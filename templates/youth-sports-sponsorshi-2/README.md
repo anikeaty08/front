@@ -1,0 +1,14 @@
+# Youth Sports Sponsorship Landing Page Template
+
+A modern landing page template for youth sports sponsorship and fundraiser events, ready to customize for your own athlete, cause, and sponsor tiers.
+
+## Project Details
+- **Slug:** `youth-sports-sponsorshi-2`
+- **Views:** 77
+- **Tags:** Landing Page, Brand, Clean, Minimal, Large Type, Event, Sports, Fundraiser, Sponsorship
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

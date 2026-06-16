@@ -1,0 +1,14 @@
+# portfolio videographer
+
+A cinematic portfolio landing page template for videographers, filmmakers, and content creators to showcase reels, services, and capture new project inquiries.
+
+## Project Details
+- **Slug:** `portfoliovideographer`
+- **Views:** 281
+- **Tags:** Landing Page, Portfolio, Art & Design, Entertainment, Brand, Dark, Large Type, Minimal, Gradient
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

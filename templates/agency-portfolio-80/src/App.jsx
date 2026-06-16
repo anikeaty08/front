@@ -1,0 +1,293 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-md">
+<div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+
+<a className="flex items-center gap-3 group" href="#">
+<div className="relative w-8 h-8 text-cyan-500 transition-transform group-hover:scale-110 duration-300">
+<svg className="w-full h-full" fill="none" viewbox="0 0 24 24">
+<path d="M12 2L2 22H22L12 2Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"></path>
+<path d="M12 6L6 18H18L12 6Z" fill="currentColor"></path>
+</svg>
+</div>
+<div className="flex flex-col">
+<span className="text-lg font-semibold text-white tracking-tight leading-none">LA MINDS</span>
+</div>
+</a>
+
+<div className="hidden md:flex items-center gap-8">
+<a className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="#">Home</a>
+<a className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="#">Services</a>
+<a className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="#">Portfolio</a>
+<a className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="#">About</a>
+<a className="text-sm font-medium text-white transition-colors" href="#">Careers</a>
+</div>
+
+<a className="hidden md:flex items-center gap-2 bg-white text-slate-900 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-slate-200 transition-colors" href="#positions">
+                View Roles
+                <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+</a>
+
+<button className="md:hidden text-white">
+<iconify-icon icon="solar:hamburger-menu-linear" width="24"></iconify-icon>
+</button>
+</div>
+</nav>
+<main className="pt-32 pb-24">
+
+<section className="max-w-7xl mx-auto px-6 mb-24 text-center">
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-8">
+<span className="relative flex h-2 w-2">
+<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+<span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+</span>
+<span className="text-xs font-medium text-cyan-400 uppercase tracking-wider">We Are Hiring</span>
+</div>
+<h1 className="text-5xl md:text-7xl font-semibold text-white tracking-tight mb-6 max-w-4xl mx-auto">
+                Build Your Career <br/>
+<span className="text-gradient">With LA MINDS</span>
+</h1>
+<p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                Join a team of visionaries. Work on impactful digital products that shape the future of the web.
+            </p>
+<a className="inline-flex items-center gap-2 bg-white text-slate-900 px-8 py-3.5 rounded-full text-sm font-medium hover:bg-slate-200 transition-all duration-300" href="#positions">
+                View Open Positions
+                <iconify-icon icon="solar:arrow-down-linear" width="18"></iconify-icon>
+</a>
+</section>
+
+<section className="max-w-7xl mx-auto px-6 mb-32">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+<div className="glass-card p-8 rounded-2xl relative overflow-hidden group hover:border-cyan-500/20 transition-all duration-300">
+<div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-6">
+<iconify-icon icon="solar:chart-square-linear" strokeWidth="1.5" width="24"></iconify-icon>
+</div>
+<h3 className="text-lg font-medium text-white mb-3">Growth Opportunities</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Fast-track your career with direct mentorship, budget for courses, and opportunities to lead projects.</p>
+</div>
+
+<div className="glass-card p-8 rounded-2xl relative overflow-hidden group hover:border-purple-500/20 transition-all duration-300">
+<div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6">
+<iconify-icon icon="solar:laptop-minimalistic-linear" strokeWidth="1.5" width="24"></iconify-icon>
+</div>
+<h3 className="text-lg font-medium text-white mb-3">Remote-First Culture</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Work from anywhere. We care about output, not hours in a chair. We provide the best gear for your home office.</p>
+</div>
+
+<div className="glass-card p-8 rounded-2xl relative overflow-hidden group hover:border-blue-500/20 transition-all duration-300">
+<div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6">
+<iconify-icon icon="solar:book-bookmark-linear" strokeWidth="1.5" width="24"></iconify-icon>
+</div>
+<h3 className="text-lg font-medium text-white mb-3">Learning Environment</h3>
+<p className="text-sm text-slate-400 leading-relaxed">We constantly explore new stacks. Innovation is required, not just encouraged. Stay on the bleeding edge.</p>
+</div>
+</div>
+</section>
+
+<section className="max-w-7xl mx-auto px-6 mb-32">
+<div className="text-center mb-16">
+<h2 className="text-3xl font-medium text-white tracking-tight mb-4">Our Hiring Process</h2>
+<p className="text-slate-400">Transparent, fast, and respectful of your time.</p>
+</div>
+<div className="relative">
+
+<div className="hidden md:block absolute top-1/2 left-0 w-full h-px bg-white/5 -translate-y-1/2 z-0"></div>
+<div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+
+<div className="bg-[#020617] md:px-4 flex flex-col items-center text-center">
+<div className="w-12 h-12 rounded-full bg-slate-800 border border-white/10 text-white flex items-center justify-center mb-6 shadow-lg shadow-black/50">
+<iconify-icon icon="solar:file-send-linear" width="20"></iconify-icon>
+</div>
+<h4 className="text-white font-medium mb-1">1. Apply</h4>
+<p className="text-xs text-slate-500">Send us your portfolio &amp; resume</p>
+</div>
+
+<div className="bg-[#020617] md:px-4 flex flex-col items-center text-center">
+<div className="w-12 h-12 rounded-full bg-slate-800 border border-white/10 text-white flex items-center justify-center mb-6 shadow-lg shadow-black/50">
+<iconify-icon icon="solar:chat-round-line-linear" width="20"></iconify-icon>
+</div>
+<h4 className="text-white font-medium mb-1">2. Interview</h4>
+<p className="text-xs text-slate-500">Cultural &amp; technical chat</p>
+</div>
+
+<div className="bg-[#020617] md:px-4 flex flex-col items-center text-center">
+<div className="w-12 h-12 rounded-full bg-slate-800 border border-white/10 text-white flex items-center justify-center mb-6 shadow-lg shadow-black/50">
+<iconify-icon icon="solar:code-square-linear" width="20"></iconify-icon>
+</div>
+<h4 className="text-white font-medium mb-1">3. Task</h4>
+<p className="text-xs text-slate-500">Small take-home assessment</p>
+</div>
+
+<div className="bg-[#020617] md:px-4 flex flex-col items-center text-center">
+<div className="w-12 h-12 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-6 shadow-lg shadow-black/50">
+<iconify-icon icon="solar:confetti-minimalistic-linear" width="20"></iconify-icon>
+</div>
+<h4 className="text-white font-medium mb-1">4. Offer</h4>
+<p className="text-xs text-slate-500">Welcome to the team</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="max-w-5xl mx-auto px-6 mb-32" id="positions">
+<h2 className="text-3xl font-medium text-white tracking-tight mb-10">Open Roles</h2>
+<div className="flex flex-col gap-4">
+
+<div className="group glass-card p-6 md:p-8 rounded-xl hover:border-cyan-500/30 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div className="space-y-2">
+<h3 className="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Senior Product Designer</h3>
+<div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+<span className="flex items-center gap-1"><iconify-icon icon="solar:map-point-linear"></iconify-icon> Remote</span>
+<span className="flex items-center gap-1"><iconify-icon icon="solar:case-minimalistic-linear"></iconify-icon> Full-time</span>
+<span className="px-2 py-0.5 rounded bg-white/5 border border-white/5 text-xs">5+ Years Exp</span>
+</div>
+</div>
+<div>
+<a className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-all duration-300 text-sm font-medium" href="#">
+                            Apply Now
+                            <iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon>
+</a>
+</div>
+</div>
+
+<div className="group glass-card p-6 md:p-8 rounded-xl hover:border-cyan-500/30 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div className="space-y-2">
+<h3 className="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Frontend Engineer (React)</h3>
+<div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+<span className="flex items-center gap-1"><iconify-icon icon="solar:map-point-linear"></iconify-icon> Los Angeles / Hybrid</span>
+<span className="flex items-center gap-1"><iconify-icon icon="solar:case-minimalistic-linear"></iconify-icon> Full-time</span>
+<span className="px-2 py-0.5 rounded bg-white/5 border border-white/5 text-xs">3+ Years Exp</span>
+</div>
+</div>
+<div>
+<a className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-all duration-300 text-sm font-medium" href="#">
+                            Apply Now
+                            <iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon>
+</a>
+</div>
+</div>
+
+<div className="group glass-card p-6 md:p-8 rounded-xl hover:border-cyan-500/30 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div className="space-y-2">
+<h3 className="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Backend Developer (Node.js)</h3>
+<div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+<span className="flex items-center gap-1"><iconify-icon icon="solar:map-point-linear"></iconify-icon> Remote</span>
+<span className="flex items-center gap-1"><iconify-icon icon="solar:case-minimalistic-linear"></iconify-icon> Contract</span>
+<span className="px-2 py-0.5 rounded bg-white/5 border border-white/5 text-xs">4+ Years Exp</span>
+</div>
+</div>
+<div>
+<a className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-all duration-300 text-sm font-medium" href="#">
+                            Apply Now
+                            <iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon>
+</a>
+</div>
+</div>
+
+<div className="group glass-card p-6 md:p-8 rounded-xl hover:border-cyan-500/30 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div className="space-y-2">
+<h3 className="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Growth Marketing Manager</h3>
+<div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+<span className="flex items-center gap-1"><iconify-icon icon="solar:map-point-linear"></iconify-icon> Remote</span>
+<span className="flex items-center gap-1"><iconify-icon icon="solar:case-minimalistic-linear"></iconify-icon> Full-time</span>
+<span className="px-2 py-0.5 rounded bg-white/5 border border-white/5 text-xs">4+ Years Exp</span>
+</div>
+</div>
+<div>
+<a className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white hover:text-black hover:border-white transition-all duration-300 text-sm font-medium" href="#">
+                            Apply Now
+                            <iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon>
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<section className="max-w-4xl mx-auto px-6 text-center pb-12">
+<div className="bg-gradient-to-b from-slate-800/40 to-slate-900/40 border border-white/5 rounded-3xl p-12 relative overflow-hidden">
+
+<div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '24px 24px'}}></div>
+<div className="relative z-10">
+<h2 className="text-3xl font-medium text-white tracking-tight mb-4">
+                        Don't see your role?
+                    </h2>
+<p className="text-slate-400 mb-8 max-w-lg mx-auto">
+                        We are always looking for exceptional talent. If you think you can add value to LA MINDS, we want to hear from you.
+                    </p>
+<button className="inline-flex items-center gap-2 px-8 py-3 bg-white text-slate-900 rounded-lg font-medium hover:bg-slate-200 transition-all duration-300 group">
+<iconify-icon icon="solar:letter-linear" width="20"></iconify-icon>
+                        Send Resume
+                    </button>
+</div>
+</div>
+</section>
+</main>
+
+<footer className="border-t border-white/5 bg-[#010409] pt-20 pb-12">
+<div className="max-w-7xl mx-auto px-6">
+<div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+<div className="max-w-sm">
+<div className="flex items-center gap-3 mb-6">
+<div className="relative w-6 h-6 text-cyan-500">
+<svg className="w-full h-full" fill="none" viewbox="0 0 24 24">
+<path d="M12 2L2 22H22L12 2Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"></path>
+<path d="M12 6L6 18H18L12 6Z" fill="currentColor"></path>
+</svg>
+</div>
+<span className="text-lg font-semibold text-white tracking-tight">LA MINDS</span>
+</div>
+<p className="text-slate-500 text-sm leading-relaxed">
+                        Premium web design and software development for ambitious entrepreneurs worldwide.
+                    </p>
+</div>
+<div className="grid grid-cols-2 gap-16">
+<div>
+<h4 className="text-white text-sm font-semibold mb-6">Company</h4>
+<ul className="space-y-4 text-sm">
+<li><a className="text-slate-500 hover:text-cyan-400 transition-colors" href="#">Home</a></li>
+<li><a className="text-slate-500 hover:text-cyan-400 transition-colors" href="#">About Us</a></li>
+<li><a className="text-slate-500 hover:text-cyan-400 transition-colors" href="#">Careers</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-white text-sm font-semibold mb-6">Social</h4>
+<div className="flex gap-4">
+<a className="text-slate-500 hover:text-white" href="#"><iconify-icon icon="solar:brand-twitter-linear" width="20"></iconify-icon></a>
+<a className="text-slate-500 hover:text-white" href="#"><iconify-icon icon="solar:brand-linkedin-linear" width="20"></iconify-icon></a>
+<a className="text-slate-500 hover:text-white" href="#"><iconify-icon icon="solar:brand-instagram-linear" width="20"></iconify-icon></a>
+</div>
+</div>
+</div>
+</div>
+<div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p className="text-slate-600 text-xs">© 2024 LA MINDS. All rights reserved.</p>
+<div className="flex gap-8">
+<a className="text-slate-600 hover:text-slate-400 text-xs" href="#">Privacy</a>
+<a className="text-slate-600 hover:text-slate-400 text-xs" href="#">Terms</a>
+</div>
+</div>
+</div>
+</footer>
+
+    </>
+  );
+}

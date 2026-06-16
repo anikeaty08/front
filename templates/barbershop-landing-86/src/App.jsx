@@ -1,0 +1,556 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+{
+"@context": "https://schema.org",
+"@type": "BarberShop",
+"name": "Creative Concept",
+"image": "https://images.unsplash.com/photo-1621605815971-fbc98d665033",
+"telephone": "+51973308052",
+"address": {
+"@type": "PostalAddress",
+"streetAddress": "Jr. Río Amazonas 226",
+"addressLocality": "Lima",
+"addressCountry": "PE"
+},
+"geo": {
+"@type": "GeoCoordinates",
+"latitude": -12.0464,
+"longitude": -77.0428
+},
+"url": "https://creativeconcept.pe",
+"sameAs": ["https://www.instagram.com/creativefade_studio"],
+"priceRange": "$$"
+}
+
+
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBf3P70-i4UGyRE3oX3JPWs6_PRPe0dlV0",
+            authDomain: "creative-concept-482b6.firebaseapp.com",
+            projectId: "creative-concept-482b6",
+            storageBucket: "creative-concept-482b6.firebasestorage.app",
+            messagingSenderId: "278677243196",
+            appId: "1:278677243196:web:ad32e4c1e37455c2bbca39"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- BOOKING LOGIC ---
+        const confirmBtn = document.getElementById('confirm-btn');
+        
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', async () => {
+                const name = document.getElementById('booking-name').value.trim();
+                const phone = document.getElementById('booking-phone').value.trim();
+                const service = document.getElementById('booking-service').value;
+                const date = document.getElementById('date-display').value;
+                const time = document.getElementById('booking-time').value;
+
+                // Simple Validation
+                if (!name || !phone || !date || !time) {
+                    alert("Por favor completa todos los campos.");
+                    return;
+                }
+
+                // UI Loading State
+                const btnTextElement = document.getElementById('btn-text');
+                const originalText = btnTextElement.innerText;
+                btnTextElement.innerText = "PROCESANDO...";
+                confirmBtn.disabled = true;
+                confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                const message = `Hola, quiero reservar una cita en Creative Concept.
+
+Servicio: ${service}
+Fecha: ${date}
+Hora: ${time}
+Nombre: ${name}`;
+
+                const whatsappURL = `https://wa.me/51973308052?text=${encodeURIComponent(message)}`;
+
+                try {
+                    // 1. Save to Firestore
+                    await addDoc(collection(db, "reservations"), {
+                        name: name,
+                        phone: phone,
+                        service: service,
+                        date: date,
+                        time: time,
+                        status: "pending",
+                        createdAt: serverTimestamp()
+                    });
+
+                    // 2. Open WhatsApp
+                    window.open(whatsappURL, "_blank", "noopener,noreferrer");
+                    
+                    // Clear inputs before redirect
+                    document.getElementById('booking-name').value = '';
+                    document.getElementById('booking-phone').value = '';
+                    document.getElementById('date-display').value = '';
+                    document.getElementById('booking-time').value = '';
+
+                } catch (error) {
+                    console.error("Error adding reservation: ", error);
+                    alert("Hubo un error guardando la reserva, te redirigiremos a WhatsApp directamente.");
+                    
+                    // Fallback to WhatsApp if DB fails
+                    window.open(whatsappURL, "_blank", "noopener,noreferrer");
+
+                } finally {
+                    // Reset UI
+                    btnTextElement.innerText = originalText;
+                    confirmBtn.disabled = false;
+                    confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        }
+    
+
+
+        // --- SCROLL REVEAL ANIMATION ---
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- LANGUAGE SWITCHER ---
+        let currentLang = 'es';
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                if (el.getAttribute('data-lang') === currentLang) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
+            const langDisplay = document.getElementById('lang-display');
+            langDisplay.innerHTML = currentLang === 'es' 
+                ? 'ES | <span class="opacity-50">EN</span>' 
+                : '<span class="opacity-50">ES</span> | EN';
+        }
+
+        // --- MOBILE MENU ---
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = !menu.classList.contains('translate-y-full');
+            if (isOpen) menu.classList.add('translate-y-full');
+            else menu.classList.remove('translate-y-full');
+        }
+
+        // --- CUSTOM CALENDAR UI LOGIC ---
+        const dateInput = document.getElementById('date-display');
+        const calendarDropdown = document.getElementById('calendar-dropdown');
+        const daysContainer = document.getElementById('calendar-days');
+        const currentMonthEl = document.getElementById('current-month');
+        let currentDate = new Date();
+        
+        // Toggle Calendar
+        document.getElementById('custom-calendar-wrapper').addEventListener('click', (e) => {
+            e.stopPropagation();
+            calendarDropdown.classList.toggle('hidden');
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('custom-calendar-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                calendarDropdown.classList.add('hidden');
+            }
+        });
+
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const monthNames = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+            
+            currentMonthEl.innerText = `${monthNames[month]} ${year}`;
+            daysContainer.innerHTML = '';
+
+            // Empty slots for days before first of month
+            for (let i = 0; i < firstDay; i++) {
+                daysContainer.innerHTML += `<div></div>`;
+            }
+
+            // Days
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayDate = new Date(year, month, i);
+                const isToday = dayDate.toDateString() === today.toDateString();
+                const isPast = dayDate < new Date().setHours(0,0,0,0);
+                
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `calendar-day-btn w-8 h-8 rounded-full text-xs flex items-center justify-center mx-auto transition-all ${isToday ? 'today' : ''} ${isPast ? 'text-muted' : 'text-white'}`;
+                btn.innerText = i;
+                
+                if (!isPast) {
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        // Format date nicely
+                        const selected = dayDate.toLocaleDateString('es-PE', { weekday: 'short', day: 'numeric', month: 'short' });
+                        dateInput.value = selected.toUpperCase();
+                        
+                        // Remove previous selection style
+                        document.querySelectorAll('.calendar-day-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        
+                        setTimeout(() => calendarDropdown.classList.add('hidden'), 200);
+                    };
+                }
+                
+                daysContainer.appendChild(btn);
+            }
+        }
+
+        const prevBtn = document.getElementById('prev-month');
+        const nextBtn = document.getElementById('next-month');
+
+        if(prevBtn && nextBtn) {
+            prevBtn.onclick = (e) => { e.stopPropagation(); currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(currentDate); };
+            nextBtn.onclick = (e) => { e.stopPropagation(); currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(currentDate); };
+        }
+
+        renderCalendar(currentDate);
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<a className="fixed bottom-6 right-6 z-50 bg-white text-black p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 flex items-center justify-center group" href="https://wa.me/51973308052" target="_blank">
+<iconify-icon icon="solar:chat-round-call-linear" strokeWidth="1.5" width="28"></iconify-icon>
+<span className="absolute right-full mr-4 bg-white text-black text-xs font-semibold px-3 py-1 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            WhatsApp
+        </span>
+</a>
+
+<nav className="fixed top-0 left-0 w-full z-40 px-6 py-6 flex justify-between items-center transition-all duration-300 border-b border-transparent" id="navbar">
+
+<a className="font-display text-2xl tracking-tighter uppercase font-semibold text-white z-50 mix-blend-difference" href="#">
+            CREATIVE<span className="font-light opacity-70">CONCEPT</span>
+</a>
+
+<div className="hidden md:flex gap-8 text-xs font-medium uppercase tracking-widest items-center text-white mix-blend-difference">
+<a className="hover:opacity-50 transition-opacity" href="#inicio"><span data-lang="es">Inicio</span><span className="hidden" data-lang="en">Home</span></a>
+<a className="hover:opacity-50 transition-opacity" href="#servicios"><span data-lang="es">Servicios</span><span className="hidden" data-lang="en">Services</span></a>
+<a className="hover:opacity-50 transition-opacity" href="#galeria"><span data-lang="es">Galería</span><span className="hidden" data-lang="en">Gallery</span></a>
+<a className="hover:opacity-50 transition-opacity" href="#equipo"><span data-lang="es">Equipo</span><span className="hidden" data-lang="en">Team</span></a>
+
+<button className="border-l border-white/30 pl-8 hover:text-gray-300 transition-colors" onclick="toggleLanguage()">
+<span id="lang-display">ES | <span className="opacity-50">EN</span></span>
+</button>
+
+<a className="bg-white text-black px-6 py-2 rounded-sm hover:bg-gray-200 transition-colors font-semibold" href="#reservas">
+<span data-lang="es">Reservar Cita</span><span className="hidden" data-lang="en">Book Now</span>
+</a>
+</div>
+
+<button className="md:hidden z-50 text-white mix-blend-difference" onclick="toggleMenu()">
+<iconify-icon icon="solar:hamburger-menu-linear" strokeWidth="1.5" width="28"></iconify-icon>
+</button>
+</nav>
+
+<div className="fixed inset-0 bg-neutral-950 z-30 transform translate-y-full transition-transform duration-500 flex flex-col justify-center items-center text-white" id="mobile-menu">
+<div className="flex flex-col gap-8 text-center">
+<a className="font-display text-4xl uppercase tracking-tight" href="#inicio" onclick="toggleMenu()"><span data-lang="es">Inicio</span><span className="hidden" data-lang="en">Home</span></a>
+<a className="font-display text-4xl uppercase tracking-tight" href="#servicios" onclick="toggleMenu()"><span data-lang="es">Servicios</span><span className="hidden" data-lang="en">Services</span></a>
+<a className="font-display text-4xl uppercase tracking-tight" href="#galeria" onclick="toggleMenu()"><span data-lang="es">Galería</span><span className="hidden" data-lang="en">Gallery</span></a>
+<a className="font-display text-4xl uppercase tracking-tight text-neutral-500" href="#reservas" onclick="toggleMenu()"><span data-lang="es">Reservar</span><span className="hidden" data-lang="en">Book</span></a>
+<button className="text-xs tracking-widest uppercase border border-white/20 px-4 py-2 mt-4" onclick="toggleLanguage()">Switch Language</button>
+</div>
+</div>
+
+<header className="relative w-full h-screen min-h-[700px] flex items-end justify-between px-6 pb-12 overflow-hidden bg-black text-white" id="inicio">
+
+<div className="absolute inset-0 z-0 opacity-50">
+<img alt="Interior Barbería Creative Concept Lima" className="w-full h-full object-cover grayscale" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&amp;w=2000&amp;auto=format&amp;fit=crop"/>
+</div>
+<div className="absolute inset-0 z-1 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+<div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-12">
+<div className="max-w-2xl reveal active">
+<span className="inline-flex items-center gap-2 mb-6 px-3 py-1 border border-white/20 rounded-sm text-xs uppercase tracking-widest backdrop-blur-md">
+<iconify-icon icon="solar:map-point-linear" width="14"></iconify-icon> Lima, Peru
+                </span>
+<h1 className="font-display text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight mb-6 font-semibold">
+<span data-lang="es">PRECISIÓN.<br/><span className="italic font-light opacity-80 font-serif">ESTILO.</span></span>
+<span className="hidden" data-lang="en">PRECISION.<br/><span className="italic font-light opacity-80 font-serif">STYLE.</span></span>
+</h1>
+<p className="text-sm md:text-base font-light text-gray-300 max-w-md leading-relaxed mb-8">
+<span data-lang="es">Barbería moderna en Lima especializada en cortes profesionales y rituales premium. Experimenta el lujo del cuidado personal.</span>
+<span className="hidden" data-lang="en">Modern barbershop in Lima specializing in professional haircuts and premium grooming. Experience the luxury of self-care.</span>
+</p>
+<div className="flex flex-col md:flex-row gap-4">
+<a className="bg-white text-black px-8 py-4 text-xs font-semibold uppercase tracking-widest hover:bg-gray-200 transition-colors text-center" href="#reservas">
+<span data-lang="es">Reservar Cita</span><span className="hidden" data-lang="en">Book Appointment</span>
+</a>
+<a className="border border-white/30 text-white px-8 py-4 text-xs font-semibold uppercase tracking-widest hover:bg-white hover:text-black transition-colors text-center flex items-center justify-center gap-2" href="https://wa.me/51973308052">
+<iconify-icon icon="solar:chat-round-call-linear" width="16"></iconify-icon> WhatsApp
+                    </a>
+</div>
+</div>
+<div className="flex flex-col items-start md:items-end gap-6 reveal delay-200">
+<div className="flex gap-8 text-xs uppercase tracking-widest text-gray-400">
+<span className="flex items-center gap-2"><iconify-icon icon="solar:star-linear"></iconify-icon> Premium</span>
+<span className="flex items-center gap-2"><iconify-icon icon="solar:scissors-linear"></iconify-icon> Professional</span>
+</div>
+</div>
+</div>
+</header>
+
+<div className="bg-neutral-900 border-y border-neutral-800 py-8 px-6 relative z-30" id="reservas">
+<div className="max-w-7xl mx-auto">
+<h3 className="text-xs uppercase tracking-widest text-gray-500 mb-6 text-center md:text-left">
+<span data-lang="es">Reserva Rápida</span><span className="hidden" data-lang="en">Quick Booking</span>
+</h3>
+<form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-2" id="booking-form">
+
+<div className="relative group">
+<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+<iconify-icon icon="solar:user-linear" width="18"></iconify-icon>
+</div>
+<input className="w-full bg-black border border-neutral-700 text-white text-sm py-4 pl-10 pr-4 focus:outline-none focus:border-white transition-colors rounded-sm uppercase placeholder-neutral-600" id="booking-name" placeholder="NOMBRE / NAME" type="text"/>
+</div>
+
+<div className="relative group">
+<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+<iconify-icon icon="solar:phone-calling-linear" width="18"></iconify-icon>
+</div>
+<input className="w-full bg-black border border-neutral-700 text-white text-sm py-4 pl-10 pr-4 focus:outline-none focus:border-white transition-colors rounded-sm uppercase placeholder-neutral-600" id="booking-phone" placeholder="TELÉFONO / PHONE" type="tel"/>
+</div>
+
+<div className="relative group">
+<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+<iconify-icon icon="solar:scissors-square-linear" width="18"></iconify-icon>
+</div>
+<select className="w-full bg-black border border-neutral-700 text-white text-sm py-4 pl-10 pr-4 focus:outline-none focus:border-white transition-colors cursor-pointer rounded-sm appearance-none" id="booking-service">
+<option value="Corte + Lavado (60 PEN)">Corte + Lavado</option>
+<option value="Ritual de Barba (40 PEN)">Ritual de Barba</option>
+<option value="Corte + Barba (90 PEN)">Corte + Barba</option>
+<option value="Domicilio (80 PEN)">Domicilio</option>
+</select>
+<div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-500">
+<iconify-icon icon="solar:alt-arrow-down-linear" width="12"></iconify-icon>
+</div>
+</div>
+
+<div className="relative" id="custom-calendar-wrapper">
+<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+<iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon>
+</div>
+<input className="w-full bg-black border border-neutral-700 text-white text-sm py-4 pl-10 pr-4 focus:outline-none focus:border-white transition-colors rounded-sm uppercase tracking-wide placeholder-neutral-500 cursor-pointer" id="date-display" placeholder="FECHA / DATE" readonly="" type="text"/>
+<div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-500">
+<iconify-icon icon="solar:alt-arrow-down-linear" width="12"></iconify-icon>
+</div>
+
+<div className="hidden absolute top-full left-0 mt-2 w-full min-w-[280px] bg-[#0A0A0A] border border-neutral-800 rounded-sm shadow-2xl z-50 p-4" id="calendar-dropdown">
+<div className="flex justify-between items-center mb-4">
+<button className="text-white hover:bg-neutral-800 p-1 rounded-sm" id="prev-month" type="button"><iconify-icon icon="solar:alt-arrow-left-linear"></iconify-icon></button>
+<span className="text-sm font-semibold uppercase tracking-widest text-white" id="current-month"></span>
+<button className="text-white hover:bg-neutral-800 p-1 rounded-sm" id="next-month" type="button"><iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon></button>
+</div>
+<div className="grid grid-cols-7 gap-1 mb-2 text-center">
+<span className="text-[10px] text-gray-500 uppercase">D</span>
+<span className="text-[10px] text-gray-500 uppercase">L</span>
+<span className="text-[10px] text-gray-500 uppercase">M</span>
+<span className="text-[10px] text-gray-500 uppercase">M</span>
+<span className="text-[10px] text-gray-500 uppercase">J</span>
+<span className="text-[10px] text-gray-500 uppercase">V</span>
+<span className="text-[10px] text-gray-500 uppercase">S</span>
+</div>
+<div className="grid grid-cols-7 gap-1 text-sm text-center" id="calendar-days"></div>
+</div>
+</div>
+
+<div className="relative group">
+<div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+<iconify-icon icon="solar:clock-circle-linear" width="18"></iconify-icon>
+</div>
+<select className="w-full bg-black border border-neutral-700 text-white text-sm py-4 pl-10 pr-4 focus:outline-none focus:border-white transition-colors cursor-pointer rounded-sm appearance-none" id="booking-time">
+<option disabled="" selected="" value="">HORA / TIME</option>
+<option value="10:00 AM">10:00 AM</option>
+<option value="11:00 AM">11:00 AM</option>
+<option value="12:00 PM">12:00 PM</option>
+<option value="01:00 PM">01:00 PM</option>
+<option value="02:00 PM">02:00 PM</option>
+<option value="03:00 PM">03:00 PM</option>
+<option value="04:00 PM">04:00 PM</option>
+<option value="05:00 PM">05:00 PM</option>
+<option value="06:00 PM">06:00 PM</option>
+<option value="07:00 PM">07:00 PM</option>
+<option value="08:00 PM">08:00 PM</option>
+</select>
+<div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-500">
+<iconify-icon icon="solar:alt-arrow-down-linear" width="12"></iconify-icon>
+</div>
+</div>
+
+<button className="bg-white text-black font-semibold uppercase tracking-widest text-xs py-4 hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 group w-full" id="confirm-btn" type="button">
+<span id="btn-text">CONFIRMAR</span>
+<iconify-icon className="group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear"></iconify-icon>
+</button>
+</form>
+</div>
+</div>
+
+<section className="py-24 bg-black text-white relative" id="servicios">
+<div className="max-w-7xl mx-auto px-6">
+<div className="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+<div>
+<span className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">Our Menu</span>
+<h2 className="font-display text-5xl md:text-6xl uppercase"><span data-lang="es">Servicios</span><span className="hidden" data-lang="en">Services</span></h2>
+</div>
+<p className="text-neutral-400 max-w-sm mt-4 md:mt-0 text-sm font-light">
+<span data-lang="es">Cada servicio incluye asesoría de imagen, lavado, peinado y productos premium.</span>
+<span className="hidden" data-lang="en">Each service includes image consultation, wash, styling and premium products.</span>
+</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+
+<div className="group border-b border-neutral-800 pb-8 hover:border-white transition-colors duration-500 reveal">
+<div className="flex justify-between items-baseline mb-2">
+<h3 className="font-display text-2xl uppercase group-hover:pl-4 transition-all">Creative Fade</h3>
+<span className="text-lg font-light">S/ 50</span>
+</div>
+<p className="text-neutral-500 text-sm font-light group-hover:text-neutral-300 transition-colors">
+<span data-lang="es">Degradado perfecto, perfilado y acabado con navaja.</span>
+<span className="hidden" data-lang="en">Perfect fade, lining and razor finish.</span>
+</p>
+</div>
+
+<div className="group border-b border-neutral-800 pb-8 hover:border-white transition-colors duration-500 reveal">
+<div className="flex justify-between items-baseline mb-2">
+<h3 className="font-display text-2xl uppercase group-hover:pl-4 transition-all">Ritual de Barba</h3>
+<span className="text-lg font-light">S/ 40</span>
+</div>
+<p className="text-neutral-500 text-sm font-light group-hover:text-neutral-300 transition-colors">
+<span data-lang="es">Toalla caliente, aceites esenciales, perfilado y masaje.</span>
+<span className="hidden" data-lang="en">Hot towel, essential oils, shaping and massage.</span>
+</p>
+</div>
+
+<div className="group border-b border-neutral-800 pb-8 hover:border-white transition-colors duration-500 reveal">
+<div className="flex justify-between items-baseline mb-2">
+<h3 className="font-display text-2xl uppercase group-hover:pl-4 transition-all">Full Experience</h3>
+<span className="text-lg font-light">S/ 80</span>
+</div>
+<p className="text-neutral-500 text-sm font-light group-hover:text-neutral-300 transition-colors">
+<span data-lang="es">Corte + Barba + Mascarilla Negra + Bebida de cortesía.</span>
+<span className="hidden" data-lang="en">Haircut + Beard + Black Mask + Complimentary drink.</span>
+</p>
+</div>
+
+<div className="group border-b border-neutral-800 pb-8 hover:border-white transition-colors duration-500 reveal">
+<div className="flex justify-between items-baseline mb-2">
+<h3 className="font-display text-2xl uppercase group-hover:pl-4 transition-all">Kids Cut</h3>
+<span className="text-lg font-light">S/ 45</span>
+</div>
+<p className="text-neutral-500 text-sm font-light group-hover:text-neutral-300 transition-colors">
+<span data-lang="es">Corte para niños con la misma precisión y paciencia.</span>
+<span className="hidden" data-lang="en">Haircut for kids with the same precision and patience.</span>
+</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-12 bg-neutral-950 overflow-hidden" id="galeria">
+<div className="flex gap-4 animate-marquee w-max">
+<div className="w-[300px] h-[400px] image-hover-zoom relative grayscale hover:grayscale-0 transition-all duration-500">
+<img alt="Fade Cut" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&amp;w=600&amp;auto=format&amp;fit=crop"/>
+</div>
+<div className="w-[300px] h-[400px] image-hover-zoom relative grayscale hover:grayscale-0 transition-all duration-500">
+<img alt="Beard Grooming" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&amp;w=600&amp;auto=format&amp;fit=crop"/>
+</div>
+<div className="w-[300px] h-[400px] image-hover-zoom relative grayscale hover:grayscale-0 transition-all duration-500">
+<img alt="Scissor Cut" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
+</div>
+<div className="w-[300px] h-[400px] image-hover-zoom relative grayscale hover:grayscale-0 transition-all duration-500">
+<img alt="Barber Tools" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1593702295094-aea22597af65?q=80&amp;w=600&amp;auto=format&amp;fit=crop"/>
+</div>
+<div className="w-[300px] h-[400px] image-hover-zoom relative grayscale hover:grayscale-0 transition-all duration-500">
+<img alt="Barber Shop Interior" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg"/>
+</div>
+
+<div className="w-[300px] h-[400px] image-hover-zoom relative grayscale hover:grayscale-0 transition-all duration-500">
+<img alt="Fade Cut" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&amp;w=600&amp;auto=format&amp;fit=crop"/>
+</div>
+<div className="w-[300px] h-[400px] image-hover-zoom relative grayscale hover:grayscale-0 transition-all duration-500">
+<img alt="Beard Grooming" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&amp;w=600&amp;auto=format&amp;fit=crop"/>
+</div>
+</div>
+</section>
+
+<footer className="bg-black text-white pt-24 pb-12 border-t border-neutral-900">
+<div className="max-w-7xl mx-auto px-6">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+
+<div>
+<h4 className="font-display text-3xl uppercase mb-6 tracking-tighter">Creative<span className="font-light text-neutral-500">Concept</span></h4>
+<p className="text-neutral-400 text-sm font-light leading-relaxed mb-6 max-w-xs">
+                        Elevando el estándar de la barbería en Lima. Un espacio donde la tradición se encuentra con el estilo moderno.
+                    </p>
+<div className="flex gap-4">
+<a className="w-10 h-10 border border-neutral-800 flex items-center justify-center hover:bg-white hover:text-black transition-colors rounded-full" href="#">
+<iconify-icon icon="solar:instagram-linear" width="20"></iconify-icon>
+</a>
+<a className="w-10 h-10 border border-neutral-800 flex items-center justify-center hover:bg-white hover:text-black transition-colors rounded-full" href="#">
+<iconify-icon icon="solar:facebook-linear" width="20"></iconify-icon>
+</a>
+</div>
+</div>
+
+<div className="space-y-4">
+<h5 className="text-xs uppercase tracking-widest text-neutral-500 mb-6">Contacto</h5>
+<div className="flex items-start gap-4 text-sm font-light">
+<iconify-icon className="mt-1 text-neutral-500" icon="solar:map-point-linear"></iconify-icon>
+<span>Jr. Río Amazonas 226,<br/>Lima, Perú</span>
+</div>
+<div className="flex items-center gap-4 text-sm font-light">
+<iconify-icon className="text-neutral-500" icon="solar:phone-calling-linear"></iconify-icon>
+<span>+51 973 308 052</span>
+</div>
+<div className="flex items-center gap-4 text-sm font-light">
+<iconify-icon className="text-neutral-500" icon="solar:clock-circle-linear"></iconify-icon>
+<span>Lun - Sab: 10:00 - 21:00</span>
+</div>
+</div>
+
+<div className="w-full h-48 bg-neutral-900 relative group overflow-hidden grayscale hover:grayscale-0 transition-all">
+<iframe allowfullscreen="" height="100%" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.996160105307!2d-77.0428!3d-12.0464!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDAyJzQ3LjAiUyA3N8KwMDInMzQuMSJX!5e0!3m2!1ses!2spe!4v1635000000000!5m2!1ses!2spe" style={{border: '0'}} width="100%"></iframe>
+</div>
+</div>
+<div className="border-t border-neutral-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-600">
+<p>© 2024 Creative Concept Barbershop. All rights reserved.</p>
+<p>Designed for Excellence.</p>
+</div>
+</div>
+</footer>
+
+
+
+
+    </>
+  );
+}

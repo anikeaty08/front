@@ -1,0 +1,359 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      <div className="fixed top-0 w-full h-screen -z-10 bg-cover bg-center" data-alpha-mask="80" id="aura-image" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1710162734106-6932b5799f99?w=3840&amp', maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}></div>
+
+
+<nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b bg-white/80 border-slate-100">
+<div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div className="flex items-center gap-3">
+<span className="lg:bg-clip-text lg:text-transparent text-5xl font-bold tracking-tight font-poppins bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-400 to-blue-600">SKILLDOTE</span>
+</div>
+<div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-500">
+<a className="hover:text-[#5BC0EB] transition-colors" href="#home">Home</a>
+<a className="hover:text-[#5BC0EB] transition-colors" href="#about">About</a>
+<a className="hover:text-[#5BC0EB] transition-colors" href="#programs">Courses</a>
+<a className="hover:text-[#5BC0EB] transition-colors" href="#faculties">Faculties</a>
+</div>
+<div className="flex items-center gap-4">
+<button className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold hover:scale-105 transition-all duration-300 shadow-xl bg-slate-900 text-white hover:bg-slate-800 shadow-slate-200">
+                    Enroll Now
+                    <iconify-icon className="" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</button>
+<button className="md:hidden p-2 text-slate-800">
+<iconify-icon icon="solar:hamburger-menu-linear" strokeWidth="1.5" width="24"></iconify-icon>
+</button>
+</div>
+</div>
+</nav>
+
+<section className="lg:pt-48 lg:pb-32 overflow-hidden pt-32 pb-20 relative" id="home">
+<div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10"></div>
+<div className="grid lg:grid-cols-2 gap-16 max-w-7xl mr-auto ml-auto pr-6 pl-6 gap-x-16 gap-y-16 items-center">
+<div className="relative z-10">
+<h1 className="lg:text-7xl leading-[1.1] text-5xl font-semibold tracking-tight mb-6 text-slate-900">Unlock Your Pharmacy <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#5BC0EB] to-[#FF8FAB]">Skill</span></h1>
+<p className="leading-relaxed text-lg text-slate-500 max-w-lg mb-10">
+                    We nurture creativity, confidence, and curiosity in every child through playful learning and expert guidance in a safe environment.
+                </p>
+<div className="flex flex-wrap gap-4 gap-x-4 gap-y-4">
+<button className="hover:bg-[#ff7aa0] hover:scale-105 hover:shadow-lg transition-all duration-300 flex hover:shadow-pink-200 text-sm font-medium text-white font-poppins bg-[#FF8FAB] rounded-full pt-4 pr-8 pb-4 pl-8 gap-x-2 gap-y-2 items-center">Admission Open</button>
+</div>
+<div className="mt-12 flex items-center gap-4">
+<div className="flex -space-x-3">
+<img alt="Parent" className="w-10 h-10 rounded-full border-2 object-cover border-white" src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=100&amp;h=100&amp;fit=crop" style={{}}/>
+<img alt="Parent" className="w-10 h-10 rounded-full border-2 object-cover border-white" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&amp;h=100&amp;fit=crop"/>
+<img alt="Parent" className="w-10 h-10 rounded-full border-2 object-cover border-white" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&amp;h=100&amp;fit=crop"/>
+<div className="w-10 h-10 rounded-full border-2 flex items-center justify-center text-xs font-bold text-slate-500 border-white bg-slate-100">+2k</div>
+</div>
+<div className="text-xs font-medium text-slate-500">Trusted by Professionals</div>
+</div>
+</div>
+<div className="relative">
+<div className="inline-block">
+<a className="block transition-opacity duration-300 hover:opacity-80" href="https://ibb.co/5h07NS6B">
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-white" id="about">
+<div className="max-w-7xl mx-auto px-6">
+<div className="text-center max-w-2xl mx-auto mb-20">
+<span className="text-[#5BC0EB] font-bold tracking-wider text-xs uppercase">Why Choose Us</span>
+<h2 className="lg:text-4xl text-3xl font-semibold tracking-tight mt-3 mb-4 text-slate-900">We Give You The Confidence</h2>
+<p className="font-medium text-slate-500">We provide a real pharmacy learning experience that goes beyond textbooks, focusing on knowledge and carrier building and creative experience.</p>
+</div>
+<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+<div className="group p-8 rounded-[2rem] bg-[#FAFAFA] border hover:shadow-xl transition-all duration-300 border-slate-100 hover:bg-white hover:shadow-blue-100/50">
+<div className="w-14 h-14 rounded-2xl text-[#5BC0EB] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform bg-blue-50">
+<iconify-icon icon="solar:lightbulb-linear" strokeWidth="1.5" width="32"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-slate-900">Creative Thinking</h3>
+<p className="leading-relaxed text-sm text-slate-500">Encouraging students to think critical problems in medicine dispencing and solve problems.</p>
+</div>
+
+<div className="group p-8 rounded-[2rem] bg-[#FAFAFA] border hover:shadow-xl transition-all duration-300 border-slate-100 hover:bg-white hover:shadow-yellow-100/50">
+<div className="w-14 h-14 rounded-2xl text-[#FFD93D] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform bg-yellow-50">
+<iconify-icon icon="solar:user-hand-up-linear" strokeWidth="1.5" width="32"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-slate-900">Social Skills</h3>
+<p className="text-sm text-slate-500 leading-relaxed">Building confidence through interaction and team activities.</p>
+</div>
+
+<div className="group p-8 rounded-[2rem] bg-[#FAFAFA] border hover:shadow-xl transition-all duration-300 border-slate-100 hover:bg-white hover:shadow-pink-100/50">
+<div className="w-14 h-14 rounded-2xl text-[#FF8FAB] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform bg-pink-50">
+<iconify-icon className="" icon="solar:heart-linear" strokeWidth="1.5" width="32"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-slate-900">Emotional Growth</h3>
+<p className="text-sm text-slate-500 leading-relaxed">Supporting emotional intelligence and empathy in every interaction.</p>
+</div>
+
+<div className="group p-8 rounded-[2rem] bg-[#FAFAFA] border hover:shadow-xl transition-all duration-300 border-slate-100 hover:bg-white hover:shadow-green-100/50">
+<div className="w-14 h-14 rounded-2xl text-[#6EE7B7] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform bg-green-50">
+<iconify-icon icon="solar:leaf-linear" strokeWidth="1.5" width="32"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-slate-900">Nature Connection</h3>
+<p className="text-sm text-slate-500 leading-relaxed">Outdoor activities that foster a love and respect for the environment.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="pt-24 pb-24 bg-slate-50" id="programs">
+<div className="max-w-7xl mx-auto px-6">
+<div className="flex flex-col md:flex-row gap-4 mb-16 gap-x-4 gap-y-4 items-end justify-between">
+<div className="">
+<span className="text-[#FF8FAB] font-bold tracking-wider text-xs uppercase">Our Programs</span>
+<h2 className="lg:text-4xl text-3xl font-semibold tracking-tight mt-3 text-slate-900">Courses</h2>
+</div>
+</div>
+<div className="grid md:grid-cols-3 gap-8">
+
+<div className="rounded-[2rem] overflow-hidden border hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group bg-white border-slate-100 hover:shadow-slate-200/50">
+<div className="h-64 overflow-hidden relative">
+<div className="text-xs font-bold text-[#5BC0EB] z-10 rounded-full pt-1 pr-3 pb-1 pl-3 absolute top-4 left-4 backdrop-blur bg-white/90">5 Modules</div>
+<img alt="Toddlers" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
+</div>
+<div className="p-8">
+<h3 className="text-xl font-semibold mb-2 text-slate-900">Life Style Diseases</h3>
+<p className="text-sm text-slate-500 mb-6 line-clamp-2">Introduction to structured play, sensory activities, and social interaction.</p>
+<button className="w-full py-3 rounded-xl border font-semibold text-sm hover:bg-[#5BC0EB] hover:border-[#5BC0EB] transition-all duration-300 border-slate-100 bg-slate-50 text-slate-600 hover:text-white">
+                            Learn More
+                        </button>
+</div>
+</div>
+
+<div className="rounded-[2rem] overflow-hidden border hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group bg-white border-slate-100 hover:shadow-slate-200/50">
+<div className="h-64 overflow-hidden relative">
+<div className="text-xs font-bold text-[#FFD93D] z-10 rounded-full pt-1 pr-3 pb-1 pl-3 absolute top-4 left-4 backdrop-blur bg-white/90">5 Modules</div>
+<img alt="Pre-K" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg"/>
+</div>
+<div className="p-8">
+<h3 className="text-xl font-semibold mb-2 text-slate-900">OTC Medications</h3>
+<p className="text-sm text-slate-500 mb-6 line-clamp-2">Building foundations in reading, numbers, and creative arts.</p>
+<button className="w-full py-3 rounded-xl border font-semibold text-sm hover:bg-[#FFD93D] hover:border-[#FFD93D] transition-all duration-300 border-slate-100 bg-slate-50 text-slate-600 hover:text-white">
+                            Learn More
+                        </button>
+</div>
+</div>
+
+<div className="rounded-[2rem] overflow-hidden border hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group bg-white border-slate-100 hover:shadow-slate-200/50">
+<div className="h-64 overflow-hidden relative">
+<div className="text-xs font-bold text-[#FF8FAB] z-10 rounded-full pt-1 pr-3 pb-1 pl-3 absolute top-4 left-4 backdrop-blur bg-white/90">5 Modules
+</div>
+<img alt="Kindergarten" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg"/>
+</div>
+<div className="p-8">
+<h3 className="text-xl font-semibold mb-2 text-slate-900">Practical Pharmacy Task and Problem solving</h3>
+<p className="text-sm text-slate-500 mb-6 line-clamp-2">Learning the fundamentals of safe medication practices and storage.</p>
+<button className="w-full py-3 rounded-xl border font-semibold text-sm hover:bg-[#FF8FAB] hover:border-[#FF8FAB] transition-all duration-300 border-slate-100 bg-slate-50 text-slate-600 hover:text-white">
+                            Learn More
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 relative overflow-hidden bg-white" id="faculties">
+<div className="max-w-7xl mx-auto px-6">
+<div className="text-center mb-16">
+<h2 className="text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900">Learn from the Best</h2>
+</div>
+<div className="grid md:grid-cols-3 gap-8 lg:gap-16">
+
+<div className="flex flex-col items-center text-center group">
+<div className="w-48 h-48 mb-8 relative">
+<div className="absolute inset-0 rounded-full bg-gradient-to-tr blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 from-blue-100 to-pink-100"></div>
+<img alt="Dr. Sarah Al-Fayed" className="w-full h-full rounded-full object-cover border-[6px] shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-300 border-white shadow-slate-200" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/caf35c48-d8a9-4080-9aee-df27c74f6f20_1600w.jpg?w=800&amp;q=80"/>
+</div>
+<h3 className="text-xl font-bold mb-2 text-slate-900">Dr. Sarah Al-Fayed</h3>
+<p className="text-sm font-bold text-[#5BC0EB] mb-4">Head of Clinical Research</p>
+<p className="text-slate-500 leading-relaxed max-w-xs mx-auto text-sm">
+                        Former Senior Clinical Lead at Pfizer. Expert in oncology trials and regulatory submissions.
+                    </p>
+</div>
+
+<div className="flex flex-col items-center text-center group">
+<div className="w-48 h-48 mb-8 relative">
+<div className="absolute inset-0 rounded-full bg-gradient-to-tr blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 from-yellow-100 to-green-100"></div>
+<img alt="Prof. James Chen" className="w-full h-full rounded-full object-cover border-[6px] shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-300 border-white shadow-slate-200" src="https://images.unsplash.com/photo-1542178243-bc20204b769f?w=500&amp;h=500&amp;fit=crop"/>
+</div>
+<h3 className="text-xl font-bold mb-2 text-slate-900">Prof. James Chen</h3>
+<p className="text-sm font-bold text-[#5BC0EB] mb-4">Senior Trainer, Pharmacovigilance</p>
+<p className="text-slate-500 leading-relaxed max-w-xs mx-auto text-sm">
+                        A veteran in drug safety with experience at Novartis and Roche. Specializes in signal management.
+                    </p>
+</div>
+
+<div className="flex flex-col items-center text-center group">
+<div className="w-48 h-48 mb-8 relative">
+<div className="absolute inset-0 rounded-full bg-gradient-to-tr blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 from-purple-100 to-blue-100"></div>
+<img alt="Dr. Emily Watson" className="w-full h-full rounded-full object-cover border-[6px] shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-300 border-white shadow-slate-200" src="https://images.unsplash.com/photo-1596245195341-b33a7f275fdb?w=500&amp;h=500&amp;fit=crop"/>
+</div>
+<h3 className="text-xl font-bold mb-2 text-slate-900">Dr. Emily Watson</h3>
+<p className="text-sm font-bold text-[#5BC0EB] mb-4">Director of Industrial Training</p>
+<p className="text-slate-500 leading-relaxed max-w-xs mx-auto text-sm">
+                        Passionate about formulation science. Leads the hands-on QA/QC workshops at Skilldote.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+
+
+<section className="overflow-hidden bg-gradient-to-b pt-24 pb-24 from-blue-50/50 to-white">
+<div className="max-w-7xl mx-auto px-6">
+<h2 className="lg:text-4xl text-3xl font-semibold tracking-tight text-center mb-12 text-slate-900">Pofessionals Love Us</h2>
+<div className="flex gap-6 overflow-x-auto snap-x hide-scrollbar pb-12">
+
+<div className="min-w-[300px] md:min-w-[400px] p-8 rounded-[2rem] shadow-sm border snap-center bg-white border-slate-100">
+<div className="flex items-center gap-4 mb-6">
+<img className="w-12 h-12 rounded-full object-cover" src="https://randomuser.me/api/portraits/women/42.jpg"/>
+<div>
+<p className="font-bold text-slate-900">Sarah Johnson</p>
+<p className="text-xs text-slate-400">Mother of Alex (4yo)</p>
+</div>
+</div>
+<div className="flex text-[#FFD93D] mb-4 text-xs">
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm italic leading-relaxed text-slate-600">"The teachers are incredibly patient and kind. Alex has bloomed socially since starting here."</p>
+</div>
+
+<div className="min-w-[300px] md:min-w-[400px] p-8 rounded-[2rem] shadow-sm border snap-center bg-white border-slate-100">
+<div className="flex items-center gap-4 mb-6">
+<img className="w-12 h-12 rounded-full object-cover" src="https://randomuser.me/api/portraits/men/32.jpg"/>
+<div className="">
+<p className="font-bold text-slate-900">Michael Chen</p>
+<p className="text-xs text-slate-400">Father of Lily (5yo)</p>
+</div>
+</div>
+<div className="flex text-[#FFD93D] mb-4 text-xs">
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm italic leading-relaxed text-slate-600">"Clean facilities, safe environment, and a curriculum that actually engages the kids. Highly recommend!"</p>
+</div>
+
+<div className="min-w-[300px] md:min-w-[400px] p-8 rounded-[2rem] shadow-sm border snap-center bg-white border-slate-100">
+<div className="flex items-center gap-4 mb-6">
+<img className="w-12 h-12 rounded-full object-cover" src="https://randomuser.me/api/portraits/women/64.jpg"/>
+<div>
+<p className="font-bold text-slate-900">Emily Davis</p>
+<p className="text-xs text-slate-400">Mother of Max (3yo)</p>
+</div>
+</div>
+<div className="flex text-[#FFD93D] mb-4 text-xs">
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+<iconify-icon icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm italic leading-relaxed text-slate-600">"The communication with parents is excellent. I always know how Max is doing with the daily updates."</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 px-6">
+<div className="max-w-6xl mx-auto bg-[#5BC0EB] rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden shadow-2xl shadow-blue-200">
+
+<div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none bg-white/10"></div>
+<div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FFD93D]/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none"></div>
+<div className="relative z-10 max-w-2xl mx-auto">
+<h2 className="text-4xl lg:text-5xl font-semibold mb-6 tracking-tight text-white">Ready to join the family?</h2>
+<p className="text-lg mb-10 font-medium text-blue-50">Limited spots available for the upcoming academic year. Schedule your campus tour today.</p>
+<div className="flex flex-col sm:flex-row gap-4 justify-center">
+<button className="px-8 py-4 text-[#5BC0EB] text-base font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-xl bg-white hover:bg-slate-50">
+                        Apply Now
+                    </button>
+<button className="px-8 py-4 bg-transparent border-2 text-base font-bold rounded-full transition-all duration-300 border-white/30 text-white hover:bg-white/10 hover:border-white">
+                        Contact Us
+                    </button>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="border-t pt-20 pb-10 bg-white border-slate-100">
+<div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-16">
+<div className="col-span-1">
+<div className="flex items-center gap-2 mb-6">
+<div className="w-8 h-8 bg-[#FFD93D] rounded-lg flex items-center justify-center text-white">
+<iconify-icon icon="solar:book-2-linear" width="18"></iconify-icon>
+</div>
+<span className="text-lg font-semibold tracking-tight text-slate-800">Bright<span className="text-[#5BC0EB]">Minds</span></span>
+</div>
+<p className="text-slate-500 text-sm mb-6 leading-relaxed">Igniting curiosity and fostering a lifelong love for learning in every child.</p>
+<div className="flex gap-4">
+<a className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-[#5BC0EB] transition-all bg-slate-100 hover:text-white" href="#">
+<iconify-icon icon="ri:facebook-fill" width="16"></iconify-icon>
+</a>
+<a className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-[#FF8FAB] transition-all bg-slate-100 hover:text-white" href="#">
+<iconify-icon icon="ri:instagram-line" width="16"></iconify-icon>
+</a>
+<a className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-[#FFD93D] transition-all bg-slate-100 hover:text-white" href="#">
+<iconify-icon icon="ri:twitter-x-fill" width="16"></iconify-icon>
+</a>
+</div>
+</div>
+<div className="">
+<h4 className="font-bold mb-6 text-slate-900">Explore</h4>
+<ul className="space-y-4 text-sm text-slate-500">
+<li><a className="hover:text-[#5BC0EB] transition-colors" href="#">Our Story</a></li>
+<li><a className="hover:text-[#5BC0EB] transition-colors" href="#">Teachers</a></li>
+<li><a className="hover:text-[#5BC0EB] transition-colors" href="#">Curriculum</a></li>
+<li><a className="hover:text-[#5BC0EB] transition-colors" href="#">Careers</a></li>
+</ul>
+</div>
+<div className="">
+<h4 className="font-bold mb-6 text-slate-900">Support</h4>
+<ul className="space-y-4 text-sm text-slate-500">
+<li className=""><a className="hover:text-[#5BC0EB] transition-colors" href="#">Parent Portal</a></li>
+<li><a className="hover:text-[#5BC0EB] transition-colors" href="#">FAQs</a></li>
+<li className=""><a className="hover:text-[#5BC0EB] transition-colors" href="#">Admissions</a></li>
+<li><a className="hover:text-[#5BC0EB] transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 className="font-bold mb-6 text-slate-900">Newsletter</h4>
+<p className="text-sm text-slate-500 mb-4">Updates on events and school news.</p>
+<form className="flex items-center gap-2">
+<input className="w-full border rounded-lg px-4 py-2 text-sm outline-none focus:border-[#5BC0EB] transition-colors placeholder:text-slate-400 bg-slate-50 border-slate-200" placeholder="Enter email" type="email"/>
+<button className="bg-[#5BC0EB] p-2 rounded-lg transition-colors text-white hover:bg-blue-400" type="button">
+<iconify-icon icon="solar:plain-2-linear" width="20"></iconify-icon>
+</button>
+</form>
+</div>
+</div>
+<div className="border-t pt-8 text-center border-slate-100">
+<p className="text-xs font-medium text-slate-400">© 2024 Bright Minds Academy. All rights reserved.</p>
+</div>
+</footer>
+
+    </>
+  );
+}

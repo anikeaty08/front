@@ -1,0 +1,295 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="iphone-frame">
+<div className="iphone-screen">
+<div className="notch"></div>
+<div className="screen-content bg-gray-50">
+
+<div className="pt-8 px-5 flex justify-between text-xs font-semibold">
+<span>9:41</span>
+<div className="flex space-x-1">
+<span>
+<svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 2L6 22"></path><path d="M10 6L10 22"></path><path d="M14 12L14 22"></path><path d="M18 16L18 22"></path>
+</svg>
+</span>
+<span>
+<svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M18 10L21 10"></path><path d="M18 14L21 14"></path><path d="M18 18L21 18"></path><path d="M18 6L21 6"></path><path d="M3 18L7 18 10 6 17 6"></path>
+</svg>
+</span>
+<span>
+<svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 7H3.77778C2.79594 7 2 7.74619 2 8.66667V15.3333C2 16.2538 2.79594 17 3.77778 17H7"></path>
+<path d="M17 7H20.2222C21.2041 7 22 7.74619 22 8.66667V15.3333C22 16.2538 21.2041 17 20.2222 17H17"></path>
+<path d="M7 7L7 17"></path>
+<path d="M17 7L17 17"></path>
+<path d="M7 12L17 12"></path>
+</svg>
+</span>
+</div>
+</div>
+
+<header className="px-6 pt-3 pb-4">
+<div className="flex items-center">
+<button className="mr-3 p-2 rounded-full bg-gray-100">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M19 12H5"></path>
+<path d="M12 19l-7-7 7-7"></path>
+</svg>
+</button>
+<h1 className="text-2xl font-bold text-gray-900">Living Room</h1>
+</div>
+</header>
+
+<main className="px-6">
+
+<div className="rounded-3xl overflow-hidden mb-6 relative">
+<img alt="Living Room" className="w-full h-48 object-cover" src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-4">
+<div className="text-white">
+<h2 className="text-xl font-bold">Living Room</h2>
+<p className="text-sm opacity-80">4 devices</p>
+</div>
+</div>
+</div>
+
+<div className="bg-white rounded-3xl p-6 mb-6 shadow-sm">
+<div className="flex justify-between items-center mb-4">
+<h3 className="text-lg font-semibold text-gray-800">Temperature</h3>
+<label className="toggle-switch">
+<input checked="" type="checkbox"/>
+<span className="toggle-slider"></span>
+</label>
+</div>
+<div className="circular-slider">
+<div className="slider-track">
+<div className="slider-inner">
+<span className="text-4xl font-light text-gray-800">22°</span>
+<span className="text-sm text-gray-500">Celsius</span>
+</div>
+</div>
+<div className="slider-knob"></div>
+</div>
+<div className="flex justify-between mt-6 text-sm text-gray-500">
+<span>16°</span>
+<span>20°</span>
+<span>24°</span>
+<span>28°</span>
+</div>
+</div>
+
+<h3 className="text-lg font-semibold text-gray-800 mb-4">Devices</h3>
+
+<div className="bg-white rounded-2xl p-4 mb-4 shadow-sm">
+<div className="flex justify-between items-center">
+<div className="flex items-center">
+<div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+<svg className="text-yellow-600" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="5"></circle>
+<line x1="12" x2="12" y1="1" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="23"></line>
+<line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+<line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+<line x1="1" x2="3" y1="12" y2="12"></line>
+<line x1="21" x2="23" y1="12" y2="12"></line>
+<line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+<line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+</svg>
+</div>
+<div>
+<h4 className="font-medium text-gray-900">Smart Lights</h4>
+<p className="text-xs text-gray-500">Phillips Hue</p>
+</div>
+</div>
+<label className="toggle-switch">
+<input checked="" type="checkbox"/>
+<span className="toggle-slider"></span>
+</label>
+</div>
+
+<div className="mt-4 px-2">
+<div className="flex justify-between text-xs text-gray-500 mb-1">
+<span>Brightness</span>
+<span>80%</span>
+</div>
+<input className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500" max="100" min="0" type="range" value="80"/>
+</div>
+
+<div className="mt-4">
+<p className="text-xs text-gray-500 mb-2">Color</p>
+<div className="flex space-x-3">
+<button className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center">
+<div className="w-6 h-6 rounded-full bg-white"></div>
+</button>
+<button className="w-8 h-8 rounded-full bg-yellow-100 border-2 border-gray-300"></button>
+<button className="w-8 h-8 rounded-full bg-orange-200 border-2 border-gray-300"></button>
+<button className="w-8 h-8 rounded-full bg-blue-200 border-2 border-gray-300"></button>
+<button className="w-8 h-8 rounded-full bg-purple-200 border-2 border-gray-300"></button>
+<button className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-300 to-blue-300 border-2 border-gray-300"></button>
+</div>
+</div>
+</div>
+
+<div className="bg-white rounded-2xl p-4 mb-4 shadow-sm">
+<div className="flex justify-between items-center">
+<div className="flex items-center">
+<div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+<svg className="text-blue-600" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<rect height="15" rx="2" ry="2" width="20" x="2" y="7"></rect>
+<polyline points="17 2 12 7 7 2"></polyline>
+</svg>
+</div>
+<div>
+<h4 className="font-medium text-gray-900">Smart TV</h4>
+<p className="text-xs text-gray-500">Samsung QN90A</p>
+</div>
+</div>
+<label className="toggle-switch">
+<input checked="" type="checkbox"/>
+<span className="toggle-slider"></span>
+</label>
+</div>
+
+<div className="mt-4 px-2">
+<div className="flex justify-between text-xs text-gray-500 mb-1">
+<span>Volume</span>
+<span>35%</span>
+</div>
+<input className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500" max="100" min="0" type="range" value="35"/>
+</div>
+
+<div className="mt-4">
+<p className="text-xs text-gray-500 mb-2">Source</p>
+<div className="flex space-x-2 overflow-x-auto py-1">
+<button className="px-3 py-1 bg-blue-500 text-white rounded-full text-xs font-medium">HDMI 1</button>
+<button className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-xs font-medium">HDMI 2</button>
+<button className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-xs font-medium">TV</button>
+<button className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-xs font-medium">Netflix</button>
+<button className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-xs font-medium">YouTube</button>
+</div>
+</div>
+</div>
+
+<div className="bg-white rounded-2xl p-4 mb-4 shadow-sm">
+<div className="flex justify-between items-center">
+<div className="flex items-center">
+<div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+<svg className="text-green-600" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+<polyline points="22 4 12 14.01 9 11.01"></polyline>
+</svg>
+</div>
+<div>
+<h4 className="font-medium text-gray-900">Air Purifier</h4>
+<p className="text-xs text-gray-500">Dyson Pure Cool</p>
+</div>
+</div>
+<label className="toggle-switch">
+<input checked="" type="checkbox"/>
+<span className="toggle-slider"></span>
+</label>
+</div>
+
+<div className="mt-4 flex justify-between bg-gray-50 p-3 rounded-xl">
+<div className="text-center">
+<p className="text-xs text-gray-500">PM2.5</p>
+<p className="font-medium text-green-600">12</p>
+</div>
+<div className="text-center">
+<p className="text-xs text-gray-500">Humidity</p>
+<p className="font-medium">48%</p>
+</div>
+<div className="text-center">
+<p className="text-xs text-gray-500">VOC</p>
+<p className="font-medium text-green-600">Low</p>
+</div>
+</div>
+
+<div className="mt-4">
+<p className="text-xs text-gray-500 mb-2">Fan Speed</p>
+<div className="flex space-x-2">
+<button className="flex-1 py-2 bg-blue-500 text-white rounded-xl text-xs font-medium">Auto</button>
+<button className="flex-1 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-medium">1</button>
+<button className="flex-1 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-medium">2</button>
+<button className="flex-1 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-medium">3</button>
+</div>
+</div>
+</div>
+
+<div className="bg-white rounded-2xl p-4 mb-4 shadow-sm">
+<div className="flex justify-between items-center">
+<div className="flex items-center">
+<div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+<svg className="text-purple-600" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<circle cx="12" cy="12" r="4"></circle>
+</svg>
+</div>
+<div>
+<h4 className="font-medium text-gray-900">Smart Speaker</h4>
+<p className="text-xs text-gray-500">Sonos One</p>
+</div>
+</div>
+<label className="toggle-switch">
+<input type="checkbox"/>
+<span className="toggle-slider"></span>
+</label>
+</div>
+</div>
+</main>
+</div>
+
+<nav className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 rounded-b-[40px]">
+<div className="flex justify-between max-w-md mx-auto">
+<button className="flex flex-col items-center text-blue-600">
+<svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+<span className="text-xs mt-1">Home</span>
+</button>
+<button className="flex flex-col items-center text-gray-500">
+<svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<rect height="14" rx="2" ry="2" width="20" x="2" y="3"></rect>
+<line x1="8" x2="16" y1="21" y2="21"></line>
+<line x1="12" x2="12" y1="17" y2="21"></line>
+</svg>
+<span className="text-xs mt-1">Devices</span>
+</button>
+<button className="flex flex-col items-center text-gray-500">
+<svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+<span className="text-xs mt-1">Security</span>
+</button>
+<button className="flex flex-col items-center text-gray-500">
+<svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+<span className="text-xs mt-1">Settings</span>
+</button>
+</div>
+</nav>
+<div className="home-indicator"></div>
+</div>
+</div>
+
+    </>
+  );
+}

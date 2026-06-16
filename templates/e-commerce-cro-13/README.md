@@ -1,0 +1,14 @@
+# E-commerce Growth & CRO Agency Template
+
+A high-converting landing page template designed for conversion rate optimization and e-commerce growth agencies to showcase results and attract clients.
+
+## Project Details
+- **Slug:** `e-commerce-cro-13`
+- **Views:** 52
+- **Tags:** Landing Page, Services, Technology, Dark, Clean, Animated, Minimal
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

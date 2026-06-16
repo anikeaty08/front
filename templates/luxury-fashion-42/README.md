@@ -1,0 +1,14 @@
+# Luxury Fashion E-commerce Landing Page Template
+
+A refined luxury fashion e-commerce landing page template for showcasing couture collections, featured products, and brand storytelling with a Parisian aesthetic.
+
+## Project Details
+- **Slug:** `luxury-fashion-42`
+- **Views:** 552
+- **Tags:** E-commerce, Fashion, Brand, Landing Page, Minimal, Clean, Large Type, Gradient, Grid, Style
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

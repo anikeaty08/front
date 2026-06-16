@@ -1,0 +1,14 @@
+# Bbb
+
+A dark, professional landing page template for forex education and trading communities, ideal for showcasing courses, memberships, and mentorship offers.
+
+## Project Details
+- **Slug:** `pfx-site-test2244`
+- **Views:** 39
+- **Tags:** Landing Page, Education, Services, Brand, Dark, Minimal, Large Type, Technology, Forex, trading
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

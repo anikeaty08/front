@@ -1,0 +1,14 @@
+# Managed IT & Web Services Landing Page Template
+
+A modern, conversion-focused landing page template for managed IT, web development, VOIP, and SEO service providers to showcase offerings and capture leads.
+
+## Project Details
+- **Slug:** `binaryitsolutions-dev`
+- **Views:** 56
+- **Tags:** Landing Page, Services, Technology, Brand, Dark, Clean, Gradient, Large Type, Minimal, Portfolio
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

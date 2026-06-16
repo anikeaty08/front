@@ -1,0 +1,3267 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+          !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+        
+
+
+        !function () {
+            if (!window.UnicornStudio) {
+                window.UnicornStudio = { isInitialized: !1 };
+                var i = document.createElement("script");
+                i.src = "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js";
+                i.onload = function () {
+                    window.UnicornStudio.isInitialized || (UnicornStudio.init(), window.UnicornStudio.isInitialized = !0);
+                };
+                (document.head || document.body).appendChild(i);
+            } else if (!window.UnicornStudio.isInitialized) {
+                UnicornStudio.init();
+                window.UnicornStudio.isInitialized = !0;
+            }
+        }();
+      
+
+
+      lucide.createIcons();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="aura-background-component top-0 w-full h-screen -z-10 absolute" data-alpha-mask="80" style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}>
+<div className="aura-background-component top-0 w-full -z-10 absolute h-full">
+<div className="absolute w-full h-full left-0 top-0 -z-10" data-us-project="ILgOO23w4wEyPQOKyLO4"></div>
+
+</div>
+</div>
+
+<div className="fixed inset-0 bg-[#030014] -z-20"></div>
+
+<div className="absolute inset-0 w-full h-screen z-0 pointer-events-none">
+<div className="absolute inset-0 w-full h-full" data-alpha-mask="100" data-us-project="HzcaAbRLaALMhHJp8gLY"></div>
+
+</div>
+
+<div className="fixed inset-0 pointer-events-none bg-grid z-[1]"></div>
+
+<nav className="fixed top-0 left-0 right-0 z-50 bg-[#030014]/40 backdrop-blur-xl border-b border-white/[0.06]">
+<div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div className="flex items-center gap-3 text-white">
+<i className="w-6 h-6 text-[#9382ff] fill-[#9382ff]/20" data-lucide="hexagon" strokeWidth="1.5"></i>
+<span className="font-heading font-medium text-xl tracking-tight">
+            Nexus
+          </span>
+</div>
+<div className="hidden md:flex items-center gap-8 text-base text-white/60">
+<a className="hover:text-white transition-colors" href="#">Features</a>
+<a className="hover:text-white transition-colors" href="#">Plans</a>
+<a className="hover:text-white transition-colors" href="#">About Us</a>
+<a className="hover:text-white transition-colors" href="#">Journal</a>
+<a className="hover:text-white transition-colors" href="#">Updates</a>
+</div>
+<div className="flex items-center gap-6 text-base">
+<a className="text-white/60 hover:text-white transition-colors hidden sm:block" href="#">
+            Sign In
+          </a>
+<a className="bg-gradient-to-b from-[#712fff] to-[#5a1cd6] hover:from-[#8145ff] hover:to-[#6a2ce6] text-white px-5 py-2.5 rounded-lg font-medium transition-all border border-[#bf97ff3d] shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" href="#">
+            Get Started Free
+          </a>
+</div>
+</div>
+</nav>
+
+<main className="z-10 overflow-hidden pt-40 pb-24 relative">
+
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[#9382ff]/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+<div className="text-center max-w-7xl mr-auto ml-auto pr-6 pl-6" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 30%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 30%, transparent)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.02] text-xs font-medium uppercase tracking-widest text-white/70 mb-8 backdrop-blur-sm">
+<i className="w-3.5 h-3.5 text-[#9382ff]" data-lucide="sparkles" strokeWidth="1.5"></i>
+          Capture thoughts with AI
+        </div>
+<h1 className="text-5xl md:text-7xl font-heading font-medium tracking-tight text-[#f4f0ff] mb-6 max-w-4xl mx-auto leading-[1.1]">
+          Expand your mind with Nexus
+        </h1>
+<p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-20 leading-relaxed">
+          Capture every spark, thought, and insight.
+        </p>
+
+<div className="relative max-w-5xl mx-auto rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.3)] h-[400px] md:h-[600px] flex text-left backdrop-blur-2xl ring-1 ring-white/10">
+
+<div className="hidden md:flex w-64 border-r border-white/10 bg-white/[0.02] p-4 flex-col gap-1 text-white/50 backdrop-blur-xl">
+<div className="flex items-center gap-2 mb-8 bg-white/[0.05] px-3 py-2 rounded-lg border border-white/10 shadow-inner">
+<i className="w-4 h-4" data-lucide="search" strokeWidth="1.5"></i>
+<span className="text-sm flex-1">Find anything...</span>
+<span className="text-xs bg-white/10 px-1.5 rounded text-white/60 shadow-sm">
+                ⌘K
+              </span>
+</div>
+<div className="flex items-center justify-between px-2 mb-2 mt-2">
+<span className="text-xs font-medium uppercase tracking-wider text-white/40">
+                Documents
+              </span>
+<i className="w-3.5 h-3.5 text-white/30" data-lucide="plus" strokeWidth="1.5"></i>
+</div>
+<div className="flex items-center gap-3 px-2 py-2 rounded-lg bg-white/10 text-white shadow-sm border border-white/5">
+<i className="w-4 h-4 text-[#9382ff]" data-lucide="file-edit" strokeWidth="1.5"></i>
+              Daily log
+            </div>
+<div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.06] transition-colors">
+<i className="w-4 h-4" data-lucide="files" strokeWidth="1.5"></i>
+              Everything
+            </div>
+<div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.06] transition-colors">
+<i className="w-4 h-4" data-lucide="check-square" strokeWidth="1.5"></i>
+              To-dos
+            </div>
+<div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/[0.06] transition-colors">
+<i className="w-4 h-4" data-lucide="share-2" strokeWidth="1.5"></i>
+              Graph
+            </div>
+</div>
+
+<div className="flex-1 p-6 md:p-10 relative bg-gradient-to-br from-transparent to-white/[0.02]">
+<div className="flex items-center gap-2 text-white/50 mb-8 text-sm">
+<div className="w-1.5 h-1.5 rounded-full bg-[#d6c7ff] shadow-[0_0_8px_#d6c7ff]"></div>
+<h2 className="text-white font-medium text-lg">
+                Mon, October 9th, 2023
+              </h2>
+</div>
+<div className="space-y-4 text-base text-white/80">
+<div className="flex gap-3">
+<span className="text-white/40 mt-1">•</span>
+<p>
+                  Today I started using
+                  <span className="text-[#d6c7ff] bg-[#9382ff]/20 px-1.5 py-0.5 rounded border border-[#9382ff]/20">
+                    Nexus!
+                  </span>
+</p>
+</div>
+<div className="flex gap-3 ml-6">
+<span className="text-white/30 mt-1">•</span>
+<p>What is Nexus?</p>
+</div>
+<div className="flex gap-3 ml-12">
+<span className="text-white/30 mt-1">-</span>
+<p>A thought-capture tool built to mimic the human brain.</p>
+</div>
+<div className="flex gap-3 ml-12">
+<span className="text-white/30 mt-1">-</span>
+<p>
+                  We recall concepts through connections. Nexus creates a web of
+                  ideas automatically.
+                </p>
+</div>
+<div className="flex gap-3 ml-12">
+<span className="text-white/30 mt-1">-</span>
+<p>
+                  Eventually, you achieve total recall. Nexus serves as your
+                  digital memory.
+                </p>
+</div>
+</div>
+
+<div className="hidden lg:block absolute right-8 top-10 w-[280px] bg-white/[0.05] backdrop-blur-2xl border border-white/20 rounded-xl p-5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+<div className="flex items-center justify-between mb-6 text-sm">
+<span className="text-white font-medium">October 2023</span>
+<div className="flex gap-2">
+<i className="w-4 h-4 text-white/40" data-lucide="chevron-left" strokeWidth="1.5"></i>
+<i className="w-4 h-4 text-white/40" data-lucide="chevron-right" strokeWidth="1.5"></i>
+</div>
+</div>
+<div className="grid grid-cols-7 gap-y-4 text-center text-xs text-white/50 mb-3 font-medium">
+<div>Mo</div>
+<div>Tu</div>
+<div>We</div>
+<div>Th</div>
+<div>Fr</div>
+<div>Sa</div>
+<div>Su</div>
+</div>
+<div className="grid grid-cols-7 gap-y-4 text-center text-sm text-white/80">
+<div className="text-white/30">27</div>
+<div className="text-white/30">28</div>
+<div className="text-white/30">29</div>
+<div className="text-white/30">30</div>
+<div className="text-white/30">31</div>
+<div className="text-white bg-[#9382ff]/80 backdrop-blur-md rounded w-6 h-6 flex items-center justify-center mx-auto shadow-[0_0_15px_rgba(147,130,255,0.6)] border border-[#9382ff]">
+                  1
+                </div>
+<div>2</div>
+<div>3</div>
+<div>4</div>
+<div>5</div>
+<div>6</div>
+<div>7</div>
+<div>8</div>
+<div>9</div>
+<div>10</div>
+<div>11</div>
+<div>12</div>
+<div>13</div>
+<div>14</div>
+<div>15</div>
+</div>
+</div>
+</div>
+
+<div className="flex z-10 group cursor-pointer transition-all bg-black/10 backdrop-blur-[2px] absolute top-0 right-0 bottom-0 left-0 items-center justify-center">
+<button className="w-20 h-20 rounded-full bg-white/[0.1] backdrop-blur-xl border border-white/20 flex items-center justify-center group-hover:bg-white/[0.15] group-hover:scale-105 transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)]">
+<i className="w-8 h-8 text-white fill-white ml-1" data-lucide="play" strokeWidth="1.5"></i>
+</button>
+</div>
+</div>
+</div>
+</main>
+
+<section className="max-w-7xl mx-auto pt-24 pb-24 px-6">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.05] border border-white/[0.05] group/grid relative z-0">
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-5 h-5 text-white/60" data-lucide="zap" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Lightning fast
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Real-time sync across all your platforms
+            </p>
+</div>
+</div>
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-5 h-5 text-white/60" data-lucide="network" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Connected ideas
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Build a visual web of your knowledge base
+            </p>
+</div>
+</div>
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-8 h-8 text-white/40 mb-6" data-lucide="smartphone" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Mobile ready
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Jot down thoughts anywhere, anytime
+            </p>
+</div>
+</div>
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-8 h-8 text-white/40 mb-6" data-lucide="shield" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Military-grade security
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Your data is entirely private and secure
+            </p>
+</div>
+</div>
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-5 h-5 text-white/60" data-lucide="calendar" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Schedule sync
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Manage all your events and tasks seamlessly
+            </p>
+</div>
+</div>
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-5 h-5 text-white/60" data-lucide="globe" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Easy sharing
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Broadcast your ideas to the world instantly
+            </p>
+</div>
+</div>
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-5 h-5 text-white/60" data-lucide="download" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Quick save
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Clip articles and highlights on the fly
+            </p>
+</div>
+</div>
+
+<div className="relative bg-[#030014] p-8 lg:p-10 transition-all duration-300 ease-out md:group-hover/grid:opacity-75 md:hover:!opacity-100 md:hover:scale-[1.02] md:hover:z-10 group/card">
+<div className="absolute inset-0 bg-gradient-to-br from-[#9382ff]/15 via-transparent to-transparent opacity-0 md:group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div className="absolute inset-0 ring-1 ring-inset ring-transparent md:group-hover/card:ring-[#9382ff]/30 transition-all duration-300 pointer-events-none z-0"></div>
+<div className="relative z-10 flex flex-col items-start">
+<div className="mb-6 text-white/50 md:group-hover/card:text-white transition-colors duration-300">
+<i className="w-6 h-6 text-white/40 mb-6" data-lucide="search" strokeWidth="1.5"></i>
+</div>
+<h3 className="text-white/90 md:group-hover/card:text-white font-normal text-xl tracking-tight mb-3 transition-colors duration-300">
+              Powerful queries
+            </h3>
+<p className="text-white/50 text-lg leading-relaxed">
+              Find exactly what you need in milliseconds
+            </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="relative pt-32 pb-40 overflow-hidden bg-[#030014]">
+<style>
+        @keyframes float-up {
+            0% { transform: translateY(0px) scale(1); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-350px) scale(0.5); opacity: 0; }
+        }
+      </style>
+
+<div className="absolute inset-0 top-0 w-full h-[900px] flex flex-col items-center justify-center pointer-events-none z-0">
+
+<div className="absolute inset-0 bg-[#030014]"></div>
+
+<div className="absolute top-[450px] w-[200vw] h-[450px] border-t border-[#c084fc]/10" style={{perspective: '1000px', left: '-50vw'}}>
+<div className="w-full h-full" style={{transformOrigin: 'top', backgroundImage: 'linear-gradient(to right, rgba(192,132,252,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(192,132,252,0.06) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)'}}></div>
+</div>
+
+<div className="absolute top-[450px] w-[800px] h-[350px] flex justify-center" style={{perspective: '1000px'}}>
+<div className="w-full h-full bg-gradient-to-b from-[#e879f9]/40 via-[#a855f7]/10 to-transparent blur-[12px]" style={{transformOrigin: 'top', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)'}}></div>
+</div>
+
+<div className="absolute top-[450px] w-full h-[1px] bg-gradient-to-r from-transparent via-[#e879f9]/50 to-transparent blur-[2px]"></div>
+<div className="absolute top-[450px] w-[900px] h-[400px] bg-[#a855f7]/15 blur-[80px] rounded-[100%] opacity-60"></div>
+
+<div className="absolute bottom-[450px] w-[800px] h-[600px] bg-gradient-to-t from-[#c084fc]/10 to-transparent blur-[80px] mix-blend-screen"></div>
+<div className="absolute bottom-[450px] w-[500px] h-[550px] bg-gradient-to-t from-[#a855f7]/30 via-[#c084fc]/15 to-transparent blur-[50px] mix-blend-screen"></div>
+<div className="absolute bottom-[450px] w-[250px] h-[450px] bg-gradient-to-t from-[#fdf4ff]/60 via-[#e879f9]/40 to-transparent blur-[25px] mix-blend-screen"></div>
+<div className="absolute bottom-[450px] w-[120px] h-[350px] bg-gradient-to-t from-white via-[#fdf4ff]/90 to-transparent blur-[12px] mix-blend-screen"></div>
+
+<div className="absolute bottom-[450px] w-[500px] h-[500px] overflow-visible pointer-events-none">
+<div className="absolute bottom-0 left-[45%] w-1.5 h-1.5 bg-white rounded-full blur-[1px]" style={{animation: 'float-up 4s ease-in-out infinite 0s'}}></div>
+<div className="absolute bottom-0 left-[55%] w-2 h-2 bg-[#fdf4ff] rounded-full blur-[2px]" style={{animation: 'float-up 5s ease-in-out infinite 1s'}}></div>
+<div className="absolute bottom-0 left-[48%] w-1 h-1 bg-white rounded-full blur-[0.5px]" style={{animation: 'float-up 3.5s ease-in-out infinite 2s'}}></div>
+<div className="absolute bottom-0 left-[60%] w-2 h-2 bg-[#e879f9] rounded-full blur-[2px]" style={{animation: 'float-up 6s ease-in-out infinite 0.5s'}}></div>
+<div className="absolute bottom-0 left-[40%] w-1.5 h-1.5 bg-white rounded-full blur-[1px]" style={{animation: 'float-up 4.5s ease-in-out infinite 1.5s'}}></div>
+<div className="absolute bottom-0 left-[35%] w-1 h-1 bg-[#fdf4ff] rounded-full blur-[1px]" style={{animation: 'float-up 5.5s ease-in-out infinite 2.5s'}}></div>
+<div className="absolute bottom-0 left-[50%] w-1 h-1 bg-white rounded-full blur-[0.5px]" style={{animation: 'float-up 4.2s ease-in-out infinite 0.8s'}}></div>
+</div>
+</div>
+
+<div className="relative z-10 w-full h-full pt-16">
+
+<div className="text-center max-w-4xl mx-auto px-6 mb-40 relative group">
+
+<div className="absolute inset-0 bg-gradient-to-r from-[#c084fc]/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-2xl"></div>
+<div className="relative bg-[#030014]/50 border border-white/[0.08] rounded-2xl p-8 md:p-10 max-w-3xl mx-auto text-left shadow-[0_0_50px_rgba(168,85,247,0.1)] backdrop-blur-2xl overflow-hidden hover:border-white/[0.15] transition-all duration-700 hover:shadow-[0_0_80px_rgba(168,85,247,0.2)] hover:-translate-y-1">
+
+<div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] to-transparent pointer-events-none h-[60%]"></div>
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[1px] bg-gradient-to-r from-transparent via-white/[0.25] to-transparent opacity-60"></div>
+
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-[1px] bg-gradient-to-r from-transparent via-[#e879f9]/40 to-transparent"></div>
+<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10 border-b border-white/[0.06] pb-8 mb-8">
+<span className="text-white font-normal text-xl tracking-tight">
+                Enhance your writing with AI assistance
+              </span>
+<button className="bg-[#c084fc]/10 hover:bg-[#c084fc]/20 text-[#e879f9] border border-[#c084fc]/20 px-5 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-all duration-300 w-fit font-normal">
+<svg className="lucide lucide-sparkles w-4 h-4" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path>
+<path d="M20 2v4"></path>
+<path d="M22 4h-4"></path>
+<circle cx="4" cy="20" r="2"></circle>
+</svg>
+                Experience the magic
+              </button>
+</div>
+<div className="relative z-10 flex items-start gap-4 text-white/60 text-base">
+<div className="w-1.5 h-1.5 rounded-full bg-[#e879f9]/50 mt-2 shrink-0"></div>
+<p className="leading-relaxed">
+                How can artificial intelligence transform your documentation?
+              </p>
+</div>
+</div>
+</div>
+
+<div className="max-w-5xl mx-auto px-6 relative z-10">
+<h3 className="text-center text-3xl font-normal tracking-tight text-white/90 mb-16">
+            What is possible with Nexus AI?
+          </h3>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-white/[0.04]">
+
+<div className="group relative flex flex-col items-center text-center px-8 py-16 border-b md:border-r border-white/[0.04] transition-all duration-500 hover:z-10 hover:bg-[#060410]/40 backdrop-blur-sm">
+
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[140px] bg-gradient-to-t from-[#c084fc]/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-[30px] pointer-events-none"></div>
+<div className="transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-[1.02] flex flex-col items-center relative z-10 w-full">
+<svg className="lucide lucide-mic w-7 h-7 text-white/40 mb-6 group-hover:text-white/90 transition-colors duration-500" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 19v3"></path>
+<path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+<rect height="13" rx="3" width="6" x="9" y="2"></rect>
+</svg>
+<h4 className="text-base font-normal text-white/90 mb-3 tracking-tight">
+                  Voice-to-text translation
+                </h4>
+<p className="text-base text-white/40 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
+                  with flawless precision
+                </p>
+</div>
+</div>
+
+<div className="group relative flex flex-col items-center text-center px-8 py-16 border-b md:border-r border-white/[0.04] transition-all duration-500 hover:z-10 hover:bg-[#060410]/40 backdrop-blur-sm">
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[140px] bg-gradient-to-t from-[#c084fc]/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-[30px] pointer-events-none"></div>
+<div className="transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-[1.02] flex flex-col items-center relative z-10 w-full">
+<svg className="lucide lucide-file-text w-7 h-7 text-white/40 mb-6 group-hover:text-white/90 transition-colors duration-500" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
+<path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+<path d="M10 9H8"></path>
+<path d="M16 13H8"></path>
+<path d="M16 17H8"></path>
+</svg>
+<h4 className="text-base font-normal text-white/90 mb-3 tracking-tight">
+                  Create structured drafts
+                </h4>
+<p className="text-base text-white/40 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
+                  out of raw brainstorms
+                </p>
+</div>
+</div>
+
+<div className="group relative flex flex-col items-center text-center px-8 py-16 border-b border-white/[0.04] transition-all duration-500 hover:z-10 hover:bg-[#060410]/40 backdrop-blur-sm">
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[140px] bg-gradient-to-t from-[#c084fc]/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-[30px] pointer-events-none"></div>
+<div className="transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-[1.02] flex flex-col items-center relative z-10 w-full">
+<svg className="lucide lucide-list-checks w-7 h-7 text-white/40 mb-6 group-hover:text-white/90 transition-colors duration-500" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 5h8"></path>
+<path d="M13 12h8"></path>
+<path d="M13 19h8"></path>
+<path d="m3 17 2 2 4-4"></path>
+<path d="m3 7 2 2 4-4"></path>
+</svg>
+<h4 className="text-base font-normal text-white/90 mb-3 tracking-tight">
+                  Extract main points and
+                </h4>
+<p className="text-base text-white/40 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
+                  tasks from your discussions
+                </p>
+</div>
+</div>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-0 max-w-4xl mx-auto border-b border-white/[0.04]">
+
+<div className="group relative flex flex-col items-center text-center px-8 py-16 border-b md:border-b-0 md:border-r border-white/[0.04] transition-all duration-500 hover:z-10 hover:bg-[#060410]/40 backdrop-blur-sm">
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[140px] bg-gradient-to-t from-[#c084fc]/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-[30px] pointer-events-none"></div>
+<div className="transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-[1.02] flex flex-col items-center relative z-10 w-full">
+<svg className="lucide lucide-message-square w-7 h-7 text-white/40 mb-6 group-hover:text-white/90 transition-colors duration-500" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path>
+</svg>
+<h4 className="text-base font-normal text-white/90 mb-3 tracking-tight">
+                  Converse with your data
+                </h4>
+<p className="text-base text-white/40 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
+                  to retrieve and structure knowledge
+                </p>
+</div>
+</div>
+
+<div className="group relative flex flex-col items-center text-center px-8 py-16 transition-all duration-500 hover:z-10 hover:bg-[#060410]/40 backdrop-blur-sm">
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[140px] bg-gradient-to-t from-[#c084fc]/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-[30px] pointer-events-none"></div>
+<div className="transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-[1.02] flex flex-col items-center relative z-10 w-full">
+<svg className="lucide lucide-save w-7 h-7 text-white/40 mb-6 group-hover:text-white/90 transition-colors duration-500" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path>
+<path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path>
+<path d="M7 3v4a1 1 0 0 0 1 1h7"></path>
+</svg>
+<h4 className="text-base font-normal text-white/90 mb-3 tracking-tight">
+                  Store personalized
+                </h4>
+<p className="text-base text-white/40 leading-relaxed group-hover:text-white/60 transition-colors duration-500">
+                  AI instructions
+                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="relative w-full overflow-hidden bg-[#030014] pt-40 pb-32 text-center text-white font-sans selection:bg-blue-500/30">
+<style className="">
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100px) translateX(0); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-400px) translateX(20px); opacity: 0; }
+        }
+        @keyframes beamIn {
+            0% { transform: scaleY(0); opacity: 0; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes scanMove {
+            0%, 100% { transform: translateX(-60px); }
+            50% { transform: translateX(60px); }
+        }
+        @keyframes scanMoveReverse {
+            0%, 100% { transform: translate(calc(-50% + 60px), -50%); }
+            50% { transform: translate(calc(-50% - 60px), -50%); }
+        }
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+      </style>
+
+<div className="z-[1] bg-[#030014] absolute top-0 right-0 bottom-0 left-0"></div>
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#030014_100%)] z-10 pointer-events-none"></div>
+
+<div className="absolute inset-0 flex justify-center gap-12 sm:gap-24 opacity-[0.04] pointer-events-none z-0">
+<div className="w-16 h-full bg-blue-400 blur-xl" style={{animation: 'floatY 10s ease-in-out infinite'}}></div>
+<div className="w-20 h-full bg-cyan-400 blur-2xl" style={{animation: 'floatY 12s ease-in-out infinite 2s'}}></div>
+<div className="w-24 h-full bg-blue-500 blur-3xl" style={{animation: 'floatY 14s ease-in-out infinite 1s'}}></div>
+<div className="w-24 h-full bg-blue-500 blur-3xl" style={{animation: 'floatY 13s ease-in-out infinite 3s'}}></div>
+<div className="w-20 h-full bg-cyan-400 blur-2xl" style={{animation: 'floatY 11s ease-in-out infinite 0.5s'}}></div>
+<div className="w-16 h-full bg-blue-400 blur-xl" style={{animation: 'floatY 9s ease-in-out infinite 1.5s'}}></div>
+</div>
+
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] pointer-events-none z-0 overflow-hidden mix-blend-screen" style={{animation: 'beamIn 2s ease-out forwards', transformOrigin: 'top'}}>
+
+<div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[100%] h-[120%] bg-[radial-gradient(ellipse_at_top,_rgba(37,99,235,0.25)_0%,_transparent_60%)] blur-3xl"></div>
+
+<div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[800px] bg-gradient-to-b from-cyan-400/30 via-blue-600/10 to-transparent blur-[50px]" style={{clipPath: 'polygon(30% 0, 70% 0, 100% 100%, 0% 100%)'}}></div>
+
+<div className="absolute top-[-5%] left-1/2 -translate-x-1/2 w-[250px] h-[600px] bg-gradient-to-b from-white/90 via-cyan-200/60 to-transparent blur-[30px]" style={{clipPath: 'polygon(40% 0, 60% 0, 85% 100%, 15% 100%)'}}></div>
+</div>
+
+<div className="absolute top-[200px] left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.2)_0%,_transparent_60%)] blur-[40px] pointer-events-none z-10" style={{animation: 'pulseGlow 6s ease-in-out infinite'}}></div>
+
+<div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+<div className="absolute bottom-[20%] left-[40%] w-1.5 h-1.5 bg-blue-200 rounded-full blur-[1px]" style={{animation: 'floatUp 4s ease-in-out infinite 0s'}}></div>
+<div className="absolute bottom-[10%] left-[60%] w-2 h-2 bg-cyan-200 rounded-full blur-[2px]" style={{animation: 'floatUp 5s ease-in-out infinite 1s'}}></div>
+<div className="absolute bottom-[30%] left-[48%] w-1 h-1 bg-white rounded-full blur-[0.5px]" style={{animation: 'floatUp 3.5s ease-in-out infinite 2s'}}></div>
+<div className="absolute bottom-[15%] left-[55%] w-2 h-2 bg-blue-300 rounded-full blur-[2px]" style={{animation: 'floatUp 6s ease-in-out infinite 0.5s'}}></div>
+<div className="absolute bottom-[25%] left-[35%] w-1.5 h-1.5 bg-cyan-100 rounded-full blur-[1px]" style={{animation: 'floatUp 4.5s ease-in-out infinite 1.5s'}}></div>
+<div className="absolute bottom-[5%] left-[45%] w-1.5 h-1.5 bg-white rounded-full blur-[1px]" style={{animation: 'floatUp 5.5s ease-in-out infinite 0.8s'}}></div>
+</div>
+
+<div className="relative z-20 max-w-4xl mx-auto px-6 mt-8 mb-16">
+<div className="inline-flex items-center px-4 py-1.5 rounded-full border border-blue-400/20 bg-blue-500/10 text-xs font-medium tracking-wide text-blue-200 mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+          Every idea, interlinked
+        </div>
+<h2 className="text-5xl md:text-6xl font-medium tracking-tight text-white mb-6 leading-[1.1] drop-shadow-2xl">
+          Unlock cognitive enhancement
+        </h2>
+<p className="text-lg md:text-xl text-slate-300/70 font-normal leading-relaxed max-w-2xl mx-auto">
+          Replicate human thought patterns by connecting concepts.
+          <br/>
+          Nexus constructs a digital vault for your memories.
+        </p>
+</div>
+
+<div className="relative z-20 grid md:grid-cols-2 max-w-[1000px] mx-auto border border-white/[0.06] bg-[#050414]/60 backdrop-blur-2xl rounded-2xl overflow-hidden mt-12 shadow-[0_20px_60px_rgba(0,0,0,0.6)] text-left">
+
+<div className="p-8 md:p-10 flex flex-col relative group border-b md:border-b-0 md:border-r border-white/[0.06] hover:bg-white/[0.02] transition-colors duration-500">
+
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[200px] bg-gradient-to-t from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none blur-2xl"></div>
+
+<div className="relative h-[240px] w-full mb-8 flex items-center justify-center">
+
+<div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.03)_1px,_transparent_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_at_center,_black_50%,_transparent_80%)]"></div>
+<svg className="absolute inset-0 w-full h-full" fill="none" viewbox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+
+<path d="M80 140 C 130 140, 160 170, 200 170 C 250 170, 270 190, 310 190" stroke="rgba(147, 130, 255, 0.3)" stroke-dasharray="600" stroke-dashoffset="600" strokeWidth="2" style={{animation: 'drawLine 3s ease-out forwards infinite alternate'}}></path>
+<path d="M130 60 C 160 60, 180 170, 200 170 C 230 170, 260 100, 320 100" stroke="rgba(59, 130, 246, 0.3)" stroke-dasharray="600" stroke-dashoffset="600" strokeWidth="2" style={{animation: 'drawLine 4s ease-out forwards infinite alternate 1s'}}></path>
+
+
+<g className="transform hover:scale-105 transition-transform cursor-pointer" style={{transformOrigin: '80px 140px'}}>
+<circle cx="80" cy="140" fill="#030014" r="14" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="2"></circle>
+<circle cx="80" cy="140" fill="#10b981" r="6" style={{animation: 'nodePulse 3s infinite'}}></circle>
+<text fill="rgba(255,255,255,0.5)" fontFamily="sans-serif" fontSize="11" text-anchor="middle" x="80" y="175">
+                  Understanding...
+                </text>
+</g>
+
+<g className="transform hover:scale-105 transition-transform cursor-pointer" style={{transformOrigin: '130px 60px'}}>
+<circle cx="130" cy="60" fill="#030014" r="16" stroke="rgba(236, 72, 153, 0.4)" strokeWidth="2"></circle>
+<circle cx="130" cy="60" fill="#ec4899" r="8" style={{animation: 'nodePulse 3s infinite 0.5s'}}></circle>
+<text fill="rgba(255,255,255,0.5)" fontFamily="sans-serif" fontSize="11" text-anchor="middle" x="130" y="95">
+                  Jane Doe
+                </text>
+</g>
+
+<g className="transform hover:scale-105 transition-transform cursor-pointer" style={{transformOrigin: '200px 170px'}}>
+<circle cx="200" cy="170" fill="#030014" r="18" stroke="rgba(168, 85, 247, 0.5)" strokeWidth="2"></circle>
+<circle cx="200" cy="170" fill="#a855f7" r="10" style={{animation: 'nodePulse 3s infinite 1s'}}></circle>
+<text fill="rgba(255,255,255,0.9)" fontFamily="sans-serif" fontSize="12" font-weight="500" text-anchor="middle" x="200" y="215">
+                  Nexus
+                </text>
+</g>
+
+<g className="transform hover:scale-105 transition-transform cursor-pointer" style={{transformOrigin: '320px 100px'}}>
+<circle cx="320" cy="100" fill="#030014" r="14" stroke="rgba(59, 130, 246, 0.4)" strokeWidth="2"></circle>
+<circle cx="320" cy="100" fill="#3b82f6" r="6" style={{animation: 'nodePulse 3s infinite 1.5s'}}></circle>
+<text fill="rgba(255,255,255,0.5)" fontFamily="sans-serif" fontSize="11" text-anchor="middle" x="320" y="135">
+                  Best practices
+                </text>
+</g>
+
+<g className="transform hover:scale-105 transition-transform cursor-pointer" style={{transformOrigin: '310px 190px'}}>
+<circle cx="310" cy="190" fill="#030014" r="14" stroke="rgba(245, 158, 11, 0.4)" strokeWidth="2"></circle>
+<circle cx="310" cy="190" fill="#f59e4b" r="6" style={{animation: 'nodePulse 3s infinite 0.2s'}}></circle>
+<text fill="rgba(255,255,255,0.5)" fontFamily="sans-serif" fontSize="11" text-anchor="middle" x="310" y="225">
+                  Bookmarking
+                </text>
+</g>
+</svg>
+</div>
+<div className="mt-auto relative z-10">
+<div className="mb-5 text-white/30 group-hover:text-blue-400 transition-colors duration-500">
+<svg className="w-6 h-6" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<rect height="14" rx="2" ry="2" width="14" x="8" y="8"></rect>
+<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+</svg>
+</div>
+<p className="text-base text-slate-400 leading-relaxed font-normal">
+<strong className="text-white font-medium">
+                Your ideas networked.
+              </strong>
+              Link your entries to build an accessible knowledge graph.
+            </p>
+</div>
+</div>
+
+<div className="p-8 md:p-10 flex flex-col relative group hover:bg-white/[0.02] transition-colors duration-500">
+
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[200px] bg-gradient-to-t from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none blur-2xl"></div>
+
+<div className="relative h-[240px] w-full mb-8 flex items-center justify-center overflow-hidden">
+
+<div className="w-full max-w-[280px] space-y-3 opacity-30 blur-[2.5px] pointer-events-none">
+<div className="w-full h-10 bg-white/5 rounded-lg border border-white/10 flex items-center px-4">
+<div className="w-3.5 h-3.5 rounded-full border border-white/30 mr-3"></div>
+<div className="h-2 w-24 bg-white/30 rounded"></div>
+<div className="ml-auto h-1.5 w-16 bg-white/20 rounded"></div>
+</div>
+<div className="w-full h-12 bg-white/10 rounded-lg border border-white/20 flex items-center px-4">
+<div className="w-3.5 h-3.5 rounded-full border-2 border-white/40 mr-3"></div>
+<div className="h-2 w-16 bg-white/50 rounded"></div>
+</div>
+<div className="w-full h-10 bg-white/5 rounded-lg border border-white/10 flex items-center px-4">
+<div className="w-3.5 h-3.5 rounded-full border border-white/30 mr-3"></div>
+<div className="h-2 w-32 bg-white/30 rounded"></div>
+<div className="ml-auto h-1.5 w-20 bg-white/20 rounded"></div>
+</div>
+</div>
+
+<div className="absolute w-40 h-40 rounded-full border border-white/10 bg-[#0a0a1a]/60 shadow-[0_0_30px_rgba(59,130,246,0.2)_inset,0_15px_40px_rgba(0,0,0,0.6)] flex items-center justify-center z-10 overflow-hidden backdrop-blur-md" style={{animation: 'scanMove 7s ease-in-out infinite'}}>
+
+<div className="absolute w-[280px] h-[150px] left-1/2 top-1/2 -translate-y-1/2" style={{animation: 'scanMoveReverse 7s ease-in-out infinite', transformOrigin: 'center'}}>
+<div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 scale-110 pointer-events-none">
+
+<div className="w-full h-10 flex items-center px-4 text-white/40 text-xs">
+<div className="w-3.5 h-3.5 rounded-full border border-white/20 mr-3"></div>
+                    Alice Smith
+                  </div>
+
+<div className="w-full h-12 bg-blue-500/20 rounded-lg border border-blue-500/40 flex items-center px-4 shadow-[0_8px_20px_rgba(0,0,0,0.4)] text-white text-sm font-medium">
+<div className="w-3.5 h-3.5 rounded-full border-2 border-blue-400 mr-3 flex items-center justify-center">
+<div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+</div>
+                    Bob Johnson
+                  </div>
+
+<div className="w-full h-10 flex items-center px-4 text-white/40 text-xs">
+<div className="w-3.5 h-3.5 rounded-full border border-white/20 mr-3"></div>
+                    David Lee // Dad
+                  </div>
+</div>
+</div>
+
+<div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none"></div>
+<div className="absolute top-2 right-4 w-8 h-3 bg-white/20 rounded-full blur-[2px] transform rotate-45 pointer-events-none"></div>
+</div>
+</div>
+<div className="mt-auto relative z-10">
+<div className="mb-5 text-white/30 group-hover:text-blue-400 transition-colors duration-500">
+<svg className="w-6 h-6" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+<path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+<path d="M10 9H8"></path>
+<path d="M16 13H8"></path>
+<path d="M16 17H8"></path>
+<circle cx="10" cy="13" r="2"></circle>
+<line x1="12" x2="14" y1="15" y2="17"></line>
+</svg>
+</div>
+<p className="text-base text-slate-400 leading-relaxed font-normal">
+<strong className="text-white font-medium">
+                Seamless idea logging.
+              </strong>
+              Draft your concepts and tasks without breaking focus.
+            </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="overflow-hidden selection:bg-purple-500/30 font-sans bg-[#03010a] pt-32 pb-32 relative">
+<style>
+        @keyframes radar-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse-node {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.8); opacity: 1; filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.8)); }
+        }
+        @keyframes breathe-core {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6)); }
+        }
+        @keyframes float-particle-slow {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            20% { opacity: 0.4; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-80px) translateX(20px); opacity: 0; }
+        }
+        @keyframes network-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+      </style>
+
+<div className="absolute inset-0 z-0 pointer-events-none flex justify-center items-center">
+<div className="absolute top-1/4 w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,_rgba(88,28,135,0.15)_0%,_transparent_70%)] blur-[80px]"></div>
+<div className="absolute bottom-1/4 w-[600px] h-[400px] bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.08)_0%,_transparent_70%)] blur-[60px]"></div>
+</div>
+
+<div className="absolute inset-0 z-0 pointer-events-none">
+<div className="absolute top-[20%] left-[20%] w-1 h-1 bg-purple-400 rounded-full blur-[1px]" style={{animation: 'float-particle-slow 10s linear infinite'}}></div>
+<div className="absolute top-[40%] left-[80%] w-1.5 h-1.5 bg-blue-400 rounded-full blur-[1px]" style={{animation: 'float-particle-slow 14s linear infinite 2s'}}></div>
+<div className="absolute top-[60%] left-[30%] w-0.5 h-0.5 bg-indigo-300 rounded-full" style={{animation: 'float-particle-slow 8s linear infinite 5s'}}></div>
+<div className="absolute top-[30%] left-[60%] w-1 h-1 bg-purple-300 rounded-full blur-[0.5px]" style={{animation: 'float-particle-slow 12s linear infinite 7s'}}></div>
+</div>
+
+<div className="relative z-10 w-full max-w-5xl mx-auto h-[350px] md:h-[450px] flex flex-col justify-end items-center pointer-events-none">
+
+<div className="absolute bottom-0 w-full max-w-[900px] aspect-[2/1] overflow-hidden">
+
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-[radial-gradient(ellipse_at_bottom,_rgba(168,85,247,0.15)_0%,_transparent_70%)] blur-2xl"></div>
+
+<svg className="absolute bottom-0 w-full h-full opacity-80" preserveaspectratio="xMidYMax meet" viewbox="0 0 900 450">
+<defs>
+<radialgradient cx="450" cy="450" gradientunits="userSpaceOnUse" id="radar-gradient" r="400">
+<stop offset="0%" stop-color="#d8b4fe" stop-opacity="0.6"></stop>
+<stop offset="30%" stop-color="#a855f7" stop-opacity="0.3"></stop>
+<stop offset="70%" stop-color="#3b82f6" stop-opacity="0.1"></stop>
+<stop offset="100%" stop-color="#3b82f6" stop-opacity="0"></stop>
+</radialgradient>
+<filter height="200%" id="radar-blur" width="200%" x="-50%" y="-50%">
+<fegaussianblur stddeviation="16"></fegaussianblur>
+</filter>
+</defs>
+<g fill="none" stroke="rgba(168, 85, 247, 0.15)" strokeWidth="1">
+
+<path d="M 450,450 m -400,0 a 400,400 0 0,1 800,0" stroke-dasharray="4 8"></path>
+<path d="M 450,450 m -320,0 a 320,320 0 0,1 640,0"></path>
+<path d="M 450,450 m -240,0 a 240,240 0 0,1 480,0" stroke-dasharray="2 6"></path>
+<path d="M 450,450 m -160,0 a 160,160 0 0,1 320,0"></path>
+<path d="M 450,450 m -80,0 a 80,80 0 0,1 160,0" stroke="rgba(168, 85, 247, 0.3)"></path>
+
+<line x1="450" x2="50" y1="450" y2="450"></line>
+<line x1="450" x2="850" y1="450" y2="450"></line>
+<line x1="450" x2="450" y1="450" y2="50"></line>
+
+<line opacity="0.5" stroke-dasharray="4 4" x1="450" x2="167" y1="450" y2="167"></line>
+<line opacity="0.5" stroke-dasharray="4 4" x1="450" x2="733" y1="450" y2="167"></line>
+
+<line stroke="rgba(168, 85, 247, 0.08)" x1="450" x2="80" y1="450" y2="297"></line>
+<line stroke="rgba(168, 85, 247, 0.08)" x1="450" x2="820" y1="450" y2="297"></line>
+
+<line stroke="rgba(168, 85, 247, 0.08)" x1="450" x2="297" y1="450" y2="80"></line>
+<line stroke="rgba(168, 85, 247, 0.08)" x1="450" x2="603" y1="450" y2="80"></line>
+</g>
+
+<g style={{transformOrigin: '450px 450px', animation: 'radar-spin 8s linear infinite'}}>
+<path d="M 450 450 L 850 450 A 400 400 0 0 0 650 103.59 Z" fill="url(#radar-gradient)" filter="url(#radar-blur)"></path>
+</g>
+
+<circle cx="210" cy="450" fill="#c084fc" r="2.5" style={{animation: 'pulse-node 4s infinite 0.2s', transformOrigin: '210px 450px'}}></circle>
+<circle cx="130" cy="450" fill="#818cf8" r="2.5" style={{animation: 'pulse-node 5.5s infinite 1.5s', transformOrigin: '130px 450px'}}></circle>
+<circle cx="690" cy="450" fill="#c084fc" r="2.5" style={{animation: 'pulse-node 4.2s infinite 3s', transformOrigin: '690px 450px'}}></circle>
+<circle cx="770" cy="450" fill="#a855f7" r="2.5" style={{animation: 'pulse-node 6s infinite 0.8s', transformOrigin: '770px 450px'}}></circle>
+<circle cx="450" cy="210" fill="#a855f7" r="2.5" style={{animation: 'pulse-node 4.8s infinite 2.2s', transformOrigin: '450px 210px'}}></circle>
+<circle cx="450" cy="130" fill="#60a5fa" r="2.5" style={{animation: 'pulse-node 3.5s infinite 1.1s', transformOrigin: '450px 130px'}}></circle>
+<circle cx="280" cy="280" fill="#c084fc" r="2.5" style={{animation: 'pulse-node 5.2s infinite 0.5s', transformOrigin: '280px 280px'}}></circle>
+<circle cx="620" cy="280" fill="#818cf8" r="2.5" style={{animation: 'pulse-node 4.5s infinite 2.8s', transformOrigin: '620px 280px'}}></circle>
+
+<g transform="translate(676, 224)">
+<circle cx="0" cy="0" fill="rgba(168, 85, 247, 0.05)" r="24" style={{animation: 'breathe-core 4s infinite 1s'}}></circle>
+<circle cx="0" cy="0" fill="#d8b4fe" r="3" style={{animation: 'breathe-core 4s infinite 1s', boxShadow: '0 0 12px 4px rgba(168,85,247,0.8)'}}></circle>
+</g>
+</svg>
+</div>
+
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-24 h-24 flex items-center justify-center z-20">
+
+<div className="absolute inset-[-20px] bg-purple-600/20 rounded-full blur-xl" style={{animation: 'breathe-core 4s ease-in-out infinite'}}></div>
+<div className="absolute inset-0 bg-indigo-500/30 rounded-full blur-md" style={{animation: 'breathe-core 4s ease-in-out infinite 0.5s'}}></div>
+
+<div className="relative w-16 h-16 rounded-full border border-purple-400/40 bg-[#060314] flex items-center justify-center shadow-[0_0_20px_rgba(147,51,234,0.4)_inset]" style={{animation: 'breathe-core 4s ease-in-out infinite'}}>
+
+<svg className="w-10 h-10 text-purple-200" style={{animation: 'network-pulse 3s ease-in-out infinite'}} viewbox="0 0 40 40">
+<g fill="none" opacity="0.7" stroke="currentColor" strokeWidth="0.75">
+<path d="M20 6 L30 14 L30 26 L20 34 L10 26 L10 14 Z"></path>
+<path d="M20 6 L20 34 M10 14 L30 26 M10 26 L30 14" opacity="0.4"></path>
+<path d="M20 12 L26 18 L26 24 L20 30 L14 24 L14 18 Z" opacity="0.5"></path>
+</g>
+<g fill="currentColor">
+<circle cx="20" cy="6" r="1.5"></circle>
+<circle cx="30" cy="14" r="1.5"></circle>
+<circle cx="30" cy="26" r="1.5"></circle>
+<circle cx="20" cy="34" r="1.5"></circle>
+<circle cx="10" cy="26" r="1.5"></circle>
+<circle cx="10" cy="14" r="1.5"></circle>
+<circle cx="20" cy="20" fill="#fff" r="2.5" style={{filter: 'drop-shadow(0 0 4px #c084fc)'}}></circle>
+</g>
+</svg>
+</div>
+</div>
+</div>
+
+<div className="relative z-10 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent">
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-blue-400/40 to-transparent blur-[1px]"></div>
+</div>
+
+<div className="relative z-0 w-full max-w-[900px] mx-auto h-[120px] flex justify-center pointer-events-none opacity-20" style={{maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)'}}>
+<svg className="w-full h-full" preserveaspectratio="none" viewbox="0 0 900 120">
+<g fill="none" stroke="rgba(168, 85, 247, 0.15)" strokeWidth="1" transform="scale(1, -1) translate(0, -120)">
+<path d="M 450,120 m -400,0 a 400,400 0 0,1 800,0" stroke-dasharray="4 8"></path>
+<path d="M 450,120 m -320,0 a 320,320 0 0,1 640,0"></path>
+<path d="M 450,120 m -240,0 a 240,240 0 0,1 480,0"></path>
+</g>
+</svg>
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[100px] bg-gradient-to-b from-purple-600/10 to-transparent blur-xl"></div>
+</div>
+
+<div className="relative z-20 max-w-4xl mx-auto px-6 mt-8 mb-20 text-center">
+<div className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/5 bg-[#0a051e]/80 text-xs font-medium tracking-wide text-slate-300 mb-8 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.5)] hover:border-white/10 transition-colors cursor-default">
+          Knowledge gathering
+        </div>
+<h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-white mb-6">
+          Retain everything
+        </h2>
+<p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto font-light">
+          Gather highlights, bookmarks, and quotes in a single repository.
+          <br/>
+          Access your vault instantly from anywhere.
+        </p>
+</div>
+
+<div className="relative z-20 grid md:grid-cols-2 gap-px max-w-5xl mx-auto px-6">
+
+<div className="group flex flex-col items-center text-center p-10 pt-12 border-t border-white/[0.04] md:border-r hover:bg-white/[0.01] transition-colors duration-500 relative">
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-px bg-gradient-to-r from-transparent via-purple-500/0 group-hover:via-purple-500/20 to-transparent transition-colors duration-500"></div>
+<div className="relative mb-6">
+<i className="w-8 h-8 text-white/40 mb-6" data-lucide="smartphone" strokeWidth="1.5"></i>
+<div className="absolute inset-0 bg-purple-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+<h4 className="text-lg font-medium text-slate-200 group-hover:text-white mb-4 transition-colors">
+            Omnipresent sync
+          </h4>
+<p className="text-base text-slate-500 leading-relaxed max-w-sm group-hover:text-slate-400 transition-colors">
+            Available on all screens, connected or not. Your data flows
+            instantly.
+          </p>
+</div>
+
+<div className="group flex flex-col items-center text-center p-10 pt-12 border-t border-white/[0.04] hover:bg-white/[0.01] transition-colors duration-500 relative">
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-px bg-gradient-to-r from-transparent via-blue-500/0 group-hover:via-blue-500/20 to-transparent transition-colors duration-500"></div>
+<div className="relative mb-6">
+<i className="w-8 h-8 text-white/40 mb-6" data-lucide="shield" strokeWidth="1.5"></i>
+<div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+<h4 className="text-lg font-medium text-slate-200 group-hover:text-white mb-4 transition-colors">
+            Locked yet accessible
+          </h4>
+<p className="text-base text-slate-500 leading-relaxed max-w-sm group-hover:text-slate-400 transition-colors">
+            Zero-knowledge privacy protects your words. Open APIs let you take
+            them anywhere.
+          </p>
+</div>
+</div>
+</section>
+
+<section className="relative min-h-[800px] flex items-center justify-center overflow-hidden bg-[#030014] font-sans">
+<style>
+        /* ===== RADIAL REVEAL ===== */
+        @keyframes scan-wave {
+          0% {
+            -webkit-mask-size: 0% 0%;
+            mask-size: 0% 0%;
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          100% {
+            -webkit-mask-size: 300% 300%;
+            mask-size: 300% 300%;
+            opacity: 0;
+          }
+        }
+
+        .mask-reveal {
+          -webkit-mask-image: radial-gradient(circle at center, black 5%, rgba(0,0,0,0.9) 30%, transparent 70%);
+          mask-image: radial-gradient(circle at center, black 5%, rgba(0,0,0,0.9) 30%, transparent 70%);
+          -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+          animation: scan-wave 6s ease-out infinite;
+        }
+
+        /* ===== CORE FLOAT ===== */
+        @keyframes float-core {
+          0%,100% { transform: translate(-50%, -50%) translateY(0); }
+          50% { transform: translate(-50%, -50%) translateY(-6px); }
+        }
+
+        /* ===== CORE PULSE ===== */
+        @keyframes core-pulse {
+          0%,100% { opacity: 0.6; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.15); }
+        }
+
+        /* ===== RING EXPANSION ===== */
+        @keyframes ring-expand {
+          0% {
+            transform: translate(-50%, -50%) scale(0.2);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.6;
+          }
+          100% {
+            transform: translate(-50%, -50%) scale(2.5);
+            opacity: 0;
+          }
+        }
+
+        /* ===== TEXT FLICKER ===== */
+        @keyframes flicker {
+          0%,100% { opacity: 1; }
+          50% { opacity: 0.6; }
+        }
+      </style>
+
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#030014_100%)] z-30 pointer-events-none"></div>
+
+<div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 blur-md">
+<div className="max-w-5xl text-center text-xs md:text-sm font-mono leading-[2.5] tracking-widest text-slate-700 px-6 select-none">
+          X9kA123mN :: B7qP09xZ :: mC4wL1 :: T8vN55k :: Z2mP77vQ :: vM0PqX9 ::
+          lKp0r4T ::
+        </div>
+</div>
+
+<div className="absolute inset-0 z-10 mask-reveal flex items-center justify-center pointer-events-none">
+<div className="max-w-5xl text-center text-xs md:text-sm font-mono leading-[2.5] tracking-widest text-slate-300 mix-blend-screen px-6" style={{textShadow: '0 0 12px rgba(168,85,247,0.4)'}}>
+<span className="text-purple-400 animate-[flicker_3s_infinite]">
+            B7qP09xZ ::
+          </span>
+<span className="text-blue-400">T8vN55k ::</span>
+<span className="text-indigo-400">Z2mP77vQ ::</span>
+<span className="text-purple-400 animate-[flicker_4s_infinite]">
+            vM0PqX9 ::
+          </span>
+<span className="text-blue-400">lKp0r4T ::</span>
+</div>
+</div>
+
+<div className="absolute top-1/2 left-1/2 w-[700px] aspect-square z-20 pointer-events-none" style={{animation: 'ring-expand 6s ease-out infinite'}}>
+<div className="absolute inset-0 rounded-full border border-purple-400/40"></div>
+</div>
+<div className="absolute top-1/2 left-1/2 w-[700px] aspect-square z-20 pointer-events-none" style={{animation: 'ring-expand 6s ease-out infinite 1s'}}>
+<div className="absolute inset-0 rounded-full border border-blue-400/30"></div>
+</div>
+
+<div className="absolute top-1/2 left-1/2 z-40 w-28 h-28 flex items-center justify-center" style={{animation: 'float-core 6s ease-in-out infinite'}}>
+
+<div className="absolute inset-[-50%] bg-purple-600/30 rounded-full blur-2xl" style={{animation: 'core-pulse 4s ease-in-out infinite'}}></div>
+
+<div className="relative w-20 h-20 bg-[#030014] rounded-full border border-purple-500/40 flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.4)_inset]">
+
+<svg fill="none" height="28" stroke="white" strokeLinecap="round" strokeWidth="1.5" viewbox="0 0 24 24" width="28">
+<rect height="11" rx="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+</div>
+</div>
+
+<div className="relative z-40 text-center mt-[250px] px-6 max-w-3xl">
+<div className="inline-block mb-6 px-4 py-1 rounded-full border border-purple-500/20 text-xs tracking-widest text-purple-300 backdrop-blur">
+          PRIVACY FIRST
+        </div>
+<h2 className="text-4xl md:text-5xl lg:text-6xl text-white mb-6">
+          Bulletproof protection
+        </h2>
+<p className="text-lg text-slate-400">
+          Your content is sealed with state-of-the-art cryptography. We have
+          zero access to your data.
+        </p>
+</div>
+</section>
+
+<section className="overflow-hidden font-sans text-center bg-[#030014] pt-32 pb-40 relative">
+<style>
+        /* Slices Assembly Animation */
+        @keyframes slice-up {
+            0% {
+                transform: translateY(var(--start-y, 80px));
+                opacity: 0;
+                filter: blur(12px);
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        .slice-panel {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            animation: slice-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0s) forwards;
+        }
+
+        /* Inner UI Element Fade-Up */
+        @keyframes inner-reveal-anim {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+                filter: blur(4px);
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        .inner-reveal {
+            opacity: 0;
+            animation: inner-reveal-anim 0.8s cubic-bezier(0.16, 1, 0.3, 1) var(--inner-delay, 1s) forwards;
+        }
+
+        /* Sweeping Light Reflection */
+        @keyframes sweep-anim {
+            0% {
+                transform: translateX(-100%) skewX(-15deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(50%) skewX(-15deg);
+                opacity: 0;
+            }
+        }
+
+        .sweep-anim {
+            animation: sweep-anim 2.5s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+            opacity: 0;
+        }
+
+        /* Top Arc Pulsing */
+        @keyframes arc-pulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scaleY(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scaleY(1.02);
+            }
+        }
+      </style>
+
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[800px] pointer-events-none flex justify-center z-0 overflow-hidden">
+
+<div className="absolute top-[-200px] w-[800px] h-[400px] bg-gradient-to-b from-[#3b82f6]/20 to-transparent blur-[100px] rounded-[100%]"></div>
+
+<div className="absolute top-[-400px] w-[1200px] h-[600px] rounded-[100%] border-[20px] border-t-0 border-[#a855f7]/30 blur-[24px]"></div>
+
+<div className="absolute top-[-400px] w-[1200px] h-[600px] rounded-[100%] border-b-[3px] border-white/80 blur-[2px] shadow-[0_10px_60px_rgba(168,85,247,0.8)]" style={{animation: 'arc-pulse 5s ease-in-out infinite'}}></div>
+
+<div className="absolute top-[-380px] w-[1160px] h-[580px] rounded-[100%] border-b-[8px] border-[#3b82f6]/60 blur-[8px]"></div>
+</div>
+
+<div className="relative z-10 max-w-3xl mx-auto px-6 mb-20 mt-16">
+<div className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/10 bg-[#060410]/60 text-xs font-medium tracking-widest text-[#d6c7ff] mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(147,130,255,0.15)] uppercase">
+          Conferences
+        </div>
+<h2 className="text-5xl md:text-6xl font-medium tracking-tight text-[#f4f0ff] mb-6 leading-[1.1] drop-shadow-2xl">
+          Maximize your
+          <br/>
+          sync sessions
+        </h2>
+<p className="text-lg md:text-xl text-slate-400 font-light leading-relaxed max-w-xl mx-auto">
+          Log discussions, decisions, and action items effortlessly.
+          <br/>
+          Sync seamlessly with your preferred scheduling tools.
+        </p>
+</div>
+
+<div className="relative w-full max-w-5xl mx-auto h-auto md:h-[450px] px-6 md:px-0 z-20">
+
+<div className="absolute inset-0 flex pointer-events-none z-30 mx-6 md:mx-0">
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-white/[0.03]"></div>
+<div className="flex-1 border-l border-r border-white/[0.03]"></div>
+</div>
+
+
+<div className="slice-panel" style={{clipPath: 'inset(0 90% 0 0)', -StartY: '60px', -Delay: '0.5s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 80% 0 10%)', -StartY: '100px', -Delay: '0.4s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 70% 0 20%)', -StartY: '70px', -Delay: '0.3s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/30" classdiv="">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 60% 0 30%)', -StartY: '120px', -Delay: '0.2s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 50% 0 40%)', -StartY: '80px', -Delay: '0.1s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 40% 0 50%)', -StartY: '110px', -Delay: '0.15s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 30% 0 60%)', -StartY: '70px', -Delay: '0.25s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 20% 0 70%)', -StartY: '100px', -Delay: '0.35s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 10% 0 80%)', -StartY: '60px', -Delay: '0.45s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
+<div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
+<div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
+<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<h3 className="text-white text-xl font-medium mb-6">
+                  Tue, November 14th, 2023
+                </h3>
+<div className="flex gap-4">
+<div className="w-1.5 h-1.5 rounded-full bg-[#a855f7] mt-2.5 shrink-0 shadow-[0_0_10px_#a855f7]"></div>
+<p className="text-slate-300 text-base leading-relaxed">
+                    Today I started using
+                    <span className="text-[#a855f7] font-medium border-b border-[#a855f7]/30 pb-0.5">
+                      nexus.app
+                    </span>
+                    !
+                  </p>
+</div>
+</div>
+<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
+<div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
+</div>
+</div>
+<div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
+<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<h3 className="text-white font-medium text-base">November 2023</h3>
+<div className="flex gap-2">
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-left"></i>
+</div>
+<div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
+<i className="w-4 h-4" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
+<div className="text-xs text-white/30 font-medium">Mo</div>
+<div className="text-xs text-white/30 font-medium">Tu</div>
+<div className="text-xs text-white/30 font-medium">We</div>
+<div className="text-xs text-white/30 font-medium">Th</div>
+<div className="text-xs text-white/30 font-medium">Fr</div>
+<div className="text-xs text-white/20 font-medium">Sa</div>
+<div className="text-xs text-white/20 font-medium">Su</div>
+<div className="text-white/20">30</div>
+<div className="text-white/20">31</div>
+<div className="text-white/70">1</div>
+<div className="text-white/70">2</div>
+<div className="text-white/70">3</div>
+<div className="text-white/30">4</div>
+<div className="text-white/30">5</div>
+<div className="text-white/70">6</div>
+<div className="text-white/70">7</div>
+<div className="text-white/70">8</div>
+<div className="text-white/70">9</div>
+<div className="text-white/70">10</div>
+<div className="text-white/30">11</div>
+<div className="text-white/30">12</div>
+<div className="text-white/70">13</div>
+<div className="relative flex items-center justify-center w-7 h-7 mx-auto">
+<div className="absolute inset-0 bg-[#a855f7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.6)]"></div>
+<span className="relative text-white font-medium z-10">14</span>
+</div>
+<div className="text-white/70">15</div>
+<div className="text-white/70">16</div>
+<div className="text-white/70">17</div>
+<div className="text-white/30">18</div>
+<div className="text-white/30">19</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="slice-panel" style={{clipPath: 'inset(0 0 0 90%)', -StartY: '90px', -Delay: '0.55s'}}>
+<div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden"></div>
+</div>
+</div>
+</section>
+
+<section className="relative overflow-hidden bg-[#030014] text-center pt-32 pb-40 font-sans">
+<style>
+        @keyframes pulse-ring {
+          0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+          100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
+        @keyframes float-smooth {
+          0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+          50% { transform: translate(-50%, -50%) translateY(-8px); }
+        }
+        @keyframes node-float-smooth {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes draw-flow {
+          0% { stroke-dashoffset: 100; opacity: 0; }
+          20% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+        @keyframes spin-slow {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .glass-card {
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(12px);
+        }
+        .glow-text {
+          text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+      </style>
+
+<div className="absolute inset-0 bg-[#030014] z-0 pointer-events-none"></div>
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#030014_100%)] z-20 pointer-events-none"></div>
+
+<div className="absolute inset-0 z-10 opacity-[0.15] pointer-events-none [mask-image:radial-gradient(circle_at_center,black_40%,transparent_80%)]" style={{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '48px 48px'}}></div>
+
+<div className="absolute top-[55%] md:top-[60%] left-1/2 w-[600px] aspect-square rounded-full border border-white/[0.03] z-10 pointer-events-none" style={{animation: 'spin-slow 60s linear infinite'}}>
+<div className="absolute inset-0 rounded-full border border-dashed border-purple-500/20" style={{margin: '-1px'}}></div>
+</div>
+<div className="absolute top-[55%] md:top-[60%] left-1/2 w-[900px] aspect-square rounded-full border border-white/[0.02] z-10 pointer-events-none" style={{animation: 'spin-slow 90s linear infinite reverse'}}>
+<div className="absolute inset-0 rounded-full border border-dashed border-blue-500/20" style={{margin: '-1px'}}></div>
+</div>
+
+<div className="relative z-30 max-w-4xl mx-auto px-6 mb-16 md:mb-24">
+<div className="inline-flex items-center px-3 py-1 rounded-full border border-purple-500/20 bg-purple-500/10 text-xs font-normal tracking-wide text-purple-300 mb-6 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+          Ecosystem
+        </div>
+<h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.1] glow-text">
+          Connect your tools
+          <br/>
+          in one place
+        </h2>
+</div>
+
+<div className="z-30 w-full max-w-5xl mx-auto px-6 relative flex flex-col md:block md:h-[600px] gap-8">
+
+<svg className="hidden md:block absolute inset-0 w-full h-full pointer-events-none z-0" preserveaspectratio="none" viewbox="0 0 100 100">
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="grad-tl" x1="50" x2="25" y1="50" y2="25">
+<stop offset="0%" stop-color="#a855f7" stop-opacity="0.6"></stop>
+<stop offset="100%" stop-color="#FF4A00" stop-opacity="0.1"></stop>
+</lineargradient>
+<lineargradient gradientunits="userSpaceOnUse" id="grad-tr" x1="50" x2="75" y1="50" y2="25">
+<stop offset="0%" stop-color="#a855f7" stop-opacity="0.6"></stop>
+<stop offset="100%" stop-color="#fff" stop-opacity="0.1"></stop>
+</lineargradient>
+<lineargradient gradientunits="userSpaceOnUse" id="grad-bl" x1="50" x2="25" y1="50" y2="75">
+<stop offset="0%" stop-color="#a855f7" stop-opacity="0.6"></stop>
+<stop offset="100%" stop-color="#3b82f6" stop-opacity="0.1"></stop>
+</lineargradient>
+<lineargradient gradientunits="userSpaceOnUse" id="grad-br" x1="50" x2="75" y1="50" y2="75">
+<stop offset="0%" stop-color="#a855f7" stop-opacity="0.6"></stop>
+<stop offset="100%" stop-color="#10b981" stop-opacity="0.1"></stop>
+</lineargradient>
+</defs>
+
+<path d="M 50 50 Q 50 25, 25 25" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" vector-effect="non-scaling-stroke"></path>
+<path d="M 50 50 Q 50 25, 75 25" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" vector-effect="non-scaling-stroke"></path>
+<path d="M 50 50 Q 50 75, 25 75" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" vector-effect="non-scaling-stroke"></path>
+<path d="M 50 50 Q 50 75, 75 75" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" vector-effect="non-scaling-stroke"></path>
+
+<path d="M 50 50 Q 50 25, 25 25" fill="none" pathlength="100" stroke="url(#grad-tl)" stroke-dasharray="50 50" stroke-dashoffset="100" strokeWidth="0.3" style={{animation: 'draw-flow 3s ease-in-out infinite'}} vector-effect="non-scaling-stroke"></path>
+<path d="M 50 50 Q 50 25, 75 25" fill="none" pathlength="100" stroke="url(#grad-tr)" stroke-dasharray="50 50" stroke-dashoffset="100" strokeWidth="0.3" style={{animation: 'draw-flow 3s ease-in-out infinite 0.75s'}} vector-effect="non-scaling-stroke"></path>
+<path d="M 50 50 Q 50 75, 25 75" fill="none" pathlength="100" stroke="url(#grad-bl)" stroke-dasharray="50 50" stroke-dashoffset="100" strokeWidth="0.3" style={{animation: 'draw-flow 3s ease-in-out infinite 1.5s'}} vector-effect="non-scaling-stroke"></path>
+<path d="M 50 50 Q 50 75, 75 75" fill="none" pathlength="100" stroke="url(#grad-br)" stroke-dasharray="50 50" stroke-dashoffset="100" strokeWidth="0.3" style={{animation: 'draw-flow 3s ease-in-out infinite 2.25s'}} vector-effect="non-scaling-stroke"></path>
+</svg>
+
+<div className="hidden md:flex absolute top-1/2 left-1/2 z-20 justify-center items-center pointer-events-none" style={{animation: 'float-smooth 6s ease-in-out infinite'}}>
+
+<div className="absolute w-24 h-24 rounded-full border border-purple-500/40 mix-blend-screen" style={{animation: 'pulse-ring 4s cubic-bezier(0.2, 0, 0.2, 1) infinite'}}></div>
+<div className="absolute w-24 h-24 rounded-full border border-blue-400/20 mix-blend-screen" style={{animation: 'pulse-ring 4s cubic-bezier(0.2, 0, 0.2, 1) infinite 1.3s'}}></div>
+
+<div className="absolute w-32 h-32 rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.3)_0%,transparent_70%)] mix-blend-screen blur-md"></div>
+
+<div className="relative w-16 h-16 bg-[#060410] rounded-full border border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.3)_inset] flex items-center justify-center backdrop-blur-xl z-10">
+<div className="absolute inset-0 rounded-full border border-white/10 m-[1px]"></div>
+
+<svg className="w-7 h-7 text-purple-200 drop-shadow-[0_0_8px_rgba(216,180,254,0.8)]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="9" stroke-dasharray="2 3"></circle>
+<path d="M12 3v18M3 12h18"></path>
+<circle cx="12" cy="12" fill="currentColor" r="2"></circle>
+<circle cx="12" cy="3" fill="currentColor" r="1.5"></circle>
+<circle cx="12" cy="21" fill="currentColor" r="1.5"></circle>
+<circle cx="3" cy="12" fill="currentColor" r="1.5"></circle>
+<circle cx="21" cy="12" fill="currentColor" r="1.5"></circle>
+</svg>
+</div>
+</div>
+
+<div className="grid grid-cols-1 gap-6 w-full md:block">
+
+<div className="glass-card md:absolute md:top-[25%] md:left-[25%] md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[260px] p-6 rounded-2xl flex flex-col items-center text-center group cursor-pointer z-30 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/10" style={{animation: 'node-float-smooth 7s ease-in-out infinite 0s'}}>
+<div className="relative w-14 h-14 mb-4 flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(255,74,0,0.3)] bg-gradient-to-br from-[#FF4A00] to-[#CC3A00] rounded-xl shadow-lg">
+<div className="absolute inset-0 rounded-xl border border-white/20"></div>
+<svg className="lucide lucide-zap w-6 h-6 text-white" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
+</svg>
+</div>
+<h4 className="text-lg tracking-tight font-normal text-white mb-1.5 group-hover:text-[#FF4A00] transition-colors duration-300">
+              Automator
+            </h4>
+<p className="text-sm font-light text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
+              Automate workflows across countless platforms easily.
+            </p>
+</div>
+
+<div className="glass-card md:absolute md:top-[25%] md:left-[75%] md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[260px] p-6 rounded-2xl flex flex-col items-center text-center group cursor-pointer z-30 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/10" style={{animation: 'node-float-smooth 6.5s ease-in-out infinite 1.5s'}}>
+<div className="relative w-14 h-14 mb-4 flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] bg-white rounded-xl shadow-lg">
+<div className="absolute inset-0 rounded-xl border border-black/10"></div>
+<span className="text-black font-serif font-semibold text-3xl tracking-tight leading-none mt-1">
+                R
+              </span>
+</div>
+<h4 className="text-lg tracking-tight font-normal text-white mb-1.5 group-hover:text-white transition-colors duration-300">
+              ReaderSync
+            </h4>
+<p className="text-sm font-light text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
+              Import your book highlights and annotations instantly.
+            </p>
+</div>
+
+<div className="glass-card md:absolute md:top-[75%] md:left-[25%] md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[260px] p-6 rounded-2xl flex flex-col items-center text-center group cursor-pointer z-30 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/10" style={{animation: 'node-float-smooth 7.5s ease-in-out infinite 0.8s'}}>
+<div className="relative flex -space-x-3 mb-4 transition-transform duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+<div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg border border-gray-200/20 z-10">
+<svg className="lucide lucide-calendar w-5 h-5 text-slate-800" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 2v4"></path>
+<path d="M16 2v4"></path>
+<rect height="18" rx="2" width="18" x="3" y="4"></rect>
+<path d="M3 10h18"></path>
+</svg>
+</div>
+<div className="w-12 h-12 bg-[#0078D4] rounded-xl flex items-center justify-center shadow-lg border border-[#005a9e] z-0">
+<svg className="lucide lucide-mail w-6 h-6 text-white" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+</svg>
+</div>
+</div>
+<h4 className="text-lg tracking-tight font-normal text-white mb-1.5 group-hover:text-blue-400 transition-colors duration-300">
+              Schedules
+            </h4>
+<p className="text-sm font-light text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
+              Bring your schedule and network together effortlessly.
+            </p>
+</div>
+
+<div className="glass-card md:absolute md:top-[75%] md:left-[75%] md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[260px] p-6 rounded-2xl flex flex-col items-center text-center group cursor-pointer z-30 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/10" style={{animation: 'node-float-smooth 6.8s ease-in-out infinite 2.2s'}}>
+<div className="relative flex -space-x-3 mb-4 transition-transform duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+<div className="w-12 h-12 bg-[#0a0a0a] rounded-xl flex items-center justify-center shadow-lg border border-white/20 z-10">
+<svg className="lucide lucide-chrome w-6 h-6 text-green-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<circle cx="12" cy="12" r="4"></circle>
+<line x1="21.17" x2="12" y1="8" y2="8"></line>
+<line x1="3.95" x2="8.54" y1="6.06" y2="14"></line>
+<line x1="10.88" x2="15.46" y1="21.94" y2="14"></line>
+</svg>
+</div>
+<div className="w-12 h-12 bg-[#0a0a0a] rounded-xl flex items-center justify-center shadow-lg border border-white/20 z-0">
+<svg className="lucide lucide-compass w-6 h-6 text-blue-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+</svg>
+</div>
+</div>
+<h4 className="text-lg tracking-tight font-normal text-white mb-1.5 group-hover:text-green-400 transition-colors duration-300">
+              Web Savers
+            </h4>
+<p className="text-sm font-light text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
+              Capture internet content seamlessly from your browser.
+            </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="relative text-center pt-32 pb-40 overflow-hidden bg-[#03010a] min-h-[900px] font-sans selection:bg-purple-500/30">
+<style>
+        @keyframes planet-drift {
+            0% { transform: translateX(-15px) rotate(-1deg); }
+            100% { transform: translateX(15px) rotate(1deg); }
+        }
+        @keyframes p-float-1 {
+            0% { transform: translateY(150px) scale(0.8); opacity: 0; }
+            20% { opacity: 0.9; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-700px) scale(1.2); opacity: 0; }
+        }
+        @keyframes p-float-2 {
+            0% { transform: translateY(150px) scale(1.2); opacity: 0; }
+            20% { opacity: 0.7; }
+            80% { opacity: 0.9; }
+            100% { transform: translateY(-800px) scale(0.7); opacity: 0; }
+        }
+        @keyframes p-drift-1 {
+            0% { transform: translateX(-30px); }
+            100% { transform: translateX(30px); }
+        }
+        @keyframes p-drift-2 {
+            0% { transform: translateX(40px); }
+            100% { transform: translateX(-25px); }
+        }
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+      </style>
+
+<div className="absolute top-[320px] left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] rounded-full overflow-hidden z-0 pointer-events-none shadow-[inset_0_20px_120px_rgba(168,85,247,0.15),0_-10px_80px_rgba(168,85,247,0.1)] border-t border-[#e879f9]/30" style={{background: 'radial-gradient(circle at 50% 85%, rgba(232,121,249,0.2) 0%, rgba(168,85,247,0.08) 35%, transparent 65%)'}}>
+
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[50%] h-[2px] bg-gradient-to-r from-transparent via-[#e879f9] to-transparent blur-[2px] opacity-80" style={{animation: 'shimmer 4s ease-in-out infinite'}}></div>
+
+<div className="absolute inset-0" style={{animation: 'planet-drift 20s ease-in-out infinite alternate'}}>
+<svg className="absolute inset-0 w-full h-full opacity-40" viewbox="0 0 1200 1200">
+<defs>
+<lineargradient id="arc-grad" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="transparent"></stop>
+<stop offset="50%" stop-color="#e879f9" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</lineargradient>
+</defs>
+<path d="M 150 350 Q 600 650 1050 350" fill="none" stroke="url(#arc-grad)" strokeWidth="1.5"></path>
+<path d="M 200 480 Q 600 780 1000 480" fill="none" stroke="url(#arc-grad)" strokeWidth="1"></path>
+<path d="M 280 610 Q 600 910 920 610" fill="none" stroke="url(#arc-grad)" strokeWidth="0.75"></path>
+<path d="M 380 740 Q 600 1040 820 740" fill="none" stroke="url(#arc-grad)" strokeWidth="0.5"></path>
+</svg>
+</div>
+
+<div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[radial-gradient(ellipse_at_center,rgba(232,121,249,0.3)_0%,transparent_70%)] blur-[50px] opacity-80"></div>
+
+<div className="absolute inset-0">
+
+<div className="absolute bottom-0" style={{left: '10%', animation: 'p-drift-1 9s ease-in-out infinite alternate'}}>
+<div className="w-1.5 h-1.5 bg-white rounded-full mix-blend-screen shadow-[0_0_8px_#fff]" style={{animation: 'p-float-1 12s ease-in-out infinite', animationDelay: '0s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '25%', animation: 'p-drift-2 11s ease-in-out infinite alternate'}}>
+<div className="w-2 h-2 bg-[#e879f9] rounded-full mix-blend-screen shadow-[0_0_10px_#e879f9]" style={{animation: 'p-float-2 15s ease-in-out infinite', animationDelay: '2s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '40%', animation: 'p-drift-1 13s ease-in-out infinite alternate'}}>
+<div className="w-1 h-1 bg-white rounded-full mix-blend-screen shadow-[0_0_6px_#fff]" style={{animation: 'p-float-1 10s ease-in-out infinite', animationDelay: '5s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '55%', animation: 'p-drift-2 10s ease-in-out infinite alternate'}}>
+<div className="w-2.5 h-2.5 bg-[#c084fc] rounded-full mix-blend-screen shadow-[0_0_12px_#c084fc]" style={{animation: 'p-float-2 14s ease-in-out infinite', animationDelay: '1s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '70%', animation: 'p-drift-1 12s ease-in-out infinite alternate'}}>
+<div className="w-1.5 h-1.5 bg-white rounded-full mix-blend-screen shadow-[0_0_8px_#fff]" style={{animation: 'p-float-1 13s ease-in-out infinite', animationDelay: '4s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '85%', animation: 'p-drift-2 14s ease-in-out infinite alternate'}}>
+<div className="w-1 h-1 bg-[#e879f9] rounded-full mix-blend-screen shadow-[0_0_6px_#e879f9]" style={{animation: 'p-float-2 16s ease-in-out infinite', animationDelay: '3s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '15%', animation: 'p-drift-2 15s ease-in-out infinite alternate'}}>
+<div className="w-2 h-2 bg-[#c084fc] rounded-full mix-blend-screen shadow-[0_0_10px_#c084fc]" style={{animation: 'p-float-2 11s ease-in-out infinite', animationDelay: '7s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '35%', animation: 'p-drift-1 16s ease-in-out infinite alternate'}}>
+<div className="w-1 h-1 bg-white rounded-full mix-blend-screen shadow-[0_0_6px_#fff]" style={{animation: 'p-float-1 14s ease-in-out infinite', animationDelay: '6s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '50%', animation: 'p-drift-2 9s ease-in-out infinite alternate'}}>
+<div className="w-1.5 h-1.5 bg-[#e879f9] rounded-full mix-blend-screen shadow-[0_0_8px_#e879f9]" style={{animation: 'p-float-2 12s ease-in-out infinite', animationDelay: '8s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '65%', animation: 'p-drift-1 11s ease-in-out infinite alternate'}}>
+<div className="w-2 h-2 bg-white rounded-full mix-blend-screen shadow-[0_0_10px_#fff]" style={{animation: 'p-float-1 15s ease-in-out infinite', animationDelay: '0.5s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '80%', animation: 'p-drift-2 13s ease-in-out infinite alternate'}}>
+<div className="w-1.5 h-1.5 bg-[#c084fc] rounded-full mix-blend-screen shadow-[0_0_8px_#c084fc]" style={{animation: 'p-float-2 10s ease-in-out infinite', animationDelay: '2.5s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '90%', animation: 'p-drift-1 12s ease-in-out infinite alternate'}}>
+<div className="w-1 h-1 bg-white rounded-full mix-blend-screen shadow-[0_0_6px_#fff]" style={{animation: 'p-float-1 13s ease-in-out infinite', animationDelay: '4.5s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '5%', animation: 'p-drift-2 10s ease-in-out infinite alternate'}}>
+<div className="w-2.5 h-2.5 bg-[#e879f9] rounded-full mix-blend-screen shadow-[0_0_12px_#e879f9]" style={{animation: 'p-float-2 16s ease-in-out infinite', animationDelay: '1.5s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '45%', animation: 'p-drift-1 14s ease-in-out infinite alternate'}}>
+<div className="w-1.5 h-1.5 bg-white rounded-full mix-blend-screen shadow-[0_0_8px_#fff]" style={{animation: 'p-float-1 11s ease-in-out infinite', animationDelay: '3.5s'}}></div>
+</div>
+
+<div className="absolute bottom-0" style={{left: '75%', animation: 'p-drift-2 11s ease-in-out infinite alternate'}}>
+<div className="w-1 h-1 bg-[#c084fc] rounded-full mix-blend-screen shadow-[0_0_6px_#c084fc]" style={{animation: 'p-float-2 14s ease-in-out infinite', animationDelay: '5.5s'}}></div>
+</div>
+</div>
+</div>
+
+<div className="relative z-20 max-w-4xl mx-auto px-6">
+
+<div className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.02] text-xs font-medium tracking-wide text-white/70 mb-8 backdrop-blur-sm cursor-default">
+          Join us
+        </div>
+
+<h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-[#f4f0ff] mb-16 leading-[1.15]">
+          Straightforward pricing.
+          <br/>
+          Everything included.
+        </h2>
+
+<div className="flex items-baseline justify-center gap-4 mb-16 relative">
+<span className="text-7xl md:text-8xl font-semibold text-transparent bg-clip-text bg-gradient-to-br from-white to-[#d8b4fe] tracking-tight">
+            $12
+          </span>
+<div className="text-left flex flex-col justify-center">
+<span className="text-lg text-white/60 leading-tight">/month</span>
+<span className="text-sm text-white/40 leading-tight mt-0.5">
+              (billed annually)
+            </span>
+</div>
+</div>
+
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 max-w-2xl mx-auto mb-16">
+
+<div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-[#060410]/40 backdrop-blur-sm border border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+<div className="w-1.5 h-1.5 rotate-45 bg-[#c084fc] shadow-[0_0_8px_#c084fc] shrink-0"></div>
+<span className="text-white/80 text-sm font-medium">
+              Interlinked documentation
+            </span>
+</div>
+
+<div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-[#060410]/40 backdrop-blur-sm border border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+<div className="w-1.5 h-1.5 rotate-45 bg-[#c084fc] shadow-[0_0_8px_#c084fc] shrink-0"></div>
+<span className="text-white/80 text-sm font-medium">
+              Complete data privacy
+            </span>
+</div>
+
+<div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-[#060410]/40 backdrop-blur-sm border border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+<div className="w-1.5 h-1.5 rotate-45 bg-[#c084fc] shadow-[0_0_8px_#c084fc] shrink-0"></div>
+<span className="text-white/80 text-sm font-medium">
+              Browser extensions included
+            </span>
+</div>
+
+<div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-[#060410]/40 backdrop-blur-sm border border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+<div className="w-1.5 h-1.5 rotate-45 bg-[#c084fc] shadow-[0_0_8px_#c084fc] shrink-0"></div>
+<span className="text-white/80 text-sm font-medium">
+              E-reader integration
+            </span>
+</div>
+
+<div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-[#060410]/40 backdrop-blur-sm border border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+<div className="w-1.5 h-1.5 rotate-45 bg-[#c084fc] shadow-[0_0_8px_#c084fc] shrink-0"></div>
+<span className="text-white/80 text-sm font-medium">
+              Offline reading mode
+            </span>
+</div>
+
+<div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-[#060410]/40 backdrop-blur-sm border border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+<div className="w-1.5 h-1.5 rotate-45 bg-[#c084fc] shadow-[0_0_8px_#c084fc] shrink-0"></div>
+<span className="text-white/80 text-sm font-medium">
+              Mobile application
+            </span>
+</div>
+</div>
+
+<button className="bg-[#0f0826]/80 backdrop-blur-md hover:bg-[#1a0f35] text-[#e879f9] border border-[#c084fc]/30 px-8 py-3.5 rounded-xl text-sm font-medium transition-all shadow-[0_0_30px_rgba(168,85,247,0.15)] hover:shadow-[0_0_40px_rgba(168,85,247,0.3)] hover:-translate-y-0.5">
+          Begin your free 14 days
+        </button>
+</div>
+
+<div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#03010a] via-[#03010a]/80 to-transparent z-30 pointer-events-none"></div>
+</section>
+
+<section className="overflow-hidden pause-on-hover text-center bg-[#030014] pt-32 pb-32 relative">
+<style>
+        @keyframes marquee-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes marquee-right {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes heart-flow {
+            0% { stroke-dashoffset: 3000; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes float-particle {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+        }
+        .animate-marquee-left {
+            animation: marquee-left 45s linear infinite;
+        }
+        .animate-marquee-right {
+            animation: marquee-right 50s linear infinite;
+        }
+        .pause-on-hover:hover .animate-marquee-left,
+        .pause-on-hover:hover .animate-marquee-right {
+            animation-play-state: paused;
+        }
+      </style>
+
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,_rgba(168,85,247,0.08)_0%,_transparent_60%)] pointer-events-none z-0"></div>
+
+<div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+<div className="absolute top-[30%] left-[20%] w-1.5 h-1.5 bg-purple-400 rounded-full blur-[1px]" style={{animation: 'float-particle 8s infinite 0s'}}></div>
+<div className="absolute top-[60%] left-[80%] w-2 h-2 bg-blue-400 rounded-full blur-[2px]" style={{animation: 'float-particle 10s infinite 2s'}}></div>
+<div className="absolute top-[40%] left-[70%] w-1 h-1 bg-pink-400 rounded-full blur-[0.5px]" style={{animation: 'float-particle 7s infinite 4s'}}></div>
+<div className="absolute top-[70%] left-[30%] w-2 h-2 bg-purple-300 rounded-full blur-[1.5px]" style={{animation: 'float-particle 9s infinite 1s'}}></div>
+</div>
+
+<svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] md:w-[1400px] h-[1000px] md:h-[1400px] pointer-events-none z-0 opacity-80 mt-10" viewbox="0 0 1000 1000">
+<defs>
+<lineargradient id="heart-glow" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#c084fc"></stop>
+<stop offset="50%" stop-color="#3b82f6"></stop>
+<stop offset="100%" stop-color="#ec4899"></stop>
+</lineargradient>
+</defs>
+
+<path d="M 500,300 C 400,100 150,200 150,450 C 150,700 500,900 500,900 C 500,900 850,700 850,450 C 850,200 600,100 500,300 Z" fill="none" stroke="rgba(168, 85, 247, 0.15)" strokeWidth="2"></path>
+
+<path d="M 500,300 C 400,100 150,200 150,450 C 150,700 500,900 500,900 C 500,900 850,700 850,450 C 850,200 600,100 500,300 Z" fill="none" stroke="url(#heart-glow)" stroke-dasharray="600 2400" strokeLinecap="round" strokeWidth="3" style={{animation: 'heart-flow 15s linear infinite'}}></path>
+
+<path d="M 500,300 C 400,100 150,200 150,450 C 150,700 500,900 500,900 C 500,900 850,700 850,450 C 850,200 600,100 500,300 Z" fill="none" filter="blur(8px)" opacity="0.6" stroke="url(#heart-glow)" stroke-dasharray="600 2400" strokeLinecap="round" strokeWidth="12" style={{animation: 'heart-flow 15s linear infinite'}}></path>
+</svg>
+<div className="max-w-4xl mx-auto px-6 mb-20 relative z-10">
+<div className="inline-flex items-center px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.02] text-xs font-normal uppercase tracking-widest text-white/70 mb-8 backdrop-blur-sm cursor-default">
+          Testimonials
+        </div>
+<h2 className="text-4xl md:text-5xl font-heading font-light tracking-tight text-[#f4f0ff] mb-6">
+          Trusted by creators
+        </h2>
+<p className="text-lg md:text-xl text-white/60 leading-relaxed max-w-xl mx-auto font-extralight">
+          Absolutely loving
+          <span className="text-[#9382ff]">@nexusapp</span>
+          . It strikes the perfect balance of speed and simplicity, organizing
+          my thoughts quietly in the background.
+        </p>
+</div>
+
+<div className="relative w-full overflow-hidden mt-10 z-10" style={{maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'}}>
+
+<div className="flex w-max animate-marquee-left">
+
+<div className="flex gap-6 pr-6">
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Sean Rose" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Ethan Clark
+                  </span>
+<span className="text-sm text-white/40">@ethanclark</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Believe the hype:
+                <span className="text-[#9382ff]">@nexusapp</span>
+                is pure magic.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-pink-500/30 hover:shadow-[0_0_30px_rgba(236,72,153,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Ryan Delk" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">Mia Wong</span>
+<span className="text-sm text-white/40">@miawong</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Exploring
+                <span className="text-[#9382ff]">@nexusapp</span>
+                has been incredible. Centralizing my quotes, insights, and
+                meeting logs has made it an essential tool.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Demetria Giles" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Sarah Jenkins
+                  </span>
+<span className="text-sm text-white/40">@sjenkins</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Got my invite to
+                <span className="text-[#9382ff]">@nexusapp</span>
+                and wow! The design is brilliant. This is definitely my new
+                default hub for ideas.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-red-500/30 hover:shadow-[0_0_30px_rgba(239,68,68,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jeremy McPeak" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Noah Brown
+                  </span>
+<span className="text-sm text-white/40">@noahb</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+<span className="text-[#9382ff]">@nexusapp</span>
+                is always running on my machine. It handles quick journals and
+                deep writing flawlessly.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-cyan-500/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Fabrizio Rinaldi" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Liam Davies
+                  </span>
+<span className="text-sm text-white/40">@liamdavies</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Huge props for building
+                <span className="text-[#9382ff]">@nexusapp</span>
+                . It's my daily driver now—fast, focused, and beautifully
+                crafted.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-indigo-500/30 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jonathan Simcoe" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Oliver Smith
+                  </span>
+<span className="text-sm text-white/40">@oliversmith</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Absolutely loving
+                <span className="text-[#9382ff]">@nexusapp</span>
+                . It strikes the perfect balance of speed and simplicity,
+                organizing my thoughts quietly in the background.
+              </p>
+</div>
+</div>
+
+<div className="flex gap-6 pr-6">
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Sean Rose" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Ethan Clark
+                  </span>
+<span className="text-sm text-white/40">@ethanclark</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Believe the hype:
+                <span className="text-[#9382ff]">@nexusapp</span>
+                is pure magic.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-pink-500/30 hover:shadow-[0_0_30px_rgba(236,72,153,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Ryan Delk" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">Mia Wong</span>
+<span className="text-sm text-white/40">@miawong</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Exploring
+                <span className="text-[#9382ff]">@nexusapp</span>
+                has been incredible. Centralizing my quotes, insights, and
+                meeting logs has made it an essential tool.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Demetria Giles" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Sarah Jenkins
+                  </span>
+<span className="text-sm text-white/40">@sjenkins</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Got my invite to
+                <span className="text-[#9382ff]">@nexusapp</span>
+                and wow! The design is brilliant. This is definitely my new
+                default hub for ideas.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-red-500/30 hover:shadow-[0_0_30px_rgba(239,68,68,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jeremy McPeak" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Noah Brown
+                  </span>
+<span className="text-sm text-white/40">@noahb</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+<span className="text-[#9382ff]">@nexusapp</span>
+                is always running on my machine. It handles quick journals and
+                deep writing flawlessly.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-cyan-500/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Fabrizio Rinaldi" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Liam Davies
+                  </span>
+<span className="text-sm text-white/40">@liamdavies</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Huge props for building
+                <span className="text-[#9382ff]">@nexusapp</span>
+                . It's my daily driver now—fast, focused, and beautifully
+                crafted.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-indigo-500/30 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jonathan Simcoe" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Oliver Smith
+                  </span>
+<span className="text-sm text-white/40">@oliversmith</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Got my invite to
+                <span className="text-[#9382ff]">@nexusapp</span>
+                and wow! The design is brilliant. This is definitely my new
+                default hub for ideas.
+              </p>
+</div>
+</div>
+</div>
+
+<div className="flex w-max animate-marquee-right mt-6">
+
+<div className="flex gap-6 pr-6">
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-red-500/30 hover:shadow-[0_0_30px_rgba(239,68,68,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jeremy McPeak" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Noah Brown
+                  </span>
+<span className="text-sm text-white/40">@noahb</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+<span className="text-[#9382ff]">@nexusapp</span>
+                is always running on my machine. It handles quick journals and
+                deep writing flawlessly.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-cyan-500/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Fabrizio Rinaldi" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Liam Davies
+                  </span>
+<span className="text-sm text-white/40">@liamdavies</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Huge props for building
+                <span className="text-[#9382ff]">@nexusapp</span>
+                . It's my daily driver now—fast, focused, and beautifully
+                crafted.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-indigo-500/30 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jonathan Simcoe" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Oliver Smith
+                  </span>
+<span className="text-sm text-white/40">@oliversmith</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Absolutely loving
+                <span className="text-[#9382ff]">@nexusapp</span>
+                . It strikes the perfect balance of speed and simplicity,
+                organizing my thoughts quietly in the background.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Sean Rose" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Ethan Clark
+                  </span>
+<span className="text-sm text-white/40">@ethanclark</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Believe the hype:
+                <span className="text-[#9382ff]">@nexusapp</span>
+                is pure magic.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-pink-500/30 hover:shadow-[0_0_30px_rgba(236,72,153,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Ryan Delk" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">Mia Wong</span>
+<span className="text-sm text-white/40">@miawong</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Exploring
+                <span className="text-[#9382ff]">@nexusapp</span>
+                has been incredible. Centralizing my quotes, insights, and
+                meeting logs has made it an essential tool.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Demetria Giles" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Sarah Jenkins
+                  </span>
+<span className="text-sm text-white/40">@sjenkins</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Got my invite to
+                <span className="text-[#9382ff]">@nexusapp</span>
+                and wow! The design is brilliant. This is definitely my new
+                default hub for ideas.
+              </p>
+</div>
+</div>
+
+<div className="flex gap-6 pr-6">
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-red-500/30 hover:shadow-[0_0_30px_rgba(239,68,68,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jeremy McPeak" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Noah Brown
+                  </span>
+<span className="text-sm text-white/40">@noahb</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+<span className="text-[#9382ff]">@nexusapp</span>
+                is always running on my machine. It handles quick journals and
+                deep writing flawlessly.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-cyan-500/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Fabrizio Rinaldi" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Liam Davies
+                  </span>
+<span className="text-sm text-white/40">@liamdavies</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Huge props for building
+                <span className="text-[#9382ff]">@nexusapp</span>
+                . It's my daily driver now—fast, focused, and beautifully
+                crafted.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-indigo-500/30 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Jonathan Simcoe" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Oliver Smith
+                  </span>
+<span className="text-sm text-white/40">@oliversmith</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Absolutely loving
+                <span className="text-[#9382ff]">@nexusapp</span>
+                . It strikes the perfect balance of speed and simplicity,
+                organizing my thoughts quietly in the background.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Sean Rose" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Ethan Clark
+                  </span>
+<span className="text-sm text-white/40">@ethanclark</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Believe the hype:
+                <span className="text-[#9382ff]">@nexusapp</span>
+                is pure magic.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-pink-500/30 hover:shadow-[0_0_30px_rgba(236,72,153,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Ryan Delk" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">Mia Wong</span>
+<span className="text-sm text-white/40">@miawong</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Exploring
+                <span className="text-[#9382ff]">@nexusapp</span>
+                has been incredible. Centralizing my quotes, insights, and
+                meeting logs has made it an essential tool.
+              </p>
+</div>
+
+<div className="w-[320px] md:w-[420px] shrink-0 p-8 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-500 text-left flex flex-col gap-6 cursor-default">
+<div className="flex items-center gap-4">
+<img alt="Demetria Giles" className="w-12 h-12 rounded-full border border-white/10 shrink-0 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&amp;h=150&amp;fit=crop&amp;q=80"/>
+<div className="flex flex-col">
+<span className="text-base font-normal text-white">
+                    Sarah Jenkins
+                  </span>
+<span className="text-sm text-white/40">@sjenkins</span>
+</div>
+</div>
+<p className="text-base text-white/60 leading-relaxed font-extralight">
+                Playing around with
+                <span className="text-[#9382ff]">@reflectnotes</span>
+                . I'm taking all my key thoughts, details and soundbites from
+                all my books, meetings, articles, etc from the system so far,
+                it's a knowledge worker's dream come true.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="relative bg-[#030014] text-center pt-32 pb-0 overflow-hidden min-h-[900px] flex flex-col items-center font-sans">
+<style>
+        @keyframes spinY {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+        @keyframes floatRays {
+            0%, 100% { opacity: 0.1; transform: scaleY(1) translateY(0); }
+            50% { opacity: 0.4; transform: scaleY(1.1) translateY(-20px); }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.1; transform: scale(0.5); }
+            50% { opacity: 0.8; transform: scale(1.2); filter: drop-shadow(0 0 4px rgba(255,255,255,0.8)); }
+        }
+        @keyframes arcSweep {
+            0% { -webkit-mask-position: 200% 0; mask-position: 200% 0; }
+            100% { -webkit-mask-position: -200% 0; mask-position: -200% 0; }
+        }
+
+        .globe-wrap {
+            perspective: 1200px;
+            position: absolute;
+            bottom: -400px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            z-index: 10;
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, black 40%, rgba(0,0,0,0.4) 60%, transparent 70%);
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, rgba(0,0,0,0.4) 60%, transparent 70%);
+        }
+        .globe-tilt {
+            width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(15deg);
+        }
+        .globe-spin {
+            width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            animation: spinY 45s linear infinite;
+        }
+        .globe-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            border-radius: 50%;
+            border: 2px dotted rgba(168, 85, 247, 0.4);
+            transform-style: preserve-3d;
+            mix-blend-mode: screen;
+        }
+        .globe-ring::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 50%;
+            border: 1px solid rgba(168, 85, 247, 0.04);
+        }
+        .lon { width: 800px; height: 800px; margin: -400px 0 0 -400px; }
+        .lon:nth-child(1) { transform: rotateY(0deg); }
+        .lon:nth-child(2) { transform: rotateY(20deg); }
+        .lon:nth-child(3) { transform: rotateY(40deg); }
+        .lon:nth-child(4) { transform: rotateY(60deg); }
+        .lon:nth-child(5) { transform: rotateY(80deg); }
+        .lon:nth-child(6) { transform: rotateY(100deg); }
+        .lon:nth-child(7) { transform: rotateY(120deg); }
+        .lon:nth-child(8) { transform: rotateY(140deg); }
+        .lon:nth-child(9) { transform: rotateY(160deg); }
+
+        /* Latitude Math: s = 800 * cos(theta), translateY = -400 * sin(theta) */
+        .lat-1 { --s: 788px; margin: -394px 0 0 -394px; transform: translateY(-104px) rotateX(90deg); }
+        .lat-2 { --s: 692px; margin: -346px 0 0 -346px; transform: translateY(-200px) rotateX(90deg); }
+        .lat-3 { --s: 566px; margin: -283px 0 0 -283px; transform: translateY(-283px) rotateX(90deg); }
+        .lat-4 { --s: 400px; margin: -200px 0 0 -200px; transform: translateY(-346px) rotateX(90deg); }
+        .lat-5 { --s: 208px; margin: -104px 0 0 -104px; transform: translateY(-386px) rotateX(90deg); }
+        .lat-0 { --s: 800px; margin: -400px 0 0 -400px; transform: translateY(0px) rotateX(90deg); }
+        .lat { width: var(--s); height: var(--s); }
+      </style>
+
+<div className="absolute inset-0 bg-gradient-to-b from-[#030014] via-[#060410] to-[#030014] z-0"></div>
+<div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.02)_1px,_transparent_1px)] bg-[size:32px_32px] opacity-60 z-0"></div>
+
+<div className="absolute inset-0 w-full max-w-5xl mx-auto flex justify-between pointer-events-none z-0">
+<div className="w-px h-full bg-gradient-to-b from-transparent via-white/[0.04] to-transparent"></div>
+<div className="w-px h-full bg-gradient-to-b from-transparent via-white/[0.04] to-transparent"></div>
+</div>
+
+<div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-[#030014] to-transparent z-30 pointer-events-none"></div>
+<div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-[#030014] to-transparent z-30 pointer-events-none"></div>
+
+<div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+<div className="absolute top-[15%] left-[25%] w-1.5 h-1.5 bg-purple-300 rounded-full blur-[1px]" style={{animation: 'sparkle 4s ease-in-out infinite 1s'}}></div>
+<div className="absolute top-[35%] left-[85%] w-2 h-2 bg-blue-300 rounded-full blur-[1.5px]" style={{animation: 'sparkle 6s ease-in-out infinite 2s'}}></div>
+<div className="absolute top-[50%] left-[15%] w-1 h-1 bg-white rounded-full" style={{animation: 'sparkle 5s ease-in-out infinite 0.5s'}}></div>
+<div className="absolute top-[25%] left-[75%] w-1.5 h-1.5 bg-indigo-300 rounded-full blur-[1px]" style={{animation: 'sparkle 7s ease-in-out infinite 3s'}}></div>
+<div className="absolute top-[60%] left-[80%] w-1 h-1 bg-purple-200 rounded-full" style={{animation: 'sparkle 5.5s ease-in-out infinite 4s'}}></div>
+<div className="absolute top-[10%] left-[65%] w-2 h-2 bg-blue-200 rounded-full blur-[2px]" style={{animation: 'sparkle 8s ease-in-out infinite 1.5s'}}></div>
+</div>
+
+<div className="absolute bottom-[250px] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gradient-to-t from-purple-500/10 via-blue-500/5 to-transparent blur-3xl z-0 pointer-events-none mix-blend-screen" style={{animation: 'floatRays 8s ease-in-out infinite'}}></div>
+
+<div className="relative z-20 max-w-4xl mx-auto px-6 mt-4">
+
+<div className="inline-flex items-center px-4 py-1.5 rounded-full border border-purple-500/20 bg-white/[0.02] text-xs font-normal tracking-wide text-purple-200 mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(168,85,247,0.1)] transition-colors hover:bg-white/[0.04]">
+          Our Story
+        </div>
+
+<h2 className="text-5xl md:text-6xl font-heading font-normal tracking-tight text-[#f4f0ff] mb-6 drop-shadow-2xl leading-[1.1] max-w-3xl mx-auto">
+          A passionate remote
+          <br/>
+          team worldwide
+        </h2>
+
+<p className="text-lg md:text-xl text-slate-400 font-light leading-relaxed max-w-2xl mx-auto mb-10">
+          We aim to elevate human cognition by building an
+          <br className="hidden sm:block"/>
+          outstanding thought-capture system.
+        </p>
+
+<button className="bg-white/[0.03] hover:bg-white/[0.08] text-white border border-white/10 px-7 py-3 rounded-lg text-sm font-normal transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.03)] hover:shadow-[0_0_20px_rgba(255,255,255,0.08)]">
+          Explore our principles
+        </button>
+</div>
+
+<div className="absolute bottom-[400px] left-1/2 -translate-x-1/2 w-[810px] h-[405px] rounded-t-full border-t-[3px] border-purple-500/30 blur-[6px] z-10 pointer-events-none"></div>
+<div className="absolute bottom-[400px] left-1/2 -translate-x-1/2 w-[810px] h-[405px] rounded-t-full border-t-[1.5px] border-white/60 z-10 pointer-events-none" style={{maskImage: 'linear-gradient(to right, transparent 10%, black 30%, black 70%, transparent 90%)', WebkitMaskImage: 'linear-gradient(to right, transparent 10%, black 30%, black 70%, transparent 90%)', maskSize: '200% 100%', WebkitMaskSize: '200% 100%', animation: 'arcSweep 6s linear infinite'}}></div>
+
+<div className="globe-wrap">
+<div className="globe-tilt">
+
+<div style={{position: 'absolute', top: '50%', left: '50%', width: '800px', height: '800px', margin: '-400px 0 0 -400px', background: 'radial-gradient(circle at 50% 50%, #030014 65%, rgba(3,0,20,0.8) 85%, transparent 100%)', borderRadius: '50%'}}></div>
+
+<div className="globe-spin">
+
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+<div className="globe-ring lon"></div>
+
+<div className="globe-ring lat lat-0"></div>
+<div className="globe-ring lat lat-1"></div>
+<div className="globe-ring lat lat-2"></div>
+<div className="globe-ring lat lat-3"></div>
+<div className="globe-ring lat lat-4"></div>
+<div className="globe-ring lat lat-5"></div>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-0 left-0 w-full h-[350px] bg-gradient-to-t from-[#030014] via-[#030014]/90 to-transparent z-30 pointer-events-none"></div>
+</section>
+
+<section className="py-24 md:py-32 bg-[#030014] text-center px-4 md:px-6 relative">
+<style>
+        @keyframes tetris-fall {
+          0% { transform: translateY(-20vh); opacity: 0; }
+          15% { opacity: 0.3; }
+          75% { opacity: 0.6; filter: drop-shadow(0 0 0px rgba(168,85,247,0)); }
+          90% { opacity: 0.9; filter: drop-shadow(0 0 20px rgba(168,85,247,0.8)); }
+          100% { transform: translateY(100vh); opacity: 0; }
+        }
+        @keyframes slow-spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .bg-tetris {
+          background: rgba(255, 255, 255, 0.015);
+          border: 1px solid rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(2px);
+        }
+        .bg-tetris-purple {
+          background: rgba(168, 85, 247, 0.02);
+          border: 1px solid rgba(168, 85, 247, 0.06);
+          backdrop-filter: blur(2px);
+        }
+      </style>
+<div className="relative w-full max-w-[1040px] mx-auto rounded-[2.5rem] md:rounded-[3.5rem] bg-[#060410] border border-white/[0.08] overflow-hidden shadow-[0_0_80px_rgba(168,85,247,0.05)] min-h-[500px] md:min-h-[640px] flex flex-col items-center justify-center p-12 md:p-24">
+
+<div className="absolute inset-0 z-0 pointer-events-none" style={{maskImage: 'radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%)', WebkitMaskImage: 'radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%)'}}>
+<div className="absolute inset-0" style={{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px', backgroundPosition: 'center top'}}></div>
+</div>
+
+<div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+
+<div className="absolute top-0 left-[15%] w-[80px] h-[120px]" style={{animation: 'tetris-fall 22s linear infinite 0s'}}>
+<div className="absolute top-0 right-0 w-[40px] h-[120px] bg-tetris"></div>
+<div className="absolute bottom-0 left-0 w-[40px] h-[40px] bg-tetris"></div>
+</div>
+
+<div className="absolute top-0 left-[75%] w-[120px] h-[80px]" style={{animation: 'tetris-fall 26s linear infinite 4s'}}>
+<div className="absolute top-0 left-0 w-[120px] h-[40px] bg-tetris-purple"></div>
+<div className="absolute bottom-0 left-[40px] w-[40px] h-[40px] bg-tetris-purple"></div>
+</div>
+
+<div className="absolute top-0 left-[35%] w-[80px] h-[80px]" style={{animation: 'tetris-fall 18s linear infinite 2s'}}>
+<div className="absolute inset-0 bg-tetris" style={{animation: 'slow-spin 25s linear infinite'}}></div>
+</div>
+
+<div className="absolute top-0 left-[55%] w-[40px] h-[160px] bg-tetris" style={{animation: 'tetris-fall 20s linear infinite 7s'}}></div>
+
+<div className="absolute top-0 left-[25%] w-[120px] h-[80px]" style={{animation: 'tetris-fall 24s linear infinite 11s'}}>
+<div className="absolute top-0 right-0 w-[80px] h-[40px] bg-tetris-purple"></div>
+<div className="absolute bottom-0 left-0 w-[80px] h-[40px] bg-tetris-purple"></div>
+</div>
+
+<div className="absolute top-0 left-[85%] w-[120px] h-[80px]" style={{animation: 'tetris-fall 28s linear infinite 14s'}}>
+<div className="absolute top-0 left-0 w-[80px] h-[40px] bg-tetris"></div>
+<div className="absolute bottom-0 right-0 w-[80px] h-[40px] bg-tetris"></div>
+</div>
+
+<div className="absolute top-[20%] left-[20%] w-[40px] h-[40px] bg-tetris opacity-30"></div>
+<div className="absolute top-[45%] left-[10%] w-[80px] h-[120px] opacity-20">
+<div className="absolute top-0 left-0 w-[40px] h-[120px] bg-tetris"></div>
+<div className="absolute bottom-0 right-0 w-[40px] h-[40px] bg-tetris"></div>
+</div>
+<div className="absolute top-[30%] right-[25%] w-[80px] h-[80px] bg-tetris opacity-20"></div>
+<div className="absolute top-[60%] right-[15%] w-[120px] h-[80px] opacity-20">
+<div className="absolute top-0 left-0 w-[120px] h-[40px] bg-tetris"></div>
+<div className="absolute bottom-0 left-[40px] w-[40px] h-[40px] bg-tetris"></div>
+</div>
+<div className="absolute bottom-[30%] left-[30%] w-[160px] h-[40px] bg-tetris opacity-20"></div>
+</div>
+
+<div className="absolute bottom-0 left-0 right-0 h-[60%] bg-gradient-to-t from-[#8b5cf6]/40 via-[#8b5cf6]/5 to-transparent pointer-events-none mix-blend-screen z-0"></div>
+<div className="absolute -bottom-[20%] left-[10%] right-[10%] h-[50%] bg-[#d8b4fe]/30 blur-[80px] pointer-events-none mix-blend-screen z-0"></div>
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[2px] bg-gradient-to-r from-transparent via-white/80 to-transparent blur-[2px] pointer-events-none z-10"></div>
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[1px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-10"></div>
+
+<div className="relative z-20 flex flex-col items-center w-full">
+<div className="inline-flex items-center px-4 py-1.5 rounded-full border border-[#9382ff]/30 bg-[#9382ff]/10 text-xs font-medium text-white/90 mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(147,130,255,0.1)]">
+            Learning Center
+          </div>
+<h2 className="text-4xl md:text-6xl font-medium tracking-tight text-[#f4f0ff] mb-6 leading-[1.15] drop-shadow-lg">
+            Master the art of
+            <br/>
+            documentation here
+          </h2>
+<p className="text-lg md:text-xl text-white/50 leading-relaxed max-w-lg mx-auto mb-10 font-light">
+            Discover the best practices of knowledge management in
+            <br/>
+            Nexus's complimentary courses.
+          </p>
+<button className="bg-white/[0.03] hover:bg-white/[0.08] text-white/90 border border-white/10 px-7 py-3.5 rounded-xl text-sm font-medium transition-all shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+            Start learning
+          </button>
+</div>
+</div>
+
+<div className="flex items-center justify-center gap-8 mt-10 text-xs text-white/30 font-sans tracking-wide flex-wrap">
+<div className="flex items-center gap-4">
+<span>Use your keyboard to play:</span>
+<div className="flex items-center gap-1.5"></div>
+</div>
+<div className="flex items-center gap-4">
+<span>Turn</span>
+<kbd className="flex items-center justify-center w-7 h-7 rounded bg-white/5 border border-white/10 text-white/40 shadow-[0_1px_0_rgba(255,255,255,0.05)]">
+<svg fill="currentColor" height="10" stroke="none" viewbox="0 0 24 24" width="10">
+<polygon points="4,15 12,7 20,15"></polygon>
+</svg>
+</kbd>
+</div>
+<div className="flex items-center gap-4">
+<span>Speed Up:</span>
+<kbd className="flex items-center justify-center w-7 h-7 rounded bg-white/5 border border-white/10 text-white/40 shadow-[0_1px_0_rgba(255,255,255,0.05)]">
+<svg fill="currentColor" height="10" stroke="none" viewbox="0 0 24 24" width="10">
+<polygon points="4,9 12,17 20,9"></polygon>
+</svg>
+</kbd>
+</div>
+</div>
+</section>
+
+<section className="relative w-full bg-[#030014] overflow-hidden flex flex-col text-center font-sans pt-40 min-h-screen z-0">
+<style>
+        @keyframes pulse-slow {
+            0%, 100% { transform: translate(-50%, 50%) scale(1); filter: brightness(1); }
+            50% { transform: translate(-50%, 50%) scale(1.02); filter: brightness(1.1); }
+        }
+        @keyframes wave-drift {
+            0% { transform: translateX(-3%); }
+            100% { transform: translateX(3%); }
+        }
+        @keyframes float-sparkle {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-200px) scale(1.2); opacity: 0; }
+        }
+      </style>
+
+<div className="absolute inset-0 pointer-events-none z-0">
+<div className="absolute top-[15%] left-[20%] w-[2px] h-[2px] bg-white rounded-full opacity-30 shadow-[0_0_4px_#fff]"></div>
+<div className="absolute top-[25%] left-[80%] w-[1px] h-[1px] bg-[#c084fc] rounded-full opacity-50 shadow-[0_0_3px_#c084fc]"></div>
+<div className="absolute top-[40%] left-[10%] w-[2px] h-[2px] bg-[#e879f9] rounded-full opacity-40"></div>
+<div className="absolute top-[10%] left-[70%] w-[1px] h-[1px] bg-white rounded-full opacity-20"></div>
+<div className="absolute top-[50%] left-[88%] w-[2px] h-[2px] bg-white rounded-full opacity-30"></div>
+<div className="absolute top-[35%] left-[92%] w-[1px] h-[1px] bg-[#712fff] rounded-full opacity-60"></div>
+<div className="absolute top-[5%] left-[45%] w-[2px] h-[2px] bg-white rounded-full opacity-30"></div>
+<div className="absolute top-[28%] left-[48%] w-[1px] h-[1px] bg-white rounded-full opacity-50 shadow-[0_0_3px_#fff]"></div>
+</div>
+
+<div className="relative z-20 max-w-3xl mx-auto px-6 flex flex-col items-center flex-shrink-0">
+
+<div className="inline-flex items-center px-5 py-2 rounded-full border border-white/[0.08] bg-white/[0.02] text-sm font-light tracking-wide text-[#d6c7ff] mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.02)] cursor-default">
+          Take action
+        </div>
+
+<h2 className="text-5xl md:text-7xl font-normal tracking-tight text-[#f4f0ff] mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+          Expand your mind with Nexus
+        </h2>
+
+<p className="text-lg md:text-xl text-slate-400 font-light mb-12 max-w-xl">
+          Capture every spark, thought, and insight.
+        </p>
+
+<button className="bg-[#1a0f35] hover:bg-[#25154c] text-[#d6c7ff] border border-[#9382ff]/30 px-8 py-4 rounded-xl text-lg font-normal transition-all duration-300 shadow-[0_0_30px_rgba(147,130,255,0.15)] hover:shadow-[0_0_50px_rgba(147,130,255,0.3)] hover:-translate-y-0.5">
+          Begin your free 14 days
+        </button>
+</div>
+
+<div className="relative w-full flex-grow min-h-[350px] md:min-h-[450px] flex items-end justify-center pointer-events-none z-10 overflow-hidden" style={{maskImage: 'linear-gradient(to top, black 30%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to top, black 30%, transparent 100%)'}}>
+
+<div className="absolute bottom-0 left-0 w-[150vw] -ml-[25vw] h-[2px] bg-gradient-to-r from-transparent via-white to-transparent blur-[1px] opacity-90 mix-blend-screen" style={{animation: 'wave-drift 8s ease-in-out infinite alternate'}}></div>
+<div className="absolute bottom-0 left-0 w-[200vw] -ml-[50vw] h-[4px] bg-gradient-to-r from-transparent via-[#e879f9] to-transparent blur-[4px] opacity-80 mix-blend-screen" style={{animation: 'wave-drift 12s ease-in-out infinite alternate-reverse'}}></div>
+<div className="absolute bottom-[-10px] left-0 w-[120vw] -ml-[10vw] h-[25px] bg-gradient-to-r from-transparent via-[#a855f7] to-transparent blur-[16px] opacity-70 mix-blend-screen"></div>
+<div className="absolute bottom-[-30px] left-0 w-full h-[80px] bg-gradient-to-r from-transparent via-[#712fff] to-transparent blur-[40px] opacity-50 mix-blend-screen"></div>
+
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[2000px] aspect-square translate-y-1/2 flex items-center justify-center mix-blend-screen" style={{animation: 'pulse-slow 5s ease-in-out infinite'}}>
+
+<div className="absolute w-[1800px] h-[1800px] rounded-full border-[60px] border-[#3b82f6]/10 blur-[80px]"></div>
+
+<div className="absolute w-[1200px] h-[1200px] rounded-full border-[40px] border-[#712fff]/30 blur-[50px]"></div>
+
+<div className="absolute w-[800px] h-[800px] rounded-full border-[25px] border-[#a855f7]/50 blur-[25px] shadow-[0_0_100px_rgba(168,85,247,0.4)]"></div>
+
+<div className="absolute w-[500px] h-[500px] rounded-full border-[15px] border-[#e879f9]/90 blur-[10px] shadow-[0_0_60px_rgba(232,121,249,0.8)]"></div>
+
+<div className="absolute w-[320px] h-[320px] rounded-full border-[12px] border-white blur-[3px] shadow-[0_0_40px_#fff,inset_0_0_30px_#fff]"></div>
+
+<div className="absolute w-[220px] h-[220px] bg-white rounded-full blur-[20px] shadow-[0_0_120px_#fff]"></div>
+<div className="absolute w-[120px] h-[120px] bg-white rounded-full blur-[8px]"></div>
+</div>
+
+<div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px]">
+<div className="absolute bottom-[10%] left-[45%] w-[3px] h-[3px] bg-white rounded-full blur-[1px] mix-blend-screen" style={{animation: 'float-sparkle 4.5s ease-in-out infinite 0s'}}></div>
+<div className="absolute bottom-[5%] left-[55%] w-[4px] h-[4px] bg-[#e879f9] rounded-full blur-[2px] mix-blend-screen" style={{animation: 'float-sparkle 5.5s ease-in-out infinite 1.2s'}}></div>
+<div className="absolute bottom-[15%] left-[40%] w-[2px] h-[2px] bg-white rounded-full mix-blend-screen" style={{animation: 'float-sparkle 3.8s ease-in-out infinite 2.5s'}}></div>
+<div className="absolute bottom-[2%] left-[60%] w-[3px] h-[3px] bg-[#c084fc] rounded-full blur-[1px] mix-blend-screen" style={{animation: 'float-sparkle 6.5s ease-in-out infinite 0.8s'}}></div>
+<div className="absolute bottom-[8%] left-[38%] w-[4px] h-[4px] bg-white rounded-full blur-[1.5px] mix-blend-screen" style={{animation: 'float-sparkle 5s ease-in-out infinite 3.2s'}}></div>
+<div className="absolute bottom-[12%] left-[62%] w-[2px] h-[2px] bg-[#e879f9] rounded-full mix-blend-screen" style={{animation: 'float-sparkle 4.2s ease-in-out infinite 1.8s'}}></div>
+<div className="absolute bottom-[4%] left-[48%] w-[2px] h-[2px] bg-white rounded-full mix-blend-screen" style={{animation: 'float-sparkle 5.8s ease-in-out infinite 2.1s'}}></div>
+</div>
+</div>
+
+</section>
+
+<footer className="border-t border-white/5 pt-20 pb-10 bg-[#030014] relative z-10">
+<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-6 gap-12 lg:gap-8 text-base">
+<div className="col-span-1 md:col-span-2">
+<div className="flex items-center gap-3 text-white mb-8">
+<i className="w-7 h-7 text-[#9382ff] fill-[#9382ff]/20" data-lucide="hexagon" strokeWidth="1.5"></i>
+<span className="font-heading font-medium text-xl tracking-tight">
+              Nexus
+            </span>
+</div>
+<div className="flex gap-5">
+<div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer text-white/50 hover:text-white">
+<svg className="w-[20px] h-[20px]" data-icon-replaced="true" fill="currentColor" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '20px', height: '20px'}} viewbox="0 0 24 24">
+<path className="" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3333-.9555 2.419-2.1569 2.419zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3333-.946 2.419-2.1568 2.419z"></path>
+</svg>
+</div>
+<div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer text-white/50 hover:text-white">
+<i className="w-[20px] h-[20px]" data-icon-replaced="true" data-lucide="twitter" strokeWidth="1.5" style={{width: '20px', height: '20px', color: 'rgb(255, 255, 255)'}}></i>
+</div>
+</div>
+</div>
+<div className="col-span-1">
+<h5 className="text-white font-medium mb-6">Platform</h5>
+<ul className="flex flex-col gap-4 text-white/50">
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                Features
+              </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                Ecosystem
+              </a>
+</li>
+<li className="">
+<a className="hover:text-white transition-colors" href="#">Plans</a>
+</li>
+<li className="">
+<a className="hover:text-white transition-colors" href="#">Updates</a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">Roadmap</a>
+</li>
+</ul>
+</div>
+<div className="col-span-1">
+<h5 className="text-white font-medium mb-6">Organization</h5>
+<ul className="flex flex-col gap-4 text-white/50">
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                Our team
+              </a>
+</li>
+<li className="">
+<a className="hover:text-white transition-colors" href="#">
+                Our values
+              </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">Journal</a>
+</li>
+</ul>
+</div>
+<div className="col-span-1">
+<h5 className="text-white font-medium mb-6">Support</h5>
+<ul className="flex flex-col gap-4 text-white/50">
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                Downloads
+              </a>
+</li>
+<li className="">
+<a className="hover:text-white transition-colors" href="#">
+                Documentation
+              </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">Contact</a>
+</li>
+</ul>
+</div>
+<div className="col-span-1 md:col-span-1 lg:col-span-1 md:mt-0 mt-8">
+
+</div>
+<div className="col-span-1 md:col-span-6 lg:col-span-2 lg:text-left mt-8 lg:mt-0">
+<h5 className="text-white font-medium mb-3">Receive productivity tips</h5>
+<p className="text-white/50 mb-6 text-sm">
+            Delivered to your inbox weekly.
+          </p>
+<div className="flex border border-white/10 rounded-lg overflow-hidden bg-white/[0.02] max-w-sm focus-within:border-white/30 transition-colors">
+<input className="bg-transparent text-white px-4 py-2.5 outline-none text-sm w-full placeholder:text-white/30" placeholder="Enter your email" type="email"/>
+<button className="bg-white/5 px-5 py-2.5 border-l border-white/10 text-white text-sm font-medium hover:bg-white/10 transition-colors">
+              Subscribe
+            </button>
+</div>
+</div>
+</div>
+<div className="max-w-7xl mx-auto px-6 mt-24 flex flex-col md:flex-row justify-between items-center text-sm text-white/30 border-t border-white/5 pt-8 gap-4">
+<div className="flex gap-6">
+<a className="hover:text-white transition-colors" href="#">
+            Privacy Guidelines
+          </a>
+<a className="hover:text-white transition-colors" href="#">
+            Terms of Service
+          </a>
+</div>
+<div>Reflect App, LLC. All rights reserved.</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

@@ -1,0 +1,14 @@
+# Creative Agency Services Template
+
+A high-impact landing page template for web design and marketing agencies featuring a risk-free value proposition and strong visual hierarchy.
+
+## Project Details
+- **Slug:** `creative-agency-84`
+- **Views:** 34
+- **Tags:** Landing Page, Technology, Services, Dark, Clean, Animated
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

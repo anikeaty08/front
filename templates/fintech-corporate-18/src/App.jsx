@@ -1,0 +1,236 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="h-14 bg-white border-b border-[#E6E9ED] px-6 flex items-center justify-between shrink-0">
+
+<div className="flex items-center gap-3">
+
+<div className="logo-container flex flex-col gap-[3px] mt-0.5">
+
+<div className="flex gap-[3px] ml-1.5">
+<div className="w-1.5 h-[5px] bg-[#E31837]"></div>
+<div className="w-1.5 h-[5px] bg-[#E31837]"></div>
+</div>
+
+<div className="flex gap-[3px] -ml-1">
+<div className="w-[14px] h-[5px] bg-[#012169]"></div>
+<div className="w-[14px] h-[5px] bg-[#012169]"></div>
+</div>
+
+<div className="flex gap-[3px] ml-2">
+<div className="w-[18px] h-1.5 bg-[#E31837]"></div>
+<div className="w-[18px] h-1.5 bg-[#E31837]"></div>
+</div>
+</div>
+<span className="text-[#012169] font-semibold tracking-tight text-lg mt-0.5">BOA</span>
+</div>
+
+<div className="flex items-center gap-5 text-[#6B7280]">
+<button className="hover:text-[#1A1A1A] transition-colors flex items-center">
+<iconify-icon className="text-xl" icon="solar:letter-linear"></iconify-icon>
+</button>
+<div className="w-8 h-8 rounded-full bg-[#F2F4F7] border border-[#E6E9ED] flex items-center justify-center text-xs font-medium text-[#1A1A1A] cursor-pointer">
+                MR
+            </div>
+</div>
+</header>
+
+<main className="flex-1 flex gap-5 p-5 h-[calc(100vh-3.5rem)] box-border">
+
+<div className="w-[340px] flex flex-col gap-4 shrink-0 h-full">
+
+<div className="bg-white rounded-lg border border-[#E6E9ED] p-4 shadow-sm">
+<h1 className="text-sm font-medium text-[#1A1A1A]">Hello, Michael Reynolds</h1>
+</div>
+
+<div className="bg-white rounded-lg border border-[#E6E9ED] p-4 shadow-sm flex items-center justify-between cursor-pointer group">
+<div>
+<h2 className="text-sm font-medium text-[#1A1A1A]">Financial Life Plan</h2>
+<p className="text-xs text-[#6B7280] mt-0.5">Your next steps are ready. Let’s go</p>
+</div>
+<iconify-icon className="text-[#6B7280] text-lg group-hover:text-[#1A1A1A] transition-colors" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+
+<div className="bg-white rounded-lg border border-[#E6E9ED] shadow-sm relative overflow-hidden">
+
+<div className="absolute top-0 left-0 w-full h-[2px] bg-[#C41230]"></div>
+<div className="p-4 pt-5 border-b border-[#E6E9ED] flex justify-between items-end">
+<h2 className="text-sm font-medium text-[#1A1A1A] mb-0.5">Banking</h2>
+<div className="text-2xl tracking-tight font-medium text-[#1A1A1A]">$63,200.00</div>
+</div>
+<div className="px-4 py-2">
+
+<div className="py-2.5 border-b border-[#E6E9ED] flex justify-between items-center cursor-pointer group">
+<span className="text-sm text-[#1A1A1A]">Business Checking Account</span>
+<div className="flex items-center gap-2">
+<span className="text-sm font-medium text-[#1A1A1A]">$41,200.00</span>
+<iconify-icon className="text-[#6B7280] group-hover:text-[#1A1A1A]" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+
+<div className="py-2.5 flex justify-between items-center cursor-pointer group">
+<span className="text-sm text-[#1A1A1A]">Corporate Savings Account</span>
+<div className="flex items-center gap-2">
+<span className="text-sm font-medium text-[#1A1A1A]">$22,000.00</span>
+<iconify-icon className="text-[#6B7280] group-hover:text-[#1A1A1A]" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+</div>
+</div>
+
+<div className="bg-white rounded-lg border border-[#E6E9ED] p-4 shadow-sm flex justify-between items-center cursor-pointer group">
+<span className="text-sm font-medium text-[#1A1A1A]">Investments</span>
+<div className="flex items-center gap-3">
+<div className="text-right">
+<div className="text-sm font-medium text-[#1A1A1A]">$22,300.00</div>
+<div className="text-xs text-[#6B7280]">Corporate Fund</div>
+</div>
+<iconify-icon className="text-[#6B7280] group-hover:text-[#1A1A1A]" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+
+<div className="bg-white rounded-lg border border-[#E6E9ED] p-4 shadow-sm flex justify-between items-center cursor-pointer group">
+<span className="text-sm font-medium text-[#1A1A1A]">Portfolio</span>
+<div className="flex items-center gap-3">
+<div className="text-right">
+<div className="text-sm font-medium text-[#1A1A1A]">$18,400.00</div>
+<div className="text-xs text-[#6B7280]">Managed Assets</div>
+</div>
+<iconify-icon className="text-[#6B7280] group-hover:text-[#1A1A1A]" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+</div>
+
+<div className="flex-1 bg-white rounded-lg border border-[#E6E9ED] shadow-sm flex flex-col h-full overflow-hidden">
+<div className="p-4 border-b border-[#E6E9ED] flex justify-between items-center shrink-0">
+<h2 className="text-sm font-medium text-[#1A1A1A]">Recent Corporate Transactions</h2>
+<button className="text-xs text-[#0052A5] font-medium hover:underline">View All</button>
+</div>
+<div className="p-4 flex-1">
+<table className="w-full text-left border-collapse">
+<thead>
+<tr>
+<th className="pb-3 text-xs font-normal text-[#6B7280] border-b border-[#E6E9ED] w-[15%]">Date</th>
+<th className="pb-3 text-xs font-normal text-[#6B7280] border-b border-[#E6E9ED] w-[45%]">Description</th>
+<th className="pb-3 text-xs font-normal text-[#6B7280] border-b border-[#E6E9ED] text-right w-[20%]">Amount</th>
+<th className="pb-3 text-xs font-normal text-[#6B7280] border-b border-[#E6E9ED] text-right w-[20%] pr-2">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td className="py-3 text-xs text-[#6B7280] border-b border-[#E6E9ED]">Apr 18</td>
+<td className="py-3 text-xs text-[#1A1A1A] font-medium border-b border-[#E6E9ED]">ACH Credit – Global Supply Chain Inc</td>
+<td className="py-3 text-xs text-[#1A1A1A] text-right font-medium border-b border-[#E6E9ED]">+$12,500.00</td>
+<td className="py-3 text-xs border-b border-[#E6E9ED] text-right pr-2">
+<span className="text-[#059669] flex items-center justify-end gap-1.5">
+<iconify-icon icon="solar:check-circle-linear"></iconify-icon> Completed
+                                </span>
+</td>
+</tr>
+<tr>
+<td className="py-3 text-xs text-[#6B7280] border-b border-[#E6E9ED]">Apr 18</td>
+<td className="py-3 text-xs text-[#1A1A1A] font-medium border-b border-[#E6E9ED]">Wire Transfer – Apex Industrial Ltd</td>
+<td className="py-3 text-xs text-[#1A1A1A] text-right border-b border-[#E6E9ED]">-$8,200.00</td>
+<td className="py-3 text-xs border-b border-[#E6E9ED] text-right pr-2">
+<span className="text-[#6B7280] flex items-center justify-end gap-1.5">
+<iconify-icon icon="solar:clock-circle-linear"></iconify-icon> Pending
+                                </span>
+</td>
+</tr>
+<tr>
+<td className="py-3 text-xs text-[#6B7280] border-b border-[#E6E9ED]">Apr 17</td>
+<td className="py-3 text-xs text-[#1A1A1A] font-medium border-b border-[#E6E9ED]">Payroll Processing – Internal Disbursement</td>
+<td className="py-3 text-xs text-[#1A1A1A] text-right border-b border-[#E6E9ED]">-$15,000.00</td>
+<td className="py-3 text-xs border-b border-[#E6E9ED] text-right pr-2">
+<span className="text-[#059669] flex items-center justify-end gap-1.5">
+<iconify-icon icon="solar:check-circle-linear"></iconify-icon> Completed
+                                </span>
+</td>
+</tr>
+<tr>
+<td className="py-3 text-xs text-[#6B7280] border-b border-[#E6E9ED]">Apr 16</td>
+<td className="py-3 text-xs text-[#1A1A1A] font-medium border-b border-[#E6E9ED]">Vendor Payment – Summit Logistics LLC</td>
+<td className="py-3 text-xs text-[#1A1A1A] text-right border-b border-[#E6E9ED]">-$3,450.00</td>
+<td className="py-3 text-xs border-b border-[#E6E9ED] text-right pr-2">
+<span className="text-[#C41230] flex items-center justify-end gap-1.5">
+<iconify-icon icon="solar:close-circle-linear"></iconify-icon> Failed
+                                </span>
+</td>
+</tr>
+<tr>
+<td className="py-3 text-xs text-[#6B7280]">Apr 15</td>
+<td className="py-3 text-xs text-[#1A1A1A] font-medium">Incoming Wire – Orion Manufacturing Co</td>
+<td className="py-3 text-xs text-[#1A1A1A] text-right font-medium">+$9,800.00</td>
+<td className="py-3 text-xs text-right pr-2">
+<span className="text-[#059669] flex items-center justify-end gap-1.5">
+<iconify-icon icon="solar:check-circle-linear"></iconify-icon> Completed
+                                </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+
+
+<div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-[380px] bg-white rounded-xl border border-[#E6E9ED] shadow-[0_8px_30px_rgba(0,0,0,0.08)] p-5 notification-anim z-50">
+<div className="flex gap-3 items-start">
+<div className="mt-0.5">
+<iconify-icon className="text-[#C41230] text-xl" icon="solar:danger-circle-linear"></iconify-icon>
+</div>
+<div className="flex-1">
+<h3 className="text-sm font-medium text-[#1A1A1A]">Transfer could not be completed</h3>
+<p className="text-xs text-[#6B7280] mt-1.5 leading-relaxed">
+                    We’re unable to process your request at this time. For further assistance, please contact BOA Customer Service.
+                </p>
+<div className="bg-[#F2F4F7] rounded-md p-3 mt-3 flex flex-col gap-1.5 border border-[#E6E9ED]/50">
+<div className="flex justify-between text-xs">
+<span className="text-[#6B7280]">Recipient</span>
+<span className="text-[#1A1A1A] font-medium">Ricardo P Mendoza</span>
+</div>
+<div className="flex justify-between text-xs">
+<span className="text-[#6B7280]">Routing Number</span>
+<span className="text-[#1A1A1A] font-medium">****0248</span>
+</div>
+<div className="flex justify-between text-xs">
+<span className="text-[#6B7280]">Transfer Type</span>
+<span className="text-[#1A1A1A] font-medium">Domestic Wire</span>
+</div>
+<div className="flex justify-between text-xs">
+<span className="text-[#6B7280]">Attempted</span>
+<span className="text-[#1A1A1A] font-medium">Apr 18, 2026</span>
+</div>
+</div>
+<div className="flex items-center gap-2 mt-4 pt-1">
+<button className="bg-[#0052A5] hover:bg-[#004085] transition-colors text-white text-xs font-medium px-4 py-2 rounded shadow-sm">
+                        Try Again
+                    </button>
+<button className="text-[#6B7280] hover:text-[#1A1A1A] transition-colors text-xs font-medium px-3 py-2">
+                        Cancel
+                    </button>
+</div>
+</div>
+</div>
+</div>
+
+    </>
+  );
+}

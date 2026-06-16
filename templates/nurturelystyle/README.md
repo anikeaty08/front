@@ -1,0 +1,14 @@
+# Nurturely Email System Template
+
+A comprehensive library of professional email templates designed for CRM communications, onboarding, and marketing automation.
+
+## Project Details
+- **Slug:** `nurturelystyle`
+- **Views:** 16
+- **Tags:** Technology, Brand Guidelines, Services, Clean, Minimal, Dark, Futuristic
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

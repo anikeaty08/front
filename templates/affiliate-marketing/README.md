@@ -1,0 +1,14 @@
+# Affiliate Marketing 
+
+A clean, blog-style template for beginner-friendly affiliate marketing articles, perfect for guides and educational content on how affiliate links work.
+
+## Project Details
+- **Slug:** `affiliate-marketing`
+- **Views:** 21
+- **Tags:** Landing Page, Blog, Education, Brand, Clean, Minimal, Large Type, Technology, Marketing, Affiliate
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

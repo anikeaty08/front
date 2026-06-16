@@ -1,0 +1,17 @@
+# Adapt from "Mobile Insights Dashboard UI" Adapt wh... v1
+
+No description provided.
+
+## 🔗 Links
+- **Live Website Demo:** [https://0XG0GPV.aura.build/](https://0XG0GPV.aura.build/)
+
+## Project Details
+- **Slug:** `0XG0GPV`
+- **Views:** 34
+- **Tags:** 
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open this folder in your terminal / VS Code.
+2. Run `npm install`.
+3. Run `npm run dev`.

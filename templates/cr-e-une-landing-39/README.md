@@ -1,0 +1,14 @@
+# SEO Audit Landing Page Template
+
+A dark, conversion-focused template for promoting free SEO and local visibility audits, capturing leads and guiding visitors to request a personalized report.
+
+## Project Details
+- **Slug:** `cr-e-une-landing-39`
+- **Views:** 43
+- **Tags:** Landing Page, Services, Technology, Dark, Gradient, Clean, Animated, SEO, Lead Generation
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

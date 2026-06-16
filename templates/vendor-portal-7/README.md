@@ -1,0 +1,14 @@
+# Vendor Portal Web App Template
+
+Responsive vendor portal UI template for procurement teams, with authentication, RFQ management, PO tracking, performance analytics, and document archive screens.
+
+## Project Details
+- **Slug:** `vendor-portal-7`
+- **Views:** 25
+- **Tags:** Landing Page, Technology, Business, Dashboard, Web App, Clean, Minimal, Gradient, Brand
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

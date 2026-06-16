@@ -1,0 +1,416 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        lucide.createIcons();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+
+<div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] bg-teal-900/30 rounded-full blur-[120px] mix-blend-screen animate-float-slow"></div>
+
+<div className="absolute bottom-[10%] right-[-10%] w-[60vw] h-[60vw] bg-amber-900/20 rounded-full blur-[120px] mix-blend-screen animate-float-slower"></div>
+
+<div className="absolute top-[40%] left-[30%] w-[40vw] h-[40vw] bg-slate-800/40 rounded-full blur-[100px] mix-blend-overlay"></div>
+
+<div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E\')'}}></div>
+</div>
+
+<nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#0b1015]/70 backdrop-blur-md">
+<div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div className="flex items-center gap-2">
+
+<div className="w-6 h-6 rounded-full border border-teal-500/50 bg-teal-500/10 flex items-center justify-center">
+<div className="w-2 h-2 rounded-full bg-teal-400"></div>
+</div>
+<span className="font-medium tracking-tight text-white text-lg">OncoSwab</span>
+</div>
+<div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+<a className="hover:text-white transition-colors" href="#workflow">Workflow</a>
+<a className="hover:text-white transition-colors" href="#science">Science</a>
+<a className="hover:text-white transition-colors" href="#team">Team</a>
+<a className="hover:text-white transition-colors" href="#faq">FAQ</a>
+</div>
+<a className="hidden md:block px-5 py-2 text-xs font-medium text-white bg-white/10 border border-white/10 hover:bg-white/20 transition-all rounded-full tracking-wide" href="#contact">
+                Request Access
+            </a>
+</div>
+</nav>
+
+<main className="relative z-10 pt-32">
+
+<section className="max-w-7xl mx-auto px-6 pb-24 md:pb-32 lg:pb-40">
+<div className="max-w-4xl">
+<div className="flex items-center gap-3 mb-8">
+<span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+<span className="text-xs font-medium tracking-widest uppercase text-teal-400/80">Research Use Only</span>
+</div>
+<h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-white leading-[1.05] mb-8">
+                    The easiest way to <br className="hidden md:block"/>detect lung cancer is <br className="hidden md:block"/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-slate-400">right under our nose</span>
+</h1>
+<p className="text-xl md:text-2xl text-slate-400 font-light max-w-2xl leading-relaxed mb-12">
+                    A new sampling layer for cancer — starting at the airway.
+                </p>
+<div className="flex flex-col sm:flex-row gap-4">
+<a className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium text-[#0b1015] bg-white hover:bg-slate-200 transition-colors rounded-full tracking-wide" href="#contact">
+                        Request RUO Access
+                    </a>
+</div>
+</div>
+</section>
+
+<section className="border-t border-white/5 py-24 md:py-32 bg-gradient-to-b from-transparent to-teal-900/5">
+<div className="max-w-7xl mx-auto px-6">
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+
+<div className="lg:col-span-5 flex flex-col justify-between">
+<div>
+<span className="text-xs font-medium tracking-widest uppercase text-slate-500 mb-6 block">Why Nasal</span>
+<h2 className="text-3xl md:text-5xl font-medium tracking-tighter text-white mb-8">
+                                Blood is great, <br/>but it isn’t enough.
+                            </h2>
+<p className="text-lg text-slate-400 leading-relaxed mb-6">
+                                Lung cancer begins in the airway. Yet most liquid biopsy approaches rely on blood — a diluted, systemic signal.
+                            </p>
+<p className="text-lg text-slate-400 leading-relaxed mb-6">
+                                Sampling from the nasal cavity accesses airway-derived genetic material at the anatomical origin of disease, revealing signals that blood alone may not capture.
+                            </p>
+<p className="text-lg text-slate-200 font-medium leading-relaxed">
+                                Nasal and blood together create a more complete molecular picture.
+                            </p>
+</div>
+</div>
+
+<div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+<div className="p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors backdrop-blur-sm">
+<i className="w-6 h-6 text-teal-400 mb-6" data-lucide="maximize"></i>
+<h3 className="text-lg font-medium text-white mb-2 tracking-tight">Unlock up to 50% more biomarkers</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Combining nasal and blood testing expands detectable signal for a more comprehensive molecular profile.</p>
+</div>
+
+<div className="p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors backdrop-blur-sm">
+<i className="w-6 h-6 text-teal-400 mb-6" data-lucide="microscope"></i>
+<h3 className="text-lg font-medium text-white mb-2 tracking-tight">Sampling closer to lung biology</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Captures airway-derived biomarkers at the anatomical origin of lung cancer.</p>
+</div>
+
+<div className="p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors backdrop-blur-sm">
+<i className="w-6 h-6 text-teal-400 mb-6" data-lucide="clock"></i>
+<h3 className="text-lg font-medium text-white mb-2 tracking-tight">Faster turnaround time</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Easier to collect than blood — enabling quicker sample acquisition and processing.</p>
+</div>
+
+<div className="p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors backdrop-blur-sm">
+<i className="w-6 h-6 text-teal-400 mb-6" data-lucide="home"></i>
+<h3 className="text-lg font-medium text-white mb-2 tracking-tight">No phlebotomist required</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Enables decentralized collection in clinic or research environments.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32 relative overflow-hidden">
+
+<div className="absolute top-[20%] right-[-20%] w-[50vw] h-[50vw] bg-amber-900/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none"></div>
+<div className="max-w-7xl mx-auto px-6">
+<div className="max-w-3xl">
+<h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tighter text-white mb-12">
+                        Blood unlocked liquid biopsy. <br/>
+<span className="text-slate-500">But lung cancer begins in the airway.</span>
+</h2>
+<div className="space-y-6 text-lg md:text-xl text-slate-400 font-light leading-relaxed border-l border-white/10 pl-8 md:pl-12">
+<p>Liquid biopsy transformed oncology by moving beyond tissue.</p>
+<p>But blood was never designed for lung cancer.</p>
+<p>Plasma reflects what reaches circulation.</p>
+<p className="text-teal-400/90 font-medium">Lung cancer originates in the airway.</p>
+<p>OncoSwab samples where the disease begins — accessing airway-derived genetic material through a simple nasal swab.</p>
+<p>This isn’t about replacing tissue.</p>
+<p>It isn’t about ignoring blood.</p>
+<p className="text-white">It’s about starting in the right place.</p>
+</div>
+<div className="mt-12 pl-8 md:pl-12">
+<a className="inline-flex items-center text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors" href="#contact">
+                            Request Research Access <i className="w-4 h-4 ml-2" data-lucide="arrow-right"></i>
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<section className="border-y border-white/5 bg-white/[0.02] py-24" id="workflow">
+<div className="max-w-7xl mx-auto px-6">
+<span className="text-xs font-medium tracking-widest uppercase text-slate-500 mb-6 block">Workflow</span>
+<div className="flex flex-col md:flex-row justify-between md:items-end mb-16 gap-8">
+<h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-white">From nose to insight — <br/>in three steps.</h2>
+<p className="text-sm text-slate-400 max-w-sm">Currently available for Research Use Only. Designed to power the next generation of non-invasive cancer detection.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+
+<div className="hidden md:block absolute top-12 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
+
+<div className="relative pt-8">
+<div className="w-8 h-8 rounded-full bg-[#0b1015] border border-teal-500/30 text-teal-400 flex items-center justify-center text-xs font-mono mb-6 relative z-10">01</div>
+<h3 className="text-xl font-medium text-white mb-3">Collect</h3>
+<p className="text-slate-400">A simple nasal swab, taken in minutes.</p>
+</div>
+
+<div className="relative pt-8">
+<div className="w-8 h-8 rounded-full bg-[#0b1015] border border-slate-700 text-slate-400 flex items-center justify-center text-xs font-mono mb-6 relative z-10">02</div>
+<h3 className="text-xl font-medium text-white mb-3">Extract</h3>
+<p className="text-slate-400">Isolate airway-derived genetic material.</p>
+</div>
+
+<div className="relative pt-8">
+<div className="w-8 h-8 rounded-full bg-[#0b1015] border border-slate-700 text-slate-400 flex items-center justify-center text-xs font-mono mb-6 relative z-10">03</div>
+<h3 className="text-xl font-medium text-white mb-3">Decode</h3>
+<p className="text-slate-400">Detect ctDNA mutations and cancer-associated biomarkers.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32" id="science">
+<div className="max-w-7xl mx-auto px-6">
+<span className="text-xs font-medium tracking-widest uppercase text-slate-500 mb-6 block">What This Unlocks</span>
+<div className="max-w-3xl mb-20">
+<h2 className="text-3xl md:text-5xl font-medium tracking-tighter text-white mb-8">A new layer of lung cancer biology.</h2>
+<p className="text-lg text-slate-400 leading-relaxed">
+                        By sampling the airway directly, OncoSwab enables researchers to study lung cancer at its point of origin — not just after it enters circulation. This opens study designs and biomarker strategies that were previously inaccessible with blood alone.
+                    </p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+<div className="group relative p-8 rounded-xl bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 overflow-hidden">
+<div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<h3 className="text-lg font-medium text-white mb-4">Longitudinal disease tracking</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Repeat sampling over time to observe molecular changes closer to tumor origin.</p>
+</div>
+
+<div className="group relative p-8 rounded-xl bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 overflow-hidden">
+<div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<h3 className="text-lg font-medium text-white mb-4">Multi-site scalability</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Standardized nasal collection across institutions, without reliance on blood-draw infrastructure.</p>
+</div>
+
+<div className="group relative p-8 rounded-xl bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 overflow-hidden">
+<div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-slate-400/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<h3 className="text-lg font-medium text-white mb-4">Airway-driven biomarker discovery</h3>
+<p className="text-sm text-slate-400 leading-relaxed">Explore ctDNA and mutation signals enriched in the respiratory epithelium.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32 bg-slate-900/50 border-t border-white/5">
+<div className="max-w-7xl mx-auto px-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<span className="text-xs font-medium tracking-widest uppercase text-teal-500 mb-6 block">The Shift</span>
+<h2 className="text-4xl md:text-5xl font-medium tracking-tighter text-white mb-8">
+                            Every breakthrough in cancer testing starts with where you sample.
+                        </h2>
+</div>
+<div>
+<div className="space-y-6 text-lg text-slate-400 font-light">
+<p>Tissue was the first breakthrough.</p>
+<p>Blood was the second.</p>
+<p>Each expanded what researchers could see.</p>
+<p>OncoSwab introduces airway-derived sampling as the next dimension — designed specifically for lung cancer biology.</p>
+<p className="text-white font-medium mt-8">
+                                As research evolves, the question is no longer just how sensitive a test is. It’s whether you’re sampling from the right place.
+                            </p>
+</div>
+<div className="mt-10">
+<a className="px-6 py-3 text-sm font-medium text-slate-900 bg-white hover:bg-slate-200 transition-colors rounded-full" href="#contact">
+                                Request Research Access
+                            </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-b border-white/5">
+<div className="max-w-7xl mx-auto px-6">
+<div className="text-center max-w-2xl mx-auto mb-16">
+<h2 className="text-3xl font-medium tracking-tighter text-white mb-4">Active clinical studies are underway.</h2>
+<p className="text-slate-400">Developed with hospitals from the start, now in multi-site clinical studies across multiple hospital partners.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden mb-16 border border-white/10">
+<div className="bg-[#0b1015] p-8 text-center">
+<div className="text-3xl font-medium text-white mb-2 tracking-tighter">Multi-site</div>
+<div className="text-sm text-slate-500">Active clinical trial hospital sites</div>
+</div>
+<div className="bg-[#0b1015] p-8 text-center">
+<div className="text-3xl font-medium text-white mb-2 tracking-tighter">Available</div>
+<div className="text-sm text-slate-500">Research Use Only (RUO) program</div>
+</div>
+<div className="bg-[#0b1015] p-8 text-center">
+<div className="text-3xl font-medium text-white mb-2 tracking-tighter">Day 1</div>
+<div className="text-sm text-slate-500">Clinical + translational focus</div>
+</div>
+</div>
+<div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-40 grayscale">
+
+<span className="text-lg font-semibold tracking-tight">MAYO CLINIC VENTURES</span>
+<span className="text-lg font-semibold tracking-tight">INNOSUISSE</span>
+<span className="text-lg font-semibold tracking-tight">HOSPITAL PARTNERS</span>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32 relative overflow-hidden">
+<div className="absolute inset-0 bg-teal-900/10"></div>
+<div className="max-w-7xl mx-auto px-6 relative z-10">
+<div className="flex flex-col lg:flex-row items-center justify-between gap-12 bg-white/[0.02] border border-white/10 rounded-3xl p-8 md:p-16 backdrop-blur-md">
+<div className="max-w-xl">
+<span className="text-xs font-medium tracking-widest uppercase text-teal-400 mb-4 block">For Research Teams</span>
+<h2 className="text-3xl md:text-5xl font-medium tracking-tighter text-white mb-6">Access the airway.</h2>
+<p className="text-lg text-slate-400 leading-relaxed mb-8">
+                            OncoSwab is now available as a Research Use Only nasal sampling platform for lung cancer biomarker studies. 
+                            <br/><br/>
+                            Designed for teams moving beyond blood-first approaches, the platform provides standardized nasal collection and airway-derived molecular analysis for multi-site and longitudinal research.
+                        </p>
+</div>
+<div className="flex-shrink-0">
+<a className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-[#0b1015] bg-teal-400 hover:bg-teal-300 transition-colors rounded-full tracking-wide shadow-[0_0_20px_rgba(45,212,191,0.3)]" href="#contact">
+                            Request Access
+                        </a>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-b border-white/5" id="team">
+<div className="max-w-7xl mx-auto px-6">
+<div className="mb-16">
+<h2 className="text-3xl font-medium tracking-tighter text-white mb-4">Built by clinicians and molecular biologists.</h2>
+<p className="text-slate-400 text-lg">A founding team spanning molecular biotechnology, translational research, and lung cancer clinical expertise.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+<div className="group">
+<div className="aspect-[4/5] bg-slate-800 rounded-xl mb-6 overflow-hidden relative">
+
+<img alt="Andrea Stephany" className="w-full h-full object-cover opacity-70 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=600&amp;h=750"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0b1015] to-transparent opacity-60"></div>
+</div>
+<h3 className="text-lg font-medium text-white">Andrea Stephany, MSc</h3>
+<p className="text-sm text-teal-400 mb-2">CEO &amp; Co-founder</p>
+<p className="text-xs text-slate-500">Serial entrepreneur. Biochemist. Science communicator</p>
+</div>
+
+<div className="group">
+<div className="aspect-[4/5] bg-slate-800 rounded-xl mb-6 overflow-hidden relative">
+
+<img alt="Javier Zulueta" className="w-full h-full object-cover opacity-70 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&amp;fit=crop&amp;q=80&amp;w=600&amp;h=750"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0b1015] to-transparent opacity-60"></div>
+</div>
+<h3 className="text-lg font-medium text-white">Javier Zulueta, MD</h3>
+<p className="text-sm text-teal-400 mb-2">Clinician co-founder &amp; Chief Medical Advisor</p>
+<p className="text-xs text-slate-500">+25 years in lung cancer screening. Former Chief of Pulmonary at Mount Sinai Morningside, NYC</p>
+</div>
+
+<div className="group">
+<div className="aspect-[4/5] bg-slate-800 rounded-xl mb-6 overflow-hidden relative">
+
+<img alt="Roberta Gatta" className="w-full h-full object-cover opacity-70 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&amp;fit=crop&amp;q=80&amp;w=600&amp;h=750"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0b1015] to-transparent opacity-60"></div>
+</div>
+<h3 className="text-lg font-medium text-white">Roberta Gatta, PhD</h3>
+<p className="text-sm text-teal-400 mb-2">Director of Clinical Operations</p>
+<p className="text-xs text-slate-500">PhD in Biotechnology. Liquid biopsy expert.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24" id="faq">
+<div className="max-w-3xl mx-auto px-6">
+<h2 className="text-3xl font-medium tracking-tighter text-white mb-12 text-center">Frequently Asked Questions</h2>
+<div className="space-y-4">
+
+<div className="border border-white/10 rounded-lg p-6 hover:bg-white/[0.02] transition-colors">
+<h3 className="text-lg font-medium text-white mb-2">Is this available clinically?</h3>
+<p className="text-slate-400 leading-relaxed text-sm">Not yet. OncoSwab is currently offered as Research Use Only (RUO) while clinical validation is underway.</p>
+</div>
+
+<div className="border border-white/10 rounded-lg p-6 hover:bg-white/[0.02] transition-colors">
+<h3 className="text-lg font-medium text-white mb-2">What studies is this best for?</h3>
+<p className="text-slate-400 leading-relaxed text-sm">Longitudinal cohorts, biomarker discovery, trial sub-studies, and workflows complementing liquid biopsy and tissue.</p>
+</div>
+
+<div className="border border-white/10 rounded-lg p-6 hover:bg-white/[0.02] transition-colors">
+<h3 className="text-lg font-medium text-white mb-2">What does RUO access include?</h3>
+<p className="text-slate-400 leading-relaxed text-sm">Collection kits, documentation, molecular analysis and support for integrating into research protocols.</p>
+</div>
+
+<div className="border border-white/10 rounded-lg p-6 hover:bg-white/[0.02] transition-colors">
+<h3 className="text-lg font-medium text-white mb-2">Is this intended to replace blood testing?</h3>
+<p className="text-slate-400 leading-relaxed text-sm">OncoSwab introduces a new sampling dimension for lung cancer research. How it ultimately integrates into clinical practice will depend on ongoing validation and study results.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-32 relative" id="contact">
+
+<div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t from-teal-900/20 to-transparent pointer-events-none"></div>
+<div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+<span className="text-xs font-medium tracking-widest uppercase text-teal-400 mb-6 block">Research Use Only</span>
+<h2 className="text-5xl md:text-7xl font-medium tracking-tighter text-white mb-8">
+                    Bring nasal biomarker sampling into your next study.
+                </h2>
+<p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
+                    Request RUO access and collaborate with OncoSwab as we expand clinical validation.
+                </p>
+<a className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-[#0b1015] bg-white hover:bg-slate-200 transition-colors rounded-full tracking-wide" href="mailto:research@oncoswab.com">
+                    Request RUO Access
+                </a>
+</div>
+</section>
+
+<footer className="border-t border-white/5 py-12 relative z-10 bg-[#0b1015]">
+<div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+<div className="flex items-center gap-2">
+<div className="w-5 h-5 rounded-full border border-teal-500/50 bg-teal-500/10 flex items-center justify-center">
+<div className="w-1.5 h-1.5 rounded-full bg-teal-400"></div>
+</div>
+<span className="font-medium tracking-tight text-white">OncoSwab</span>
+</div>
+<div className="flex gap-8 text-sm text-slate-500">
+<a className="hover:text-white transition-colors" href="#">Home</a>
+<a className="hover:text-white transition-colors" href="#science">For Researchers</a>
+<a className="hover:text-white transition-colors" href="#team">Team</a>
+<a className="hover:text-white transition-colors" href="#faq">FAQ</a>
+<a className="hover:text-white transition-colors" href="mailto:research@oncoswab.com">Contact</a>
+</div>
+<div className="text-right">
+<p className="text-xs text-slate-600 mb-1">Research Use Only. Not for diagnostic procedures.</p>
+<p className="text-xs text-slate-700">© 2026 OncoSwab</p>
+</div>
+</div>
+</footer>
+</main>
+
+
+    </>
+  );
+}

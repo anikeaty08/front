@@ -1,0 +1,14 @@
+# Full Screen Animated Hero Section
+
+Responsive full screen hero UI with animated backgrounds, slide and fade-in text effects, and interactive icon buttons.
+
+## Project Details
+- **Slug:** `UWKWSZ2`
+- **Views:** 271
+- **Tags:** Hero, Animation, Tailwind CSS, Canvas, SVG Icons, Responsive Design, Web Animations
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

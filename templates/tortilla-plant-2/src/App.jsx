@@ -1,0 +1,529 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        // Data Structure - 5 Sections, 15 Questions total
+        const sections = [
+            {
+                id: "visibility",
+                title: "Production Visibility",
+                desc: "Clarity on real-time line performance.",
+                questions: [
+                    { id: "q1", text: "Is line speed and throughput visible remotely in real-time?" },
+                    { id: "q2", text: "Are operators logging scrap digitally as it happens?" },
+                    { id: "q3", text: "Is OEE calculated automatically without spreadsheets?" }
+                ]
+            },
+            {
+                id: "traceability",
+                title: "Traceability & Audit Readiness",
+                desc: "Speed and accuracy of lot tracking.",
+                questions: [
+                    { id: "q4", text: "Can you trace a flour batch to finished pallets in <15m?" },
+                    { id: "q5", text: "Are lot codes scanned at the mixer (vs. written)?" },
+                    { id: "q6", text: "Is a mock recall performed successfully every quarter?" }
+                ]
+            },
+            {
+                id: "efficiency",
+                title: "Team Efficiency",
+                desc: "Standardization of daily work.",
+                questions: [
+                    { id: "q7", text: "Are SOPs accessible digitally at the line?" },
+                    { id: "q8", text: "Is shift handover formalized with digital records?" },
+                    { id: "q9", text: "Can new operators run the line with minimal supervision?" }
+                ]
+            },
+            {
+                id: "downtime",
+                title: "Downtime & Waste Control",
+                desc: "Granularity of loss data.",
+                questions: [
+                    { id: "q10", text: "Is downtime categorized by specific reason codes?" },
+                    { id: "q11", text: "Are short stops (< 2 mins) automatically captured?" },
+                    { id: "q12", text: "Is rework tracked separately from scrap?" }
+                ]
+            },
+            {
+                id: "costing",
+                title: "Costing & Profitability",
+                desc: "Understanding margins per SKU.",
+                questions: [
+                    { id: "q13", text: "Is labor cost tracked against specific runs?" },
+                    { id: "q14", text: "Do you know the exact margin of every SKU per shift?" },
+                    { id: "q15", text: "Is ingredient yield loss calculated per batch?" }
+                ]
+            }
+        ];
+
+        let currentSectionIndex = 0;
+        let answers = {}; 
+
+        // Initialize all answers to false (No)
+        sections.forEach(sec => {
+            sec.questions.forEach(q => {
+                answers[q.id] = false;
+            });
+        });
+
+        function startDiagnostic() {
+            const intro = document.getElementById('intro-screen');
+            intro.classList.add('fade-out');
+            setTimeout(() => {
+                intro.classList.add('hidden');
+                document.getElementById('diagnostic-container').classList.remove('hidden');
+                document.getElementById('diagnostic-container').classList.add('fade-in');
+                renderSection(0);
+            }, 300);
+        }
+
+        function renderSection(index) {
+            const data = sections[index];
+            
+            // Update Headers
+            document.getElementById('current-section-num').innerText = index + 1;
+            document.getElementById('section-title').innerText = data.title;
+            document.getElementById('section-desc').innerText = data.desc;
+            
+            // Update Progress Bar
+            const progress = ((index + 1) / sections.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            // Render Questions
+            const formContainer = document.getElementById('assessment-form');
+            formContainer.innerHTML = ''; 
+
+            data.questions.forEach((q, i) => {
+                const isChecked = answers[q.id] ? 'checked' : '';
+                
+                const qHTML = `
+                <label class="group relative flex items-center justify-between p-6 bg-white border border-slate-100 rounded-xl cursor-pointer hover:border-[#ff8404]/30 hover:shadow-md transition-all duration-200 opacity-0" style="animation: fadeIn 0.4s ease forwards ${i * 0.08}s">
+                    <span class="text-[15px] font-medium text-slate-700 group-hover:text-slate-900 transition-colors pr-6">${q.text}</span>
+                    
+                    <div class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                        <input type="checkbox" class="sr-only peer" onchange="toggleAnswer('${q.id}', this)" ${isChecked}>
+                        <div class="w-12 h-7 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff8404]"></div>
+                    </div>
+                </label>
+                `;
+                formContainer.insertAdjacentHTML('beforeend', qHTML);
+            });
+        }
+
+        function toggleAnswer(qId, checkbox) {
+            answers[qId] = checkbox.checked;
+        }
+
+        function nextSection() {
+            if (currentSectionIndex < sections.length - 1) {
+                const form = document.getElementById('assessment-form');
+                form.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    form.classList.remove('fade-out');
+                    currentSectionIndex++;
+                    renderSection(currentSectionIndex);
+                }, 300);
+            } else {
+                finishDiagnostic();
+            }
+        }
+
+        function finishDiagnostic() {
+            const container = document.getElementById('diagnostic-container');
+            container.classList.add('fade-out');
+            setTimeout(() => {
+                container.classList.add('hidden');
+                const loading = document.getElementById('analysis-screen');
+                loading.classList.remove('hidden');
+                loading.classList.add('fade-in');
+                
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                    calculateResults();
+                }, 1500);
+            }, 300);
+        }
+
+        function calculateResults() {
+            let totalScore = 0;
+            const totalQuestions = 15;
+            let sectionResults = [];
+
+            // Calculate Scores
+            sections.forEach(sec => {
+                let secScore = 0;
+                sec.questions.forEach(q => {
+                    if (answers[q.id]) {
+                        totalScore++;
+                        secScore++;
+                    }
+                });
+                sectionResults.push({
+                    title: sec.title,
+                    score: secScore,
+                    id: sec.id
+                });
+            });
+
+            // 1. Update Circle Score
+            const percentage = Math.round((totalScore / totalQuestions) * 100);
+            const scoreCircle = document.getElementById('score-circle-stroke');
+            const scoreText = document.getElementById('score-percentage');
+            
+            // Circle Math: Radius 80, Circumference ~502.65
+            const radius = 80;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - ((percentage / 100) * circumference);
+
+            // Color Logic (Red -> Orange -> Green)
+            let colorClass = "text-red-500"; // Default Red
+            if (percentage > 40) colorClass = "text-[#ff8404]"; // Orange
+            if (percentage > 75) colorClass = "text-emerald-500"; // Green
+
+            scoreCircle.classList.remove("text-red-500", "text-[#ff8404]", "text-emerald-500");
+            scoreCircle.classList.add(colorClass);
+
+            // Trigger Animation (slight delay to ensure DOM is ready)
+            setTimeout(() => {
+                scoreCircle.style.strokeDashoffset = offset;
+            }, 100);
+
+            // Animate number count
+            let currentNum = 0;
+            const duration = 1500;
+            const stepTime = Math.abs(Math.floor(duration / percentage));
+            if (percentage > 0) {
+                const timer = setInterval(() => {
+                    currentNum += 1;
+                    scoreText.innerText = currentNum + "%";
+                    if (currentNum == percentage) {
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            } else {
+                scoreText.innerText = "0%";
+            }
+
+
+            // 2. Overall Posture Logic
+            const titleEl = document.getElementById('posture-title');
+            const interpEl = document.getElementById('posture-interpretation');
+            const tensionEl = document.getElementById('posture-tension');
+
+            if (totalScore >= 13) {
+                titleEl.innerText = "Disciplined and Scalable";
+                interpEl.innerText = "Operations are largely system-driven. Risk exists mainly in edge cases and scale pressure, not in daily execution.";
+                tensionEl.innerText = "Growth will expose whatever remains manual.";
+            } else if (totalScore >= 9) {
+                titleEl.innerText = "Structured but Fragile";
+                interpEl.innerText = "Core processes exist, but depend on people, workarounds, or timing. Things work until volume, audits, or staffing change.";
+                tensionEl.innerText = "The operation feels stable — but it’s carrying hidden load.";
+            } else if (totalScore >= 5) {
+                titleEl.innerText = "Reactive and Person-Dependent";
+                interpEl.innerText = "Performance relies on experience and effort rather than systems. Problems are addressed after impact, not before.";
+                tensionEl.innerText = "Consistency is coming from people compensating, not from process.";
+            } else {
+                titleEl.innerText = "Uncontrolled and High-Risk";
+                interpEl.innerText = "Operations lack reliable structure. Visibility, traceability, and costing are fragmented or absent.";
+                tensionEl.innerText = "The plant is vulnerable to audits, turnover, and sudden scale pressure.";
+            }
+
+            // 3. Section Diagnostics (Weak Sections < 3)
+            const diagList = document.getElementById('diagnostic-list');
+            const diagContainer = document.getElementById('diagnostics-container');
+            diagList.innerHTML = '';
+            
+            // Diagnostic copy map
+            const diagnostics = {
+                "Production Visibility": {
+                    0: "Issues are discovered after they cause waste or downtime. Visibility is retrospective, not preventative.",
+                    1: "Issues are discovered after they cause waste or downtime. Visibility is retrospective, not preventative.",
+                    2: "Some data exists, but timing and definitions vary by shift or role."
+                },
+                "Traceability & Audit Readiness": {
+                    0: "Traceability depends on searching, memory, or specific individuals. Audit readiness is fragile.",
+                    1: "Traceability depends on searching, memory, or specific individuals. Audit readiness is fragile.",
+                    2: "Information exists, but retrieval speed and completeness vary."
+                },
+                "Team Efficiency": {
+                    0: "Reporting and coordination consume excessive operator and supervisor time.",
+                    1: "Reporting and coordination consume excessive operator and supervisor time.",
+                    2: "Processes exist, but are not standardized or easily taught."
+                },
+                "Downtime & Waste Control": {
+                    0: "Losses are visible only in aggregate. Root causes are not consistently captured.",
+                    1: "Losses are visible only in aggregate. Root causes are not consistently captured.",
+                    2: "Data exists, but corrective action is irregular."
+                },
+                "Costing & Profitability": {
+                    0: "Cost visibility is estimated or delayed. Decisions are made without true margin clarity.",
+                    1: "Cost visibility is estimated or delayed. Decisions are made without true margin clarity.",
+                    2: "Costing exists, but is disconnected from production reality."
+                }
+            };
+
+            let weakSectionsFound = false;
+
+            sectionResults.forEach(res => {
+                if (res.score < 3) {
+                    weakSectionsFound = true;
+                    const text = diagnostics[res.title][res.score];
+                    const scoreLabel = res.score <= 1 ? "Exposed" : "Inconsistent";
+                    const scoreColor = res.score <= 1 ? "bg-red-50 text-red-700 border-red-100" : "bg-orange-50 text-orange-700 border-orange-100";
+                    
+                    const html = `
+                        <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-6 items-start">
+                            <div class="flex-shrink-0 w-full sm:w-56 flex justify-between sm:block">
+                                <span class="text-sm font-semibold text-slate-900 block">${res.title}</span>
+                                <span class="text-[11px] uppercase tracking-wide font-medium px-2.5 py-1 rounded border ${scoreColor} mt-2 inline-block">${scoreLabel}</span>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed">${text}</p>
+                        </div>
+                    `;
+                    diagList.insertAdjacentHTML('beforeend', html);
+                }
+            });
+
+            if (weakSectionsFound) {
+                diagContainer.classList.remove('hidden');
+            }
+
+            // 4. Prioritization Logic (Lowest 2 Sections)
+            const sortedSections = [...sectionResults].sort((a, b) => a.score - b.score);
+            const bottomTwo = sortedSections.slice(0, 2);
+            const pressureEl = document.getElementById('pressure-text');
+            
+            // Prioritization Copy Map
+            const priorityText = {
+                "Production Visibility": "Low visibility delays reaction time, allowing small issues to compound into major losses.",
+                "Traceability & Audit Readiness": "Traceability gaps amplify audit risk and slow root-cause analysis across the plant.",
+                "Team Efficiency": "Manual coordination creates bottlenecks that limit the plant’s ability to scale output.",
+                "Downtime & Waste Control": "Blindness to downtime reasons prevents the engineering team from solving chronic issues.",
+                "Costing & Profitability": "Costing blindness leads to running unprofitable SKUs without realizing the margin impact."
+            };
+
+            let pressureHTML = "";
+            bottomTwo.forEach(sec => {
+                pressureHTML += `<span class="block mb-3"><strong class="font-medium text-slate-900">${sec.title}:</strong> ${priorityText[sec.title]}</span>`;
+            });
+            pressureEl.innerHTML = pressureHTML;
+
+
+            // 5. Next Step Guidance
+            const guideList = document.getElementById('guidance-list');
+            const actions = [
+                "Reducing variability in how production data is captured shift-to-shift.",
+                "Centralizing batch and production records into a single source of truth.",
+                "Shifting review cadence from monthly retrospective to daily correction.",
+                "Making performance visible to the floor without manual intervention."
+            ];
+
+            actions.forEach(action => {
+                const li = `
+                    <li class="flex items-start gap-3">
+                        <div class="mt-2 h-1.5 w-1.5 rounded-full bg-slate-300 flex-shrink-0"></div>
+                        <span class="text-base text-slate-600 leading-relaxed">${action}</span>
+                    </li>
+                `;
+                guideList.insertAdjacentHTML('beforeend', li);
+            });
+
+            document.getElementById('results-screen').classList.remove('hidden');
+        }
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="w-full pt-12 pb-8 px-8 fade-in flex justify-between items-center opacity-0" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
+
+<a aria-label="Return to Start" className="h-12 w-auto overflow-hidden rounded-md cursor-pointer block hover:opacity-80 transition-opacity" href="#" onclick="location.reload(); return false;">
+<img alt="Logo" className="h-full w-auto object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/09ac6bfd-746a-42b5-817f-061d60fb7a56_3840w.png"/>
+</a>
+<div className="text-xs text-slate-400 font-medium tracking-widest uppercase bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">Diagnostic</div>
+</header>
+<main className="flex-grow flex flex-col min-h-[70vh] w-full px-8 relative justify-center">
+
+<section className="py-12 fade-in flex flex-col items-start w-full" id="intro-screen">
+<div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-[#ff8404] text-xs font-medium tracking-wide uppercase mb-8">
+<iconify-icon height="14" icon="solar:graph-up-linear" width="14"></iconify-icon>
+<span>Operations Check</span>
+</div>
+<h1 className="text-5xl md:text-6xl font-semibold text-slate-900 leading-[1.1] tracking-tight mb-8">
+                Tortilla Plant <br/>Efficiency Audit.
+            </h1>
+<p className="text-lg text-slate-500 font-normal leading-relaxed max-w-xl mb-16">
+                Evaluate your production line against industry standards for visibility, traceability, and cost control.
+            </p>
+
+<div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
+<div className="p-6 rounded-2xl border border-slate-100 bg-white hover:border-slate-200 transition-colors shadow-sm">
+<iconify-icon className="text-slate-400 mb-4" height="24" icon="solar:stopwatch-linear" width="24"></iconify-icon>
+<h3 className="text-base font-medium text-slate-900 mb-2">2 Minutes</h3>
+<p className="text-sm text-slate-500">Rapid self-assessment.</p>
+</div>
+<div className="p-6 rounded-2xl border border-slate-100 bg-white hover:border-slate-200 transition-colors shadow-sm">
+<iconify-icon className="text-slate-400 mb-4" height="24" icon="solar:document-text-linear" width="24"></iconify-icon>
+<h3 className="text-base font-medium text-slate-900 mb-2">Detailed Analysis</h3>
+<p className="text-sm text-slate-500">Uncover operational fragility.</p>
+</div>
+</div>
+<button className="group bg-[#0f172a] hover:bg-slate-800 text-white transition-all px-8 py-4 rounded-xl text-base font-medium flex items-center gap-3 shadow-xl shadow-slate-900/10" onclick="startDiagnostic()">
+<span>Start Audit</span>
+<iconify-icon className="text-slate-400 group-hover:text-white transition-colors" height="18" icon="solar:arrow-right-linear" width="18"></iconify-icon>
+</button>
+</section>
+
+<section className="hidden w-full py-12" id="diagnostic-container">
+<div className="mb-12 flex flex-col gap-3">
+<div className="flex justify-between items-end">
+<div>
+<h2 className="text-2xl font-semibold text-slate-900 tracking-tight" id="section-title">Production Visibility</h2>
+<p className="text-base text-slate-500 mt-2" id="section-desc">Clarity on line speed and waste.</p>
+</div>
+<span className="text-sm font-mono text-slate-400 bg-slate-50 px-3 py-1.5 rounded-md border border-slate-100">
+<span id="current-section-num">1</span> <span className="text-slate-300">/</span> 5
+                    </span>
+</div>
+
+<div className="w-full h-1 bg-slate-100 mt-6 overflow-hidden rounded-full">
+<div className="h-full bg-[#ff8404] w-1/5 transition-all duration-500 ease-out rounded-full" id="progress-bar"></div>
+</div>
+</div>
+<form className="space-y-4" id="assessment-form" onsubmit="return false;">
+
+</form>
+<div className="mt-16 flex justify-between items-center pt-8 border-t border-slate-100">
+<div className="text-xs text-slate-400 uppercase tracking-wider font-medium">Select all that apply</div>
+<button className="bg-[#ff8404] text-white hover:bg-[#e67700] transition-all px-8 py-3.5 text-sm font-medium rounded-lg flex items-center gap-2.5 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30" onclick="nextSection()">
+                    Next Step
+                    <iconify-icon height="16" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</button>
+</div>
+</section>
+
+<section className="hidden py-32 w-full text-center flex flex-col items-center justify-center h-[60vh]" id="analysis-screen">
+<div className="relative">
+<div className="h-12 w-12 border-[3px] border-slate-100 border-t-[#ff8404] rounded-full animate-spin"></div>
+</div>
+<p className="text-sm text-slate-400 font-medium mt-8 tracking-wide uppercase">Processing Data</p>
+</section>
+
+<section className="hidden py-12 w-full fade-in pb-32" id="results-screen">
+
+<div className="mb-16 border-b border-slate-100 pb-12">
+<div className="flex flex-col-reverse md:flex-row md:items-start md:justify-between gap-12">
+
+<div className="flex-1">
+<div className="inline-block px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-semibold uppercase tracking-wide rounded mb-6 border border-slate-200">Operational Posture</div>
+<h1 className="text-4xl md:text-5xl font-semibold text-slate-900 tracking-tight mb-6 leading-tight">
+<span id="posture-title">Analyzing...</span>
+</h1>
+<p className="text-lg text-slate-500 leading-relaxed max-w-lg mb-8" id="posture-subtitle">
+                            Results based on 15 key indicators.
+                        </p>
+</div>
+
+<div className="relative flex items-center justify-center flex-shrink-0">
+<svg className="w-48 h-48 transform -rotate-90">
+<circle className="circle-bg text-slate-100" cx="96" cy="96" fill="transparent" r="80"></circle>
+<circle className="circle transition-all duration-1000 ease-out" cx="96" cy="96" fill="transparent" id="score-circle-stroke" r="80" stroke="currentColor" stroke-dasharray="502.65" stroke-dashoffset="502.65"></circle>
+</svg>
+<div className="absolute inset-0 flex flex-col items-center justify-center">
+<span className="text-5xl font-semibold tracking-tight text-slate-900" id="score-percentage">0%</span>
+<span className="text-xs uppercase tracking-widest text-slate-400 font-medium mt-2">Score</span>
+</div>
+</div>
+</div>
+<div className="grid gap-8 md:grid-cols-2 mt-8">
+
+<div className="bg-slate-50 rounded-xl p-8 border border-slate-100">
+<div className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Interpretation</div>
+<p className="text-base text-slate-700 leading-relaxed" id="posture-interpretation">
+                            Loading analysis...
+                        </p>
+</div>
+
+<div className="bg-orange-50/50 rounded-xl p-8 border border-orange-100/50">
+<div className="text-xs text-orange-400 uppercase tracking-wider font-semibold mb-3">Key Tension</div>
+<p className="text-base text-slate-900 leading-relaxed font-medium" id="posture-tension">
+                            Loading tension...
+                        </p>
+</div>
+</div>
+
+<div className="mt-8 flex justify-start">
+<a className="inline-flex items-center gap-2.5 bg-[#ff8404] hover:bg-[#e67700] text-white px-6 py-3.5 rounded-lg text-sm font-medium transition-all shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30" href="https://api.leadconnectorhq.com/widget/booking/ydJM0ERcXMT6CZvDFEd4" target="_blank">
+<span>Review Results with an Expert</span>
+<iconify-icon height="16" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</a>
+</div>
+</div>
+
+<div className="hidden mb-16" id="diagnostics-container">
+<h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-8 flex items-center gap-2.5">
+<iconify-icon className="text-[#ff8404]" height="16" icon="solar:danger-circle-linear" width="16"></iconify-icon>
+                    Diagnostic Findings
+                </h3>
+<div className="space-y-6" id="diagnostic-list">
+
+</div>
+</div>
+
+<div className="grid md:grid-cols-12 gap-12">
+
+<div className="md:col-span-5">
+<h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-8">Pressure Accumulation</h3>
+<div className="relative pl-6 border-l-2 border-[#ff8404]">
+<p className="text-base text-slate-600 leading-relaxed" id="pressure-text">
+                            Analysis of your lowest scoring sections...
+                        </p>
+</div>
+</div>
+
+<div className="md:col-span-7">
+<h3 className="text-xs font-semibold uppercase tracking-wider text-slate-900 mb-8">What Stabilizing Operations Typically Requires</h3>
+<ul className="space-y-6" id="guidance-list">
+
+</ul>
+</div>
+</div>
+
+<div className="mt-20 pt-10 border-t border-slate-100 text-center">
+<p className="text-sm text-slate-500 font-medium italic" id="positioning-bridge">
+                    Plants that resolve these gaps typically do so by consolidating production, traceability, and costing into one operational system.
+                </p>
+</div>
+
+<div className="mt-12 bg-[#fff7ed] rounded-2xl p-10 text-center border border-orange-100 shadow-xl shadow-orange-900/5">
+<h3 className="text-2xl font-semibold text-slate-900 mb-3">Ready to optimize your production line?</h3>
+<p className="text-slate-600 mb-8 max-w-lg mx-auto leading-relaxed">Schedule a consultation to review your results and discuss specific solutions for your plant.</p>
+<a className="inline-flex items-center gap-2.5 bg-[#ff8404] hover:bg-[#e67700] text-white px-8 py-4 rounded-xl text-base font-semibold transition-all hover:-translate-y-0.5 shadow-lg shadow-orange-900/10" href="https://api.leadconnectorhq.com/widget/booking/ydJM0ERcXMT6CZvDFEd4" target="_blank">
+                    Fix my Operations
+                    <iconify-icon height="18" icon="solar:arrow-right-linear" width="18"></iconify-icon>
+</a>
+<div className="mt-6">
+<button className="text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors" onclick="location.reload()">
+                        Restart Assessment
+                    </button>
+</div>
+</div>
+</section>
+</main>
+
+
+    </>
+  );
+}

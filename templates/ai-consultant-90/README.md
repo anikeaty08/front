@@ -1,0 +1,14 @@
+# AI Consultant Landing Page Template
+
+A high-converting dark-themed template designed for AI automation agencies and consultants to showcase lead generation pipelines.
+
+## Project Details
+- **Slug:** `ai-consultant-90`
+- **Views:** 78
+- **Tags:** Landing Page, Technology, Services, Dark, Clean, Minimal, Animated
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

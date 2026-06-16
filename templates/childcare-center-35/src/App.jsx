@@ -1,0 +1,436 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        (function() {
+          const section = document.querySelector('[data-element-id="aura-emg3yk9nd"]');
+          const video = section?.querySelector('video[data-hero-video]');
+          if (!section || !video) return;
+          const playVideo = () => { try { video.currentTime = 0; video.play(); } catch(e){} };
+          const pauseVideo = () => { try { video.pause(); video.currentTime = 0; } catch(e){} };
+          section.addEventListener('mouseenter', playVideo);
+          section.addEventListener('mouseleave', pauseVideo);
+          // For keyboard focus accessibility on links inside hero
+          section.addEventListener('focusin', playVideo);
+          section.addEventListener('focusout', pauseVideo);
+        })();
+      
+
+
+      // Init lucide icons
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.lucide) lucide.createIcons();
+      });
+
+      // Mobile menu toggle
+      const btn = document.getElementById('menuBtn');
+      const menu = document.getElementById('mobileMenu');
+      btn?.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        const isOpen = !menu.classList.contains('hidden');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        btn.innerHTML = isOpen ? '<i data-lucide="x" class="h-5 w-5"></i>' : '<i data-lucide="menu" class="h-5 w-5"></i>';
+        if (window.lucide) lucide.createIcons();
+      });
+
+      // Year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="fixed z-50 top-0 right-0 left-0">
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="mt-4 rounded-xl border backdrop-blur supports-[backdrop-filter]:bg-white/5 border-black/10 bg-black/5">
+<div className="flex items-center justify-between px-4 py-3">
+
+<a className="inline-flex items-center justify-center bg-center mix-blend-multiply w-[140px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1b425c19-b754-4a17-9331-a8161895332d_800w.png)] bg-cover rounded invert" href="#"></a>
+
+<nav className="hidden items-center gap-8 md:flex">
+<a className="text-sm font-medium transition text-black/80 hover:text-black font-nunito" href="#">Home</a>
+<a className="text-sm font-medium transition text-black/80 hover:text-black font-nunito" href="#programs">Programs</a>
+<a className="text-sm font-medium transition text-black/80 hover:text-black font-nunito" href="#about">About</a>
+<a className="text-sm font-medium transition text-black/80 hover:text-black font-nunito" href="#stories">Stories</a>
+<a className="text-sm font-medium transition text-black/80 hover:text-black font-nunito" href="#contact">Contact</a>
+</nav>
+
+<div className="hidden md:flex items-center gap-3">
+<a className="inline-flex items-center gap-2 rounded-lg border px-3.5 py-2 text-sm font-medium transition border-black/10 bg-black/0 text-black/90 hover:bg-black/5 font-nunito" href="#contact">
+<svg className="lucide lucide-phone h-4 w-4" data-lucide="phone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
+                Call Us
+              </a>
+<a className="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition bg-black text-neutral-100 hover:bg-black/90 font-nunito" href="#visit">
+<svg className="lucide lucide-calendar h-4 w-4" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg>
+                Book a Visit
+              </a>
+</div>
+
+<button aria-label="Open menu" className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg border transition border-black/10 bg-black/0 hover:bg-black/5" id="menuBtn">
+<svg className="lucide lucide-menu h-5 w-5" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+</button>
+</div>
+
+<div className="hidden border-t px-4 py-3 md:hidden border-black/10" id="mobileMenu">
+<nav className="grid gap-2">
+<a className="rounded-lg px-3 py-2 text-sm font-medium transition text-black/80 hover:bg-black/5 hover:text-black font-nunito" href="#">Home</a>
+<a className="rounded-lg px-3 py-2 text-sm font-medium transition text-black/80 hover:bg-black/5 hover:text-black font-nunito" href="#programs">Programs</a>
+<a className="rounded-lg px-3 py-2 text-sm font-medium transition text-black/80 hover:bg-black/5 hover:text-black font-nunito" href="#about">About</a>
+<a className="rounded-lg px-3 py-2 text-sm font-medium transition text-black/80 hover:bg-black/5 hover:text-black font-nunito" href="#stories">Stories</a>
+<a className="rounded-lg px-3 py-2 text-sm font-medium transition text-black/80 hover:bg-black/5 hover:text-black font-nunito" href="#contact">Contact</a>
+<div className="mt-2 flex gap-2">
+<a className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition border-black/10 bg-black/0 text-black/90 hover:bg-black/5 font-nunito" href="#contact">
+<svg className="lucide lucide-phone h-4 w-4" data-lucide="phone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
+                  Call Us
+                </a>
+<a className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition bg-black text-neutral-100 hover:bg-black/90 font-nunito" href="#visit">
+<svg className="lucide lucide-calendar h-4 w-4" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg>
+                  Book a Visit
+                </a>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</header>
+
+<section className="pt-32 pb-20 relative group" data-element-id="aura-emg3yk9nd">
+<div className="-z-10 absolute top-0 right-0 bottom-0 left-0">
+<img alt="Children learning and playing" className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:opacity-0" src="https://cdn.midjourney.com/dcc55565-ffef-43f2-98b5-1ad0c52db984/0_0.png?w=800&amp;q=80" style={{}}/>
+<video className="absolute inset-0 h-full w-full object-cover opacity-0 transition duration-500 group-hover:opacity-100 pointer-events-none" data-hero-video="" loop="" muted="" playsinline="" poster="https://cdn.midjourney.com/dcc55565-ffef-43f2-98b5-1ad0c52db984/0_0.png?w=800&amp;q=80" preload="metadata" src="https://cdn.midjourney.com/video/8d0ca3af-0e79-4e25-a349-b2b655d97726/1.mp4"></video>
+</div>
+<div className="max-w-7xl mt-40 mr-auto ml-auto pr-4 pl-4 sm:px-6 lg:px-8 lg:pt-40">
+<div className="max-w-3xl">
+<h1 className="sm:text-5xl md:text-7xl md:font-bold text-4xl font-semibold tracking-tight font-nunito mt-6">
+            Warm, Trusted Care for Growing Minds
+          </h1>
+<p className="sm:text-lg text-base text-black/80 font-nunito mt-4">
+            At Bubble, we create a calm, joyful place where children feel safe to explore, imagine, and learn through play—guided by caring educators and a research-led approach.
+          </p>
+<div className="mt-8 flex flex-wrap items-center gap-3">
+<a className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition bg-black text-neutral-100 hover:bg-black/90 font-nunito" href="#visit">
+<svg className="lucide lucide-hand h-4 w-4" data-lucide="hand" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"></path><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"></path><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"></path><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path></svg>
+              Schedule a Tour
+            </a>
+<a className="inline-flex items-center gap-2 transition hover:bg-black/5 text-sm font-medium text-black font-nunito bg-black/0 border-black/10 border rounded-xl pt-3 pr-5 pb-3 pl-5 backdrop-blur-xl" href="#programs">
+<svg className="lucide lucide-compass h-4 w-4" data-lucide="compass" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path><circle cx="12" cy="12" r="10"></circle></svg>
+              Explore Programs
+            </a>
+</div>
+</div>
+</div>
+
+</section>
+
+<section className="sm:py-20 pt-16 pb-16" id="about">
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+<div className="rounded-2xl border p-6 border-black/10 bg-black/5">
+<div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-black text-neutral-100">
+<svg className="lucide lucide-baby h-5 w-5" data-lucide="baby" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"></path><path d="M15 12h.01"></path><path d="M19.38 6.813A9 9 0 0 1 20.8 10.2a2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"></path><path d="M9 12h.01"></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold tracking-tight font-nunito">Small Group Care</h3>
+<p className="mt-2 text-sm text-black/70 font-nunito">Intentional ratios so every child is seen, heard, and supported daily.</p>
+</div>
+<div className="rounded-2xl border p-6 border-black/10 bg-black/5">
+<div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-black text-neutral-100">
+<svg className="lucide lucide-graduation-cap h-5 w-5" data-lucide="graduation-cap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold tracking-tight font-nunito">Play-Based Learning</h3>
+<p className="mt-2 text-sm text-black/70 font-nunito">Curiosity-led activities build language, motor skills, and confidence.</p>
+</div>
+<div className="rounded-2xl border p-6 border-black/10 bg-black/5">
+<div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-black text-neutral-100">
+<svg className="lucide lucide-shield h-5 w-5" data-lucide="shield" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold tracking-tight font-nunito">Safety First</h3>
+<p className="mt-2 text-sm text-black/70 font-nunito">Secured entry, trained staff, and clean, calm spaces designed for kids.</p>
+</div>
+<div className="rounded-2xl border p-6 border-black/10 bg-black/5">
+<div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-black text-neutral-100">
+<svg className="lucide lucide-heart-handshake h-5 w-5" data-lucide="heart-handshake" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold tracking-tight font-nunito">Parent Partnership</h3>
+<p className="mt-2 text-sm text-black/70 font-nunito">Daily updates, open communication, and community events.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="sm:py-8 pt-4 pb-4" id="programs">
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="flex items-end justify-between gap-6">
+<div className="">
+<h2 className="text-3xl sm:text-4xl tracking-tight font-nunito font-semibold">Programs for Every Stage</h2>
+<p className="mt-2 text-sm text-black/70 font-nunito">From first steps to school-ready, we meet children where they are.</p>
+</div>
+<a className="hidden sm:inline-flex items-center gap-2 rounded-lg border px-3.5 py-2 text-sm font-medium transition border-black/10 bg-black/0 text-black hover:bg-black/5 font-nunito" href="#visit">
+<svg className="lucide lucide-map h-4 w-4" data-lucide="map" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"></path><path d="M15 5.764v15"></path><path d="M9 3.236v15"></path></svg>
+            View a sample day
+          </a>
+</div>
+<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8 gap-x-6 gap-y-6">
+
+<article className="group overflow-hidden bg-black/5 border-black/10 border rounded-2xl shadow-xl backdrop-blur-none">
+<div className="relative overflow-hidden">
+<img alt="Toddlers exploring colors" className="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03]" src="https://cdn.midjourney.com/d0bb3c70-35a3-4f59-bd1f-6fe65e16ba65/0_0.png?w=800&amp;q=80" style={{}}/>
+<div className=""></div>
+</div>
+<div className="pt-6 pr-6 pb-6 pl-6">
+<div className="inline-flex text-[11px] font-medium text-black/80 border-black/10 border rounded-full pt-1 pr-2.5 pb-1 pl-2.5 gap-x-2 gap-y-2 items-center font-nunito">Ages 6 weeks-18months<svg className="lucide lucide-rainbow h-3.5 w-3.5" data-lucide="rainbow" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 17a10 10 0 0 0-20 0"></path><path d="M6 17a6 6 0 0 1 12 0"></path><path d="M10 17a2 2 0 0 1 4 0"></path></svg></div>
+<h3 className="text-xl font-semibold tracking-tight font-nunito mt-3">Infant Care</h3>
+<p className="text-sm text-black/70 mt-2 font-nunito">Tender, individualized care for babies (6 weeks to 18 months) with loving attention to feeding, sleep, and sensory development.</p><a className="inline-flex items-center gap-2 hover:text-black text-sm font-medium text-black/80 mt-4 font-nunito" href="#visit">
+          Learn More
+          <svg className="lucide lucide-arrow-right h-4 w-4 transition group-hover:translate-x-0.5" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+</div>
+</article>
+
+<article className="group overflow-hidden bg-black/5 border-black/10 border rounded-2xl shadow-xl">
+<div className="relative overflow-hidden">
+<img alt="Preschoolers learning together" className="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03]" src="https://cdn.midjourney.com/8fc84cdb-7372-45f9-91ef-6f6d9cd33389/0_0.png?w=800&amp;q=80" style={{}}/>
+<div className=""></div>
+</div>
+<div className="pt-6 pr-6 pb-6 pl-6">
+<div className="inline-flex gap-2 text-[11px] font-medium text-black/80 border-black/10 border rounded-full pt-1 pr-2.5 pb-1 pl-2.5 gap-x-2 gap-y-2 items-center font-nunito">Ages 18 months–3<svg className="lucide lucide-puzzle h-3.5 w-3.5" data-lucide="puzzle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"></path></svg></div>
+<h3 className="text-xl font-semibold tracking-tight mt-3 font-nunito">Toddler Adventures</h3>
+<p className="text-sm text-black/70 mt-2 font-nunito">Dynamic programs for toddlers (18 months–3 years) focusing on independence, creativity, and early communication skills.</p><a className="inline-flex items-center gap-2 hover:text-black text-sm font-medium text-black/80 mt-4 font-nunito" href="#visit">
+          Learn More
+          <svg className="lucide lucide-arrow-right h-4 w-4 transition group-hover:translate-x-0.5" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+</div>
+</article>
+
+<article className="group overflow-hidden bg-black/5 border-black/10 border rounded-2xl shadow-xl">
+<div className="relative overflow-hidden">
+<img alt="Child drawing a rocket" className="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03]" src="https://cdn.midjourney.com/126da838-69e2-4f78-9d60-23906be5b6b5/0_0.png?w=800&amp;q=80" style={{}}/>
+<div className=""></div>
+</div>
+<div className="pt-6 pr-6 pb-6 pl-6">
+<div className="inline-flex text-[11px] font-medium text-black/80 border-black/10 border rounded-full pt-1 pr-2.5 pb-1 pl-2.5 gap-x-2 gap-y-2 items-center font-nunito">Ages 3–5<svg className="lucide lucide-rocket h-3.5 w-3.5" data-lucide="rocket" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg></div>
+<h3 className="text-xl font-semibold tracking-tight mt-3 font-nunito" style={{}}>Preschool Programs</h3>
+<p className="text-sm text-black/70 mt-2 font-nunito">Comprehensive learning for ages 3–5 with structured activities in literacy, math, science, and social skills preparation.</p><a className="inline-flex items-center gap-2 hover:text-black text-sm font-medium text-black/80 mt-4 font-nunito" href="#visit">
+          Learn More
+          <svg className="lucide lucide-arrow-right h-4 w-4 transition group-hover:translate-x-0.5" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<section className="sm:py-20 pt-16 pb-16">
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="grid items-center gap-10 lg:grid-cols-2">
+<div className="order-2 lg:order-1">
+<h2 className="text-3xl sm:text-4xl tracking-tight font-nunito font-semibold">A calm space where children thrive</h2>
+<p className="mt-3 text-sm text-black/70 font-nunito">Our educators design days that balance routine with discovery—so kids feel secure while they stretch into new ideas.</p>
+<ul className="mt-6 grid gap-3 text-sm">
+<li className="inline-flex items-start gap-3 font-nunito">
+<span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md bg-black text-neutral-100">
+<svg className="lucide lucide-check h-3.5 w-3.5" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</span>
+                Gentle, positive guidance and social-emotional learning
+              </li>
+<li className="inline-flex items-start gap-3 font-nunito">
+<span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md bg-black text-neutral-100">
+<svg className="lucide lucide-check h-3.5 w-3.5" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</span>
+                Healthy snacks and outdoor playtime daily
+              </li>
+<li className="inline-flex items-start gap-3 font-nunito">
+<span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md bg-black text-neutral-100">
+<svg className="lucide lucide-check h-3.5 w-3.5" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</span>
+                Real-time updates through our parent app
+              </li>
+</ul>
+<div className="mt-8 flex flex-wrap gap-3">
+<a className="inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition border-black/10 bg-black/0 text-black hover:bg-black/5 font-nunito" href="#contact">
+<svg className="lucide lucide-message-circle h-4 w-4" data-lucide="message-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                Ask a Question
+              </a>
+<a className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition bg-black text-neutral-100 hover:bg-black/90 font-nunito" href="#visit">
+<svg className="lucide lucide-door-open h-4 w-4" data-lucide="door-open" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11 20H2"></path><path d="M11 4.562v16.157a1 1 0 0 0 1.242.97L19 20V5.562a2 2 0 0 0-1.515-1.94l-4-1A2 2 0 0 0 11 4.561z"></path><path d="M11 4H8a2 2 0 0 0-2 2v14"></path><path d="M14 12h.01"></path><path d="M22 20h-3"></path></svg>
+                Tour the Center
+              </a>
+</div>
+</div>
+<div className="order-1 lg:order-2">
+<div className="overflow-hidden bg-black/5 border-black/10 border rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-xl">
+<img alt="Classroom environment" className="aspect-video w-full rounded-xl object-cover" src="https://cdn.midjourney.com/eda3aa17-0ead-4314-9169-5172411b8eea/0_0.png?w=800&amp;q=80" style={{}}/>
+<div className="mt-4 grid grid-cols-3 gap-3">
+<div className="rounded-xl border p-4 text-center border-black/10 bg-black/5">
+<div className="text-2xl tracking-tight font-nunito font-semibold">12:1</div>
+<div className="mt-1 text-[11px] text-black/60 font-nunito">Child-to-educator max</div>
+</div>
+<div className="rounded-xl border p-4 text-center border-black/10 bg-black/5">
+<div className="text-2xl tracking-tight font-nunito font-semibold">100%</div>
+<div className="mt-1 text-[11px] text-black/60 font-nunito">First-aid trained staff</div>
+</div>
+<div className="rounded-xl border p-4 text-center border-black/10 bg-black/5">
+<div className="text-2xl font-semibold tracking-tight font-nunito">6am–6pm</div>
+<div className="mt-1 text-[11px] text-black/60 font-nunito">Flexible care hours</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="sm:py-20 pt-16 pb-16" id="stories">
+<div className="sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pr-4 pl-4">
+<div className="flex items-end justify-between gap-6">
+<div className="">
+<h2 className="text-3xl sm:text-4xl tracking-tight font-nunito font-semibold">Parent Stories</h2>
+<p className="mt-2 text-sm text-black/70 font-nunito">Real notes from families who trust us every day.</p>
+</div>
+</div>
+<div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+<article className="rounded-2xl border p-6 border-black/10 bg-black/5">
+<div className="flex items-center gap-3">
+<img alt="Parent portrait" className="h-10 w-10 rounded-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3aeae5fa-2dbb-4d52-b874-a4ea8e0905a7_320w.jpg"/>
+<div>
+<div className="text-sm font-semibold tracking-tight font-nunito">Amelia R.</div>
+<div className="text-[11px] text-black/60 font-nunito">Parent of 3-year-old</div>
+</div>
+</div>
+<p className="mt-4 text-sm text-black/80 font-nunito">Our daughter runs into class smiling. The team is so attentive and the updates make us feel involved.</p>
+</article>
+<article className="rounded-2xl border p-6 border-black/10 bg-black/5">
+<div className="flex gap-x-3 gap-y-3 items-center">
+<img alt="Parent portrait" className="h-10 w-10 rounded-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3e3e1091-f8e8-4022-a02a-fa37a35c59a5_320w.jpg"/>
+<div>
+<div className="text-sm font-semibold tracking-tight font-nunito">Liam K.</div>
+<div className="text-[11px] text-black/60 font-nunito">Parent of 4-year-old</div>
+</div>
+</div>
+<p className="mt-4 text-sm text-black/80 font-nunito">Calm environment, thoughtful curriculum. We've seen huge growth in confidence and language.</p>
+</article>
+<article className="rounded-2xl border p-6 border-black/10 bg-black/5">
+<div className="flex items-center gap-3">
+<img alt="Parent portrait" className="w-10 h-10 object-cover rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/278caecf-da29-4e6d-8136-25eb327075ea_800w.jpg" style={{}}/>
+<div className="">
+<div className="text-sm font-semibold tracking-tight font-nunito">Priya S.</div>
+<div className="text-[11px] text-black/60 font-nunito">Parent of 2-year-old</div>
+</div>
+</div>
+<p className="mt-4 text-sm text-black/80 font-nunito">The educators truly know our child. Communication is excellent and caring.</p>
+</article>
+</div>
+</div>
+</section>
+
+<section className="pb-20" id="visit">
+<div className="sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pr-4 pl-4">
+<div className="overflow-hidden bg-zinc-50 border-black/10 border rounded-2xl shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]">
+<div className="grid md:grid-cols-2">
+<div className="sm:p-10 pt-8 pr-8 pb-8 pl-8">
+<div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-medium backdrop-blur border-black/10 bg-black/5 text-black/80 font-nunito">
+<svg className="lucide lucide-map-pin h-3.5 w-3.5" data-lucide="map-pin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                21 Oakview Lane, Riverpark
+              </div>
+<h3 className="mt-4 text-2xl sm:text-3xl tracking-tight font-nunito font-semibold">Come say hi—tour Bubble</h3>
+<p className="mt-2 text-sm text-black/70 font-nunito">See the classrooms, meet our team, and learn about enrollment.</p>
+<form action="#" className="grid gap-3 sm:grid-cols-2 mt-6 gap-x-3 gap-y-3" method="post" onsubmit="event.preventDefault(); alert('Thanks! We will confirm your visit shortly.');">
+<input className="placeholder-black/40 outline-none focus:ring-2 focus:ring-white/20 text-sm bg-black/5 w-full border-black/10 border rounded-lg pt-3 pr-3.5 pb-3 pl-3.5" placeholder="Your name" required=""/>
+<input className="placeholder-black/40 outline-none focus:ring-2 focus:ring-white/20 text-sm bg-black/5 w-full border-black/10 border rounded-lg pt-3 pr-3.5 pb-3 pl-3.5" placeholder="Email" required="" type="email"/>
+<input className="placeholder-black/40 outline-none focus:ring-2 focus:ring-white/20 sm:col-span-2 text-sm bg-black/5 w-full border-black/10 border rounded-lg pt-3 pr-3.5 pb-3 pl-3.5" placeholder="Preferred date"/>
+<button className="mt-1 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition sm:col-span-2 bg-black text-neutral-100 hover:bg-black/90 font-nunito">
+<svg className="lucide lucide-send h-4 w-4" data-lucide="send" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+                  Request a Visit
+                </button>
+</form>
+<p className="mt-3 text-[11px] text-black/60 font-nunito">We'll reply within one business day.</p>
+</div>
+<div className="relative">
+<img alt="Parent and child tour" className="w-full h-full object-cover rounded-2xl" src="https://cdn.midjourney.com/8f603f06-b205-412b-a6fe-2cafbfe6264c/0_0.png?w=800&amp;q=80"/>
+<div className="pointer-events-none absolute inset-0 bg-gradient-to-l to-transparent md:bg-gradient-to-t md:from-neutral-950/0 from-neutral-50/40"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="border-black/10 border-t pt-10 pb-10" id="contact">
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+<div className="">
+<a className="inline-flex items-center justify-center bg-center mix-blend-multiply w-[140px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1b425c19-b754-4a17-9331-a8161895332d_800w.png)] bg-cover rounded invert" href="#"></a>
+<p className="mt-3 text-sm text-black/70 font-nunito">Nurturing care and playful learning for bright beginnings.</p>
+<div className="mt-4 flex items-center gap-3 text-sm text-black/70 font-nunito">
+<svg className="lucide lucide-mail h-4 w-4" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></svg>
+              hello@bubble.co
+            </div>
+<div className="mt-2 flex items-center gap-3 text-sm text-black/70 font-nunito">
+<svg className="lucide lucide-phone h-4 w-4" data-lucide="phone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
+              (555) 214‑0199
+            </div>
+</div>
+<div>
+<h4 className="text-sm font-semibold tracking-tight font-nunito">Center</h4>
+<ul className="mt-3 space-y-2 text-sm text-black/70">
+<li><a className="hover:text-black font-nunito" href="#programs">Programs</a></li>
+<li><a className="hover:text-black font-nunito" href="#about">Our Approach</a></li>
+<li><a className="hover:text-black font-nunito" href="#stories">Parent Stories</a></li>
+<li><a className="hover:text-black font-nunito" href="#visit">Book a Visit</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-sm font-semibold tracking-tight font-nunito">Resources</h4>
+<ul className="mt-3 space-y-2 text-sm text-black/70">
+<li><a className="hover:text-black font-nunito" href="#">Family Handbook</a></li>
+<li><a className="hover:text-black font-nunito" href="#">Health &amp; Safety</a></li>
+<li><a className="hover:text-black font-nunito" href="#">Tuition &amp; Schedule</a></li>
+<li><a className="hover:text-black font-nunito" href="#">Careers</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-sm font-semibold tracking-tight font-nunito">Follow</h4>
+<div className="mt-3 flex gap-2">
+<a aria-label="Instagram" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border transition border-black/10 hover:bg-black/5" href="#">
+<svg className="lucide lucide-instagram h-4 w-4" data-lucide="instagram" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+</a>
+<a aria-label="Facebook" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border transition border-black/10 hover:bg-black/5" href="#">
+<svg className="lucide lucide-facebook h-4 w-4" data-lucide="facebook" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+</a>
+<a aria-label="Twitter" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border transition border-black/10 hover:bg-black/5" href="#">
+<svg className="lucide lucide-twitter h-4 w-4" data-lucide="twitter" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+<div className="mt-8 flex flex-col items-center justify-between gap-4 border-t pt-6 text-xs sm:flex-row border-black/10 text-black/60">
+<p className="font-nunito">© <span className="font-nunito" id="year">2025</span> Bubble. All rights reserved.</p>
+<div className="flex items-center gap-4">
+<a className="hover:text-black font-nunito" href="#">Privacy</a>
+<a className="hover:text-black font-nunito" href="#">Terms</a>
+<a className="hover:text-black font-nunito" href="#">Accessibility</a>
+</div>
+</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

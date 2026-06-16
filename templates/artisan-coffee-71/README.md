@@ -1,0 +1,14 @@
+# Artisan Coffee E-commerce Landing Page Template
+
+A modern artisan coffee e-commerce landing page template for roasters to showcase beans, subscriptions, and ethical sourcing with a clean, conversion-ready layout.
+
+## Project Details
+- **Slug:** `artisan-coffee-71`
+- **Views:** 36
+- **Tags:** E-commerce, Food, Landing Page, Brand, Clean, Minimal, Large Type, Gradient, Coffee, Subscription
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

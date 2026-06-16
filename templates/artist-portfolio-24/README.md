@@ -1,0 +1,14 @@
+# Artist Portfolio Landing Page Template
+
+Elegant dark artist portfolio landing page template for showcasing artworks, selling paintings, and custom commissions for contemporary visual artists.
+
+## Project Details
+- **Slug:** `artist-portfolio-24`
+- **Views:** 473
+- **Tags:** Landing Page, Art & Design, Artist, Portfolio, Brand, Dark, Minimal, Large Type, E-commerce, Services
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

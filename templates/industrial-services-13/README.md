@@ -1,0 +1,14 @@
+# Powder Coating Services Landing Page Template
+
+A reusable landing page template for powder coating workshops and metal finishing services to showcase pricing, process, gallery, and contact booking.
+
+## Project Details
+- **Slug:** `industrial-services-13`
+- **Views:** 46
+- **Tags:** Landing Page, Services, Technology, Clean, Minimal, Dark, automotive, industrial, powder coating
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

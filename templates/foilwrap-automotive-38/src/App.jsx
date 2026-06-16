@@ -1,0 +1,1452 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+
+
+
+emailjs.init('s5cIKtiUD8VlLyniC');
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+      // Scroll Progress Line
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        const progressBar = document.getElementById('scroll-progress');
+        if(progressBar) {
+          progressBar.style.transform = `scaleX(${scrolled / 100})`;
+        }
+      });
+
+      // Premium Reveal on Scroll Observer
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    
+
+
+      window.addEventListener('scroll', function() {
+        const nav = document.getElementById('main-nav');
+        if (!nav) return;
+        if (window.scrollY > 50) {
+          nav.classList.add('nav-scrolled');
+        } else {
+          nav.classList.remove('nav-scrolled');
+        }
+      });
+    
+
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('contact-form');
+        const photoInput = document.getElementById('photo-upload');
+        const uploadText = document.getElementById('upload-text');
+        const uploadPreview = document.getElementById('upload-preview');
+        let uploadedUrls = [];
+
+        if (photoInput) {
+          photoInput.addEventListener('change', function() {
+            const files = Array.from(photoInput.files);
+            uploadText.textContent = files.length + ' soubor(y) vybrán(y)';
+            uploadPreview.innerHTML = '';
+            uploadedUrls = [];
+            files.forEach(function(file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-16 h-16 object-cover rounded-lg border border-white/10';
+                uploadPreview.appendChild(img);
+              };
+              reader.readAsDataURL(file);
+            });
+          });
+        }
+
+        async function uploadToCloudinary(file) {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', 'foilwrap_upload');
+          formData.append('cloud_name', 'detrjtngk');
+          const response = await fetch('https://api.cloudinary.com/v1_1/detrjtngk/image/upload', {
+            method: 'POST',
+            body: formData
+          });
+          const data = await response.json();
+          return data.secure_url;
+        }
+
+        if (form) {
+          form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+              submitBtn.disabled = true;
+              submitBtn.innerHTML = '<span>Odesílám...</span>';
+            }
+
+            try {
+              const files = photoInput ? Array.from(photoInput.files) : [];
+              if (files.length > 0) {
+                submitBtn.innerHTML = '<span>Nahrávám fotografie...</span>';
+                const uploadPromises = files.map(file => uploadToCloudinary(file));
+                uploadedUrls = await Promise.all(uploadPromises);
+              }
+
+              const templateParams = {
+                name: form.querySelector('[name="Jméno a příjmení"]').value,
+                phone: form.querySelector('[name="Telefonní číslo"]').value,
+                email: form.querySelector('[name="E-mail"]').value,
+                service: form.querySelector('[name="Zvolená služba"]').value,
+                message: form.querySelector('[name="Značka vozu / Představa"]').value,
+                photos: uploadedUrls.length > 0 ? uploadedUrls.join('\n') : 'Žádné fotografie'
+              };
+
+              emailjs.send('service_zg71owi', 'template_vntrjfw', templateParams)
+                .then(function() {
+                  form.innerHTML = '<div class="text-center py-16"><p class="font-orbitron text-[#bbcf1d] text-lg uppercase tracking-widest mb-4">Děkujeme!</p><p class="text-zinc-300 font-light">Vaše poptávka byla odeslána. Ozveme se vám do 24 hodin.</p></div>';
+                }, function(error) {
+                  alert('Něco se pokazilo. Zkuste to prosím znovu nebo nás kontaktujte na obchod@foilwrap.cz');
+                  if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Odeslat poptávku</span>';
+                  }
+                });
+
+            } catch (error) {
+              alert('Chyba při nahrávání fotografií. Zkuste to prosím znovu.');
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Odeslat poptávku</span>';
+              }
+            }
+          });
+        }
+      });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<header className="fixed top-6 left-0 right-0 z-[100] flex justify-center px-4 md:px-6 w-full pointer-events-none" id="global-navigation">
+<nav className="pointer-events-auto w-full max-w-[1280px] border-2 border-[#bbcf1d] shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-full transition-all duration-300 opacity-0" id="main-nav" style={{animation: 'fadeInNav 0.6s ease-out forwards'}}>
+<div className="flex w-full px-10 md:px-16 py-6 md:py-8 items-center justify-between relative transition-all duration-300">
+<div className="contents">
+<a className="flex-shrink-0 flex items-center group" href="/">
+<img alt="FoilWrap Logo" className="md:h-10 lg:h-11 w-auto h-8 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-[1.85] scale-[1.75]" src="https://res.cloudinary.com/detrjtngk/image/upload/v1774261683/FW_logo_new_zelen%C3%A1_web_tlnlod.png"/>
+</a>
+<div className="hidden md:flex items-center gap-6 lg:gap-10">
+<a className="js-nav-link relative whitespace-nowrap text-[11px] lg:text-[13px] font-orbitron font-semibold uppercase tracking-[0.2em] text-white/70 hover:text-[#bbcf1d] transition-all duration-[200ms] ease-in-out hover:scale-[1.15] origin-center inline-block" href="/">
+                Domov
+              </a>
+<div className="relative group h-full flex items-center">
+<a className="js-nav-link relative whitespace-nowrap text-[11px] lg:text-[13px] font-orbitron font-semibold uppercase tracking-[0.2em] text-white/70 group-hover:text-[#bbcf1d] transition-all duration-[200ms] ease-in-out group-hover:scale-[1.15] origin-center inline-block" href="/#sluzby">
+                  Služby
+                </a>
+<div className="absolute left-0 top-full pt-4 w-[750px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-out z-50">
+<div className="bg-black/60 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_24px_48px_rgba(0,0,0,0.6)] p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 ease-out">
+<div className="grid grid-cols-2 gap-4">
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/ochranne-folie">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Ochranné fólie" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781526936/IMG_8885_thyqa9.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Ochranné fólie
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Neviditelný PPF štít proti kamínkům a škrábancům.
+                          </p>
+</div>
+</a>
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/zmena-barvy-vozu">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Změna barvy vozu" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1773574285/fotoweb_Kreslic%C3%AD_pl%C3%A1tno_1_dgsqum.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Změna barvy vozu
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Prémiové celopolepy v matných i lesklých odstínech.
+                          </p>
+</div>
+</a>
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/tonovani-skel">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Tónování skel" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781527262/IMG_3011_q8muzn.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Tónování skel
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Zatemnění s certifikací pro soukromí a ochranu před
+                            UV.
+                          </p>
+</div>
+</a>
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/dechroming">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Dechroming" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781529017/IMG_0627_okyu8q.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Dechroming
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Odstranění chromových prvků pro sportovní "Shadow"
+                            look.
+                          </p>
+</div>
+</a>
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/polepy-interieru">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Polepy interiéru" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781528146/IMG_3371_wof0qs.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Polepy interiéru
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Renovace a změna barvy dekorativních lišt ve voze.
+                          </p>
+</div>
+</a>
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/polepy-kol">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Polepy kol" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781527769/IMG_1044_cknzq0.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Ochranné a designové polepy na MTB, silniční, gravel
+                            kola atd.
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Odolné polepy a specifické ochranné vrstvy pro alu
+                            kola.
+                          </p>
+</div>
+</a>
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/detailing">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Detailing" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781529225/IMG_3441_1_tfxxvn.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Detailing
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Keramická ochrana, leštění, čištění interiéru a PDR
+                            opravy.
+                          </p>
+</div>
+</a>
+<a className="flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-[#bbcf1d]/30 hover:bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(187,207,29,0.08)] group/card" href="/reklamni-polepy">
+<div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-[#222222] group-hover/card:border-[#bbcf1d]/50 transition-colors">
+<img alt="Reklamní polepy" className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 filter grayscale group-hover/card:grayscale-0 opacity-80 group-hover/card:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781529148/IMG_0470_qqbox4.jpg?w=800&amp;q=80"/>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-sm text-white uppercase tracking-wider mb-1 group-hover/card:text-[#bbcf1d] transition-colors">
+                            Reklamní polepy
+                          </h4>
+<p className="text-xs text-[#a0a0a0] font-light leading-relaxed whitespace-normal">
+                            Firemní polepy vozidel, výloh a reklamních ploch na
+                            míru.
+                          </p>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+<a className="js-nav-link relative whitespace-nowrap text-[11px] lg:text-[13px] font-orbitron font-semibold uppercase tracking-[0.2em] text-white/70 hover:text-[#bbcf1d] transition-all duration-[200ms] ease-in-out hover:scale-[1.15] origin-center inline-block" href="/galerie">
+                Galerie
+              </a>
+<a className="js-nav-link relative whitespace-nowrap text-[11px] lg:text-[13px] font-orbitron font-semibold uppercase tracking-[0.2em] text-white/70 hover:text-[#bbcf1d] transition-all duration-[200ms] ease-in-out hover:scale-[1.15] origin-center inline-block" href="/o-nas">
+                O nás
+              </a>
+<a className="js-nav-link relative whitespace-nowrap text-[11px] lg:text-[13px] font-orbitron font-semibold uppercase tracking-[0.2em] text-white/70 hover:text-[#bbcf1d] transition-all duration-[200ms] ease-in-out hover:scale-[1.15] origin-center inline-block" href="/kontakt">
+                Kontakt
+              </a>
+<a className="js-nav-link relative whitespace-nowrap text-[11px] lg:text-[13px] font-orbitron font-semibold uppercase tracking-[0.2em] hover:text-[#bbcf1d] transition-all duration-[200ms] ease-in-out hover:scale-[1.15] origin-center inline-block text-[#bbcf1d]" href="/blog">
+                Blog
+              </a>
+</div>
+</div>
+<div className="flex items-center gap-4 justify-end">
+<button className="md:hidden text-white/70 hover:text-[#bbcf1d] transition-colors">
+<iconify-icon icon="solar:hamburger-menu-linear" width="28"></iconify-icon>
+</button>
+<a className="hidden md:inline-flex items-center gap-2 whitespace-nowrap text-xs font-orbitron font-semibold uppercase tracking-[0.2em] bg-[#bbcf1d] text-[#0a0a0a] px-6 py-2.5 rounded-full hover:bg-[#d4e34a] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_rgba(187,207,29,0.15)] hover:shadow-[0_0_30px_rgba(187,207,29,0.3)]" href="/#kontakt">
+              Nezávazná poptávka
+            </a>
+</div>
+</div>
+</nav>
+</header>
+<div className="fixed top-0 left-0 h-[2px] w-full z-[70] bg-gradient-to-r from-transparent via-[#bbcf1d] to-[#d4e34a] pointer-events-none" id="scroll-progress"></div>
+<main className="relative z-10 w-full flex flex-col">
+
+<section className="relative w-full h-[100svh] overflow-hidden flex items-center shrink-0 bg-[#0a0a0a]" id="home">
+<div className="absolute inset-0 z-0 bg-black">
+<video autoplay="" className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-80" disablepictureinpicture="" loop="" muted="" playsinline="" src="https://res.cloudinary.com/detrjtngk/video/upload/v1773097900/kling_20260310_VIDEO_shot_1_5s__1814_0_1_w1gepg.mp4"></video>
+
+<div className="absolute inset-0 cinematic-vignette z-10 mix-blend-multiply"></div>
+<div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#0a0a0a] z-10"></div>
+</div>
+<div className="relative z-30 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 flex items-center mt-12 md:mt-0">
+<div className="w-full max-w-5xl relative">
+<div className="" style={{opacity: '0', animation: 'blurReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards'}}>
+<div className="flex items-center gap-4 mb-8">
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+<span className="text-xs font-orbitron font-medium tracking-widest text-[#bbcf1d] uppercase">
+                  Prémiové Polepy, Ochrana Aut &amp; Realizace Interiéru
+                </span>
+</div>
+<h1 className="font-orbitron font-medium uppercase leading-[1.05] tracking-tighter text-5xl md:text-6xl lg:text-[6.5rem] text-white drop-shadow-2xl">
+                Dokonalost v
+                <br/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#bbcf1d]">
+                  každém detailu
+                </span>
+</h1>
+</div>
+<div className="" style={{opacity: '0', animation: 'blurReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards'}}>
+<p className="mt-8 text-base md:text-xl text-zinc-300 font-light max-w-2xl leading-relaxed">
+                Realizujeme polepy aut, ochranné PPF fólie, tónování skel i
+                reklamní polepy. Poskytujeme nekompromisní kvalitu a materiály
+                pro váš vůz i byznys.
+              </p>
+<div className="mt-12 flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
+<a className="group relative inline-flex items-center justify-center gap-3 bg-[#bbcf1d] text-black font-orbitron font-medium text-xs uppercase tracking-widest px-10 py-5 rounded-full transition-all duration-500 hover:bg-white w-full sm:w-auto neon-glow hover:scale-[1.02]" href="/#kontakt">
+<span>Získat nabídku</span>
+<iconify-icon className="transition-transform duration-500 group-hover:translate-x-1" icon="solar:alt-arrow-right-linear" width="20"></iconify-icon>
+</a>
+<a className="group relative inline-flex items-center justify-center gap-3 border border-white/20 text-white font-orbitron font-medium text-xs uppercase tracking-widest px-10 py-5 rounded-full transition-all duration-500 hover:bg-white/10 w-full sm:w-auto backdrop-blur-sm" href="/#galerie">
+<span className="">Zobrazit realizace</span>
+</a>
+</div>
+
+<p className="mt-10 text-sm font-orbitron tracking-widest text-[#ebf1d3] uppercase flex items-center gap-4 opacity-90">
+<iconify-icon className="text-[#bbcf1d]" icon="solar:shield-check-linear" width="22"></iconify-icon>
+                500+ realizací
+                <span className="text-white/20">|</span>
+                98% spokojenost
+              </p>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-4 opacity-0" style={{animation: 'blurReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards'}}>
+<span className="text-[10px] font-orbitron tracking-widest uppercase text-zinc-500">
+            Scroll
+          </span>
+<div className="w-[1px] h-16 bg-gradient-to-b from-zinc-500 to-transparent"></div>
+</div>
+</section>
+
+<section className="relative z-20 pb-8" style={{background: 'radial-gradient(at 50% 0%, rgba(30, 60, 10, 0.65) 0%, rgba(15, 15, 15, 0.97) 55%, rgb(10, 10, 10) 100%)'}}>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
+<div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 py-10">
+<div className="flex flex-col items-center justify-center text-center reveal-on-scroll py-6 md:py-0 in-view">
+<div className="flex items-center gap-2 text-[#bbcf1d] mb-2">
+<iconify-icon icon="solar:star-linear" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" width="18"></iconify-icon>
+</div>
+<h4 className="font-orbitron font-medium text-2xl text-white tracking-tight mb-1">
+                4.9/5 Hodnocení
+              </h4>
+<span className="text-xs font-inter uppercase tracking-widest text-zinc-500">
+                Google Recenze
+              </span>
+</div>
+<div className="flex flex-col items-center justify-center text-center reveal-on-scroll py-6 md:py-0 in-view" style={{-RevealDelay: '100ms'}}>
+<h4 className="font-orbitron font-medium text-2xl text-white tracking-tight mb-2">
+                500+ Projektů
+              </h4>
+<span className="text-xs font-inter uppercase tracking-widest text-zinc-500">
+                Pro osobní i firemní vozy
+              </span>
+</div>
+<div className="flex flex-col items-center justify-center text-center reveal-on-scroll py-6 md:py-0 in-view" style={{-RevealDelay: '200ms'}}>
+<h4 className="font-orbitron font-medium text-2xl text-white tracking-tight mb-2">
+                Prémiové Materiály
+              </h4>
+<span className="text-xs font-inter uppercase tracking-widest text-zinc-500">
+                Záruka nekompromisní kvality
+              </span>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-b from-transparent to-[#080808] pointer-events-none z-0"></div>
+</section>
+
+<section className="relative z-20 pt-16 pb-24" id="sluzby" style={{background: 'radial-gradient(at 30% 50%, rgba(25, 50, 8, 0.6) 0%, rgba(12, 12, 12, 0.98) 60%, rgb(8, 8, 8) 100%)'}}>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
+<div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12 reveal-on-scroll in-view">
+<div className="">
+<div className="flex items-center gap-4 mb-6">
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+<span className="text-xs font-orbitron tracking-widest text-[#bbcf1d] uppercase">
+                  Služby
+                </span>
+</div>
+<h2 className="font-orbitron font-medium uppercase tracking-tighter text-4xl md:text-5xl lg:text-6xl text-white">
+                Co pro vás
+                <br/>
+                umíme udělat
+              </h2>
+</div>
+<p className="text-[#FFFFFF] font-light max-w-md border-l-2 border-white/20 pl-6 text-lg md:text-xl leading-[1.8] drop-shadow-md tracking-wide">
+              Fólie aplikujeme na všechny typy povrchů s maximálním důrazem na
+              detail. Proměňte a chraňte svůj vůz.
+            </p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block in-view" href="/zmena-barvy-vozu">
+<img alt="Změna barvy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1773574285/fotoweb_Kreslic%C3%AD_pl%C3%A1tno_1_dgsqum.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" height="32" icon="solar:pallete-2-linear" style={{color: 'rgb(187, 207, 29)'}} width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                  Změna barvy (Wrap)
+                </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                  Stovky prémiových odstínů s hlubokým leskem i dokonalým matem.
+                  Změňte vzhled vozu a chraňte originální lak.
+                </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                  Detail služby
+                  <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block in-view" href="/ochranne-folie" style={{-RevealDelay: '100ms'}}>
+<img alt="Ochranné PPF" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781526936/IMG_8885_thyqa9.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" icon="solar:shield-check-linear" width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                  Ochranné PPF fólie
+                </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                  Neviditelný štít, který absorbuje nárazy kamínků a brání
+                  vzniku škrábanců. Váš vůz neztratí hodnotu.
+                </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                  Detail služby
+                  <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block in-view" href="/tonovani-skel" style={{-RevealDelay: '200ms'}}>
+<img alt="Tónování" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781527262/IMG_3011_q8muzn.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" icon="solar:eye-scan-linear" width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                  Tónování autoskel
+                </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                  Maximální soukromí, ochrana před horkem a UV zářením.
+                  Homologované fólie s nezaměnitelným puncem luxusu.
+                </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                  Detail služby
+                  <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block in-view" href="/polepy-kol">
+<img alt="Polepy kol" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781527769/IMG_1044_cknzq0.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" icon="solar:bicycle-linear" width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                  Polepy kol
+                </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                  Ochranné a designové polepy na MTB, silniční, gravel kola atd.
+                </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                  Detail služby
+                  <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block in-view" href="/interierove-folie" style={{-RevealDelay: '100ms'}}>
+<img alt="Interiér" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781528146/IMG_3371_wof0qs.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" icon="solar:armchair-linear" width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                  Interiérové fólie
+                </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                  Renovace dekorativních lišt vozu. Luxusní vzhled dřeva,
+                  mramoru či karbonu k nerozeznání od originálu.
+                </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                  Detail služby
+                  <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block in-view" href="/dechroming" style={{-RevealDelay: '200ms'}}>
+<img alt="Dechroming" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781529017/IMG_0627_okyu8q.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" icon="solar:magic-stick-3-linear" width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                  Dechrom
+                </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                  Zbavte se rušivého chromu. Aplikujeme černé lesklé nebo matné
+                  detaily pro čistý, sportovní Shadow look.
+                </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                  Detail služby
+                  <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+<div className="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] reveal-on-scroll block lg:aspect-[15/8] in-view" href="/detailing">
+<img alt="Detailing" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781529225/IMG_3441_1_tfxxvn.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" icon="solar:star-shine-linear" width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                    Detailing
+                  </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                    Keramická ochrana laku, strojní leštění, hloubkové čištění
+                    interiéru, renovace kůže a vytahování důlků PDR.
+                  </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                    Detail služby
+                    <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] reveal-on-scroll block lg:aspect-[15/8] in-view" href="/reklamni-polepy" style={{-RevealDelay: '100ms'}}>
+<img alt="Reklamní polepy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781529148/IMG_0470_qqbox4.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+<iconify-icon className="text-[#bbcf1d] mb-4 transform transition-transform duration-500 group-hover:-translate-y-2" icon="solar:bill-list-linear" width="32"></iconify-icon>
+<h3 className="uppercase text-2xl font-medium text-[#bbcf1d] tracking-tight font-orbitron mb-3">
+                    Reklamní polepy
+                  </h3>
+<p className="leading-relaxed text-sm font-light text-zinc-50 mb-6">
+                    Profesionální firemní polepy vozidel, výloh, poboček a
+                    reklamních ploch. Vizuální identita vaší firmy na cestách.
+                  </p>
+<span className="inline-flex items-center gap-2 text-xs font-orbitron uppercase tracking-widest text-white group-hover:text-[#bbcf1d] transition-colors mt-auto">
+                    Detail služby
+                    <iconify-icon className="transform group-hover:translate-x-2 transition-transform duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</span>
+</div>
+</a>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#0a0a0a] pointer-events-none z-0"></div>
+</section>
+
+<section className="relative z-20 overflow-hidden pt-24 pb-32" style={{background: 'radial-gradient(at 50% 0%, rgba(30, 60, 10, 0.65) 0%, rgba(15, 15, 15, 0.97) 55%, rgb(10, 10, 10) 100%)'}}>
+<div className="absolute inset-0 cinematic-vignette opacity-80 pointer-events-none"></div>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+<div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+<div className="relative reveal-on-scroll group order-2 lg:order-1" style={{-RevealDelay: '100ms'}}>
+<div className="w-full aspect-square md:aspect-[4/3] lg:aspect-[4/5] rounded-[2rem] overflow-hidden relative shadow-[0_0_40px_rgba(187,207,29,0.15)] ring-1 ring-white/10 hover:-translate-y-2 transition-transform duration-1000">
+<div className="absolute inset-0 bg-gradient-to-tr from-[#bbcf1d]/10 to-transparent z-10 pointer-events-none mix-blend-overlay"></div>
+<img alt="Detail polepu" className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105" src="https://res.cloudinary.com/detrjtngk/image/upload/v1781526743/IMG_3842_fnezss.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+</div>
+</div>
+<div className="order-1 lg:order-2">
+<div className="reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="flex items-center gap-4 mb-6">
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+<span className="text-xs font-orbitron tracking-widest text-[#bbcf1d] uppercase font-semibold">
+                    Naše hodnoty
+                  </span>
+</div>
+<h2 className="font-orbitron font-semibold uppercase tracking-tighter text-4xl md:text-5xl text-white mb-12 leading-[1.1]">
+                  Proč si vybrat
+                  <br/>
+                  právě nás
+                </h2>
+</div>
+<ul className="space-y-10">
+<li className="flex items-start gap-6 group reveal-on-scroll" style={{-RevealDelay: '300ms'}}>
+<div className="w-14 h-14 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/5 shadow-[0_0_15px_rgba(187,207,29,0.15)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
+<iconify-icon icon="solar:verified-check-linear" width="28"></iconify-icon>
+</div>
+<div className="">
+<h4 className="font-orbitron font-semibold uppercase text-base md:text-lg mb-2 tracking-wide text-white">
+                      Nekompromisní kvalita
+                    </h4>
+<p className="text-sm md:text-base text-zinc-400 font-light leading-relaxed">
+                      Pracujeme výhradně s certifikovanými prémiovými materiály
+                      světových značek s garantovanou životností.
+                    </p>
+</div>
+</li>
+<li className="flex items-start gap-6 group reveal-on-scroll" style={{-RevealDelay: '400ms'}}>
+<div className="w-14 h-14 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/5 shadow-[0_0_15px_rgba(187,207,29,0.15)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
+<iconify-icon className="" icon="solar:user-hand-up-linear" width="28"></iconify-icon>
+</div>
+<div className="">
+<h4 className="font-orbitron font-semibold uppercase text-base md:text-lg mb-2 tracking-wide text-white">
+                      Individuální přístup na míru
+                    </h4>
+<p className="text-sm md:text-base text-zinc-400 font-light leading-relaxed">
+                      Každý projekt řešíme detailně podle specifikací vozu a
+                      vašich osobních i firemních požadavků.
+                    </p>
+</div>
+</li>
+<li className="flex items-start gap-6 group reveal-on-scroll" style={{-RevealDelay: '500ms'}}>
+<div className="w-14 h-14 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/5 shadow-[0_0_15px_rgba(187,207,29,0.15)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
+<iconify-icon icon="solar:medal-star-linear" width="28"></iconify-icon>
+</div>
+<div className="">
+<h4 className="font-orbitron font-semibold uppercase text-base md:text-lg mb-2 tracking-wide text-white">
+                      Garance špičkové práce
+                    </h4>
+<p className="text-sm md:text-base text-zinc-400 font-light leading-relaxed">
+                      Náš tým prochází pravidelnými školeními a na provedenou
+                      instalaci poskytujeme nadstandardní záruky.
+                    </p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#080808] pointer-events-none z-0"></div>
+</section>
+
+<section className="relative overflow-hidden z-20 pt-12 lg:pt-16 pb-24 lg:pb-32" id="ochrana" style={{background: 'radial-gradient(at 30% 50%, rgba(25, 50, 8, 0.6) 0%, rgba(12, 12, 12, 0.98) 60%, rgb(8, 8, 8) 100%)'}}>
+<div className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-white/5 rounded-full blur-[120px] -translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
+<div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+<div className="reveal-on-scroll">
+<span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-orbitron uppercase tracking-widest mb-6">
+<iconify-icon className="text-[#bbcf1d]" icon="solar:shield-star-linear" width="16"></iconify-icon>
+                Nejvyšší Ochrana Laku
+              </span>
+<h2 className="font-orbitron font-semibold uppercase tracking-tighter text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-[1.05] drop-shadow-md">
+                Neviditelný štít
+                <br/>
+                pro váš vůz
+              </h2>
+<p className="text-zinc-400 font-light leading-relaxed mb-8 text-base md:text-lg">
+                Chraňte originální lak před škrábanci, odletujícími kamínky a
+                agresivním UV zářením. Naše špičková transparentní PPF fólie
+                absorbuje nárazy, uchovává hodnotu vozu a dodává mu
+                nepřekonatelný lesk.
+              </p>
+<ul className="space-y-5 mb-10">
+<li className="flex items-start gap-6 group">
+<div className="w-10 h-10 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/10 shadow-[0_0_20px_rgba(187,207,29,0.25)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
+<iconify-icon icon="solar:restart-linear" width="20"></iconify-icon>
+</div>
+<div className="">
+<h4 className="font-orbitron font-semibold uppercase text-sm mb-1 tracking-wide text-white">
+                      Samoregenerační povrch
+                    </h4>
+<p className="text-sm text-zinc-500 font-light leading-relaxed">
+                      Drobné škrábance se na slunci nebo působením tepla samy
+                      zacelí.
+                    </p>
+</div>
+</li>
+<li className="flex items-start gap-6 group">
+<div className="w-10 h-10 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/10 shadow-[0_0_20px_rgba(187,207,29,0.25)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
+<iconify-icon icon="solar:eye-closed-linear" width="20"></iconify-icon>
+</div>
+<div className="">
+<h4 className="font-orbitron font-semibold uppercase text-sm mb-1 tracking-wide text-white">
+                      Absolutní neviditelnost
+                    </h4>
+<p className="text-sm text-zinc-500 font-light leading-relaxed">
+                      Křišťálově čistý materiál, který nemění odstín laku, ale
+                      prohlubuje jeho lesk.
+                    </p>
+</div>
+</li>
+<li className="flex items-start gap-6 group">
+<div className="w-10 h-10 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/10 shadow-[0_0_20px_rgba(187,207,29,0.25)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
+<iconify-icon icon="solar:shield-check-linear" width="20"></iconify-icon>
+</div>
+<div className="">
+<h4 className="font-orbitron font-semibold uppercase text-sm mb-1 tracking-wide text-white">
+                      Dlouhodobá trvanlivost
+                    </h4>
+<p className="text-sm text-zinc-500 font-light leading-relaxed">
+                      Záruka ochrany před poškozením a žloutnutím na dlouhá léta
+                      dopředu.
+                    </p>
+</div>
+</li>
+</ul>
+<a className="group inline-flex items-center gap-3 text-xs font-orbitron uppercase tracking-widest text-white hover:text-[#bbcf1d] transition-colors pb-2 border-b border-white/20 hover:border-[#bbcf1d]" href="/ochranne-folie">
+                Zjistit více o investici do ochrany laku
+                <iconify-icon className="transform group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</a>
+</div>
+<div className="relative reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden group shadow-[0_25px_50px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
+<img alt="PPF Instalation" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" src="https://res.cloudinary.com/detrjtngk/image/upload/v1773993851/IMG_3762_lhvj9v.jpg?w=1000&amp;q=85"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+<div className="bg-black/40 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+<span className="font-orbitron text-[10px] uppercase tracking-widest text-white">
+                      Instalace PPF na luxusní vůz
+                    </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#0a0a0a] pointer-events-none z-0"></div>
+</section>
+
+<section className="relative z-20 pt-32 pb-40" style={{background: 'radial-gradient(at 50% 0%, rgba(30, 60, 10, 0.65) 0%, rgba(15, 15, 15, 0.97) 55%, rgb(10, 10, 10) 100%)'}}>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
+<div className="flex flex-col items-center text-center mb-20 reveal-on-scroll">
+<div className="flex items-center gap-4 mb-6">
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+<span className="text-xs font-orbitron tracking-widest text-[#bbcf1d] uppercase">
+                Jak pracujeme
+              </span>
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+</div>
+<h2 className="font-orbitron font-medium uppercase tracking-tighter text-4xl md:text-5xl text-white">
+              Proces k dokonalosti
+            </h2>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 relative">
+
+<div className="hidden md:block absolute top-[40px] left-[10%] right-[10%] h-[1px] bg-white/5 z-0 pointer-events-none"></div>
+
+<div className="relative z-10 reveal-on-scroll text-center group">
+<div className="w-20 h-20 mx-auto rounded-full bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-6 group-hover:border-[#bbcf1d] transition-colors duration-500">
+<span className="font-orbitron font-medium text-2xl text-white group-hover:text-[#bbcf1d] transition-colors">
+                  01
+                </span>
+</div>
+<h3 className="font-orbitron font-medium text-lg text-white uppercase tracking-tight mb-3">
+                Konzultace
+              </h3>
+<p className="text-sm font-light text-zinc-300">
+                Probereme vaše představy, zhodnotíme stav vozu a doporučíme
+                nejlepší řešení.
+              </p>
+</div>
+
+<div className="relative z-10 reveal-on-scroll text-center group" style={{-RevealDelay: '100ms'}}>
+<div className="w-20 h-20 mx-auto rounded-full bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-6 group-hover:border-[#bbcf1d] transition-colors duration-500">
+<span className="font-orbitron font-medium text-2xl text-white group-hover:text-[#bbcf1d] transition-colors">
+                  02
+                </span>
+</div>
+<h3 className="font-orbitron font-medium text-lg text-white uppercase tracking-tight mb-3">
+                Návrh
+              </h3>
+<p className="text-sm font-light text-zinc-200">
+                Vybereme konkrétní fólii, připravíme cenovou kalkulaci a
+                domluvíme pevný termín.
+              </p>
+</div>
+
+<div className="relative z-10 reveal-on-scroll text-center group" style={{-RevealDelay: '200ms'}}>
+<div className="w-20 h-20 mx-auto rounded-full bg-[#0a0a0a] border border-[#bbcf1d]/30 flex items-center justify-center mb-6 neon-glow">
+<span className="font-orbitron font-medium text-2xl text-[#bbcf1d]">
+                  03
+                </span>
+</div>
+<h3 className="font-orbitron font-medium text-lg text-white uppercase tracking-tight mb-3">
+                Realizace
+              </h3>
+<p className="font-light text-sm text-zinc-200">
+                Precizní příprava, dekontaminace laku a bezchybná instalace
+                našimi experty.
+              </p>
+</div>
+
+<div className="relative z-10 reveal-on-scroll text-center group" style={{-RevealDelay: '300ms'}}>
+<div className="w-20 h-20 mx-auto rounded-full bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-6 group-hover:border-[#bbcf1d] transition-colors duration-500">
+<span className="font-orbitron font-medium text-2xl text-white group-hover:text-[#bbcf1d] transition-colors">
+                  04
+                </span>
+</div>
+<h3 className="font-orbitron font-medium text-lg text-white uppercase tracking-tight mb-3">
+                Předání
+              </h3>
+<p className="text-sm font-light text-zinc-200">
+                Finální kontrola kvality, seznámení s údržbou a předání vašeho
+                "nového" vozu.
+              </p>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#080808] pointer-events-none z-0"></div>
+</section>
+
+<section className="relative z-20 pt-32 pb-40" id="galerie" style={{background: 'radial-gradient(at 30% 50%, rgba(25, 50, 8, 0.6) 0%, rgba(12, 12, 12, 0.98) 60%, rgb(8, 8, 8) 100%)'}}>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
+<div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 reveal-on-scroll">
+<div className="">
+<div className="flex items-center gap-4 mb-6">
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+<span className="text-xs font-orbitron tracking-widest text-[#bbcf1d] uppercase">
+                  Showroom
+                </span>
+</div>
+<h2 className="font-orbitron font-medium uppercase tracking-tighter text-4xl md:text-5xl lg:text-6xl text-white">
+                Naše realizace
+              </h2>
+</div>
+<a className="hidden md:inline-flex text-xs font-orbitron uppercase tracking-widest text-zinc-400 hover:text-white transition-colors gap-2 items-center pb-2 border-b border-white/10 hover:border-white" href="/galerie">
+              Otevřít celou galerii
+              <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div className="relative group overflow-hidden rounded-[2rem] cursor-pointer reveal-on-scroll w-full">
+<div className="relative w-full aspect-[4/5] bg-black">
+<img alt="PPF BMW" className="w-full h-full object-cover opacity-80 transition-all duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1774014956/IMG_9844_dk1jfr.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+<div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1)">
+<span className="text-[10px] uppercase block text-[#bbcf1d] tracking-widest font-orbitron mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    PPF ochrana
+                  </span>
+<h3 className="text-2xl font-medium tracking-tight font-orbitron text-white">
+                    BMW M3 Competition
+                  </h3>
+</div>
+</div>
+</div>
+<div className="relative group overflow-hidden rounded-[2rem] cursor-pointer reveal-on-scroll w-full" style={{-RevealDelay: '100ms'}}>
+<div className="relative w-full aspect-[4/5] bg-black">
+<img alt="Wrap Mercedes" className="w-full h-full object-cover opacity-80 transition-all duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1774016549/IMG_8867_nfg4ri.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+<div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1)">
+<span className="text-[10px] uppercase block text-[#bbcf1d] tracking-widest font-orbitron mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    Změna barvy
+                  </span>
+<h3 className="text-2xl font-medium tracking-tight font-orbitron text-white">
+                    Mercedes A35 AMG
+                  </h3>
+</div>
+</div>
+</div>
+<div className="relative group overflow-hidden rounded-[2rem] cursor-pointer reveal-on-scroll w-full" style={{-RevealDelay: '200ms'}}>
+<div className="relative w-full aspect-[4/5] bg-black">
+<img alt="Tónování Tesla" className="w-full h-full object-cover opacity-80 transition-all duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1774016848/IMG_3826_qyezxn.jpg?w=800&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+<div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1)">
+<span className="text-[10px] uppercase block text-[#bbcf1d] tracking-widest font-orbitron mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    Tónování Skel
+                  </span>
+<h3 className="text-2xl font-medium tracking-tight font-orbitron text-white">
+                    Tesla Model 3
+                  </h3>
+</div>
+</div>
+</div>
+</div>
+<div className="mt-12 text-center md:hidden">
+<a className="inline-flex items-center justify-center gap-3 border border-white/20 text-white font-orbitron font-medium text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all hover:bg-white/10 w-full" href="/galerie">
+<span>Otevřít celou galerii</span>
+</a>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#0a0a0a] pointer-events-none z-0"></div>
+</section>
+
+<section className="relative overflow-hidden z-20 pt-32 pb-40" id="recenze" style={{background: 'radial-gradient(at 50% 0%, rgba(30, 60, 10, 0.65) 0%, rgba(15, 15, 15, 0.97) 55%, rgb(10, 10, 10) 100%)'}}>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 mb-16">
+<div className="flex flex-col md:flex-row md:items-end justify-between gap-8 reveal-on-scroll">
+<div className="">
+<div className="flex items-center gap-4 mb-6">
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+<span className="text-xs font-orbitron tracking-widest text-[#bbcf1d] uppercase">
+                  Zkušenosti klientů
+                </span>
+</div>
+<h2 className="font-orbitron font-medium uppercase tracking-tighter text-4xl md:text-5xl text-white">
+                Nekompromisní hodnocení
+              </h2>
+</div>
+<div className="flex flex-col items-start md:items-end justify-end mt-4 md:mt-0">
+<div className="flex items-center gap-4 bg-[#0a0a0a]/80 backdrop-blur-sm border border-white/10 px-5 py-3 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] hover:border-[#bbcf1d]/40 transition-colors duration-300 group cursor-default">
+<iconify-icon className="text-white group-hover:text-[#bbcf1d] transition-colors" icon="solar:medal-star-linear" width="28"></iconify-icon>
+<div className="flex flex-col">
+<span className="font-orbitron font-semibold text-white tracking-tight leading-none text-lg">
+                    4,9
+                    <span className="text-[#bbcf1d] text-base">★</span>
+<span className="text-zinc-500 text-sm font-light">/ 5 ★</span>
+</span>
+<span className="text-[9px] font-inter uppercase tracking-widest text-zinc-500 mt-1">
+                    Google Hodnocení
+                  </span>
+</div>
+</div>
+<a className="mt-4 flex items-center gap-2 text-[10px] md:text-xs font-orbitron uppercase tracking-widest text-zinc-400 hover:text-[#bbcf1d] transition-colors group" href="https://www.google.com/search?sa=X&amp;sca_esv=539c00fc8c0dc83a&amp;sxsrf=ANbL-n4NKroEuWUi98YUkhUuyRdZazO5Lg:1774293704046&amp;q=FoilWrap+Recenze&amp;rflfq=1&amp;num=20&amp;stick=H4sIAAAAAAAAAONgkxI2MTMzMzUzNzMyNzI1MDIzNDYw3sDI-IpRwC0_Mye8KLFAISg1OTWvKnURK4YQAIPuEqlAAAAA&amp;rldimm=4666567627250261303&amp;tbm=lcl&amp;hl=cs-CZ&amp;ved=2ahUKEwjmyNOP37aTAxU887sIHelaApsQ9fQKegQIShAG&amp;biw=1912&amp;bih=948&amp;dpr=1#lkt=LocalPoiReviews" rel="noopener noreferrer" target="_blank">
+                Zobrazit všechny recenze
+                <iconify-icon className="transform group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</a>
+</div>
+</div>
+</div>
+
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 reveal-on-scroll">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full">
+
+<div className="w-full bg-[#0a0a0a] border border-white/5 p-10 rounded-[2rem] relative group hover:border-white/10 transition-colors duration-500 flex flex-col">
+<div className="flex items-center gap-1 text-[#bbcf1d] mb-8">
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+</div>
+<p className="text-zinc-300 font-light leading-relaxed mb-10 text-lg flex-1">
+                "Perfektní práce, auto vypadá jako naprosto nové. Skvělá domluva
+                a dodržení všech termínů. Prvotřídní přístup od A do Z."
+              </p>
+<div className="flex items-center gap-4 mt-auto">
+<div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white font-orbitron font-semibold text-sm">
+                  MN
+                </div>
+<div>
+<h4 className="font-orbitron font-semibold text-xs text-white uppercase tracking-widest mb-1">
+                    Martin Novák
+                  </h4>
+<span className="text-[10px] text-zinc-500 font-inter uppercase tracking-widest">
+                    Ověřený klient
+                  </span>
+</div>
+</div>
+</div>
+
+<div className="w-full bg-[#0a0a0a] border border-white/5 p-10 rounded-[2rem] relative group hover:border-white/10 transition-colors duration-500 flex flex-col">
+<div className="flex items-center gap-1 text-[#bbcf1d] mb-8">
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+</div>
+<p className="text-zinc-300 font-light leading-relaxed mb-10 text-lg flex-1">
+                "Nechal jsem aplikovat PPF na předek vozu. Křišťálově čistá
+                práce, okraje perfektně zahnuté. Doporučuji všem s luxusními
+                vozy."
+              </p>
+<div className="flex items-center gap-4 mt-auto">
+<div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white font-orbitron font-semibold text-sm">
+                  TD
+                </div>
+<div>
+<h4 className="font-orbitron font-semibold text-xs text-white uppercase tracking-widest mb-1">
+                    Tomáš Dvořák
+                  </h4>
+<span className="text-[10px] text-zinc-500 font-inter uppercase tracking-widest">
+                    Ověřený klient
+                  </span>
+</div>
+</div>
+</div>
+
+<div className="w-full bg-[#0a0a0a] border border-white/5 p-10 rounded-[2rem] relative group hover:border-white/10 transition-colors duration-500 flex flex-col">
+<div className="flex items-center gap-1 text-[#bbcf1d] mb-8">
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="18"></iconify-icon>
+</div>
+<p className="text-zinc-300 font-light leading-relaxed mb-10 text-lg flex-1">
+                "Tónování skel i dechroming proběhly přesně podle mých představ.
+                Komunikace na jedničku, auto vypadá mnohem agresivněji."
+              </p>
+<div className="flex items-center gap-4 mt-auto">
+<div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white font-orbitron font-semibold text-sm">
+                  LK
+                </div>
+<div>
+<h4 className="font-orbitron font-semibold text-xs text-white uppercase tracking-widest mb-1">
+                    Lukáš Král
+                  </h4>
+<span className="text-[10px] text-zinc-500 font-inter uppercase tracking-widest">
+                    Ověřený klient
+                  </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#111111] pointer-events-none z-0"></div>
+</section>
+
+<section className="relative overflow-hidden z-20 pt-32 pb-40" id="kontakt" style={{background: 'radial-gradient(at 50% 0%, rgba(40, 75, 10, 0.45) 0%, transparent 50%), linear-gradient(rgb(17, 17, 17) 0%, rgb(10, 10, 10) 100%)'}}>
+<div className="opacity-80 absolute top-0 right-0 bottom-0 left-0"></div>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+<div className="grid lg:grid-cols-5 gap-16 md:gap-24 items-start">
+<div className="lg:col-span-2 reveal-on-scroll">
+<div className="flex items-center gap-4 mb-6">
+<span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
+<span className="text-xs font-orbitron tracking-widest text-[#bbcf1d] uppercase">
+                  Zajistěte si termín
+                </span>
+</div>
+<h2 className="font-orbitron font-medium uppercase tracking-tighter text-5xl md:text-6xl text-white mb-8 leading-[1.1]">
+                Změňte svůj vůz k
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#bbcf1d] to-[#d4e34a]">
+                  nepoznání.
+                </span>
+</h2>
+<p className="text-zinc-300 font-light leading-relaxed mb-10 text-lg">
+                Termíny se rychle plní. Máte-li zájem o prvotřídní polep či PPF
+                fólii, vyplňte formulář a rezervujte si svůj čas v našem studiu.
+              </p>
+<div className="space-y-8">
+<div className="flex items-start gap-6">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center shrink-0 text-white">
+<iconify-icon icon="solar:map-point-linear" width="24"></iconify-icon>
+</div>
+<div className="pt-1">
+<h4 className="text-[10px] uppercase font-medium text-[#bbcf1d] tracking-widest font-orbitron mb-1">
+                      Naše studio
+                    </h4>
+<p className="text-sm text-white font-light">
+                      Na Šilbochu 2392/2, Praha 8
+                    </p>
+<div className="inline-flex gap-2 text-zinc-300 bg-[#bbcf1d]/5 border-[#bbcf1d]/20 border rounded-lg mt-3 pt-2 pr-3 pb-2 pl-3 gap-x-2 gap-y-2 items-center">
+<iconify-icon className="text-[#bbcf1d] shrink-0" icon="lucide:credit-card" width="16"></iconify-icon>
+<span className="text-xs font-light">
+                        Na prodejně není možnost platit kartou.
+                      </span>
+</div>
+</div>
+</div>
+<div className="flex items-start gap-6">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center shrink-0 text-white">
+<iconify-icon icon="solar:phone-calling-linear" width="24"></iconify-icon>
+</div>
+<div className="pt-1">
+<h4 className="text-[10px] uppercase font-medium text-[#bbcf1d] tracking-widest font-orbitron mb-1">
+                      Telefon
+                    </h4>
+<a className="text-sm text-white font-light hover:text-[#bbcf1d] transition-colors block" href="tel:+420608002608">
+                      +420 608 002 608
+                    </a>
+</div>
+</div>
+<div className="flex items-start gap-6">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center shrink-0 text-white">
+<iconify-icon icon="solar:letter-linear" width="24"></iconify-icon>
+</div>
+<div className="pt-1">
+<h4 className="text-[10px] uppercase font-medium text-[#bbcf1d] tracking-widest font-orbitron mb-1">
+                      E-mail
+                    </h4>
+<a className="text-sm text-white font-light hover:text-[#bbcf1d] transition-colors block" href="mailto:obchod@foilwrap.cz">
+                      obchod@foilwrap.cz
+                    </a>
+</div>
+</div>
+</div>
+</div>
+
+<div className="lg:col-span-3 bg-[#0a0a0a] border border-white/5 p-8 md:p-12 rounded-[2rem] reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<form className="space-y-8" id="contact-form">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div className="space-y-3">
+<label className="font-orbitron text-[10px] uppercase tracking-widest text-zinc-500 pl-1" htmlFor="name">
+                      Jméno a příjmení
+                    </label>
+<input className="form-input bg-transparent border-t-0 border-x-0 border-b-white/10 rounded-none px-1 py-3 focus:border-b-[#bbcf1d] focus:bg-transparent focus:shadow-none transition-colors" id="name" name="Jméno a příjmení" placeholder="Jan Novák" required="" type="text"/>
+</div>
+<div className="space-y-3">
+<label className="font-orbitron text-[10px] uppercase tracking-widest text-zinc-500 pl-1" htmlFor="phone">
+                      Telefonní číslo
+                    </label>
+<input className="form-input bg-transparent border-t-0 border-x-0 border-b-white/10 rounded-none px-1 py-3 focus:border-b-[#bbcf1d] focus:bg-transparent focus:shadow-none transition-colors" id="phone" name="Telefonní číslo" placeholder="+420 123 456 789" required="" type="tel"/>
+</div>
+</div>
+<div className="space-y-3">
+<label className="font-orbitron text-[10px] uppercase tracking-widest text-zinc-500 pl-1" htmlFor="email">
+                    E-mailová adresa
+                  </label>
+<input className="form-input bg-transparent border-t-0 border-x-0 border-b-white/10 rounded-none px-1 py-3 focus:border-b-[#bbcf1d] focus:bg-transparent focus:shadow-none transition-colors" id="email" name="E-mail" placeholder="jan.novak@email.cz" required="" type="email"/>
+</div>
+<div className="space-y-3">
+<label className="font-orbitron text-[10px] uppercase tracking-widest text-zinc-500 pl-1" htmlFor="service">
+                    Zvolte službu
+                  </label>
+<div className="relative">
+<select className="form-input bg-transparent border-t-0 border-x-0 border-b-white/10 rounded-none px-1 py-3 focus:border-b-[#bbcf1d] focus:bg-transparent focus:shadow-none transition-colors appearance-none relative z-10" id="service" name="Zvolená služba" required="">
+<option disabled="" selected="" value="">
+                        Vyberte z možností
+                      </option>
+<option value="Kompletní polep vozu (Wrap)">
+                        Kompletní polep vozu (Wrap)
+                      </option>
+<option value="Ochranná PPF fólie">
+                        Ochranná PPF fólie
+                      </option>
+<option value="Tónování autoskel">
+                        Tónování autoskel
+                      </option>
+<option value="Dechroming">Dechroming</option>
+<option value="Polep interiéru">Polep interiéru</option>
+<option value="Detailing">Detailing</option>
+<option value="Jiné">Jiné</option>
+</select>
+<iconify-icon className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-600 z-0 pointer-events-none" icon="solar:alt-arrow-down-linear" width="20"></iconify-icon>
+</div>
+</div>
+<div className="space-y-3">
+<label className="font-orbitron text-[10px] uppercase tracking-widest text-zinc-500 pl-1" htmlFor="message">
+                    Značka vozu / Vaše představa
+                  </label>
+<textarea className="form-input resize-none bg-transparent border-t-0 border-x-0 border-b-white/10 rounded-none px-1 py-3 focus:border-b-[#bbcf1d] focus:bg-transparent focus:shadow-none transition-colors" id="message" name="Značka vozu / Představa" placeholder="Např. BMW M3, chci matný PPF..." required="" rows="3"></textarea>
+</div>
+<div className="space-y-3">
+<label className="font-orbitron text-[10px] uppercase tracking-widest text-zinc-500 pl-1">
+                    Přiložit fotografie (nepovinné)
+                  </label>
+<label className="flex items-center justify-center gap-3 border border-dashed border-white/20 rounded-xl px-4 py-6 cursor-pointer hover:border-[#bbcf1d]/50 transition-colors group" id="upload-label">
+<iconify-icon className="text-zinc-500 group-hover:text-[#bbcf1d] transition-colors" icon="solar:upload-linear" width="24"></iconify-icon>
+<span className="text-xs text-zinc-500 font-light group-hover:text-zinc-300 transition-colors" id="upload-text">
+                      Klikněte pro výběr nebo přetáhněte soubory sem
+                    </span>
+<input accept="image/*" className="hidden" id="photo-upload" multiple="" type="file"/>
+</label>
+<p className="text-[10px] text-zinc-600 pl-1">
+                    Podporované formáty: JPG, PNG, WEBP. Max. 10 MB.
+                  </p>
+<div className="flex flex-wrap gap-2 mt-2" id="upload-preview"></div>
+</div>
+<div className="flex items-start gap-3">
+<input className="mt-1 w-4 h-4 shrink-0 accent-[#bbcf1d] cursor-pointer" id="gdpr" name="souhlas" required="" type="checkbox"/>
+<label className="text-xs text-zinc-400 font-light leading-relaxed cursor-pointer" htmlFor="gdpr">
+                    Souhlasím s
+                    <a className="text-[#bbcf1d] hover:text-white transition-colors underline underline-offset-2" href="https://foilwrap.cz/zasady-cookies-eu/" target="_blank">
+                      obchodními podmínkami
+                    </a>
+                    a
+                    <a className="text-[#bbcf1d] hover:text-white transition-colors underline underline-offset-2" href="https://foilwrap.cz/gdpr/" target="_blank">
+                      zásadami ochrany osobních údajů
+                    </a>
+                    .
+                  </label>
+</div>
+<div className="pt-6">
+<button className="w-full group relative inline-flex items-center justify-center gap-3 bg-[#bbcf1d] text-black font-orbitron font-medium text-xs uppercase tracking-widest px-8 py-5 rounded-full transition-all duration-500 hover:bg-white border-none hover:scale-[1.02]" type="submit">
+<span>Odeslat poptávku</span>
+<iconify-icon className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" icon="solar:plain-3-linear" width="20"></iconify-icon>
+</button>
+<p className="text-center mt-6 text-[10px] text-zinc-600 font-inter uppercase tracking-widest flex justify-center items-center gap-2">
+<iconify-icon icon="solar:lock-password-linear"></iconify-icon>
+                    Bezpečná komunikace
+                  </p>
+</div>
+</form>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-black pointer-events-none z-0"></div>
+</section>
+</main>
+
+<footer className="bg-black pt-20 pb-10 px-6 md:px-12 lg:px-24 relative z-20">
+<div className="max-w-[1400px] mx-auto">
+<div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-16 mb-16">
+<div className="md:col-span-2">
+<a className="inline-block mb-6 group" href="/">
+<img alt="FoilWrap Logo" className="h-10 md:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300" src="https://res.cloudinary.com/detrjtngk/image/upload/v1774261683/FW_logo_new_zelen%C3%A1_web_tlnlod.png"/>
+</a>
+<p className="text-zinc-500 font-light text-sm max-w-sm mb-8 leading-relaxed">
+              Prémiové polepy aut a ochranné fólie. Bezkompromisní kvalita pro
+              ty, kteří vyžadují dokonalost.
+            </p>
+<div className="flex items-center gap-4">
+<a className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-[#bbcf1d] hover:border-[#bbcf1d] hover:scale-110 hover:shadow-[0_0_15px_rgba(187,207,29,0.3)] transition-all duration-300" href="https://www.instagram.com/foilwrap.cz/" rel="noopener noreferrer" target="_blank">
+<iconify-icon icon="mdi:instagram" width="20"></iconify-icon>
+</a>
+<a className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-[#bbcf1d] hover:border-[#bbcf1d] hover:scale-110 hover:shadow-[0_0_15px_rgba(187,207,29,0.3)] transition-all duration-300" href="https://www.facebook.com/people/Foilwrap/100045469646685/" rel="noopener noreferrer" target="_blank">
+<iconify-icon icon="mdi:facebook" width="20"></iconify-icon>
+</a>
+</div>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-[10px] text-zinc-600 uppercase tracking-widest mb-6">
+              Služby
+            </h4>
+<ul className="space-y-4">
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/zmena-barvy-vozu">
+                  Změna barvy (Wrap)
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/ochranne-folie">
+                  Ochranné PPF fólie
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/tonovani-skel">
+                  Tónování autoskel
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/polepy-kol">
+                  Polepy kol
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/polepy-interieru">
+                  Interiérové fólie
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/dechroming">
+                  Dechroming
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/detailing">
+                  Detailing
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/reklamni-polepy">
+                  Reklamní polepy
+                </a>
+</li>
+</ul>
+</div>
+<div>
+<h4 className="font-orbitron font-medium text-[10px] text-zinc-600 uppercase tracking-widest mb-6">
+              Navigace
+            </h4>
+<ul className="space-y-4">
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/">
+                  Domov
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/o-nas">
+                  O nás
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/galerie">
+                  Galerie
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/blog">
+                  Blog
+                </a>
+</li>
+<li>
+<a className="text-zinc-400 hover:text-white transition-colors text-sm font-light" href="/kontakt">
+                  Kontakt
+                </a>
+</li>
+</ul>
+<h4 className="font-orbitron font-medium text-[10px] text-zinc-600 uppercase tracking-widest mb-6 mt-10">
+              Kontakt
+            </h4>
+<ul className="space-y-3">
+<li className="text-zinc-400 text-sm font-light flex items-center gap-2">
+<iconify-icon className="text-[#bbcf1d] shrink-0" icon="solar:phone-linear" width="14"></iconify-icon>
+<a className="hover:text-white transition-colors" href="tel:+420608002608">
+                  +420 608 002 608
+                </a>
+</li>
+<li className="text-zinc-400 text-sm font-light flex items-center gap-2">
+<iconify-icon className="text-[#bbcf1d] shrink-0" icon="solar:letter-linear" width="14"></iconify-icon>
+<a className="hover:text-white transition-colors" href="mailto:obchod@foilwrap.cz">
+                  obchod@foilwrap.cz
+                </a>
+</li>
+<li className="text-zinc-400 text-sm font-light flex items-center gap-2">
+<iconify-icon className="text-[#bbcf1d] shrink-0" icon="solar:map-point-linear" width="14"></iconify-icon>
+                Na Šilbochu 2392/2, Praha 8
+              </li>
+<li className="text-zinc-400 text-sm font-light flex items-center gap-2">
+<iconify-icon className="text-[#bbcf1d] shrink-0" icon="solar:clock-circle-linear" width="14"></iconify-icon>
+                Po – Pá 8:00 – 16:30
+              </li>
+</ul>
+</div>
+</div>
+<div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<p className="text-zinc-600 text-[10px] font-orbitron uppercase tracking-widest">
+            © 2025 FoilWrap Praha. Všechna práva vyhrazena.
+          </p>
+<div className="flex gap-6">
+<a className="text-zinc-600 hover:text-white text-[10px] font-orbitron uppercase tracking-widest transition-colors" href="/ochrana-osobnich-udaju">
+              Soukromí
+            </a>
+<a className="text-zinc-600 hover:text-white text-[10px] font-orbitron uppercase tracking-widest transition-colors" href="/obchodni-podminky">
+              Podmínky
+            </a>
+</div>
+</div>
+</div>
+</footer>
+
+<style>
+      #main-nav { transition: max-width 0.4s ease-in-out, background 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out; }
+      #main-nav.nav-scrolled { max-width: 1100px; background: rgba(0,0,0,0.75); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+      #main-nav.nav-scrolled .flex.w-full { padding-top: 0.85rem; padding-bottom: 0.85rem; padding-left: 2.5rem; padding-right: 2.5rem; }
+      #main-nav.nav-scrolled a.js-nav-link { font-size: 11px; letter-spacing: 0.18em; transition: all 0.3s ease-in-out; }
+      #main-nav.nav-scrolled img { height: 32px; transition: all 0.3s ease-in-out; }
+      #main-nav.nav-scrolled a[href="/#kontakt"] { font-size: 10px; padding: 0.5rem 1.2rem; transition: all 0.3s ease-in-out; }
+    </style>
+
+
+
+    </>
+  );
+}

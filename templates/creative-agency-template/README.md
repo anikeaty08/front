@@ -1,0 +1,14 @@
+# Creative Digital Designer Portfolio Template
+
+A dark, brutalist portfolio landing page template for creative agencies and digital designers to showcase work, services, testimonials, and pricing with bold animations.
+
+## Project Details
+- **Slug:** `creative-agency-template`
+- **Views:** 3932
+- **Tags:** Landing Page, Portfolio, Art & Design, Brand, Brutal, Dark, Large Type, Technology, Clean, Gradient
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

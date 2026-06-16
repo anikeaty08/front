@@ -1,0 +1,14 @@
+# Sharcon Systems Agency Landing Page Template
+
+A dark, futuristic template for system architecture and digital infrastructure agencies to showcase capabilities, case studies, and drive consultation leads.
+
+## Project Details
+- **Slug:** `sharcon-systems-43`
+- **Views:** 12
+- **Tags:** Landing Page, Services, Technology, Brand, Dark, Minimal, Futuristic, Large Type, Agency, B2B
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

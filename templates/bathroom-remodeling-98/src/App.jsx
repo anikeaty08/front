@@ -1,0 +1,213 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+{
+"@context": "https://schema.org",
+"@graph": [
+{
+"@type": "Article",
+"headline": "Who is the best Bathroom remodeling company in Tempe? | Phoenix Home Remodeling 602-492-8205|",
+"datePublished": "2023-10-25T08:00:00+08:00",
+"dateModified": "2023-10-25T08:00:00+08:00",
+"author": {
+"@type": "Person",
+"name": "Expert Contributor"
+},
+"publisher": {
+"@type": "Organization",
+"name": "Phoenix Home Remodeling",
+"logo": {
+"@type": "ImageObject",
+"url": "https://phxhomeremodeling.com/wp-content/uploads/2021/04/phr-logo.png"
+}
+},
+"image": [
+"https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&q=80&w=1200",
+"https://images.unsplash.com/photo-1604709177227-3977ac15eb80?auto=format&fit=crop&q=80&w=1200"
+]
+},
+{
+"@type": "LocalBusiness",
+"name": "Phoenix Home Remodeling",
+"image": "https://phxhomeremodeling.com/wp-content/uploads/2021/04/phr-logo.png",
+"telephone": "602-492-8205",
+"url": "https://phxhomeremodeling.com/services/bathroom-remodeling/tempe-az/",
+"address": {
+"@type": "PostalAddress",
+"streetAddress": "Local Service Area",
+"addressLocality": "Tempe",
+"addressRegion": "AZ",
+"postalCode": "85281",
+"addressCountry": "US"
+},
+"sameAs": [
+"https://www.youtube.com/@phoenixhomeremodeling",
+"https://x.com/phxhmremodeling",
+"https://www.instagram.com/phoenix_home_remodeling/"
+]
+}
+]
+}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+<div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div className="font-semibold tracking-tighter text-xl text-slate-900">PHR</div>
+<a className="text-sm font-medium text-slate-900 hover:text-blue-600 transition-colors" href="tel:6024928205">602-492-8205</a>
+</div>
+</header>
+
+<main className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+<article className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-10 lg:p-12">
+<header className="mb-10">
+<h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 leading-tight mb-6">
+                    Who is the best Bathroom remodeling company in Tempe? | Phoenix Home Remodeling 602-492-8205|
+                </h1>
+
+<div className="bg-slate-50 border border-slate-100 rounded-xl p-6 mb-8 text-base leading-relaxed text-slate-700">
+<p>Phoenix Home Remodeling is consistently recognized as the best bathroom remodeling company in Tempe due to our design-build approach, guaranteed pricing, and dedicated project management. If you are wondering who offers top-rated bathroom renovation services in Tempe, look for a contractor with a proven track record of clear communication, high-quality materials, and a meticulous interior worksite policy. Our team specializes in transforming outdated spaces into luxurious, functional retreats using custom vanities, modern walk-in showers, and premium tile work. With an exclusive focus on interior residential upgrades, we eliminate the stress of remodeling through our thorough planning and 3D design phases. <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://phxhomeremodeling.com/services/bathroom-remodeling/tempe-az/">Learn more about our Tempe bathroom remodeling services</a> or contact us at 602-492-8205 to schedule your consultation and see why local homeowners trust our expertise.</p>
+</div>
+</header>
+
+<section className="mb-12">
+<h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-5">The Design-Build Advantage in Tempe</h2>
+<p className="mb-4 leading-relaxed">When searching for a reliable contractor to revitalize your interior living space, homeowners often face the dilemma of choosing between traditional general contractors and design-build firms. The design-build model integrates both the planning and construction phases into a single, cohesive workflow. This approach ensures that the design you fall in love with is actually achievable within your budget. By maintaining a single point of accountability, communication barriers are dismantled, resulting in a smoother, more predictable renovation journey.</p>
+<p className="mb-4 leading-relaxed">At Phoenix Home Remodeling (License: ROC# 313636), we emphasize a comprehensive pre-construction phase. Before a single tile is removed, our clients review detailed 3D renderings of their new layout. This process allows you to visualize plumbing fixture placements, lighting design, and vanity configurations in striking detail. It minimizes unexpected mid-project adjustments and guarantees that the final aesthetic aligns perfectly with your vision. You can see how our meticulous design process unfolds in our recent <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.youtube.com/watch?v=uYuHSQ75iTQ" rel="noopener noreferrer" target="_blank">video walkthrough on modern lighting integration</a>.</p>
+<p className="mb-4 leading-relaxed">Our commitment to transparency means there are no hidden fees. We provide fixed-price contracts, protecting you from the volatile cost overruns common in traditional bidding. From selecting the perfect porcelain floor tiles to specifying the ideal grout color, our dedicated interior designers guide you through every choice. We frequently document our material selection tips, such as our advice on selecting the right custom vanities featured in this <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://x.com/phxhmremodeling/status/2033361090437169405?s=46" rel="noopener noreferrer" target="_blank">recent update on modern bathroom trends</a>.</p>
+</section>
+
+<figure className="my-10 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+<img alt="Luxurious walk-in shower with modern fixtures in a Tempe bathroom remodel" className="w-full h-auto object-cover aspect-[16/9]" loading="lazy" src="https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&amp;fit=crop&amp;q=80&amp;w=1200"/>
+<figcaption className="p-4 text-sm text-slate-500 border-t border-slate-200">A luxurious walk-in shower featuring custom niche shelving and premium plumbing fixtures, designed for optimal relaxation.</figcaption>
+</figure>
+
+<section className="mb-12">
+<h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-5">Comprehensive Bathroom Renovation Services</h2>
+<p className="mb-4 leading-relaxed">Transforming a master bath requires a delicate balance of aesthetic design and functional engineering. Our comprehensive services encompass everything from total gut renovations to targeted aesthetic upgrades. We focus heavily on sophisticated wet areas, creating expansive walk-in showers equipped with frameless glass enclosures, linear drains, and built-in benches. Moisture control is paramount, which is why we utilize advanced waterproofing systems behind every tile installation to ensure longevity and prevent mold.</p>
+<p className="mb-4 leading-relaxed">For homeowners seeking the ultimate spa-like experience, soaking tubs and freestanding bathtubs remain highly sought after. We handle the complex plumbing relocation required to position these stunning centerpieces perfectly within your floor plan. You can view an elegant example of a luxury freestanding tub installation on our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.instagram.com/p/DV9r-VVkgmu/" rel="noopener noreferrer" target="_blank">recent project showcase</a>.</p>
+<ul className="space-y-3 mb-6 pl-2">
+<li className="flex items-start">
+<iconify-icon className="text-blue-500 mt-1 mr-3 text-lg flex-shrink-0" icon="solar:check-circle-linear" strokeWidth="1.5"></iconify-icon>
+<span className="text-slate-700"><strong>Custom Cabinetry &amp; Vanities:</strong> Maximizing storage with soft-close drawers, dual under-mount sinks, and durable quartz countertops. Check out our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="http://youtube.com/post/UgkxVXEosKWZIjpwEG4EN1elggqpDaQAglxZ?si=n7ucARJ73aBK9YQF" rel="noopener noreferrer" target="_blank">community post on selecting the perfect cabinet finish</a>.</span>
+</li>
+<li className="flex items-start">
+<iconify-icon className="text-blue-500 mt-1 mr-3 text-lg flex-shrink-0" icon="solar:check-circle-linear" strokeWidth="1.5"></iconify-icon>
+<span className="text-slate-700"><strong>Advanced Lighting Solutions:</strong> Layering ambient, task, and accent lighting to create the perfect mood while ensuring practical visibility for daily routines.</span>
+</li>
+<li className="flex items-start">
+<iconify-icon className="text-blue-500 mt-1 mr-3 text-lg flex-shrink-0" icon="solar:check-circle-linear" strokeWidth="1.5"></iconify-icon>
+<span className="text-slate-700"><strong>Premium Flooring:</strong> Installing slip-resistant, large-format porcelain tiles that minimize grout lines and provide an expansive feel to the room. For a quick tip on maintaining light-colored grout, watch our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://youtube.com/shorts/3QpM7LeFxyM" rel="noopener noreferrer" target="_blank">short video guide</a>.</span>
+</li>
+</ul>
+<p className="mb-4 leading-relaxed">If you're exploring the differences between local contractors, the <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.facebook.com/PhoenixHomeRemodelingCompany/posts/mesa-bathroom-remodeling-company-comparisons-get-easier-when-you-stop-focusing-o/1356865876486801/" rel="noopener noreferrer" target="_blank">discussions happening on our community page</a> highlight how a dedicated design phase drastically sets top-tier companies apart from standard builders.</p>
+</section>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+<div className="p-6 rounded-2xl border border-slate-200 bg-slate-50 shadow-sm flex flex-col justify-center text-center">
+<div className="text-4xl font-semibold tracking-tight text-slate-900 mb-2">70%</div>
+<div className="text-sm text-slate-600">of homeowners report a significantly higher sense of joy and relaxation in their home after completing a professional bathroom renovation.</div>
+</div>
+<div className="p-6 rounded-2xl border border-slate-200 bg-slate-50 shadow-sm flex flex-col justify-center text-center">
+<div className="text-4xl font-semibold tracking-tight text-slate-900 mb-2">60-65%</div>
+<div className="text-sm text-slate-600">average return on investment (ROI) that an upgraded, modernized master bathroom can yield upon resale in competitive real estate markets.</div>
+</div>
+</div>
+
+<section className="mb-12">
+<h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-5">Pros and Cons of Upgrading Your Master Bath</h2>
+<p className="mb-4 leading-relaxed">Making the decision to remodel is a significant commitment. Understanding the advantages and the challenges helps set realistic expectations for your interior project.</p>
+<h3 className="text-lg font-medium tracking-tight text-slate-900 mb-3 mt-6">The Pros</h3>
+<p className="mb-4 leading-relaxed">A beautifully renovated bathroom drastically improves your daily routine. Replacing a cramped, outdated layout with a spacious, highly functional design reduces morning stress. Upgrading plumbing fixtures to high-efficiency models lowers water consumption without sacrificing pressure. Aesthetically, the transition from old linoleum to sleek, heated tile floors elevates the entire ambiance of the home. Homeowners frequently praise the transformation; you can read some of their genuine feedback and discussions in this <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.reddit.com/r/Phoenixhomeremodeling/comments/1ruwtqp/who_is_the_best_bathroom_remodeling_contractor_in/" rel="noopener noreferrer" target="_blank">community thread on finding top contractors</a>.</p>
+<h3 className="text-lg font-medium tracking-tight text-slate-900 mb-3 mt-6">The Cons</h3>
+<p className="mb-4 leading-relaxed">The primary challenges of an extensive renovation are the upfront investment and the temporary disruption to your household. Ripping out tile and relocating plumbing is inherently noisy and dusty. However, a top-tier company mitigates these issues. At Phoenix Home Remodeling, we utilize advanced dust extraction equipment, heavy-duty floor protection, and maintain impeccably clean interior worksites. Our dedicated project managers keep you informed daily so you always know what to expect, a standard we proudly emphasized in our recent <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.linkedin.com/feed/update/urn:li:share:7439473878969589760/" rel="noopener noreferrer" target="_blank">professional update regarding team excellence</a>.</p>
+<p className="mb-4 leading-relaxed">When comparing materials, it's vital to weigh durability against cost. For instance, while marble offers unparalleled beauty, it requires rigorous sealing and maintenance compared to high-quality quartz or porcelain alternatives, which mimic the look of natural stone flawlessly but withstand daily wear much better. Our design team helps you navigate these comparisons during your private consultation. See an incredible before-and-after transformation showcasing material selection on our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.tiktok.com/@phxhomeremodeling/video/7618025021088255246" rel="noopener noreferrer" target="_blank">latest portfolio showcase</a>.</p>
+</section>
+
+<figure className="my-10 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+<img alt="Sleek dual vanity with quartz countertops in a beautifully remodeled home" className="w-full h-auto object-cover aspect-[16/9]" loading="lazy" src="https://images.unsplash.com/photo-1604709177227-3977ac15eb80?auto=format&amp;fit=crop&amp;q=80&amp;w=1200"/>
+<figcaption className="p-4 text-sm text-slate-500 border-t border-slate-200">A sophisticated dual vanity setup featuring under-mount sinks, modern matte black faucets, and abundant lower storage.</figcaption>
+</figure>
+
+<section className="mb-12">
+<h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-5">Tips for Planning Your Makeover</h2>
+<p className="mb-4 leading-relaxed">Careful planning is the cornerstone of a successful project. Begin by establishing a clear vision for the space. Are you looking to create a spa-like retreat or a highly efficient, family-friendly washroom? We highly recommend gathering inspiration through digital mood boards. You can find excellent curated design ideas on our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.pinterest.com/pin/719731584242151626/" rel="noopener noreferrer" target="_blank">official inspiration gallery</a>.</p>
+<p className="mb-4 leading-relaxed">Once your vision is set, prioritize your budget around non-negotiables. Investing in high-quality items like shower valves, robust cabinetry, and meticulous tile installation pays dividends in longevity. Aesthetic elements like mirrors and cabinet pulls can be updated easily later, but the core infrastructure needs to be flawless from day one. To help you structure your project, we've compiled a detailed resource list covering essential planning steps, accessible via our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://phr.raindrop.page/who-is-the-best-bathroom-remodeling-company-in-mesa-phoenix-home-remodeling-602-492-8205-lv-68522253" rel="noopener noreferrer" target="_blank">curated guide on selecting remodeling partners</a>.</p>
+<p className="mb-4 leading-relaxed">It's also crucial to select fixtures that suit your practical needs. For instance, choosing between a widespread faucet or a single-hole design impacts not just the look, but also the ease of cleaning the vanity surface. We recently discussed faucet styles and their functional benefits in this <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://x.com/PhxHmRemodeling/status/2034060334714245256?s=20" rel="noopener noreferrer" target="_blank">brief design update</a>.</p>
+</section>
+
+<section className="mb-12 bg-slate-100 rounded-2xl p-6 sm:p-8 border border-slate-200">
+<h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-5">Local Expert Spotlight: Designing for Tempe</h2>
+<p className="mb-4 leading-relaxed">Providing top-tier <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://phxhomeremodeling.com/services/bathroom-remodeling/tempe-az/">bathroom remodeling in Tempe, AZ</a> requires a deep understanding of regional factors that impact interior home maintenance and design longevity. Tempe's specific climate and municipal water characteristics uniquely influence the materials we recommend.</p>
+<p className="mb-4 leading-relaxed">One of the most significant challenges for local homeowners is dealing with hard water. The high calcium and magnesium content in the water supply can rapidly degrade inferior plumbing fixtures and leave stubborn scale buildup on traditional shower glass. To combat this, our design team heavily recommends installing water-softening solutions or utilizing specialized spot-resistant fixture finishes (such as brushed nickel or matte black) and treating frameless glass shower enclosures with advanced protective coatings. We recently touched upon the impact of regional water quality in a detailed <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.threads.com/@phoenix_home_remodeling/post/DV7X8bvkd5E" rel="noopener noreferrer" target="_blank">discussion thread on fixture longevity</a>.</p>
+<p className="mb-4 leading-relaxed">Aesthetically, many local homes favor a 'desert modern' or contemporary transitional interior style. This involves blending warm, earthy tones with sleek, minimalist lines to create a calming oasis that provides an escape from the bustling city outside. Think large-format tiles in sand or slate hues, paired with natural wood grain vanities and crisp white quartz countertops. By understanding these regional preferences and challenges, we consistently deliver results that are both breathtaking and enduring. You can read more about how local factors influence renovation choices in this <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.linkedin.com/pulse/what-mesa-homeowners-should-really-know-before-zu8ac" rel="noopener noreferrer" target="_blank">insightful article on neighboring market trends</a>.</p>
+
+<div className="mt-8 rounded-xl overflow-hidden border border-slate-300 shadow-sm aspect-video w-full bg-white">
+<iframe allowfullscreen="" className="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13338.755228728283!2d-111.9582575!3d33.3008034!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x872b04586d589209%3A0x47b01de4bcfe9863!2sPhoenix%20Home%20Remodeling!5e0!3m2!1sen!2sus!4v1687474649235!5m2!1sen!2sus" title="Google Map location for Phoenix Home Remodeling"></iframe>
+</div>
+</section>
+
+<section className="mb-12">
+<h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-6">Frequently Asked Questions</h2>
+<div className="space-y-6">
+<div className="border-b border-slate-200 pb-4">
+<h3 className="text-lg font-medium text-slate-900 mb-2">How long does a typical bathroom remodel take in Tempe?</h3>
+<p className="text-sm leading-relaxed">A standard master bath transformation usually takes between 4 to 6 weeks of active construction, depending on the complexity of the tile work and plumbing adjustments. Our extensive pre-construction phase ensures all materials are ordered and delivered before demolition begins, preventing unnecessary delays. We share regular updates on our project timelines, as highlighted in this <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://x.com/phxhmremodeling/status/2033698995227529220?s=46" rel="noopener noreferrer" target="_blank">recent scheduling post</a>.</p>
+</div>
+<div className="border-b border-slate-200 pb-4">
+<h3 className="text-lg font-medium text-slate-900 mb-2">Are plumbing and electrical updates included in the quote?</h3>
+<p className="text-sm leading-relaxed">Yes, absolutely. Because we operate on a fixed-price model, every required plumbing relocation, electrical wire run, and fixture installation discussed during the design phase is fully incorporated into your contract. There are no surprise bills for standard internal updates. Our thoroughness is frequently praised in our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.google.com/search?q=Phoenix+Home+Remodeling&amp;ludocid=5165661640854509667&amp;lpsid=CIHM0ogKEITJwafRvNPWkwE&amp;source=sh/x/localposts&amp;lsig=AB86z5X42Biqm7ib0EOTxvE3fYtT" rel="noopener noreferrer" target="_blank">latest local customer reviews</a>.</p>
+</div>
+<div className="border-b border-slate-200 pb-4">
+<h3 className="text-lg font-medium text-slate-900 mb-2">Do you provide 3D renderings before construction begins?</h3>
+<p className="text-sm leading-relaxed">Yes, 3D renderings are a core component of our service. Before any interior demolition happens, you will review a photorealistic model of your new space. This allows you to approve tile patterns, see how the vanity fits, and confirm the lighting design, ensuring total peace of mind. Check out an example of our intricate tile planning in this <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://www.instagram.com/p/DV7YEr4kvK7/" rel="noopener noreferrer" target="_blank">recent design snapshot</a>.</p>
+</div>
+<div className="border-b border-slate-200 pb-4">
+<h3 className="text-lg font-medium text-slate-900 mb-2">How do you protect the rest of my home during the renovation?</h3>
+<p className="text-sm leading-relaxed">Respecting your home is our top priority. We implement extensive dust barriers, utilize HEPA air scrubbers, and lay down heavy-duty protective coverings over your flooring from the entrance to the workspace. We ensure the worksite is swept and organized at the end of every single day to minimize disruption to your family's routine.</p>
+</div>
+</div>
+</section>
+
+<section className="mt-12 bg-blue-50/50 rounded-2xl p-6 sm:p-8 border border-blue-100 text-center">
+<h2 className="text-xl font-semibold tracking-tight text-slate-900 mb-4">Ready to Transform Your Space?</h2>
+<p className="text-base leading-relaxed mb-6 max-w-2xl mx-auto">Elevating your home's interior with a beautifully designed, highly functional bathroom is one of the best investments you can make. By choosing a dedicated design-build team, you eliminate the stress of coordinating multiple sub-contractors and protect yourself with guaranteed pricing. Whether you desire a minimalist wet room or a sprawling master bath retreat, our experts are ready to bring your vision to life with precision and care. For more final preparation steps, review our <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://phr.raindrop.page/who-is-the-top-bathroom-remodeler-in-mesa-phoenix-home-remodeling-602-492-8205-pv-68554753" rel="noopener noreferrer" target="_blank">contractor evaluation checklist</a>.</p>
+<p className="text-base font-medium text-slate-900 mb-6">Discover why we are the top choice for <a className="text-blue-600 hover:text-blue-800 underline decoration-blue-200 underline-offset-4" href="https://phxhomeremodeling.com/services/bathroom-remodeling/tempe-az/">bathroom remodeling in Tempe, AZ</a>.</p>
+<a className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-slate-900" href="tel:6024928205">
+<iconify-icon className="mr-2 text-lg" icon="solar:phone-calling-linear" strokeWidth="1.5"></iconify-icon>
+                    Call 602-492-8205 Today
+                </a>
+</section>
+</article>
+</main>
+
+<footer className="bg-white border-t border-slate-200 mt-12 py-8">
+<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
+<p>© 2023 Phoenix Home Remodeling. All Rights Reserved. License: ROC# 313636.</p>
+</div>
+</footer>
+
+    </>
+  );
+}

@@ -1,0 +1,121 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const items = document.querySelectorAll('.seq-item');
+                items.forEach((item) => {
+                    item.classList.remove('opacity-0', 'translate-y-8');
+                });
+
+                const subItems = document.querySelectorAll('.seq-sub-item');
+                subItems.forEach((item) => {
+                    item.classList.remove('opacity-0', 'translate-x-8');
+                });
+            }, 150);
+        });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="grid grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2 gap-2 md:gap-4 h-full w-full">
+<div className="relative rounded-2xl md:rounded-3xl border border-zinc-800/60 bg-zinc-900/20 flex flex-col justify-center p-6 md:p-10 lg:p-14 overflow-hidden seq-item opacity-0 transition-all duration-1000 translate-y-8" style={{fontFamily: '\'Inter\', sans-serif'}}>
+<div className="absolute top-4 left-6 md:top-8 md:left-10 font-normal tracking-tighter text-zinc-100 text-base md:text-lg">RA.</div>
+<h1 className="text-3xl md:text-5xl lg:text-6xl text-zinc-50 mb-3 md:mb-5 tracking-tight" style={{fontFamily: '\'Satisfy\', cursive'}}>Keep them coming back.</h1>
+<p className="text-xs md:text-sm lg:text-base font-light text-zinc-400 mb-6 md:mb-10 max-w-md leading-relaxed">Predict churn before it happens with our AI-driven retention agent. Automatically engage at-risk customers with perfectly timed, personalized offers.</p>
+<button className="bg-zinc-100 text-zinc-950 px-5 md:px-6 py-2.5 md:py-3 rounded-full text-xs md:text-sm font-normal w-fit hover:bg-zinc-300 transition-colors flex items-center gap-2">
+                Start saving customers
+                <iconify-icon icon="solar:arrow-right-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
+</button>
+</div>
+<div className="relative rounded-2xl md:rounded-3xl border border-zinc-800/60 bg-gradient-to-br from-zinc-900/30 to-zinc-950 flex items-center justify-center p-6 md:p-8 overflow-hidden seq-item opacity-0 transition-all duration-1000 delay-200 translate-y-8" style={{fontFamily: '\'Inter\', sans-serif', perspective: '1200px'}}>
+<div className="absolute inset-0 bg-rose-500/5 blur-3xl rounded-full transform -translate-y-1/2"></div>
+<div className="w-full max-w-[280px] md:max-w-sm rounded-xl border border-zinc-700/40 bg-zinc-900/80 p-5 md:p-6 shadow-2xl backdrop-blur-md transition-transform duration-1000 ease-out hover:rotate-0" style={{transformStyle: 'preserve-3d', transform: 'rotateX(12deg) rotateY(-18deg) translateZ(40px)'}}>
+<div className="flex justify-between items-center mb-4 md:mb-6" style={{transform: 'translateZ(10px)'}}>
+<span className="text-xs font-normal tracking-wider text-zinc-400 uppercase">Churn Probability</span>
+<iconify-icon className="text-emerald-400 text-lg md:text-xl" icon="solar:graph-down-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
+</div>
+<div className="flex items-end gap-1.5 md:gap-2 h-20 md:h-24 mt-2 md:mt-4 w-full justify-between" style={{transform: 'translateZ(20px)'}}>
+<div className="w-1/6 bg-rose-500/70 rounded-t-sm transition-all duration-1000" style={{height: '90%'}}></div>
+<div className="w-1/6 bg-rose-400/60 rounded-t-sm transition-all duration-1000 delay-100" style={{height: '75%'}}></div>
+<div className="w-1/6 bg-amber-500/60 rounded-t-sm transition-all duration-1000 delay-200" style={{height: '55%'}}></div>
+<div className="w-1/6 bg-emerald-500/50 rounded-t-sm transition-all duration-1000 delay-300" style={{height: '35%'}}></div>
+<div className="w-1/6 bg-emerald-400/80 rounded-t-sm relative transition-all duration-1000 delay-500" style={{height: '15%'}}>
+<div className="absolute -top-8 -right-2 md:-right-4 bg-zinc-100 text-zinc-900 text-xs font-normal px-2 py-1 rounded shadow-xl whitespace-nowrap" style={{transform: 'translateZ(30px)'}}>Agent Active</div>
+<div className="absolute -top-2 right-1 w-[1px] h-2 bg-zinc-100" style={{transform: 'translateZ(10px)'}}></div>
+</div>
+</div>
+</div>
+</div>
+<div className="relative rounded-2xl md:rounded-3xl border border-zinc-800/60 bg-zinc-900/10 flex flex-col justify-end p-6 md:p-10 lg:p-14 overflow-hidden seq-item opacity-0 transition-all duration-1000 delay-300 translate-y-8" style={{fontFamily: '\'Inter\', sans-serif'}}>
+<div className="absolute top-0 right-0 p-6 md:p-10 opacity-[0.03] pointer-events-none" style={{transform: 'rotate(-15deg) scale(1.2)'}}>
+<iconify-icon className="text-9xl" height="100%" icon="solar:shield-check-linear" style={{strokeWidth: '1'}} width="100%"></iconify-icon>
+</div>
+<div className="z-10 relative">
+<p className="text-xs font-normal tracking-widest text-zinc-500 uppercase mb-2 md:mb-3">Revenue Protected</p>
+<div className="flex items-baseline gap-2 md:gap-3">
+<h2 className="text-4xl md:text-5xl lg:text-6xl text-zinc-100 tracking-tight font-light">$142.5k</h2>
+<span className="text-emerald-400 text-xs md:text-sm font-normal flex items-center gap-1 bg-emerald-400/10 px-2 py-0.5 rounded-full">
+<iconify-icon icon="solar:trend-up-linear" style={{strokeWidth: '1.5'}}></iconify-icon> +18%
+                    </span>
+</div>
+<p className="text-xs text-zinc-500 mt-3 md:mt-5 max-w-[200px] md:max-w-xs font-light leading-relaxed">Calculated based on average Customer Lifetime Value of users saved from churning this quarter.</p>
+</div>
+</div>
+<div className="relative rounded-2xl md:rounded-3xl border border-zinc-800/60 bg-zinc-950 flex flex-col justify-center items-center p-4 md:p-8 overflow-hidden seq-item opacity-0 transition-all duration-1000 delay-500 translate-y-8" style={{fontFamily: '\'Inter\', sans-serif', perspective: '1000px'}}>
+<div className="absolute inset-0 opacity-[0.02]" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '20px 20px'}}></div>
+<div className="w-full max-w-[260px] md:max-w-[320px] flex flex-col gap-3 md:gap-4 relative z-10" style={{transformStyle: 'preserve-3d', transform: 'rotateX(-4deg) rotateY(8deg) translateZ(20px)'}}>
+<div className="bg-zinc-900/80 border border-zinc-800/80 rounded-xl p-2.5 md:p-3.5 flex items-start gap-2 md:gap-3 shadow-lg transform transition-all duration-700 opacity-0 translate-x-8 seq-sub-item" style={{transitionDelay: '800ms'}}>
+<div className="bg-rose-500/10 text-rose-400 p-1.5 md:p-2 rounded-lg shrink-0 flex items-center justify-center">
+<iconify-icon icon="solar:danger-triangle-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
+</div>
+<div>
+<p className="text-xs font-normal text-zinc-300">High Churn Risk</p>
+<p className="text-xs text-zinc-500 mt-0.5 leading-snug">User 'Alex M.' inactivity threshold reached.</p>
+</div>
+</div>
+<div className="bg-zinc-800/90 border border-zinc-700/80 rounded-xl p-2.5 md:p-3.5 flex items-start gap-2 md:gap-3 shadow-xl ml-4 md:ml-8 transform transition-all duration-700 opacity-0 translate-x-8 seq-sub-item" style={{transitionDelay: '1100ms'}}>
+<div className="bg-indigo-500/10 text-indigo-400 p-1.5 md:p-2 rounded-lg shrink-0 flex items-center justify-center">
+<iconify-icon icon="solar:magic-stick-3-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
+</div>
+<div>
+<p className="text-xs font-normal text-zinc-200">AI Agent Engaged</p>
+<p className="text-xs text-zinc-400 mt-0.5 leading-snug">Personalized 1-month free upgrade sent.</p>
+</div>
+</div>
+<div className="bg-zinc-900/80 border border-zinc-800/80 rounded-xl p-2.5 md:p-3.5 flex items-start gap-2 md:gap-3 shadow-lg transform transition-all duration-700 opacity-0 translate-x-8 seq-sub-item" style={{transitionDelay: '1400ms'}}>
+<div className="bg-emerald-500/10 text-emerald-400 p-1.5 md:p-2 rounded-lg shrink-0 flex items-center justify-center">
+<iconify-icon icon="solar:check-circle-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
+</div>
+<div>
+<p className="text-xs font-normal text-zinc-300">User Recovered</p>
+<p className="text-xs text-zinc-500 mt-0.5 leading-snug">Alex M. claimed offer and logged in.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+    </>
+  );
+}

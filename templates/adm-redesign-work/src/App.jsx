@@ -1,0 +1,722 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+brand: {
+50: '#f8fafc',
+100: '#f1f5f9',
+900: '#0f172a',
+},
+accent: {
+lime: '#bef264', // Lime-300 equivalent
+mint: '#10b981', // Emerald-500
+}
+},
+animation: {
+'float': 'float 6s ease-in-out infinite',
+'scroll': 'scroll 20s linear infinite',
+},
+keyframes: {
+float: {
+'0%, 100%': { transform: 'translateY(0)' },
+'50%': { transform: 'translateY(-20px)' },
+},
+scroll: {
+'0%': { transform: 'translateX(0)' },
+'100%': { transform: 'translateX(-100%)' },
+}
+}
+}
+}
+}
+
+
+
+        // Data for Pricing Switcher
+        const pricingData = {
+            'master': {
+                title: 'Master in Digital Marketing',
+                desc: '7 Month Comprehensive Program with Job Guarantee',
+                price: '₹4,824',
+                duration: '7 Months',
+                button: 'btn-master'
+            },
+            'executive': {
+                title: 'Executive Program in Growth Hacking',
+                desc: '3 Month Intensive for Professionals & Founders',
+                price: '₹6,450',
+                duration: '3 Months',
+                button: 'btn-executive'
+            },
+            'growth': {
+                title: 'Digital Growth Hack Bundle',
+                desc: 'Self-paced learning with weekly mentorship calls',
+                price: '₹2,999',
+                duration: '6 Weeks',
+                button: 'btn-growth'
+            }
+        };
+
+        // Switch Pricing Logic
+        function switchPricing(type) {
+            const data = pricingData[type];
+            const container = document.getElementById('pricing-content');
+            
+            // Fade out
+            container.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                // Update Content
+                container.innerHTML = `
+                    <div class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold mb-6">No Cost EMI Available</div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-2">${data.title}</h3>
+                    <p class="text-slate-500 mb-8">${data.desc}</p>
+                    
+                    <div class="grid grid-cols-2 gap-8 mb-8">
+                        <div>
+                            <div class="text-sm text-slate-500 mb-1">Monthly EMI starting at</div>
+                            <div class="text-4xl font-bold text-slate-900 tracking-tight">${data.price}<span class="text-lg font-normal text-slate-400">/mo</span></div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-slate-500 mb-1">Total Duration</div>
+                            <div class="text-2xl font-bold text-slate-900">${data.duration}</div>
+                            <div class="text-xs text-slate-400">Live + Recorded Sessions</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all">
+                            <span class="text-xs font-bold text-slate-400">Financing Partners:</span>
+                            <div class="font-bold text-slate-700">Bajaj Finserv</div>
+                            <div class="font-bold text-slate-700">PayU</div>
+                        </div>
+                    </div>
+                `;
+                container.style.opacity = '1';
+            }, 200);
+
+            // Update Buttons Style
+            ['btn-master', 'btn-executive', 'btn-growth'].forEach(btn => {
+                const el = document.getElementById(btn);
+                if(btn === data.button) {
+                    el.className = "text-left px-4 py-4 rounded-xl transition-all duration-200 bg-white shadow-md border-l-4 border-indigo-500 text-slate-900 font-semibold";
+                    el.querySelector('div').className = "text-sm text-slate-500 font-normal mb-1";
+                } else {
+                    el.className = "text-left px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white hover:shadow-sm text-slate-600 border-l-4 border-transparent hover:border-slate-200 font-medium";
+                    el.querySelector('div').className = "text-sm text-slate-400 font-normal mb-1";
+                }
+            });
+        }
+
+        // Popup Logic
+        let ebookShown = false;
+        let communityShown = false;
+
+        function closePopup(id) {
+            const el = document.getElementById(id);
+            if(id === 'community-popup') {
+                 el.classList.remove('translate-y-0', 'opacity-100');
+                 el.classList.add('translate-y-full', 'opacity-0');
+            } else {
+                el.classList.remove('opacity-100', 'pointer-events-auto');
+                el.classList.add('opacity-0', 'pointer-events-none');
+                document.getElementById('ebook-content').classList.remove('scale-100');
+                document.getElementById('ebook-content').classList.add('scale-95');
+            }
+        }
+
+        function openEbookPopup() {
+            if(ebookShown) return;
+            ebookShown = true;
+            const el = document.getElementById('ebook-popup');
+            el.classList.remove('opacity-0', 'pointer-events-none');
+            el.classList.add('opacity-100', 'pointer-events-auto');
+            setTimeout(() => {
+                 document.getElementById('ebook-content').classList.remove('scale-95');
+                 document.getElementById('ebook-content').classList.add('scale-100');
+            }, 100);
+        }
+
+        function openCommunityPopup() {
+            if(communityShown) return;
+            communityShown = true;
+            const el = document.getElementById('community-popup');
+            el.classList.remove('translate-y-full', 'opacity-0');
+            el.classList.add('translate-y-0', 'opacity-100');
+        }
+
+        // Exit Intent Trigger
+        document.addEventListener('mouseout', e => {
+            if (!e.toElement && !e.relatedTarget && e.clientY < 10) {
+                openEbookPopup();
+            }
+        });
+
+        // Scroll Depth Trigger for Community
+        window.addEventListener('scroll', () => {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            if(scrollPercent > 50) {
+                openCommunityPopup();
+            }
+        });
+
+        // Countdown Timer
+        function startCountdown() {
+            let hours = 4, minutes = 12, seconds = 33;
+            setInterval(() => {
+                if(seconds > 0) seconds--;
+                else {
+                    seconds = 59;
+                    if(minutes > 0) minutes--;
+                    else {
+                        minutes = 59;
+                        if(hours > 0) hours--;
+                    }
+                }
+                const format = (n) => n < 10 ? `0${n}` : n;
+                document.getElementById('countdown').innerText = `${format(hours)}:${format(minutes)}:${format(seconds)}`;
+            }, 1000);
+        }
+        startCountdown();
+
+        // Reveal on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        });
+
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="bg-gradient-to-r from-lime-200 via-lime-300 to-lime-200 text-slate-900 text-xs md:text-sm py-2.5 px-4 relative z-50 shadow-sm transition-transform duration-300" id="announcement-bar">
+<div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 text-center font-medium">
+<div className="flex items-center gap-2">
+<span className="bg-slate-900 text-white text-[10px] uppercase tracking-wider py-0.5 px-1.5 rounded font-bold">New</span>
+<span>🔥 Sale On | Get Up To 30% OFF</span>
+</div>
+<div className="hidden md:flex items-center gap-2 tabular-nums">
+<span className="">Ends in:</span>
+<span className="font-bold tracking-tight" id="countdown">04:12:33</span>
+</div>
+<a className="underline underline-offset-2 decoration-slate-900/40 hover:decoration-slate-900 transition-all font-semibold" href="#courses">View Courses →</a>
+</div>
+<button className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-black/5 rounded-full transition-colors" onclick="document.getElementById('announcement-bar').style.transform='translateY(-100%)'; setTimeout(() =&gt; document.getElementById('announcement-bar').style.display='none', 300);">
+<iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>
+</button>
+</div>
+
+<nav className="sticky top-0 z-40 glass border-b border-slate-200/50 transition-all duration-300">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="flex justify-between items-center h-20">
+
+<div className="flex items-center gap-2 cursor-pointer group">
+<div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white">
+<iconify-icon icon="solar:atom-bold-duotone" width="20"></iconify-icon>
+</div>
+<span className="text-lg font-bold tracking-tight text-slate-900 group-hover:text-purple-600 transition-colors">ADM<span className="font-light text-slate-500">Education</span></span>
+</div>
+
+<div className="hidden md:flex items-center space-x-8">
+<a className="text-sm font-medium text-slate-600 hover:text-purple-600 transition-colors" href="#">Programs</a>
+<a className="text-sm font-medium text-slate-600 hover:text-purple-600 transition-colors" href="#">Admissions</a>
+<a className="text-sm font-medium text-slate-600 hover:text-purple-600 transition-colors" href="#">Success Stories</a>
+<a className="text-sm font-medium text-slate-600 hover:text-purple-600 transition-colors" href="#">Resources</a>
+</div>
+
+<div className="hidden md:flex items-center gap-4">
+<a className="text-sm font-semibold text-slate-900 hover:text-purple-600" href="#">Login</a>
+<a className="group relative px-6 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-full overflow-hidden shadow-lg hover:shadow-xl hover:bg-slate-800 transition-all" href="#demo">
+<span className="relative z-10 flex items-center gap-2">
+                            Book Free Demo
+                            <iconify-icon className="group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear"></iconify-icon>
+</span>
+</a>
+</div>
+
+<button className="md:hidden p-2 text-slate-600">
+<iconify-icon icon="solar:hamburger-menu-linear" width="24"></iconify-icon>
+</button>
+</div>
+</div>
+</nav>
+<main className="">
+
+<section className="lg:pt-32 lg:pb-40 overflow-hidden pt-16 pb-24 relative">
+
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 pointer-events-none">
+<div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+<div className="absolute top-20 left-0 w-[400px] h-[400px] bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style={{animationDelay: '2s'}}></div>
+<div className="absolute -bottom-20 left-1/3 w-[600px] h-[600px] bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style={{animationDelay: '4s'}}></div>
+</div>
+<div className="sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pr-4 pl-4 relative">
+<div className="text-center max-w-4xl mx-auto">
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-100 text-purple-700 text-xs font-medium mb-6 animate-pulse">
+<span className="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
+                        New Batches Starting Feb 11th
+                    </div>
+<h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+                        Master Digital Marketing <br/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">With Real-World Impact</span>
+</h1>
+<p className="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        Join 25,000+ alumni at the world's most premium digital institute. Learn from industry leaders, work on live brands, and launch your career.
+                    </p>
+<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold shadow-lg shadow-purple-200 hover:shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+                            Explore Programs
+                            <iconify-icon icon="solar:magnifer-linear" width="20"></iconify-icon>
+</button>
+<button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-xl font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
+<iconify-icon icon="solar:play-circle-linear" width="20"></iconify-icon>
+                            Watch Free Demo Class
+                        </button>
+</div>
+
+<div className="mt-12 flex items-center justify-center gap-6 text-sm text-slate-400 font-medium">
+<div className="flex -space-x-3">
+<img alt="Student" className="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=1"/>
+<img alt="Student" className="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=5"/>
+<img alt="Student" className="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=8"/>
+<div className="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-xs text-slate-600">+2k</div>
+</div>
+<p>Students enrolled this month</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="border-y overflow-hidden bg-white/50 border-slate-100 pt-10 pb-10">
+<p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">Our Alumni Work At</p>
+<div className="relative w-full max-w-7xl mx-auto px-4">
+<div className="flex items-center justify-between gap-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+
+<h3 className="text-xl font-bold font-sans tracking-tighter text-slate-800">HubSpot</h3>
+<h3 className="text-xl font-bold font-sans tracking-tighter text-slate-800">Shopify</h3>
+<h3 className="text-xl font-bold font-sans tracking-tighter text-slate-800 italic">Zapier</h3>
+<h3 className="text-xl font-bold font-sans tracking-tighter text-slate-800">Google</h3>
+<h3 className="text-xl font-bold font-sans tracking-tighter text-slate-800">Meta</h3>
+<h3 className="text-xl font-bold font-sans tracking-tighter text-slate-800">Zoho</h3>
+<h3 className="text-xl font-bold font-sans tracking-tighter text-slate-800">Freshworks</h3>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-slate-50 relative" id="courses">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-4">Accelerate Your Career</h2>
+<p className="text-slate-500 max-w-xl">Comprehensive curriculums designed by industry experts to take you from beginner to pro.</p>
+</div>
+<a className="text-purple-600 font-semibold hover:text-purple-700 flex items-center gap-1" href="#">
+                        View All Programs <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+<div className="grid md:grid-cols-3 gap-8">
+
+<div className="group relative bg-white rounded-3xl p-2 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100">
+<div className="bg-indigo-50 rounded-2xl h-48 overflow-hidden relative">
+<div className="absolute inset-0 flex items-center justify-center text-indigo-200">
+<iconify-icon icon="solar:chart-2-bold-duotone" width="80"></iconify-icon>
+</div>
+<div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-indigo-600 shadow-sm">Bestseller</div>
+</div>
+<div className="p-6">
+<h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">Advanced Digital Marketing Master</h3>
+<p className="text-sm text-slate-500 mb-4 line-clamp-2">Master SEO, PPC, Social Media, and Analytics in a 6-month intensive bootcamp.</p>
+<ul className="space-y-2 mb-6">
+<li className="flex items-center gap-2 text-sm text-slate-600">
+<iconify-icon className="text-emerald-500" icon="solar:check-circle-linear"></iconify-icon> 50+ Modules
+                                </li>
+<li className="flex items-center gap-2 text-sm text-slate-600">
+<iconify-icon className="text-emerald-500" icon="solar:check-circle-linear"></iconify-icon> Guaranteed Internship
+                                </li>
+</ul>
+<button className="w-full py-3 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all flex justify-between px-4 items-center group/btn">
+                                View Details
+                                <iconify-icon className="group-hover/btn:rotate-45 transition-transform" icon="solar:arrow-right-up-linear"></iconify-icon>
+</button>
+</div>
+</div>
+
+<div className="group relative bg-white rounded-3xl p-2 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100">
+<div className="bg-purple-50 rounded-2xl h-48 overflow-hidden relative">
+<div className="absolute inset-0 flex items-center justify-center text-purple-200">
+<iconify-icon icon="solar:rocket-2-bold-duotone" width="80"></iconify-icon>
+</div>
+</div>
+<div className="p-6">
+<h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-600 transition-colors">Executive Program in Growth Hacking</h3>
+<p className="text-sm text-slate-500 mb-4 line-clamp-2">Designed for entrepreneurs and marketing managers focusing on rapid scaling.</p>
+<ul className="space-y-2 mb-6">
+<li className="flex items-center gap-2 text-sm text-slate-600">
+<iconify-icon className="text-emerald-500" icon="solar:check-circle-linear"></iconify-icon> Live Business Projects
+                                </li>
+<li className="flex items-center gap-2 text-sm text-slate-600">
+<iconify-icon className="text-emerald-500" icon="solar:check-circle-linear"></iconify-icon> AI Tools Integration
+                                </li>
+</ul>
+<button className="w-full py-3 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all flex justify-between px-4 items-center group/btn">
+                                View Details
+                                <iconify-icon className="group-hover/btn:rotate-45 transition-transform" icon="solar:arrow-right-up-linear"></iconify-icon>
+</button>
+</div>
+</div>
+
+<div className="group relative bg-white rounded-3xl p-2 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100">
+<div className="bg-pink-50 rounded-2xl h-48 overflow-hidden relative">
+<div className="absolute inset-0 flex items-center justify-center text-pink-200">
+<iconify-icon icon="solar:laptop-bold-duotone" width="80"></iconify-icon>
+</div>
+</div>
+<div className="p-6">
+<h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-pink-600 transition-colors">Data Analytics &amp; Business Mindset</h3>
+<p className="text-sm text-slate-500 mb-4 line-clamp-2">Learn to read the data behind the marketing and make data-driven decisions.</p>
+<ul className="space-y-2 mb-6">
+<li className="flex items-center gap-2 text-sm text-slate-600">
+<iconify-icon className="text-emerald-500" icon="solar:check-circle-linear"></iconify-icon> Google &amp; Meta Analytics
+                                </li>
+<li className="flex items-center gap-2 text-sm text-slate-600">
+<iconify-icon className="text-emerald-500" icon="solar:check-circle-linear"></iconify-icon> Strategy Workshops
+                                </li>
+</ul>
+<button className="w-full py-3 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all flex justify-between px-4 items-center group/btn">
+                                View Details
+                                <iconify-icon className="group-hover/btn:rotate-45 transition-transform" icon="solar:arrow-right-up-linear"></iconify-icon>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-white relative overflow-hidden">
+<div className="absolute inset-0 bg-gradient-to-b from-slate-50 to-white -z-10"></div>
+<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center mb-12">
+<h2 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight mb-4">Invest in Your Future</h2>
+<p className="text-slate-500">Flexible payment plans and zero-cost EMI options available.</p>
+</div>
+<div className="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+
+<div className="w-full md:w-1/3 bg-slate-50 border-r border-slate-100 p-6 flex flex-col gap-2">
+<label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 px-2">Select Program</label>
+<button className="text-left px-4 py-4 rounded-xl transition-all duration-200 bg-white shadow-md border-l-4 border-indigo-500 text-slate-900 font-semibold" id="btn-master" onclick="switchPricing('master')">
+<div className="text-sm text-slate-500 font-normal mb-1">Most Popular</div>
+                            Master Program
+                        </button>
+<button className="text-left px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white hover:shadow-sm text-slate-600 border-l-4 border-transparent hover:border-slate-200 font-medium" id="btn-executive" onclick="switchPricing('executive')">
+<div className="text-sm text-slate-400 font-normal mb-1">For Professionals</div>
+                            Executive Program
+                        </button>
+<button className="text-left px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white hover:shadow-sm text-slate-600 border-l-4 border-transparent hover:border-slate-200 font-medium" id="btn-growth" onclick="switchPricing('growth')">
+<div className="text-sm text-slate-400 font-normal mb-1">Short Term</div>
+                            Growth Hack Bundle
+                        </button>
+</div>
+
+<div className="w-full md:w-2/3 p-8 md:p-12 flex flex-col justify-between relative">
+<div className="transition-opacity duration-300" id="pricing-content">
+
+<div className="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold mb-6">No Cost EMI Available</div>
+<h3 className="text-3xl font-bold text-slate-900 mb-2">Master in Digital Marketing</h3>
+<p className="text-slate-500 mb-8">7 Month Comprehensive Program with Job Guarantee</p>
+<div className="grid grid-cols-2 gap-8 mb-8">
+<div>
+<div className="text-sm text-slate-500 mb-1">Monthly EMI starting at</div>
+<div className="text-4xl font-bold text-slate-900 tracking-tight">₹4,824<span className="text-lg font-normal text-slate-400">/mo</span></div>
+</div>
+<div>
+<div className="text-sm text-slate-500 mb-1">Total Duration</div>
+<div className="text-2xl font-bold text-slate-900">7 Months</div>
+<div className="text-xs text-slate-400">Live + Recorded Sessions</div>
+</div>
+</div>
+<div className="flex flex-col gap-4">
+<div className="flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all">
+<span className="text-xs font-bold text-slate-400">Financing Partners:</span>
+<div className="font-bold text-slate-700">Bajaj Finserv</div>
+<div className="font-bold text-slate-700">PayU</div>
+</div>
+</div>
+</div>
+<div className="mt-8 flex gap-4 border-t border-slate-100 pt-8">
+<button className="flex-1 bg-emerald-500 text-white font-semibold py-4 rounded-xl shadow-lg shadow-emerald-200 hover:bg-emerald-600 hover:shadow-emerald-300 transition-all flex justify-center items-center gap-2">
+                                Apply Now
+                                <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</button>
+<button className="px-6 py-4 rounded-xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition-all">
+                                View EMI Plans
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-16 bg-slate-50">
+<div className="max-w-3xl mx-auto px-4">
+<div className="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 md:p-10 shadow-2xl overflow-hidden flex flex-col md:flex-row items-center gap-8">
+
+<div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+<div className="relative z-10 flex-1">
+<div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-bold tracking-wider uppercase mb-3">
+<iconify-icon icon="solar:document-add-linear"></iconify-icon> Free Resource
+                        </div>
+<h3 className="text-2xl font-bold text-white mb-2">ChatGPT Prompt Guide for Marketers</h3>
+<p className="text-slate-300 text-sm leading-relaxed">Boost your marketing productivity by 10x using our curated list of 100+ advanced prompts for SEO, Content, and Strategy.</p>
+</div>
+<div className="relative z-10 w-full md:w-auto min-w-[200px]">
+<button className="w-full bg-white text-slate-900 font-bold py-3 px-6 rounded-lg hover:bg-emerald-50 transition-colors shadow-lg flex items-center justify-center gap-2">
+<iconify-icon icon="solar:download-linear" width="20"></iconify-icon>
+                            Download Guide
+                        </button>
+<p className="text-[10px] text-slate-400 text-center mt-3">Instant PDF Download. No spam.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-white">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center mb-16">
+<h2 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight mb-4">Learn From The Best</h2>
+<p className="text-slate-500">Mentors with experience from Top Fortune 500 companies.</p>
+</div>
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+
+<div className="group">
+<div className="relative mb-4 overflow-hidden rounded-2xl">
+<img alt="Mentor" className="w-full aspect-[4/5] object-cover transition-transform duration-500 group-hover:scale-105" src="https://i.pravatar.cc/400?img=11"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<button className="text-white text-sm font-semibold flex items-center gap-2">
+                                    View Profile <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</button>
+</div>
+</div>
+<h3 className="text-lg font-bold text-slate-900">Sarah Johnson</h3>
+<p className="text-sm text-purple-600 font-medium">Ex-Google Ads Lead</p>
+</div>
+
+<div className="group">
+<div className="relative mb-4 overflow-hidden rounded-2xl">
+<img alt="Mentor" className="w-full aspect-[4/5] object-cover transition-transform duration-500 group-hover:scale-105" src="https://i.pravatar.cc/400?img=13"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<button className="text-white text-sm font-semibold flex items-center gap-2">
+                                    View Profile <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</button>
+</div>
+</div>
+<h3 className="text-lg font-bold text-slate-900">David Chen</h3>
+<p className="text-sm text-purple-600 font-medium">Head of SEO, Shopify</p>
+</div>
+
+<div className="group">
+<div className="relative mb-4 overflow-hidden rounded-2xl">
+<img alt="Mentor" className="w-full aspect-[4/5] object-cover transition-transform duration-500 group-hover:scale-105" src="https://i.pravatar.cc/400?img=20"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<button className="text-white text-sm font-semibold flex items-center gap-2">
+                                    View Profile <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</button>
+</div>
+</div>
+<h3 className="text-lg font-bold text-slate-900">Anita Roy</h3>
+<p className="text-sm text-purple-600 font-medium">Content Strategist, Zomato</p>
+</div>
+
+<div className="group">
+<div className="relative mb-4 overflow-hidden rounded-2xl">
+<img alt="Mentor" className="w-full aspect-[4/5] object-cover transition-transform duration-500 group-hover:scale-105" src="https://i.pravatar.cc/400?img=33"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<button className="text-white text-sm font-semibold flex items-center gap-2">
+                                    View Profile <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</button>
+</div>
+</div>
+<h3 className="text-lg font-bold text-slate-900">Marcus Wright</h3>
+<p className="text-sm text-purple-600 font-medium">CMO, TechStartup</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-slate-900 relative overflow-hidden" id="demo">
+
+<div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20"></div>
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<div className="grid lg:grid-cols-2 gap-16 items-center">
+<div>
+<h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">Kickstart Your Digital Journey Today</h2>
+<ul className="space-y-6 mb-8">
+<li className="flex items-start gap-4">
+<div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-emerald-400 shrink-0">
+<iconify-icon icon="solar:videocamera-record-bold-duotone" width="24"></iconify-icon>
+</div>
+<div>
+<h4 className="text-white font-bold text-lg">Free Live Demo Class</h4>
+<p className="text-slate-400 text-sm">Experience our teaching methodology before you pay a single rupee.</p>
+</div>
+</li>
+<li className="flex items-start gap-4">
+<div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-purple-400 shrink-0">
+<iconify-icon icon="solar:user-speak-bold-duotone" width="24"></iconify-icon>
+</div>
+<div>
+<h4 className="text-white font-bold text-lg">1:1 Career Counselling</h4>
+<p className="text-slate-400 text-sm">Get a personalized roadmap from our academic counselors.</p>
+</div>
+</li>
+</ul>
+</div>
+
+<div className="bg-white rounded-2xl p-8 shadow-2xl">
+<div className="flex items-center justify-between mb-8">
+<h3 className="text-2xl font-bold text-slate-900">Book Your Free Spot</h3>
+<div className="flex gap-1">
+<div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+<div className="w-2 h-2 rounded-full bg-slate-200"></div>
+</div>
+</div>
+<form className="space-y-5">
+<div className="relative">
+<input className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all placeholder:text-slate-400 text-sm" placeholder="Full Name" type="text"/>
+</div>
+<div className="relative">
+<input className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all placeholder:text-slate-400 text-sm" placeholder="Email Address" type="email"/>
+</div>
+<div className="grid grid-cols-3 gap-3">
+<select className="col-span-1 px-2 py-3 rounded-lg bg-slate-50 border border-slate-200 text-sm outline-none">
+<option>+91</option>
+<option>+1</option>
+</select>
+<input className="col-span-2 px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all placeholder:text-slate-400 text-sm" placeholder="Phone Number" type="tel"/>
+</div>
+<button className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 transition-all text-lg flex items-center justify-center gap-2 mt-4" type="button">
+                                Next Step
+                                <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</button>
+<p className="text-[10px] text-slate-400 text-center">By continuing, you agree to our Terms &amp; Privacy Policy.</p>
+</form>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer className="bg-slate-50 border-t border-slate-200 pt-16 pb-8">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div className="col-span-1 md:col-span-1">
+<div className="flex items-center gap-2 mb-4">
+<div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white">
+<iconify-icon icon="solar:atom-bold-duotone" width="20"></iconify-icon>
+</div>
+<span className="text-xl font-bold text-slate-900">ADM Education</span>
+</div>
+<p className="text-sm text-slate-500 mb-6">Empowering the next generation of digital leaders through premium education.</p>
+<div className="flex gap-4">
+<a className="text-slate-400 hover:text-slate-900 transition-colors" href="#"><iconify-icon icon="solar:brand-instagram-bold" width="24"></iconify-icon></a>
+<a className="text-slate-400 hover:text-slate-900 transition-colors" href="#"><iconify-icon icon="solar:brand-linkedin-bold" width="24"></iconify-icon></a>
+<a className="text-slate-400 hover:text-slate-900 transition-colors" href="#"><iconify-icon icon="solar:brand-youtube-bold" width="24"></iconify-icon></a>
+</div>
+</div>
+<div>
+<h4 className="font-bold text-slate-900 mb-4">Programs</h4>
+<ul className="space-y-2 text-sm text-slate-500">
+<li><a className="hover:text-purple-600" href="#">Master in Digital Marketing</a></li>
+<li><a className="hover:text-purple-600" href="#">Executive Growth Hacking</a></li>
+</ul>
+</div>
+<div>
+<h4 className="font-bold text-slate-900 mb-4">Company</h4>
+<ul className="space-y-2 text-sm text-slate-500">
+<li><a className="hover:text-purple-600" href="#">About Us</a></li>
+<li><a className="hover:text-purple-600" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 className="font-bold text-slate-900 mb-4">Contact</h4>
+<ul className="space-y-2 text-sm text-slate-500">
+<li className="flex items-center gap-2"><iconify-icon icon="solar:phone-calling-linear"></iconify-icon> +91 98765 43210</li>
+<li className="flex items-center gap-2"><iconify-icon icon="solar:letter-linear"></iconify-icon> admissions@adm.edu</li>
+</ul>
+</div>
+</div>
+<div className="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400">
+<p>© 2026 ADM Education. All rights reserved.</p>
+<div className="flex gap-4 mt-2 md:mt-0">
+<a className="hover:text-slate-600" href="#">Privacy Policy</a>
+<a className="hover:text-slate-600" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+
+
+<div className="fixed inset-0 z-[60] flex items-center justify-center transition-opacity duration-500" id="ebook-popup">
+<div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closePopup('ebook-popup')"></div>
+<div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl m-4 overflow-hidden relative transform transition-transform duration-300" id="ebook-content">
+<button className="absolute top-4 right-4 z-10 p-2 bg-white/50 rounded-full hover:bg-slate-100" onclick="closePopup('ebook-popup')"><iconify-icon icon="solar:close-circle-linear" width="24"></iconify-icon></button>
+<div className="grid md:grid-cols-2">
+<div className="bg-slate-100 p-8 flex items-center justify-center relative overflow-hidden">
+<div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10"></div>
+
+<div className="w-48 h-64 bg-white shadow-xl rounded-r-lg border-l-4 border-l-slate-800 flex flex-col items-center justify-center p-4 text-center z-10 rotate-3 transform hover:rotate-0 transition-all">
+<div className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Guide</div>
+<h4 className="font-bold text-slate-900 leading-tight">Kickstarting Your Digital Career</h4>
+</div>
+</div>
+<div className="p-8 md:p-12">
+<div className="inline-block px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded mb-4">FREE DOWNLOAD</div>
+<h3 className="text-2xl font-bold text-slate-900 mb-2">Wait! Don't leave empty handed.</h3>
+<p className="text-slate-500 mb-6 text-sm">Get our ultimate guide to landing your first job in digital marketing. Includes salary insights &amp; resume templates.</p>
+<form className="space-y-3" onsubmit="event.preventDefault(); closePopup('ebook-popup');">
+<input className="w-full px-4 py-3 rounded-lg border border-slate-200 text-sm focus:border-purple-500 outline-none" placeholder="Enter your email" type="email"/>
+<button className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors">Send me the Guide</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<div className="fixed bottom-4 right-4 z-50 max-w-sm w-full transform translate-y-full opacity-0 transition-all duration-500" id="community-popup">
+<div className="bg-white rounded-2xl shadow-2xl border border-slate-100 p-1 relative overflow-hidden">
+<button className="absolute top-2 right-2 text-slate-400 hover:text-slate-800 z-10" onclick="closePopup('community-popup')"><iconify-icon icon="solar:close-circle-linear"></iconify-icon></button>
+<div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-6 text-white text-center">
+<div className="w-12 h-12 mx-auto bg-white rounded-full flex items-center justify-center text-purple-600 mb-3 shadow-lg">
+<iconify-icon icon="solar:users-group-rounded-bold-duotone" width="24"></iconify-icon>
+</div>
+<h4 className="font-bold text-lg mb-1">Join 300K+ Learners</h4>
+<p className="text-indigo-100 text-xs mb-4">Network with the best minds in the industry.</p>
+<button className="w-full py-2 bg-white text-indigo-600 font-bold rounded-lg text-sm hover:bg-indigo-50 transition-colors">Join Community Free</button>
+</div>
+</div>
+</div>
+
+
+
+    </>
+  );
+}

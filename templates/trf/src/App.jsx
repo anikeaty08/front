@@ -1,0 +1,551 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+      // GLOBAL ANIMATIONS & COMPONENT SCRIPTS
+      document.addEventListener("DOMContentLoaded", (event) => {
+          // 1. Friction Point Section Intersection Observer
+          const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                      entry.target.classList.add('reveal-active');
+                  }
+              });
+          }, { threshold: 0.1 });
+
+          document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
+
+          // 2. Ensure GSAP is loaded before running
+          if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+              gsap.registerPlugin(ScrollTrigger);
+
+              // 3. Vertical Text Clip Slide Down (Works on any element with .gsap-hero-title)
+              const heroTitles = document.querySelectorAll('.gsap-hero-title, #hero-title');
+              heroTitles.forEach(heroTitle => {
+                  const text = heroTitle.textContent.trim();
+                  heroTitle.innerHTML = '';
+
+                  const words = text.split(/\s+/);
+
+                  words.forEach((word, index) => {
+                      const wordSpan = document.createElement('span');
+                      wordSpan.className = 'inline-block whitespace-nowrap';
+
+                      word.split('').forEach(char => {
+                          const outerSpan = document.createElement('span');
+                          outerSpan.className = 'inline-block overflow-hidden align-bottom pb-1 -mb-1';
+                          const innerSpan = document.createElement('span');
+                          innerSpan.className = 'inline-block translate-y-[120%] hero-char';
+                          innerSpan.textContent = char;
+                          outerSpan.appendChild(innerSpan);
+                          wordSpan.appendChild(outerSpan);
+                      });
+
+                      heroTitle.appendChild(wordSpan);
+                      if (index < words.length - 1) heroTitle.appendChild(document.createTextNode(' '));
+                  });
+              });
+
+              if (document.querySelector('.hero-char')) {
+                  gsap.to('.hero-char', {
+                      y: '0%',
+                      stagger: 0.02,
+                      duration: 0.8,
+                      ease: 'power3.out',
+                      delay: 0.1
+                  });
+              }
+
+              // 4. Parallax Scrolling for Images (Works on any element with .parallax-bg)
+              gsap.utils.toArray('.parallax-bg').forEach(bg => {
+                  gsap.to(bg, {
+                      yPercent: 15,
+                      ease: "none",
+                      scrollTrigger: {
+                          trigger: bg.parentElement,
+                          start: "top bottom",
+                          end: "bottom top",
+                          scrub: true
+                      }
+                  });
+              });
+
+              // 5. Simple fade-up reveals for elements (Works on any element with .reveal-up)
+              gsap.utils.toArray('.reveal-up').forEach(elem => {
+                  gsap.from(elem, {
+                      scrollTrigger: {
+                          trigger: elem,
+                          start: "top 85%",
+                      },
+                      y: 30,
+                      opacity: 0,
+                      duration: 0.8,
+                      ease: "power3.out"
+                  });
+              });
+          }
+      });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 pointer-events-none z-0 flex justify-center w-full max-w-7xl mx-auto border-x border-slate-200/50">
+<div className="w-full h-full grid-lines"></div>
+</div>
+
+<div className="sticky top-0 z-50 w-full bg-[#FCFBF9]/80 backdrop-blur-md border-b border-slate-200/50">
+<div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav className="flex lg:py-5 pt-4 pb-4 items-center justify-between">
+<a className="flex items-center gap-3" href="/">
+<svg className="w-6 h-6 text-[#B6904E]" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2L22 20H2L12 2Z"></path>
+</svg>
+<span className="text-lg font-medium tracking-tight text-slate-900 hidden sm:block">
+              The Revival Fellowship
+            </span>
+</a>
+<div className="hidden lg:flex items-center gap-8 text-sm font-normal text-slate-500">
+<a className="hover:text-slate-900 transition-colors" href="/">
+              I'm New
+            </a>
+<a className="text-slate-900 transition-colors" href="/">Our Story</a>
+<a className="hover:text-slate-900 transition-colors" href="/">
+              Beliefs
+            </a>
+<a className="hover:text-slate-900 transition-colors" href="/">
+              Find a Fellowship
+            </a>
+</div>
+<div className="hidden md:flex items-center gap-6">
+<a className="bg-slate-900 text-white px-5 py-2.5 rounded-full text-xs font-medium hover:bg-slate-800 transition-colors" href="#contact">
+              Get in Touch
+            </a>
+</div>
+<button className="lg:hidden flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-medium hover:bg-slate-800 transition-colors">
+            Menu
+            <iconify-icon className="text-base" icon="solar:hamburger-menu-linear"></iconify-icon>
+</button>
+</nav>
+</div>
+</div>
+<main className="relative z-10 w-full">
+
+<section className="relative pt-32 lg:pt-48 pb-24 flex flex-col items-center justify-center min-h-[75vh] text-center overflow-hidden border-b border-slate-200/50">
+
+<div className="absolute inset-0 z-0 bg-[#FCFBF9]">
+
+<img alt="Community gathering" className="w-full h-full object-cover opacity-[0.12] mix-blend-multiply parallax-bg saturate-0" src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&amp;w=2070&amp;auto=format&amp;fit=crop"/>
+<div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FCFBF9]/80 to-[#FCFBF9]"></div>
+</div>
+<div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6">
+<div className="inline-flex reveal-up xl:bg-clip-text xl:text-transparent text-xs font-medium bg-gradient-to-br from-white/10 to-white/0 rounded-full mb-8 px-3 py-1.5 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(168, 162, 158, 1), rgba(87, 83, 78, 1))', -BorderRadiusBefore: '9999px'}}>
+<iconify-icon className="text-sm" icon="solar:book-linear"></iconify-icon>
+            Who We Are
+          </div>
+<h1 className="sm:text-6xl lg:text-7xl leading-[1.05] gsap-hero-title text-5xl font-normal text-slate-900 tracking-tight mb-8" id="hero-title"><span className="inline-block whitespace-nowrap"><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">A</span></span></span> <span className="inline-block whitespace-nowrap"><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">L</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">i</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">v</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">i</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">n</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">g</span></span></span> <span className="inline-block whitespace-nowrap"><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">F</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">a</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">i</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">t</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">h</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">.</span></span></span> <span className="inline-block whitespace-nowrap"><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">A</span></span></span> <span className="inline-block whitespace-nowrap"><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">G</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">r</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">o</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">w</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">i</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">n</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">g</span></span></span> <span className="inline-block whitespace-nowrap"><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">F</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">e</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">l</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">l</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">o</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">w</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">s</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">h</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">i</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">p</span></span><span className="inline-block overflow-hidden align-bottom pb-1 -mb-1"><span className="inline-block translate-y-[120%] hero-char">.</span></span></span></h1>
+<p className="text-lg text-slate-600 font-light leading-relaxed max-w-2xl mx-auto reveal-up">
+            The Revival Fellowship UK &amp; Ireland is part of a worldwide
+            Christian fellowship of churches committed to Bible-based teaching,
+            genuine community, and a personal experience of faith.
+          </p>
+<div className="mt-10 reveal-up">
+<a className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/10" href="#locations">
+              Find a Fellowship Near You
+              <iconify-icon className="text-lg" icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-24 lg:py-32 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
+<div className="lg:col-span-5 reveal-up sticky top-32">
+<span className="text-xs font-medium text-[#B6904E] tracking-widest uppercase flex items-center gap-2 mb-4">
+<span className="w-1.5 h-1.5 rounded-full bg-[#B6904E]"></span>
+              Our Story
+            </span>
+<h2 className="text-4xl lg:text-5xl tracking-tight font-normal text-slate-900 mb-6">
+              Rooted in the UK.
+            </h2>
+</div>
+<div className="lg:col-span-7 space-y-8 reveal-up">
+<p className="text-xl text-slate-900 font-light leading-relaxed">
+              The Revival Fellowship has been active in the UK for decades,
+              quietly building communities where everyday people can discover
+              the extraordinary power of God together.
+            </p>
+<div className="space-y-6 text-base text-slate-600 font-light leading-relaxed">
+<p>
+                We believe that faith isn't meant to be complicated or strictly
+                institutional. While each of our local fellowships operates
+                independently to best serve its specific area, we remain deeply
+                united in our core beliefs and shared purpose.
+              </p>
+<p>
+                We place a strong emphasis on genuine community, practical
+                faith, and real-life transformation. When you visit any of our
+                meetings, you won't find heavy religious rituals or
+                exaggeration. Instead, you'll find a grounded, human approach to
+                exploring what the Bible means for our lives today.
+              </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 lg:py-32 bg-white border-y border-slate-200/60">
+<div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center max-w-3xl mx-auto mb-16 reveal-up">
+<iconify-icon className="text-4xl text-[#B6904E] mb-6" icon="solar:earth-linear"></iconify-icon>
+<h2 className="text-3xl lg:text-4xl tracking-tight font-normal text-slate-900 mb-6">
+              Part of a Worldwide Fellowship
+            </h2>
+<p className="text-base text-slate-600 font-light leading-relaxed">
+              What began in Australia has steadily grown to span multiple
+              continents. The UK &amp; Ireland fellowships are part of this
+              wider global body, sharing a profound unity in doctrine, spirit,
+              and purpose. No matter where you travel in the world, the
+              fellowship feels like home.
+            </p>
+</div>
+
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 reveal-up">
+<div className="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100/80">
+<div className="w-2 h-2 rounded-full bg-[#B6904E]"></div>
+<span className="text-sm font-medium text-slate-900">
+                UK &amp; Ireland
+              </span>
+</div>
+<div className="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100/80">
+<div className="w-2 h-2 rounded-full bg-slate-300"></div>
+<span className="text-sm font-medium text-slate-900">Australia</span>
+</div>
+<div className="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100/80">
+<div className="w-2 h-2 rounded-full bg-slate-300"></div>
+<span className="text-sm font-medium text-slate-900">Europe</span>
+</div>
+<div className="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100/80">
+<div className="w-2 h-2 rounded-full bg-slate-300"></div>
+<span className="text-sm font-medium text-slate-900">
+                North America
+              </span>
+</div>
+<div className="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100/80">
+<div className="w-2 h-2 rounded-full bg-slate-300"></div>
+<span className="text-sm font-medium text-slate-900">
+                Africa &amp; Asia
+              </span>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 lg:py-32 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="mb-16 reveal-up">
+<h2 className="text-3xl lg:text-4xl tracking-tight font-normal text-slate-900">
+            What Makes Us Distinct
+          </h2>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal-up">
+
+<div className="bg-white p-8 rounded-[2rem] border border-slate-200/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex flex-col h-full hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.06)] transition-shadow">
+<div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 mb-6 text-[#B6904E]">
+<iconify-icon className="text-xl" icon="solar:book-bookmark-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-medium tracking-tight text-slate-900 mb-3">
+              Bible-Centred Teaching
+            </h3>
+<p className="text-sm font-light text-slate-600 leading-relaxed mt-auto">
+              We skip the heavy theological wording and traditions. Instead, we
+              focus on clear, straightforward teaching directly from the
+              scriptures that anyone can understand.
+            </p>
+</div>
+
+<div className="bg-white p-8 rounded-[2rem] border border-slate-200/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex flex-col h-full hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.06)] transition-shadow">
+<div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 mb-6 text-[#B6904E]">
+<iconify-icon className="text-xl" icon="solar:running-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-medium tracking-tight text-slate-900 mb-3">
+              Active Faith
+            </h3>
+<p className="text-sm font-light text-slate-600 leading-relaxed mt-auto">
+              We believe faith isn't just a Sunday morning activity. It's a
+              dynamic, everyday experience that shapes how we live, work, and
+              treat others throughout the week.
+            </p>
+</div>
+
+<div className="bg-white p-8 rounded-[2rem] border border-slate-200/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex flex-col h-full hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.06)] transition-shadow">
+<div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 mb-6 text-[#B6904E]">
+<iconify-icon className="text-xl" icon="solar:users-group-two-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-medium tracking-tight text-slate-900 mb-3">
+              Community &amp; Support
+            </h3>
+<p className="text-sm font-light text-slate-600 leading-relaxed mt-auto">
+              We are a family. We support one another through life's ups and
+              downs with genuine care, ensuring nobody has to walk through
+              difficult seasons alone.
+            </p>
+</div>
+
+<div className="bg-white p-8 rounded-[2rem] border border-slate-200/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.03)] flex flex-col h-full hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.06)] transition-shadow">
+<div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 mb-6 text-[#B6904E]">
+<iconify-icon className="text-xl" icon="solar:fire-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-medium tracking-tight text-slate-900 mb-3">
+              Personal Experience of the Spirit
+            </h3>
+<p className="text-sm font-light text-slate-600 leading-relaxed mt-auto">
+              We embrace the biblical promise of receiving the Holy Spirit. It's
+              not just historical—it brings transformative power and comfort to
+              our everyday lives.
+            </p>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-t border-slate-200/50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
+<div className="reveal-up order-2 md:order-1">
+<h2 className="text-3xl lg:text-4xl tracking-tight font-normal text-slate-900 mb-6">
+              Leadership &amp; Structure
+            </h2>
+<p className="text-base text-slate-600 font-light leading-relaxed mb-6">
+              Our local fellowships are led by dedicated pastors and ministry
+              teams who view their roles as service-focused, not hierarchical.
+            </p>
+<p className="text-base text-slate-600 font-light leading-relaxed">
+              Rather than operating in isolation, there is strong collaboration,
+              shared resources, and close fellowship between churches. This
+              ensures a steady, trustworthy environment where everyone is
+              supported to grow in their faith.
+            </p>
+</div>
+<div className="relative h-64 md:h-96 rounded-[2.5rem] bg-slate-100 overflow-hidden border border-slate-200/50 reveal-up order-1 md:order-2">
+<img alt="People discussing" className="absolute inset-0 w-full h-full object-cover parallax-bg scale-[1.15] opacity-90 saturate-50" src="https://images.unsplash.com/photo-1577805947697-89e18249d767?q=80&amp;w=2098&amp;auto=format&amp;fit=crop"/>
+<div className="absolute inset-0 bg-gradient-to-tr from-slate-900/20 to-transparent"></div>
+</div>
+</div>
+</section>
+
+<section className="md:px-12 md:py-32 text-stone-900 bg-[#EAE8E2] w-full pt-24 pr-6 pb-24 pl-6 relative overflow-hidden">
+
+<div className="absolute inset-0 w-full h-full pointer-events-none opacity-40" style={{backgroundImage: 'linear-gradient(#d1d1cf 1px, transparent 1px), linear-gradient(90deg, #d1d1cf 1px, transparent 1px)', backgroundSize: '100px 100px'}}>
+</div>
+<div className="z-10 w-full relative">
+
+<div className="mb-20 flex flex-col items-center text-center max-w-7xl mx-auto reveal-node">
+<span className="rounded-full border border-stone-300/60 bg-white/80 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-stone-500 font-sans backdrop-blur-sm mb-6">
+              The Friction Point
+            </span>
+<h2 className="max-w-3xl text-4xl font-light tracking-tight text-stone-900 md:text-6xl font-serif italic" style={{fontFamily: '\'DM Sans\', sans-serif'}}>
+              Is legacy architecture stifling your <span className="text-stone-400">cognitive potential?</span>
+</h2>
+</div>
+
+<div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+<div className="flex w-max animate-friction-cards gap-6 py-4">
+
+<div className="w-[380px] md:w-[420px] relative rounded-2xl border border-stone-200 bg-white/70 backdrop-blur-md p-10 shadow-sm transition-all hover:border-stone-400 hover:shadow-xl group">
+<div className="mb-10 flex h-12 w-12 items-center justify-center rounded-xl bg-stone-900 text-white transition-transform group-hover:scale-110">
+<iconify-icon className="text-2xl" icon="solar:globus-linear"></iconify-icon>
+</div>
+<p className="text-xl font-light leading-relaxed text-stone-800 mb-10 font-sans italic">
+                  "Reducing inference latency by <span className="font-normal text-black">40%</span> is no longer an option—it is
+                  a requirement for survival."
+                </p>
+<div className="flex items-center gap-4 pt-6 border-t border-stone-100">
+<div className="h-10 w-10 rounded-full bg-stone-200 overflow-hidden grayscale">
+<img alt="User" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&amp;h=100&amp;fit=crop"/>
+</div>
+<div>
+<p className="text-xs font-semibold uppercase tracking-widest text-stone-900">Elena Rodriguez</p>
+<p className="text-xs text-stone-500 font-normal">VP of Engineering</p>
+</div>
+</div>
+</div>
+<div className="w-[380px] md:w-[420px] relative rounded-2xl border border-stone-200 bg-white/70 backdrop-blur-md p-10 shadow-sm transition-all hover:border-stone-400 hover:shadow-xl group">
+<div className="mb-10 flex h-12 w-12 items-center justify-center rounded-xl bg-stone-900 text-white transition-transform group-hover:scale-110">
+<iconify-icon className="text-2xl" icon="solar:shield-warning-linear"></iconify-icon>
+</div>
+<p className="text-xl font-light leading-relaxed text-stone-800 mb-10 font-sans italic">
+                  "Compliance cycles are taking weeks. We need
+                  <span className="font-normal text-black">automated traceability</span> at the neural level."
+                </p>
+<div className="flex items-center gap-4 pt-6 border-t border-stone-100">
+<div className="h-10 w-10 rounded-full bg-stone-200 overflow-hidden grayscale">
+<img alt="User" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&amp;h=100&amp;fit=crop"/>
+</div>
+<div>
+<p className="text-xs font-semibold uppercase tracking-widest text-stone-900">Marcus Chen</p>
+<p className="text-xs text-stone-500 font-normal">Lead AI Architect</p>
+</div>
+</div>
+</div>
+<div className="w-[380px] md:w-[420px] relative rounded-2xl border border-stone-200 bg-white/70 backdrop-blur-md p-10 shadow-sm transition-all hover:border-stone-400 hover:shadow-xl group">
+<div className="mb-10 flex h-12 w-12 items-center justify-center rounded-xl bg-stone-900 text-white transition-transform group-hover:scale-110">
+<iconify-icon className="text-2xl" icon="solar:bolt-circle-linear"></iconify-icon>
+</div>
+<p className="text-xl font-light leading-relaxed text-stone-800 mb-10 font-sans italic">
+                  "Data silos have become the <span className="font-normal text-black">innovation tax</span> we can no longer
+                  afford to pay."
+                </p>
+<div className="flex items-center gap-4 pt-6 border-t border-stone-100">
+<div className="h-10 w-10 rounded-full bg-stone-200 overflow-hidden grayscale">
+<img alt="User" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&amp;h=100&amp;fit=crop"/>
+</div>
+<div>
+<p className="text-xs font-semibold uppercase tracking-widest text-stone-900">Sarah Lin</p>
+<p className="text-xs text-stone-500 font-normal">Infrastructure Lead</p>
+</div>
+</div>
+</div>
+
+<div aria-hidden="true" className="w-[380px] md:w-[420px] relative rounded-2xl border border-stone-200 bg-white/70 backdrop-blur-md p-10 shadow-sm group">
+<div className="mb-10 flex h-12 w-12 items-center justify-center rounded-xl bg-stone-900 text-white">
+<iconify-icon className="text-2xl" icon="solar:globus-linear"></iconify-icon>
+</div>
+<p className="text-xl font-light leading-relaxed text-stone-800 mb-10 font-sans italic">
+                  "Reducing inference latency by <span className="font-normal text-black">40%</span> is no longer an option."
+                </p>
+<div className="flex items-center gap-4 pt-6 border-t border-stone-100">
+<div className="h-10 w-10 rounded-full bg-stone-200 overflow-hidden grayscale">
+<img alt="User" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&amp;h=100&amp;fit=crop"/>
+</div>
+<div>
+<p className="text-xs font-semibold uppercase tracking-widest text-stone-900">Elena Rodriguez</p>
+</div>
+</div>
+</div>
+<div aria-hidden="true" className="w-[380px] md:w-[420px] relative rounded-2xl border border-stone-200 bg-white/70 backdrop-blur-md p-10 shadow-sm group">
+<div className="mb-10 flex h-12 w-12 items-center justify-center rounded-xl bg-stone-900 text-white">
+<iconify-icon className="text-2xl" icon="solar:shield-warning-linear"></iconify-icon>
+</div>
+<p className="text-xl font-light leading-relaxed text-stone-800 mb-10 font-sans italic">
+                  "Compliance cycles are taking weeks. We need <span className="font-normal text-black">automated traceability</span>."
+                </p>
+<div className="flex items-center gap-4 pt-6 border-t border-stone-100">
+<div className="h-10 w-10 rounded-full bg-stone-200 overflow-hidden grayscale">
+<img alt="User" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&amp;h=100&amp;fit=crop"/>
+</div>
+<div>
+<p className="text-xs font-semibold uppercase tracking-widest text-stone-900">Marcus Chen</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="mt-20 flex justify-center reveal-node" style={{transitionDelay: '200ms'}}>
+<div className="flex flex-wrap justify-center gap-x-8 gap-y-4 max-w-4xl opacity-40">
+<span className="text-xs font-semibold uppercase tracking-[0.3em] font-mono">Latency Bloat</span>
+<span className="text-stone-400">•</span>
+<span className="text-xs font-semibold uppercase tracking-[0.3em] font-mono">Compute Drift</span>
+<span className="text-stone-400">•</span>
+<span className="text-xs font-semibold uppercase tracking-[0.3em] font-mono">Model Fragility</span>
+<span className="text-stone-400">•</span>
+<span className="text-xs font-semibold uppercase tracking-[0.3em] font-mono">Legacy Debt</span>
+<span className="text-stone-400">•</span>
+<span className="text-xs font-semibold uppercase tracking-[0.3em] font-mono">API Throttling</span>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 lg:py-32 bg-slate-900 relative overflow-hidden mt-12">
+
+<div className="absolute inset-0 opacity-10">
+<div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px'}}></div>
+</div>
+<div className="relative z-10 max-w-3xl mx-auto px-4 text-center reveal-up">
+<h2 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight font-normal text-white mb-6">
+            More Than a Church Service.
+          </h2>
+<p className="text-lg text-slate-300 font-light leading-relaxed mb-10">
+            We invite you to explore, visit, or reach out. Whether you're deeply
+            familiar with the Bible or just starting to ask questions, there's a
+            place for you here.
+          </p>
+<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+<a className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-slate-900 text-sm font-medium hover:bg-slate-50 transition-colors inline-flex items-center justify-center gap-2" href="#locations">
+              Visit a Local Fellowship
+              <iconify-icon className="text-lg" icon="solar:map-point-linear"></iconify-icon>
+</a>
+<a className="w-full sm:w-auto px-8 py-4 rounded-full border border-slate-700 text-white text-sm font-medium hover:bg-slate-800 transition-colors inline-flex items-center justify-center" href="#stories">
+              Read Real Stories
+            </a>
+</div>
+</div>
+</section>
+</main>
+
+<footer className="py-12 border-t border-slate-200/60 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+<div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12">
+<div>
+<div className="flex items-center gap-2 mb-2">
+<svg className="w-5 h-5 text-[#B6904E]" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2L22 20H2L12 2Z"></path>
+</svg>
+<span className="text-base font-medium tracking-tight text-slate-900">
+              The Revival Fellowship UK &amp; Ireland
+            </span>
+</div>
+<p className="text-xs text-slate-500 font-light">
+            A worldwide, Spirit-filled Christian fellowship.
+          </p>
+</div>
+<div className="flex flex-wrap gap-x-8 gap-y-4 text-xs font-normal text-slate-500">
+<a className="hover:text-slate-900 transition-colors" href="/">Home</a>
+<a className="hover:text-slate-900 transition-colors" href="/">I'm New</a>
+<a className="hover:text-slate-900 transition-colors" href="/">
+            What We Believe
+          </a>
+<a className="hover:text-slate-900 transition-colors" href="/">
+            Find a Church
+          </a>
+<a className="hover:text-slate-900 transition-colors" href="#contact">
+            Contact
+          </a>
+<a className="hover:text-slate-900 transition-colors" href="#">
+            International Site
+          </a>
+</div>
+</div>
+<div className="flex flex-col sm:flex-row justify-between items-center text-xs font-light text-slate-400 pt-8 border-t border-slate-100">
+<p>
+          © 2026 The Revival Fellowship UK &amp; Ireland. All rights reserved.
+        </p>
+<div className="flex items-center gap-4 mt-4 sm:mt-0">
+<a className="hover:text-slate-900 transition-colors flex items-center gap-1.5" href="#">
+<iconify-icon className="text-base" icon="solar:video-library-linear"></iconify-icon>
+            Watch Testimonies
+          </a>
+</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

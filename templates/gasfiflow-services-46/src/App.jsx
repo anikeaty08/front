@@ -1,0 +1,961 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+(function() {
+// Store original methods to restore later
+const originalRequestAnimationFrame = window.requestAnimationFrame;
+const originalSetTimeout = window.setTimeout;
+const originalSetInterval = window.setInterval;
+const originalGetContext = HTMLCanvasElement.prototype.getContext;
+// Disable requestAnimationFrame during loading
+window.requestAnimationFrame = function(callback) {
+// Return a fake ID and don't execute the callback
+return -1;
+};
+// Disable setTimeout for short intervals (likely animations)
+window.setTimeout = function(callback, delay) {
+// Only disable short timeouts that are likely animations
+if (delay < 100) {
+return -1;
+}
+return originalSetTimeout.apply(this, arguments);
+};
+// Disable setInterval (likely animations)
+window.setInterval = function(callback, delay) {
+// Disable all intervals during loading
+return -1;
+};
+// Disable canvas rendering
+HTMLCanvasElement.prototype.getContext = function(contextType, contextAttributes) {
+const context = originalGetContext.call(this, contextType, contextAttributes);
+if (!context) return context;
+// For 2D context, override drawing methods
+if (contextType === '2d') {
+const originalMethods = {};
+const drawingMethods = [
+'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText',
+'drawImage', 'putImageData', 'fill', 'stroke', 'arc', 'arcTo',
+'beginPath', 'closePath', 'lineTo', 'moveTo', 'quadraticCurveTo',
+'bezierCurveTo', 'rect', 'ellipse'
+];
+drawingMethods.forEach(method => {
+if (typeof context[method] === 'function') {
+originalMethods[method] = context[method];
+context[method] = function() {
+// Do nothing - disable drawing during loading
+return this;
+};
+}
+});
+// Store original methods for potential restoration
+context._originalMethods = originalMethods;
+}
+// For WebGL context, override key methods
+else if (contextType === 'webgl' || contextType === 'webgl2' || contextType === 'experimental-webgl') {
+const originalMethods = {};
+const webglMethods = [
+'clear', 'drawArrays', 'drawElements', 'useProgram', 'bindBuffer',
+'bindTexture', 'bindFramebuffer', 'viewport', 'enable', 'disable'
+];
+webglMethods.forEach(method => {
+if (typeof context[method] === 'function') {
+originalMethods[method] = context[method];
+context[method] = function() {
+// Do nothing - disable WebGL operations during loading
+return this;
+};
+}
+});
+// Store original methods for potential restoration
+context._originalMethods = originalMethods;
+}
+return context;
+};
+// Disable Three.js specific functionality
+const disableThreeJS = function() {
+// Wait for Three.js to potentially load
+setTimeout(() => {
+if (typeof THREE !== 'undefined') {
+// Override Three.js WebGLRenderer render method
+if (THREE.WebGLRenderer) {
+const originalRender = THREE.WebGLRenderer.prototype.render;
+THREE.WebGLRenderer.prototype.render = function() {
+// Do nothing - disable rendering during loading
+return this;
+};
+THREE.WebGLRenderer.prototype._originalRender = originalRender;
+}
+// Override Animation Mixer
+if (THREE.AnimationMixer) {
+const originalUpdate = THREE.AnimationMixer.prototype.update;
+THREE.AnimationMixer.prototype.update = function() {
+// Do nothing - disable animations during loading
+return this;
+};
+THREE.AnimationMixer.prototype._originalUpdate = originalUpdate;
+}
+}
+}, 100);
+};
+// Apply Three.js disabling
+disableThreeJS();
+// Disable Spline functionality during loading
+const disableSpline = function() {
+// Hide any existing spline viewers immediately
+const hideSplineElements = () => {
+const splineSelectors = [
+'spline-viewer',
+'[data-spline]',
+'iframe[src*="spline.design"]',
+'iframe[src*="my.spline.design"]',
+'embed[src*="spline.design"]',
+'embed[src*="my.spline.design"]',
+'object[data*="spline.design"]',
+'object[data*="my.spline.design"]'
+];
+splineSelectors.forEach(selector => {
+const elements = document.querySelectorAll(selector);
+elements.forEach(el => {
+el.style.display = 'none';
+el.style.visibility = 'hidden';
+});
+});
+};
+// Hide existing elements immediately
+hideSplineElements();
+// Monitor for new spline elements being added
+const observer = new MutationObserver(hideSplineElements);
+// Ensure document.body is available before observing
+if (document.body instanceof Node) {
+observer.observe(document.body, {
+childList: true,
+subtree: true,
+attributes: true,
+attributeFilter: ['src', 'data']
+});
+}
+// Disable Spline runtime if it exists
+if (typeof window.Spline !== 'undefined') {
+const originalSpline = window.Spline;
+window.Spline = function() {
+// Do nothing - disable Spline initialization during loading
+return {
+load: () => Promise.resolve(),
+setSize: () => {},
+dispose: () => {},
+play: () => {},
+pause: () => {},
+stop: () => {}
+};
+};
+window.Spline._originalSpline = originalSpline;
+}
+// Prevent new Spline instances from being created
+Object.defineProperty(window, 'Spline', {
+set: function(value) {
+// Store original but don't activate during loading
+window._SplineOriginal = value;
+},
+get: function() {
+// Return dummy implementation during loading
+return function() {
+return {
+load: () => Promise.resolve(),
+setSize: () => {},
+dispose: () => {},
+play: () => {},
+pause: () => {},
+stop: () => {}
+};
+};
+},
+configurable: true
+});
+};
+// Apply Spline disabling
+disableSpline();
+// Store restoration function globally (though we don't restore in this loading context)
+window._restoreCanvasAndAnimations = function() {
+window.requestAnimationFrame = originalRequestAnimationFrame;
+window.setTimeout = originalSetTimeout;
+window.setInterval = originalSetInterval;
+HTMLCanvasElement.prototype.getContext = originalGetContext;
+// Restore Three.js if available
+if (typeof THREE !== 'undefined') {
+if (THREE.WebGLRenderer && THREE.WebGLRenderer.prototype._originalRender) {
+THREE.WebGLRenderer.prototype.render = THREE.WebGLRenderer.prototype._originalRender;
+}
+if (THREE.AnimationMixer && THREE.AnimationMixer.prototype._originalUpdate) {
+THREE.AnimationMixer.prototype.update = THREE.AnimationMixer.prototype._originalUpdate;
+}
+}
+// Restore Spline if available
+if (window._SplineOriginal) {
+window.Spline = window._SplineOriginal;
+} else if (window.Spline && window.Spline._originalSpline) {
+window.Spline = window.Spline._originalSpline;
+}
+// Restore visibility of Spline elements
+const splineSelectors = [
+'spline-viewer',
+'[data-spline]',
+'iframe[src*="spline.design"]',
+'iframe[src*="my.spline.design"]',
+'embed[src*="spline.design"]',
+'embed[src*="my.spline.design"]',
+'object[data*="spline.design"]',
+'object[data*="my.spline.design"]'
+];
+splineSelectors.forEach(selector => {
+const elements = document.querySelectorAll(selector);
+elements.forEach(el => {
+el.style.display = '';
+el.style.visibility = '';
+});
+});
+};
+})();
+
+
+"use strict";
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+var _React = React,
+useState = _React.useState;
+// Reusable Icon Component for Solar Icons
+var Icon = function Icon(_ref) {
+var icon = _ref.icon,
+_ref$size = _ref.size,
+size = _ref$size === void 0 ? "24px" : _ref$size,
+_ref$className = _ref.className,
+className = _ref$className === void 0 ? "" : _ref$className;
+return /*#__PURE__*/React.createElement("iconify-icon", {
+icon: icon,
+width: size,
+height: size,
+"stroke-width": "1.5",
+"class": className
+});
+};
+var App = function App() {
+var _useState = useState(''),
+_useState2 = _slicedToArray(_useState, 2),
+searchTerm = _useState2[0],
+setSearchTerm = _useState2[1];
+var _useState3 = useState('Todos'),
+_useState4 = _slicedToArray(_useState3, 2),
+activeCategory = _useState4[0],
+setActiveCategory = _useState4[1];
+var _useState5 = useState(false),
+_useState6 = _slicedToArray(_useState5, 2),
+isMenuOpen = _useState6[0],
+setIsMenuOpen = _useState6[1];
+var gasfiteres = [{
+id: 1,
+nombre: "Roberto Martínez",
+especialidad: "Emergencias 24/7",
+calificacion: 4.9,
+trabajos: 124,
+precio: "Desde $25.000",
+imagen: "https://images.unsplash.com/photo-1595844730298-b960ff98fee0?auto=format&fit=crop&q=80&w=400",
+categoria: "Urgencias",
+verificado: true
+}, {
+id: 2,
+nombre: "Ana Silva",
+especialidad: "Instalaciones de Calefont",
+calificacion: 4.8,
+trabajos: 89,
+precio: "Desde $35.000",
+imagen: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+categoria: "Calefont",
+verificado: true
+}, {
+id: 3,
+nombre: "Juan Pedro Soto",
+especialidad: "Destape de Cañerías",
+calificacion: 4.7,
+trabajos: 210,
+precio: "Desde $20.000",
+imagen: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400",
+categoria: "Destapes",
+verificado: false
+}, {
+id: 4,
+nombre: "Carlos Fuentealba",
+especialidad: "Fugas y Filtraciones",
+calificacion: 5.0,
+trabajos: 56,
+precio: "Desde $30.000",
+imagen: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+categoria: "Filtraciones",
+verificado: true
+}];
+var categorias = [{
+nombre: 'Todos',
+icon: 'solar:bolt-linear'
+}, {
+nombre: 'Urgencias',
+icon: 'solar:flame-linear'
+}, {
+nombre: 'Calefont',
+icon: 'solar:waterdrops-linear'
+}, {
+nombre: 'Destapes',
+icon: 'solar:sledgehammer-linear'
+}, {
+nombre: 'Filtraciones',
+icon: 'solar:shield-check-linear'
+}];
+var filteredGasfiteres = gasfiteres.filter(function (g) {
+return (activeCategory === 'Todos' || g.categoria === activeCategory) && (g.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || g.especialidad.toLowerCase().includes(searchTerm.toLowerCase()));
+});
+return /*#__PURE__*/React.createElement("div", {
+className: "min-h-screen font-sans text-slate-800"
+}, /*#__PURE__*/React.createElement("nav", {
+className: "sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60"
+}, /*#__PURE__*/React.createElement("div", {
+className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+}, /*#__PURE__*/React.createElement("div", {
+className: "flex justify-between h-16 items-center"
+}, /*#__PURE__*/React.createElement("div", {
+className: "flex items-center gap-3 cursor-pointer group"
+}, /*#__PURE__*/React.createElement("div", {
+className: "bg-gradient-to-br from-blue-600 to-cyan-400 p-2 rounded-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:waterdrops-bold",
+className: "text-white block",
+size: "20"
+})), /*#__PURE__*/React.createElement("span", {
+className: "text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-cyan-600"
+}, "GASFIFLOW")), /*#__PURE__*/React.createElement("div", {
+className: "hidden md:flex items-center gap-8 font-medium text-sm"
+}, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "text-slate-500 hover:text-blue-600 transition-colors"
+}, "Inicio"), /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "text-slate-500 hover:text-blue-600 transition-colors"
+}, "C\xF3mo funciona"), /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "bg-gradient-to-r from-orange-500 to-pink-500 text-white px-5 py-2.5 rounded-full shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 transition-all text-xs font-semibold tracking-wide"
+}, "Soy Gasf\xEDter")), /*#__PURE__*/React.createElement("button", {
+className: "md:hidden text-slate-600",
+onClick: function onClick() {
+return setIsMenuOpen(!isMenuOpen);
+}
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: isMenuOpen ? "solar:close-circle-linear" : "solar:hamburger-menu-linear",
+size: "24"
+}))))), /*#__PURE__*/React.createElement("header", {
+className: "relative overflow-hidden bg-slate-900 py-20 sm:py-32"
+}, /*#__PURE__*/React.createElement("div", {
+className: "absolute inset-0 overflow-hidden pointer-events-none"
+}, /*#__PURE__*/React.createElement("div", {
+className: "absolute -top-[20%] -left-[10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen"
+}), /*#__PURE__*/React.createElement("div", {
+className: "absolute top-[40%] -right-[10%] w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[100px] mix-blend-screen"
+}), /*#__PURE__*/React.createElement("div", {
+className: "absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent"
+})), /*#__PURE__*/React.createElement("div", {
+className: "relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10"
+}, /*#__PURE__*/React.createElement("div", {
+className: "inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 text-blue-300 text-xs font-medium mb-8 backdrop-blur-md"
+}, /*#__PURE__*/React.createElement("span", {
+className: "relative flex h-2 w-2"
+}, /*#__PURE__*/React.createElement("span", {
+className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"
+}), /*#__PURE__*/React.createElement("span", {
+className: "relative inline-flex rounded-full h-2 w-2 bg-blue-500"
+})), "Red de expertos certificada"), /*#__PURE__*/React.createElement("h1", {
+className: "text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight"
+}, "Soluciones que ", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+className: "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 animate-gradient"
+}, "fluyen contigo")), /*#__PURE__*/React.createElement("p", {
+className: "text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-12 font-light leading-relaxed"
+}, "Encuentra al experto perfecto en segundos. Profesionales certificados, respuestas r\xE1pidas y garant\xEDa de satisfacci\xF3n."), /*#__PURE__*/React.createElement("div", {
+className: "max-w-xl mx-auto relative group"
+}, /*#__PURE__*/React.createElement("div", {
+className: "absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-2xl blur opacity-20 group-focus-within:opacity-75 transition duration-700"
+}), /*#__PURE__*/React.createElement("div", {
+className: "relative flex items-center bg-white rounded-xl shadow-2xl shadow-blue-900/20 p-1.5 transition-transform group-focus-within:scale-[1.01]"
+}, /*#__PURE__*/React.createElement("div", {
+className: "pl-4 text-slate-400"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:magnifer-linear",
+size: "22"
+})), /*#__PURE__*/React.createElement("input", {
+type: "text",
+placeholder: "\xBFQu\xE9 necesitas arreglar hoy?",
+className: "w-full p-3 bg-transparent text-slate-800 placeholder:text-slate-400 focus:outline-none text-base font-medium",
+value: searchTerm,
+onChange: function onChange(e) {
+return setSearchTerm(e.target.value);
+}
+}), /*#__PURE__*/React.createElement("button", {
+className: "hidden sm:flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-slate-800 transition-colors"
+}, "Buscar"))))), /*#__PURE__*/React.createElement("section", {
+className: "relative z-20 max-w-7xl mx-auto px-4 -mt-10"
+}, /*#__PURE__*/React.createElement("div", {
+className: "flex overflow-x-auto pb-6 gap-3 no-scrollbar sm:justify-center px-4"
+}, categorias.map(function (cat) {
+return /*#__PURE__*/React.createElement("button", {
+key: cat.nombre,
+onClick: function onClick() {
+return setActiveCategory(cat.nombre);
+},
+className: "\n                                        flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold shadow-lg backdrop-blur-sm border transition-all duration-300 whitespace-nowrap\n                                        ".concat(activeCategory === cat.nombre ? 'bg-white border-orange-100 text-orange-600 shadow-orange-500/10 scale-105 ring-1 ring-orange-100' : 'bg-white/90 border-slate-200/60 text-slate-600 hover:bg-white hover:scale-105 hover:text-blue-600 hover:shadow-xl', "\n                                    ")
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: cat.icon,
+size: "18"
+}), cat.nombre);
+}))), /*#__PURE__*/React.createElement("main", {
+className: "max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8"
+}, /*#__PURE__*/React.createElement("div", {
+className: "flex flex-col sm:flex-row justify-between items-end mb-12 border-b border-slate-100 pb-4"
+}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+className: "text-2xl font-bold text-slate-900 tracking-tight"
+}, "Expertos disponibles ahora"), /*#__PURE__*/React.createElement("p", {
+className: "text-slate-500 mt-1 text-sm"
+}, "Mostrando profesionales cerca de tu ubicaci\xF3n")), /*#__PURE__*/React.createElement("button", {
+className: "hidden sm:flex items-center gap-1.5 text-blue-600 font-semibold text-sm hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors mt-4 sm:mt-0"
+}, "Ver mapa ", /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:map-point-linear",
+size: "16"
+}))), filteredGasfiteres.length > 0 ? /*#__PURE__*/React.createElement("div", {
+className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+}, filteredGasfiteres.map(function (pro) {
+return /*#__PURE__*/React.createElement("div", {
+key: pro.id,
+className: "group bg-white rounded-2xl border border-slate-200/60 overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-blue-100 transition-all duration-300 flex flex-col"
+}, /*#__PURE__*/React.createElement("div", {
+className: "relative h-48 overflow-hidden bg-slate-100"
+}, /*#__PURE__*/React.createElement("img", {
+src: pro.imagen,
+alt: pro.nombre,
+className: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+}), /*#__PURE__*/React.createElement("div", {
+className: "absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-100"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:star-bold",
+className: "text-orange-400",
+size: "12"
+}), pro.calificacion), pro.verificado && /*#__PURE__*/React.createElement("div", {
+className: "absolute top-3 left-3 bg-blue-500 text-white w-7 h-7 flex items-center justify-center rounded-full shadow-lg shadow-blue-500/30",
+title: "Perfil Verificado"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:shield-check-bold",
+size: "14"
+})), /*#__PURE__*/React.createElement("div", {
+className: "absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/50 to-transparent"
+})), /*#__PURE__*/React.createElement("div", {
+className: "p-5 flex-1 flex flex-col relative"
+}, /*#__PURE__*/React.createElement("div", {
+className: "absolute -top-6 left-5"
+}, /*#__PURE__*/React.createElement("span", {
+className: "inline-block px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold uppercase tracking-wider text-blue-600"
+}, pro.categoria)), /*#__PURE__*/React.createElement("h3", {
+className: "text-lg font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors"
+}, pro.nombre), /*#__PURE__*/React.createElement("p", {
+className: "text-slate-500 text-xs mb-5 flex items-center gap-1.5 font-medium"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:clock-circle-linear",
+size: "14",
+className: "text-slate-400"
+}), pro.especialidad), /*#__PURE__*/React.createElement("div", {
+className: "mt-auto"
+}, /*#__PURE__*/React.createElement("div", {
+className: "flex items-end justify-between py-3 border-t border-slate-50 mb-3"
+}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+className: "text-[10px] uppercase tracking-wide text-slate-400 font-semibold"
+}, "Desde"), /*#__PURE__*/React.createElement("div", {
+className: "text-base font-extrabold text-slate-900 tracking-tight"
+}, pro.precio)), /*#__PURE__*/React.createElement("div", {
+className: "text-right"
+}, /*#__PURE__*/React.createElement("span", {
+className: "text-[10px] uppercase tracking-wide text-slate-400 font-semibold"
+}, "Exp"), /*#__PURE__*/React.createElement("div", {
+className: "text-xs font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100"
+}, pro.trabajos, " trb."))), /*#__PURE__*/React.createElement("button", {
+className: "w-full bg-slate-50 hover:bg-slate-900 text-slate-900 hover:text-white py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn border border-slate-200 hover:border-slate-900"
+}, "Contactar", /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:alt-arrow-right-linear",
+className: "group-hover/btn:translate-x-1 transition-transform",
+size: "16"
+})))));
+})) : /*#__PURE__*/React.createElement("div", {
+className: "text-center py-24 bg-white rounded-3xl border border-dashed border-slate-200"
+}, /*#__PURE__*/React.createElement("div", {
+className: "bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-100"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:magnifer-linear",
+className: "text-slate-300",
+size: "32"
+})), /*#__PURE__*/React.createElement("h3", {
+className: "text-lg font-bold text-slate-900"
+}, "No encontramos resultados"), /*#__PURE__*/React.createElement("p", {
+className: "text-slate-500 text-sm mt-1"
+}, "Intenta buscar con otra categor\xEDa o palabra clave."))), /*#__PURE__*/React.createElement("footer", {
+className: "bg-white border-t border-slate-200 pt-20 pb-10"
+}, /*#__PURE__*/React.createElement("div", {
+className: "max-w-7xl mx-auto px-4 text-center"
+}, /*#__PURE__*/React.createElement("div", {
+className: "bg-slate-900 rounded-[2.5rem] p-12 md:p-16 text-white relative overflow-hidden mb-20 shadow-2xl shadow-slate-900/10 group"
+}, /*#__PURE__*/React.createElement("div", {
+className: "absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-b from-blue-600/30 to-purple-600/30 rounded-full -mr-32 -mt-32 blur-[80px] group-hover:bg-blue-600/40 transition-colors duration-1000"
+}), /*#__PURE__*/React.createElement("div", {
+className: "absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-t from-orange-500/20 to-pink-500/20 rounded-full -ml-20 -mb-20 blur-[80px]"
+}), /*#__PURE__*/React.createElement("div", {
+className: "relative z-10 max-w-2xl mx-auto"
+}, /*#__PURE__*/React.createElement("h2", {
+className: "text-3xl md:text-5xl font-extrabold mb-6 tracking-tight"
+}, "\xBFEres un experto certificado?"), /*#__PURE__*/React.createElement("p", {
+className: "text-slate-300 text-lg mb-10 font-light leading-relaxed"
+}, "\xDAnete a la red m\xE1s grande de profesionales y comienza a recibir trabajos en tu zona hoy mismo. Sin cuotas mensuales fijas."), /*#__PURE__*/React.createElement("button", {
+className: "bg-white text-slate-900 px-8 py-3.5 rounded-xl font-bold text-base transition-all hover:scale-105 hover:shadow-xl hover:shadow-white/10 active:scale-95"
+}, "Registrarme como Profesional"))), /*#__PURE__*/React.createElement("div", {
+className: "grid grid-cols-2 md:grid-cols-4 gap-10 text-left mb-16 border-b border-slate-100 pb-16"
+}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
+className: "font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider"
+}, "Plataforma"), /*#__PURE__*/React.createElement("ul", {
+className: "text-slate-500 space-y-3 text-sm font-medium"
+}, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "C\xF3mo funciona")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "Seguridad")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "Precios")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
+className: "font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider"
+}, "Categor\xEDas"), /*#__PURE__*/React.createElement("ul", {
+className: "text-slate-500 space-y-3 text-sm font-medium"
+}, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "Gasfiter\xEDa General")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "Instalaci\xF3n Gas")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "Alcantarillado")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
+className: "font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider"
+}, "Soporte"), /*#__PURE__*/React.createElement("ul", {
+className: "text-slate-500 space-y-3 text-sm font-medium"
+}, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "Centro de Ayuda")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "Contacto")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-blue-600 transition-colors"
+}, "T\xE9rminos")))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h4", {
+className: "font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider"
+}, "Social"), /*#__PURE__*/React.createElement("div", {
+className: "flex gap-3"
+}, /*#__PURE__*/React.createElement("div", {
+className: "w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:chat-line-linear",
+size: "18"
+})), /*#__PURE__*/React.createElement("div", {
+className: "w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:phone-calling-linear",
+size: "18"
+})), /*#__PURE__*/React.createElement("div", {
+className: "w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900"
+}, /*#__PURE__*/React.createElement(Icon, {
+icon: "solar:camera-linear",
+size: "18"
+}))))), /*#__PURE__*/React.createElement("div", {
+className: "flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400"
+}, /*#__PURE__*/React.createElement("p", null, "\xA9 2024 GasfiFlow. Hecho para que todo fluya."), /*#__PURE__*/React.createElement("div", {
+className: "flex gap-6"
+}, /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-slate-600"
+}, "Privacidad"), /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-slate-600"
+}, "Cookies"), /*#__PURE__*/React.createElement("a", {
+href: "#",
+className: "hover:text-slate-600"
+}, "Legal"))))));
+};
+var root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(/*#__PURE__*/React.createElement(App, null));
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJfUmVhY3QiLCJSZWFjdCIsInVzZVN0YXRlIiwiSWNvbiIsIl9yZWYiLCJpY29uIiwiX3JlZiRzaXplIiwic2l6ZSIsIl9yZWYkY2xhc3NOYW1lIiwiY2xhc3NOYW1lIiwiY3JlYXRlRWxlbWVudCIsIndpZHRoIiwiaGVpZ2h0IiwiQXBwIiwiX3VzZVN0YXRlIiwiX3VzZVN0YXRlMiIsIl9zbGljZWRUb0FycmF5Iiwic2VhcmNoVGVybSIsInNldFNlYXJjaFRlcm0iLCJfdXNlU3RhdGUzIiwiX3VzZVN0YXRlNCIsImFjdGl2ZUNhdGVnb3J5Iiwic2V0QWN0aXZlQ2F0ZWdvcnkiLCJfdXNlU3RhdGU1IiwiX3VzZVN0YXRlNiIsImlzTWVudU9wZW4iLCJzZXRJc01lbnVPcGVuIiwiZ2FzZml0ZXJlcyIsImlkIiwibm9tYnJlIiwiZXNwZWNpYWxpZGFkIiwiY2FsaWZpY2FjaW9uIiwidHJhYmFqb3MiLCJwcmVjaW8iLCJpbWFnZW4iLCJjYXRlZ29yaWEiLCJ2ZXJpZmljYWRvIiwiY2F0ZWdvcmlhcyIsImZpbHRlcmVkR2FzZml0ZXJlcyIsImZpbHRlciIsImciLCJ0b0xvd2VyQ2FzZSIsImluY2x1ZGVzIiwiaHJlZiIsIm9uQ2xpY2siLCJ0eXBlIiwicGxhY2Vob2xkZXIiLCJ2YWx1ZSIsIm9uQ2hhbmdlIiwiZSIsInRhcmdldCIsIm1hcCIsImNhdCIsImtleSIsImNvbmNhdCIsImxlbmd0aCIsInBybyIsInNyYyIsImFsdCIsInRpdGxlIiwicm9vdCIsIlJlYWN0RE9NIiwiY3JlYXRlUm9vdCIsImRvY3VtZW50IiwiZ2V0RWxlbWVudEJ5SWQiLCJyZW5kZXIiXSwic291cmNlcyI6WyJJbmxpbmUgQmFiZWwgc2NyaXB0Il0sInNvdXJjZXNDb250ZW50IjpbIlxuICAgICAgICBjb25zdCB7IHVzZVN0YXRlIH0gPSBSZWFjdDtcblxuICAgICAgICAvLyBSZXVzYWJsZSBJY29uIENvbXBvbmVudCBmb3IgU29sYXIgSWNvbnNcbiAgICAgICAgY29uc3QgSWNvbiA9ICh7IGljb24sIHNpemUgPSBcIjI0cHhcIiwgY2xhc3NOYW1lID0gXCJcIiB9KSA9PiAoXG4gICAgICAgICAgICA8aWNvbmlmeS1pY29uIFxuICAgICAgICAgICAgICAgIGljb249e2ljb259IFxuICAgICAgICAgICAgICAgIHdpZHRoPXtzaXplfSBcbiAgICAgICAgICAgICAgICBoZWlnaHQ9e3NpemV9IFxuICAgICAgICAgICAgICAgIHN0cm9rZS13aWR0aD1cIjEuNVwiXG4gICAgICAgICAgICAgICAgY2xhc3M9e2NsYXNzTmFtZX1cbiAgICAgICAgICAgID48L2ljb25pZnktaWNvbj5cbiAgICAgICAgKTtcblxuICAgICAgICBjb25zdCBBcHAgPSAoKSA9PiB7XG4gICAgICAgICAgICBjb25zdCBbc2VhcmNoVGVybSwgc2V0U2VhcmNoVGVybV0gPSB1c2VTdGF0ZSgnJyk7XG4gICAgICAgICAgICBjb25zdCBbYWN0aXZlQ2F0ZWdvcnksIHNldEFjdGl2ZUNhdGVnb3J5XSA9IHVzZVN0YXRlKCdUb2RvcycpO1xuICAgICAgICAgICAgY29uc3QgW2lzTWVudU9wZW4sIHNldElzTWVudU9wZW5dID0gdXNlU3RhdGUoZmFsc2UpO1xuXG4gICAgICAgICAgICBjb25zdCBnYXNmaXRlcmVzID0gW1xuICAgICAgICAgICAgICAgIHtcbiAgICAgICAgICAgICAgICAgICAgaWQ6IDEsXG4gICAgICAgICAgICAgICAgICAgIG5vbWJyZTogXCJSb2JlcnRvIE1hcnTDrW5lelwiLFxuICAgICAgICAgICAgICAgICAgICBlc3BlY2lhbGlkYWQ6IFwiRW1lcmdlbmNpYXMgMjQvN1wiLFxuICAgICAgICAgICAgICAgICAgICBjYWxpZmljYWNpb246IDQuOSxcbiAgICAgICAgICAgICAgICAgICAgdHJhYmFqb3M6IDEyNCxcbiAgICAgICAgICAgICAgICAgICAgcHJlY2lvOiBcIkRlc2RlICQyNS4wMDBcIixcbiAgICAgICAgICAgICAgICAgICAgaW1hZ2VuOiBcImh0dHBzOi8vaW1hZ2VzLnVuc3BsYXNoLmNvbS9waG90by0xNTk1ODQ0NzMwMjk4LWI5NjBmZjk4ZmVlMD9hdXRvPWZvcm1hdCZmaXQ9Y3JvcCZxPTgwJnc9NDAwXCIsXG4gICAgICAgICAgICAgICAgICAgIGNhdGVnb3JpYTogXCJVcmdlbmNpYXNcIixcbiAgICAgICAgICAgICAgICAgICAgdmVyaWZpY2FkbzogdHJ1ZVxuICAgICAgICAgICAgICAgIH0sXG4gICAgICAgICAgICAgICAge1xuICAgICAgICAgICAgICAgICAgICBpZDogMixcbiAgICAgICAgICAgICAgICAgICAgbm9tYnJlOiBcIkFuYSBTaWx2YVwiLFxuICAgICAgICAgICAgICAgICAgICBlc3BlY2lhbGlkYWQ6IFwiSW5zdGFsYWNpb25lcyBkZSBDYWxlZm9udFwiLFxuICAgICAgICAgICAgICAgICAgICBjYWxpZmljYWNpb246IDQuOCxcbiAgICAgICAgICAgICAgICAgICAgdHJhYmFqb3M6IDg5LFxuICAgICAgICAgICAgICAgICAgICBwcmVjaW86IFwiRGVzZGUgJDM1LjAwMFwiLFxuICAgICAgICAgICAgICAgICAgICBpbWFnZW46IFwiaHR0cHM6Ly9pbWFnZXMudW5zcGxhc2guY29tL3Bob3RvLTE1NzM0OTYzNTkxNDItYjhkODc3MzRhNWEyP2F1dG89Zm9ybWF0JmZpdD1jcm9wJnE9ODAmdz00MDBcIixcbiAgICAgICAgICAgICAgICAgICAgY2F0ZWdvcmlhOiBcIkNhbGVmb250XCIsXG4gICAgICAgICAgICAgICAgICAgIHZlcmlmaWNhZG86IHRydWVcbiAgICAgICAgICAgICAgICB9LFxuICAgICAgICAgICAgICAgIHtcbiAgICAgICAgICAgICAgICAgICAgaWQ6IDMsXG4gICAgICAgICAgICAgICAgICAgIG5vbWJyZTogXCJKdWFuIFBlZHJvIFNvdG9cIixcbiAgICAgICAgICAgICAgICAgICAgZXNwZWNpYWxpZGFkOiBcIkRlc3RhcGUgZGUgQ2HDsWVyw61hc1wiLFxuICAgICAgICAgICAgICAgICAgICBjYWxpZmljYWNpb246IDQuNyxcbiAgICAgICAgICAgICAgICAgICAgdHJhYmFqb3M6IDIxMCxcbiAgICAgICAgICAgICAgICAgICAgcHJlY2lvOiBcIkRlc2RlICQyMC4wMDBcIixcbiAgICAgICAgICAgICAgICAgICAgaW1hZ2VuOiBcImh0dHBzOi8vaW1hZ2VzLnVuc3BsYXNoLmNvbS9waG90by0xNjIxOTA1MjUxMTg5LTA4YjQ1ZDZhMjY5ZT9hdXRvPWZvcm1hdCZmaXQ9Y3JvcCZxPTgwJnc9NDAwXCIsXG4gICAgICAgICAgICAgICAgICAgIGNhdGVnb3JpYTogXCJEZXN0YXBlc1wiLFxuICAgICAgICAgICAgICAgICAgICB2ZXJpZmljYWRvOiBmYWxzZVxuICAgICAgICAgICAgICAgIH0sXG4gICAgICAgICAgICAgICAge1xuICAgICAgICAgICAgICAgICAgICBpZDogNCxcbiAgICAgICAgICAgICAgICAgICAgbm9tYnJlOiBcIkNhcmxvcyBGdWVudGVhbGJhXCIsXG4gICAgICAgICAgICAgICAgICAgIGVzcGVjaWFsaWRhZDogXCJGdWdhcyB5IEZpbHRyYWNpb25lc1wiLFxuICAgICAgICAgICAgICAgICAgICBjYWxpZmljYWNpb246IDUuMCxcbiAgICAgICAgICAgICAgICAgICAgdHJhYmFqb3M6IDU2LFxuICAgICAgICAgICAgICAgICAgICBwcmVjaW86IFwiRGVzZGUgJDMwLjAwMFwiLFxuICAgICAgICAgICAgICAgICAgICBpbWFnZW46IFwiaHR0cHM6Ly9pbWFnZXMudW5zcGxhc2guY29tL3Bob3RvLTE1MDcwMDMyMTExNjktMGExZGQ3MjI4ZjJkP2F1dG89Zm9ybWF0JmZpdD1jcm9wJnE9ODAmdz00MDBcIixcbiAgICAgICAgICAgICAgICAgICAgY2F0ZWdvcmlhOiBcIkZpbHRyYWNpb25lc1wiLFxuICAgICAgICAgICAgICAgICAgICB2ZXJpZmljYWRvOiB0cnVlXG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgXTtcblxuICAgICAgICAgICAgY29uc3QgY2F0ZWdvcmlhcyA9IFtcbiAgICAgICAgICAgICAgICB7IG5vbWJyZTogJ1RvZG9zJywgaWNvbjogJ3NvbGFyOmJvbHQtbGluZWFyJyB9LFxuICAgICAgICAgICAgICAgIHsgbm9tYnJlOiAnVXJnZW5jaWFzJywgaWNvbjogJ3NvbGFyOmZsYW1lLWxpbmVhcicgfSxcbiAgICAgICAgICAgICAgICB7IG5vbWJyZTogJ0NhbGVmb250JywgaWNvbjogJ3NvbGFyOndhdGVyZHJvcHMtbGluZWFyJyB9LFxuICAgICAgICAgICAgICAgIHsgbm9tYnJlOiAnRGVzdGFwZXMnLCBpY29uOiAnc29sYXI6c2xlZGdlaGFtbWVyLWxpbmVhcicgfSxcbiAgICAgICAgICAgICAgICB7IG5vbWJyZTogJ0ZpbHRyYWNpb25lcycsIGljb246ICdzb2xhcjpzaGllbGQtY2hlY2stbGluZWFyJyB9XG4gICAgICAgICAgICBdO1xuXG4gICAgICAgICAgICBjb25zdCBmaWx0ZXJlZEdhc2ZpdGVyZXMgPSBnYXNmaXRlcmVzLmZpbHRlcihnID0+IFxuICAgICAgICAgICAgICAgIChhY3RpdmVDYXRlZ29yeSA9PT0gJ1RvZG9zJyB8fCBnLmNhdGVnb3JpYSA9PT0gYWN0aXZlQ2F0ZWdvcnkpICYmXG4gICAgICAgICAgICAgICAgKGcubm9tYnJlLnRvTG93ZXJDYXNlKCkuaW5jbHVkZXMoc2VhcmNoVGVybS50b0xvd2VyQ2FzZSgpKSB8fCBnLmVzcGVjaWFsaWRhZC50b0xvd2VyQ2FzZSgpLmluY2x1ZGVzKHNlYXJjaFRlcm0udG9Mb3dlckNhc2UoKSkpXG4gICAgICAgICAgICApO1xuXG4gICAgICAgICAgICByZXR1cm4gKFxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibWluLWgtc2NyZWVuIGZvbnQtc2FucyB0ZXh0LXNsYXRlLTgwMFwiPlxuICAgICAgICAgICAgICAgICAgICB7LyogTmF2aWdhdGlvbiAqL31cbiAgICAgICAgICAgICAgICAgICAgPG5hdiBjbGFzc05hbWU9XCJzdGlja3kgdG9wLTAgei01MCBiZy13aGl0ZS83MCBiYWNrZHJvcC1ibHVyLXhsIGJvcmRlci1iIGJvcmRlci1zbGF0ZS0yMDAvNjBcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibWF4LXctN3hsIG14LWF1dG8gcHgtNCBzbTpweC02IGxnOnB4LThcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXgganVzdGlmeS1iZXR3ZWVuIGgtMTYgaXRlbXMtY2VudGVyXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTMgY3Vyc29yLXBvaW50ZXIgZ3JvdXBcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYmctZ3JhZGllbnQtdG8tYnIgZnJvbS1ibHVlLTYwMCB0by1jeWFuLTQwMCBwLTIgcm91bmRlZC14bCBzaGFkb3ctbGcgc2hhZG93LWJsdWUtNTAwLzIwIGdyb3VwLWhvdmVyOnNjYWxlLTEwNSB0cmFuc2l0aW9uLXRyYW5zZm9ybSBkdXJhdGlvbi0zMDBcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8SWNvbiBpY29uPVwic29sYXI6d2F0ZXJkcm9wcy1ib2xkXCIgY2xhc3NOYW1lPVwidGV4dC13aGl0ZSBibG9ja1wiIHNpemU9XCIyMFwiIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cInRleHQteGwgZm9udC1leHRyYWJvbGQgdHJhY2tpbmctdGlnaHQgYmctY2xpcC10ZXh0IHRleHQtdHJhbnNwYXJlbnQgYmctZ3JhZGllbnQtdG8tciBmcm9tLWJsdWUtNzAwIHRvLWN5YW4tNjAwXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgR0FTRklGTE9XXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L3NwYW4+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJoaWRkZW4gbWQ6ZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTggZm9udC1tZWRpdW0gdGV4dC1zbVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJ0ZXh0LXNsYXRlLTUwMCBob3Zlcjp0ZXh0LWJsdWUtNjAwIHRyYW5zaXRpb24tY29sb3JzXCI+SW5pY2lvPC9hPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJ0ZXh0LXNsYXRlLTUwMCBob3Zlcjp0ZXh0LWJsdWUtNjAwIHRyYW5zaXRpb24tY29sb3JzXCI+Q8OzbW8gZnVuY2lvbmE8L2E+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8YSBocmVmPVwiI1wiIGNsYXNzTmFtZT1cImJnLWdyYWRpZW50LXRvLXIgZnJvbS1vcmFuZ2UtNTAwIHRvLXBpbmstNTAwIHRleHQtd2hpdGUgcHgtNSBweS0yLjUgcm91bmRlZC1mdWxsIHNoYWRvdy1sZyBzaGFkb3ctb3JhbmdlLTUwMC8yNSBob3ZlcjpzaGFkb3ctb3JhbmdlLTUwMC80MCBob3ZlcjotdHJhbnNsYXRlLXktMC41IHRyYW5zaXRpb24tYWxsIHRleHQteHMgZm9udC1zZW1pYm9sZCB0cmFja2luZy13aWRlXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU295IEdhc2bDrXRlclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9hPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIGNsYXNzTmFtZT1cIm1kOmhpZGRlbiB0ZXh0LXNsYXRlLTYwMFwiIG9uQ2xpY2s9eygpID0+IHNldElzTWVudU9wZW4oIWlzTWVudU9wZW4pfT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxJY29uIGljb249e2lzTWVudU9wZW4gPyBcInNvbGFyOmNsb3NlLWNpcmNsZS1saW5lYXJcIiA6IFwic29sYXI6aGFtYnVyZ2VyLW1lbnUtbGluZWFyXCJ9IHNpemU9XCIyNFwiIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgIDwvbmF2PlxuXG4gICAgICAgICAgICAgICAgICAgIHsvKiBIZXJvIFNlY3Rpb24gKi99XG4gICAgICAgICAgICAgICAgICAgIDxoZWFkZXIgY2xhc3NOYW1lPVwicmVsYXRpdmUgb3ZlcmZsb3ctaGlkZGVuIGJnLXNsYXRlLTkwMCBweS0yMCBzbTpweS0zMlwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgey8qIEJhY2tncm91bmQgRWZmZWN0cyAqL31cbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYWJzb2x1dGUgaW5zZXQtMCBvdmVyZmxvdy1oaWRkZW4gcG9pbnRlci1ldmVudHMtbm9uZVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYWJzb2x1dGUgLXRvcC1bMjAlXSAtbGVmdC1bMTAlXSB3LVs1MDBweF0gaC1bNTAwcHhdIGJnLWJsdWUtNjAwLzIwIHJvdW5kZWQtZnVsbCBibHVyLVsxMjBweF0gbWl4LWJsZW5kLXNjcmVlblwiPjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYWJzb2x1dGUgdG9wLVs0MCVdIC1yaWdodC1bMTAlXSB3LVs0MDBweF0gaC1bNDAwcHhdIGJnLW9yYW5nZS01MDAvMTAgcm91bmRlZC1mdWxsIGJsdXItWzEwMHB4XSBtaXgtYmxlbmQtc2NyZWVuXCI+PC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJhYnNvbHV0ZSBib3R0b20tMCBsZWZ0LTAgcmlnaHQtMCBoLTMyIGJnLWdyYWRpZW50LXRvLXQgZnJvbS1zbGF0ZS01MCB0by10cmFuc3BhcmVudFwiPjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicmVsYXRpdmUgbWF4LXctN3hsIG14LWF1dG8gcHgtNCBzbTpweC02IGxnOnB4LTggdGV4dC1jZW50ZXIgei0xMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaW5saW5lLWZsZXggaXRlbXMtY2VudGVyIGdhcC0yIHB4LTMgcHktMSByb3VuZGVkLWZ1bGwgYmctc2xhdGUtODAwLzUwIGJvcmRlciBib3JkZXItc2xhdGUtNzAwLzUwIHRleHQtYmx1ZS0zMDAgdGV4dC14cyBmb250LW1lZGl1bSBtYi04IGJhY2tkcm9wLWJsdXItbWRcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwicmVsYXRpdmUgZmxleCBoLTIgdy0yXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiYW5pbWF0ZS1waW5nIGFic29sdXRlIGlubGluZS1mbGV4IGgtZnVsbCB3LWZ1bGwgcm91bmRlZC1mdWxsIGJnLWJsdWUtNDAwIG9wYWNpdHktNzVcIj48L3NwYW4+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwicmVsYXRpdmUgaW5saW5lLWZsZXggcm91bmRlZC1mdWxsIGgtMiB3LTIgYmctYmx1ZS01MDBcIj48L3NwYW4+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUmVkIGRlIGV4cGVydG9zIGNlcnRpZmljYWRhXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGgxIGNsYXNzTmFtZT1cInRleHQtNHhsIG1kOnRleHQtNnhsIGxnOnRleHQtN3hsIGZvbnQtZXh0cmFib2xkIHRleHQtd2hpdGUgbWItNiBsZWFkaW5nLVsxLjFdIHRyYWNraW5nLXRpZ2h0XCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNvbHVjaW9uZXMgcXVlIDxiciAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJ0ZXh0LXRyYW5zcGFyZW50IGJnLWNsaXAtdGV4dCBiZy1ncmFkaWVudC10by1yIGZyb20tYmx1ZS00MDAgdmlhLWN5YW4tMzAwIHRvLWJsdWUtNDAwIGFuaW1hdGUtZ3JhZGllbnRcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZsdXllbiBjb250aWdvXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2gxPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtc2xhdGUtNDAwIHRleHQtYmFzZSBtZDp0ZXh0LWxnIG1heC13LTJ4bCBteC1hdXRvIG1iLTEyIGZvbnQtbGlnaHQgbGVhZGluZy1yZWxheGVkXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVuY3VlbnRyYSBhbCBleHBlcnRvIHBlcmZlY3RvIGVuIHNlZ3VuZG9zLiBQcm9mZXNpb25hbGVzIGNlcnRpZmljYWRvcywgcmVzcHVlc3RhcyByw6FwaWRhcyB5IGdhcmFudMOtYSBkZSBzYXRpc2ZhY2Npw7NuLlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvcD5cblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHsvKiBTZWFyY2ggQmFyICovfVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibWF4LXcteGwgbXgtYXV0byByZWxhdGl2ZSBncm91cFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImFic29sdXRlIC1pbnNldC0xIGJnLWdyYWRpZW50LXRvLXIgZnJvbS1ibHVlLTUwMCB2aWEtcHVycGxlLTUwMCB0by1vcmFuZ2UtNTAwIHJvdW5kZWQtMnhsIGJsdXIgb3BhY2l0eS0yMCBncm91cC1mb2N1cy13aXRoaW46b3BhY2l0eS03NSB0cmFuc2l0aW9uIGR1cmF0aW9uLTcwMFwiPjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInJlbGF0aXZlIGZsZXggaXRlbXMtY2VudGVyIGJnLXdoaXRlIHJvdW5kZWQteGwgc2hhZG93LTJ4bCBzaGFkb3ctYmx1ZS05MDAvMjAgcC0xLjUgdHJhbnNpdGlvbi10cmFuc2Zvcm0gZ3JvdXAtZm9jdXMtd2l0aGluOnNjYWxlLVsxLjAxXVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwbC00IHRleHQtc2xhdGUtNDAwXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb24gaWNvbj1cInNvbGFyOm1hZ25pZmVyLWxpbmVhclwiIHNpemU9XCIyMlwiIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpbnB1dCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0eXBlPVwidGV4dFwiIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHBsYWNlaG9sZGVyPVwiwr9RdcOpIG5lY2VzaXRhcyBhcnJlZ2xhciBob3k/XCIgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwidy1mdWxsIHAtMyBiZy10cmFuc3BhcmVudCB0ZXh0LXNsYXRlLTgwMCBwbGFjZWhvbGRlcjp0ZXh0LXNsYXRlLTQwMCBmb2N1czpvdXRsaW5lLW5vbmUgdGV4dC1iYXNlIGZvbnQtbWVkaXVtXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2YWx1ZT17c2VhcmNoVGVybX1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvbkNoYW5nZT17KGUpID0+IHNldFNlYXJjaFRlcm0oZS50YXJnZXQudmFsdWUpfVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxidXR0b24gY2xhc3NOYW1lPVwiaGlkZGVuIHNtOmZsZXggaXRlbXMtY2VudGVyIGdhcC0yIGJnLXNsYXRlLTkwMCB0ZXh0LXdoaXRlIHB4LTYgcHktMyByb3VuZGVkLWxnIGZvbnQtc2VtaWJvbGQgdGV4dC1zbSBob3ZlcjpiZy1zbGF0ZS04MDAgdHJhbnNpdGlvbi1jb2xvcnNcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBCdXNjYXJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICA8L2hlYWRlcj5cblxuICAgICAgICAgICAgICAgICAgICB7LyogRmxvYXRpbmcgQ2F0ZWdvcmllcyAqL31cbiAgICAgICAgICAgICAgICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPVwicmVsYXRpdmUgei0yMCBtYXgtdy03eGwgbXgtYXV0byBweC00IC1tdC0xMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IG92ZXJmbG93LXgtYXV0byBwYi02IGdhcC0zIG5vLXNjcm9sbGJhciBzbTpqdXN0aWZ5LWNlbnRlciBweC00XCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAge2NhdGVnb3JpYXMubWFwKChjYXQpID0+IChcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGJ1dHRvblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAga2V5PXtjYXQubm9tYnJlfVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gc2V0QWN0aXZlQ2F0ZWdvcnkoY2F0Lm5vbWJyZSl9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9e2BcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiBweC01IHB5LTMgcm91bmRlZC14bCB0ZXh0LXNtIGZvbnQtc2VtaWJvbGQgc2hhZG93LWxnIGJhY2tkcm9wLWJsdXItc20gYm9yZGVyIHRyYW5zaXRpb24tYWxsIGR1cmF0aW9uLTMwMCB3aGl0ZXNwYWNlLW5vd3JhcFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICR7YWN0aXZlQ2F0ZWdvcnkgPT09IGNhdC5ub21icmUgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgID8gJ2JnLXdoaXRlIGJvcmRlci1vcmFuZ2UtMTAwIHRleHQtb3JhbmdlLTYwMCBzaGFkb3ctb3JhbmdlLTUwMC8xMCBzY2FsZS0xMDUgcmluZy0xIHJpbmctb3JhbmdlLTEwMCcgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDogJ2JnLXdoaXRlLzkwIGJvcmRlci1zbGF0ZS0yMDAvNjAgdGV4dC1zbGF0ZS02MDAgaG92ZXI6Ymctd2hpdGUgaG92ZXI6c2NhbGUtMTA1IGhvdmVyOnRleHQtYmx1ZS02MDAgaG92ZXI6c2hhZG93LXhsJ31cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGB9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxJY29uIGljb249e2NhdC5pY29ufSBzaXplPVwiMThcIiAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAge2NhdC5ub21icmV9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICkpfVxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgIDwvc2VjdGlvbj5cblxuICAgICAgICAgICAgICAgICAgICB7LyogTWFpbiBDb250ZW50ICovfVxuICAgICAgICAgICAgICAgICAgICA8bWFpbiBjbGFzc05hbWU9XCJtYXgtdy03eGwgbXgtYXV0byBweC00IHB5LTE2IHNtOnB4LTYgbGc6cHgtOFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGZsZXgtY29sIHNtOmZsZXgtcm93IGp1c3RpZnktYmV0d2VlbiBpdGVtcy1lbmQgbWItMTIgYm9yZGVyLWIgYm9yZGVyLXNsYXRlLTEwMCBwYi00XCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT1cInRleHQtMnhsIGZvbnQtYm9sZCB0ZXh0LXNsYXRlLTkwMCB0cmFja2luZy10aWdodFwiPkV4cGVydG9zIGRpc3BvbmlibGVzIGFob3JhPC9oMj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1zbGF0ZS01MDAgbXQtMSB0ZXh0LXNtXCI+TW9zdHJhbmRvIHByb2Zlc2lvbmFsZXMgY2VyY2EgZGUgdHUgdWJpY2FjacOzbjwvcD5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uIGNsYXNzTmFtZT1cImhpZGRlbiBzbTpmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMS41IHRleHQtYmx1ZS02MDAgZm9udC1zZW1pYm9sZCB0ZXh0LXNtIGhvdmVyOmJnLWJsdWUtNTAgcHgtMyBweS0xLjUgcm91bmRlZC1sZyB0cmFuc2l0aW9uLWNvbG9ycyBtdC00IHNtOm10LTBcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVmVyIG1hcGEgPEljb24gaWNvbj1cInNvbGFyOm1hcC1wb2ludC1saW5lYXJcIiBzaXplPVwiMTZcIiAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICAgICAgICAgICAgICAgIHtmaWx0ZXJlZEdhc2ZpdGVyZXMubGVuZ3RoID4gMCA/IChcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImdyaWQgZ3JpZC1jb2xzLTEgc206Z3JpZC1jb2xzLTIgbGc6Z3JpZC1jb2xzLTQgZ2FwLTZcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAge2ZpbHRlcmVkR2FzZml0ZXJlcy5tYXAoKHBybykgPT4gKFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBrZXk9e3Byby5pZH0gY2xhc3NOYW1lPVwiZ3JvdXAgYmctd2hpdGUgcm91bmRlZC0yeGwgYm9yZGVyIGJvcmRlci1zbGF0ZS0yMDAvNjAgb3ZlcmZsb3ctaGlkZGVuIGhvdmVyOnNoYWRvdy1bMF8yMHB4XzQwcHhfLTE1cHhfcmdiYSgwLDAsMCwwLjEpXSBob3Zlcjpib3JkZXItYmx1ZS0xMDAgdHJhbnNpdGlvbi1hbGwgZHVyYXRpb24tMzAwIGZsZXggZmxleC1jb2xcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB7LyogSW1hZ2UgQXJlYSAqL31cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInJlbGF0aXZlIGgtNDggb3ZlcmZsb3ctaGlkZGVuIGJnLXNsYXRlLTEwMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aW1nIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3JjPXtwcm8uaW1hZ2VufSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsdD17cHJvLm5vbWJyZX0gXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJ3LWZ1bGwgaC1mdWxsIG9iamVjdC1jb3ZlciBncm91cC1ob3ZlcjpzY2FsZS0xMDUgdHJhbnNpdGlvbi10cmFuc2Zvcm0gZHVyYXRpb24tNzAwXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJhYnNvbHV0ZSB0b3AtMyByaWdodC0zIGJnLXdoaXRlLzk1IGJhY2tkcm9wLWJsdXItc20gcHgtMi41IHB5LTEgcm91bmRlZC1mdWxsIGZsZXggaXRlbXMtY2VudGVyIGdhcC0xIHRleHQteHMgZm9udC1ib2xkIHRleHQtc2xhdGUtNzAwIHNoYWRvdy1zbSBib3JkZXIgYm9yZGVyLXNsYXRlLTEwMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb24gaWNvbj1cInNvbGFyOnN0YXItYm9sZFwiIGNsYXNzTmFtZT1cInRleHQtb3JhbmdlLTQwMFwiIHNpemU9XCIxMlwiIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB7cHJvLmNhbGlmaWNhY2lvbn1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHtwcm8udmVyaWZpY2FkbyAmJiAoXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImFic29sdXRlIHRvcC0zIGxlZnQtMyBiZy1ibHVlLTUwMCB0ZXh0LXdoaXRlIHctNyBoLTcgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgcm91bmRlZC1mdWxsIHNoYWRvdy1sZyBzaGFkb3ctYmx1ZS01MDAvMzBcIiB0aXRsZT1cIlBlcmZpbCBWZXJpZmljYWRvXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb24gaWNvbj1cInNvbGFyOnNoaWVsZC1jaGVjay1ib2xkXCIgc2l6ZT1cIjE0XCIgLz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICApfVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImFic29sdXRlIGJvdHRvbS0wIGxlZnQtMCByaWdodC0wIGgtMTYgYmctZ3JhZGllbnQtdG8tdCBmcm9tLXdoaXRlIHZpYS13aGl0ZS81MCB0by10cmFuc3BhcmVudFwiPjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgey8qIENvbnRlbnQgKi99XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwLTUgZmxleC0xIGZsZXggZmxleC1jb2wgcmVsYXRpdmVcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJhYnNvbHV0ZSAtdG9wLTYgbGVmdC01XCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJpbmxpbmUtYmxvY2sgcHgtMiBweS0wLjUgcm91bmRlZC1tZCBiZy1ibHVlLTUwIGJvcmRlciBib3JkZXItYmx1ZS0xMDAgdGV4dC1bMTBweF0gZm9udC1ib2xkIHVwcGVyY2FzZSB0cmFja2luZy13aWRlciB0ZXh0LWJsdWUtNjAwXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAge3Byby5jYXRlZ29yaWF9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L3NwYW4+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9XCJ0ZXh0LWxnIGZvbnQtYm9sZCB0ZXh0LXNsYXRlLTkwMCBtYi0xIGdyb3VwLWhvdmVyOnRleHQtYmx1ZS02MDAgdHJhbnNpdGlvbi1jb2xvcnNcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHtwcm8ubm9tYnJlfVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2gzPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXNsYXRlLTUwMCB0ZXh0LXhzIG1iLTUgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTEuNSBmb250LW1lZGl1bVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb24gaWNvbj1cInNvbGFyOmNsb2NrLWNpcmNsZS1saW5lYXJcIiBzaXplPVwiMTRcIiBjbGFzc05hbWU9XCJ0ZXh0LXNsYXRlLTQwMFwiIC8+IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAge3Byby5lc3BlY2lhbGlkYWR9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvcD5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXQtYXV0b1wiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGl0ZW1zLWVuZCBqdXN0aWZ5LWJldHdlZW4gcHktMyBib3JkZXItdCBib3JkZXItc2xhdGUtNTAgbWItM1wiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cInRleHQtWzEwcHhdIHVwcGVyY2FzZSB0cmFja2luZy13aWRlIHRleHQtc2xhdGUtNDAwIGZvbnQtc2VtaWJvbGRcIj5EZXNkZTwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJ0ZXh0LWJhc2UgZm9udC1leHRyYWJvbGQgdGV4dC1zbGF0ZS05MDAgdHJhY2tpbmctdGlnaHRcIj57cHJvLnByZWNpb308L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInRleHQtcmlnaHRcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwidGV4dC1bMTBweF0gdXBwZXJjYXNlIHRyYWNraW5nLXdpZGUgdGV4dC1zbGF0ZS00MDAgZm9udC1zZW1pYm9sZFwiPkV4cDwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJ0ZXh0LXhzIGZvbnQtc2VtaWJvbGQgdGV4dC1zbGF0ZS03MDAgYmctc2xhdGUtNTAgcHgtMiBweS0wLjUgcm91bmRlZC1mdWxsIGJvcmRlciBib3JkZXItc2xhdGUtMTAwXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB7cHJvLnRyYWJham9zfSB0cmIuXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxidXR0b24gY2xhc3NOYW1lPVwidy1mdWxsIGJnLXNsYXRlLTUwIGhvdmVyOmJnLXNsYXRlLTkwMCB0ZXh0LXNsYXRlLTkwMCBob3Zlcjp0ZXh0LXdoaXRlIHB5LTIuNSByb3VuZGVkLXhsIHRleHQtc20gZm9udC1zZW1pYm9sZCB0cmFuc2l0aW9uLWFsbCBkdXJhdGlvbi0zMDAgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgZ2FwLTIgZ3JvdXAvYnRuIGJvcmRlciBib3JkZXItc2xhdGUtMjAwIGhvdmVyOmJvcmRlci1zbGF0ZS05MDBcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDb250YWN0YXIgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb24gaWNvbj1cInNvbGFyOmFsdC1hcnJvdy1yaWdodC1saW5lYXJcIiBjbGFzc05hbWU9XCJncm91cC1ob3Zlci9idG46dHJhbnNsYXRlLXgtMSB0cmFuc2l0aW9uLXRyYW5zZm9ybVwiIHNpemU9XCIxNlwiIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKSl9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICApIDogKFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGV4dC1jZW50ZXIgcHktMjQgYmctd2hpdGUgcm91bmRlZC0zeGwgYm9yZGVyIGJvcmRlci1kYXNoZWQgYm9yZGVyLXNsYXRlLTIwMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImJnLXNsYXRlLTUwIHctMTYgaC0xNiByb3VuZGVkLTJ4bCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBteC1hdXRvIG1iLTQgYm9yZGVyIGJvcmRlci1zbGF0ZS0xMDBcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxJY29uIGljb249XCJzb2xhcjptYWduaWZlci1saW5lYXJcIiBjbGFzc05hbWU9XCJ0ZXh0LXNsYXRlLTMwMFwiIHNpemU9XCIzMlwiIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aDMgY2xhc3NOYW1lPVwidGV4dC1sZyBmb250LWJvbGQgdGV4dC1zbGF0ZS05MDBcIj5ObyBlbmNvbnRyYW1vcyByZXN1bHRhZG9zPC9oMz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1zbGF0ZS01MDAgdGV4dC1zbSBtdC0xXCI+SW50ZW50YSBidXNjYXIgY29uIG90cmEgY2F0ZWdvcsOtYSBvIHBhbGFicmEgY2xhdmUuPC9wPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgKX1cbiAgICAgICAgICAgICAgICAgICAgPC9tYWluPlxuXG4gICAgICAgICAgICAgICAgICAgIHsvKiBGb290ZXIgLyBDVEEgKi99XG4gICAgICAgICAgICAgICAgICAgIDxmb290ZXIgY2xhc3NOYW1lPVwiYmctd2hpdGUgYm9yZGVyLXQgYm9yZGVyLXNsYXRlLTIwMCBwdC0yMCBwYi0xMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtYXgtdy03eGwgbXgtYXV0byBweC00IHRleHQtY2VudGVyXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJiZy1zbGF0ZS05MDAgcm91bmRlZC1bMi41cmVtXSBwLTEyIG1kOnAtMTYgdGV4dC13aGl0ZSByZWxhdGl2ZSBvdmVyZmxvdy1oaWRkZW4gbWItMjAgc2hhZG93LTJ4bCBzaGFkb3ctc2xhdGUtOTAwLzEwIGdyb3VwXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYWJzb2x1dGUgdG9wLTAgcmlnaHQtMCB3LVs1MDBweF0gaC1bNTAwcHhdIGJnLWdyYWRpZW50LXRvLWIgZnJvbS1ibHVlLTYwMC8zMCB0by1wdXJwbGUtNjAwLzMwIHJvdW5kZWQtZnVsbCAtbXItMzIgLW10LTMyIGJsdXItWzgwcHhdIGdyb3VwLWhvdmVyOmJnLWJsdWUtNjAwLzQwIHRyYW5zaXRpb24tY29sb3JzIGR1cmF0aW9uLTEwMDBcIj48L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJhYnNvbHV0ZSBib3R0b20tMCBsZWZ0LTAgdy1bNDAwcHhdIGgtWzQwMHB4XSBiZy1ncmFkaWVudC10by10IGZyb20tb3JhbmdlLTUwMC8yMCB0by1waW5rLTUwMC8yMCByb3VuZGVkLWZ1bGwgLW1sLTIwIC1tYi0yMCBibHVyLVs4MHB4XVwiPjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJyZWxhdGl2ZSB6LTEwIG1heC13LTJ4bCBteC1hdXRvXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aDIgY2xhc3NOYW1lPVwidGV4dC0zeGwgbWQ6dGV4dC01eGwgZm9udC1leHRyYWJvbGQgbWItNiB0cmFja2luZy10aWdodFwiPsK/RXJlcyB1biBleHBlcnRvIGNlcnRpZmljYWRvPzwvaDI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXNsYXRlLTMwMCB0ZXh0LWxnIG1iLTEwIGZvbnQtbGlnaHQgbGVhZGluZy1yZWxheGVkXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgw5puZXRlIGEgbGEgcmVkIG3DoXMgZ3JhbmRlIGRlIHByb2Zlc2lvbmFsZXMgeSBjb21pZW56YSBhIHJlY2liaXIgdHJhYmFqb3MgZW4gdHUgem9uYSBob3kgbWlzbW8uIFNpbiBjdW90YXMgbWVuc3VhbGVzIGZpamFzLlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9wPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGJ1dHRvbiBjbGFzc05hbWU9XCJiZy13aGl0ZSB0ZXh0LXNsYXRlLTkwMCBweC04IHB5LTMuNSByb3VuZGVkLXhsIGZvbnQtYm9sZCB0ZXh0LWJhc2UgdHJhbnNpdGlvbi1hbGwgaG92ZXI6c2NhbGUtMTA1IGhvdmVyOnNoYWRvdy14bCBob3ZlcjpzaGFkb3ctd2hpdGUvMTAgYWN0aXZlOnNjYWxlLTk1XCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUmVnaXN0cmFybWUgY29tbyBQcm9mZXNpb25hbFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJncmlkIGdyaWQtY29scy0yIG1kOmdyaWQtY29scy00IGdhcC0xMCB0ZXh0LWxlZnQgbWItMTYgYm9yZGVyLWIgYm9yZGVyLXNsYXRlLTEwMCBwYi0xNlwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGg0IGNsYXNzTmFtZT1cImZvbnQtYm9sZCBtYi01IHRleHQtc2xhdGUtOTAwIHRleHQtc20gdXBwZXJjYXNlIHRyYWNraW5nLXdpZGVyXCI+UGxhdGFmb3JtYTwvaDQ+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dWwgY2xhc3NOYW1lPVwidGV4dC1zbGF0ZS01MDAgc3BhY2UteS0zIHRleHQtc20gZm9udC1tZWRpdW1cIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bGk+PGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJob3Zlcjp0ZXh0LWJsdWUtNjAwIHRyYW5zaXRpb24tY29sb3JzXCI+Q8OzbW8gZnVuY2lvbmE8L2E+PC9saT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bGk+PGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJob3Zlcjp0ZXh0LWJsdWUtNjAwIHRyYW5zaXRpb24tY29sb3JzXCI+U2VndXJpZGFkPC9hPjwvbGk+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGxpPjxhIGhyZWY9XCIjXCIgY2xhc3NOYW1lPVwiaG92ZXI6dGV4dC1ibHVlLTYwMCB0cmFuc2l0aW9uLWNvbG9yc1wiPlByZWNpb3M8L2E+PC9saT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvdWw+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGg0IGNsYXNzTmFtZT1cImZvbnQtYm9sZCBtYi01IHRleHQtc2xhdGUtOTAwIHRleHQtc20gdXBwZXJjYXNlIHRyYWNraW5nLXdpZGVyXCI+Q2F0ZWdvcsOtYXM8L2g0PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHVsIGNsYXNzTmFtZT1cInRleHQtc2xhdGUtNTAwIHNwYWNlLXktMyB0ZXh0LXNtIGZvbnQtbWVkaXVtXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGxpPjxhIGhyZWY9XCIjXCIgY2xhc3NOYW1lPVwiaG92ZXI6dGV4dC1ibHVlLTYwMCB0cmFuc2l0aW9uLWNvbG9yc1wiPkdhc2ZpdGVyw61hIEdlbmVyYWw8L2E+PC9saT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bGk+PGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJob3Zlcjp0ZXh0LWJsdWUtNjAwIHRyYW5zaXRpb24tY29sb3JzXCI+SW5zdGFsYWNpw7NuIEdhczwvYT48L2xpPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxsaT48YSBocmVmPVwiI1wiIGNsYXNzTmFtZT1cImhvdmVyOnRleHQtYmx1ZS02MDAgdHJhbnNpdGlvbi1jb2xvcnNcIj5BbGNhbnRhcmlsbGFkbzwvYT48L2xpPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC91bD5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aDQgY2xhc3NOYW1lPVwiZm9udC1ib2xkIG1iLTUgdGV4dC1zbGF0ZS05MDAgdGV4dC1zbSB1cHBlcmNhc2UgdHJhY2tpbmctd2lkZXJcIj5Tb3BvcnRlPC9oND5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx1bCBjbGFzc05hbWU9XCJ0ZXh0LXNsYXRlLTUwMCBzcGFjZS15LTMgdGV4dC1zbSBmb250LW1lZGl1bVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxsaT48YSBocmVmPVwiI1wiIGNsYXNzTmFtZT1cImhvdmVyOnRleHQtYmx1ZS02MDAgdHJhbnNpdGlvbi1jb2xvcnNcIj5DZW50cm8gZGUgQXl1ZGE8L2E+PC9saT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bGk+PGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJob3Zlcjp0ZXh0LWJsdWUtNjAwIHRyYW5zaXRpb24tY29sb3JzXCI+Q29udGFjdG88L2E+PC9saT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8bGk+PGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJob3Zlcjp0ZXh0LWJsdWUtNjAwIHRyYW5zaXRpb24tY29sb3JzXCI+VMOpcm1pbm9zPC9hPjwvbGk+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L3VsPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxoNCBjbGFzc05hbWU9XCJmb250LWJvbGQgbWItNSB0ZXh0LXNsYXRlLTkwMCB0ZXh0LXNtIHVwcGVyY2FzZSB0cmFja2luZy13aWRlclwiPlNvY2lhbDwvaDQ+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggZ2FwLTNcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInctMTAgaC0xMCBiZy1zbGF0ZS01MCByb3VuZGVkLWZ1bGwgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgaG92ZXI6Ymctc2xhdGUtOTAwIGhvdmVyOnRleHQtd2hpdGUgY3Vyc29yLXBvaW50ZXIgdHJhbnNpdGlvbi1hbGwgZHVyYXRpb24tMzAwIGJvcmRlciBib3JkZXItc2xhdGUtMTAwIGhvdmVyOmJvcmRlci1zbGF0ZS05MDBcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb24gaWNvbj1cInNvbGFyOmNoYXQtbGluZS1saW5lYXJcIiBzaXplPVwiMThcIiAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidy0xMCBoLTEwIGJnLXNsYXRlLTUwIHJvdW5kZWQtZnVsbCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBob3ZlcjpiZy1zbGF0ZS05MDAgaG92ZXI6dGV4dC13aGl0ZSBjdXJzb3ItcG9pbnRlciB0cmFuc2l0aW9uLWFsbCBkdXJhdGlvbi0zMDAgYm9yZGVyIGJvcmRlci1zbGF0ZS0xMDAgaG92ZXI6Ym9yZGVyLXNsYXRlLTkwMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8SWNvbiBpY29uPVwic29sYXI6cGhvbmUtY2FsbGluZy1saW5lYXJcIiBzaXplPVwiMThcIiAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidy0xMCBoLTEwIGJnLXNsYXRlLTUwIHJvdW5kZWQtZnVsbCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBob3ZlcjpiZy1zbGF0ZS05MDAgaG92ZXI6dGV4dC13aGl0ZSBjdXJzb3ItcG9pbnRlciB0cmFuc2l0aW9uLWFsbCBkdXJhdGlvbi0zMDAgYm9yZGVyIGJvcmRlci1zbGF0ZS0xMDAgaG92ZXI6Ym9yZGVyLXNsYXRlLTkwMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8SWNvbiBpY29uPVwic29sYXI6Y2FtZXJhLWxpbmVhclwiIHNpemU9XCIxOFwiIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGZsZXgtY29sIG1kOmZsZXgtcm93IGp1c3RpZnktYmV0d2VlbiBpdGVtcy1jZW50ZXIgZ2FwLTQgdGV4dC14cyBmb250LW1lZGl1bSB0ZXh0LXNsYXRlLTQwMFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cD7CqSAyMDI0IEdhc2ZpRmxvdy4gSGVjaG8gcGFyYSBxdWUgdG9kbyBmbHV5YS48L3A+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBnYXAtNlwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJob3Zlcjp0ZXh0LXNsYXRlLTYwMFwiPlByaXZhY2lkYWQ8L2E+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8YSBocmVmPVwiI1wiIGNsYXNzTmFtZT1cImhvdmVyOnRleHQtc2xhdGUtNjAwXCI+Q29va2llczwvYT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxhIGhyZWY9XCIjXCIgY2xhc3NOYW1lPVwiaG92ZXI6dGV4dC1zbGF0ZS02MDBcIj5MZWdhbDwvYT5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgPC9mb290ZXI+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICApO1xuICAgICAgICB9O1xuXG4gICAgICAgIGNvbnN0IHJvb3QgPSBSZWFjdERPTS5jcmVhdGVSb290KGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdyb290JykpO1xuICAgICAgICByb290LnJlbmRlcig8QXBwIC8+KTtcbiAgICAiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7O0FBQ1EsSUFBQUEsTUFBQSxHQUFxQkMsS0FBSztFQUFsQkMsUUFBUSxHQUFBRixNQUFBLENBQVJFLFFBQVE7O0FBRWhCO0FBQ0EsSUFBTUMsSUFBSSxHQUFHLFNBQVBBLElBQUlBLENBQUFDLElBQUE7RUFBQSxJQUFNQyxJQUFJLEdBQUFELElBQUEsQ0FBSkMsSUFBSTtJQUFBQyxTQUFBLEdBQUFGLElBQUEsQ0FBRUcsSUFBSTtJQUFKQSxJQUFJLEdBQUFELFNBQUEsY0FBRyxNQUFNLEdBQUFBLFNBQUE7SUFBQUUsY0FBQSxHQUFBSixJQUFBLENBQUVLLFNBQVM7SUFBVEEsU0FBUyxHQUFBRCxjQUFBLGNBQUcsRUFBRSxHQUFBQSxjQUFBO0VBQUEsb0JBQy9DUCxLQUFBLENBQUFTLGFBQUE7SUFDSUwsSUFBSSxFQUFFQSxJQUFLO0lBQ1hNLEtBQUssRUFBRUosSUFBSztJQUNaSyxNQUFNLEVBQUVMLElBQUs7SUFDYixnQkFBYSxLQUFLO0lBQ2xCLFNBQU9FO0VBQVUsQ0FDTixDQUFDO0FBQUEsQ0FDbkI7QUFFRCxJQUFNSSxHQUFHLEdBQUcsU0FBTkEsR0FBR0EsQ0FBQSxFQUFTO0VBQ2QsSUFBQUMsU0FB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
+
+
+        const { useState } = React;
+
+        // Reusable Icon Component for Solar Icons
+        const Icon = ({ icon, size = "24px", className = "" }) => (
+            <iconify-icon 
+                icon={icon} 
+                width={size} 
+                height={size} 
+                stroke-width="1.5"
+                class={className}
+            ></iconify-icon>
+        );
+
+        const App = () => {
+            const [searchTerm, setSearchTerm] = useState('');
+            const [activeCategory, setActiveCategory] = useState('Todos');
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+            const gasfiteres = [
+                {
+                    id: 1,
+                    nombre: "Roberto Martínez",
+                    especialidad: "Emergencias 24/7",
+                    calificacion: 4.9,
+                    trabajos: 124,
+                    precio: "Desde $25.000",
+                    imagen: "https://images.unsplash.com/photo-1595844730298-b960ff98fee0?auto=format&fit=crop&q=80&w=400",
+                    categoria: "Urgencias",
+                    verificado: true
+                },
+                {
+                    id: 2,
+                    nombre: "Ana Silva",
+                    especialidad: "Instalaciones de Calefont",
+                    calificacion: 4.8,
+                    trabajos: 89,
+                    precio: "Desde $35.000",
+                    imagen: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+                    categoria: "Calefont",
+                    verificado: true
+                },
+                {
+                    id: 3,
+                    nombre: "Juan Pedro Soto",
+                    especialidad: "Destape de Cañerías",
+                    calificacion: 4.7,
+                    trabajos: 210,
+                    precio: "Desde $20.000",
+                    imagen: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400",
+                    categoria: "Destapes",
+                    verificado: false
+                },
+                {
+                    id: 4,
+                    nombre: "Carlos Fuentealba",
+                    especialidad: "Fugas y Filtraciones",
+                    calificacion: 5.0,
+                    trabajos: 56,
+                    precio: "Desde $30.000",
+                    imagen: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+                    categoria: "Filtraciones",
+                    verificado: true
+                }
+            ];
+
+            const categorias = [
+                { nombre: 'Todos', icon: 'solar:bolt-linear' },
+                { nombre: 'Urgencias', icon: 'solar:flame-linear' },
+                { nombre: 'Calefont', icon: 'solar:waterdrops-linear' },
+                { nombre: 'Destapes', icon: 'solar:sledgehammer-linear' },
+                { nombre: 'Filtraciones', icon: 'solar:shield-check-linear' }
+            ];
+
+            const filteredGasfiteres = gasfiteres.filter(g => 
+                (activeCategory === 'Todos' || g.categoria === activeCategory) &&
+                (g.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || g.especialidad.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+
+            return (
+                <div className="min-h-screen font-sans text-slate-800">
+                    {/* Navigation */}
+                    <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex justify-between h-16 items-center">
+                                <div className="flex items-center gap-3 cursor-pointer group">
+                                    <div className="bg-gradient-to-br from-blue-600 to-cyan-400 p-2 rounded-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
+                                        <Icon icon="solar:waterdrops-bold" className="text-white block" size="20" />
+                                    </div>
+                                    <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-cyan-600">
+                                        GASFIFLOW
+                                    </span>
+                                </div>
+                                
+                                <div className="hidden md:flex items-center gap-8 font-medium text-sm">
+                                    <a href="#" className="text-slate-500 hover:text-blue-600 transition-colors">Inicio</a>
+                                    <a href="#" className="text-slate-500 hover:text-blue-600 transition-colors">Cómo funciona</a>
+                                    <a href="#" className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-5 py-2.5 rounded-full shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 transition-all text-xs font-semibold tracking-wide">
+                                        Soy Gasfíter
+                                    </a>
+                                </div>
+
+                                <button className="md:hidden text-slate-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                                    <Icon icon={isMenuOpen ? "solar:close-circle-linear" : "solar:hamburger-menu-linear"} size="24" />
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Hero Section */}
+                    <header className="relative overflow-hidden bg-slate-900 py-20 sm:py-32">
+                        {/* Background Effects */}
+                        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                            <div className="absolute -top-[20%] -left-[10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen"></div>
+                            <div className="absolute top-[40%] -right-[10%] w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[100px] mix-blend-screen"></div>
+                            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
+                        </div>
+
+                        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 text-blue-300 text-xs font-medium mb-8 backdrop-blur-md">
+                                <span className="relative flex h-2 w-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                                </span>
+                                Red de expertos certificada
+                            </div>
+                            
+                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight">
+                                Soluciones que <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 animate-gradient">
+                                    fluyen contigo
+                                </span>
+                            </h1>
+                            <p className="text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+                                Encuentra al experto perfecto en segundos. Profesionales certificados, respuestas rápidas y garantía de satisfacción.
+                            </p>
+
+                            {/* Search Bar */}
+                            <div className="max-w-xl mx-auto relative group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-2xl blur opacity-20 group-focus-within:opacity-75 transition duration-700"></div>
+                                <div className="relative flex items-center bg-white rounded-xl shadow-2xl shadow-blue-900/20 p-1.5 transition-transform group-focus-within:scale-[1.01]">
+                                    <div className="pl-4 text-slate-400">
+                                        <Icon icon="solar:magnifer-linear" size="22" />
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        placeholder="¿Qué necesitas arreglar hoy?" 
+                                        className="w-full p-3 bg-transparent text-slate-800 placeholder:text-slate-400 focus:outline-none text-base font-medium"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                    <button className="hidden sm:flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-slate-800 transition-colors">
+                                        Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Floating Categories */}
+                    <section className="relative z-20 max-w-7xl mx-auto px-4 -mt-10">
+                        <div className="flex overflow-x-auto pb-6 gap-3 no-scrollbar sm:justify-center px-4">
+                            {categorias.map((cat) => (
+                                <button
+                                    key={cat.nombre}
+                                    onClick={() => setActiveCategory(cat.nombre)}
+                                    className={`
+                                        flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold shadow-lg backdrop-blur-sm border transition-all duration-300 whitespace-nowrap
+                                        ${activeCategory === cat.nombre 
+                                            ? 'bg-white border-orange-100 text-orange-600 shadow-orange-500/10 scale-105 ring-1 ring-orange-100' 
+                                            : 'bg-white/90 border-slate-200/60 text-slate-600 hover:bg-white hover:scale-105 hover:text-blue-600 hover:shadow-xl'}
+                                    `}
+                                >
+                                    <Icon icon={cat.icon} size="18" />
+                                    {cat.nombre}
+                                </button>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* Main Content */}
+                    <main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+                        <div className="flex flex-col sm:flex-row justify-between items-end mb-12 border-b border-slate-100 pb-4">
+                            <div>
+                                <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Expertos disponibles ahora</h2>
+                                <p className="text-slate-500 mt-1 text-sm">Mostrando profesionales cerca de tu ubicación</p>
+                            </div>
+                            <button className="hidden sm:flex items-center gap-1.5 text-blue-600 font-semibold text-sm hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors mt-4 sm:mt-0">
+                                Ver mapa <Icon icon="solar:map-point-linear" size="16" />
+                            </button>
+                        </div>
+
+                        {filteredGasfiteres.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {filteredGasfiteres.map((pro) => (
+                                    <div key={pro.id} className="group bg-white rounded-2xl border border-slate-200/60 overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-blue-100 transition-all duration-300 flex flex-col">
+                                        
+                                        {/* Image Area */}
+                                        <div className="relative h-48 overflow-hidden bg-slate-100">
+                                            <img 
+                                                src={pro.imagen} 
+                                                alt={pro.nombre} 
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                            />
+                                            <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-100">
+                                                <Icon icon="solar:star-bold" className="text-orange-400" size="12" />
+                                                {pro.calificacion}
+                                            </div>
+                                            {pro.verificado && (
+                                                <div className="absolute top-3 left-3 bg-blue-500 text-white w-7 h-7 flex items-center justify-center rounded-full shadow-lg shadow-blue-500/30" title="Perfil Verificado">
+                                                    <Icon icon="solar:shield-check-bold" size="14" />
+                                                </div>
+                                            )}
+                                            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
+                                        </div>
+
+                                        {/* Content */}
+                                        <div className="p-5 flex-1 flex flex-col relative">
+                                            <div className="absolute -top-6 left-5">
+                                                <span className="inline-block px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold uppercase tracking-wider text-blue-600">
+                                                    {pro.categoria}
+                                                </span>
+                                            </div>
+
+                                            <h3 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">
+                                                {pro.nombre}
+                                            </h3>
+                                            <p className="text-slate-500 text-xs mb-5 flex items-center gap-1.5 font-medium">
+                                                <Icon icon="solar:clock-circle-linear" size="14" className="text-slate-400" /> 
+                                                {pro.especialidad}
+                                            </p>
+                                            
+                                            <div className="mt-auto">
+                                                <div className="flex items-end justify-between py-3 border-t border-slate-50 mb-3">
+                                                    <div>
+                                                        <span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Desde</span>
+                                                        <div className="text-base font-extrabold text-slate-900 tracking-tight">{pro.precio}</div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Exp</span>
+                                                        <div className="text-xs font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+                                                            {pro.trabajos} trb.
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button className="w-full bg-slate-50 hover:bg-slate-900 text-slate-900 hover:text-white py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn border border-slate-200 hover:border-slate-900">
+                                                    Contactar 
+                                                    <Icon icon="solar:alt-arrow-right-linear" className="group-hover/btn:translate-x-1 transition-transform" size="16" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-slate-200">
+                                <div className="bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                                    <Icon icon="solar:magnifer-linear" className="text-slate-300" size="32" />
+                                </div>
+                                <h3 className="text-lg font-bold text-slate-900">No encontramos resultados</h3>
+                                <p className="text-slate-500 text-sm mt-1">Intenta buscar con otra categoría o palabra clave.</p>
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Footer / CTA */}
+                    <footer className="bg-white border-t border-slate-200 pt-20 pb-10">
+                        <div className="max-w-7xl mx-auto px-4 text-center">
+                            <div className="bg-slate-900 rounded-[2.5rem] p-12 md:p-16 text-white relative overflow-hidden mb-20 shadow-2xl shadow-slate-900/10 group">
+                                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-b from-blue-600/30 to-purple-600/30 rounded-full -mr-32 -mt-32 blur-[80px] group-hover:bg-blue-600/40 transition-colors duration-1000"></div>
+                                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-t from-orange-500/20 to-pink-500/20 rounded-full -ml-20 -mb-20 blur-[80px]"></div>
+                                
+                                <div className="relative z-10 max-w-2xl mx-auto">
+                                    <h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">¿Eres un experto certificado?</h2>
+                                    <p className="text-slate-300 text-lg mb-10 font-light leading-relaxed">
+                                        Únete a la red más grande de profesionales y comienza a recibir trabajos en tu zona hoy mismo. Sin cuotas mensuales fijas.
+                                    </p>
+                                    <button className="bg-white text-slate-900 px-8 py-3.5 rounded-xl font-bold text-base transition-all hover:scale-105 hover:shadow-xl hover:shadow-white/10 active:scale-95">
+                                        Registrarme como Profesional
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-left mb-16 border-b border-slate-100 pb-16">
+                                <div>
+                                    <h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Plataforma</h4>
+                                    <ul className="text-slate-500 space-y-3 text-sm font-medium">
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Cómo funciona</a></li>
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Seguridad</a></li>
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Precios</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Categorías</h4>
+                                    <ul className="text-slate-500 space-y-3 text-sm font-medium">
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Gasfitería General</a></li>
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Instalación Gas</a></li>
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Alcantarillado</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Soporte</h4>
+                                    <ul className="text-slate-500 space-y-3 text-sm font-medium">
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Centro de Ayuda</a></li>
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Contacto</a></li>
+                                        <li><a href="#" className="hover:text-blue-600 transition-colors">Términos</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Social</h4>
+                                    <div className="flex gap-3">
+                                        <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900">
+                                            <Icon icon="solar:chat-line-linear" size="18" />
+                                        </div>
+                                        <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900">
+                                            <Icon icon="solar:phone-calling-linear" size="18" />
+                                        </div>
+                                        <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900">
+                                            <Icon icon="solar:camera-linear" size="18" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
+                                <p>© 2024 GasfiFlow. Hecho para que todo fluya.</p>
+                                <div className="flex gap-6">
+                                    <a href="#" className="hover:text-slate-600">Privacidad</a>
+                                    <a href="#" className="hover:text-slate-600">Cookies</a>
+                                    <a href="#" className="hover:text-slate-600">Legal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="" id="root"><div className="min-h-screen font-sans text-slate-800"><nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="flex h-16 items-center justify-between"><div className="flex items-center gap-3 cursor-pointer group"><div className="bg-gradient-to-br from-blue-600 to-cyan-400 p-2 rounded-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300"><iconify-icon className="text-white block" height="20" icon="solar:waterdrops-bold" strokeWidth="1.5" width="20"></iconify-icon></div><span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-cyan-600">GASFIFLOW</span></div><div className="hidden md:flex items-center gap-8 font-medium text-sm"><a className="text-slate-500 hover:text-blue-600 transition-colors" href="#">Inicio</a><a className="text-slate-500 hover:text-blue-600 transition-colors" href="#">Cómo funciona</a><a className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-5 py-2.5 rounded-full shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 transition-all text-xs font-semibold tracking-wide" href="#">Soy Gasfíter</a></div><button className="md:hidden text-slate-600"><iconify-icon className="" height="24" icon="solar:hamburger-menu-linear" strokeWidth="1.5" width="24"></iconify-icon></button></div></div></nav><header className="relative overflow-hidden bg-slate-900 py-20 sm:py-32"><div className="absolute inset-0 overflow-hidden pointer-events-none"><div className="absolute -top-[20%] -left-[10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen"></div><div className="absolute top-[40%] -right-[10%] w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[100px] mix-blend-screen"></div><div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent"></div></div><div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10"><div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 text-blue-300 text-xs font-medium mb-8 backdrop-blur-md"><span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>Red de expertos certificada</div><h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight">Soluciones que <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 animate-gradient">fluyen contigo</span></h1><p className="text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-12 font-light leading-relaxed">Encuentra al experto perfecto en segundos. Profesionales certificados, respuestas rápidas y garantía de satisfacción.</p><div className="max-w-xl mx-auto relative group"><div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-500 rounded-2xl blur opacity-20 group-focus-within:opacity-75 transition duration-700"></div><div className="relative flex items-center bg-white rounded-xl shadow-2xl shadow-blue-900/20 p-1.5 transition-transform group-focus-within:scale-[1.01]"><div className="pl-4 text-slate-400"><iconify-icon className="" height="22" icon="solar:magnifer-linear" strokeWidth="1.5" width="22"></iconify-icon></div><input className="w-full p-3 bg-transparent text-slate-800 placeholder:text-slate-400 focus:outline-none text-base font-medium" placeholder="¿Qué necesitas arreglar hoy?" type="text" value=""/><button className="hidden sm:flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-slate-800 transition-colors">Buscar</button></div></div></div></header><section className="relative z-20 max-w-7xl mx-auto px-4 -mt-10"><div className="flex overflow-x-auto pb-6 gap-3 no-scrollbar sm:justify-center px-4"><button className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold shadow-lg backdrop-blur-sm border transition-all duration-300 whitespace-nowrap bg-white border-orange-100 text-orange-600 shadow-orange-500/10 scale-105 ring-1 ring-orange-100"><iconify-icon className="" height="18" icon="solar:bolt-linear" strokeWidth="1.5" width="18"></iconify-icon>Todos</button><button className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold shadow-lg backdrop-blur-sm border transition-all duration-300 whitespace-nowrap bg-white/90 border-slate-200/60 text-slate-600 hover:bg-white hover:scale-105 hover:text-blue-600 hover:shadow-xl"><iconify-icon className="" height="18" icon="solar:flame-linear" strokeWidth="1.5" width="18"></iconify-icon>Urgencias</button><button className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold shadow-lg backdrop-blur-sm border transition-all duration-300 whitespace-nowrap bg-white/90 border-slate-200/60 text-slate-600 hover:bg-white hover:scale-105 hover:text-blue-600 hover:shadow-xl"><iconify-icon className="" height="18" icon="solar:waterdrops-linear" strokeWidth="1.5" width="18"></iconify-icon>Calefont</button><button className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold shadow-lg backdrop-blur-sm border transition-all duration-300 whitespace-nowrap bg-white/90 border-slate-200/60 text-slate-600 hover:bg-white hover:scale-105 hover:text-blue-600 hover:shadow-xl"><iconify-icon className="" height="18" icon="solar:sledgehammer-linear" strokeWidth="1.5" width="18"></iconify-icon>Destapes</button><button className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold shadow-lg backdrop-blur-sm border transition-all duration-300 whitespace-nowrap bg-white/90 border-slate-200/60 text-slate-600 hover:bg-white hover:scale-105 hover:text-blue-600 hover:shadow-xl"><iconify-icon className="" height="18" icon="solar:shield-check-linear" strokeWidth="1.5" width="18"></iconify-icon>Filtraciones</button></div></section><main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8"><div className="flex flex-col sm:flex-row justify-between items-end mb-12 border-b border-slate-100 pb-4"><div><h2 className="text-2xl font-bold text-slate-900 tracking-tight">Expertos disponibles ahora</h2><p className="text-slate-500 mt-1 text-sm">Mostrando profesionales cerca de tu ubicación</p></div><button className="hidden sm:flex items-center gap-1.5 text-blue-600 font-semibold text-sm hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors mt-4 sm:mt-0">Ver mapa <iconify-icon className="" height="16" icon="solar:map-point-linear" strokeWidth="1.5" width="16"></iconify-icon></button></div><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"><div className="group bg-white rounded-2xl border border-slate-200/60 overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-blue-100 transition-all duration-300 flex flex-col"><div className="relative h-48 overflow-hidden bg-slate-100"><img alt="Roberto Martínez" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1595844730298-b960ff98fee0?auto=format&amp;fit=crop&amp;q=80&amp;w=400"/><div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-100"><iconify-icon className="text-orange-400" height="12" icon="solar:star-bold" strokeWidth="1.5" width="12"></iconify-icon>4.9</div><div className="absolute top-3 left-3 bg-blue-500 text-white w-7 h-7 flex items-center justify-center rounded-full shadow-lg shadow-blue-500/30" title="Perfil Verificado"><iconify-icon className="" height="14" icon="solar:shield-check-bold" strokeWidth="1.5" width="14"></iconify-icon></div><div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div><div className="p-5 flex-1 flex flex-col relative"><div className="absolute -top-6 left-5"><span className="inline-block px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold uppercase tracking-wider text-blue-600">Urgencias</span></div><h3 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Roberto Martínez</h3><p className="text-slate-500 text-xs mb-5 flex items-center gap-1.5 font-medium"><iconify-icon className="text-slate-400" height="14" icon="solar:clock-circle-linear" strokeWidth="1.5" width="14"></iconify-icon>Emergencias 24/7</p><div className="mt-auto"><div className="flex items-end justify-between py-3 border-t border-slate-50 mb-3"><div><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Desde</span><div className="text-base font-extrabold text-slate-900 tracking-tight">Desde $25.000</div></div><div className="text-right"><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Exp</span><div className="text-xs font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">124 trb.</div></div></div><button className="w-full bg-slate-50 hover:bg-slate-900 text-slate-900 hover:text-white py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn border border-slate-200 hover:border-slate-900">Contactar<iconify-icon className="group-hover/btn:translate-x-1 transition-transform" height="16" icon="solar:alt-arrow-right-linear" strokeWidth="1.5" width="16"></iconify-icon></button></div></div></div><div className="group bg-white rounded-2xl border border-slate-200/60 overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-blue-100 transition-all duration-300 flex flex-col"><div className="relative h-48 overflow-hidden bg-slate-100"><img alt="Ana Silva" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=400"/><div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-100"><iconify-icon className="text-orange-400" height="12" icon="solar:star-bold" strokeWidth="1.5" width="12"></iconify-icon>4.8</div><div className="absolute top-3 left-3 bg-blue-500 text-white w-7 h-7 flex items-center justify-center rounded-full shadow-lg shadow-blue-500/30" title="Perfil Verificado"><iconify-icon className="" height="14" icon="solar:shield-check-bold" strokeWidth="1.5" width="14"></iconify-icon></div><div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div><div className="p-5 flex-1 flex flex-col relative"><div className="absolute -top-6 left-5"><span className="inline-block px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold uppercase tracking-wider text-blue-600">Calefont</span></div><h3 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Ana Silva</h3><p className="text-slate-500 text-xs mb-5 flex items-center gap-1.5 font-medium"><iconify-icon className="text-slate-400" height="14" icon="solar:clock-circle-linear" strokeWidth="1.5" width="14"></iconify-icon>Instalaciones de Calefont</p><div className="mt-auto"><div className="flex items-end justify-between py-3 border-t border-slate-50 mb-3"><div><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Desde</span><div className="text-base font-extrabold text-slate-900 tracking-tight">Desde $35.000</div></div><div className="text-right"><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Exp</span><div className="text-xs font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">89 trb.</div></div></div><button className="w-full bg-slate-50 hover:bg-slate-900 text-slate-900 hover:text-white py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn border border-slate-200 hover:border-slate-900">Contactar<iconify-icon className="group-hover/btn:translate-x-1 transition-transform" height="16" icon="solar:alt-arrow-right-linear" strokeWidth="1.5" width="16"></iconify-icon></button></div></div></div><div className="group bg-white rounded-2xl border border-slate-200/60 overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-blue-100 transition-all duration-300 flex flex-col"><div className="relative h-48 overflow-hidden bg-slate-100"><img alt="Juan Pedro Soto" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&amp;fit=crop&amp;q=80&amp;w=400"/><div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-100"><iconify-icon className="text-orange-400" height="12" icon="solar:star-bold" strokeWidth="1.5" width="12"></iconify-icon>4.7</div><div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div><div className="p-5 flex-1 flex flex-col relative"><div className="absolute -top-6 left-5"><span className="inline-block px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold uppercase tracking-wider text-blue-600">Destapes</span></div><h3 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Juan Pedro Soto</h3><p className="text-slate-500 text-xs mb-5 flex items-center gap-1.5 font-medium"><iconify-icon className="text-slate-400" height="14" icon="solar:clock-circle-linear" strokeWidth="1.5" width="14"></iconify-icon>Destape de Cañerías</p><div className="mt-auto"><div className="flex items-end justify-between py-3 border-t border-slate-50 mb-3"><div><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Desde</span><div className="text-base font-extrabold text-slate-900 tracking-tight">Desde $20.000</div></div><div className="text-right"><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Exp</span><div className="text-xs font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">210 trb.</div></div></div><button className="w-full bg-slate-50 hover:bg-slate-900 text-slate-900 hover:text-white py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn border border-slate-200 hover:border-slate-900">Contactar<iconify-icon className="group-hover/btn:translate-x-1 transition-transform" height="16" icon="solar:alt-arrow-right-linear" strokeWidth="1.5" width="16"></iconify-icon></button></div></div></div><div className="group bg-white rounded-2xl border border-slate-200/60 overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-blue-100 transition-all duration-300 flex flex-col"><div className="relative h-48 overflow-hidden bg-slate-100"><img alt="Carlos Fuentealba" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&amp;fit=crop&amp;q=80&amp;w=400"/><div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-bold text-slate-700 shadow-sm border border-slate-100"><iconify-icon className="text-orange-400" height="12" icon="solar:star-bold" strokeWidth="1.5" width="12"></iconify-icon>5</div><div className="absolute top-3 left-3 bg-blue-500 text-white w-7 h-7 flex items-center justify-center rounded-full shadow-lg shadow-blue-500/30" title="Perfil Verificado"><iconify-icon className="" height="14" icon="solar:shield-check-bold" strokeWidth="1.5" width="14"></iconify-icon></div><div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/50 to-transparent"></div></div><div className="p-5 flex-1 flex flex-col relative"><div className="absolute -top-6 left-5"><span className="inline-block px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold uppercase tracking-wider text-blue-600">Filtraciones</span></div><h3 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">Carlos Fuentealba</h3><p className="text-slate-500 text-xs mb-5 flex items-center gap-1.5 font-medium"><iconify-icon className="text-slate-400" height="14" icon="solar:clock-circle-linear" strokeWidth="1.5" width="14"></iconify-icon>Fugas y Filtraciones</p><div className="mt-auto"><div className="flex items-end justify-between py-3 border-t border-slate-50 mb-3"><div><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Desde</span><div className="text-base font-extrabold text-slate-900 tracking-tight">Desde $30.000</div></div><div className="text-right"><span className="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Exp</span><div className="text-xs font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">56 trb.</div></div></div><button className="w-full bg-slate-50 hover:bg-slate-900 text-slate-900 hover:text-white py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 group/btn border border-slate-200 hover:border-slate-900">Contactar<iconify-icon className="group-hover/btn:translate-x-1 transition-transform" height="16" icon="solar:alt-arrow-right-linear" strokeWidth="1.5" width="16"></iconify-icon></button></div></div></div></div></main><footer className="bg-white border-t border-slate-200 pt-20 pb-10"><div className="max-w-7xl mx-auto px-4 text-center"><div className="bg-slate-900 rounded-[2.5rem] p-12 md:p-16 text-white relative overflow-hidden mb-20 shadow-2xl shadow-slate-900/10 group"><div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-b from-blue-600/30 to-purple-600/30 rounded-full -mr-32 -mt-32 blur-[80px] group-hover:bg-blue-600/40 transition-colors duration-1000"></div><div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-t from-orange-500/20 to-pink-500/20 rounded-full -ml-20 -mb-20 blur-[80px]"></div><div className="relative z-10 max-w-2xl mx-auto"><h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">¿Eres un experto certificado?</h2><p className="text-slate-300 text-lg mb-10 font-light leading-relaxed">Únete a la red más grande de profesionales y comienza a recibir trabajos en tu zona hoy mismo. Sin cuotas mensuales fijas.</p><button className="bg-white text-slate-900 px-8 py-3.5 rounded-xl font-bold text-base transition-all hover:scale-105 hover:shadow-xl hover:shadow-white/10 active:scale-95">Registrarme como Profesional</button></div></div><div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-left mb-16 border-b border-slate-100 pb-16"><div><h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Plataforma</h4><ul className="text-slate-500 space-y-3 text-sm font-medium"><li><a className="hover:text-blue-600 transition-colors" href="#">Cómo funciona</a></li><li><a className="hover:text-blue-600 transition-colors" href="#">Seguridad</a></li><li><a className="hover:text-blue-600 transition-colors" href="#">Precios</a></li></ul></div><div><h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Categorías</h4><ul className="text-slate-500 space-y-3 text-sm font-medium"><li><a className="hover:text-blue-600 transition-colors" href="#">Gasfitería General</a></li><li><a className="hover:text-blue-600 transition-colors" href="#">Instalación Gas</a></li><li><a className="hover:text-blue-600 transition-colors" href="#">Alcantarillado</a></li></ul></div><div><h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Soporte</h4><ul className="text-slate-500 space-y-3 text-sm font-medium"><li><a className="hover:text-blue-600 transition-colors" href="#">Centro de Ayuda</a></li><li><a className="hover:text-blue-600 transition-colors" href="#">Contacto</a></li><li><a className="hover:text-blue-600 transition-colors" href="#">Términos</a></li></ul></div><div><h4 className="font-bold mb-5 text-slate-900 text-sm uppercase tracking-wider">Social</h4><div className="flex gap-3"><div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900"><iconify-icon className="" height="18" icon="solar:chat-line-linear" strokeWidth="1.5" width="18"></iconify-icon></div><div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900"><iconify-icon className="" height="18" icon="solar:phone-calling-linear" strokeWidth="1.5" width="18"></iconify-icon></div><div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white cursor-pointer transition-all duration-300 border border-slate-100 hover:border-slate-900"><iconify-icon className="" height="18" icon="solar:camera-linear" strokeWidth="1.5" width="18"></iconify-icon></div></div></div></div><div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400"><p>© 2024 GasfiFlow. Hecho para que todo fluya.</p><div className="flex gap-6"><a className="hover:text-slate-600" href="#">Privacidad</a><a className="hover:text-slate-600" href="#">Cookies</a><a className="hover:text-slate-600" href="#">Legal</a></div></div></div></footer></div></div>
+
+
+    </>
+  );
+}

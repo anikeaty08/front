@@ -1,0 +1,175 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    const beforeBtn = document.getElementById('beforeBtn');
+    const afterBtn = document.getElementById('afterBtn');
+    const beforeSection = document.getElementById('beforeSection');
+    const afterSection = document.getElementById('afterSection');
+
+    beforeBtn.addEventListener('click', () => {
+        beforeBtn.classList.add('bg-gray-900', 'text-white');
+        beforeBtn.classList.remove('text-gray-600');
+        afterBtn.classList.remove('bg-gray-900', 'text-white');
+        afterBtn.classList.add('text-('opacity-30');
+        afterSection.classList.add('opacity-30');
+    });
+
+    afterBtn.addEventListener('click', () => {
+        afterBtn.classList.add('bg-gray-900', 'text-white');
+        afterBtn.classList.remove('text-gray-600');
+        beforeBtn.classList.remove('bg-gray-900', 'text-.add('text-gray-600');
+        
+        afterSection.classList.remove('opacity-30');
+        beforeSection.classList.add('opacity-30');
+    });
+
+
+
+        lucide.createIcons();
+        
+        // Simple timer animation
+        let seconds = 19723; // 5:28:43 in seconds
+        setInterval(() => {
+            seconds++;
+            const hours = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            const timeStr = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            const timerEl = document.querySelector('.font-mono');
+            if (timerEl) timerEl.textContent = timeStr;
+        }, 1000);
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<nav className="floating-nav">
+<div className="flex h-full px-4 sm:px-6 items-center justify-between">
+<div className="flex items-center space-x-2">
+<div className="flex bg-indigo-500 w-8 h-8 rounded-full items-center justify-center">
+<svg className="lucide lucide-zap w-5 h-5 text-white" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+</div>
+<span className="text-lg sm:text-xl font-bold text-gray-900">FlowDesk</span>
+</div>
+<div className="hidden lg:flex items-center space-x-8">
+<a className="hover:text-gray-900 transition-colors font-medium text-gray-600" href="#">Platform</a>
+<a className="text-gray-600 hover:text-gray-900 transition-colors font-medium" href="#">Features</a>
+<a className="text-gray-600 hover:text-gray-900 transition-colors font-medium" href="#">Resources</a>
+<a className="text-gray-600 hover:text-gray-900 transition-colors font-medium" href="#">Pricing</a>
+</div>
+<button className="bg-black text-white px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors">
+                Get Started
+            </button>
+</div>
+</nav>
+
+<section className="sm:pt-32 lg:pt-40 sm:px-6 sm:pb-20 pt-32 pr-4 pb-20 pl-4">
+<div className="text-center max-w-4xl mr-auto ml-auto">
+<div className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-white/70 rounded-full text-xs font-semibold text-gray-600 mb-6 sm:mb-8 border border-white/30">
+                TRANSFORM YOUR WORKPLACE
+            </div>
+<h1 className="text-4xl sm:text-5xl md:text-6xl leading-tight tracking-tight font-bold text-gray-900 mb-4 sm:mb-6 px-4">
+                Streamline Your
+                Workflow with Smart
+                Productivity Hub
+            </h1>
+<p className="text-lg sm:text-xl text-gray-700 mb-8 sm:mb-12 max-w-2xl mx-auto px-4">
+                Transform how your team works with intelligent project management and real-time collaboration tools
+            </p>
+<button className="hover:bg-indigo-600 transition-colors font-semibold text-white bg-slate-950 rounded-full px-6 sm:px-8 py-2.5 sm:py-3 shadow-lg text-sm sm:text-base">
+                Try FlowDesk Free
+            </button>
+</div><div className="sm:mt-32 sm:px-6 max-w-7xl mt-32 mr-auto ml-auto pr-4 pl-4">
+<div className="text-center mb-12 sm:mb-16">
+<div className="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-xsdigo-600 mb-6 border border-indigo-100">
+            NOTRE SAVOIR-FAIRE
+        </div>
+<h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
+            Avant / Après
+        </h2>
+<p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+            Découvrez la transformation de vos vêtements de base en pièces personnalisées grâce au flocage et à la broderie R3N2E
+        </p>
+</div>
+
+<div className="flex mb-12 justify-center">
+<div className="inline-flex items-center bg-white rounded-full p-1 shadow-lg border border-gray-200">
+<button className="sm:px-8 transition-all text-sm font-semibold text-white bg-gray-900 rounded-full pt-2.5 pr-6 pb-2.5 pl-6" id="beforeBtn">
+                Avant
+            </button>
+<button className="sm:px-8 transition-all hover:text-gray-900 text-sm font-semibold text-gray-600 rounded-full pt-2.5 pr-6 pb-2.5 pl-6" id="afterBtn">
+                Après
+            </button>
+</div>
+</div>
+
+<div className="grid md:grid-cols-2 gap-8 sm:gap-12 gap-x-8 gap-y-8">
+
+<div className="transition overflow-hidden rounded-2xl bg-gray-100 aspect-[3/4] hover-scale" id="beforeSection">
+<img alt="Vêtements de base" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&amp;q=80"/>
+<div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
+<span className="text-sm font-semibold text-gray-900">Avant</span>
+</div>
+</div>
+<div className="mt-6">
+<h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">Vêtements de Base</h3>
+<p className="text-gray-600">T-shirts, sweats et polos unis prêts à être personnalisés selon vos besoins.</p>
+</div>
+</div>
+
+<div className="transition-opacity duration-500 opacity-30" id="afterSection">
+<div className="relative overflow-hidden rounded-2xl bg-gray-100 aspect-[3/4] hover-scale">
+<img alt="Vêtements floqués et brodés" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&amp;q=80"/>
+<div className="absolute top-4 left-4 bg-indigo-600 px-4 py-2 rounded-full">
+<span className="text-sm font-semibold text-white">Après</span>
+</div>
+</div>
+<div className="mt-6">
+<h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">Floqués &amp; Brodés par R3N2E</h3>
+<p className="text-gray-600">Personnalisation haut de gamme avec flocage et broderie professionnelle pour un rendu exceptionnel.</p>
+
+<div className="grid sm:grid-cols-3 gap-6 mt-16 sm:mt-20">
+<div className="bg-white rounded-xl p-6 border border-gray-200 hover-scale">
+<div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4">
+<svg className="w-6 h-6 text-indigo-600" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"></path><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+</div>
+<h4 className="text-lg font-semibold text-gray-900 mb-2">F<p className="text-sm text-gray-600">Technique de marquage durable avec des visuels nets et résistants aux lavages.</p>
+</h4></div>
+<div className="bg-white rounded-xl p-6 border border-gray-200 hover-scale">
+<div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4">
+<svg className="w-6 h-6 text-indigo-600" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
+</div>
+<h4 className="text-lg font-semibold text-gray-900 mb-2">Broderie Premium</h4>
+<p className="text-sm text-gray-600">Broderie haute qualité pour un rendu élégant et professionnel qui dure.</p>
+</div>
+<div className="bg-white rounded-xl p-6 border border-gray-200 hover-scale">
+<div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4">
+<svg className="w-6 h-6 text-indigo-600" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+</div>
+<h4 className="text-lg font-semibold text-gray-900 mb-2">Qualité Garantie</h4>
+<p className="text-sm text-gray-600">Engagement chaque pièce personnalisée avec soin.</p>
+</div>
+</div>
+</div>
+</div></div>
+
+<div className="max-w-7xl mx-auto mt-12 sm:mt-16">
+</div>
+</section>
+
+
+    </>
+  );
+}

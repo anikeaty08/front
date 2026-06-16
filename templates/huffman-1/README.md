@@ -1,0 +1,14 @@
+# Healthcare Clinic Landing Page Template
+
+A professional medical services landing page template designed for specialized clinics focusing on neurological and metabolic patient care.
+
+## Project Details
+- **Slug:** `huffman-1`
+- **Views:** 28
+- **Tags:** Health, Services, Landing Page, Clean, Minimal, Professional
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

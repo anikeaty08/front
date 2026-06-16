@@ -1,0 +1,1326 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+// Configure Tailwind to include our custom 3D transform utilities
+tailwind.config = {
+theme: {
+extend: {
+// Add any custom theme extensions here if needed
+}
+},
+plugins: [
+function({ addUtilities }) {
+const rotateXUtilities = {};
+const rotateYUtilities = {};
+const rotateZUtilities = {};
+const rotateValues = [0, 5, 10, 15, 20, 30, 45, 75];
+// Generate rotate-x utilities
+rotateValues.forEach((value) => {
+rotateXUtilities[`.rotate-x-${value}`] = {
+'--tw-rotate-x': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateXUtilities[`.-rotate-x-${value}`] = {
+'--tw-rotate-x': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-y utilities
+rotateValues.forEach((value) => {
+rotateYUtilities[`.rotate-y-${value}`] = {
+'--tw-rotate-y': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateYUtilities[`.-rotate-y-${value}`] = {
+'--tw-rotate-y': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-z utilities
+rotateValues.forEach((value) => {
+rotateZUtilities[`.rotate-z-${value}`] = {
+'--tw-rotate-z': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateZUtilities[`.-rotate-z-${value}`] = {
+'--tw-rotate-z': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Perspective utilities
+const perspectiveUtilities = {
+".perspective-none": { perspective: "none" },
+".perspective-dramatic": { perspective: "100px" },
+".perspective-near": { perspective: "300px" },
+".perspective-normal": { perspective: "500px" },
+".perspective-midrange": { perspective: "800px" },
+".perspective-distant": { perspective: "1200px" },
+};
+// Transform style utilities
+const transformStyleUtilities = {
+".transform-style-preserve-3d": { "transform-style": "preserve-3d" },
+".transform-style-flat": { "transform-style": "flat" },
+};
+addUtilities({
+...rotateXUtilities,
+...rotateYUtilities,
+...rotateZUtilities,
+...perspectiveUtilities,
+...transformStyleUtilities,
+});
+}
+]
+};
+
+
+
+  !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.31/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+
+
+
+        (function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('terminal-active');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      
+      const terminal = document.getElementById('terminal-aura-emkjg4pxs0ahwgw0');
+      if(terminal) observer.observe(terminal);
+    })();
+    
+
+
+    (function() {
+      const toggleContainer = document.getElementById('billing-toggle-container');
+      const indicator = document.getElementById('toggle-indicator');
+      const monthlyBtn = toggleContainer.querySelector('[data-plan="monthly"]');
+      const yearlyBtn = toggleContainer.querySelector('[data-plan="yearly"]');
+      const amounts = document.querySelectorAll('.pricing-amount');
+      const periods = document.querySelectorAll('.pricing-period');
+      
+      let isYearly = false;
+
+      toggleContainer.addEventListener('click', () => {
+        isYearly = !isYearly;
+        
+        // Update Indicator
+        if (isYearly) {
+          indicator.style.transform = 'translateX(100%)';
+          yearlyBtn.classList.replace('text-slate-400', 'text-white');
+          monthlyBtn.classList.replace('text-white', 'text-slate-400');
+        } else {
+          indicator.style.transform = 'translateX(0)';
+          monthlyBtn.classList.replace('text-slate-400', 'text-white');
+          yearlyBtn.classList.replace('text-white', 'text-slate-400');
+        }
+
+        // Update Prices with animation
+        amounts.forEach(el => {
+            el.style.opacity = '0';
+            setTimeout(() => {
+                if (isYearly) {
+                    el.textContent = '$' + el.dataset.yearly;
+                } else {
+                    el.textContent = '$' + el.dataset.monthly;
+                }
+                el.style.opacity = '1';
+            }, 150);
+        });
+
+        // Update Period text
+        periods.forEach(el => {
+             // Optional: change /mo to /yr if desired, but usually kept as /mo billed yearly
+             // Keeping simple for now
+        });
+      });
+    })();
+  
+
+
+        (function() {
+          const faqItems = document.querySelectorAll('[data-element-id="aura-emh906t4ngsde0i5h"] .faq-item');
+          
+          faqItems.forEach(item => {
+            const trigger = item.querySelector('.faq-trigger');
+            const content = item.querySelector('.faq-content');
+            const icon = item.querySelector('.faq-icon');
+            
+            trigger.addEventListener('click', () => {
+              const isOpen = content.style.display === 'block';
+              
+              if (isOpen) {
+                content.style.display = 'none';
+                icon.innerHTML = '<path d="M5 12h14"></path><path d="M12 5v14"></path>';
+                trigger.setAttribute('aria-expanded', 'false');
+              } else {
+                content.style.display = 'block';
+                icon.innerHTML = '<path d="M5 12h14"></path>';
+                trigger.setAttribute('aria-expanded', 'true');
+              }
+            });
+          });
+        })();
+        
+
+
+        lucide.createIcons();
+        
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        menuBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+        closeMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        mobileLinks.forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+        
+        // Accordion
+        document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.closest('.accordion-item');
+                const content = item.querySelector('.accordion-content');
+                const icon = item.querySelector('.accordion-icon');
+                const isOpen = content.classList.contains('open');
+                
+                content.classList.toggle('open');
+                icon.classList.toggle('open');
+                trigger.setAttribute('aria-expanded', !isOpen);
+            });
+        });
+
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="aura-background-component top-0 w-full -z-10 absolute h-[840px]" data-alpha-mask="80" style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}><div className="absolute w-full h-full left-0 top-0 -z-10" data-us-project="1bY8o6HVTI1oxJxuCJEG"></div>
+</div>
+<div className="gradient-blur">
+<div className=""></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+</div>
+<style className="">
+    .gradient-blur {
+      position: fixed;
+      z-index: 5;
+      inset: 0 0 auto 0;
+      height: 12%;
+      pointer-events: none;
+    }
+
+    .gradient-blur>div,
+    .gradient-blur::before,
+    .gradient-blur::after {
+      position: absolute;
+      inset: 0;
+    }
+
+    .gradient-blur::before {
+      content: "";
+      z-index: 1;
+      backdrop-filter: blur(0.5px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 1) 12.5%,
+          rgba(0, 0, 0, 1) 25%,
+          rgba(0, 0, 0, 0) 37.5%);
+    }
+
+    .gradient-blur>div:nth-of-type(1) {
+      z-index: 2;
+      backdrop-filter: blur(1px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 12.5%,
+          rgba(0, 0, 0, 1) 25%,
+          rgba(0, 0, 0, 1) 37.5%,
+          rgba(0, 0, 0, 0) 50%);
+    }
+
+    .gradient-blur>div:nth-of-type(2) {
+      z-index: 3;
+      backdrop-filter: blur(2px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 25%,
+          rgba(0, 0, 0, 1) 37.5%,
+          rgba(0, 0, 0, 1) 50%,
+          rgba(0, 0, 0, 0) 62.5%);
+    }
+
+    .gradient-blur>div:nth-of-type(3) {
+      z-index: 4;
+      backdrop-filter: blur(4px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 37.5%,
+          rgba(0, 0, 0, 1) 50%,
+          rgba(0, 0, 0, 1) 62.5%,
+          rgba(0, 0, 0, 0) 75%);
+    }
+
+    .gradient-blur>div:nth-of-type(4) {
+      z-index: 5;
+      backdrop-filter: blur(8px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 50%,
+          rgba(0, 0, 0, 1) 62.5%,
+          rgba(0, 0, 0, 1) 75%,
+          rgba(0, 0, 0, 0) 87.5%);
+    }
+
+    .gradient-blur>div:nth-of-type(5) {
+      z-index: 6;
+      backdrop-filter: blur(16px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 62.5%,
+          rgba(0, 0, 0, 1) 75%,
+          rgba(0, 0, 0, 1) 87.5%,
+          rgba(0, 0, 0, 0) 100%);
+    }
+
+    .gradient-blur>div:nth-of-type(6) {
+      z-index: 7;
+      backdrop-filter: blur(32px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 75%,
+          rgba(0, 0, 0, 1) 87.5%,
+          rgba(0, 0, 0, 1) 100%);
+    }
+
+    .gradient-blur::after {
+      content: "";
+      z-index: 8;
+      backdrop-filter: blur(64px);
+      mask: linear-gradient(to top,
+          rgba(0, 0, 0, 0) 87.5%,
+          rgba(0, 0, 0, 1) 100%);
+    }
+  </style>
+
+
+<header className="sticky z-20 top-0">
+<div className="flex max-w-7xl mr-auto ml-auto pt-4 pr-6 pb-4 pl-6 items-center justify-between">
+<div className="flex items-center gap-2">
+<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+<span className="font-bold text-lg tracking-tight">Canvas</span>
+</div>
+<nav className="hidden gap-6 md:flex gap-x-6 gap-y-6 items-center">
+<a className="nav-link hover:text-white text-sm text-slate-300 relative" href="#features">Features</a>
+<a className="nav-link relative text-sm text-slate-300 hover:text-white" href="#templates">Templates</a>
+<a className="nav-link relative text-sm text-slate-300 hover:text-white" href="#showcase">Showcase</a>
+<a className="nav-link relative text-sm text-slate-300 hover:text-white" href="#pricing">Pricing</a>
+<a className="inline-flex items-center gap-2 hover:bg-white/10 transition-colors text-sm text-white bg-white/5 ring-white/10 ring-1 rounded-full pt-2 pr-4 pb-2 pl-4" href="#cta">
+        Open App <svg className="lucide lucide-arrow-right h-4 w-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+</nav>
+<button aria-label="Open menu" className="md:hidden rounded-lg p-2 text-slate-200 hover:bg-white/5 transition-colors" id="menuBtn">
+<svg className="lucide lucide-menu w-[24px] h-[24px]" data-icon-replaced="true" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px', color: 'rgb(226, 232, 240)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+</button>
+</div>
+
+<aside aria-label="Mobile menu" className="mobile-menu fixed z-50 bg-slate-950/95 w-[80%] max-w-sm border-white/10 border-l pt-6 pr-6 pb-6 pl-6 top-0 right-0 bottom-0 backdrop-blur" id="mobileMenu">
+<div className="flex items-center justify-between">
+<span className="font-semibold">Canvas</span>
+<button aria-label="Close menu" className="rounded-lg p-2 text-slate-200 hover:bg-white/5 transition-colors" id="closeMenuBtn">
+<svg className="lucide lucide-x h-6 w-6" data-lucide="x" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+</button>
+</div>
+<ul className="mt-6 space-y-4">
+<li className=""><a className="mobile-link block rounded-lg px-2 py-2 text-slate-300 hover:bg-white/5 hover:text-white transition-colors" href="#features">Features</a>
+</li>
+<li><a className="mobile-link block rounded-lg px-2 py-2 text-slate-300 hover:bg-white/5 hover:text-white transition-colors" href="#templates">Templates</a>
+</li>
+<li className=""><a className="mobile-link block rounded-lg px-2 py-2 text-slate-300 hover:bg-white/5 hover:text-white transition-colors" href="#showcase">Showcase</a>
+</li>
+<li className=""><a className="mobile-link block rounded-lg px-2 py-2 text-slate-300 hover:bg-white/5 hover:text-white transition-colors" href="#pricing">Pricing</a>
+</li>
+</ul>
+<a className="mobile-link mt-6 inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm ring-1 ring-white/10 hover:bg-white/10 transition-colors" href="#cta">
+      Open App <svg className="lucide lucide-arrow-right h-4 w-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+</aside>
+</header>
+
+<section className="text-left max-w-7xl mr-auto ml-auto pt-16 pb-36 pl-20 relative">
+<div className="text-center max-w-3xl mr-auto ml-0">
+<h1 className="text-[44px] leading-[0.9] sm:text-6xl lg:text-8xl font-medium text-zinc-100 tracking-tighter font-geist text-left mt-20" style={{maskImage: 'linear-gradient(290deg, transparent, black 0%, black 40%, transparent)', WebkitMaskImage: 'linear-gradient(290deg, transparent, black 0%, black 40%, transparent)'}}>Design and publish your dream site.</h1>
+<div className="flex flex-wrap xl:mt-10 mt-12 gap-x-3 gap-y-3 justify-start">
+<div className="inline-block bg-transparent">
+<style className="">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap'); @property --gradient-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; } @property --gradient-angle-offset { syntax: "<angle>"; initial-value: 0deg; inherits: false; } @property --gradient-percent { syntax: "<percentage>"; initial-value: 20%; inherits: false; } @property --gradient-shine { syntax: "<color>"; initial-value: #8484ff; inherits: false; } .shiny-cta { --gradient-angle: 0deg; --gradient-angle-offset: 0deg; --gradient-percent: 20%; --gradient-shine: #8484ff; --shadow-size: 2px; position: relative; overflow: hidden; border-radius: 9999px; padding: 1.25rem 2.5rem; font-size: 1.125rem; line-height: 1.2; font-weight: 500; color: #ffffff; background: linear-gradient(#000000, #000000) padding-box, conic-gradient( from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #3b82f6 5%, var(--gradient-shine) 15%, #3b82f6 30%, transparent 40%, transparent 100% ) border-box; border: 2px solid transparent; box-shadow: inset 0 0 0 1px #1a1818; outline: none; transition: --gradient-angle-offset 800ms cubic-bezier(0.25, 1, 0.5, 1), --gradient-percent 800ms cubic-bezier(0.25, 1, 0.5, 1), --gradient-shine 800ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s; cursor: pointer; isolation: isolate; outline-offset: 4px; font-family: 'Inter', 'Helvetica Neue', sans-serif; z-index: 0; animation: border-spin 2.5s linear infinite; } @keyframes border-spin { to { --gradient-angle: 360deg; } } .shiny-cta:active { transform: translateY(1px); } .shiny-cta::before { content: ''; pointer-events: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 0; --size: calc(100% - 6px); --position: 2px; --space: 4px; width: var(--size); height: var(--size); background: radial-gradient(circle at var(--position) var(--position), white 0.5px, transparent 0) padding-box; background-size: var(--space) var(--space); background-repeat: space; mask-image: conic-gradient( from calc(var(--gradient-angle) + 45deg), black, transparent 10% 90%, black ); border-radius: inherit; opacity: 0.4; pointer-events: none; } .shiny-cta::after { content: ''; pointer-events: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1; width: 100%; aspect-ratio: 1; background: linear-gradient(-50deg, transparent, #3b82f6, transparent); mask-image: radial-gradient(circle at bottom, transparent 40%, black); opacity: 0.6; animation: shimmer 4s linear infinite; animation-play-state: running; } .shiny-cta span { position: relative; z-index: 2; display: inline-block; } .shiny-cta span::before { content: ''; pointer-events: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: -1; --size: calc(100% + 1rem); width: var(--size); height: var(--size); box-shadow: inset 0 -1ex 2rem 4px #3b82f6; opacity: 0; border-radius: inherit; transition: opacity 800ms cubic-bezier(0.25, 1, 0.5, 1); animation: breathe 4.5s linear infinite; } @keyframes shimmer { to { transform: translate(-50%, -50%) rotate(360deg);} } @keyframes breathe { 0%, 100% { transform: translate(-50%, -50%) scale(1);} 50% { transform: translate(-50%, -50%) scale(1.20);} }
+  </style>
+<button className="shiny-cta focus:outline-none">
+<span className="">Start for free</span>
+</button>
+</div>
+<a className="inline-flex items-center gap-2 hover:bg-white/5 transition-colors text-sm text-white border-white/10 border rounded-full pt-3 pr-5 pb-3 pl-5 backdrop-blur-2xl" href="#showcase">
+                    Watch Video <svg className="lucide lucide-play-circle h-4 w-4" data-lucide="play-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path><circle cx="12" cy="12" r="10"></circle></svg>
+</a>
+</div>
+
+</div>
+</section>
+
+<div className="flex xl:pt-0 xl:pb-0 sm:pl-4 sm:pr-4 sm:pt-20 sm:pb-0 w-screen h-1000 pt-20 pr-2 pb-40 pl-2 scale-100 rotate-x-5 items-center justify-center" id="terminal-aura-emkjg4pxs0ahwgw0" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 1%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 1%, transparent)'}}>
+
+<div className="relative w-full max-w-4xl bg-[#0a0a0a]/90 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl overflow-hidden font-mono text-sm md:text-base leading-relaxed text-slate-300 group perspective-none" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px -10px rgba(0,0,0,0.5)'}}>
+
+<div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-70 z-20 shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+</div>
+<div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-40 blur-sm z-10">
+</div>
+
+<div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+<div className="flex gap-2 group-hover:opacity-100 opacity-60 transition-opacity duration-300">
+<div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
+<div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
+<div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
+</div>
+<div className="ml-4 flex items-center gap-2 text-xs text-slate-500 select-none">
+<svg className="opacity-50" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
+<rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+<path d="M9 3v18"></path>
+</svg>
+<span className="">terminal — -zsh — 80x24</span>
+</div>
+</div>
+
+<div className="md:p-8 min-h-[360px] flex flex-col z-0 pt-6 pr-6 pb-6 pl-6 relative gap-x-2 gap-y-2">
+
+<style>
+                @keyframes type-error {
+                    0% {
+                        width: 0;
+                        opacity: 1;
+                        border-color: rgba(248, 113, 113, 0.7);
+                    }
+
+                    100% {
+                        width: 100%;
+                        opacity: 1;
+                        border-color: rgba(248, 113, 113, 0.7);
+                    }
+                }
+
+                @keyframes delete-error {
+                    0% {
+                        width: 100%;
+                        opacity: 1;
+                        border-color: rgba(248, 113, 113, 0.7);
+                    }
+
+                    99% {
+                        border-color: rgba(248, 113, 113, 0.7);
+                    }
+
+                    100% {
+                        width: 0;
+                        opacity: 0;
+                        border-color: transparent;
+                    }
+                }
+
+                @keyframes type-intro {
+                    0% {
+                        width: 0;
+                        opacity: 1;
+                        border-color: rgba(59, 130, 246, 0.7);
+                    }
+
+                    100% {
+                        width: 100%;
+                        opacity: 1;
+                        border-color: transparent;
+                    }
+                }
+
+                @keyframes cursor-blink {
+
+                    0%,
+                    100% {
+                        border-right-color: transparent;
+                    }
+
+                    50% {
+                        border-right-color: currentColor;
+                    }
+                }
+
+                @keyframes appear {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(2px);
+                    }
+
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .typing-cursor::after {
+                    content: '';
+                    display: inline-block;
+                    width: 8px;
+                    height: 1.2em;
+                    background-color: rgba(255, 255, 255, 0.7);
+                    margin-left: 4px;
+                    vertical-align: text-bottom;
+                    animation: blink-block 1s step-end infinite;
+                }
+
+                @keyframes blink-block {
+
+                    0%,
+                    100% {
+                        opacity: 0;
+                    }
+
+                    50% {
+                        opacity: 1;
+                    }
+                }
+
+                /* Initial hidden states */
+                #terminal-aura-emkjg4pxs0ahwgw0 .line-error {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    border-right: 2px solid transparent;
+                    width: 0;
+                }
+
+                #terminal-aura-emkjg4pxs0ahwgw0 .line-intro {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    border-right: 2px solid transparent;
+                    width: 0;
+                    opacity: 0;
+                }
+
+                #terminal-aura-emkjg4pxs0ahwgw0 .line-static {
+                    opacity: 0;
+                }
+
+                #terminal-aura-emkjg4pxs0ahwgw0 .prompt-spacing {
+                    display: inline-flex;
+                    min-width: 3.5rem;
+                }
+
+                /* Animations trigger only when .terminal-active is present */
+                #terminal-aura-emkjg4pxs0ahwgw0.terminal-active .line-error {
+                    animation:
+                        type-error 1.5s steps(35, end) 0.5s forwards,
+                        cursor-blink 0.75s step-end 0.5s infinite,
+                        delete-error 1s steps(35, end) 3.5s forwards;
+                }
+
+                #terminal-aura-emkjg4pxs0ahwgw0.terminal-active .line-intro {
+                    animation:
+                        type-intro 2.5s steps(45, end) 5s forwards,
+                        cursor-blink 0.75s step-end 5s 4;
+                }
+
+                #terminal-aura-emkjg4pxs0ahwgw0.terminal-active .line-static {
+                    animation: appear 0.3s ease-out forwards;
+                }
+            </style>
+
+<div className="relative flex items-center h-6 text-slate-300">
+<div className="prompt-spacing select-none">
+<span className="mr-2 text-blue-400 font-semibold">➜</span>
+<span className="text-cyan-300 font-semibold">~</span>
+</div>
+<div className="flex-1 flex h-full relative items-center">
+
+<span className="line-error absolute left-0 text-red-400 tracking-tight">Error: Detected Outdated Website...</span>
+
+<span className="line-intro absolute left-0 text-white tracking-tight">Introducing <span className="text-blue-400">Velosite Web</span>:
+                    Custom Engineering</span>
+</div>
+</div>
+
+<div className="line-static flex items-center h-6 text-slate-300" style={{animationDelay: '7.8s'}}>
+<div className="prompt-spacing select-none">
+<span className="mr-2 text-blue-400 font-semibold">➜</span>
+<span className="text-cyan-300 font-semibold">~/velosite</span>
+</div>
+<span className="text-slate-100">npm install modern-infrastructure</span>
+</div>
+
+<div className="line-static flex items-center h-6 text-slate-300" style={{animationDelay: '8.2s'}}>
+<div className="prompt-spacing select-none">
+<span className="mr-2 text-green-500 font-semibold">✔</span>
+</div>
+<span className="text-slate-400">System Status: <span className="text-green-400 font-medium tracking-wide">READY</span></span>
+</div>
+
+<div className="line-static flex text-slate-300 h-6 items-center" style={{animationDelay: '8.5s'}}>
+<div className="prompt-spacing select-none">
+<span className="mr-2 text-blue-400 font-semibold">➜</span>
+<span className="text-cyan-300 font-semibold">~/project</span>
+</div>
+<span className="typing-cursor"></span>
+</div>
+</div>
+</div>
+
+</div><section className="[animation:fadeSlideIn_0.8s_ease-out_0.6s_both] animate-on-scroll animate sm:px-6 lg:px-8 lg:pt-6 max-w-7xl z-10 mt-8 mr-auto mb-16 ml-auto pt-16 pr-4 pb-6 pl-4 relative">
+<div className="text-center">
+<p className="uppercase text-sm font-medium text-slate-400 tracking-wide">
+      Empowering design teams at
+    </p>
+</div>
+<div className="overflow-hidden mt-6 relative">
+<style>
+      @keyframes smoothCarousel {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+      .carousel-wrapper {
+        animation: smoothCarousel 40s linear infinite;
+      }
+      .carousel-wrapper:hover {
+        animation-play-state: paused;
+      }
+    </style>
+<div className="" style={{maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'}}>
+<div className="flex carousel-wrapper gap-x-6 lg:gap-x-20">
+<div className="flex gap-6 shrink-0 gap-x-6 lg:gap-x-20">
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e5f2922d-4fb6-4f7c-8795-cd9ba63105a4_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/92287bc0-bc70-4864-bf05-a89c1b99a218_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8284c62f-bfed-4d35-aaa2-956d0a8969b3_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[120px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3764a6eb-78e1-495f-9143-c85a648446c4_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[120px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dea31d52-7076-423f-bace-53eeec3014d3_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b16a9cf6-6be1-4d0d-bc63-07a471092998_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+</div>
+<div className="flex shrink-0 gap-x-6 lg:gap-x-20">
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e5f2922d-4fb6-4f7c-8795-cd9ba63105a4_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/92287bc0-bc70-4864-bf05-a89c1b99a218_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8284c62f-bfed-4d35-aaa2-956d0a8969b3_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[100px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3764a6eb-78e1-495f-9143-c85a648446c4_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[100px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dea31d52-7076-423f-bace-53eeec3014d3_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+<a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[150px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b16a9cf6-6be1-4d0d-bc63-07a471092998_1600w.png)] bg-cover rounded-lg transition-transform hover:scale-110" href="#"></a>
+</div>
+</div>
+</div>
+</div>
+</section><section className="sm:pt-24 md:pt-10 max-w-7xl mr-auto ml-auto pt-24 pb-20 relative">
+<div className="max-w-7xl mr-auto ml-auto pr-6 pl-6">
+
+<div className="text-center mb-12">
+<h2 className="text-2xl font-medium text-white tracking-tighter text-left pt-6 pb-6 sm:text-5xl" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 10%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 10%, transparent)'}}>Ship sites with speed</h2>
+</div>
+
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+<div className="group relative overflow-hidden transition-all duration-500 hover:border-blue-500/30 hover:ring-blue-500/20 bg-gradient-to-br from-neutral-900/80 to-neutral-950/90 border-white/10 border ring-white/5 ring-1 rounded-2xl">
+
+<div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-tr from-blue-500/30 via-indigo-500/20 to-cyan-500/10 blur-3xl transition-all duration-700 group-hover:scale-110"></div>
+<div className="absolute -top-8 -left-8 bg-gradient-to-br from-blue-500/25 via-cyan-500/15 to-transparent w-40 h-40 rounded-full blur-2xl"></div>
+<div className="pt-6 pr-6 pb-6 pl-6 relative z-10">
+<div className="flex mb-4 items-start justify-between">
+<span className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-white/5 ring-white/20 ring-1 rounded-lg pt-1 pr-2.5 pb-1 pl-2.5">
+<div className="h-1.5 w-1.5 animate-pulse bg-blue-400 rounded-full"></div>
+              Editor
+            </span>
+</div>
+<h3 className="text-lg font-semibold tracking-tight text-neutral-100 mb-2">Visual Editing</h3>
+<p className="leading-relaxed text-sm text-neutral-400 mb-6">Design just like you would in Figma. Drag, drop, and style elements with pixel-perfect precision.</p>
+
+<div className="relative overflow-hidden bg-gradient-to-b from-white/5 via-white/5 to-transparent h-44 ring-white/5 ring-1 rounded-xl flex items-center justify-center">
+<div className="relative w-32 h-24 border border-dashed border-neutral-700 rounded bg-neutral-900/50 flex flex-col p-2 gap-2 shadow-2xl backdrop-blur-sm">
+<div className="w-full h-2 bg-neutral-800 rounded-full"></div>
+<div className="flex gap-2 h-full">
+<div className="w-1/3 h-full bg-neutral-800/50 rounded"></div>
+<div className="w-2/3 h-full bg-neutral-800/50 rounded border border-blue-500/50 relative">
+
+<div className="absolute -top-1 -left-1 w-2 h-2 bg-blue-500 rounded-full"></div>
+<div className="absolute -bottom-1 -right-1 w-2 h-2 bg-blue-500 rounded-full"></div>
+</div>
+</div>
+</div>
+
+<div className="absolute top-4 right-4"><span className="inline-flex items-center ring-1 ring-white/10 text-[10px] font-medium text-neutral-300 bg-neutral-900/80 rounded-full py-0.5 px-2 backdrop-blur-sm">Width: 320px</span></div>
+<div className="absolute bottom-4 left-4"><span className="inline-flex items-center ring-1 ring-white/10 text-[10px] font-medium text-neutral-300 bg-neutral-900/80 rounded-full py-0.5 px-2 backdrop-blur-sm">Flex Layout</span></div>
+</div>
+</div>
+</div>
+
+<div className="group relative overflow-hidden transition-all duration-500 hover:border-indigo-500/30 hover:ring-indigo-500/20 bg-gradient-to-br from-neutral-900/80 to-neutral-950/90 border-white/10 border ring-white/5 ring-1 rounded-2xl">
+
+<div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-tr from-indigo-500/30 via-violet-500/20 to-blue-500/10 blur-3xl transition-all duration-700 group-hover:scale-110"></div>
+<div className="absolute -top-8 -left-8 bg-gradient-to-br from-indigo-500/25 via-blue-500/15 to-transparent w-40 h-40 rounded-full blur-2xl"></div>
+<div className="pt-6 pr-6 pb-6 pl-6 relative z-10">
+<div className="flex mb-4 items-start justify-between">
+<span className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-white/5 ring-white/20 ring-1 rounded-lg pt-1 pr-2.5 pb-1 pl-2.5">
+<div className="h-1.5 w-1.5 animate-pulse bg-indigo-400 rounded-full"></div>
+              Motion
+            </span>
+</div>
+<h3 className="text-lg font-semibold tracking-tight text-neutral-100 mb-2">Animation</h3>
+<p className="leading-relaxed text-sm text-neutral-400 mb-6">Add scroll transforms, appearing effects, and component interactions without writing code.</p>
+
+<div className="relative overflow-hidden bg-gradient-to-b from-white/5 via-white/5 to-transparent h-44 ring-white/5 ring-1 rounded-xl flex items-center justify-center">
+<div className="flex gap-3">
+<div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500/40 to-indigo-600/10 border border-indigo-500/50 animate-bounce shadow-lg shadow-indigo-500/20"></div>
+<div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500/40 to-indigo-600/10 border border-indigo-500/50 animate-bounce shadow-lg shadow-indigo-500/20" style={{animationDelay: '0.1s'}}></div>
+<div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500/40 to-indigo-600/10 border border-indigo-500/50 animate-bounce shadow-lg shadow-indigo-500/20" style={{animationDelay: '0.2s'}}></div>
+</div>
+
+<div className="absolute top-3 left-4"><span className="inline-flex items-center ring-1 ring-white/10 text-[10px] font-medium text-neutral-300 bg-neutral-900/80 rounded-full py-0.5 px-2 backdrop-blur-sm">Scroll Y</span></div>
+<div className="absolute bottom-3 right-4"><span className="inline-flex items-center ring-1 ring-white/10 text-[10px] font-medium text-neutral-300 bg-neutral-900/80 rounded-full py-0.5 px-2 backdrop-blur-sm">Spring: 120</span></div>
+</div>
+</div>
+</div>
+
+<div className="group relative overflow-hidden transition-all duration-500 hover:border-emerald-500/30 hover:ring-emerald-500/20 bg-gradient-to-br from-neutral-900/80 to-neutral-950/90 border-white/10 border ring-white/5 ring-1 rounded-2xl">
+
+<div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-tr from-emerald-500/30 via-teal-500/20 to-cyan-500/10 blur-3xl transition-all duration-700 group-hover:scale-110"></div>
+<div className="absolute -top-8 -left-8 bg-gradient-to-br from-emerald-500/25 via-teal-500/15 to-transparent w-40 h-40 rounded-full blur-2xl"></div>
+<div className="pt-6 pr-6 pb-6 pl-6 relative z-10">
+<div className="flex mb-4 items-start justify-between">
+<span className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-white/5 ring-white/20 ring-1 rounded-lg pt-1 pr-2.5 pb-1 pl-2.5">
+<div className="h-1.5 w-1.5 animate-pulse bg-emerald-400 rounded-full"></div>
+              Speed
+            </span>
+</div>
+<h3 className="text-lg font-semibold tracking-tight text-neutral-100 mb-2">Performance</h3>
+<p className="leading-relaxed text-sm text-neutral-400 mb-6">Sites are optimized automatically and deployed to a global edge network for blazing speed.</p>
+
+<div className="relative overflow-hidden bg-gradient-to-b from-white/5 via-white/5 to-transparent h-44 ring-white/5 ring-1 rounded-xl flex items-center justify-center">
+<div className="relative w-[150px] h-[150px] rounded-full border border-white/5 shadow-2xl flex items-center justify-center overflow-hidden">
+<div className="absolute inset-0 rounded-full border border-dashed border-white/10"></div>
+<div className="absolute inset-8 rounded-full border border-dashed border-white/10"></div>
+
+<span className="absolute top-1/2 left-1/2 origin-top-left border-dashed animate-[radar81_4s_linear_infinite] w-1/2 h-full bg-gradient-to-r from-emerald-500/20 to-transparent border-t border-emerald-500/50" style={{marginTop: '-1px', maskImage: 'linear-gradient(to right, black, transparent)'}}></span>
+</div>
+
+<div className="absolute top-4 left-4"><span className="inline-flex items-center ring-1 ring-white/10 text-[10px] font-medium text-neutral-300 bg-neutral-900/80 rounded-full py-0.5 px-2 backdrop-blur-sm">Score: 100</span></div>
+<div className="absolute bottom-4 right-4"><span className="inline-flex items-center ring-1 ring-white/10 text-[10px] font-medium text-neutral-300 bg-neutral-900/80 rounded-full py-0.5 px-2 backdrop-blur-sm">CDN Active</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<style>
+    @keyframes radar81 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</section><section className="mt-10 mb-0 pt-0 pb-0 relative" id="features">
+<div className="sm:px-6 lg:px-8 lg:pb-0 max-w-7xl mr-auto ml-auto pt-16 pr-4 pb-16 pl-4">
+<h2 className="text-2xl font-medium text-white tracking-tighter text-left mb-0 sm:text-5xl" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 10%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 10%, transparent)'}}>A complete visual workspace</h2>
+<section className="mt-10 mb-20 pt-0 pb-0 relative">
+<div className="sm:px-6 lg:px-8 lg:pt-8 max-w-full pt-16 pr-4 pb-16 pl-4">
+<div className="rounded-2xl mt-10 backdrop-blur" style={{maskImage: 'linear-gradient(90deg, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 20%, black 80%, transparent)'}}>
+<div className="grid grid-cols-1 md:grid-cols-3 border-white/10 border-b" style={{maskImage: 'linear-gradient(0deg, transparent, black 0%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(0deg, transparent, black 0%, black 100%, transparent)'}}>
+<div className="hover:bg-white/10 transition-all duration-300 cursor-pointer overflow-hidden group text-center pt-8 pr-8 pb-8 pl-8 relative" style={{maskImage: 'linear-gradient(0deg, transparent, black 0%, black 10%, transparent)', WebkitMaskImage: 'linear-gradient(0deg, transparent, black 0%, black 10%, transparent)'}}>
+<div className="inline-flex group-hover:bg-white/10 transition-colors duration-300 text-slate-200 bg-white/5 w-10 h-10 ring-white/10 ring-1 rounded-lg mr-auto mb-4 ml-auto items-center justify-center">
+<svg className="h-5 w-5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+</div>
+<h3 className="text-lg text-white">Visual Layout</h3>
+<p className="text-sm text-zinc-400 mt-1">Freeform positioning on the canvas</p>
+</div>
+<div className="md:border-l md:border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer overflow-hidden group text-center pt-8 pr-8 pb-8 pl-8 relative" style={{maskImage: 'linear-gradient(0deg, transparent, black 0%, black 10%, transparent)', WebkitMaskImage: 'linear-gradient(0deg, transparent, black 0%, black 10%, transparent)'}}>
+<div className="inline-flex group-hover:bg-white/10 transition-colors duration-300 text-slate-200 bg-white/5 w-10 h-10 ring-white/10 ring-1 rounded-lg mr-auto mb-4 ml-auto items-center justify-center">
+<svg className="h-5 w-5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+</div>
+<h3 className="text-lg font-semibold text-white tracking-tight">Effects &amp; Motion</h3>
+<p className="text-sm text-zinc-400 mt-1">Scroll transforms and animations</p>
+</div>
+<div className="md:border-l md:border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer overflow-hidden group text-center pt-8 pr-8 pb-8 pl-8 relative" style={{maskImage: 'linear-gradient(0deg, transparent, black 0%, black 10%, transparent)', WebkitMaskImage: 'linear-gradient(0deg, transparent, black 0%, black 10%, transparent)'}}>
+<div className="inline-flex group-hover:bg-white/10 transition-colors duration-300 text-slate-200 bg-white/5 w-10 h-10 ring-white/10 ring-1 rounded-lg mr-auto mb-4 ml-auto items-center justify-center">
+<svg className="h-5 w-5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3v18h18"></path><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
+</div>
+<h3 className="text-lg font-semibold text-white tracking-tight">CMS</h3>
+<p className="text-sm text-zinc-400 mt-1">Manage content at scale</p>
+</div>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2">
+<div className="md:border-r md:border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer overflow-hidden group text-center pt-8 pr-8 pb-8 pl-8 relative" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 20%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 20%, transparent)'}}>
+<div className="inline-flex group-hover:bg-white/10 transition-colors duration-300 text-slate-200 bg-white/5 w-10 h-10 ring-white/10 ring-1 rounded-lg mr-auto mb-4 ml-auto items-center justify-center">
+<svg className="h-5 w-5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m16 16-4-4-4 4"></path></svg>
+</div>
+<h3 className="text-lg font-semibold text-white tracking-tight">Instant Publish</h3>
+<p className="text-sm text-zinc-400 mt-1">Live in seconds with global CDN</p>
+</div>
+<div className="hover:bg-white/10 transition-all duration-300 cursor-pointer overflow-hidden group text-center pt-8 pr-8 pb-8 pl-8 relative" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 20%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 20%, transparent)'}}>
+<div className="inline-flex group-hover:bg-white/10 transition-colors duration-300 text-slate-200 bg-white/5 w-10 h-10 ring-white/10 ring-1 rounded-lg mr-auto mb-4 ml-auto items-center justify-center">
+<svg className="h-5 w-5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+</div>
+<h3 className="text-lg font-semibold text-white tracking-tight">Localization</h3>
+<p className="text-sm text-zinc-400 mt-1">Translate your site instantly</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</section>
+
+
+<section className="sm:pt-24 md:pt-20 pt-24 pb-20 relative" id="showcase">
+
+<div className="max-w-7xl mr-auto ml-auto pr-6 pl-6">
+
+<div className="text-center">
+<h2 className="text-2xl font-medium text-white tracking-tighter text-left pt-6 pb-6 sm:text-5xl" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 0%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 0%, transparent)'}}>Made with Canvas</h2>
+</div>
+
+<div className="grid grid-cols-1 lg:grid-cols-4 mt-10 pt-0 pr-0 pb-0 pl-0 space-x-5">
+
+<div className="group overflow-hidden hover:bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] hover:from-blue-400/30 hover:to-blue-400/0 hover:border-slate-50/20 transition-all duration-300 sm:p-6 bg-gradient-to-b from-[#ffffff]/10 to-[#000000]/10 ring-[#ffffff]/10 ring-1 rounded-2xl pt-5 pr-5 pb-5 pl-5 relative">
+<div className="opacity-[0.07] absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.9) 1px, transparent 1px)', backgroundSize: '14px 14px'}}>
+</div>
+<div className="flex gap-3 gap-x-3 gap-y-3 items-center">
+<span className="inline-flex items-center justify-center rounded-full bg-white/5 ring-1 ring-white/15 px-2.5 py-1 text-xs text-white/80">Featured</span>
+</div>
+<h3 className="mt-3 text-xl sm:text-2xl font-semibold tracking-tight font-manrope">Start with a template</h3>
+<p className="text-sm text-neutral-400 mt-2">Jumpstart your next project with professionally designed templates for portfolios, SaaS, and more.</p>
+<div className="mt-4 flex flex-wrap gap-2">
+<span className="inline-flex items-center gap-1 rounded-full bg-white/5 px-2.5 py-1 text-xs text-white/70 ring-1 ring-white/10">Portfolio</span>
+<span className="inline-flex items-center gap-1 rounded-full bg-white/5 px-2.5 py-1 text-xs text-white/70 ring-1 ring-white/10">Landing Page</span>
+</div>
+</div>
+
+<div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-4">
+<div className="group overflow-hidden hover:ring-white/20 hover:shadow-xl transition ring-white/10 ring-1 rounded-2xl bg-zinc-900" style={{}}>
+<div className="relative">
+<img alt="Minimal Portfolio" className="group-hover:grayscale-0 transition-all duration-300 w-full h-[224px] object-cover grayscale" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/286dcc4a-3b11-43d3-af80-a7b1c3aaaad1_800w.webp"/>
+<div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Preview</button>
+</div>
+</div>
+<div className="pt-4 pr-4 pb-4 pl-4">
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Minimal Portfolio</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>For Designers</p>
+</div>
+</div>
+<div className="group overflow-hidden hover:ring-white/20 hover:shadow-xl transition ring-white/10 ring-1 rounded-2xl bg-zinc-900" style={{}}>
+<div className="relative">
+<img alt="SaaS Landing" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bb9b217e-05c2-4e6e-8f35-3fcb7f5b5e0c_800w.webp"/>
+<div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Preview</button>
+</div>
+</div>
+<div className="pt-4 pr-4 pb-4 pl-4">
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>SaaS Landing</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>For Startups</p>
+</div>
+</div>
+<div className="group overflow-hidden hover:ring-white/20 hover:shadow-xl transition ring-white/10 ring-1 rounded-2xl bg-zinc-900" style={{}}>
+<div className="relative">
+<img alt="Agency Site" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a59cef23-182d-4015-9d64-9748fcf818c3_800w.webp" style={{}}/>
+<div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Preview</button>
+</div>
+</div>
+<div className="pt-4 pr-4 pb-4 pl-4">
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Agency Site</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>For Teams</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section className="overflow-hidden mt-40 mb-40 pt-24 pb-24 relative" id="pricing">
+
+<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none -z-10 mix-blend-screen"></div>
+<div className="max-w-7xl mr-auto ml-auto pr-6 pl-6">
+
+<div className="text-center max-w-2xl mx-auto mb-16">
+<h2 className="text-4xl md:text-5xl font-medium tracking-tighter text-white mb-6" style={{maskImage: 'linear-gradient(to bottom, white 40%, rgba(255,255,255,0.5))', WebkitMaskImage: 'linear-gradient(to bottom, white 40%, rgba(255,255,255,0.5))'}}>
+        Simple, transparent pricing
+      </h2>
+<p className="text-lg text-slate-400">
+        Start for free, upgrade when you need more power. No hidden fees.
+      </p>
+
+<div className="mt-10 flex items-center justify-center">
+<div className="flex cursor-pointer bg-white/5 border-white/10 border rounded-full pt-1 pr-1 pb-1 pl-1 relative items-center hover:bg-white/10 transition-colors" id="billing-toggle-container">
+<span className="px-4 py-1 rounded-full text-sm font-medium text-white transition-colors" data-plan="monthly">Monthly</span>
+<span className="px-4 py-1 rounded-full text-sm font-medium text-slate-400 transition-colors" data-plan="yearly">Yearly</span>
+<div className="absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full -z-10 transition-transform duration-300 ease-out bg-indigo-500" id="toggle-indicator" style={{transform: 'translateX(0)'}}></div>
+</div>
+<span className="ml-4 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border bg-indigo-500/10 text-indigo-400 border-indigo-500/20">
+          Save 20%
+        </span>
+</div>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+<div className="group transition-all duration-500 hover:border-white/20 bg-gradient-to-br from-neutral-900/80 to-neutral-950/90 border-white/10 border ring-white/5 ring-1 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative">
+<div className="mb-6">
+<h3 className="text-lg font-medium text-white">Starter</h3>
+<p className="text-sm text-slate-400 mt-2">Perfect for personal projects.</p>
+</div>
+<div className="mb-6 flex items-baseline gap-1">
+<span className="text-4xl font-medium text-white tracking-tight">$0</span>
+<span className="text-slate-500">/mo</span>
+</div>
+<div className="mt-8 mb-8 space-y-4">
+<div className="flex gap-3 text-sm text-slate-300 gap-x-3 gap-y-3 items-start">
+<svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">1 published project</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-slate-300">
+<svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">Canvas subdomain</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-slate-300">
+<svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">Community support</span>
+</div>
+</div><a className="flex items-center justify-center hover:bg-white/10 transition-colors text-sm font-medium text-white bg-white/5 w-full border-white/10 border rounded-full pt-3 pb-3" href="#">
+          Start for Free
+        </a>
+</div>
+
+<div className="group relative overflow-hidden transition-all duration-500 bg-gradient-to-br from-neutral-900/80 to-neutral-950/90 border-white/10 border ring-white/5 ring-1 rounded-2xl p-8 shadow-2xl hover:border-indigo-500/30 hover:ring-indigo-500/20 shadow-indigo-900/10">
+
+<div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-tr from-violet-500/30 to-cyan-500/10 blur-3xl transition-all duration-700 group-hover:scale-110 via-indigo-500/20"></div>
+<div className="absolute -top-8 -left-8 bg-gradient-to-br via-violet-500/15 to-transparent w-40 h-40 rounded-full blur-2xl from-indigo-500/25"></div>
+<div className="relative z-10">
+<div className="mb-6 flex items-center justify-between">
+<div className="">
+<h3 className="text-lg font-medium text-white">Pro</h3>
+<p className="text-sm mt-2 text-indigo-200/70">For serious designers.</p>
+</div>
+<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white shadow-lg bg-indigo-600 shadow-indigo-500/30">
+                Popular
+              </span>
+</div>
+<div className="mb-6 flex items-baseline gap-1">
+<span className="text-4xl font-medium text-white tracking-tight pricing-amount" data-monthly="29" data-yearly="24">$29</span>
+<span className="text-slate-400 pricing-period">/mo</span>
+</div>
+<div className="mt-8 mb-8 space-y-4">
+<div className="flex gap-3 text-sm text-white gap-x-3 gap-y-3 items-start">
+<svg className="w-5 h-5 shrink-0 text-indigo-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">Unlimited projects</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-white">
+<svg className="w-5 h-5 shrink-0 text-indigo-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">Custom domains</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-white">
+<svg className="w-5 h-5 shrink-0 text-indigo-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">Remove branding</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-white">
+<svg className="w-5 h-5 shrink-0 text-indigo-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline className="" points="20 6 9 17 4 12"></polyline></svg>
+<span className="">Advanced analytics</span>
+</div>
+</div><a className="flex items-center justify-center hover:bg-slate-200 transition-colors shadow-white/10 text-sm font-medium text-black bg-white w-full rounded-full pt-3 pb-3 shadow-lg" href="#">
+              Get Started
+            </a>
+</div>
+</div>
+
+<div className="relative group rounded-2xl border border-white/10 bg-gradient-to-br from-neutral-900/80 to-neutral-950/90 ring-1 ring-white/5 p-8 transition-all duration-500 hover:border-white/20">
+<div className="mb-6">
+<h3 className="text-lg font-medium text-white">Business</h3>
+<p className="text-sm text-slate-400 mt-2">For scaling teams.</p>
+</div>
+<div className="mb-6 flex items-baseline gap-1">
+<span className="text-4xl font-medium text-white tracking-tight pricing-amount" data-monthly="99" data-yearly="79">$99</span>
+<span className="text-slate-500 pricing-period">/mo</span>
+</div>
+<div className="mt-8 mb-8 space-y-4">
+<div className="flex items-start gap-3 text-sm text-slate-300">
+<svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span>Everything in Pro</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-slate-300">
+<svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">Team collaboration</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-slate-300">
+<svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">SSO &amp; Priority Support</span>
+</div>
+<div className="flex items-start gap-3 text-sm text-slate-300">
+<svg className="w-5 h-5 text-slate-500 shrink-0" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
+<span className="">99.9% Uptime SLA</span>
+</div>
+</div><a className="flex items-center justify-center hover:bg-white/10 transition-colors text-sm font-medium text-white bg-white/5 w-full border-white/10 border rounded-full pt-3 pb-3" href="#">
+          Contact Sales
+        </a>
+</div>
+</div>
+</div>
+
+</section><section className="sm:px-6 sm:py-10 md:py-12 lg:pl-8 lg:pr-8 max-w-7xl mt-20 mr-auto ml-auto pt-8 pr-4 pb-8 pl-4">
+<div className="flex items-center justify-between">
+<div className="space-y-1">
+<p className="text-xs sm:text-sm text-zinc-400">Loved by designers</p>
+<h2 className="text-2xl font-medium text-white tracking-tighter text-left pt-6 pb-6 sm:text-5xl" style={{maskImage: 'linear-gradient(250deg, transparent, black 25%, black 70%, transparent)', WebkitMaskImage: 'linear-gradient(250deg, transparent, black 25%, black 70%, transparent)'}}>Testimonials</h2>
+</div>
+</div>
+<div className="sm:mt-8 overflow-hidden sm:rounded-3xl mt-6 relative" style={{maskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)'}}>
+<div className="pointer-events-none absolute inset-y-0 left-0 w-24 sm:w-40 bg-gradient-to-r from-zinc-950 to-transparent z-10">
+</div>
+<div className="pointer-events-none absolute inset-y-0 right-0 w-24 sm:w-40 bg-gradient-to-l from-zinc-950 to-transparent z-10">
+</div>
+
+<div className="sm:py-8 pt-6 pb-6 relative">
+<div className="flex gap-4 sm:gap-5 will-change-transform animate-[marquee-ltr_45s_linear_infinite]">
+
+<article className="shrink-0 w-[280px] sm:w-[360px] md:w-[420px] rounded-2xl border border-zinc-900 bg-zinc-900/40 p-5">
+<div className="flex items-center gap-3">
+<img alt="Avatar" className="size-9 object-cover rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e0bbf4a4-5f58-4644-bea6-85d2fef73d4a_320w.jpg"/>
+<div className="">
+<div className="flex items-center gap-1">
+<span className="text-sm font-medium text-zinc-100">Ava Thompson</span>
+<svg className="w-3.5 h-3.5 text-blue-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+</div>
+<p className="text-xs text-zinc-400">@ava_builds</p>
+</div>
+</div>
+<p className="mt-4 text-sm sm:text-base text-zinc-300">
+            Canvas completely changed how I build websites. The visual editor is intuitive and the generated code is clean.
+          </p>
+</article>
+<article className="shrink-0 w-[280px] sm:w-[360px] md:w-[420px] rounded-2xl border border-zinc-900 bg-zinc-900/40 p-5">
+<div className="flex items-center gap-3">
+<img alt="Avatar" className="size-9 object-cover rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/27a2c31e-38f3-479f-a831-858e91b9bd84_320w.jpg"/>
+<div className="">
+<div className="flex items-center gap-1">
+<span className="text-sm font-medium text-zinc-100">Noah Patel</span>
+<svg className="w-3.5 h-3.5 text-blue-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle className="" cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+</div>
+<p className="text-xs text-zinc-400">@noah_ops</p>
+</div>
+</div>
+<p className="mt-4 text-sm sm:text-base text-zinc-300">
+            I launched my portfolio in an afternoon. No coding required, just pure design freedom.
+          </p>
+</article>
+<article className="shrink-0 w-[280px] sm:w-[360px] md:w-[420px] rounded-2xl border border-zinc-900 bg-zinc-900/40 p-5">
+<div className="flex items-center gap-3">
+<img alt="Avatar" className="size-9 rounded-full object-cover" src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&amp;w=120&amp;h=120&amp;fit=crop&amp;crop=faces"/>
+<div>
+<div className="flex items-center gap-1">
+<span className="text-sm font-medium text-zinc-100">Ethan Garcia</span>
+<svg className="w-3.5 h-3.5 text-blue-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+</div>
+<p className="text-xs text-zinc-400">@egarcia</p>
+</div>
+</div>
+<p className="mt-4 text-sm sm:text-base text-zinc-300">
+            The animation tools are top tier. Adding scroll effects and transitions is just a matter of clicks.
+          </p>
+</article>
+<article className="shrink-0 w-[280px] sm:w-[360px] md:w-[420px] rounded-2xl border border-zinc-900 bg-zinc-900/40 p-5">
+<div className="flex items-center gap-3">
+<img alt="Avatar" className="size-9 object-cover rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e0bbf4a4-5f58-4644-bea6-85d2fef73d4a_320w.jpg"/>
+<div>
+<div className="flex items-center gap-1">
+<span className="text-sm font-medium text-zinc-100">Ava Thompson</span>
+<svg className="w-3.5 h-3.5 text-blue-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+</div>
+<p className="text-xs text-zinc-400">@ava_builds</p>
+</div>
+</div>
+<p className="mt-4 text-sm sm:text-base text-zinc-300">
+            Canvas completely changed how I build websites. The visual editor is intuitive and the generated code is clean.
+          </p>
+</article>
+<article className="shrink-0 w-[280px] sm:w-[360px] md:w-[420px] rounded-2xl border border-zinc-900 bg-zinc-900/40 p-5">
+<div className="flex items-center gap-3">
+<img alt="Avatar" className="size-9 object-cover rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/27a2c31e-38f3-479f-a831-858e91b9bd84_320w.jpg"/>
+<div className="">
+<div className="flex items-center gap-1">
+<span className="text-sm font-medium text-zinc-100">Noah Patel</span>
+<svg className="w-3.5 h-3.5 text-blue-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle className="" cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+</div>
+<p className="text-xs text-zinc-400">@noah_ops</p>
+</div>
+</div>
+<p className="mt-4 text-sm sm:text-base text-zinc-300">
+            I launched my portfolio in an afternoon. No coding required, just pure design freedom.
+          </p>
+</article>
+</div>
+</div>
+</div>
+<style className="">
+    @keyframes marquee-rtl {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes marquee-ltr {
+      0% {
+        transform: translateX(-50%);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .animate-\[marquee-rtl_45s_linear_infinite\],
+      .animate-\[marquee-ltr_45s_linear_infinite\] {
+        animation: none !important;
+      }
+    }
+  </style>
+</section>
+
+<section className="md:p-10 bg-zinc-500/5 max-w-7xl border-white/10 border rounded-3xl ring-white/10 ring-1 mt-40 mr-auto ml-auto pt-6 pr-6 pb-6 pl-6 shadow-2xl backdrop-blur-xl" style={{maskImage: 'linear-gradient(200deg, transparent, black 25%, black 65%, transparent)', WebkitMaskImage: 'linear-gradient(200deg, transparent, black 25%, black 65%, transparent)'}}>
+
+<div className="mb-8 flex items-center justify-between" style={{}}>
+<div className="flex items-center gap-3">
+<div className="">
+<h1 className="sm:text-5xl text-2xl font-medium text-white tracking-tighter text-left pt-6 pb-6" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 45%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 45%, transparent)'}}>Canvas — Help &amp; FAQs</h1>
+<p className="mt-1 text-sm text-slate-400">Common questions about the editor and publishing.</p>
+</div>
+</div>
+</div>
+
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6" style={{}}>
+
+<div className="faq-item rounded-2xl border border-white/10 bg-white/5 p-4 md:p-5">
+<button className="faq-trigger flex text-left w-full gap-x-4 gap-y-4 items-center justify-between" type="button">
+<span className="text-base md:text-lg font-semibold leading-6 tracking-tight text-slate-100">Do I need to know how to code?</span>
+<span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/10">
+<svg className="faq-icon" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</span>
+</button>
+<div className="faq-content mt-3 text-sm leading-6 text-slate-300" style={{display: 'none'}}>
+              No. Canvas is a visual tool that writes the code for you. If you can use design software like Figma, you can build a site with Canvas.
+            </div>
+</div>
+
+<div className="faq-item rounded-2xl border border-white/10 bg-white/5 p-4 md:p-5">
+<button className="faq-trigger flex w-full items-center justify-between gap-4 text-left" type="button">
+<span className="text-base md:text-lg font-semibold leading-6 tracking-tight text-slate-100">Can I connect my own domain?</span>
+<span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/10">
+<svg className="faq-icon" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</span>
+</button>
+<div className="faq-content mt-3 text-sm leading-6 text-slate-300" style={{display: 'none'}}>
+              Yes. Every paid plan includes the ability to connect custom domains. SSL certificates are generated automatically.
+            </div>
+</div>
+
+<div className="faq-item rounded-2xl border border-white/10 bg-white/5 p-4 md:p-5">
+<button className="faq-trigger flex w-full items-center justify-between gap-4 text-left" type="button">
+<span className="text-base md:text-lg font-semibold leading-6 tracking-tight text-slate-100">Is hosting included?</span>
+<span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/10">
+<svg className="faq-icon" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</span>
+</button>
+<div className="faq-content mt-3 text-sm leading-6 text-slate-300" style={{display: 'none'}}>
+              Yes, we provide ultra-fast global hosting powered by a CDN. You don't need to worry about servers or infrastructure.
+            </div>
+</div>
+
+<div className="faq-item rounded-2xl border border-white/10 bg-white/5 p-4 md:p-5">
+<button className="faq-trigger flex w-full items-center justify-between gap-4 text-left" type="button">
+<span className="text-base md:text-lg font-semibold leading-6 tracking-tight text-slate-100">Can I export the code?</span>
+<span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/10">
+<svg className="faq-icon" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</span>
+</button>
+<div className="faq-content mt-3 text-sm leading-6 text-slate-300" style={{display: 'none'}}>
+              While Canvas is designed to host your site, certain plans allow you to export static HTML/CSS/JS for hosting elsewhere.
+            </div>
+</div>
+</div>
+
+<div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 sm:flex-row">
+<div className="flex items-center gap-3">
+<span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/10">
+<svg className="h-5 w-5 text-sky-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+</span>
+<p className="text-sm text-slate-300">Still have questions? We're here to help.</p>
+</div>
+<div className="flex items-center gap-3">
+<button className="inline-flex hover:bg-white/10 text-sm font-medium text-slate-200 bg-white/5 border-white/10 border rounded-full pt-3 pr-4 pb-3 pl-4 gap-x-2 gap-y-2 items-center">
+<svg className="h-4 w-4" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path className="" d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>
+              Contact Support
+            </button>
+<a className="hover:shadow-lg transition-shadow text-sm font-medium text-slate-900 bg-white rounded-full pt-3 pr-5 pb-3 pl-5 shadow" href="#">
+              Start Building
+            </a>
+</div>
+</div>
+
+</section>
+
+<section className="overflow-hidden my-10 relative" id="cta">
+<div className="text-white max-w-7xl mr-auto ml-auto pr-0 pb-24 pl-0">
+<div className="md:p-10 bg-zinc-500/5 max-w-7xl border-white/10 border rounded-3xl ring-white/10 ring-1 mr-auto ml-auto pt-6 pr-6 pb-6 pl-6 shadow-2xl backdrop-blur-xl" style={{maskImage: 'linear-gradient(150deg, transparent, black 0%, black 60%, transparent)', WebkitMaskImage: 'linear-gradient(150deg, transparent, black 0%, black 60%, transparent)'}}>
+<div className="grid gap-6 md:grid-cols-[1.2fr_1fr] md:p-12 pt-8 pr-8 pb-8 pl-8 gap-x-6 gap-y-6 items-center">
+<div className="">
+<h3 className="text-2xl font-semibold tracking-tight">Ready to launch?</h3>
+<p className="mt-2 max-w-prose text-slate-200">Join thousands of designers building the future of the web with Canvas. Start your free project today.</p>
+<div className="mt-5 flex gap-3 flex-wrap">
+<a className="hover:shadow-lg transition-shadow text-sm font-medium text-slate-900 bg-white rounded-full pt-3 pr-5 pb-3 pl-5 shadow" href="#">Start for Free</a>
+<a className="hover:bg-white/5 transition-colors text-sm text-white border-white/20 border rounded-full pt-3 pr-5 pb-3 pl-5" href="#features">View Templates</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="border-white/10 border-t pt-16 pb-10" style={{maskImage: 'linear-gradient(100deg, transparent, black 25%, black 75%, transparent)', WebkitMaskImage: 'linear-gradient(100deg, transparent, black 25%, black 75%, transparent)'}}>
+<div className="max-w-7xl mx-auto px-6">
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+
+<div className="space-y-4">
+<div className="flex items-center gap-2">
+<svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+<span className="font-bold text-lg tracking-tight">Canvas</span>
+</div>
+<p className="text-sm text-slate-400 max-w-xs">The web builder for creative pros. Design, animate, and publish.</p>
+<div className="flex items-center gap-3">
+<a className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-colors" href="#">
+<svg className="" fill="currentColor" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path className="" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+</a>
+<a className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-colors" href="#">
+<svg className="" fill="currentColor" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path className="" d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"></path></svg>
+</a>
+</div>
+</div>
+
+<div className="">
+<h3 className="text-sm font-semibold text-white mb-4">Product</h3>
+<ul className="space-y-3">
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#features">Features</a></li>
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Pricing</a></li>
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#showcase">Showcase</a></li>
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Changelog</a></li>
+</ul>
+</div>
+
+<div className="">
+<h3 className="text-sm font-semibold text-white mb-4">Company</h3>
+<ul className="space-y-3">
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">About</a></li>
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Blog</a></li>
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Careers</a></li>
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Partners</a></li>
+</ul>
+</div>
+
+<div className="">
+<h3 className="text-sm font-semibold text-white mb-4">Resources</h3>
+<ul className="space-y-3">
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Documentation</a></li>
+<li><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Help Center</a></li>
+<li className=""><a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Community</a></li>
+</ul>
+</div>
+</div>
+
+<div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+<p className="text-sm text-slate-400">
+        © <span id="year">2026</span> Canvas Inc. All rights reserved.
+      </p>
+<div className="flex items-center gap-6">
+<a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a className="text-sm text-slate-400 hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

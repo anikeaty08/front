@@ -1,0 +1,14 @@
+# Dental Clinic Landing Page Template
+
+A modern Dental Clinic Landing Page Template for showcasing services, team, testimonials, and appointment booking for local dental practices.
+
+## Project Details
+- **Slug:** `dental-clinic-92`
+- **Views:** 21
+- **Tags:** Health, Landing Page, Services, Brand, Clean, Minimal, Large Type, Dark, Gradient, Technology
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

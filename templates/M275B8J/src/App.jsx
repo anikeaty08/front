@@ -1,0 +1,136 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="max-w-2xl mx-auto bg-zinc-800 rounded-lg border border-zinc-700 overflow-hidden">
+
+<div className="p-8 border-b border-zinc-700">
+<div className="flex items-center space-x-3 mb-6">
+<div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg"></div>
+<span className="text-sm text-zinc-400">March 2024 • Product Update</span>
+</div>
+<h1 className="text-3xl font-medium text-zinc-100 mb-3">What's new in Aura</h1>
+<p className="text-zinc-300 text-lg leading-relaxed">Two powerful features to transform your workflow management.</p>
+</div>
+
+<div className="p-8 border-b border-zinc-700">
+<div className="flex items-center space-x-2 mb-4">
+<div className="w-2 h-2 bg-green-500 rounded-full"></div>
+<span className="text-sm text-green-400 font-medium">Available now</span>
+</div>
+<h2 className="text-2xl font-medium text-zinc-100 mb-4">AI-Powered Smart Workflows</h2>
+
+<div className="bg-zinc-700 border border-zinc-600 rounded-lg p-8 mb-6 text-center">
+<div className="w-16 h-16 bg-zinc-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+<div className="w-8 h-8 border-2 border-zinc-500 rounded"></div>
+</div>
+<p className="text-zinc-400 text-sm">Smart Workflow Interface Preview</p>
+</div>
+<p className="text-zinc-300 mb-6 leading-relaxed">Intelligent task routing and predictive scheduling powered by AI.</p>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div className="flex items-start space-x-3">
+<div className="w-5 h-5 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+<div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+</div>
+<div>
+<h3 className="font-medium text-zinc-100 mb-1">Smart Task Assignment</h3>
+<p className="text-sm text-zinc-400">AI analyzes team capacity and skills for optimal assignments.</p>
+</div>
+</div>
+<div className="flex items-start space-x-3">
+<div className="w-5 h-5 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+<div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+</div>
+<div>
+<h3 className="font-medium text-zinc-100 mb-1">Predictive Scheduling</h3>
+<p className="text-sm text-zinc-400">Machine learning prevents delays before they happen.</p>
+</div>
+</div>
+</div>
+<div className="bg-zinc-700/50 rounded-lg p-4 border border-zinc-600">
+<p className="text-sm text-zinc-300"><strong>Early results:</strong> 35% faster completion, 50% less context switching.</p>
+</div>
+</div>
+
+<div className="p-8 border-b border-zinc-700">
+<div className="flex items-center space-x-2 mb-4">
+<div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+<span className="text-sm text-orange-400 font-medium">Beta • Invite only</span>
+</div>
+<h2 className="text-2xl font-medium text-zinc-100 mb-4">Real-Time Collaborative Canvas</h2>
+
+<div className="bg-zinc-700 border border-zinc-600 rounded-lg p-8 mb-6 text-center">
+<div className="grid grid-cols-3 gap-2 max-w-32 mx-auto mb-4">
+<div className="w-8 h-8 bg-zinc-600 rounded"></div>
+<div className="w-8 h-8 bg-zinc-500 rounded"></div>
+<div className="w-8 h-8 bg-zinc-600 rounded"></div>
+<div className="w-8 h-8 bg-zinc-500 rounded"></div>
+<div className="w-8 h-8 bg-zinc-600 rounded"></div>
+<div className="w-8 h-8 bg-zinc-500 rounded"></div>
+</div>
+<p className="text-zinc-400 text-sm">Collaborative Canvas Mockup</p>
+</div>
+<p className="text-zinc-300 mb-6 leading-relaxed">Infinite canvas for real-time brainstorming and project planning.</p>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div className="flex items-start space-x-3">
+<div className="w-5 h-5 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+<div className="w-2 h-2 bg-green-400 rounded-full"></div>
+</div>
+<div>
+<h3 className="font-medium text-zinc-100 mb-1">Live Collaboration</h3>
+<p className="text-sm text-zinc-400">See teammates' edits and comments in real-time.</p>
+</div>
+</div>
+<div className="flex items-start space-x-3">
+<div className="w-5 h-5 bg-yellow-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+<div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+</div>
+<div>
+<h3 className="font-medium text-zinc-100 mb-1">Smart Templates</h3>
+<p className="text-sm text-zinc-400">Pre-built components for sprint planning and roadmaps.</p>
+</div>
+</div>
+</div>
+<div className="bg-orange-500/10 rounded-lg p-4 border border-orange-500/20">
+<p className="text-sm text-orange-300"><strong>Beta access:</strong> Limited spots available. Join the waitlist.</p>
+</div>
+</div>
+
+<div className="p-8 text-center">
+<h2 className="text-xl font-medium text-zinc-100 mb-3">Ready to upgrade your workflow?</h2>
+<div className="flex flex-col sm:flex-row gap-3 justify-center">
+<button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-2.5 rounded-md font-medium transition-all duration-200">
+          Open Aura
+        </button>
+<button className="border border-zinc-600 hover:border-zinc-500 text-zinc-300 px-6 py-2.5 rounded-md font-medium transition-colors">
+          Request Beta Access
+        </button>
+</div>
+</div>
+
+<div className="px-8 py-6 bg-zinc-800/50 border-t border-zinc-700">
+<div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 text-sm text-zinc-400">
+<div>Aura - Intelligent workflow platform</div>
+<div className="flex items-center space-x-6">
+<a className="hover:text-zinc-300 transition-colors" href="#">Unsubscribe</a>
+<a className="hover:text-zinc-300 transition-colors" href="#">Preferences</a>
+</div>
+</div>
+</div>
+</div>
+
+    </>
+  );
+}

@@ -1,0 +1,449 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+darkMode: 'class',
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+zinc: {
+850: '#1f2023',
+950: '#09090b',
+}
+}
+}
+}
+}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-zinc-800 bg-zinc-950 flex flex-col justify-between flex-shrink-0 z-20">
+<div>
+<div className="h-16 flex items-center px-6 border-b border-zinc-800">
+<div className="flex items-center gap-2">
+<div className="w-6 h-6 bg-zinc-100 rounded flex items-center justify-center text-zinc-950 font-bold text-xs tracking-tight">V</div>
+<span className="text-zinc-100 font-medium tracking-tight text-sm">VEST CAP</span>
+</div>
+</div>
+<div className="p-4 space-y-1">
+<p className="px-2 text-xs font-medium text-zinc-500 mb-2 mt-2 uppercase tracking-wider">Platform</p>
+<a className="flex items-center gap-3 px-3 py-2 rounded-md bg-zinc-900 text-zinc-100 text-sm font-medium border border-zinc-800 transition-all" href="#">
+<span className="iconify" data-height="16" data-icon="lucide:layout-grid" data-width="16"></span>
+                    Marketplace
+                </a>
+<a className="flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50 text-sm font-medium transition-all" href="#">
+<span className="iconify" data-height="16" data-icon="lucide:pie-chart" data-width="16"></span>
+                    Portfolio
+                </a>
+<a className="flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50 text-sm font-medium transition-all" href="#">
+<span className="iconify" data-height="16" data-icon="lucide:arrow-left-right" data-width="16"></span>
+                    Transactions
+                </a>
+</div>
+<div className="p-4 space-y-1">
+<p className="px-2 text-xs font-medium text-zinc-500 mb-2 uppercase tracking-wider">Account</p>
+<a className="flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50 text-sm font-medium transition-all" href="#">
+<span className="iconify" data-height="16" data-icon="lucide:wallet" data-width="16"></span>
+                    Wallet
+                </a>
+<a className="flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50 text-sm font-medium transition-all" href="#">
+<span className="iconify" data-height="16" data-icon="lucide:settings-2" data-width="16"></span>
+                    Settings
+                </a>
+</div>
+</div>
+
+<div className="p-4 border-t border-zinc-800">
+<div className="bg-zinc-900/50 rounded-lg p-3 border border-zinc-800/50">
+<div className="flex justify-between items-start mb-2">
+<span className="text-xs text-zinc-500">Total Balance</span>
+<button className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors">Top Up</button>
+</div>
+<div className="text-lg font-medium text-zinc-100 tracking-tight">$42,503.00</div>
+<div className="flex items-center gap-1 mt-1 text-emerald-500 text-xs">
+<span className="iconify" data-icon="lucide:trending-up" data-width="12"></span>
+<span>+2.4% this week</span>
+</div>
+</div>
+<div className="mt-4 flex items-center gap-3 px-1">
+<div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-xs text-white font-medium border border-zinc-700">JD</div>
+<div className="flex flex-col">
+<span className="text-sm font-medium text-zinc-200">John Doe</span>
+<span className="text-xs text-zinc-500">Investor Tier 1</span>
+</div>
+<button className="ml-auto text-zinc-500 hover:text-zinc-300">
+<span className="iconify" data-icon="lucide:log-out" data-width="16"></span>
+</button>
+</div>
+</div>
+</aside>
+
+<main className="flex-1 overflow-y-auto h-screen relative bg-zinc-950">
+
+<div className="absolute top-0 left-0 w-full h-96 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/10 via-zinc-950/0 to-zinc-950 pointer-events-none"></div>
+
+<header className="sticky top-0 z-10 backdrop-blur-md bg-zinc-950/80 border-b border-zinc-800 px-6 h-16 flex items-center justify-between">
+<div className="flex items-center gap-4 text-sm text-zinc-500">
+<span className="hover:text-zinc-300 cursor-pointer transition-colors">Explore</span>
+<span className="iconify" data-icon="lucide:chevron-right" data-width="14"></span>
+<span className="text-zinc-200">Companies</span>
+</div>
+<div className="flex items-center gap-4">
+<div className="relative group">
+<span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-zinc-300 transition-colors">
+<span className="iconify" data-icon="lucide:search" data-width="16"></span>
+</span>
+<input className="bg-zinc-900 border border-zinc-800 text-zinc-200 text-sm rounded-full pl-9 pr-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-zinc-700 focus:border-transparent w-64 placeholder:text-zinc-600 transition-all" placeholder="Search projects..." type="text"/>
+</div>
+<button className="w-8 h-8 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-all relative">
+<span className="iconify" data-icon="lucide:bell" data-width="16"></span>
+<span className="absolute top-0 right-0 w-2 h-2 bg-indigo-500 rounded-full border border-zinc-950"></span>
+</button>
+</div>
+</header>
+<div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
+
+<div className="flex flex-col md:flex-row items-end justify-between gap-6 pb-6 border-b border-zinc-800/50">
+<div>
+<h1 className="text-3xl font-medium tracking-tight text-zinc-100">Investment Opportunities</h1>
+<p className="text-zinc-400 mt-2 text-sm max-w-xl">Discover and invest in high-growth companies. Back the future of technology, green energy, and infrastructure directly from your dashboard.</p>
+</div>
+<div className="flex gap-3">
+<button className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-zinc-300 rounded-lg text-sm font-medium hover:bg-zinc-800 hover:text-white transition-all flex items-center gap-2">
+<span className="iconify" data-icon="lucide:filter" data-width="16"></span> Filter
+                    </button>
+<button className="px-4 py-2 bg-zinc-100 text-zinc-950 rounded-lg text-sm font-medium hover:bg-zinc-200 transition-all shadow-lg shadow-zinc-100/5">
+                        My Investments
+                    </button>
+</div>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors group cursor-default">
+<div className="flex justify-between items-start">
+<div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400 border border-indigo-500/20 group-hover:border-indigo-500/40 transition-colors">
+<span className="iconify" data-icon="lucide:rocket" data-width="18"></span>
+</div>
+<span className="text-emerald-500 text-xs font-medium flex items-center gap-1">+12% <span className="iconify" data-icon="lucide:arrow-up" data-width="12"></span></span>
+</div>
+<div className="mt-4">
+<p className="text-zinc-500 text-xs font-medium uppercase tracking-wider">Active Projects</p>
+<h3 className="text-2xl font-medium text-zinc-100 mt-1 tracking-tight">24 Companies</h3>
+</div>
+</div>
+<div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors group cursor-default">
+<div className="flex justify-between items-start">
+<div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400 border border-emerald-500/20 group-hover:border-emerald-500/40 transition-colors">
+<span className="iconify" data-icon="lucide:dollar-sign" data-width="18"></span>
+</div>
+<span className="text-zinc-500 text-xs font-medium">Last 30 days</span>
+</div>
+<div className="mt-4">
+<p className="text-zinc-500 text-xs font-medium uppercase tracking-wider">Total Volume</p>
+<h3 className="text-2xl font-medium text-zinc-100 mt-1 tracking-tight">$12.4M</h3>
+</div>
+</div>
+<div className="p-5 rounded-xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors group cursor-default">
+<div className="flex justify-between items-start">
+<div className="p-2 bg-orange-500/10 rounded-lg text-orange-400 border border-orange-500/20 group-hover:border-orange-500/40 transition-colors">
+<span className="iconify" data-icon="lucide:users" data-width="18"></span>
+</div>
+<span className="text-zinc-500 text-xs font-medium">Global</span>
+</div>
+<div className="mt-4">
+<p className="text-zinc-500 text-xs font-medium uppercase tracking-wider">Investors</p>
+<h3 className="text-2xl font-medium text-zinc-100 mt-1 tracking-tight">4,892</h3>
+</div>
+</div>
+</div>
+
+<div>
+<h2 className="text-lg font-medium text-zinc-100 mb-4 flex items-center gap-2">
+<span className="iconify" data-icon="lucide:zap" data-width="18"></span>
+                    Trending Projects
+                </h2>
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+<div className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-600 transition-all duration-300 group flex flex-col">
+<div className="h-32 bg-gradient-to-br from-zinc-800 to-zinc-900 relative p-6">
+<div className="absolute top-4 right-4 bg-zinc-950/50 backdrop-blur-md px-2 py-1 rounded text-xs text-zinc-300 border border-zinc-800 font-medium flex items-center gap-1">
+<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live
+                            </div>
+<div className="w-12 h-12 bg-zinc-950 rounded-lg border border-zinc-700 flex items-center justify-center text-xl font-bold text-white shadow-xl relative top-8">
+<span className="iconify" data-icon="lucide:cpu" data-width="24"></span>
+</div>
+</div>
+<div className="p-6 pt-10 flex-1 flex flex-col">
+<div className="mb-4">
+<h3 className="text-lg font-medium text-zinc-100">Nexus AI Infrastructure</h3>
+<p className="text-sm text-zinc-400 mt-1 line-clamp-2 leading-relaxed">Building the next generation of decentralized GPU clusters for machine learning model training.</p>
+</div>
+<div className="flex items-center gap-2 mb-6">
+<span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Series A</span>
+<span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-zinc-800 text-zinc-400 border border-zinc-700">Tech</span>
+</div>
+<div className="space-y-3 mb-6">
+<div className="flex justify-between text-xs text-zinc-400">
+<span>Raised</span>
+<span className="text-zinc-200 font-medium">$3.2M / $5.0M</span>
+</div>
+<div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+<div className="h-full bg-indigo-500 w-[64%] rounded-full"></div>
+</div>
+<div className="flex justify-between text-xs text-zinc-500">
+<span>64% Funded</span>
+<span>12 Days Left</span>
+</div>
+</div>
+<div className="mt-auto pt-4 border-t border-zinc-800/50 flex items-center justify-between">
+<div className="text-xs">
+<p className="text-zinc-500">Min. Investment</p>
+<p className="text-zinc-200 font-medium">$500.00</p>
+</div>
+<button className="px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold rounded-lg transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+
+<div className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-600 transition-all duration-300 group flex flex-col">
+<div className="h-32 bg-gradient-to-br from-emerald-900/20 to-zinc-900 relative p-6">
+<div className="absolute top-4 right-4 bg-zinc-950/50 backdrop-blur-md px-2 py-1 rounded text-xs text-zinc-300 border border-zinc-800 font-medium flex items-center gap-1">
+<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live
+                            </div>
+<div className="w-12 h-12 bg-zinc-950 rounded-lg border border-zinc-700 flex items-center justify-center text-xl font-bold text-emerald-400 shadow-xl relative top-8">
+<span className="iconify" data-icon="lucide:leaf" data-width="24"></span>
+</div>
+</div>
+<div className="p-6 pt-10 flex-1 flex flex-col">
+<div className="mb-4">
+<h3 className="text-lg font-medium text-zinc-100">SolarGrid Solutions</h3>
+<p className="text-sm text-zinc-400 mt-1 line-clamp-2 leading-relaxed">Modular solar panel systems for urban residential complexes. Sustainable energy for everyone.</p>
+</div>
+<div className="flex items-center gap-2 mb-6">
+<span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Seed</span>
+<span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-zinc-800 text-zinc-400 border border-zinc-700">Energy</span>
+</div>
+<div className="space-y-3 mb-6">
+<div className="flex justify-between text-xs text-zinc-400">
+<span>Raised</span>
+<span className="text-zinc-200 font-medium">$850K / $1.2M</span>
+</div>
+<div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+<div className="h-full bg-emerald-500 w-[70%] rounded-full"></div>
+</div>
+<div className="flex justify-between text-xs text-zinc-500">
+<span>70% Funded</span>
+<span>24 Days Left</span>
+</div>
+</div>
+<div className="mt-auto pt-4 border-t border-zinc-800/50 flex items-center justify-between">
+<div className="text-xs">
+<p className="text-zinc-500">Min. Investment</p>
+<p className="text-zinc-200 font-medium">$100.00</p>
+</div>
+<button className="px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold rounded-lg transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+
+<div className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-600 transition-all duration-300 group flex flex-col">
+<div className="h-32 bg-gradient-to-br from-blue-900/20 to-zinc-900 relative p-6">
+<div className="absolute top-4 right-4 bg-zinc-950/50 backdrop-blur-md px-2 py-1 rounded text-xs text-zinc-300 border border-zinc-800 font-medium flex items-center gap-1">
+<span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Closing
+                            </div>
+<div className="w-12 h-12 bg-zinc-950 rounded-lg border border-zinc-700 flex items-center justify-center text-xl font-bold text-blue-400 shadow-xl relative top-8">
+<span className="iconify" data-icon="lucide:droplets" data-width="24"></span>
+</div>
+</div>
+<div className="p-6 pt-10 flex-1 flex flex-col">
+<div className="mb-4">
+<h3 className="text-lg font-medium text-zinc-100">AquaPure Systems</h3>
+<p className="text-sm text-zinc-400 mt-1 line-clamp-2 leading-relaxed">Advanced filtration technology for industrial waste water management and recycling.</p>
+</div>
+<div className="flex items-center gap-2 mb-6">
+<span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-blue-500/10 text-blue-400 border border-blue-500/20">Series B</span>
+<span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-zinc-800 text-zinc-400 border border-zinc-700">Industrial</span>
+</div>
+<div className="space-y-3 mb-6">
+<div className="flex justify-between text-xs text-zinc-400">
+<span>Raised</span>
+<span className="text-zinc-200 font-medium">$9.1M / $10M</span>
+</div>
+<div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+<div className="h-full bg-blue-500 w-[91%] rounded-full"></div>
+</div>
+<div className="flex justify-between text-xs text-zinc-500">
+<span>91% Funded</span>
+<span>2 Days Left</span>
+</div>
+</div>
+<div className="mt-auto pt-4 border-t border-zinc-800/50 flex items-center justify-between">
+<div className="text-xs">
+<p className="text-zinc-500">Min. Investment</p>
+<p className="text-zinc-200 font-medium">$2,500.00</p>
+</div>
+<button className="px-4 py-2 bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold rounded-lg transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-8 border-t border-zinc-800/50">
+
+<div className="lg:col-span-2 space-y-6">
+<h2 className="text-lg font-medium text-zinc-100">Project Details: Nexus AI</h2>
+<div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/20">
+<div className="flex flex-col sm:flex-row gap-8">
+<div className="flex-1 space-y-4">
+<h3 className="text-sm font-medium text-zinc-200 uppercase tracking-wide">Investment Highlights</h3>
+<ul className="space-y-3">
+<li className="flex items-start gap-3 text-sm text-zinc-400">
+<span className="iconify text-emerald-500 mt-0.5 flex-shrink-0" data-icon="lucide:check-circle-2" data-width="16"></span>
+<span>Projected Annual ROI of 18-22% based on current GPU demand.</span>
+</li>
+<li className="flex items-start gap-3 text-sm text-zinc-400">
+<span className="iconify text-emerald-500 mt-0.5 flex-shrink-0" data-icon="lucide:check-circle-2" data-width="16"></span>
+<span>Partnerships secured with 3 major university research labs.</span>
+</li>
+<li className="flex items-start gap-3 text-sm text-zinc-400">
+<span className="iconify text-emerald-500 mt-0.5 flex-shrink-0" data-icon="lucide:check-circle-2" data-width="16"></span>
+<span>Quarterly dividends distributed directly to wallet.</span>
+</li>
+</ul>
+<div className="pt-4 mt-4 border-t border-zinc-800/50 flex gap-4">
+<a className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1" href="#">
+                                        Download Prospectus <span className="iconify" data-icon="lucide:download" data-width="12"></span>
+</a>
+<a className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1" href="#">
+                                        View Smart Contract <span className="iconify" data-icon="lucide:external-link" data-width="12"></span>
+</a>
+</div>
+</div>
+
+<div className="w-full sm:w-72 bg-zinc-950 border border-zinc-800 p-5 rounded-lg">
+<div className="flex justify-between items-center mb-4">
+<span className="text-sm font-medium text-zinc-200">Invest Capital</span>
+<span className="text-[10px] text-zinc-500 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">Fee: 0.5%</span>
+</div>
+<div className="relative mb-4">
+<span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
+<input className="w-full bg-zinc-900 border border-zinc-700 text-zinc-100 rounded-md py-2 pl-7 pr-3 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" type="number" value="1000"/>
+</div>
+<div className="flex justify-between text-xs text-zinc-500 mb-4">
+<span>Balance: $42,503.00</span>
+<button className="text-indigo-400 hover:text-indigo-300">Max</button>
+</div>
+<button className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-md shadow-lg shadow-indigo-900/20 transition-all flex justify-center items-center gap-2">
+                                    Confirm Investment
+                                </button>
+</div>
+</div>
+</div>
+</div>
+
+<div className="lg:col-span-1">
+<div className="bg-zinc-900/20 border border-zinc-800 rounded-xl p-6 h-full flex flex-col">
+<div className="flex items-center justify-between mb-6">
+<h2 className="text-lg font-medium text-zinc-100">Wallet</h2>
+<button className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-400 transition-colors">
+<span className="iconify" data-icon="lucide:more-horizontal" data-width="16"></span>
+</button>
+</div>
+<div className="relative overflow-hidden rounded-lg bg-gradient-to-tr from-zinc-800 to-zinc-900 border border-zinc-700 p-5 mb-6 group">
+<div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-indigo-500/20 transition-all duration-500"></div>
+<p className="text-xs text-zinc-400 mb-1">Available Balance</p>
+<h3 className="text-3xl font-semibold text-zinc-100 tracking-tight mb-4">$42,503.00</h3>
+<div className="flex gap-2">
+<button className="flex-1 bg-zinc-100 text-zinc-950 text-xs font-semibold py-2 rounded shadow hover:bg-white transition-colors">Deposit</button>
+<button className="flex-1 bg-zinc-800 text-zinc-300 border border-zinc-700 text-xs font-medium py-2 rounded hover:bg-zinc-700 transition-colors">Withdraw</button>
+</div>
+</div>
+<div className="flex-1">
+<h4 className="text-xs font-medium text-zinc-500 uppercase tracking-wide mb-3">Recent Transactions</h4>
+<div className="space-y-3">
+<div className="flex items-center justify-between p-2 rounded hover:bg-zinc-800/50 transition-colors cursor-pointer">
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 rounded-full bg-indigo-500/10 text-indigo-400 flex items-center justify-center border border-indigo-500/20">
+<span className="iconify" data-icon="lucide:arrow-down-left" data-width="14"></span>
+</div>
+<div>
+<p className="text-sm font-medium text-zinc-200">Deposit</p>
+<p className="text-[10px] text-zinc-500">Today, 10:23 AM</p>
+</div>
+</div>
+<span className="text-sm font-medium text-emerald-500">+$5,000.00</span>
+</div>
+<div className="flex items-center justify-between p-2 rounded hover:bg-zinc-800/50 transition-colors cursor-pointer">
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center border border-zinc-700">
+<span className="iconify" data-icon="lucide:briefcase" data-width="14"></span>
+</div>
+<div>
+<p className="text-sm font-medium text-zinc-200">Inv: SolarGrid</p>
+<p className="text-[10px] text-zinc-500">Yesterday</p>
+</div>
+</div>
+<span className="text-sm font-medium text-zinc-300">-$1,200.00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="mt-12 py-10 border-t border-zinc-800 flex flex-col items-center justify-center bg-zinc-900/10 rounded-xl">
+<div className="text-center mb-6">
+<span className="text-xs font-medium text-indigo-400 tracking-wider uppercase mb-2 block">Authentication Demo</span>
+<h2 className="text-xl font-medium text-zinc-100">Join 50,000+ Investors</h2>
+<p className="text-sm text-zinc-500 mt-2">Start your journey today. Create an account in seconds.</p>
+</div>
+<form className="w-full max-w-sm space-y-3" onsubmit="event.preventDefault()">
+<div className="flex gap-3">
+<input className="flex-1 bg-zinc-950 border border-zinc-800 text-zinc-200 text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-zinc-600" placeholder="Email address" type="email"/>
+</div>
+<div className="flex gap-3">
+<input className="flex-1 bg-zinc-950 border border-zinc-800 text-zinc-200 text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-zinc-600" placeholder="Password" type="password"/>
+</div>
+<div className="flex gap-3">
+<button className="flex-1 bg-zinc-100 text-zinc-950 font-semibold text-sm py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">Sign Up</button>
+<button className="flex-1 bg-transparent border border-zinc-700 text-zinc-300 font-medium text-sm py-2.5 rounded-lg hover:bg-zinc-800 transition-colors">Log In</button>
+</div>
+</form>
+<div className="mt-6 flex gap-6 text-xs text-zinc-500">
+<span className="flex items-center gap-1"><span className="iconify" data-icon="lucide:shield-check" data-width="12"></span> Bank Level Security</span>
+<span className="flex items-center gap-1"><span className="iconify" data-icon="lucide:lock" data-width="12"></span> Encrypted Data</span>
+</div>
+</div>
+<footer className="pt-8 pb-12 text-center">
+<p className="text-xs text-zinc-600">© 2023 Vest Capital Inc. All rights reserved. <br/>Investing involves risk, including loss of principal.</p>
+</footer>
+</div>
+</main>
+
+    </>
+  );
+}

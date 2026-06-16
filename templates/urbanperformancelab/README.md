@@ -1,0 +1,14 @@
+# Urban Performance Lab E-commerce Landing Page Template
+
+A sleek, editorial-style e-commerce landing page template for curated athletic footwear and apparel reviews, guides, and affiliate product recommendations.
+
+## Project Details
+- **Slug:** `urbanperformancelab`
+- **Views:** 618
+- **Tags:** E-commerce, Landing Page, Brand, Style, Clean, Minimal, Large Type, Technology
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

@@ -1,0 +1,14 @@
+# Sales Consulting by Colleen
+
+A reusable landing page template for sales consultants, coaches, and B2B revenue experts to showcase expertise, build trust, and drive strategy calls.
+
+## Project Details
+- **Slug:** `colleen-francis`
+- **Views:** 30
+- **Tags:** Landing Page, Services, Business, Technology, Dark, Clean, Minimal, Grid, consulting, sales
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

@@ -1,0 +1,225 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const color1Input = document.getElementById('color1');
+      const color2Input = document.getElementById('color2');
+      const color1Text = document.getElementById('color1Text');
+      const color2Text = document.getElementById('color2Text');
+      const x1Input = document.getElementById('x1');
+      const y1Input = document.getElementById('y1');
+      const x2Input = document.getElementById('x2');
+      const y2Input = document.getElementById('y2');
+      const blurInput = document.getElementById('blur');
+      const gradientPreview = document.getElementById('gradientPreview');
+      const cssCode = document.getElementById('cssCode');
+      const randomizeBtn = document.getElementById('randomize');
+      const copyCSSBtn = document.getElementById('copyCSS');
+      
+      // Connect color inputs
+      color1Input.addEventListener('input', () => {
+        color1Text.value = color1Input.value;
+        updateGradient();
+      });
+      
+      color2Input.addEventListener('input', () => {
+        color2Text.value = color2Input.value;
+        updateGradient();
+      });
+      
+      color1Text.addEventListener('input', () => {
+        color1Input.value = color1Text.value;
+        updateGradient();
+      });
+      
+      color2Text.addEventListener('input', () => {
+        color2Input.value = color2Text.value;
+        updateGradient();
+      });
+      
+      // Color presets
+      document.querySelectorAll('.color-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const color = btn.getAttribute('data-color');
+          const parent = btn.closest('div').parentElement;
+          const colorInput = parent.querySelector('input[type="color"]');
+          const textInput = parent.querySelector('input[type="text"]');
+          
+          colorInput.value = color;
+          textInput.value = color;
+          updateGradient();
+        });
+      });
+      
+      // Position controls
+      [x1Input, y1Input, x2Input, y2Input, blurInput].forEach(input => {
+        input.addEventListener('input', updateGradient);
+      });
+      
+      // Randomize button
+      randomizeBtn.addEventListener('click', () => {
+        const randomColor = () => {
+          const letters = '0123456789ABCDEF';
+          let color = '#';
+          for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        };
+        
+        color1Input.value = randomColor();
+        color2Input.value = randomColor();
+        color1Text.value = color1Input.value;
+        color2Text.value = color2Input.value;
+        
+        x1Input.value = Math.floor(Math.random() * 100);
+        y1Input.value = Math.floor(Math.random() * 100);
+        x2Input.value = Math.floor(Math.random() * 100);
+        y2Input.value = Math.floor(Math.random() * 100);
+        blurInput.value = Math.floor(Math.random() * 80) + 20;
+        
+        updateGradient();
+      });
+      
+      // Copy CSS button
+      copyCSSBtn.addEventListener('click', () => {
+        const textToCopy = cssCode.textContent;
+        navigator.clipboard.writeText(textToCopy);
+        
+        copyCSSBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyCSSBtn.textContent = 'Copy CSS';
+        }, 2000);
+      });
+      
+      // Generate CSS
+      function updateGradient() {
+        const color1 = color1Input.value;
+        const color2 = color2Input.value;
+        const x1 = x1Input.value;
+        const y1 = y1Input.value;
+        const x2 = x2Input.value;
+        const y2 = y2Input.value;
+        const blur = blurInput.value;
+        
+        const radialGradient1 = `radial-gradient(circle at ${x1}% ${y1}%, ${color1} 0%, transparent ${blur}%)`;
+        const radialGradient2 = `radial-gradient(circle at ${x2}% ${y2}%, ${color2} 0%, transparent ${blur}%)`;
+        
+        const backgroundValue = `${radialGradient1}, ${radialGradient2}`;
+        gradientPreview.style.background = backgroundValue;
+        
+        cssCode.textContent = `.mesh-gradient {
+  background: ${backgroundValue};
+}`;
+      }
+      
+      // Initial update
+      updateGradient();
+    });
+  
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="w-full max-w-4xl bg-gray-900 rounded-lg shadow-xl overflow-hidden border border-gray-800">
+<div className="p-4 border-b border-gray-800">
+<h1 className="text-lg font-medium text-white">Mesh Gradient Generator</h1>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2">
+
+<div className="p-4 border-r border-gray-800">
+<div className="space-y-4">
+
+<div>
+<label className="block text-xs font-medium text-gray-400 mb-1">Color 1</label>
+<div className="flex items-center space-x-2">
+<input className="h-8 w-8 rounded cursor-pointer bg-transparent" id="color1" type="color" value="#635BFF"/>
+<input className="flex-1 px-2 py-1 bg-gray-800 border border-gray-700 rounded text-xs" id="color1Text" type="text" value="#635BFF"/>
+</div>
+<div className="mt-2 grid grid-cols-4 gap-1">
+<button className="color-preset w-full h-5 rounded bg-[#635BFF]" data-color="#635BFF"></button>
+<button className="color-preset w-full h-5 rounded bg-[#00D4FF]" data-color="#00D4FF"></button>
+<button className="color-preset w-full h-5 rounded bg-[#FF6BCB]" data-color="#FF6BCB"></button>
+<button className="color-preset w-full h-5 rounded bg-[#FFB347]" data-color="#FFB347"></button>
+</div>
+</div>
+
+<div>
+<label className="block text-xs font-medium text-gray-400 mb-1">Color 2</label>
+<div className="flex items-center space-x-2">
+<input className="h-8 w-8 rounded cursor-pointer bg-transparent" id="color2" type="color" value="#00D4FF"/>
+<input className="flex-1 px-2 py-1 bg-gray-800 border border-gray-700 rounded text-xs" id="color2Text" type="text" value="#00D4FF"/>
+</div>
+<div className="mt-2 grid grid-cols-4 gap-1">
+<button className="color-preset w-full h-5 rounded bg-[#635BFF]" data-color="#635BFF"></button>
+<button className="color-preset w-full h-5 rounded bg-[#00D4FF]" data-color="#00D4FF"></button>
+<button className="color-preset w-full h-5 rounded bg-[#FF6BCB]" data-color="#FF6BCB"></button>
+<button className="color-preset w-full h-5 rounded bg-[#FFB347]" data-color="#FFB347"></button>
+</div>
+</div>
+
+<div>
+<label className="block text-xs font-medium text-gray-400 mb-1">Positions</label>
+<div className="grid grid-cols-2 gap-3">
+<div>
+<label className="block text-[10px] text-gray-500 mb-1">X1</label>
+<input className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="x1" max="100" min="0" type="range" value="0"/>
+</div>
+<div>
+<label className="block text-[10px] text-gray-500 mb-1">Y1</label>
+<input className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="y1" max="100" min="0" type="range" value="0"/>
+</div>
+<div>
+<label className="block text-[10px] text-gray-500 mb-1">X2</label>
+<input className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="x2" max="100" min="0" type="range" value="100"/>
+</div>
+<div>
+<label className="block text-[10px] text-gray-500 mb-1">Y2</label>
+<input className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="y2" max="100" min="0" type="range" value="100"/>
+</div>
+</div>
+</div>
+
+<div>
+<label className="block text-xs font-medium text-gray-400 mb-1">Blur</label>
+<input className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="blur" max="100" min="0" type="range" value="40"/>
+</div>
+
+<div className="flex space-x-2 pt-2">
+<button className="flex-1 bg-gray-800 text-gray-200 py-1.5 px-3 rounded border border-gray-700 hover:bg-gray-700 text-xs" id="randomize">
+              Randomize
+            </button>
+<button className="flex-1 bg-indigo-900 text-gray-100 py-1.5 px-3 rounded border border-indigo-800 hover:bg-indigo-800 text-xs" id="copyCSS">
+              Copy CSS
+            </button>
+</div>
+</div>
+</div>
+
+<div className="p-4">
+<div className="w-full h-48 rounded-md mb-4 border border-gray-800" id="gradientPreview"></div>
+<div>
+<label className="block text-xs font-medium text-gray-400 mb-1">CSS Code</label>
+<div className="relative">
+<pre className="bg-gray-800 p-2 rounded-md text-[10px] overflow-x-auto text-gray-300 border border-gray-700" id="cssCode"></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+    </>
+  );
+}

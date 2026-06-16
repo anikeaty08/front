@@ -1,0 +1,590 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+display: ['Space Grotesk', 'sans-serif'],
+},
+colors: {
+dark: '#0A0A0A',
+accent: '#00F0FF',
+}
+}
+}
+}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        // 1. Initialize Lenis (Smooth Scroll)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Connect GSAP to Lenis
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Data for Arcs
+        const arcsData = [
+            { title: "Money", desc: "Funding and capital" },
+            { title: "Expertise", desc: "Mentorship and domain expertise" },
+            { title: "Insights", desc: "Market analytics and data-driven insights" },
+            { title: "Infrastructure", desc: "Technical and operational infrastructure" },
+            { title: "Network", desc: "Access to a curated network of contacts" },
+            { title: "Collaborations", desc: "Strategic partnerships and collaborations" },
+            { title: "Leverage", desc: "Scaling and growth leverage" }
+        ];
+
+        // Populate Arc Texts in DOM
+        const arcsContainer = document.getElementById('arc-texts-container');
+        arcsData.forEach((arc, i) => {
+            const div = document.createElement('div');
+            div.className = `arc-text-item arc-item-${i}`;
+            div.innerHTML = `
+                <h3 class="font-display text-4xl md:text-6xl font-medium tracking-tight mb-2 ${i === 0 ? 'text-accent' : 'text-white'}">${arc.title}</h3>
+                <p class="text-sm md:text-base text-white/50">${arc.desc}</p>
+            `;
+            arcsContainer.appendChild(div);
+        });
+
+        // 2. Three.js Setup
+        const canvas = document.querySelector('#webgl-canvas');
+        const scene = new THREE.Scene();
+        // Fog for depth
+        scene.fog = new THREE.FogExp2(0x0a0a0a, 0.015);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 25;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const isMobile = window.innerWidth < 768;
+
+        // Groups to manage transformations
+        const mainGroup = new THREE.Group();
+        scene.add(mainGroup);
+
+        const heroGroup = new THREE.Group();
+        const arcsGroup = new THREE.Group();
+        const bgGroup = new THREE.Group();
+        mainGroup.add(heroGroup, arcsGroup, bgGroup);
+
+        // --- Create Hero Object (Abstract Crystalline Polyhedron) ---
+        const heroGeo = new THREE.IcosahedronGeometry(4, 1);
+        const heroMat = new THREE.MeshBasicMaterial({ 
+            color: 0x0a0a0a, 
+            wireframe: false,
+            transparent: true,
+            opacity: 0.9
+        });
+        const heroWireMat = new THREE.LineBasicMaterial({ color: 0x333333, transparent: true, opacity: 0.5 });
+        const heroMesh = new THREE.Mesh(heroGeo, heroMat);
+        
+        const wireframe = new THREE.WireframeGeometry(heroGeo);
+        const line = new THREE.LineSegments(wireframe, heroWireMat);
+        heroMesh.add(line);
+
+        // Inner core
+        const coreGeo = new THREE.OctahedronGeometry(2, 0);
+        const coreMat = new THREE.MeshBasicMaterial({ color: 0x00F0FF, wireframe: true, transparent: true, opacity: 0.3 });
+        const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+        heroMesh.add(coreMesh);
+
+        heroGroup.add(heroMesh);
+        heroGroup.position.set(0, 0, 0);
+
+        // --- Create 7 Arcs ---
+        const arcsCount = 7;
+        const radius = 8;
+        const tube = 0.05;
+        const arcMeshes = [];
+        
+        // Hide arcs initially
+        arcsGroup.position.y = -50; 
+        arcsGroup.rotation.x = Math.PI / 3; // Tilt it
+
+        for (let i = 0; i < arcsCount; i++) {
+            // Calculate segment angle
+            const angleSpan = (Math.PI * 2) / arcsCount;
+            const gap = 0.2;
+            const geo = new THREE.TorusGeometry(radius, tube, 8, 64, angleSpan - gap);
+            
+            const mat = new THREE.MeshBasicMaterial({ 
+                color: 0x222222, 
+                transparent: true, 
+                opacity: 0.3 
+            });
+            
+            const mesh = new THREE.Mesh(geo, mat);
+            
+            // Position around circle
+            mesh.rotation.z = (i * angleSpan) + (gap/2);
+            
+            arcMeshes.push(mesh);
+            arcsGroup.add(mesh);
+        }
+
+        // --- Background Particles ---
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        const particlesGeo = new THREE.BufferGeometry();
+        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMat = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.3
+        });
+        const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
+        bgGroup.add(particlesMesh);
+
+        // 3. Animation Loop
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            const elapsedTime = clock.getElapsedTime();
+
+            // Idle animations
+            if (!isMobile) {
+                heroMesh.rotation.y = elapsedTime * 0.1;
+                heroMesh.rotation.x = elapsedTime * 0.05;
+                coreMesh.rotation.y = -elapsedTime * 0.2;
+                
+                arcsGroup.rotation.z = elapsedTime * 0.05;
+                
+                bgGroup.rotation.y = elapsedTime * 0.02;
+            }
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 4. GSAP Scroll Animations
+        
+        // Initial Page Load
+        window.addEventListener('load', () => {
+            const tlLoad = gsap.timeline();
+            tlLoad.to("#hero-badge", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" })
+                  .to("#hero-title", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
+                  .to("#hero-subtitle", { opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
+                  .to("#hero-cta", { opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6");
+            
+            // Show cookie banner after delay
+            setTimeout(() => {
+                document.getElementById('cookie-banner').classList.remove('translate-y-48');
+            }, 2000);
+        });
+
+        // Setup ScrollTriggers if not strictly mobile (to save performance)
+        if (!isMobile) {
+            
+            // Navbar blur effect
+            ScrollTrigger.create({
+                start: "top -50",
+                end: 99999,
+                toggleClass: {className: "bg-dark/70", targets: "#navbar"}
+            });
+
+            // Hero to Arcs Transition
+            gsap.to(heroGroup.position, {
+                y: 15, // Move up and out
+                z: -20,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#hero",
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+
+            // Arcs Pinned Section
+            const arcEls = document.querySelectorAll('.arc-text-item');
+            
+            const arcsTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#arcs-scroll-wrapper",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1,
+                }
+            });
+
+            // Bring arcs group into view
+            arcsTl.to(arcsGroup.position, { y: 0, duration: 0.1 }, 0);
+            arcsTl.to(arcsGroup.rotation, { x: 0, duration: 0.2 }, 0);
+            arcsTl.to("#arcs-main-title", { opacity: 1, duration: 0.1 }, 0);
+
+            // Animate through the 7 steps
+            const stepDuration = 1 / arcsCount;
+            
+            for(let i=0; i < arcsCount; i++) {
+                const startTime = i * stepDuration;
+                
+                // Highlight corresponding 3D arc
+                arcsTl.call(() => {
+                    // Reset all
+                    arcMeshes.forEach(m => {
+                        m.material.color.setHex(0x222222);
+                        m.material.opacity = 0.3;
+                    });
+                    // Highlight active
+                    arcMeshes[i].material.color.setHex(0x00F0FF);
+                    arcMeshes[i].material.opacity = 1;
+                }, null, startTime);
+
+                // Fade in text
+                arcsTl.to(arcEls[i], { opacity: 1, y: -20, duration: stepDuration * 0.4 }, startTime);
+                
+                // Fade out text (unless it's the last one)
+                if(i < arcsCount - 1) {
+                    arcsTl.to(arcEls[i], { opacity: 0, y: -40, duration: stepDuration * 0.4 }, startTime + (stepDuration * 0.6));
+                }
+            }
+
+            // Move arcs away
+            arcsTl.to(arcsGroup.position, { z: 30, opacity: 0, duration: 0.2 }, 0.9);
+            arcsTl.to("#arcs-main-title", { opacity: 0, duration: 0.1 }, 0.9);
+            arcsTl.to(arcEls[arcsCount-1], { opacity: 0, duration: 0.1 }, 0.9);
+
+            // Philosophy Push-through (Camera movement)
+            const philTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#philosophy",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+
+            // Camera zooms in dramatically
+            philTl.to(camera.position, { z: -30, ease: "power1.inOut" }, 0);
+            
+            // HTML text scale up
+            gsap.to("#philosophy-title", {
+                scale: 1,
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: "#philosophy",
+                    start: "top 60%",
+                    end: "top 20%",
+                    scrub: true
+                }
+            });
+            gsap.to("#philosophy-content p", {
+                opacity: 1,
+                y: 0,
+                scrollTrigger: {
+                    trigger: "#philosophy",
+                    start: "top 60%",
+                    end: "top 30%",
+                    scrub: true
+                }
+            });
+
+            // Criteria Cards Stagger
+            gsap.to(".criteria-card", {
+                y: 0,
+                opacity: 1,
+                stagger: 0.1,
+                duration: 0.8,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: "#criteria",
+                    start: "top 60%",
+                }
+            });
+
+            // Subtle 3D tilt on cards via JS
+            const cards = document.querySelectorAll('.criteria-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -5;
+                    const rotateY = ((x - centerX) / centerX) * 5;
+                    
+                    gsap.to(card, {
+                        rotateX: rotateX,
+                        rotateY: rotateY,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.5, ease: "power2.out" });
+                });
+            });
+
+        } else {
+            // Mobile Fallbacks (Simplified)
+            gsap.to(".criteria-card", {
+                y: 0, opacity: 1, stagger: 0.1, duration: 0.5,
+                scrollTrigger: { trigger: "#criteria", start: "top 80%" }
+            });
+            
+            // Static text for arcs on mobile
+            const arcEls = document.querySelectorAll('.arc-text-item');
+            gsap.set(arcEls, { opacity: 0, position: 'absolute' });
+            gsap.to(arcEls, {
+                opacity: 1, stagger: 1, duration: 0.5,
+                scrollTrigger: { trigger: "#arcs-scroll-wrapper", start: "top top", end: "bottom bottom", scrub: true }
+            });
+            
+            gsap.to("#philosophy-title", {
+                scale: 1, opacity: 1,
+                scrollTrigger: { trigger: "#philosophy", start: "top 70%", end: "top 30%", scrub: true }
+            });
+        }
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<canvas className="fixed inset-0 z-0 pointer-events-none w-full h-full" id="webgl-canvas"></canvas>
+
+<nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-white/5 transition-all duration-300" id="navbar">
+<div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div className="flex items-baseline gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+<span className="font-display font-medium text-2xl tracking-tighter text-white">SAG7</span>
+<span className="text-xs text-white/50 tracking-widest uppercase hidden md:inline-block">Investment Office</span>
+</div>
+<div className="hidden md:flex items-center gap-8 text-sm text-white/70">
+<a className="hover:text-white transition-colors" href="#arcs-section">7 Arcs</a>
+<a className="hover:text-white transition-colors" href="#philosophy">Philosophy</a>
+<a className="hover:text-white transition-colors" href="#criteria">Criteria</a>
+</div>
+<a className="group relative px-5 py-2.5 glass-panel rounded-full overflow-hidden flex items-center gap-2 hover:bg-white/10 transition-colors" href="#pitch">
+<span className="relative z-10 text-sm font-medium tracking-wide">Pitch us</span>
+<iconify-icon className="text-lg relative z-10 group-hover:text-accent transition-colors" icon="solar:arrow-right-up-linear"></iconify-icon>
+</a>
+</div>
+</nav>
+
+<main className="relative z-10">
+
+<section className="min-h-screen flex items-center justify-center pt-20 px-6 relative" id="hero">
+<div className="max-w-4xl mx-auto text-center flex flex-col items-center">
+<div className="glass-panel px-4 py-1.5 rounded-full mb-8 inline-flex items-center gap-2 border-white/10 opacity-0 transform translate-y-4" id="hero-badge">
+<span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+<span className="text-xs tracking-wider text-white/70 uppercase">Venture Capital Fund</span>
+</div>
+<h1 className="font-display font-medium text-5xl md:text-7xl lg:text-8xl tracking-tighter leading-tight mb-6 opacity-0 transform translate-y-8" id="hero-title">
+                    Unlock Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40 italic">x7 Growth</span>
+</h1>
+<p className="text-base md:text-lg text-white/50 max-w-2xl font-light mb-10 opacity-0" id="hero-subtitle">
+                    Private Equity Investments for Digital Businesses. We back visionary founders building the infrastructure of tomorrow.
+                </p>
+<div className="flex items-center gap-4 opacity-0" id="hero-cta">
+<a className="bg-white text-dark px-8 py-4 rounded-full text-sm font-medium hover:bg-white/90 transition-all flex items-center gap-2" href="#pitch">
+                        Submit Pitch Deck
+                    </a>
+</div>
+</div>
+
+<div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+<span className="text-xs tracking-widest uppercase">Scroll</span>
+<iconify-icon className="text-xl animate-bounce" icon="solar:mouse-minimalistic-linear"></iconify-icon>
+</div>
+</section>
+
+<section className="relative" id="arcs-section">
+
+<div className="h-[400vh]" id="arcs-scroll-wrapper">
+
+<div className="h-screen sticky top-0 flex items-center justify-center overflow-hidden w-full pointer-events-none" id="arcs-pinned">
+<div className="absolute top-32 left-1/2 -translate-x-1/2 text-center w-full z-20">
+<h2 className="font-display font-medium text-3xl md:text-5xl tracking-tight text-white/20" id="arcs-main-title">7 Arcs of Growth</h2>
+</div>
+
+<div className="relative w-full max-w-2xl mx-auto z-20 h-64 flex items-center justify-center">
+<div className="relative w-full h-full" id="arc-texts-container">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="min-h-screen flex items-center justify-center relative overflow-hidden px-6" id="philosophy">
+<div className="text-center z-10 mix-blend-difference" id="philosophy-content">
+<p className="text-sm md:text-base text-accent uppercase tracking-[0.3em] mb-4 opacity-0">Backing the Boldest Ideas</p>
+<h2 className="font-display font-medium text-4xl md:text-6xl lg:text-7xl tracking-tighter leading-tight opacity-0 scale-95" id="philosophy-title">
+                    Beyond Investments.<br/>
+<span className="text-white/40">Beyond Growth.</span>
+</h2>
+</div>
+</section>
+
+<section className="min-h-screen py-32 px-6 relative z-10 bg-dark/50 backdrop-blur-3xl border-t border-white/5" id="criteria">
+<div className="max-w-7xl mx-auto">
+<div className="mb-20 md:mb-32">
+<h2 className="font-display font-medium text-3xl md:text-5xl tracking-tight mb-4">Our Investment Criteria</h2>
+<p className="text-base text-white/50 max-w-xl">Strategic capital tailored for high-leverage digital business models.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="criteria-grid">
+
+<div className="criteria-card glass-panel p-8 rounded-2xl opacity-0 translate-y-10 hover:bg-white/5 transition-colors duration-500 group">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-6 group-hover:border-accent/50 transition-colors">
+<iconify-icon className="text-2xl text-white/70 group-hover:text-accent" icon="solar:box-linear"></iconify-icon>
+</div>
+<h3 className="font-display text-xl font-medium mb-3">Niches</h3>
+<p className="text-sm text-white/50 leading-relaxed">AI, Social Discovery, iGaming, Finance and other high-growth digital sectors.</p>
+</div>
+<div className="criteria-card glass-panel p-8 rounded-2xl opacity-0 translate-y-10 hover:bg-white/5 transition-colors duration-500 group">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-6 group-hover:border-accent/50 transition-colors">
+<iconify-icon className="text-2xl text-white/70 group-hover:text-accent" icon="solar:pie-chart-2-linear"></iconify-icon>
+</div>
+<h3 className="font-display text-xl font-medium mb-3">Stake</h3>
+<p className="text-sm text-white/50 leading-relaxed">Significant Minority Stakes Orientation, typically targeting between 20% to 49%.</p>
+</div>
+<div className="criteria-card glass-panel p-8 rounded-2xl opacity-0 translate-y-10 hover:bg-white/5 transition-colors duration-500 group">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-6 group-hover:border-accent/50 transition-colors">
+<iconify-icon className="text-2xl text-white/70 group-hover:text-accent" icon="solar:wad-of-money-linear"></iconify-icon>
+</div>
+<h3 className="font-display text-xl font-medium mb-3">Financing</h3>
+<p className="text-sm text-white/50 leading-relaxed">Smart Money Financing, providing not just capital but strategic operational support.</p>
+</div>
+<div className="criteria-card glass-panel p-8 rounded-2xl opacity-0 translate-y-10 hover:bg-white/5 transition-colors duration-500 group">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-6 group-hover:border-accent/50 transition-colors">
+<iconify-icon className="text-2xl text-white/70 group-hover:text-accent" icon="solar:routing-2-linear"></iconify-icon>
+</div>
+<h3 className="font-display text-xl font-medium mb-3">Business Models</h3>
+<p className="text-sm text-white/50 leading-relaxed">Preference for Traffic-driven Business Models with clear unit economics and scalability.</p>
+</div>
+<div className="criteria-card glass-panel p-8 rounded-2xl opacity-0 translate-y-10 hover:bg-white/5 transition-colors duration-500 group">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-6 group-hover:border-accent/50 transition-colors">
+<iconify-icon className="text-2xl text-white/70 group-hover:text-accent" icon="solar:sprout-linear"></iconify-icon>
+</div>
+<h3 className="font-display text-xl font-medium mb-3">Stages</h3>
+<p className="text-sm text-white/50 leading-relaxed">Partnering early. We focus primarily on Idea, Pre-Seed &amp; Seed Stages.</p>
+</div>
+<div className="criteria-card glass-panel p-8 rounded-2xl opacity-0 translate-y-10 hover:bg-white/5 transition-colors duration-500 group">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-6 group-hover:border-accent/50 transition-colors">
+<iconify-icon className="text-2xl text-white/70 group-hover:text-accent" icon="solar:banknotes-linear"></iconify-icon>
+</div>
+<h3 className="font-display text-xl font-medium mb-3">Ticket Size</h3>
+<p className="text-sm text-white/50 leading-relaxed">Investment Commitments ranging from USD 200K to USD 3 MLN per project.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="min-h-screen py-32 px-6 relative flex items-center justify-center overflow-hidden" id="pitch">
+<div className="w-full max-w-2xl mx-auto glass-panel p-8 md:p-12 rounded-3xl relative z-10">
+<div className="mb-10 text-center">
+<h2 className="font-display font-medium text-4xl tracking-tight mb-3">Pitch Us</h2>
+<p className="text-sm text-white/50">Submit your deck. We review every submission.</p>
+</div>
+<form className="space-y-8 pointer-events-auto" onsubmit="event.preventDefault();">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div className="relative">
+<input className="input-line w-full pb-3 text-sm focus:ring-0 peer placeholder-transparent" id="name" placeholder="Name" required="" type="text"/>
+<label className="absolute left-0 top-0 text-sm text-white/50 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-0 peer-focus:-top-5 peer-focus:text-xs peer-focus:text-accent -translate-y-5" htmlFor="name">Full Name</label>
+</div>
+<div className="relative">
+<input className="input-line w-full pb-3 text-sm focus:ring-0 peer placeholder-transparent" id="email" placeholder="Email" required="" type="email"/>
+<label className="absolute left-0 top-0 text-sm text-white/50 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-0 peer-focus:-top-5 peer-focus:text-xs peer-focus:text-accent -translate-y-5" htmlFor="email">Email Address</label>
+</div>
+</div>
+<div className="relative">
+<input className="input-line w-full pb-3 text-sm focus:ring-0 peer placeholder-transparent" id="company" placeholder="Company" required="" type="text"/>
+<label className="absolute left-0 top-0 text-sm text-white/50 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-0 peer-focus:-top-5 peer-focus:text-xs peer-focus:text-accent -translate-y-5" htmlFor="company">Company / Project Name</label>
+</div>
+<div className="relative">
+<input className="input-line w-full pb-3 text-sm focus:ring-0 peer placeholder-transparent" id="deck" placeholder="Deck URL" required="" type="url"/>
+<label className="absolute left-0 top-0 text-sm text-white/50 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-0 peer-focus:-top-5 peer-focus:text-xs peer-focus:text-accent -translate-y-5" htmlFor="deck">Pitch Deck URL</label>
+</div>
+<div className="relative">
+<textarea className="input-line w-full pb-3 text-sm focus:ring-0 peer placeholder-transparent resize-none" id="desc" placeholder="Description" required="" rows="3"></textarea>
+<label className="absolute left-0 top-0 text-sm text-white/50 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-0 peer-focus:-top-5 peer-focus:text-xs peer-focus:text-accent -translate-y-5" htmlFor="desc">Brief Description</label>
+</div>
+<button className="w-full bg-white text-dark py-4 rounded-xl text-sm font-medium hover:bg-white/90 transition-colors flex items-center justify-center gap-2 group" type="submit">
+                        Send Protocol
+                        <iconify-icon className="text-lg group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" icon="solar:plain-2-linear"></iconify-icon>
+</button>
+</form>
+</div>
+</section>
+
+<footer className="border-t border-white/10 bg-dark py-12 px-6 relative z-10">
+<div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div className="flex items-baseline gap-3">
+<span className="font-display font-medium text-xl tracking-tighter text-white">SAG7</span>
+<span className="text-xs text-white/40 tracking-widest uppercase">Ventures</span>
+</div>
+<div className="flex items-center gap-6 text-xs text-white/40">
+<a className="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a className="hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+<div className="text-xs text-white/30">
+                    © 2026 SAG 7 Ventures. All rights reserved.
+                </div>
+</div>
+</footer>
+</main>
+
+<div className="fixed bottom-6 left-6 right-6 md:left-auto md:right-6 md:w-96 glass-panel p-6 rounded-2xl z-50 flex flex-col gap-4 transform translate-y-48 transition-transform duration-700" id="cookie-banner">
+<p className="text-xs text-white/70 leading-relaxed">We use cookies to optimize our website and our service. <a className="text-white underline decoration-white/30 hover:decoration-white" href="#">Read more</a>.</p>
+<div className="flex gap-3">
+<button className="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg text-xs transition-colors" onclick="document.getElementById('cookie-banner').style.display='none'">Decline</button>
+<button className="flex-1 bg-white text-dark py-2 rounded-lg text-xs font-medium hover:bg-white/90 transition-colors" onclick="document.getElementById('cookie-banner').style.display='none'">Accept All</button>
+</div>
+</div>
+
+
+
+    </>
+  );
+}

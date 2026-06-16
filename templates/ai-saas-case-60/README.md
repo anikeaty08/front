@@ -1,0 +1,14 @@
+# AI SaaS Case Study Landing Page Template
+
+A clean, mobile-first case study landing page template for showcasing AI SaaS products, project roles, outcomes, and UX process in a portfolio-ready format.
+
+## Project Details
+- **Slug:** `ai-saas-case-60`
+- **Views:** 37
+- **Tags:** Landing Page, Portfolio, Technology, Brand, Clean, Minimal, Case Study, AI SaaS, Product Design
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

@@ -1,0 +1,2336 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+// Configure Tailwind to include our custom 3D transform utilities
+tailwind.config = {
+theme: {
+extend: {
+// Add any custom theme extensions here if needed
+}
+},
+plugins: [
+function({ addUtilities }) {
+const rotateXUtilities = {};
+const rotateYUtilities = {};
+const rotateZUtilities = {};
+const rotateValues = [0, 5, 10, 15, 20, 30, 45, 75];
+// Generate rotate-x utilities
+rotateValues.forEach((value) => {
+rotateXUtilities[`.rotate-x-${value}`] = {
+'--tw-rotate-x': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateXUtilities[`.-rotate-x-${value}`] = {
+'--tw-rotate-x': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-y utilities
+rotateValues.forEach((value) => {
+rotateYUtilities[`.rotate-y-${value}`] = {
+'--tw-rotate-y': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateYUtilities[`.-rotate-y-${value}`] = {
+'--tw-rotate-y': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-z utilities
+rotateValues.forEach((value) => {
+rotateZUtilities[`.rotate-z-${value}`] = {
+'--tw-rotate-z': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateZUtilities[`.-rotate-z-${value}`] = {
+'--tw-rotate-z': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Perspective utilities
+const perspectiveUtilities = {
+".perspective-none": { perspective: "none" },
+".perspective-dramatic": { perspective: "100px" },
+".perspective-near": { perspective: "300px" },
+".perspective-normal": { perspective: "500px" },
+".perspective-midrange": { perspective: "800px" },
+".perspective-distant": { perspective: "1200px" },
+};
+// Transform style utilities
+const transformStyleUtilities = {
+".transform-style-preserve-3d": { "transform-style": "preserve-3d" },
+".transform-style-flat": { "transform-style": "flat" },
+};
+addUtilities({
+...rotateXUtilities,
+...rotateYUtilities,
+...rotateZUtilities,
+...perspectiveUtilities,
+...transformStyleUtilities,
+});
+}
+]
+};
+
+
+
+    (function() {
+      const nav = document.getElementById("navbar");
+      if (!nav) return;
+
+      function handleScroll() {
+        if (window.scrollY > 20) {
+          nav.classList.remove('bg-[#020412]/20', 'backdrop-blur-md');
+          nav.classList.add('bg-[#060812]');
+        } else {
+          nav.classList.add('bg-[#020412]/20', 'backdrop-blur-md');
+          nav.classList.remove('bg-[#060812]');
+        }
+      }
+      window.addEventListener('scroll', handleScroll);
+      // Initialize on load
+      handleScroll();
+    })();
+  
+
+
+    // Flashlight Hover Effect
+        const cards = document.querySelectorAll('.flashlight-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simple interactivity for the buttons (Just console log for now as per "illustration purposes")
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => {
+                    this.classList.remove('scale-95');
+                }, 150);
+            });
+        });
+  
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed -z-50 overflow-hidden w-full h-full top-0 right-0 bottom-0 left-0" style={{}}>
+
+<div className="w-full h-full absolute top-0 right-0 bottom-0 left-0" style={{background: 'linear-gradient(rgb(0, 24, 113) 0%, rgb(0, 82, 194) 25%, rgb(74, 150, 228) 45%, rgb(217, 230, 245) 65%, rgb(255, 173, 125) 75%, rgb(247, 93, 77) 85%, rgb(204, 0, 61) 95%, rgb(82, 0, 61) 100%)'}}>
+</div>
+
+<div className="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none" style={{background: 'radial-gradient(circle at 50% 100%, #38bdf8, transparent 60%)', animation: 'aurora-move 15s ease-in-out infinite'}}>
+</div>
+
+<div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-[#020412] to-transparent opacity-90">
+</div>
+</div>
+
+<nav className="fixed z-50 transition-all duration-300 bg-[#020412]/20 border-white/5 border-b top-0 right-0 left-0 backdrop-blur-md" id="navbar">
+<div className="flex h-16 max-w-7xl mr-auto ml-auto pr-6 pl-6 items-center justify-between">
+
+<a className="" href="/home">
+<div className="flex font-medium text-white gap-x-2 gap-y-x-2 items-center">Nebula Max</div>
+</a>
+
+<div className="hidden md:flex gap-8 text-sm font-medium text-slate-300 h-full gap-x-8 gap-y-8 items-center">
+
+<div className="relative group h-full flex items-center">
+<button className="flex items-center gap-1.5 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors font-manrope outline-none">
+                Services
+                <svg className="text-slate-500 group-hover:text-white transition-colors duration-200 group-hover:rotate-180" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+</button>
+
+<div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 w-[600px] invisible opacity-0 translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-out z-50 pointer-events-none group-hover:pointer-events-auto">
+<div className="bg-[#020412] backdrop-blur-3xl border border-white/10 rounded-2xl p-2 shadow-2xl ring-1 ring-white/5 grid grid-cols-2 gap-1 overflow-hidden">
+
+<a className="group/item relative flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-all" href="/frontend-cloud">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+<path d="M3 9h18"></path>
+<path d="M9 21V9"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Frontend Cloud</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Deploy
+                  static sites and SPAs globally in seconds.</div>
+</div>
+</a>
+
+<a className="group/item relative flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-all" href="/serverless-compute">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2v20"></path>
+<path d="m17 5-5-3-5 3"></path>
+<path d="m17 19-5 3-5-3"></path>
+<path d="M2 12h20"></path>
+<path d="M2 12v5c0 1.66 1.34 3 3 3h14c1.66 0 3-1.34 3-3v-5"></path>
+<path d="M2 12v-5c0-1.66 1.34-3 3-3h14c1.66 0 3 1.34 3 3v5"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Serverless Compute</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Run
+                  code at the edge with zero cold starts.</div>
+</div>
+</a>
+
+<a className="group/item relative flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-all" href="/databases">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+<path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+<path d="M3 12A9 3 0 0 0 21 12"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Databases</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Scalable Postgres and Redis stores for your data.</div>
+</div>
+</a>
+
+<a className="group/item relative flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-all" href="/edge-network">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="2" x2="22" y1="12" y2="12"></line>
+<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+</path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Edge Network</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Low-latency global content delivery network.</div>
+</div>
+</a>
+
+<a className="group/item relative flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-all" href="/object-storage">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<line x1="22" x2="2" y1="12" y2="12"></line>
+<path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
+</path>
+<line x1="6" x2="6.01" y1="16" y2="16"></line>
+<line x1="10" x2="10.01" y1="16" y2="16"></line>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Object Storage</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  S3-compatible storage for your assets.</div>
+</div>
+</a>
+
+<a className="group/item relative flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-all" href="/security">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+<path d="m9 12 2 2 4-4"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Security</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  DDoS
+                  protection, WAF, and SSL management.</div>
+</div>
+</a>
+</div>
+</div>
+</div>
+<a className="hover:text-white transition-colors font-manrope" href="/pricing">Pricing</a>
+<a className="hover:text-white transition-colors font-manrope" href="/documentation">Documentation</a>
+<a className="hover:text-white transition-colors font-manrope" href="/about">About</a>
+</div>
+
+<div className="flex gap-4 text-sm font-medium gap-x-4 gap-y-4 items-center">
+<a className="hidden sm:block hover:text-white transition-colors font-manrope" href="/account">Sign in</a>
+<a className="hover:bg-white/15 transition-all text-white font-manrope bg-white/10 border border-white/10 rounded-full py-1.5 px-4" href="/account">
+        Sign up
+      </a>
+
+<button aria-label="Toggle menu" className="md:hidden hover:text-white transition-colors text-slate-300 pt-1 pr-1 pb-1 pl-1 z-50 relative" onclick="
+          const menu = document.getElementById('nebula-internal-mobile-menu');
+          const menuIcon = document.getElementById('menu-icon');
+          const closeIcon = document.getElementById('close-icon');
+          
+          if(menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            menu.classList.add('flex');
+            menuIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+          } else {
+            menu.classList.add('hidden');
+            menu.classList.remove('flex');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+            document.body.style.overflow = '';
+          }
+        ">
+<svg className="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="menu" fill="none" height="24" id="menu-icon" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(255, 255, 255)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="20" y1="12" y2="12"></line><line className="" x1="4" x2="20" y1="6" y2="6"></line><line className="" x1="4" x2="20" y1="18" y2="18"></line></svg>
+<svg className="hidden" height="24" id="close-icon" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"></circle><path d="m14.5 9.5l-5 5m0-5l5 5" strokeLinecap="round"></path></g></svg>
+</button>
+</div>
+
+<div className="fixed inset-x-0 top-[64px] z-40 h-dvh bg-[#020412]/95 backdrop-blur-3xl hidden md:hidden flex-col px-6 pb-12 overflow-y-auto flex" id="nebula-internal-mobile-menu">
+<div className="flex flex-col gap-6 text-lg font-medium text-slate-300 pt-6">
+
+<div>
+<button className="flex items-center justify-between w-full text-left font-manrope transition-colors" onclick="
+                    const list = document.getElementById('mobile-services-list');
+                    const icon = this.querySelector('svg');
+                    list.classList.toggle('hidden');
+                    list.classList.toggle('flex');
+                    icon.classList.toggle('rotate-180');
+                    this.classList.toggle('text-white');
+                ">
+                    Services
+                    <svg className="w-5 h-5 transition-transform duration-300 text-slate-500" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+</button>
+<div className="flex hidden flex-col gap-6 mt-5" id="mobile-services-list">
+
+<a className="group/item relative flex pt-2 pb-2 gap-4 rounded-xl hover:bg-white/5 transition-all" href="/frontend-cloud">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+<path d="M3 9h18"></path>
+<path d="M9 21V9"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Frontend Cloud</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Deploy
+                  static sites and SPAs globally in seconds.</div>
+</div>
+</a>
+
+<a className="group/item relative flex pt-2 pb-2 gap-4 rounded-xl hover:bg-white/5 transition-all" href="/serverless-compute">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2v20"></path>
+<path d="m17 5-5-3-5 3"></path>
+<path d="m17 19-5 3-5-3"></path>
+<path d="M2 12h20"></path>
+<path d="M2 12v5c0 1.66 1.34 3 3 3h14c1.66 0 3-1.34 3-3v-5"></path>
+<path d="M2 12v-5c0-1.66 1.34-3 3-3h14c1.66 0 3 1.34 3 3v5"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Serverless Compute</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Run
+                  code at the edge with zero cold starts.</div>
+</div>
+</a>
+
+<a className="group/item relative flex pt-2 pb-2 gap-4 rounded-xl hover:bg-white/5 transition-all" href="/databases">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+<path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+<path d="M3 12A9 3 0 0 0 21 12"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Databases</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Scalable Postgres and Redis stores for your data.</div>
+</div>
+</a>
+
+<a className="group/item relative flex pt-2 pb-2 gap-4 rounded-xl hover:bg-white/5 transition-all" href="/edge-network">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="2" x2="22" y1="12" y2="12"></line>
+<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+</path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Edge Network</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  Low-latency global content delivery network.</div>
+</div>
+</a>
+
+<a className="group/item relative flex pt-2 pb-2 gap-4 rounded-xl hover:bg-white/5 transition-all" href="/object-storage">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<line x1="22" x2="2" y1="12" y2="12"></line>
+<path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
+</path>
+<line x1="6" x2="6.01" y1="16" y2="16"></line>
+<line x1="10" x2="10.01" y1="16" y2="16"></line>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Object Storage</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  S3-compatible storage for your assets.</div>
+</div>
+</a>
+
+<a className="group/item relative flex pt-2 pb-2 gap-4 rounded-xl hover:bg-white/5 transition-all" href="/security">
+<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-400 group-hover/item:text-indigo-400 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+<path d="m9 12 2 2 4-4"></path>
+</svg>
+</div>
+<div>
+<div className="text-sm font-semibold text-slate-200 group-hover/item:text-white transition-colors font-manrope">
+                  Security</div>
+<div className="text-xs text-slate-500 mt-1 leading-relaxed group-hover/item:text-slate-400 font-manrope">
+                  DDoS
+                  protection, WAF, and SSL management.</div>
+</div>
+</a>
+</div>
+</div>
+<a className="hover:text-white transition-colors font-manrope" href="/pricing">Pricing</a>
+<a className="hover:text-white transition-colors font-manrope" href="/documentation">Documentation</a>
+<a className="hover:text-white transition-colors font-manrope" href="/about">About</a>
+<div className="h-px bg-white/10 w-full my-2"></div>
+<a className="hover:text-white transition-colors font-manrope" href="/account">Sign in</a>
+</div>
+</div>
+</div>
+
+</nav>
+
+<div className="hidden fixed inset-0 z-40 bg-[#020412]/80 backdrop-blur-3xl md:hidden" id="mobile-menu">
+<div className="flex flex-col h-full pt-24 px-6 gap-6 text-lg font-medium text-slate-300">
+<a className="hover:text-white transition-colors font-manrope" href="/pricing">Pricing</a>
+<a className="hover:text-white transition-colors font-manrope" href="/services">Services</a>
+<a className="hover:text-white transition-colors font-manrope" href="/documentation">Documentation</a>
+<a className="hover:text-white transition-colors font-manrope" href="/about">About</a>
+<div className="h-px bg-white/10 w-full my-2"></div>
+<a className="hover:text-white transition-colors font-manrope sm:hidden" href="/account">Sign in</a>
+</div>
+</div>
+
+<main className="overflow-hidden min-h-screen flex flex-col pt-28 pb-0 relative items-center">
+
+
+<div className="animate-intro z-10 flex flex-col text-center max-w-4xl mr-auto ml-auto pr-6 pl-6 items-center">
+<h1 className="md:text-7xl leading-[1.1] text-3xl font-medium tracking-tight mb-6">
+<span className="title-reflection block sm:inline font-manrope font-medium" style={{}}>The all in one </span> <br className="hidden sm:block"/>
+<span className="bg-clip-text font-medium text-transparent font-manrope bg-gradient-to-r from-indigo-200 via-white to-cyan-200">web app deployment solution</span>
+</h1>
+<p className="leading-relaxed md:text-xl text-base text-slate-50 font-manrope opacity-90 max-w-2xl mr-auto mb-6 ml-auto">
+        Easily connect with vibe coding platforms like Lovable or Aura Builder. Deploy your full-stack applications
+        instantly without configuration. </p>
+<div className="flex sm:flex-row gap-2 gap-x-2 gap-y-2 items-center">
+
+<button className="group hover:text-purple-600 flex gap-4 hover:shadow-[0_8px_30px_rgba(192,132,252,0.15),0_0_0_1px_rgba(192,132,252,0.1)] transition-all duration-300 text-slate-600 bg-white rounded-full pt-2.5 pr-4 pb-2.5 pl-4 relative shadow-[0_8px_30px_rgb(0,0,0,0.04),0_0_0_1px_rgba(0,0,0,0.02)] gap-x-1 gap-y-4 items-center">
+<span className="bg-clip-text group-hover:from-blue-800 group-hover:to-blue-400 text-sm text-transparent tracking-tight bg-gradient-to-r from-slate-700 to-slate-500">Get started</span>
+<svg className="lucide lucide-arrow-right group-hover:translate-x-1 transition-transform duration-300 group-hover:text-blue-500 text-blue-900 w-[24px] h-[20px]" data-icon-replaced="true" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '20px'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path className="" d="M5 12h14"></path>
+<path className="" d="m12 5 7 7-7 7"></path>
+</svg>
+</button>
+<button className="hover:bg-white/10 transition-colors flex group text-sm text-white font-manrope bg-white/5 border-white/10 border rounded-full pt-2.5 pr-4 pb-2.5 pl-4 gap-x-2 gap-y-2 items-center">
+                    Book a demo
+                    <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:calendar-linear" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><g className="" fill="none"><path className="" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14z" stroke="currentColor" strokeWidth="1.5"></path><path d="M7 4V2.5M17 4V2.5M2.5 9h19" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path><path d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0" fill="currentColor"></path></g></svg>
+</button>
+</div>
+</div>
+
+<div className="animate-intro md:px-8 w-full max-w-6xl mt-12 mb-20 pr-4 pl-4 relative perspective-1000" style={{maxHeight: '400px'}}>
+
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-indigo-500/20 blur-[80px] -z-10 rounded-full">
+</div>
+
+<div className="relative bg-[#0F111A]/90 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden ring-1 ring-white/5">
+
+<div className="h-14 border-b border-white/5 flex items-center justify-between px-4 bg-white/[0.02]">
+<div className="flex gap-4 gap-x-2 gap-y-4 items-center">
+<div className="flex gap-2">
+<span className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></span>
+<span className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></span>
+<span className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></span>
+</div>
+
+<div className="flex gap-2 text-xs font-medium text-slate-400 gap-x-1 gap-y-2 items-center">
+<div className="flex items-center gap-1.5 p-1 px-2 rounded hover:bg-white/5 transition-colors cursor-pointer">
+<svg aria-hidden="true" className="iconify text-indigo-400 iconify--solar" data-icon="solar:cloud-linear" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
+<path className="" d="M14.381 9.027a5.8 5.8 0 0 1 1.905-.321c.654 0 1.283.109 1.87.309m-11.04 2.594a4.4 4.4 0 0 0-.83-.08C3.919 11.53 2 13.426 2 15.765S3.919 20 6.286 20h10C19.442 20 22 17.472 22 14.353c0-2.472-1.607-4.573-3.845-5.338M7.116 11.609a5.6 5.6 0 0 1-.354-1.962C6.762 6.528 9.32 4 12.476 4c2.94 0 5.361 2.194 5.68 5.015m-11.04 2.594a4.3 4.3 0 0 1 1.55.634" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path>
+</svg>
+<span className="text-slate-300 font-manrope">Nebula</span>
+</div>
+<span className="text-slate-600 font-manrope">/</span>
+<div className="flex items-center gap-1.5 p-1 px-2 rounded hover:bg-white/5 transition-colors cursor-pointer">
+<svg aria-hidden="true" className="iconify text-cyan-400 iconify--solar" data-icon="solar:box-linear" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
+<path d="m15.578 3.382l2 1.05c2.151 1.129 3.227 1.693 3.825 2.708C22 8.154 22 9.417 22 11.942v.117c0 2.524 0 3.787-.597 4.801c-.598 1.015-1.674 1.58-3.825 2.709l-2 1.049C13.822 21.539 12.944 22 12 22s-1.822-.46-3.578-1.382l-2-1.05c-2.151-1.129-3.227-1.693-3.825-2.708C2 15.846 2 14.583 2 12.06v-.117c0-2.525 0-3.788.597-4.802c.598-1.015 1.674-1.58 3.825-2.708l2-1.05C10.178 2.461 11.056 2 12 2s1.822.46 3.578 1.382ZM21 7.5l-4 2M12 12L3 7.5m9 4.5v9.5m0-9.5l4.5-2.25l.5-.25m0 0V13m0-3.5l-9.5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5">
+</path>
+</svg>
+<span className="text-slate-300 font-manrope" style={{}}>Frontend</span>
+</div>
+<span className="text-slate-600 font-manrope" style={{}}>/</span>
+<div className="flex items-center gap-1.5 bg-green-900/20 border border-green-500/20 text-green-400 px-2 py-0.5 rounded-full">
+<span className="w-1.5 h-1.5 rounded-full bg-green-400 sonar-emitter"></span>
+<span className="font-manrope" style={{}}>main</span>
+</div>
+</div>
+</div>
+
+<div className="flex gap-4 gap-x-2 gap-y-2 items-center">
+<div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/5 border border-white/5 text-xs text-slate-500 w-48 justify-between cursor-text">
+<div className="flex items-center gap-2">
+<svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:magnifer-linear" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke="currentColor" strokeWidth="1.5">
+<circle cx="11.5" cy="11.5" r="9.5"></circle>
+<path d="M18.5 18.5L22 22" strokeLinecap="round"></path>
+</g>
+</svg>
+<span className="font-manrope" style={{}}>Search...</span>
+</div>
+<span className="text-[10px] border border-white/10 rounded px-1 font-manrope" style={{}}>⌘K</span>
+</div>
+<img alt="User" className="hover:opacity-100 transition-opacity bg-center opacity-80 w-7 h-7 object-cover border-white/10 border rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0a9490d3-0806-4139-aaa6-628fd3eee5b1_320w.png"/>
+</div>
+</div>
+
+<div className="flex border-white/5 border-b pr-6 pl-6 gap-x-6 gap-y-6 items-center">
+<button className="py-3 text-sm text-white border-b-2 border-indigo-500 font-manrope" style={{}}>Overview</button>
+<button className="py-3 text-sm text-slate-500 hover:text-slate-300 transition-colors font-manrope" style={{}}>Deployments</button>
+<button className="py-3 text-sm text-slate-500 hover:text-slate-300 transition-colors font-manrope" style={{}}>Metrics</button>
+<button className="py-3 text-sm text-slate-500 hover:text-slate-300 transition-colors font-manrope" style={{}}>Settings</button>
+</div>
+
+<div className="md:p-8 min-h-[500px] bg-[#0B0D15] relative overflow-hidden flex items-center justify-center p-4 group/container">
+
+<div className="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen animate-pulse">
+</div>
+<div className="absolute bottom-[-20%] right-[20%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen">
+</div>
+
+<div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none z-0 opacity-40">
+</div>
+
+<svg className="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="beam-gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#6366f1" stop-opacity="0"></stop>
+<stop offset="50%" stop-color="#818cf8" stop-opacity="0.5"></stop>
+<stop offset="100%" stop-color="#22d3ee" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+
+<path className="hidden md:block" d="M 320 250 C 400 250, 400 250, 460 250" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5"></path>
+<path className="hidden md:block noodle-path" d="M 320 250 C 400 250, 400 250, 460 250" fill="none" stroke="url(#beam-gradient)" stroke-dasharray="10 10" strokeWidth="2"></path>
+
+<path className="hidden md:block" d="M 780 250 C 820 250, 820 180, 880 180" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5"></path>
+
+<path className="hidden md:block" d="M 780 250 C 820 250, 820 380, 880 380" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5"></path>
+<path className="hidden md:block noodle-path" d="M 780 250 C 820 250, 820 380, 880 380" fill="none" stroke="url(#beam-gradient)" stroke-dasharray="8 8" strokeWidth="2" style={{animationDuration: '3s'}}></path>
+</svg>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl relative z-10 items-start">
+
+<div className="flex flex-col gap-4">
+<div className="flex items-center gap-2 text-slate-400 text-xs font-medium pl-1 uppercase tracking-wider opacity-80">
+<svg className="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<circle className="" cx="12" cy="12" r="10"></circle>
+<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+<path d="M2 12h20"></path>
+</svg>
+<span className="font-manrope" style={{}}>Global Network</span>
+</div>
+
+<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors overflow-hidden" style={{-MouseX: '278px', -MouseY: '6px'}}>
+<div className="p-4 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
+<h3 className="text-slate-200 text-sm font-manrope" style={{}}>Edge network</h3>
+<div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse"></span>
+<span className="text-[10px] text-emerald-400 font-manrope" style={{}}>Online</span>
+</div>
+</div>
+<div className="p-4 space-y-3">
+<div className="flex justify-between items-center text-xs group">
+<div className="flex items-center gap-2 text-slate-400 group-hover:text-slate-300 transition-colors font-manrope" style={{}}>
+<svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+</svg>
+                      DDoS protection
+                    </div>
+<span className="text-emerald-500/80 font-manrope" style={{}}>Active</span>
+</div>
+<div className="flex justify-between items-center text-xs group">
+<div className="flex items-center gap-2 text-slate-400 group-hover:text-slate-300 transition-colors font-manrope" style={{}}>
+<svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<path d="M2 12h20"></path>
+<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+</path>
+</svg>
+                      Global CDN
+                    </div>
+<span className="text-emerald-500/80 font-manrope" style={{}}>Active</span>
+</div>
+<div className="flex justify-between items-center text-xs group">
+<div className="flex items-center gap-2 text-slate-400 group-hover:text-slate-300 transition-colors font-manrope" style={{}}>
+<svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+</svg>
+                      Edge caching
+                    </div>
+<span className="text-emerald-500/80 font-manrope" style={{}}>Active</span>
+</div>
+</div>
+</div>
+
+<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-4 shadow-lg hover:border-white/10 transition-colors" style={{-MouseX: '34px', -MouseY: '85px'}}>
+<div className="flex justify-between items-center mb-3">
+<h3 className="text-slate-200 text-sm font-manrope" style={{}}>Domains</h3>
+</div>
+<div className="group flex items-center justify-between p-2.5 rounded bg-white/5 border border-white/5 hover:bg-white/[0.07] transition-colors cursor-pointer mb-2">
+<div className="flex items-center gap-2.5 overflow-hidden">
+<div className="w-6 h-6 rounded bg-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0">
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
+<rect height="14" rx="2" width="20" x="2" y="3"></rect>
+<line x1="8" x2="16" y1="21" y2="21"></line>
+<line x1="12" x2="12" y1="17" y2="21"></line>
+</svg>
+</div>
+<span className="text-xs text-slate-300 truncate font-manrope" style={{}}>frontend-web.app</span>
+</div>
+<span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+<button className="w-full py-2 flex items-center justify-center gap-2 text-xs text-slate-500 hover:text-slate-300 hover:bg-white/5 rounded border border-dashed border-white/10 hover:border-white/20 transition-all font-manrope" style={{}}>
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+          Add custom domain
+        </button>
+</div>
+</div>
+
+<div className="flex flex-col gap-4 mt-8 md:mt-0 relative">
+
+<div className="absolute inset-0 bg-indigo-500/5 blur-3xl -z-10 rounded-full"></div>
+<div className="flex items-center gap-2 text-slate-400 text-xs font-medium pl-1 uppercase tracking-wider opacity-80">
+<svg className="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+<circle cx="12" cy="10" r="3"></circle>
+</svg>
+<span className="font-manrope" style={{}}>EU Central (Frankfurt)</span>
+</div>
+
+<div className="flashlight-card bg-[#11131A] border border-indigo-500/20 rounded-xl p-0 shadow-2xl hover:border-indigo-500/30 transition-all duration-300" style={{-MouseX: '235px', -MouseY: '3px'}}>
+<div className="p-4 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
+<div className="flex items-center gap-3">
+<span className="text-white text-sm tracking-tight font-manrope" style={{}}>consumer-web</span>
+<span className="text-[10px] text-slate-400 bg-white/5 px-1.5 py-0.5 rounded border border-white/10 flex items-center gap-1 font-manrope" style={{}}>
+<svg fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><path d="M9 3v18"></path><path d="m14 9 3 3-3 3"></path></svg> Web
+            </span>
+</div>
+<button className="text-slate-500 hover:text-white transition-colors"><svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+</div>
+<div className="p-5 space-y-4">
+<div className="flex justify-between items-center text-xs">
+<div className="flex items-center gap-2 text-slate-400 font-manrope" style={{}}>
+<svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<rect height="18" rx="2" width="18" x="3" y="3"></rect>
+<path d="M3 9h18"></path>
+<path d="M9 21V9"></path>
+</svg>
+                      Instance Size
+                    </div>
+<span className="text-slate-200 font-manrope" style={{}}>Flex 1 vCPU</span>
+</div>
+<div className="flex justify-between items-center text-xs">
+<div className="flex items-center gap-2 text-slate-400 font-manrope" style={{}}>
+<svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+                      Hibernate after
+                    </div>
+<span className="text-slate-200 font-manrope" style={{}}>1m</span>
+</div>
+<div className="flex justify-between items-center text-xs">
+<div className="flex items-center gap-2 text-slate-400 font-manrope" style={{}}>
+<svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"></path>
+<path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+<path d="M12 2v2"></path>
+<path d="M12 22v-2"></path>
+<path d="m17 20.66-1-1.73"></path>
+<path d="M11 10.27 7 3.34"></path>
+<path d="m20.66 17-1.73-1"></path>
+<path d="m3.34 7 1.73 1"></path>
+<path d="M14 12h8"></path>
+<path d="M2 12h2"></path>
+<path d="m20.66 7-1.73 1"></path>
+<path d="m3.34 17 1.73-1"></path>
+<path d="m17 3.34-1 1.73"></path>
+<path d="m11 13.73-4 6.93"></path>
+</svg>
+                      Autoscaling
+                    </div>
+<span className="text-slate-200 font-manrope" style={{}}>1-5 instances</span>
+</div>
+</div>
+<div className="p-3 bg-white/[0.02] border-t border-white/5">
+<button className="w-full text-xs text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/5 py-1.5 rounded transition-colors flex items-center justify-center gap-1.5 font-manrope" style={{}}>
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+             Add worker cluster
+           </button>
+</div>
+</div>
+</div>
+
+<div className="flex flex-col gap-4 mt-16 md:mt-0">
+<div className="flex items-center gap-2 text-slate-400 text-xs font-medium pl-1 uppercase tracking-wider opacity-80">
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+<circle cx="12" cy="10" r="3"></circle>
+</svg>
+<span className="font-manrope" style={{}}>US East (Ohio)</span>
+</div>
+
+<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors" style={{-MouseX: '105.84375px', -MouseY: '133px'}}>
+<div className="p-4 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
+<div className="flex items-center gap-3">
+<span className="text-white text-sm font-manrope" style={{}}>core-db</span>
+<span className="flex items-center gap-1 text-[10px] text-orange-400 bg-orange-500/10 px-1.5 py-0.5 rounded border border-orange-500/20 font-manrope" style={{}}>
+<svg className="" fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+               Database
+            </span>
+</div>
+<button className="text-slate-500 hover:text-white transition-colors"><svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+</div>
+<div className="p-4 space-y-3">
+<div className="flex justify-between items-center text-xs">
+<span className="text-slate-400 flex items-center gap-2 font-manrope" style={{}}><svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M3 15h18"></path><path d="M9 3v18"></path><path d="M15 3v18"></path></svg> Type</span>
+<span className="text-slate-200 font-manrope" style={{}}>Serverless Postgres 16</span>
+</div>
+<div className="flex justify-between items-center text-xs">
+<span className="text-slate-400 flex items-center gap-2 font-manrope" style={{}}><svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v20"></path><path d="M2 12h20"></path><path d="m4.93 4.93 14.14 14.14"></path><path d="m19.07 4.93-14.14 14.14"></path></svg> Compute</span>
+<span className="text-slate-200 font-manrope" style={{}}>0.25 - 2.0 units</span>
+</div>
+<div className="flex justify-between items-center text-xs">
+<span className="text-slate-400 flex items-center gap-2 font-manrope" style={{}}><svg className="text-slate-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Hibernate</span>
+<span className="text-slate-200 font-manrope" style={{}}>300s</span>
+</div>
+</div>
+</div>
+
+<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors opacity-80 hover:opacity-100" style={{-MouseX: '98.84375px', -MouseY: '85px'}}>
+<div className="p-3 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
+<div className="flex items-center gap-3">
+<span className="text-white text-sm font-manrope" style={{}}>cache-v1</span>
+<span className="flex items-center gap-1 text-[10px] text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded border border-purple-500/20 font-manrope" style={{}}>
+<svg fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>
+               Cache
+            </span>
+</div>
+<button className="text-slate-500 hover:text-white transition-colors"><svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+</div>
+<div className="p-3 space-y-2">
+<div className="flex justify-between items-center text-xs">
+<span className="text-slate-400 font-manrope" style={{}}>Type</span>
+<span className="text-slate-200 font-manrope" style={{}}>KV Store</span>
+</div>
+<div className="flex justify-between items-center text-xs">
+<span className="text-slate-400 font-manrope" style={{}}>Size</span>
+<span className="text-slate-200 font-manrope" style={{}}>250 MB</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
+<button className="flex items-center gap-2 bg-white text-black text-xs px-5 py-2 rounded-full hover:bg-slate-200 transition-colors shadow-2xl shadow-indigo-500/20 ring-4 ring-black/20 font-manrope" style={{}}>
+<svg className="" fill="currentColor" height="14" stroke="none" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 3.5v17l15-8.5-15-8.5z" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+      Watch demo
+    </button>
+</div>
+</div>
+
+<div className="h-8 bg-[#0D1117] border-t border-white/5 flex items-center justify-between px-4 text-[10px] text-slate-600">
+<span className="font-manrope" style={{}}>Ready</span>
+<div className="flex gap-4">
+<span className="font-manrope" style={{}}>UTF-8</span>
+<span className="font-manrope" style={{}}>TypeScript</span>
+<span className="font-manrope" style={{}}>4 Spaces</span>
+</div>
+</div>
+</div>
+</div>
+<div className="-translate-x-1/2 text-slate-900 bg-white w-screen border-0 border-t mt-0 pt-24 pb-8 relative left-1/2">
+
+<div className="[background-size:24px_24px] pointer-events-none opacity-40 absolute top-0 right-0 bottom-0 left-0">
+</div>
+
+<div className="z-10 text-center max-w-7xl mr-auto mb-32 ml-auto pr-6 pl-6 relative">
+<p className="text-xs text-slate-500 mb-10 uppercase tracking-widest font-manrope" style={{}}>Trusted by
+          forward-thinking
+          teams</p>
+<div className="flex flex-wrap hover:grayscale-0 transition-all duration-700 opacity-50 grayscale gap-x-12 gap-y-10 items-center justify-center">
+
+<svg className="w-[150px] h-[20px]" data-icon-replaced="true" data-icon-set="logos" data-logos="oracle" fill="currentColor" height="20" strokeWidth="2" style={{color: 'rgb(15, 23, 42)', width: '150px', height: '20px'}} viewbox="0 0 512 67" width="150" xmlns="http://www.w3.org/2000/svg">
+<path d="M221.034 43.303h33.832l-17.889-28.781l-32.833 52.037h-14.942l39.935-62.508c1.736-2.525 4.63-4.051 7.84-4.051c3.104 0 5.998 1.473 7.682 3.946l40.093 62.613H269.81l-7.05-11.628h-34.253zM376.251 54.93V.631h-12.68v59.614c0 1.631.631 3.21 1.841 4.42s2.841 1.894 4.63 1.894h57.825l7.472-11.628zm-209.78-9.734c12.313 0 22.31-9.944 22.31-22.256c0-12.313-9.997-22.31-22.31-22.31h-55.473v65.93h12.676v-54.3h41.956c5.893 0 10.628 4.789 10.628 10.682c0 5.892-4.735 10.68-10.628 10.68l-35.747-.052l37.851 32.99h18.416l-25.466-21.362zM32.97 66.559C14.77 66.56 0 51.827 0 33.622C0 15.416 14.77.632 32.97.632h38.32c18.204 0 32.963 14.784 32.963 32.99c0 18.205-14.759 32.937-32.964 32.937zm37.468-11.628c11.791 0 21.341-9.524 21.341-21.31S82.228 12.26 70.437 12.26h-36.62c-11.787 0-21.342 9.576-21.342 21.362S22.03 54.93 33.816 54.93zm240.78 11.628c-18.204 0-32.99-14.732-32.99-32.937c0-18.206 14.786-32.99 32.99-32.99h45.514l-7.42 11.628H312.06c-11.786 0-21.362 9.576-21.362 21.362s9.576 21.309 21.362 21.309h45.723l-7.472 11.628zm155.06-11.628c-9.734 0-17.995-6.524-20.52-15.522h54.194l7.471-11.628h-61.665c2.525-8.945 10.786-15.521 20.52-15.521h37.2L511 .63h-45.565c-18.205 0-32.99 14.785-32.99 32.99s14.785 32.938 32.99 32.938h39.094L512 54.931z" fill="#EA1B22">
+</path>
+</svg>
+
+<svg className="mb-1.5 w-[39px] h-[24px]" data-icon-replaced="true" data-icon-set="logos" data-logos="aws" fill="currentColor" height="24" strokeWidth="2" style={{color: 'rgb(15, 23, 42)', width: '39px', height: '24px'}} viewbox="0 0 256 153" width="39" xmlns="http://www.w3.org/2000/svg">
+<path d="M72.392 55.438c0 3.137.34 5.68.933 7.545a45.4 45.4 0 0 0 2.712 6.103c.424.678.593 1.356.593 1.95c0 .847-.508 1.695-1.61 2.543l-5.34 3.56c-.763.509-1.526.763-2.205.763c-.847 0-1.695-.424-2.543-1.187a26 26 0 0 1-3.051-3.984c-.848-1.44-1.696-3.052-2.628-5.001q-9.919 11.697-24.922 11.698c-7.12 0-12.8-2.035-16.954-6.103c-4.153-4.07-6.272-9.495-6.272-16.276c0-7.205 2.543-13.054 7.714-17.462c5.17-4.408 12.037-6.612 20.768-6.612c2.882 0 5.849.254 8.985.678c3.137.424 6.358 1.102 9.749 1.865V29.33c0-6.443-1.357-10.935-3.985-13.563c-2.712-2.628-7.29-3.9-13.817-3.9c-2.967 0-6.018.34-9.155 1.103s-6.188 1.695-9.155 2.882c-1.356.593-2.373.932-2.967 1.102s-1.017.254-1.356.254c-1.187 0-1.78-.848-1.78-2.628v-4.154c0-1.356.17-2.373.593-2.966c.424-.594 1.187-1.187 2.374-1.78q4.45-2.29 10.68-3.815C33.908.763 38.316.255 42.978.255c10.088 0 17.463 2.288 22.21 6.866c4.662 4.577 7.036 11.528 7.036 20.853v27.464zM37.976 68.323c2.798 0 5.68-.508 8.731-1.526c3.052-1.017 5.765-2.882 8.053-5.425c1.357-1.61 2.374-3.39 2.882-5.425c.509-2.034.848-4.493.848-7.375v-3.56a71 71 0 0 0-7.799-1.441a64 64 0 0 0-7.968-.509c-5.68 0-9.833 1.102-12.63 3.391s-4.154 5.51-4.154 9.748c0 3.984 1.017 6.951 3.136 8.986c2.035 2.119 5.002 3.136 8.901 3.136m68.069 9.155c-1.526 0-2.543-.254-3.221-.848c-.678-.508-1.272-1.695-1.78-3.305L81.124 7.799c-.51-1.696-.764-2.798-.764-3.391c0-1.356.678-2.12 2.035-2.12h8.307c1.61 0 2.713.255 3.306.848c.678.509 1.187 1.696 1.695 3.306l14.241 56.117l13.224-56.117c.424-1.695.933-2.797 1.61-3.306c.679-.508 1.866-.847 3.392-.847h6.781c1.61 0 2.713.254 3.39.847c.679.509 1.272 1.696 1.611 3.306l13.394 56.795L168.01 6.442c.508-1.695 1.102-2.797 1.695-3.306c.678-.508 1.78-.847 3.306-.847h7.883c1.357 0 2.12.678 2.12 2.119c0 .424-.085.848-.17 1.356s-.254 1.187-.593 2.12l-20.43 65.525q-.762 2.544-1.78 3.306c-.678.509-1.78.848-3.22.848h-7.29c-1.611 0-2.713-.254-3.392-.848c-.678-.593-1.271-1.695-1.61-3.39l-13.14-54.676l-13.054 54.59c-.423 1.696-.932 2.798-1.61 3.391c-.678.594-1.865.848-3.39.848zm108.927 2.289c-4.408 0-8.816-.509-13.054-1.526c-4.239-1.017-7.544-2.12-9.748-3.39c-1.357-.764-2.29-1.611-2.628-2.374a6 6 0 0 1-.509-2.374V65.78c0-1.78.678-2.628 1.95-2.628a4.8 4.8 0 0 1 1.526.255c.508.17 1.271.508 2.119.847a46 46 0 0 0 9.324 2.967a51 51 0 0 0 10.088 1.017c5.34 0 9.494-.932 12.376-2.797s4.408-4.577 4.408-8.053c0-2.373-.763-4.323-2.289-5.934s-4.408-3.051-8.561-4.408l-12.292-3.814c-6.188-1.95-10.765-4.832-13.563-8.647c-2.797-3.73-4.238-7.883-4.238-12.291q0-5.34 2.289-9.41c1.525-2.712 3.56-5.085 6.103-6.95c2.543-1.95 5.425-3.391 8.816-4.408c3.39-1.017 6.95-1.441 10.68-1.441c1.865 0 3.815.085 5.68.339c1.95.254 3.73.593 5.51.932c1.695.424 3.306.848 4.832 1.357q2.288.762 3.56 1.525c1.187.679 2.034 1.357 2.543 2.12q.763 1.017.763 2.797v3.984c0 1.78-.678 2.713-1.95 2.713c-.678 0-1.78-.34-3.22-1.018q-7.25-3.306-16.276-3.306c-4.832 0-8.647.763-11.275 2.374c-2.627 1.61-3.984 4.069-3.984 7.544c0 2.374.848 4.408 2.543 6.019s4.832 3.221 9.325 4.662l12.037 3.815c6.103 1.95 10.511 4.662 13.139 8.137s3.9 7.46 3.9 11.868c0 3.645-.764 6.951-2.205 9.833c-1.525 2.882-3.56 5.425-6.188 7.46c-2.628 2.119-5.764 3.645-9.409 4.747c-3.815 1.187-7.799 1.78-12.122 1.78" fill="#252F3E">
+</path>
+<path d="M230.993 120.964c-27.888 20.599-68.408 31.534-103.247 31.534c-48.827 0-92.821-18.056-126.05-48.064c-2.628-2.373-.255-5.594 2.881-3.73c35.942 20.854 80.276 33.484 126.136 33.484c30.94 0 64.932-6.442 96.212-19.666c4.662-2.12 8.646 3.052 4.068 6.442m11.614-13.224c-3.56-4.577-23.566-2.204-32.636-1.102c-2.713.34-3.137-2.034-.678-3.814c15.936-11.19 42.13-7.968 45.181-4.239c3.052 3.815-.848 30.008-15.767 42.554c-2.288 1.95-4.492.933-3.475-1.61c3.39-8.393 10.935-27.296 7.375-31.789" fill="#F90">
+</path>
+</svg>
+
+<svg className="w-[24px] h-[24px]" data-icon-replaced="true" data-icon-set="logos" data-logos="digital-ocean-icon" fill="currentColor" height="24" strokeWidth="2" style={{color: 'rgb(15, 23, 42)', width: '24px', height: '24px'}} viewbox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M128 206.55v49.448c83.813 0 149.07-80.968 121.653-168.793c-11.981-38.38-42.478-68.877-80.858-80.858C80.97-21.069 0 44.19 0 128.001h49.561c.008 0 .013-.014.013-.014c.008-52.597 52.061-93.262 107.36-73.196c20.487 7.435 36.829 23.773 44.268 44.259c20.069 55.266-20.535 107.3-73.088 107.374v-49.288l-.009-.003H78.697c-.005 0-.01.007-.01.007v49.41zm-49.32 37.977H40.715l-.01-.009V206.55h37.982v37.968s-.005.009-.009.009M40.732 206.55H8.908c-.013 0-.023-.008-.023-.008v-31.81s.01-.024.023-.024H40.71c.013 0 .023.01.023.01z" fill="#0080FF">
+</path>
+</svg>
+
+<svg className="w-[24px] h-[24px]" data-icon-replaced="true" data-icon-set="logos" data-logos="github-icon" fill="currentColor" height="24" strokeWidth="2" style={{color: 'rgb(15, 23, 42)', width: '24px', height: '24px'}} viewbox="0 0 256 250" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46c6.397 1.185 8.746-2.777 8.746-6.158c0-3.052-.12-13.135-.174-23.83c-35.61 7.742-43.124-15.103-43.124-15.103c-5.823-14.795-14.213-18.73-14.213-18.73c-11.613-7.944.876-7.78.876-7.78c12.853.902 19.621 13.19 19.621 13.19c11.417 19.568 29.945 13.911 37.249 10.64c1.149-8.272 4.466-13.92 8.127-17.116c-28.431-3.236-58.318-14.212-58.318-63.258c0-13.975 5-25.394 13.188-34.358c-1.329-3.224-5.71-16.242 1.24-33.874c0 0 10.749-3.44 35.21 13.121c10.21-2.836 21.16-4.258 32.038-4.307c10.878.049 21.837 1.47 32.066 4.307c24.431-16.56 35.165-13.12 35.165-13.12c6.967 17.63 2.584 30.65 1.255 33.873c8.207 8.964 13.173 20.383 13.173 34.358c0 49.163-29.944 59.988-58.447 63.157c4.591 3.972 8.682 11.762 8.682 23.704c0 17.126-.148 30.91-.148 35.126c0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002C256 57.307 198.691 0 128.001 0m-80.06 182.34c-.282.636-1.283.827-2.194.39c-.929-.417-1.45-1.284-1.15-1.922c.276-.655 1.279-.838 2.205-.399c.93.418 1.46 1.293 1.139 1.931m6.296 5.618c-.61.566-1.804.303-2.614-.591c-.837-.892-.994-2.086-.375-2.66c.63-.566 1.787-.301 2.626.591c.838.903 1 2.088.363 2.66m4.32 7.188c-.785.545-2.067.034-2.86-1.104c-.784-1.138-.784-2.503.017-3.05c.795-.547 2.058-.055 2.861 1.075c.782 1.157.782 2.522-.019 3.08m7.304 8.325c-.701.774-2.196.566-3.29-.49c-1.119-1.032-1.43-2.496-.726-3.27c.71-.776 2.213-.558 3.315.49c1.11 1.03 1.45 2.505.701 3.27m9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033c-1.448-.439-2.395-1.613-2.103-2.626c.301-1.01 1.747-1.484 3.207-1.028c1.446.436 2.396 1.602 2.095 2.622m10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95c-1.53.034-2.769-.82-2.786-1.86c0-1.065 1.202-1.932 2.733-1.958c1.522-.03 2.768.818 2.768 1.868m10.555-.405c.182 1.03-.875 2.088-2.387 2.37c-1.485.271-2.861-.365-3.05-1.386c-.184-1.056.893-2.114 2.376-2.387c1.514-.263 2.868.356 3.061 1.403" fill="#161614">
+</path>
+</svg>
+
+<svg className="w-[24px] h-[24px]" data-icon-replaced="true" data-icon-set="logos" data-logos="bitbucket" fill="currentColor" height="24" strokeWidth="2" style={{color: 'rgb(15, 23, 42)', width: '24px', height: '24px'}} viewbox="0 0 256 231" width="24" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="SVGBf96sekI" x1="108.633%" x2="46.927%" y1="13.818%" y2="78.776%">
+<stop offset="18%" stop-color="#0052CC"></stop>
+<stop offset="100%" stop-color="#2684FF"></stop>
+</lineargradient>
+</defs>
+<g fill="none">
+<path d="M101.272 152.561h53.449l12.901-75.319H87.06z"></path>
+<path d="M8.308 0A8.202 8.202 0 0 0 .106 9.516l34.819 211.373a11.155 11.155 0 0 0 10.909 9.31h167.04a8.2 8.2 0 0 0 8.201-6.89l34.82-213.752a8.202 8.202 0 0 0-8.203-9.514zm146.616 152.768h-53.315l-14.436-75.42h80.67z" fill="#2684FF">
+</path>
+<path d="M244.61 77.242h-76.916l-12.909 75.36h-53.272l-62.902 74.663a11.1 11.1 0 0 0 7.171 2.704H212.73a8.196 8.196 0 0 0 8.196-6.884z" fill="url(#SVGBf96sekI)">
+</path>
+</g>
+</svg>
+
+<div className="flex items-center gap-2 font-bold text-lg tracking-tight">
+<svg className="w-[24px] h-[24px]" data-icon-replaced="true" data-icon-set="logos" data-logos="google-cloud" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(15, 23, 42)', width: '24px', height: '24px'}} viewbox="0 0 256 206" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="m170.252 56.819l22.253-22.253l1.483-9.37C153.437-11.677 88.976-7.496 52.42 33.92C42.267 45.423 34.734 59.764 30.717 74.573l7.97-1.123l44.505-7.34l3.436-3.513c19.797-21.742 53.27-24.667 76.128-6.168z" fill="#EA4335">
+</path>
+<path d="M224.205 73.918a100.25 100.25 0 0 0-30.217-48.722l-31.232 31.232a55.52 55.52 0 0 1 20.379 44.037v5.544c15.35 0 27.797 12.445 27.797 27.796c0 15.352-12.446 27.485-27.797 27.485h-55.671l-5.466 5.934v33.34l5.466 5.231h55.67c39.93.311 72.553-31.494 72.864-71.424a72.3 72.3 0 0 0-31.793-60.453" fill="#4285F4">
+</path>
+<path d="M71.87 205.796h55.593V161.29H71.87a27.3 27.3 0 0 1-11.399-2.498l-7.887 2.42l-22.409 22.253l-1.952 7.574c12.567 9.489 27.9 14.825 43.647 14.757" fill="#34A853">
+</path>
+<path d="M71.87 61.426C31.94 61.663-.237 94.227.001 134.158a72.3 72.3 0 0 0 28.222 56.88l32.248-32.246c-13.99-6.322-20.208-22.786-13.887-36.776s22.786-20.208 36.775-13.888a27.8 27.8 0 0 1 13.887 13.888l32.248-32.248A72.22 72.22 0 0 0 71.87 61.427" fill="#FBBC05">
+</path>
+</svg>
+</div>
+</div>
+</div>
+
+<div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 relative gap-x-20 gap-y-20">
+
+<div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-200 hidden lg:block -translate-x-1/2"></div>
+
+<div className="absolute left-1/2 top-12 w-2 h-2 rounded-full bg-slate-300 hidden lg:block -translate-x-1/2 shadow-sm ring-4 ring-white">
+</div>
+<div className="absolute left-1/2 bottom-12 w-2 h-2 rounded-full bg-slate-300 hidden lg:block -translate-x-1/2 shadow-sm ring-4 ring-white">
+</div>
+
+<div className="flex flex-col gap-8 group">
+
+<div className="flex flex-col gap-4 max-w-lg">
+<div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 mb-2">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+</svg>
+</div>
+<h3 className="text-2xl text-slate-900 tracking-tight font-manrope font-medium" style={{}}>Get started under 60
+                seconds</h3>
+<p className="text-lg text-slate-500 leading-relaxed font-manrope" style={{}}>
+                No code changes, extra packages, or CLI tools needed - just connect your git provider account,
+                select a repo, and you're ready to go.
+              </p>
+</div>
+
+<div className="relative mt-4">
+
+<svg className="absolute -top-12 left-8 h-12 w-px overflow-visible text-slate-300 hidden md:block" stroke="currentColor" strokeWidth="1.5">
+<path d="M0.5 0v48" stroke-dasharray="4 4"></path>
+<circle cx="0.5" cy="48" fill="white" r="3" stroke="currentColor" strokeWidth="1.5"></circle>
+</svg>
+<div className="bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/50 p-6 relative overflow-hidden transition-transform duration-500 hover:-translate-y-1">
+
+<div className="flex justify-between items-center mb-8">
+<h4 className="text-slate-900 font-manrope" style={{}}>New application</h4>
+<div className="flex gap-1.5">
+<span className="w-2.5 h-2.5 rounded-full bg-slate-200"></span>
+<span className="w-2.5 h-2.5 rounded-full bg-slate-200"></span>
+</div>
+</div>
+
+<div className="space-y-6 relative z-10">
+<div className="space-y-2">
+<label className="text-xs text-slate-400 uppercase tracking-wider font-manrope" style={{}}>Source control provider</label>
+<div className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
+<svg className="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z">
+</path>
+</svg>
+<span className="text-sm font-manrope" style={{}}>laravel/beep</span>
+</div>
+</div>
+<div className="space-y-2">
+<label className="text-xs text-slate-400 uppercase tracking-wider font-manrope" style={{}}>Repository</label>
+<div className="bg-white rounded-lg border border-indigo-500 shadow-[0_0_0_3px_rgba(99,102,241,0.1)] overflow-hidden">
+<div className="p-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+<div className="flex items-center gap-2 text-sm text-slate-700 font-manrope" style={{}}>
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+</path>
+</svg>
+                          Select a repository
+                        </div>
+<svg className="text-slate-400" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+</div>
+<div className="p-1">
+<div className="flex items-center gap-2 p-2 rounded bg-indigo-50 text-indigo-700 text-sm cursor-pointer font-manrope" style={{}}>
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+</path>
+</svg>
+                          beep
+                          <svg className="ml-auto opacity-100" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<polyline points="20 6 9 17 4 12"></polyline>
+</svg>
+</div>
+<div className="flex items-center gap-2 p-2 rounded hover:bg-slate-50 text-slate-600 text-sm cursor-pointer transition-colors font-manrope" style={{}}>
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+</path>
+</svg>
+                          vapor
+                        </div>
+<div className="flex items-center gap-2 p-2 rounded hover:bg-slate-50 text-slate-600 text-sm cursor-pointer transition-colors font-manrope" style={{}}>
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+</path>
+</svg>
+                          sail
+                        </div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="absolute -right-20 -bottom-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none">
+</div>
+</div>
+</div>
+</div>
+
+<div className="flex flex-col gap-8 group lg:mt-12">
+
+<div className="flex flex-col gap-4 max-w-lg">
+<div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 mb-2">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<rect height="7" width="7" x="3" y="3"></rect>
+<rect height="7" width="7" x="14" y="3"></rect>
+<rect height="7" width="7" x="14" y="14"></rect>
+<rect height="7" width="7" x="3" y="14"></rect>
+</svg>
+</div>
+<h3 className="text-2xl text-slate-900 tracking-tight font-manrope font-medium" style={{}}>Multiple environments
+              </h3>
+<p className="text-lg text-slate-500 leading-relaxed font-manrope" style={{}}>
+                Create multiple environments for your app, such as staging, production, and development. Each
+                environment can have its own configuration.
+              </p>
+</div>
+
+<div className="relative mt-4">
+
+<svg className="absolute -top-12 left-8 h-12 w-px overflow-visible text-slate-300 hidden md:block" stroke="currentColor" strokeWidth="1.5">
+<path d="M0.5 0v48" stroke-dasharray="4 4"></path>
+<circle cx="0.5" cy="48" fill="white" r="3" stroke="currentColor" strokeWidth="1.5"></circle>
+</svg>
+<div className="flex flex-col gap-4 relative">
+
+<div className="bg-white rounded-xl border border-blue-200 p-5 shadow-lg shadow-blue-500/5 relative z-20 group-hover:translate-x-1 transition-transform duration-500">
+<div className="flex items-start justify-between">
+<div className="flex gap-3">
+<div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500 border border-blue-100">
+<svg fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+<rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+<path d="M9 3v18"></path>
+<path d="m14 9 3 3-3 3"></path>
+</svg>
+</div>
+<div className="">
+<div className="flex items-center gap-2 mb-1">
+<h4 className="text-slate-900 text-sm font-manrope" style={{}}>Beep</h4>
+<span className="w-1 h-1 rounded-full bg-slate-300"></span>
+<span className="text-slate-600 text-sm font-manrope" style={{}}>main</span>
+</div>
+<div className="flex items-center gap-3 text-xs text-slate-500">
+<span className="flex items-center gap-1.5 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100 font-manrope" style={{}}>
+<svg className="w-3 h-3" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+                                                laravel/beep
+                                            </span>
+<span className="flex items-center gap-1.5 font-manrope" style={{}}>
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                                2 days ago
+                                            </span>
+</div>
+</div>
+</div>
+<div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]">
+</div>
+</div>
+
+<div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none rounded-xl">
+</div>
+</div>
+
+<div className="bg-white rounded-xl border border-slate-100 p-5 opacity-60 scale-95 origin-top relative z-10 hover:opacity-100 hover:scale-100 transition-all duration-300 cursor-pointer">
+<div className="flex items-start justify-between">
+<div className="flex gap-3">
+<div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600 border border-green-100">
+<svg fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+</svg>
+</div>
+<div className="">
+<div className="flex items-center gap-2 mb-1">
+<h4 className="text-slate-900 text-sm font-manrope" style={{}}>Swipple</h4>
+<span className="w-1 h-1 rounded-full bg-slate-300"></span>
+<span className="text-slate-600 text-sm font-manrope" style={{}}>develop</span>
+</div>
+<div className="flex items-center gap-3 text-xs text-slate-500">
+<span className="font-manrope" style={{}}>Ready to deploy</span>
+</div>
+</div>
+</div>
+<div className="w-2.5 h-2.5 rounded-full bg-green-500/50 border border-green-500"></div>
+</div>
+</div>
+
+<div className="absolute top-24 left-4 right-4 h-24 bg-white rounded-xl border border-slate-100 shadow-sm -z-10 scale-90 origin-top">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<style className="">
+        @keyframes float-slow {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        @keyframes float-delayed {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+
+        @keyframes float-reverse {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(6px);
+          }
+        }
+
+        .animate-float-slow {
+          animation: float-slow 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+          animation: float-delayed 7s ease-in-out infinite 1s;
+        }
+
+        .animate-float-reverse {
+          animation: float-reverse 8s ease-in-out infinite;
+        }
+
+        @keyframes marquee {
+          from {
+            transform: translateX(0);
+          }
+
+          to {
+            transform: translateX(-50%);
+          }
+        }
+
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+        }
+
+        .noodle-glow {
+          stroke-dasharray: 10;
+          animation: dash 30s linear infinite;
+        }
+      </style>
+<div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 mt-32 mb-32">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-16 gap-x-16 gap-y-16 items-center">
+
+<div className="order-2 lg:order-1">
+<div className="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 mb-6">
+<svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+<path d="M3 3v5h5"></path>
+</svg>
+</div>
+<h2 className="text-3xl sm:text-4xl text-slate-900 tracking-tight mb-4 font-manrope font-medium" style={{}}>
+              Instant rollbacks to
+              any point in time
+            </h2>
+<p className="text-lg text-slate-500 leading-relaxed mb-8 font-manrope" style={{}}>
+              Mistakes happen. With Nebula's atomic deployments, you can revert to any previous version of your
+              application in milliseconds, with zero downtime.
+            </p>
+<div className="space-y-4">
+<div className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+<div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 shadow-sm">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 20h9"></path>
+<path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+</svg>
+</div>
+<div className="">
+<h4 className="text-sm text-slate-900 font-manrope" style={{}}>Immutable deployments</h4>
+<p className="text-sm text-slate-500 font-manrope" style={{}}>Every commit creates a new, immutable release.
+                  </p>
+</div>
+</div>
+<div className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+<div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 shadow-sm">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+</div>
+<div className="">
+<h4 className="text-sm text-slate-900 font-manrope" style={{}}>Zero downtime</h4>
+<p className="text-sm text-slate-500 font-manrope" style={{}}>Traffic is only switched when health checks
+                    pass.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div className="order-1 lg:order-2 relative h-[500px] perspective-1000 group">
+
+<div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-indigo-500/10 rounded-full blur-3xl -z-10">
+</div>
+
+<div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-[60%] w-[340px] bg-white rounded-2xl border border-slate-200 shadow-2xl transition-all duration-700 group-hover:-translate-y-[65%] group-hover:rotate-x-6">
+
+<div className="h-10 border-b border-slate-100 flex items-center px-4 gap-2">
+<div className="flex gap-1.5">
+<div className="w-2.5 h-2.5 rounded-full bg-rose-400"></div>
+<div className="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+<div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+</div>
+<div className="mx-auto text-xs text-slate-400 font-manrope" style={{}}>Deployments</div>
+</div>
+
+<div className="p-2 space-y-1">
+
+<div className="flex items-center justify-between p-3 rounded-lg bg-emerald-50/50 border border-emerald-100">
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 6 9 17l-5-5"></path>
+</svg>
+</div>
+<div className="">
+<div className="text-xs text-slate-900 font-manrope" style={{}}>v2.4.0
+                        <span className="text-slate-500 mx-1 font-manrope" style={{}}>main</span>
+</div>
+<div className="text-[10px] text-slate-500 font-manrope" style={{}}>2 min ago by @alex</div>
+</div>
+</div>
+<span className="text-[10px] text-emerald-600 bg-white px-2 py-1 rounded-full shadow-sm font-manrope" style={{}}>Current</span>
+</div>
+
+<div className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 group/item cursor-pointer">
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 group-hover/item:bg-white group-hover/item:shadow-sm transition-all">
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+</svg>
+</div>
+<div className="">
+<div className="text-xs text-slate-700 font-manrope" style={{}}>v2.3.9
+                        <span className="text-slate-400 mx-1 font-manrope" style={{}}>main</span>
+</div>
+<div className="text-[10px] text-slate-400 font-manrope" style={{}}>4 hours ago by @sarah</div>
+</div>
+</div>
+<button className="opacity-0 group-hover/item:opacity-100 text-[10px] text-slate-600 bg-white border border-slate-200 px-2 py-1 rounded shadow-sm hover:text-rose-600 hover:border-rose-200 transition-all flex items-center gap-1 font-manrope" style={{}}>
+<svg fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path></svg> Rollback
+                        </button>
+</div>
+
+<div className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 group/item cursor-pointer">
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 group-hover/item:bg-white group-hover/item:shadow-sm transition-all">
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+</svg>
+</div>
+<div className="">
+<div className="text-xs text-slate-700 font-manrope" style={{}}>v2.3.8
+                        <span className="text-slate-400 mx-1 font-manrope" style={{}}>main</span>
+</div>
+<div className="text-[10px] text-slate-400 font-manrope" style={{}}>Yesterday by @david</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="absolute top-[60%] left-[60%] -translate-x-1/2 -translate-y-1/2 w-[320px] bg-slate-900 rounded-xl shadow-2xl transition-all duration-700 group-hover:translate-x-4 group-hover:translate-y-4 -z-10 rotate-3">
+<div className="h-8 border-b border-white/10 flex items-center px-3 gap-1.5">
+<div className="w-2 h-2 rounded-full bg-slate-700"></div>
+<div className="w-2 h-2 rounded-full bg-slate-700"></div>
+</div>
+<div className="p-4 font-mono text-[10px] leading-relaxed">
+<div className="text-emerald-400 font-manrope" style={{}}>$ nebula rollback v2.3.9</div>
+<div className="text-slate-400 mt-1 font-manrope" style={{}}>Verifying release integrity...</div>
+<div className="text-slate-400 font-manrope" style={{}}>Switching traffic to v2.3.9...</div>
+<div className="text-slate-300 mt-1 font-manrope" style={{}}>✓ Health checks passed</div>
+<div className="text-slate-300 font-manrope" style={{}}>✓ Traffic routed (0.4s)</div>
+<div className="text-emerald-400 mt-2 font-manrope" style={{}}>Rollback complete.</div>
+<div className="animate-pulse text-emerald-400 inline-block font-manrope" style={{}}>_</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div className="-translate-x-1/2 text-slate-900 bg-white w-screen border-0 border-t pt-24 pb-24 relative left-1/2">
+
+
+
+<style className="">
+        @keyframes float-slow {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        @keyframes float-delayed {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+
+        @keyframes float-reverse {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(6px);
+          }
+        }
+
+        .animate-float-slow {
+          animation: float-slow 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+          animation: float-delayed 7s ease-in-out infinite 1s;
+        }
+
+        .animate-float-reverse {
+          animation: float-reverse 8s ease-in-out infinite;
+        }
+
+        @keyframes marquee {
+          from {
+            transform: translateX(0);
+          }
+
+          to {
+            transform: translateX(-50%);
+          }
+        }
+
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+        }
+
+        .noodle-glow {
+          stroke-dasharray: 10;
+          animation: dash 30s linear infinite;
+        }
+      </style>
+<div className="sm:px-6 z-10 max-w-7xl mt-0 mr-auto ml-auto pr-6 pl-6 relative">
+<div className="text-center max-w-3xl mx-auto mb-20">
+<h2 className="sm:text-5xl text-4xl font-medium text-slate-900 tracking-tight font-manrope mb-6">
+            Speed, simplicity, and scalability
+            <span className="font-medium text-indigo-600 font-manrope">without the headaches</span>
+</h2>
+<p className="text-xl text-slate-500 leading-relaxed font-manrope" style={{}}>
+            Built specifically for modern applications, Nebula eliminates configuration hassles and deployment
+            complexity.
+            So you can focus on building, not configuring.
+          </p>
+</div>
+
+<div className="relative w-full h-[600px] sm:h-[700px] bg-slate-50/50 rounded-3xl border border-slate-100 overflow-hidden select-none">
+
+<div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:32px_32px]">
+</div>
+
+<svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{overflow: 'visible'}}>
+<defs>
+<lineargradient id="line-gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#94a3b8" stop-opacity="0.2"></stop>
+<stop offset="50%" stop-color="#6366f1" stop-opacity="0.6"></stop>
+<stop offset="100%" stop-color="#94a3b8" stop-opacity="0.2"></stop>
+</lineargradient>
+</defs>
+
+
+<path className="noodle-glow hidden lg:block" d="M 300 200 C 350 200, 350 250, 420 250" fill="none" stroke="url(#line-gradient)" strokeWidth="1.5"></path>
+
+<path className="noodle-glow hidden lg:block" d="M 680 250 C 750 250, 750 180, 820 180" fill="none" stroke="url(#line-gradient)" strokeWidth="1.5"></path>
+
+<path className="noodle-glow hidden lg:block" d="M 680 250 C 750 250, 750 350, 820 350" fill="none" stroke="url(#line-gradient)" strokeWidth="1.5"></path>
+
+<path className="noodle-glow hidden lg:block" d="M 550 380 C 550 420, 550 450, 550 500" fill="none" stroke="url(#line-gradient)" strokeWidth="1.5"></path>
+</svg>
+
+<div className="overflow-x-auto overflow-y-hidden w-full h-full pt-10 pr-10 pb-10 pl-10 relative">
+<div className="min-w-[1000px] h-full mr-auto ml-auto relative">
+
+<div className="absolute top-[120px] left-[20px] w-64 bg-white rounded-xl border border-blue-100 shadow-xl shadow-blue-900/5 animate-float-slow z-10">
+<div className="p-3 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+<div className="flex items-center gap-2 text-slate-500 text-xs font-manrope" style={{}}>
+<svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="2" x2="22" y1="12" y2="12"></line>
+<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+</path>
+</svg>
+                    Edge network
+                  </div>
+<svg className="text-slate-300" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="12" x2="12" y1="16" y2="12"></line>
+<line x1="12" x2="12.01" y1="8" y2="8"></line>
+</svg>
+</div>
+<div className="p-4 space-y-3">
+<div className="flex items-center justify-between text-sm">
+<span className="text-slate-800 font-manrope" style={{}}>Network</span>
+</div>
+<div className="space-y-2">
+<div className="flex justify-between text-xs items-center">
+<span className="text-slate-500 flex items-center gap-1.5 font-manrope" style={{}}><svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg> DDoS protection</span>
+<span className="text-emerald-500 flex items-center gap-1 font-manrope" style={{}}><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Active</span>
+</div>
+<div className="flex justify-between text-xs items-center">
+<span className="text-slate-500 flex items-center gap-1.5 font-manrope" style={{}}><svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg> CDN</span>
+<span className="text-emerald-500 flex items-center gap-1 font-manrope" style={{}}><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Active</span>
+</div>
+<div className="flex justify-between text-xs items-center">
+<span className="text-slate-500 flex items-center gap-1.5 font-manrope" style={{}}><svg className="" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polygon className="" points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Edge caching</span>
+<span className="text-emerald-500 flex items-center gap-1 font-manrope" style={{}}><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Active</span>
+</div>
+</div>
+</div>
+</div>
+
+<div className="absolute top-[340px] left-[50px] w-64 bg-white rounded-xl border border-blue-500 shadow-[0_0_0_2px_rgba(59,130,246,0.1),0_10px_20px_-5px_rgba(59,130,246,0.1)] animate-float-delayed z-20">
+<div className="p-3 border-b border-slate-50 text-xs text-slate-800 font-manrope" style={{}}>Domains</div>
+<div className="p-4 space-y-4">
+<div className="flex items-start justify-between">
+<div className="flex flex-col gap-1">
+<span className="text-xs text-slate-500 flex items-center gap-1.5 font-manrope" style={{}}><svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Cloud domain</span>
+<span className="text-[10px] text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded font-manrope" style={{}}>beep-main-28a683.cloud</span>
+</div>
+<span className="text-[10px] text-emerald-500 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 font-manrope" style={{}}>Enabled</span>
+</div>
+<div className="flex items-start justify-between border-t border-slate-50 pt-3">
+<div className="flex flex-col gap-1">
+<span className="text-xs text-slate-500 flex items-center gap-1.5 font-manrope" style={{}}><svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg> Custom domain</span>
+<span className="text-[10px] text-slate-800 font-manrope" style={{}}>beep.today</span>
+</div>
+<span className="text-[10px] text-emerald-500 flex items-center gap-1 font-manrope" style={{}}><span className="w-1 h-1 rounded-full bg-emerald-500"></span>
+                    Verified</span>
+</div>
+<button className="w-full py-1.5 text-xs text-blue-500 hover:bg-blue-50 rounded transition-colors flex items-center justify-center gap-1 font-manrope" style={{}}>
+<svg fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+                            Add domain
+                        </button>
+</div>
+</div>
+
+<div className="absolute top-[180px] left-[420px] w-72 bg-white rounded-xl border border-indigo-200 shadow-2xl shadow-indigo-500/10 z-30 animate-float-reverse">
+<div className="absolute -top-6 left-0 text-xs text-slate-400 flex items-center gap-1 font-manrope" style={{}}>
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+<circle cx="12" cy="10" r="3"></circle>
+</svg>
+                  US East (Ohio)
+                </div>
+<div className="p-4 border-b border-indigo-50 flex items-center justify-between">
+<div className="flex items-center gap-2">
+<span className="text-slate-900 font-manrope" style={{}}>App</span>
+<span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 flex items-center gap-1 font-manrope" style={{}}>
+<svg fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><path d="M9 3v18"></path><path d="m14 9 3 3-3 3"></path></svg> Web
+                            </span>
+</div>
+<div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+</div>
+<div className="p-5 space-y-4">
+<div className="flex justify-between items-center text-sm">
+<span className="text-slate-500 flex items-center gap-2 font-manrope" style={{}}><svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 19c0-1.7-1.3-3-3-3h-5c-1.7 0-3-1.3-3-3"></path><path d="M6 19c0-1.7 1.3-3 3-3h5c1.7 0 3-1.3 3-3"></path></svg> Web traffic</span>
+<span className="text-emerald-600 text-xs bg-emerald-50 px-2 py-0.5 rounded-full font-manrope" style={{}}>• Enabled</span>
+</div>
+<div className="flex justify-between items-center text-sm">
+<span className="text-slate-500 flex items-center gap-2 font-manrope" style={{}}><svg className="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg> Size</span>
+<span className="text-slate-700 font-manrope" style={{}}>Large</span>
+</div>
+<div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div className="bg-indigo-500 w-3/4 h-full rounded-full"></div>
+</div>
+</div>
+</div>
+
+<div className="absolute top-[420px] left-[450px] w-64 bg-white rounded-xl border border-slate-200 shadow-lg animate-float-delayed">
+<div className="p-3 border-b border-slate-50 flex items-center justify-between">
+<div className="flex items-center gap-2">
+<span className="text-slate-900 text-sm font-manrope" style={{}}>Queue worker</span>
+<span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 font-manrope" style={{}}>Worker</span>
+</div>
+</div>
+<div className="p-3 space-y-2">
+<div className="flex justify-between text-xs">
+<span className="text-slate-500 font-manrope" style={{}}>Size</span>
+<span className="text-slate-700 font-manrope" style={{}}>Large</span>
+</div>
+<div className="flex justify-between text-xs">
+<span className="text-slate-500 font-manrope" style={{}}>Autoscaling</span>
+<span className="text-slate-700 font-manrope" style={{}}>2-4 replicas</span>
+</div>
+<div className="flex justify-between text-xs">
+<span className="text-slate-500 font-manrope" style={{}}>Background</span>
+<span className="text-slate-700 font-manrope" style={{}}>2</span>
+</div>
+</div>
+</div>
+
+<div className="absolute top-[100px] left-[820px] w-64 bg-white rounded-xl border border-orange-200 shadow-xl shadow-orange-500/5 animate-float-slow z-20">
+<div className="p-3 bg-gradient-to-r from-white to-orange-50/50 border-b border-orange-100 flex items-center justify-between rounded-t-xl">
+<div className="flex items-center gap-2">
+<span className="text-slate-900 text-sm font-manrope" style={{}}>Beep</span>
+<span className="text-[10px] text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded border border-orange-200 flex items-center gap-1 font-manrope" style={{}}>
+<svg className="" fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg> SQL
+                            </span>
+</div>
+
+<div className="absolute -right-12 -top-12 bg-slate-900 text-white p-3 rounded-lg shadow-xl text-xs z-50 w-40 space-y-2 border border-slate-700">
+<div className="flex items-center gap-2 hover:text-slate-300 cursor-pointer font-manrope" style={{}}>
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
+<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+<circle cx="12" cy="12" r="3"></circle>
+</svg> View credentials
+                    </div>
+<div className="flex items-center gap-2 hover:text-slate-300 cursor-pointer font-manrope" style={{}}>
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+<path d="M3 3v5h5"></path>
+<path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+<path d="M16 21h5v-5"></path>
+</svg> Replace
+                    </div>
+<div className="flex items-center gap-2 hover:text-red-300 text-red-400 cursor-pointer font-manrope" style={{}}>
+<svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg> Detach database
+                    </div>
+</div>
+</div>
+<div className="p-4 bg-white/50 space-y-1">
+
+<div className="h-6 w-full border-b border-slate-100 flex items-center text-xs text-slate-400 font-mono">
+<span className="w-6 border-r border-slate-100 mr-2 font-manrope" style={{}}>id</span>
+<span className="w-full font-manrope" style={{}}>uuid</span>
+</div>
+<div className="h-6 w-full border-b border-slate-100 flex items-center text-xs text-slate-600 font-mono bg-orange-50/30">
+<span className="w-6 border-r border-slate-100 mr-2 text-slate-400 font-manrope" style={{}}>1</span>
+<span className="w-full truncate font-manrope" style={{}}>9b1deb4d-3b7d...</span>
+</div>
+<div className="h-6 w-full border-b border-slate-100 flex items-center text-xs text-slate-600 font-mono">
+<span className="w-6 border-r border-slate-100 mr-2 text-slate-400 font-manrope" style={{}}>2</span>
+<span className="w-full truncate font-manrope" style={{}}>a4f21e90-1c2a...</span>
+</div>
+</div>
+</div>
+
+<div className="shadow-purple-500/5 animate-float-reverse bg-white w-64 border-purple-200 border rounded-xl absolute top-[320px] left-[820px] shadow-xl">
+<div className="p-3 border-b border-purple-50 flex items-center justify-between">
+<div className="flex items-center gap-2">
+<span className="text-slate-900 text-sm font-manrope" style={{}}>Cache</span>
+<span className="text-[10px] bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded border border-purple-200 font-manrope" style={{}}>Redis</span>
+</div>
+</div>
+<div className="p-3 space-y-2 text-xs">
+<div className="flex justify-between">
+<span className="text-slate-500 font-manrope" style={{}}>Provider</span>
+<span className="text-slate-700 font-manrope" style={{}}>Redis by Upstash</span>
+</div>
+<div className="flex justify-between">
+<span className="text-slate-500 font-manrope" style={{}}>Size</span>
+<span className="text-slate-700 font-manrope" style={{}}>1 GB</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div className="-translate-x-1/2 text-slate-900 bg-white w-screen border-0 border-t pt-24 pb-24 relative left-1/2">
+
+
+
+<div className="lg:px-8 max-w-7xl mr-auto ml-auto pr-6 pl-6">
+
+<div className="lg:text-center lg:mb-28 max-w-2xl mr-auto mb-28 ml-auto">
+<h2 className="sm:text-5xl text-4xl font-medium text-slate-900 tracking-tight font-manrope mb-6">Security and
+            reliability <span className="font-medium text-indigo-600 font-manrope">automatically configured</span></h2>
+<p className="mt-6 text-lg leading-8 text-slate-500 font-manrope">
+            Cloud provides enterprise-grade security and performance out of the box. No need to configure firewalls,
+            load
+            balancers, or caching layers - it's all done for you.
+          </p>
+</div>
+
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-32">
+
+<div className="flex flex-col gap-8">
+<div className="flex flex-col gap-4">
+<div className="flex items-center gap-3 text-slate-900 font-manrope font-semibold text-lg">
+<svg className="text-slate-900" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 12h14"></path>
+<path d="m12 5 7 7-7 7"></path>
+</svg>
+                Edge network
+              </div>
+<p className="text-slate-500 font-manrope leading-relaxed">
+                Content caching at the edge ensures your application stays fast and reliable for users worldwide.
+              </p>
+</div>
+
+<div className="relative w-full aspect-[4/3] lg:aspect-square xl:aspect-[4/3] bg-white rounded-2xl overflow-hidden mt-4 select-none">
+
+<svg className="w-full h-full text-indigo-500/20 fill-current" viewbox="0 0 400 240">
+
+<g className="text-indigo-500 fill-current">
+<circle className="animate-blink-1" cx="50" cy="50" r="1.5"></circle>
+<circle className="opacity-40" cx="60" cy="45" r="1.5"></circle>
+<circle className="opacity-60" cx="70" cy="50" r="1.5"></circle>
+<circle className="animate-blink-2" cx="80" cy="55" r="1.5"></circle>
+<circle className="opacity-50" cx="55" cy="60" r="1.5"></circle>
+<circle className="animate-blink-3" cx="65" cy="65" r="1.5"></circle>
+<circle className="opacity-70" cx="90" cy="50" r="1.5"></circle>
+<circle cx="85" cy="65" r="1.5"></circle>
+<circle className="animate-blink-1" cx="75" cy="75" r="1.5"></circle>
+<circle className="opacity-50" cx="95" cy="70" r="1.5"></circle>
+<circle className="animate-blink-2" cx="100" cy="60" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-1" cx="105" cy="75" r="1.5"></circle>
+<circle className="opacity-60" cx="95" cy="85" r="1.5"></circle>
+<circle className="animate-blink-3" cx="85" cy="95" r="1.5"></circle>
+<circle className="animate-blink-2" cx="45" cy="70" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-1" cx="50" cy="80" r="1.5"></circle>
+</g>
+
+<g className="text-indigo-500 fill-current">
+<circle className="opacity-50" cx="110" cy="130" r="1.5"></circle>
+<circle className="animate-blink-1" cx="120" cy="140" r="1.5"></circle>
+<circle className="opacity-60" cx="115" cy="150" r="1.5"></circle>
+<circle className="animate-blink-2" cx="125" cy="160" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-3" cx="130" cy="145" r="1.5"></circle>
+<circle className="opacity-40" cx="120" cy="170" r="1.5"></circle>
+<circle className="animate-blink-1" cx="115" cy="180" r="1.5"></circle>
+<circle className="opacity-50" cx="135" cy="155" r="1.5"></circle>
+<circle className="opacity-60" cx="125" cy="190" r="1.5"></circle>
+</g>
+
+<g className="text-indigo-500 fill-current">
+<circle className="opacity-50" cx="190" cy="50" r="1.5"></circle>
+<circle className="animate-blink-1" cx="200" cy="45" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-2" cx="195" cy="60" r="1.5"></circle>
+<circle className="opacity-60" cx="205" cy="55" r="1.5"></circle>
+<circle className="animate-blink-3" cx="210" cy="50" r="1.5"></circle>
+<circle className="opacity-40" cx="200" cy="70" r="1.5"></circle>
+<circle className="animate-blink-1" cx="215" cy="65" r="1.5"></circle>
+<circle className="opacity-50" cx="220" cy="55" r="1.5"></circle>
+</g>
+
+<g className="text-indigo-500 fill-current">
+<circle className="opacity-50" cx="195" cy="90" r="1.5"></circle>
+<circle className="animate-blink-1" cx="205" cy="100" r="1.5"></circle>
+<circle className="opacity-60" cx="190" cy="110" r="1.5"></circle>
+<circle className="animate-blink-2" cx="210" cy="110" r="1.5"></circle>
+<circle className="opacity-40" cx="200" cy="120" r="1.5"></circle>
+<circle className="animate-blink-3" cx="215" cy="125" r="1.5"></circle>
+<circle className="opacity-50" cx="205" cy="135" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-1" cx="220" cy="140" r="1.5"></circle>
+<circle className="opacity-60" cx="210" cy="150" r="1.5"></circle>
+<circle className="opacity-40" cx="225" cy="115" r="1.5"></circle>
+</g>
+
+<g className="text-indigo-500 fill-current">
+<circle className="opacity-50" cx="240" cy="50" r="1.5"></circle>
+<circle className="animate-blink-1" cx="250" cy="60" r="1.5"></circle>
+<circle className="opacity-60" cx="260" cy="55" r="1.5"></circle>
+<circle className="animate-blink-2" cx="270" cy="65" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-3" cx="280" cy="50" r="1.5"></circle>
+<circle className="opacity-40" cx="290" cy="60" r="1.5"></circle>
+<circle className="animate-blink-1" cx="300" cy="55" r="1.5"></circle>
+<circle className="opacity-50" cx="310" cy="65" r="1.5"></circle>
+<circle className="opacity-60" cx="250" cy="80" r="1.5"></circle>
+<circle className="animate-blink-2" cx="265" cy="75" r="1.5"></circle>
+<circle className="opacity-40" cx="280" cy="85" r="1.5"></circle>
+<circle className="animate-blink-3" cx="295" cy="75" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-1" cx="310" cy="80" r="1.5"></circle>
+<circle className="opacity-50" cx="320" cy="70" r="1.5"></circle>
+
+<circle className="animate-blink-2" cx="270" cy="95" r="1.5"></circle>
+<circle className="opacity-60" cx="285" cy="100" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-3" cx="300" cy="105" r="1.5"></circle>
+<circle className="opacity-40" cx="315" cy="110" r="1.5"></circle>
+</g>
+
+<g className="text-indigo-500 fill-current">
+<circle className="opacity-50" cx="320" cy="160" r="1.5"></circle>
+<circle className="animate-blink-1" cx="330" cy="165" r="1.5"></circle>
+<circle className="opacity-60" cx="340" cy="160" r="1.5"></circle>
+<circle className="animate-blink-2" cx="325" cy="175" r="1.5"></circle>
+<circle className="text-blue-600 animate-blink-3" cx="335" cy="170" r="1.5"></circle>
+<circle className="opacity-40" cx="345" cy="175" r="1.5"></circle>
+</g>
+
+<path className="animate-pulse" d="M105 75 Q 160 30 200 45" fill="none" stroke="currentColor" stroke-opacity="0.2" strokeWidth="0.5"></path>
+<path className="animate-pulse" d="M200 45 Q 250 20 280 50" fill="none" stroke="currentColor" stroke-opacity="0.2" strokeWidth="0.5" style={{animationDelay: '1s'}}></path>
+<path className="animate-pulse" d="M280 50 Q 320 80 335 170" fill="none" stroke="currentColor" stroke-opacity="0.2" strokeWidth="0.5" style={{animationDelay: '2s'}}></path>
+<path className="animate-pulse" d="M105 75 Q 120 120 130 145" fill="none" stroke="currentColor" stroke-opacity="0.2" strokeWidth="0.5" style={{animationDelay: '1.5s'}}></path>
+</svg>
+
+<div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-20 pointer-events-none">
+</div>
+</div>
+</div>
+
+<div className="flex flex-col gap-8">
+<div className="flex flex-col gap-4">
+<div className="flex items-center gap-3 text-slate-900 font-manrope font-semibold text-lg">
+<svg className="text-slate-900" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+<path d="M2 12h20"></path>
+</svg>
+                Custom domains
+              </div>
+<p className="text-slate-500 font-manrope leading-relaxed">
+                Use your own domain name with your app, and get a free SSL certificate automatically. No need to
+                configure
+                TLS/SSL.
+              </p>
+</div>
+
+<div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-4 h-[320px] relative flex flex-col select-none">
+
+<div className="p-6 border-b border-slate-100 bg-white z-10 relative">
+<div className="flex gap-2">
+<div className="flex-1 relative">
+<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+<path d="M2 12h20"></path>
+</svg>
+</div>
+<input className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-manrope" placeholder="Add a domain" readonly="" type="text" value="beep-app.com"/>
+</div>
+<button className="bg-white px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors font-manrope">
+                                Add domain
+                            </button>
+</div>
+</div>
+
+<div className="relative flex-1 overflow-hidden mask-gradient-y bg-slate-50/30">
+<div className="absolute inset-x-0 top-0 animate-scroll-y">
+
+<div className="flex flex-col">
+
+<div className="border-b border-slate-100 bg-white p-4 flex items-center justify-between">
+<div className="flex flex-col">
+<span className="text-sm font-medium text-slate-900 font-manrope">beep-staging.laravel.cloud</span>
+<span className="text-xs text-slate-400 font-manrope">Redirect from www.</span>
+</div>
+<div className="flex items-center gap-4">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20 font-manrope">
+<svg aria-hidden="true" className="h-1.5 w-1.5 fill-emerald-500" viewbox="0 0 6 6"><circle cx="3" cy="3" r="3"></circle></svg> Connected
+                                        </span>
+<svg className="text-slate-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</div>
+</div>
+<div className="border-b border-slate-100 bg-white p-4 flex items-center justify-between">
+<div className="flex flex-col">
+<span className="text-sm font-medium text-slate-900 font-manrope">beep.today</span>
+<span className="text-xs text-slate-400 font-manrope">Primary domain</span>
+</div>
+<div className="flex items-center gap-4">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20 font-manrope">
+<svg aria-hidden="true" className="h-1.5 w-1.5 fill-emerald-500" viewbox="0 0 6 6"><circle cx="3" cy="3" r="3"></circle></svg> Connected
+                                        </span>
+<svg className="text-slate-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</div>
+</div>
+<div className="flex bg-white border-slate-100 border-b pt-4 pr-4 pb-4 pl-4 items-center justify-between">
+<div className="flex flex-col">
+<span className="text-sm font-medium text-slate-900 font-manrope">*.beep.today</span>
+<span className="text-xs text-slate-400 font-manrope">Wildcard</span>
+</div>
+<div className="flex items-center gap-4">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20 font-manrope">
+<svg aria-hidden="true" className="h-1.5 w-1.5 fill-emerald-500" viewbox="0 0 6 6"><circle cx="3" cy="3" r="3"></circle></svg> Connected
+                                        </span>
+<svg className="text-slate-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</div>
+</div>
+<div className="flex bg-white border-slate-100 border-b pt-4 pr-4 pb-4 pl-4 items-center justify-between">
+<div className="flex flex-col">
+<span className="text-sm font-medium text-slate-900 font-manrope" style={{}}>end.agency</span>
+<span className="text-xs text-slate-400 font-manrope" style={{}}>DNS config</span>
+</div>
+<div className="flex items-center gap-4">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20 font-manrope">
+<svg aria-hidden="true" className="h-1.5 w-1.5 fill-emerald-500" viewbox="0 0 6 6"><circle cx="3" cy="3" r="3"></circle></svg> Connected
+                                        </span>
+<svg className="text-slate-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</div>
+</div>
+
+
+<div className="flex bg-white border-slate-100 border-b pt-4 pr-4 pb-4 pl-4 items-center justify-between">
+<div className="flex flex-col">
+<span className="text-sm font-medium text-slate-900 font-manrope">app.beep.com</span>
+<span className="text-xs text-slate-400 font-manrope">CNAME Record</span>
+</div>
+<div className="flex items-center gap-4">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20 font-manrope">
+<svg aria-hidden="true" className="h-1.5 w-1.5 fill-emerald-500" viewbox="0 0 6 6"><circle cx="3" cy="3" r="3"></circle></svg> Connected
+                                        </span>
+<svg className="text-slate-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</div>
+</div>
+<div className="border-b border-slate-100 bg-white p-4 flex items-center justify-between">
+<div className="flex flex-col">
+<span className="text-sm font-medium text-slate-900 font-manrope">api.beep.com</span>
+<span className="text-xs text-slate-400 font-manrope">API Gateway</span>
+</div>
+<div className="flex items-center gap-4">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20 font-manrope">
+<svg aria-hidden="true" className="h-1.5 w-1.5 fill-emerald-500" viewbox="0 0 6 6"><circle cx="3" cy="3" r="3"></circle></svg> Connected
+                                        </span>
+<svg className="text-slate-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</div>
+</div>
+<div className="border-b border-slate-100 bg-white p-4 flex items-center justify-between">
+<div className="flex flex-col">
+<span className="text-sm font-medium text-slate-900 font-manrope">store.beep.com</span>
+<span className="text-xs text-slate-400 font-manrope">Shop</span>
+</div>
+<div className="flex items-center gap-4">
+<span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20 font-manrope">
+<svg aria-hidden="true" className="h-1.5 w-1.5 fill-emerald-500" viewbox="0 0 6 6"><circle cx="3" cy="3" r="3"></circle></svg> Connected
+                                        </span>
+<svg className="text-slate-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+
+<div className="flex flex-col gap-3">
+<div className="flex items-center gap-2 text-slate-900 font-manrope font-semibold">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+<path d="m9 12 2 2 4-4"></path>
+</svg>
+              DDoS protection
+            </div>
+<p className="text-sm text-slate-500 font-manrope leading-relaxed">
+              Attacks are automatically detected and mitigated without any configuration required.
+            </p>
+</div>
+
+<div className="flex flex-col gap-3">
+<div className="flex items-center gap-2 text-slate-900 font-manrope font-semibold">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+</svg>
+              Content caching
+            </div>
+<p className="text-sm text-slate-500 font-manrope leading-relaxed">
+              Static assets are cached at the edge locations, ensuring your app loads fast everywhere.
+            </p>
+</div>
+
+<div className="flex flex-col gap-3">
+<div className="flex items-center gap-2 text-slate-900 font-manrope font-semibold">
+<svg className="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+              SSL and TLS certificates
+            </div>
+<p className="text-sm text-slate-500 font-manrope leading-relaxed">
+              Cloud automatically provisions and renews SSL certificates for all your custom domains.
+            </p>
+</div>
+
+<div className="flex flex-col gap-3">
+<div className="flex items-center gap-2 text-slate-900 font-manrope font-semibold">
+<svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+<path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+<path d="M4 22h16"></path>
+<path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+<path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+<path d="M18 2a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+<path d="M6 2a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+</svg>
+              Load balancing
+            </div>
+<p className="text-sm text-slate-500 font-manrope leading-relaxed">
+              Traffic is automatically balanced across healthy instances as your application scales up.
+            </p>
+</div>
+</div>
+</div>
+<style className="">
+        @keyframes blink-random {
+
+          0%,
+          100% {
+            opacity: 0.3;
+            transform: scale(0.8);
+          }
+
+          50% {
+            opacity: 1;
+            transform: scale(1.1);
+          }
+        }
+
+        .animate-blink-1 {
+          animation: blink-random 3s infinite ease-in-out 0s;
+        }
+
+        .animate-blink-2 {
+          animation: blink-random 4s infinite ease-in-out 1s;
+        }
+
+        .animate-blink-3 {
+          animation: blink-random 3.5s infinite ease-in-out 0.5s;
+        }
+
+        @keyframes scroll-vertical {
+          0% {
+            transform: translateY(0);
+          }
+
+          100% {
+            transform: translateY(-50%);
+          }
+        }
+
+        .animate-scroll-y {
+          animation: scroll-vertical 25s linear infinite;
+        }
+
+        /* Status evolution animation */
+        @keyframes status-cycle-pending {
+
+          0%,
+          20% {
+            opacity: 1;
+          }
+
+          21%,
+          100% {
+            opacity: 0;
+          }
+        }
+
+        @keyframes status-cycle-connecting {
+
+          0%,
+          20% {
+            opacity: 0;
+          }
+
+          21%,
+          50% {
+            opacity: 1;
+          }
+
+          51%,
+          100% {
+            opacity: 0;
+          }
+        }
+
+        @keyframes status-cycle-connected {
+
+          0%,
+          50% {
+            opacity: 0;
+          }
+
+          51%,
+          100% {
+            opacity: 1;
+          }
+        }
+
+        .status-text-1 {
+          animation: status-cycle-pending 6s steps(1) infinite;
+        }
+
+        .status-text-2 {
+          animation: status-cycle-connecting 6s steps(1) infinite;
+        }
+
+        .status-text-3 {
+          animation: status-cycle-connected 6s steps(1) infinite;
+        }
+
+        /* Mask for fade effect on scroll list */
+        .mask-gradient-y {
+          mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+          -webkit-mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+        }
+      </style>
+</div>
+<div className="-translate-x-1/2 text-slate-900 bg-white w-screen border-0 border-t pt-24 pb-24 relative left-1/2">
+
+
+
+<style className="">
+        @keyframes float-slow {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        @keyframes float-delayed {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+
+        @keyframes float-reverse {
+
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(6px);
+          }
+        }
+
+        .animate-float-slow {
+          animation: float-slow 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+          animation: float-delayed 7s ease-in-out infinite 1s;
+        }
+
+        .animate-float-reverse {
+          animation: float-reverse 8s ease-in-out infinite;
+        }
+
+        @keyframes marquee {
+          from {
+            transform: translateX(0);
+          }
+
+          to {
+            transform: translateX(-50%);
+          }
+        }
+
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+        }
+
+        .noodle-glow {
+          stroke-dasharray: 10;
+          animation: dash 30s linear infinite;
+        }
+      </style>
+<div className="sm:px-6 sm:pt-0 max-w-3xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4">
+<div className="text-center mb-16">
+<h2 className="text-3xl text-slate-900 tracking-tight mb-4 font-manrope font-medium" style={{}}>Frequently asked
+            questions</h2>
+<p className="text-slate-500 text-lg font-manrope" style={{}}>Everything you need to know about Nebula.</p>
+</div>
+<div className="space-y-4">
+<details className="group p-4 bg-white rounded-xl border border-slate-200 open:ring-2 open:ring-indigo-100 open:border-indigo-200 transition-all">
+<summary className="flex items-center justify-between cursor-pointer text-slate-900 marker:content-none list-none font-manrope" style={{}}>
+              How does the pricing work?
+              <svg className="text-slate-400 group-open:rotate-180 transition-transform" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</summary>
+<div className="mt-4 text-slate-500 text-sm leading-relaxed font-manrope" style={{}}>
+              We charge based on resource usage. You only pay for the compute time and storage you actually use. There
+              are
+              no upfront fees or long-term contracts.
+            </div>
+</details>
+<details className="group p-4 bg-white rounded-xl border border-slate-200 open:ring-2 open:ring-indigo-100 open:border-indigo-200 transition-all">
+<summary className="flex items-center justify-between cursor-pointer text-slate-900 marker:content-none list-none font-manrope" style={{}}>
+              Can I deploy Docker containers?
+              <svg className="text-slate-400 group-open:rotate-180 transition-transform" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</summary>
+<div className="mt-4 text-slate-500 text-sm leading-relaxed font-manrope" style={{}}>
+              Yes! Nebula supports deploying any Docker container. Just provide your Dockerfile and we'll handle the
+              build
+              and deployment process automatically.
+            </div>
+</details>
+<details className="group p-4 bg-white rounded-xl border border-slate-200 open:ring-2 open:ring-indigo-100 open:border-indigo-200 transition-all">
+<summary className="flex items-center justify-between cursor-pointer text-slate-900 marker:content-none list-none font-manrope" style={{}}>
+              Do you offer SLA guarantees?
+              <svg className="text-slate-400 group-open:rotate-180 transition-transform" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</summary>
+<div className="mt-4 text-slate-500 text-sm leading-relaxed font-manrope" style={{}}>
+              Enterprise plans come with a 99.99% uptime SLA. We have a globally distributed infrastructure designed to
+              withstand regional outages.
+            </div>
+</details>
+<details className="group p-4 bg-white rounded-xl border border-slate-200 open:ring-2 open:ring-indigo-100 open:border-indigo-200 transition-all">
+<summary className="flex items-center justify-between cursor-pointer text-slate-900 marker:content-none list-none font-manrope" style={{}}>
+              How do you handle secrets?
+              <svg className="text-slate-400 group-open:rotate-180 transition-transform" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</summary>
+<div className="mt-4 text-slate-500 text-sm leading-relaxed font-manrope" style={{}}>
+              Secrets are encrypted at rest using AES-256. They are injected into your application environment at
+              runtime
+              and are never exposed in your build logs.
+            </div>
+</details>
+</div>
+</div>
+</div>
+<footer className="overflow-hidden w-full relative gap-x-4 gap-y-4" style={{background: 'linear-gradient(to bottom, #001871 0%, #0052c2 25%,, #d9e6f5 65%, #EF5554 100%)'}}>
+
+<div className="backdrop-blur-[1px] bg-slate-900/40 absolute top-0 right-0 bottom-0 left-0"></div>
+<div className="z-10 text-white max-w-7xl mr-auto ml-auto pt-20 pr-6 pb-20 pl-6 relative space-y-20 gap-x-4 gap-y-4">
+<div className="animate-intro flex flex-col z-10 text-center max-w-7xl border-[#ffffff] mr-auto ml-auto pr-6 pb-24 pl-6 items-center">
+<h1 className="md:text-7xl leading-[1.1] text-5xl font-medium tracking-tight max-w-3xl mb-6">Get started today
+          </h1>
+<p className="md:text-xl leading-relaxed text-lg text-slate-300 font-manrope opacity-90 max-w-2xl mr-auto mb-10 ml-auto">
+            Connect your platform and start deploying today or book a demo to have one the member of our team
+            introducing you the product.</p>
+<div className="flex flex-col sm:flex-row items-center gap-4">
+
+<button className="group relative rounded-full bg-white text-slate-950 px-6 py-2.5 font-medium text-sm overflow-hidden transition-transform active:scale-95">
+<span className="flex items-center gap-2 font-manrope z-10 relative">Get started <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:arrow-right-linear" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 12h16m0 0l-6-6m6 6l-6 6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path></svg></span>
+
+<div className="absolute inset-0 rounded-full p-[1px] bg-gradient-to-r from-transparent via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div className="absolute top-0 left-0 h-full w-full animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] opacity-50"></div>
+</div>
+</button>
+<button className="hover:bg-white/10 transition-colors flex gap-2 group text-sm text-white font-manrope bg-white/5 border-white/10 border rounded-full pt-2.5 pr-6 pb-2.5 pl-6 gap-x-2 gap-y-2 items-center">
+                    Book a demo
+                    <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:calendar-linear" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><g className="" fill="none"><path className="" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14z" stroke="currentColor" strokeWidth="1.5"></path><path d="M7 4V2.5M17 4V2.5M2.5 9h19" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path><path d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0" fill="currentColor"></path></g></svg>
+</button>
+</div>
+</div>
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
+<div className="col-span-2 lg:col-span-2">
+<div className="flex text-xl text-white font-manrope mb-6 gap-x-2 gap-y-2 items-center">Nebula Max</div>
+<p className="leading-relaxed text-sm text-indigo-100/80 max-w-sm font-manrope" style={{}}>
+              The next generation cloud platform for developers who want to ship faster. Zero config, infinite scale.
+            </p>
+</div>
+<div className="">
+<h4 className="text-white mb-4 font-manrope" style={{}}>Product</h4>
+<ul className="space-y-3 text-sm text-indigo-100/70">
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/pricing" style={{}}>Pricing</a>
+</li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/documentation" style={{}}>Documentation</a></li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/about" style={{}}>About</a>
+</li>
+<li className=""><a href="/account" style={{}}>Sign in</a></li>
+<li className=""><a className="" href="/account" style={{}}>Create an account</a></li>
+<li className=""><a></a></li>
+</ul>
+</div>
+<div className="">
+<h4 className="text-white mb-4 font-manrope" style={{}}>Services</h4>
+<ul className="space-y-3 text-sm text-indigo-100/70">
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/frontend-cloud" style={{}}>Frontend
+                Cloud</a></li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/database" style={{}}>Database</a>
+</li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/object-storage" style={{}}>Object
+                Storage</a></li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/serverless-compute" style={{}}>Serverless Compute</a></li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/edge-network" style={{}}>Edge
+                Network</a></li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/security" style={{}}>Security</a>
+</li>
+</ul>
+</div><div className="">
+<h4 className="text-white mb-4 font-manrope" style={{}}>Legal</h4>
+<ul className="space-y-3 text-sm text-indigo-100/70">
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/privacy" style={{}}>Privacy
+                  Policy</a></li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/terms" style={{}}>Terms and
+                  Conditions</a></li>
+<li className=""><a className="hover:text-white transition-colors font-manrope" href="/cookie" style={{}}>Cookie
+                  Policy</a></li>
+</ul>
+</div>
+</div>
+<div className="flex flex-col md:flex-row gap-4 text-xs text-indigo-100/60 border-white/10 border-t pt-8 gap-x-4 gap-y-4 items-center justify-between">
+<div className="flex gap-1 items-center">
+<span className="font-manrope">© Nebula Max |</span>
+<span className="font-manrope opacity-80">vibe designed and Aura coded by François Savard from <a className="" href="https://end.agency" style={{color: 'white'}}>END Agency</a></span>
+</div>
+<div className="flex gap-4 gap-x-4 gap-y-4 items-center">
+<a className="hover:text-white transition-colors" href="#">
+</a><a className="hover:text-white transition-colors" href="#">
+<svg className="w-[18px] h-[18px]" data-icon-replaced="true" data-icon-set="logos" data-logos="linkedin-icon" fill="currentColor" height="18" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '18px', height: '18px'}} viewbox="0 0 256 256" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4c-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.91 39.91 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186zM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009s9.851-22.014 22.008-22.016c12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97zM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453" fill="#ffffff">
+</path>
+</svg>
+</a><a className="hover:text-white transition-colors" href="#">
+<svg className="w-[18px] h-[18px]" data-icon-replaced="true" data-icon-set="logos" data-logos="x" fill="currentColor" height="18" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '18px', height: '18px'}} viewbox="0 0 251 256" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M149.079 108.399L242.33 0h-22.098l-80.97 94.12L74.59 0H0l97.796 142.328L0 256h22.1l85.507-99.395L175.905 256h74.59L149.073 108.399zM118.81 143.58l-9.909-14.172l-78.84-112.773h33.943l63.625 91.011l9.909 14.173l82.705 118.3H186.3l-67.49-96.533z">
+</path>
+</svg>
+</a>
+<a className="hover:text-white transition-colors" href="#">
+<svg className="w-[18px] h-[18px]" data-icon-replaced="true" data-icon-set="logos" data-logos="instagram-icon" fill="currentColor" height="18" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '18px', height: '18px'}} viewbox="0 0 256 256" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M128 23.064c34.177 0 38.225.13 51.722.745c12.48.57 19.258 2.655 23.769 4.408c5.974 2.322 10.238 5.096 14.717 9.575s7.253 8.743 9.575 14.717c1.753 4.511 3.838 11.289 4.408 23.768c.615 13.498.745 17.546.745 51.723s-.13 38.226-.745 51.723c-.57 12.48-2.655 19.257-4.408 23.768c-2.322 5.974-5.096 10.239-9.575 14.718s-8.743 7.253-14.717 9.574c-4.511 1.753-11.289 3.839-23.769 4.408c-13.495.616-17.543.746-51.722.746s-38.228-.13-51.723-.746c-12.48-.57-19.257-2.655-23.768-4.408c-5.974-2.321-10.239-5.095-14.718-9.574c-4.479-4.48-7.253-8.744-9.574-14.718c-1.753-4.51-3.839-11.288-4.408-23.768c-.616-13.497-.746-17.545-.746-51.723s.13-38.225.746-51.722c.57-12.48 2.655-19.258 4.408-23.769c2.321-5.974 5.095-10.238 9.574-14.717c4.48-4.48 8.744-7.253 14.718-9.575c4.51-1.753 11.288-3.838 23.768-4.408c13.497-.615 17.545-.745 51.723-.745M128 0C93.237 0 88.878.147 75.226.77c-13.625.622-22.93 2.786-31.071 5.95c-8.418 3.271-15.556 7.648-22.672 14.764S9.991 35.738 6.72 44.155C3.555 52.297 1.392 61.602.77 75.226C.147 88.878 0 93.237 0 128s.147 39.122.77 52.774c.622 13.625 2.785 22.93 5.95 31.071c3.27 8.417 7.647 15.556 14.763 22.672s14.254 11.492 22.672 14.763c8.142 3.165 17.446 5.328 31.07 5.95c13.653.623 18.012.77 52.775.77s39.122-.147 52.774-.77c13.624-.622 22.929-2.785 31.07-5.95c8.418-3.27 15.556-7.647 22.672-14.763s11.493-14.254 14.764-22.672c3.164-8.142 5.328-17.446 5.95-31.07c.623-13.653.77-18.012.77-52.775s-.147-39.122-.77-52.774c-.622-13.624-2.786-22.929-5.95-31.07c-3.271-8.418-7.648-15.556-14.764-22.672S220.262 9.99 211.845 6.72c-8.142-3.164-17.447-5.328-31.071-5.95C167.122.147 162.763 0 128 0m0 62.27c-36.302 0-65.73 29.43-65.73 65.73s29.428 65.73 65.73 65.73c36.301 0 65.73-29.428 65.73-65.73c0-36.301-29.429-65.73-65.73-65.73m0 108.397c-23.564 0-42.667-19.103-42.667-42.667S104.436 85.333 128 85.333s42.667 19.103 42.667 42.667s-19.103 42.667-42.667 42.667m83.686-110.994c0 8.484-6.876 15.36-15.36 15.36s-15.36-6.876-15.36-15.36s6.877-15.36 15.36-15.36s15.36 6.877 15.36 15.36" fill="#ffffff">
+</path>
+</svg>
+</a><a className="hover:text-white transition-colors" href="#">
+<svg className="w-[18px] h-[18px]" data-icon-replaced="true" fill="currentColor" height="18" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '18px', height: '18px'}} viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+<path className="" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+</svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</main>
+
+
+    </>
+  );
+}

@@ -1,0 +1,14 @@
+# Premium Sleep E-commerce Product Page Template
+
+Modern e-commerce product page template for showcasing a premium down pillow (or similar physical product) with specs, benefits, and conversion-focused CTAs.
+
+## Project Details
+- **Slug:** `pillow-product-94`
+- **Views:** 9
+- **Tags:** E-commerce, Landing Page, Brand, Clean, Minimal, Large Type, Product Page, Pillow, Retail
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

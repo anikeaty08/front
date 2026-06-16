@@ -1,0 +1,728 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Data: Solar System
+        const planetsData = [
+            { name: "Sun", color: 0xFDB813, size: 12, distance: 0, speed: 0, desc: "The star at the center of our Solar System.", temp: "5,500°C", year: "N/A", type: "Star" },
+            { name: "Mercury", color: 0xA5A5A5, size: 2, distance: 25, speed: 0.02, desc: "The smallest planet and closest to the Sun.", temp: "167°C", year: "88 Days", type: "Planet" },
+            { name: "Venus", color: 0xE3BB76, size: 3.5, distance: 35, speed: 0.015, desc: "Spinning in the opposite direction to most planets.", temp: "464°C", year: "225 Days", type: "Planet" },
+            { name: "Earth", color: 0x22A6F3, size: 3.8, distance: 50, speed: 0.01, desc: "Our home. The only place we know of with life.", temp: "15°C", year: "365 Days", type: "Planet" },
+            { name: "Mars", color: 0xDD4124, size: 2.5, distance: 65, speed: 0.008, desc: "The Red Planet, home to the largest volcano.", temp: "-65°C", year: "687 Days", type: "Planet" },
+            { name: "Jupiter", color: 0xD8CA9D, size: 9, distance: 90, speed: 0.004, desc: "A gas giant and the largest planet in the system.", temp: "-110°C", year: "12 Years", type: "Gas Giant" },
+            { name: "Saturn", color: 0xA49B72, size: 7.5, distance: 120, speed: 0.003, desc: "Famous for its beautiful, complex ring system.", temp: "-140°C", year: "29 Years", type: "Gas Giant" },
+            { name: "Uranus", color: 0xC6D3E3, size: 6, distance: 150, speed: 0.002, desc: "An ice giant that rotates on its side.", temp: "-195°C", year: "84 Years", type: "Ice Giant" },
+            { name: "Neptune", color: 0x3F54BA, size: 5.8, distance: 180, speed: 0.001, desc: "The windiest planet, with supersonic winds.", temp: "-200°C", year: "165 Years", type: "Ice Giant" }
+        ];
+
+        // Three.js Setup
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x020617, 0.002); // Deep space fog
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 60, 120);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // Soft white light
+        scene.add(ambientLight);
+
+        const pointLight = new THREE.PointLight(0xFFFFFF, 2, 300); // Sun light
+        scene.add(pointLight);
+
+        // Starfield with Custom Icon
+        const starsGeometry = new THREE.BufferGeometry();
+        const starsCount = 1500; // Reduced slightly for better icon visibility
+        const posArray = new Float32Array(starsCount * 3);
+        for(let i = 0; i < starsCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 500;
+        }
+        starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        // Load Custom Texture
+        const textureLoader = new THREE.TextureLoader();
+        textureLoader.crossOrigin = 'Anonymous';
+        const starTexture = textureLoader.load('https://digitaldynamics.uk/wp-content/uploads/2025/10/ico2-1.png');
+
+        const starsMaterial = new THREE.PointsMaterial({ 
+            size: 2.5, // Larger size to see the icon
+            map: starTexture, 
+            transparent: true, 
+            opacity: 0.9,
+            depthWrite: false, // Prevents z-buffer issues with transparent textures
+            blending: THREE.AdditiveBlending
+        });
+        
+        const starMesh = new THREE.Points(starsGeometry, starsMaterial);
+        scene.add(starMesh);
+
+        // Planet Mesh Generation
+        const planetMeshes = [];
+        const orbitLines = [];
+
+        planetsData.forEach((planet, index) => {
+            // Planet Body
+            const geometry = new THREE.SphereGeometry(planet.size, 32, 32);
+            let material;
+            
+            if (index === 0) {
+                // Sun Material (Emissive)
+                material = new THREE.MeshBasicMaterial({ color: planet.color });
+                const glowGeo = new THREE.SphereGeometry(planet.size * 1.2, 32, 32);
+                const glowMat = new THREE.MeshBasicMaterial({ color: planet.color, transparent: true, opacity: 0.2, side: THREE.BackSide });
+                const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+                scene.add(glowMesh);
+            } else {
+                // Standard Planet (Lambert for lighting interaction)
+                material = new THREE.MeshLambertMaterial({ color: planet.color });
+                
+                // Orbit Path
+                const orbitGeo = new THREE.RingGeometry(planet.distance - 0.2, planet.distance + 0.2, 128);
+                const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.05, transparent: true, side: THREE.DoubleSide });
+                const orbit = new THREE.Mesh(orbitGeo, orbitMat);
+                orbit.rotation.x = Math.PI / 2;
+                scene.add(orbit);
+                orbitLines.push(orbit);
+            }
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.userData = { ...planet, id: index, angle: Math.random() * Math.PI * 2 };
+            
+            // Special case for Saturn Ring
+            if(planet.name === "Saturn") {
+                const ringGeo = new THREE.RingGeometry(planet.size + 2, planet.size + 6, 32);
+                const ringMat = new THREE.MeshBasicMaterial({ color: 0x8d8668, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
+                const ring = new THREE.Mesh(ringGeo, ringMat);
+                ring.rotation.x = Math.PI / 2;
+                mesh.add(ring);
+            }
+
+            scene.add(mesh);
+            planetMeshes.push(mesh);
+        });
+
+        // Animation State
+        let isPaused = false;
+        let timeSpeed = 1;
+        let focusTarget = null;
+        
+        // Setup UI
+        const planetListEl = document.getElementById('planet-list');
+        
+        planetsData.forEach((planet, index) => {
+            const btn = document.createElement('button');
+            btn.className = `planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent`;
+            btn.innerHTML = `
+                <div class="w-3 h-3 rounded-full" style="background-color: #${planet.color.toString(16)}"></div>
+                <div class="text-left">
+                    <div class="text-xs font-medium text-slate-200 group-hover:text-white">${planet.name}</div>
+                    <div class="text-[10px] text-slate-400">${planet.type}</div>
+                </div>
+            `;
+            btn.onclick = () => focusOnPlanet(index);
+            planetListEl.appendChild(btn);
+        });
+
+        // Functions
+        function focusOnPlanet(index) {
+            focusTarget = index;
+            const planet = planetMeshes[index];
+            const data = planetsData[index];
+
+            // Update Active State in UI
+            document.querySelectorAll('.planet-nav-item').forEach((el, i) => {
+                if (i === index) el.classList.add('active', 'border-white/20');
+                else el.classList.remove('active', 'border-white/20');
+            });
+
+            // Move Camera
+            const offset = index === 0 ? 40 : 20; // Distance from planet
+            const duration = 1.5;
+
+            // If looking at sun, fixed position, else dynamic calculation in loop
+            if (index === 0) {
+                gsap.to(camera.position, {
+                    x: 0, y: 30, z: 60,
+                    duration: duration,
+                    onUpdate: () => camera.lookAt(0,0,0)
+                });
+            }
+            
+            // Show Info Panel
+            const panel = document.getElementById('planet-panel');
+            
+            // Text Updates
+            document.getElementById('panel-title').innerText = data.name;
+            document.getElementById('panel-subtitle').innerText = data.type;
+            document.getElementById('stat-temp').innerText = data.temp;
+            document.getElementById('stat-orbit').innerText = data.year;
+            document.getElementById('panel-fact').innerText = data.desc;
+
+            // Animation slide in
+            panel.classList.remove('translate-x-96', 'opacity-0');
+        }
+
+        document.getElementById('close-panel').onclick = () => {
+            focusTarget = null;
+            document.getElementById('planet-panel').classList.add('translate-x-96', 'opacity-0');
+            
+            // Reset View
+            gsap.to(camera.position, {
+                x: 0, y: 60, z: 120,
+                duration: 2,
+                onUpdate: () => camera.lookAt(0,0,0)
+            });
+            
+            document.querySelectorAll('.planet-nav-item').forEach(el => el.classList.remove('active', 'border-white/20'));
+        };
+
+        // Time Controls
+        document.getElementById('toggle-pause').onclick = function() {
+            isPaused = !isPaused;
+            this.innerHTML = isPaused 
+                ? `<i data-lucide="play" class="w-4 h-4 fill-current"></i>` 
+                : `<i data-lucide="pause" class="w-4 h-4 fill-current"></i>`;
+            lucide.createIcons();
+        };
+
+        document.getElementById('speed-up').onclick = () => {
+            if(timeSpeed < 5) timeSpeed += 0.5;
+            document.getElementById('speed-indicator').innerText = timeSpeed + 'x';
+        };
+
+        document.getElementById('speed-down').onclick = () => {
+            if(timeSpeed > 0.5) timeSpeed -= 0.5;
+            document.getElementById('speed-indicator').innerText = timeSpeed + 'x';
+        };
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate Planets
+            planetMeshes.forEach((mesh, index) => {
+                // Self rotation
+                mesh.rotation.y += 0.005;
+
+                if (index > 0) {
+                    const data = mesh.userData;
+                    
+                    if(!isPaused) {
+                        data.angle += data.speed * timeSpeed;
+                    }
+
+                    const x = Math.cos(data.angle) * data.distance;
+                    const z = Math.sin(data.angle) * data.distance;
+                    mesh.position.set(x, 0, z);
+                }
+            });
+
+            // Camera Tracking if Locked
+            if (focusTarget !== null && focusTarget !== 0) {
+                const targetMesh = planetMeshes[focusTarget];
+                const targetOffset = 20; // Zoom distance
+                
+                // Smoothly follow the planet
+                const idealX = targetMesh.position.x;
+                const idealZ = targetMesh.position.z + targetOffset;
+                const idealY = 10;
+
+                // Simple linear interpolation (lerp) for smooth camera follow
+                camera.position.x += (idealX - camera.position.x) * 0.05;
+                camera.position.z += (idealZ - camera.position.z) * 0.05;
+                camera.position.y += (idealY - camera.position.y) * 0.05;
+                
+                camera.lookAt(targetMesh.position);
+            } else if (focusTarget === null) {
+                // Idle rotation of entire system slightly
+                scene.rotation.y += 0.0005;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Start
+        animate();
+
+        // Loading Screen Removal
+        window.onload = () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 1000);
+            }, 1500);
+        };
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="absolute inset-0 z-0" id="canvas-container"><canvas className="" height="861" style={{display: 'block', width: '1470px', height: '861px'}} width="1470"></canvas><canvas height="861" style={{display: 'block', width: '1470px', height: '861px'}} width="1470"></canvas><canvas height="861" style={{display: 'block', width: '1470px', height: '861px'}} width="1470"></canvas><canvas height="861" style={{display: 'block', width: '1470px', height: '861px'}} width="1470"></canvas><canvas height="861" style={{display: 'block', width: '1470px', height: '861px'}} width="1470"></canvas><canvas height="861" style={{display: 'block', width: '1470px', height: '861px'}} width="1470"></canvas></div>
+
+<nav className="absolute top-0 left-0 right-0 z-50 p-6 flex justify-between items-start pointer-events-none">
+
+<div className="pointer-events-auto flex flex-col gap-1">
+<div className="flex items-center gap-3">
+
+<img alt="Logo" className="h-12 w-auto object-contain" src="https://digitaldynamics.uk/wp-content/uploads/2023/05/web-logo.png"/>
+<div className="w-px h-8 bg-white/10 mx-2"></div>
+<h1 className="leading-none text-lg font-medium text-white tracking-tight">3D PLANET EXPLORER</h1>
+</div>
+<span className="text-xs font-medium text-slate-400 tracking-wide ml-1"></span>
+</div>
+
+<div className="pointer-events-auto flex gap-3">
+<div className="glass-panel rounded-full px-4 py-2 flex items-center gap-3">
+<div className="flex items-center gap-1.5">
+<svg className="lucide lucide-trophy w-4 h-4 text-yellow-400" data-lucide="trophy" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"></path><path d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"></path><path d="M18 9h1.5a1 1 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"></path><path d="M6 9H4.5a1 1 0 0 1 0-5H6"></path></svg>
+<span className="text-xs font-medium tracking-tight text-slate-200">Level 3 Explorer</span>
+</div>
+<div className="w-px h-4 bg-white/10"></div>
+<div className="flex items-center gap-1.5">
+<svg className="lucide lucide-star w-4 h-4 text-indigo-400" data-lucide="star" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+<span className="text-xs font-medium text-slate-200 tracking-tight">450 XP</span>
+</div>
+</div>
+<button className="glass-panel w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+<svg className="lucide lucide-settings-2 w-5 h-5 text-slate-300" data-lucide="settings-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M14 17H5"></path><path d="M19 7h-9"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+</button>
+</div>
+</nav>
+
+<aside className="absolute top-24 right-6 z-40 w-80 glass-panel rounded-2xl p-6 translate-x-96 transition-transform duration-500 ease-out opacity-0 pointer-events-auto flex flex-col gap-4" id="planet-panel">
+<div className="flex justify-between items-start">
+<div>
+<h2 className="text-3xl font-medium tracking-tight text-white mb-1" id="panel-title">Earth</h2>
+<p className="text-sm text-indigo-400 font-medium tracking-tight" id="panel-subtitle">The Blue Marble</p>
+</div>
+<button className="text-slate-400 hover:text-white transition-colors" id="close-panel">
+<svg className="lucide lucide-x w-5 h-5" data-lucide="x" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+</button>
+</div>
+
+<div className="grid grid-cols-2 gap-3 mt-2">
+<div className="bg-slate-900/40 rounded-xl p-3 border border-white/5">
+<div className="flex items-center gap-2 mb-1 text-slate-400">
+<svg className="lucide lucide-thermometer w-3 h-3" data-lucide="thermometer" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"></path></svg>
+<span className="text-xs font-medium uppercase tracking-wider">Temp</span>
+</div>
+<span className="text-sm font-medium text-slate-100" id="stat-temp">15°C</span>
+</div>
+<div className="bg-slate-900/40 rounded-xl p-3 border border-white/5">
+<div className="flex items-center gap-2 mb-1 text-slate-400">
+<svg className="lucide lucide-orbit w-3 h-3" data-lucide="orbit" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20.341 6.484A10 10 0 0 1 10.266 21.85"></path><path d="M3.659 17.516A10 10 0 0 1 13.74 2.152"></path><circle cx="12" cy="12" r="3"></circle><circle cx="19" cy="5" r="2"></circle><circle cx="5" cy="19" r="2"></circle></svg>
+<span className="text-xs font-medium uppercase tracking-wider">Year</span>
+</div>
+<span className="text-sm font-medium text-slate-100" id="stat-orbit">365 Days</span>
+</div>
+</div>
+<div className="space-y-2">
+<h3 className="text-xs font-medium uppercase tracking-wider text-slate-500">Did you know?</h3>
+<p className="text-sm text-slate-300 leading-relaxed" id="panel-fact">Earth is the only planet known to support life and has liquid water on its surface.</p>
+</div>
+
+<div className="grid grid-cols-2 gap-3 mt-2">
+<button className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg py-2.5 px-4 text-xs font-medium tracking-tight transition-colors flex items-center justify-center gap-2">
+<svg className="lucide lucide-gamepad-2 w-4 h-4" data-lucide="gamepad-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="6" x2="10" y1="11" y2="11"></line><line x1="8" x2="8" y1="9" y2="13"></line><line x1="15" x2="15.01" y1="12" y2="12"></line><line x1="18" x2="18.01" y1="10" y2="10"></line><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"></path></svg>
+                Play Quiz
+            </button>
+<button className="bg-white/10 hover:bg-white/20 text-white rounded-lg py-2.5 px-4 text-xs font-medium tracking-tight transition-colors flex items-center justify-center gap-2 border border-white/10">
+<svg className="lucide lucide-glasses w-4 h-4" data-lucide="glasses" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="15" r="4"></circle><circle cx="18" cy="15" r="4"></circle><path d="M14 15a2 2 0 0 0-2-2 2 2 0 0 0-2 2"></path><path d="M2.5 13 5 7c.7-1.3 1.4-2 3-2"></path><path d="M21.5 13 19 7c-.7-1.3-1.5-2-3-2"></path></svg>
+                AR Mode
+            </button>
+</div>
+
+<div className="mt-2 pt-4 border-t border-white/10">
+<div className="flex justify-between items-center mb-2">
+<span className="text-xs text-slate-400 font-medium">Discovery Progress</span>
+<span className="text-xs text-indigo-400 font-medium">60%</span>
+</div>
+<div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div className="bg-indigo-500 h-full rounded-full" style={{width: '60%'}}></div>
+</div>
+</div>
+</aside>
+
+<div className="absolute bottom-8 left-6 right-6 z-50 flex flex-col gap-4 pointer-events-none">
+
+<div className="flex pointer-events-auto gap-x-4 gap-y-4 justify-center">
+<div className="glass-panel rounded-full p-1.5 flex items-center gap-1">
+<button className="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-slate-300 transition-colors" id="speed-down">
+<svg className="lucide lucide-rewind w-4 h-4" data-lucide="rewind" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6a2 2 0 0 0-3.414-1.414l-6 6a2 2 0 0 0 0 2.828l6 6A2 2 0 0 0 12 18z"></path><path d="M22 6a2 2 0 0 0-3.414-1.414l-6 6a2 2 0 0 0 0 2.828l6 6A2 2 0 0 0 22 18z"></path></svg>
+</button>
+<button className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/30 hover:scale-105 transition-transform" id="toggle-pause">
+<svg className="lucide lucide-pause w-4 h-4 fill-current" data-lucide="pause" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="1" width="5" x="14" y="3"></rect><rect height="18" rx="1" width="5" x="5" y="3"></rect></svg>
+</button>
+<button className="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-slate-300 transition-colors" id="speed-up">
+<svg className="lucide lucide-fast-forward w-4 h-4" data-lucide="fast-forward" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 12 18z"></path><path d="M2 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 2 18z"></path></svg>
+</button>
+</div>
+<div className="glass-panel rounded-full px-4 flex items-center">
+<span className="text-xs font-medium text-slate-400 tracking-tight mr-2">ORBIT SPEED</span>
+<span className="text-xs font-medium text-indigo-400 w-8 text-right" id="speed-indicator">1x</span>
+</div>
+</div>
+
+<div className="w-full overflow-x-auto hide-scrollbar pointer-events-auto pb-2">
+<div className="flex justify-center min-w-max px-4 gap-3" id="planet-list">
+
+<button className="planet-nav-item glass-panel flex hover:bg-white/10 transition-all group min-w-[140px] border-transparent border rounded-xl pt-2 pr-4 pb-2 pl-4 gap-x-3 gap-y-3 items-center">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#fdb813'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Sun</div>
+<div className="text-[10px] text-slate-400">Star</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a5a5a5'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mercury</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#e3bb76'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Venus</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#22a6f3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Earth</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#dd4124'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mars</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d8ca9d'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Jupiter</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a49b72'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Saturn</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#c6d3e3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Uranus</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#3f54ba'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Neptune</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#fdb813'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Sun</div>
+<div className="text-[10px] text-slate-400">Star</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a5a5a5'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mercury</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#e3bb76'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Venus</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#22a6f3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Earth</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#dd4124'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mars</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d8ca9d'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Jupiter</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a49b72'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Saturn</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#c6d3e3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Uranus</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#3f54ba'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Neptune</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#fdb813'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Sun</div>
+<div className="text-[10px] text-slate-400">Star</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a5a5a5'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mercury</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#e3bb76'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Venus</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#22a6f3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Earth</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#dd4124'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mars</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d8ca9d'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Jupiter</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a49b72'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Saturn</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#c6d3e3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Uranus</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#3f54ba'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Neptune</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#fdb813'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Sun</div>
+<div className="text-[10px] text-slate-400">Star</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a5a5a5'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mercury</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#e3bb76'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Venus</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#22a6f3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Earth</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#dd4124'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mars</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d8ca9d'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Jupiter</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a49b72'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Saturn</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#c6d3e3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Uranus</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#3f54ba'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Neptune</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#fdb813'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Sun</div>
+<div className="text-[10px] text-slate-400">Star</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a5a5a5'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mercury</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#e3bb76'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Venus</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#22a6f3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Earth</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#dd4124'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mars</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d8ca9d'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Jupiter</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a49b72'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Saturn</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#c6d3e3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Uranus</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#3f54ba'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Neptune</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#fdb813'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Sun</div>
+<div className="text-[10px] text-slate-400">Star</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a5a5a5'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mercury</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#e3bb76'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Venus</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#22a6f3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Earth</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#dd4124'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Mars</div>
+<div className="text-[10px] text-slate-400">Planet</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#d8ca9d'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Jupiter</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#a49b72'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Saturn</div>
+<div className="text-[10px] text-slate-400">Gas Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#c6d3e3'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Uranus</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button><button className="planet-nav-item glass-panel px-4 py-2 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all group min-w-[140px] border border-transparent">
+<div className="w-3 h-3 rounded-full" style={{backgroundColor: '#3f54ba'}}></div>
+<div className="text-left">
+<div className="text-xs font-medium text-slate-200 group-hover:text-white">Neptune</div>
+<div className="text-[10px] text-slate-400">Ice Giant</div>
+</div>
+</button></div>
+</div>
+</div>
+
+
+
+    </>
+  );
+}

@@ -1,0 +1,264 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+dark: '#050505',
+glass: 'rgba(255, 255, 255, 0.05)',
+glassBorder: 'rgba(255, 255, 255, 0.1)',
+},
+animation: {
+'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+'blob': 'blob 7s infinite',
+},
+keyframes: {
+fadeInUp: {
+'0%': { opacity: '0', transform: 'translateY(20px)' },
+'100%': { opacity: '1', transform: 'translateY(0)' },
+},
+blob: {
+'0%': { transform: 'translate(0px, 0px) scale(1)' },
+'33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+'66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+'100%': { transform: 'translate(0px, 0px) scale(1)' },
+}
+}
+}
+}
+}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 pointer-events-none z-0">
+<div className="absolute inset-0 grid-bg"></div>
+<div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-900/20 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob"></div>
+<div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-900/20 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+</div>
+
+<nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-dark/80 backdrop-blur-md">
+<div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div className="flex items-center gap-2 cursor-pointer">
+<span className="iconify text-indigo-500 w-6 h-6" data-icon="lucide:layers" data-strokeWidth="1.5"></span>
+<span className="text-lg font-semibold tracking-tighter text-white">ADSHIFT</span>
+</div>
+<div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
+<a className="hover:text-white transition-colors" href="#">Services</a>
+<a className="hover:text-white transition-colors" href="#">Case Studies</a>
+<a className="hover:text-white transition-colors" href="#">Pricing</a>
+<a className="hover:text-white transition-colors" href="#">About</a>
+</div>
+<div className="flex items-center gap-4">
+<a className="text-sm font-medium text-neutral-400 hover:text-white hidden sm:block" href="#">Log in</a>
+<button className="bg-white text-black px-4 py-2 rounded-full text-xs font-semibold hover:bg-neutral-200 transition-colors">
+                    Start Optimization
+                </button>
+</div>
+</div>
+</nav>
+
+<main className="relative z-10 pt-32 pb-20 px-6 max-w-7xl mx-auto">
+
+<div className="flex flex-col items-center text-center max-w-4xl mx-auto animate-fade-in-up">
+
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 hover:border-white/20 transition-colors cursor-pointer group">
+<span className="flex h-2 w-2 rounded-full bg-indigo-500 group-hover:animate-pulse"></span>
+<span className="text-xs font-medium text-neutral-300 tracking-wide">META PARTNER CERTIFIED</span>
+<span className="iconify text-neutral-500 w-3 h-3 group-hover:text-white transition-colors" data-icon="lucide:chevron-right"></span>
+</div>
+
+<h1 className="text-5xl md:text-7xl font-semibold tracking-tight leading-[1.1] mb-6">
+                Turn messy ads into <br/>
+<span className="text-gradient-accent">Meta professional</span> assets.
+            </h1>
+
+<p className="text-lg text-neutral-400 max-w-2xl font-light mb-10 leading-relaxed">
+                Stop wasting budget on cluttered creatives. We restructure your chaos into sleek, high-performing professional campaigns that drive real revenue.
+            </p>
+
+<div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+<button className="group relative flex items-center justify-center gap-3 bg-white text-black px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-neutral-200 transition-all w-full sm:w-auto overflow-hidden">
+<div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+<span className="iconify w-4 h-4" data-icon="lucide:bar-chart-2"></span>
+<span>View High Valued Ads &amp; Sales</span>
+</button>
+<button className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium text-neutral-300 border border-white/10 hover:bg-white/5 hover:text-white transition-all w-full sm:w-auto">
+<span>How it works</span>
+<span className="iconify w-4 h-4" data-icon="lucide:arrow-right"></span>
+</button>
+</div>
+</div>
+
+<div className="mt-20 relative animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+
+<div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl blur opacity-20"></div>
+
+<div className="glass-card rounded-xl border border-white/10 p-1 md:p-2 relative overflow-hidden">
+
+<div className="absolute top-4 left-4 flex gap-2 z-20">
+<div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+<div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+<div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+</div>
+
+<div className="bg-[#0A0A0A] rounded-lg border border-white/5 overflow-hidden">
+
+<div className="h-14 border-b border-white/5 flex items-center justify-between px-6 pl-20 bg-white/[0.02]">
+<div className="flex items-center gap-4">
+<div className="text-xs font-medium text-neutral-400 px-3 py-1 rounded-md bg-white/5">Overview</div>
+<div className="text-xs font-medium text-neutral-600 hover:text-neutral-400 cursor-pointer transition-colors">Campaigns</div>
+<div className="text-xs font-medium text-neutral-600 hover:text-neutral-400 cursor-pointer transition-colors">Creatives</div>
+</div>
+<div className="flex items-center gap-3">
+<span className="text-xs text-neutral-500">Live Data</span>
+<div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+</div>
+</div>
+<div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-white/5">
+
+<div className="lg:col-span-2 p-6 md:p-8">
+<div className="flex justify-between items-end mb-8">
+<div>
+<p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1">Total Sales</p>
+<h3 className="text-3xl font-medium text-white tracking-tight">$124,500.00</h3>
+<div className="flex items-center gap-1 mt-2 text-emerald-400 text-xs font-medium">
+<span className="iconify" data-icon="lucide:trending-up"></span>
+<span>+24.5% vs last month</span>
+</div>
+</div>
+<div className="flex gap-2">
+<button className="px-3 py-1 rounded bg-white/10 text-xs text-white border border-white/10">7D</button>
+<button className="px-3 py-1 rounded bg-transparent text-xs text-neutral-500 hover:text-neutral-300 transition-colors">30D</button>
+</div>
+</div>
+
+<div className="h-48 flex items-end justify-between gap-2 md:gap-4 w-full">
+
+<div className="w-full bg-indigo-500/20 rounded-t-sm h-[40%] relative group cursor-pointer hover:bg-indigo-500/40 transition-all">
+<div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-neutral-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">$4.2k</div>
+</div>
+<div className="w-full bg-indigo-500/20 rounded-t-sm h-[65%] relative group cursor-pointer hover:bg-indigo-500/40 transition-all"></div>
+<div className="w-full bg-indigo-500/20 rounded-t-sm h-[50%] relative group cursor-pointer hover:bg-indigo-500/40 transition-all"></div>
+<div className="w-full bg-indigo-500/20 rounded-t-sm h-[75%] relative group cursor-pointer hover:bg-indigo-500/40 transition-all"></div>
+<div className="w-full bg-indigo-500/20 rounded-t-sm h-[60%] relative group cursor-pointer hover:bg-indigo-500/40 transition-all"></div>
+<div className="w-full bg-indigo-500/20 rounded-t-sm h-[85%] relative group cursor-pointer hover:bg-indigo-500/40 transition-all"></div>
+<div className="w-full bg-gradient-to-t from-indigo-500 to-purple-500 rounded-t-sm h-[95%] relative group cursor-pointer shadow-[0_0_20px_rgba(129,140,248,0.3)]">
+<div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-black font-bold text-[10px] py-1 px-2 rounded">$12.5k</div>
+</div>
+</div>
+<div className="flex justify-between mt-4 text-[10px] text-neutral-500 font-medium uppercase tracking-wider">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+
+<div className="lg:col-span-1 bg-neutral-900/30">
+<div className="p-4 border-b border-white/5">
+<h4 className="text-xs font-semibold text-white tracking-wide">TOP PERFORMING ADS</h4>
+</div>
+<div className="h-64 overflow-y-auto custom-scroll p-2 space-y-2">
+
+<div className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:border-indigo-500/30 transition-colors group">
+<div className="w-10 h-10 rounded bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white shrink-0">
+<span className="iconify w-5 h-5" data-icon="lucide:zap"></span>
+</div>
+<div className="flex-1 min-w-0">
+<p className="text-xs font-medium text-white truncate group-hover:text-indigo-300 transition-colors">Meta Pro Campaign #1</p>
+<p className="text-[10px] text-neutral-500 truncate">ROAS: 4.5 • CTR: 2.1%</p>
+</div>
+<div className="text-right">
+<p className="text-xs font-medium text-emerald-400">$8.2k</p>
+</div>
+</div>
+
+<div className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors">
+<div className="w-10 h-10 rounded bg-neutral-800 flex items-center justify-center text-neutral-400 shrink-0 border border-white/5">
+<span className="iconify w-5 h-5" data-icon="lucide:image"></span>
+</div>
+<div className="flex-1 min-w-0">
+<p className="text-xs font-medium text-neutral-200 truncate">Retargeting Bundle</p>
+<p className="text-[10px] text-neutral-500 truncate">ROAS: 3.2 • CTR: 1.8%</p>
+</div>
+<div className="text-right">
+<p className="text-xs font-medium text-neutral-300">$4.1k</p>
+</div>
+</div>
+
+<div className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/5 transition-colors">
+<div className="w-10 h-10 rounded bg-neutral-800 flex items-center justify-center text-neutral-400 shrink-0 border border-white/5">
+<span className="iconify w-5 h-5" data-icon="lucide:play-circle"></span>
+</div>
+<div className="flex-1 min-w-0">
+<p className="text-xs font-medium text-neutral-200 truncate">Video Reel V2</p>
+<p className="text-[10px] text-neutral-500 truncate">ROAS: 2.9 • CTR: 1.5%</p>
+</div>
+<div className="text-right">
+<p className="text-xs font-medium text-neutral-300">$2.8k</p>
+</div>
+</div>
+</div>
+
+<div className="p-3 border-t border-white/5 text-center">
+<a className="text-[10px] font-medium text-indigo-400 hover:text-indigo-300 flex items-center justify-center gap-1" href="#">
+                                    View All Active Ads
+                                    <span className="iconify" data-icon="lucide:arrow-right" data-width="10"></span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="absolute -right-8 top-12 glass-card p-3 rounded-lg flex items-center gap-3 animate-[float_4s_ease-in-out_infinite] hidden md:flex">
+<div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
+<span className="iconify" data-icon="lucide:arrow-up-right" data-width="16"></span>
+</div>
+<div>
+<p className="text-[10px] text-neutral-400 uppercase tracking-wider">Conversion Rate</p>
+<p className="text-sm font-semibold text-white">+12.4%</p>
+</div>
+</div>
+<div className="absolute -left-8 bottom-12 glass-card p-3 rounded-lg flex items-center gap-3 animate-[float_5s_ease-in-out_infinite] animation-delay-1000 hidden md:flex">
+<div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+<span className="iconify" data-icon="lucide:check-circle" data-width="16"></span>
+</div>
+<div>
+<p className="text-[10px] text-neutral-400 uppercase tracking-wider">Ads Optimized</p>
+<p className="text-sm font-semibold text-white">1,240</p>
+</div>
+</div>
+</div>
+
+<div className="mt-24 pt-10 border-t border-white/5 text-center">
+<p className="text-xs text-neutral-500 font-medium tracking-widest uppercase mb-8">Powering high-growth brands</p>
+<div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+
+<div className="text-xl font-bold tracking-tighter text-white flex items-center gap-1"><span className="iconify" data-icon="lucide:triangle"></span>ACME</div>
+<div className="text-xl font-bold tracking-tighter text-white flex items-center gap-1"><span className="iconify" data-icon="lucide:hexagon"></span>BOLT</div>
+<div className="text-xl font-bold tracking-tighter text-white flex items-center gap-1"><span className="iconify" data-icon="lucide:circle"></span>ORBIT</div>
+<div className="text-xl font-bold tracking-tighter text-white flex items-center gap-1"><span className="iconify" data-icon="lucide:box"></span>CUBE</div>
+<div className="text-xl font-bold tracking-tighter text-white flex items-center gap-1"><span className="iconify" data-icon="lucide:zap"></span>FLASH</div>
+</div>
+</div>
+</main>
+
+    </>
+  );
+}

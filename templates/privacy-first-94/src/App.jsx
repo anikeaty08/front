@@ -1,0 +1,213 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="noise-bg"></div>
+
+<div className="fixed top-0 left-1/2 -translate-x-1/2 w-full h-[50vh] bg-[#8D45F2] opacity-[0.08] blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+<nav className="fixed top-0 w-full z-40 backdrop-blur-md border-b border-white/5 bg-[#09090b]/80">
+<div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+<a className="display-font text-2xl font-medium tracking-tighter text-white hover:text-[#49F963] transition-colors flex items-center gap-2 group" href="#">
+<div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center group-hover:bg-[#49F963] transition-colors">
+<iconify-icon className="text-white group-hover:text-black text-lg transition-colors" icon="solar:shield-keyhole-linear"></iconify-icon>
+</div>
+                Silo
+            </a>
+<div className="flex items-center gap-6">
+<a className="hidden md:block text-sm text-zinc-400 hover:text-white transition-colors" href="#">Manifesto</a>
+<a className="hidden md:block text-sm text-zinc-400 hover:text-white transition-colors" href="#">Safety</a>
+<button className="bg-[#e4e4e7] hover:bg-[#49F963] text-black text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2">
+<span>Download</span>
+<iconify-icon icon="solar:arrow-right-linear" strokeWidth="2"></iconify-icon>
+</button>
+</div>
+</div>
+</nav>
+
+<main className="relative z-10 pt-32 pb-20 px-6">
+
+<div className="max-w-4xl mx-auto text-center mb-16">
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 mb-8 animate-pulse">
+<span className="w-2 h-2 rounded-full bg-[#49F963]"></span>
+<span className="text-xs font-medium text-zinc-400 uppercase tracking-widest">System Online · Encrypted</span>
+</div>
+<h1 className="text-5xl md:text-7xl font-medium tracking-tight text-white mb-6 leading-[1.1]">
+                I'm Silo. <br className="hidden md:block"/>
+<span className="text-zinc-500">I know nothing about you.</span>
+</h1>
+<p className="text-lg md:text-xl text-zinc-400 max-w-xl mx-auto font-light leading-relaxed">
+                The AI that hits different because it literally can't read your DMs. Zero knowledge, full vibes, and absolutely no receipts.
+            </p>
+</div>
+
+<div className="max-w-2xl mx-auto relative group">
+
+<div className="absolute -inset-1 bg-gradient-to-r from-[#8D45F2] to-[#49F963] rounded-[2.2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+
+<div className="relative bg-[#0e0e11] border border-zinc-800 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col h-[500px]">
+
+<div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800/50 bg-[#0e0e11]/90 backdrop-blur-sm z-20">
+<div className="flex items-center gap-3">
+<div className="relative">
+<div className="w-10 h-10 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-700 flex items-center justify-center border border-zinc-700">
+<iconify-icon className="text-xl text-[#49F963]" icon="solar:ghost-smile-linear"></iconify-icon>
+</div>
+<div className="absolute bottom-0 right-0 w-3 h-3 bg-[#49F963] border-2 border-[#0e0e11] rounded-full"></div>
+</div>
+<div>
+<h3 className="font-medium text-sm text-white">Silo</h3>
+<p className="text-xs text-zinc-500">Always active · Ghost mode</p>
+</div>
+</div>
+
+<div className="flex items-center gap-2" title="Ghost Mode Active">
+<span className="text-xs text-zinc-500 font-medium">Ghost Mode</span>
+<div className="w-10 h-6 bg-[#49F963] rounded-full relative cursor-pointer">
+<div className="absolute right-1 top-1 w-4 h-4 bg-black rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+
+<div className="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar relative">
+
+<div className="flex justify-center">
+<span className="text-xs text-zinc-600 font-medium bg-zinc-900/50 px-3 py-1 rounded-full">Today</span>
+</div>
+
+<div className="flex items-start gap-3 max-w-[85%]">
+<div className="w-8 h-8 rounded-full bg-zinc-800 flex-shrink-0 flex items-center justify-center">
+<iconify-icon className="text-[#49F963]" icon="solar:ghost-smile-linear"></iconify-icon>
+</div>
+<div className="bg-zinc-800/50 border border-zinc-700/50 text-zinc-200 px-4 py-3 rounded-2xl rounded-tl-sm text-sm leading-relaxed">
+                            Sup? I'm ready to help with whatever. Just know that what happens here, stays on your device. Literally. 🔒
+                        </div>
+</div>
+
+<div className="flex items-start gap-3 max-w-[85%] ml-auto flex-row-reverse">
+<div className="w-8 h-8 rounded-full bg-[#8D45F2] flex-shrink-0 flex items-center justify-center text-white">
+<span className="text-xs font-bold">ME</span>
+</div>
+<div className="bg-[#8D45F2]/10 border border-[#8D45F2]/30 text-[#dcbfff] px-4 py-3 rounded-2xl rounded-tr-sm text-sm leading-relaxed">
+                            Hey Silo, can you analyze my spending habits from this raw data? I'm kinda scared to look at it myself lol.
+                        </div>
+</div>
+
+<div className="flex items-start gap-3 max-w-[85%]">
+<div className="w-8 h-8 rounded-full bg-zinc-800 flex-shrink-0 flex items-center justify-center">
+<iconify-icon className="text-[#49F963]" icon="solar:ghost-smile-linear"></iconify-icon>
+</div>
+<div className="bg-zinc-800/50 border border-zinc-700/50 px-4 py-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 h-[46px]">
+<span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></span>
+<span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></span>
+<span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></span>
+</div>
+</div>
+
+<div className="absolute bottom-4 left-6 right-6">
+<div className="bg-[#0e0e11]/80 backdrop-blur-md p-3 rounded-xl border border-[#49F963]/20 flex items-center gap-3 animate-[pulse_3s_ease-in-out_infinite]">
+<iconify-icon className="text-[#49F963] text-lg" icon="solar:lock-password-linear"></iconify-icon>
+<p className="text-xs text-[#49F963]">Encryption keys rotating locally...</p>
+</div>
+</div>
+</div>
+
+<div className="p-4 bg-[#0e0e11] border-t border-zinc-800">
+<div className="relative flex items-center gap-2 bg-zinc-900 border-2 border-zinc-800 focus-within:border-[#8D45F2] rounded-xl px-4 py-3 transition-colors duration-300">
+<iconify-icon className="text-zinc-500 hover:text-white cursor-pointer transition-colors text-xl" icon="solar:add-circle-linear"></iconify-icon>
+<input className="w-full bg-transparent border-none focus:outline-none text-sm text-white placeholder-zinc-600 font-medium h-full" placeholder="Spill the tea (safely)..." type="text"/>
+<button className="p-2 bg-[#8D45F2] hover:bg-[#7b35e0] text-white rounded-lg transition-colors flex items-center justify-center">
+<iconify-icon icon="solar:plain-3-bold-duotone"></iconify-icon>
+</button>
+</div>
+<div className="text-center mt-2">
+<p className="text-[10px] text-zinc-600">Local-only processing active. I can't see what you type.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div className="max-w-5xl mx-auto mt-24">
+<h2 className="text-center text-3xl md:text-4xl text-white mb-12 tracking-tight">Why I'm different</h2>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+<div className="group bg-zinc-900/30 border border-zinc-800 hover:border-[#49F963]/50 rounded-[1.5rem] p-8 transition-all duration-300 hover:-translate-y-1">
+<div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center mb-6 group-hover:bg-[#49F963]/10 transition-colors">
+<iconify-icon className="text-2xl text-zinc-400 group-hover:text-[#49F963] transition-colors" icon="solar:lock-keyhole-minimalistic-linear" strokeWidth="1.5"></iconify-icon>
+</div>
+<h3 className="text-xl text-white font-medium mb-3">E2EE Everything</h3>
+<p className="text-zinc-400 text-sm leading-relaxed">
+                        End-to-end encryption isn't a feature, it's my personality. Only you hold the keys. I'm just here to chat.
+                    </p>
+</div>
+
+<div className="group bg-zinc-900/30 border border-zinc-800 hover:border-[#8D45F2]/50 rounded-[1.5rem] p-8 transition-all duration-300 hover:-translate-y-1 delay-75">
+<div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center mb-6 group-hover:bg-[#8D45F2]/10 transition-colors">
+<iconify-icon className="text-2xl text-zinc-400 group-hover:text-[#8D45F2] transition-colors" icon="solar:cpu-bolt-linear" strokeWidth="1.5"></iconify-icon>
+</div>
+<h3 className="text-xl text-white font-medium mb-3">On-Device Brain</h3>
+<p className="text-zinc-400 text-sm leading-relaxed">
+                        My neural networks run locally on your hardware. No cloud peeking. Your GPU does the talking, not a server farm.
+                    </p>
+</div>
+
+<div className="group bg-zinc-900/30 border border-zinc-800 hover:border-[#49F963]/50 rounded-[1.5rem] p-8 transition-all duration-300 hover:-translate-y-1 delay-150">
+<div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center mb-6 group-hover:bg-[#49F963]/10 transition-colors">
+<iconify-icon className="text-2xl text-zinc-400 group-hover:text-[#49F963] transition-colors" icon="solar:trash-bin-trash-linear" strokeWidth="1.5"></iconify-icon>
+</div>
+<h3 className="text-xl text-white font-medium mb-3">Goldfish Memory</h3>
+<p className="text-zinc-400 text-sm leading-relaxed">
+                        I don't train on your data. I don't sell your data. Honestly? I don't even remember your data once you close the app.
+                    </p>
+</div>
+</div>
+</div>
+
+<div className="max-w-3xl mx-auto mt-32 text-center relative">
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#49F963] opacity-[0.05] blur-[80px] rounded-full -z-10"></div>
+<h2 className="text-4xl md:text-5xl font-medium text-white mb-6 tracking-tight">Ready to go dark?</h2>
+<p className="text-zinc-400 mb-10 text-lg">Download Silo and start chatting with an AI that actually respects boundaries.</p>
+<div className="flex flex-col md:flex-row items-center justify-center gap-4">
+<button className="w-full md:w-auto bg-[#49F963] hover:bg-[#3ce053] text-black font-semibold text-lg px-8 py-4 rounded-full transition-all hover:shadow-[0_0_20px_rgba(73,249,99,0.3)] flex items-center justify-center gap-3">
+<iconify-icon className="text-xl" icon="solar:apple-linear"></iconify-icon>
+<span>Download for iOS</span>
+</button>
+<button className="w-full md:w-auto bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 font-medium text-lg px-8 py-4 rounded-full transition-colors flex items-center justify-center gap-3">
+<iconify-icon className="text-xl" icon="solar:android-linear"></iconify-icon>
+<span>Get Android APK</span>
+</button>
+</div>
+</div>
+
+<footer className="mt-32 border-t border-zinc-800 pt-12 pb-8">
+<div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div className="flex items-center gap-2">
+<iconify-icon className="text-[#49F963] text-xl" icon="solar:shield-keyhole-linear"></iconify-icon>
+<span className="display-font text-xl font-medium tracking-tight text-white">Silo</span>
+</div>
+<div className="flex gap-8 text-sm text-zinc-500">
+<a className="hover:text-[#49F963] transition-colors" href="#">Privacy Policy</a>
+<a className="hover:text-[#49F963] transition-colors" href="#">Terms of Service</a>
+<a className="hover:text-[#49F963] transition-colors" href="#">Source Code</a>
+</div>
+<p className="text-xs text-zinc-600">© 2024 Silo AI Inc. Stay hidden.</p>
+</div>
+</footer>
+</main>
+
+    </>
+  );
+}

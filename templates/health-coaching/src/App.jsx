@@ -1,0 +1,525 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+      // Reviews Data - 10 Elite Testimonials
+      const reviews = [
+          { name: "Michael R.", location: "London", badge: "Lost 15lbs", text: "I kept waiting for the catch. No cardio? Really? But 3 weeks in, my belt is loose and I have abs showing for the first time in years." },
+          { name: "Sarah L.", location: "New York", badge: "Recomp", text: "Finally a system that understands female hormones. I didn't starve myself, yet the fat just melted off. Dr. Julian is a genius." },
+          { name: "David K.", location: "Sydney", badge: "Lost 20lbs", text: "The 24/7 coach is the real deal. I texted at 10 PM wondering about a meal choice and got an instant, helpful reply. Worth 10x the price." },
+          { name: "Jessica M.", location: "Toronto", badge: "Energy Boost", text: "No exhaustion. That's the best part. I have more energy for my kids and I look better than I did in my 20s." },
+          { name: "James P.", location: "Austin", badge: "Lean Muscle", text: "I hate running. This program was made for me. Straight forward biological hacks that actually work." },
+          { name: "Emma W.", location: "Berlin", badge: "Lost 12lbs", text: "I've tried Keto, Paleo, everything. This is the only thing that didn't feel like a 'diet'. It just felt like living healthy." },
+          { name: "Robert T.", location: "Chicago", badge: "Definition", text: "The visual changes in the mirror are insane. My wife asked me what I was taking—I told her 'nothing, just smart biology'." },
+          { name: "Linda H.", location: "Manchester", badge: "Sustainability", text: "Two months in and I haven't tracked a single calorie. This is sustainable for life. Highly recommend." },
+          { name: "Tom B.", location: "Denver", badge: "Lost 18lbs", text: "For $37 this is a steal. The PDF is clear, but the coach access is what makes this an elite product." },
+          { name: "Sophie G.", location: "Paris", badge: "Confidence", text: "I feel lighter, sharper, and more confident. The brain fog is gone too. Complete transformation." }
+      ];
+
+      // Marquee Logic
+      function initMarquee() {
+          const track = document.getElementById('marquee-track');
+          if (!track) return;
+          const allReviews = [...reviews, ...reviews]; // Duplicate for loop
+
+          allReviews.forEach(review => {
+              const card = document.createElement('div');
+              card.className = "w-[320px] md:w-[360px] flex-shrink-0 bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col h-auto hover:shadow-md transition-shadow duration-300 select-none";
+              
+              card.innerHTML = `
+                  <div class="flex items-start justify-between mb-3">
+                      <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 rounded-full bg-[#305F8E] text-white flex items-center justify-center text-lg font-medium">${review.name.charAt(0)}</div>
+                          <div>
+                              <div class="font-semibold text-[#244a70] leading-tight">${review.name}</div>
+                              <div class="text-xs text-gray-500 mt-0.5">${review.location}</div>
+                          </div>
+                      </div>
+                      <div class="flex text-[#8ebb14] gap-0.5">
+                          ${Array(5).fill('<iconify-icon icon="solar:star-bold" class="text-[#8ebb14]"></iconify-icon>').join('')}
+                      </div>
+                  </div>
+                  <p class="text-gray-700 text-sm leading-relaxed mb-4 line-clamp-4">"${review.text}"</p>
+                  <div class="mt-auto">
+                      <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#f0f9ff] text-[10px] font-semibold text-[#305F8E] uppercase tracking-wide">
+                        ${review.badge}
+                      </div>
+                  </div>
+              `;
+              track.appendChild(card);
+          });
+      }
+
+      // Logic Init
+      document.addEventListener('DOMContentLoaded', () => {
+          initMarquee();
+          // Header Scroll
+          const header = document.getElementById('header');
+          window.addEventListener('scroll', () => {
+              if (window.scrollY > 20) {
+                  header.classList.add('shadow-lg');
+              } else {
+                  header.classList.remove('shadow-lg');
+              }
+          });
+
+          // Mobile Menu
+          const mobileBtn = document.getElementById('mobile-menu-btn');
+          const mobileMenu = document.getElementById('mobile-menu');
+          mobileBtn.addEventListener('click', () => {
+              mobileMenu.classList.toggle('hidden');
+          });
+      });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="fixed inset-0 -z-10 h-full w-full bg-white pointer-events-none overflow-hidden">
+<div className="absolute inset-0 bg-[linear-gradient(to_right,#305F8E05_1px,transparent_1px),linear-gradient(to_bottom,#305F8E05_1px,transparent_1px)] bg-[size:6rem_4rem]"></div>
+
+<div className="absolute top-[20%] right-[-10%] h-[800px] w-[800px] rounded-full bg-[#D4FF33]/10 blur-[120px]"></div>
+<div className="absolute bottom-[10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-[#305F8E]/5 blur-[100px]"></div>
+</div>
+
+<header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 bg-white/90 backdrop-blur-md border-b border-gray-100" id="header">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav className="flex items-center justify-between h-14">
+
+<a className="font-bebas text-4xl tracking-tight text-[#305F8E] transition-colors duration-300" href="#" id="header-logo">
+            SMART
+            <span className="text-[#8ebb14]">LEAN</span>
+</a>
+
+<div className="hidden md:flex items-center gap-8">
+<a className="text-xs font-medium uppercase tracking-widest text-gray-600 hover:text-[#305F8E] transition-colors" href="#method">
+              The Method
+            </a>
+<a className="text-xs font-medium uppercase tracking-widest text-gray-600 hover:text-[#305F8E] transition-colors" href="#science">
+              Science
+            </a>
+<a className="text-xs font-medium uppercase tracking-widest text-gray-600 hover:text-[#305F8E] transition-colors" href="#results">
+              Results
+            </a>
+<a className="text-xs font-medium uppercase tracking-widest text-gray-600 hover:text-[#305F8E] transition-colors" href="#guarantee">
+              Guarantee
+            </a>
+</div>
+
+<div className="flex items-center gap-4">
+<a className="hidden md:inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-[#305F8E] bg-[#D4FF33] rounded-lg hover:bg-[#ccee22] transition-transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-lime-400/20" href="https://payhip.com/b/Efm8W">
+              Buy Now
+            </a>
+<button aria-label="Toggle menu" className="md:hidden p-2 text-[#305F8E]" id="mobile-menu-btn">
+<svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<line x1="4" x2="20" y1="12" y2="12"></line>
+<line x1="4" x2="20" y1="6" y2="6"></line>
+<line x1="4" x2="20" y1="18" y2="18"></line>
+</svg>
+</button>
+</div>
+</nav>
+</div>
+
+<div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-100 hidden shadow-xl" id="mobile-menu">
+<div className="flex flex-col p-4 space-y-4">
+<a className="text-lg font-medium text-gray-800 hover:text-[#305F8E]" href="#method">
+            The Method
+          </a>
+<a className="text-lg font-medium text-gray-800 hover:text-[#305F8E]" href="#science">
+            Science
+          </a>
+<a className="text-lg font-medium text-gray-800 hover:text-[#305F8E]" href="#results">
+            Results
+          </a>
+<a className="text-lg font-semibold text-[#305F8E]" href="https://payhip.com/b/Efm8W">
+            Buy Now
+          </a>
+</div>
+</div>
+</header>
+
+<section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white pt-20">
+<div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+<div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#f0f9ff] border border-[#305F8E]/20 mb-8 animate-fade-in-up">
+<span className="relative flex h-3 w-3">
+<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#305F8E] opacity-75"></span>
+<span className="relative inline-flex rounded-full h-3 w-3 bg-[#305F8E]"></span>
+</span>
+<span className="text-sm font-semibold uppercase tracking-widest text-[#305F8E]">
+            🧑‍⚕️ 24/7 Personal Coach Included
+          </span>
+</div>
+<h1 className="font-bebas text-7xl md:text-9xl text-[#244a70] leading-[0.85] tracking-tight mb-8">
+          TRANSFORM
+          <br/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8ebb14] to-[#305F8E]">
+            YOUR BODY
+          </span>
+<br/>
+          NO DIET. NO CARDIO.
+        </h1>
+<p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8 font-light">
+          A revolutionary lean-body system based on biology — tested for 1 full year on 200 people with a <span className="font-semibold text-[#305F8E]">100% success rate</span>. Designed by Dr. Julian.
+        </p>
+
+<div className="flex flex-wrap justify-center gap-x-6 gap-y-3 mb-10 text-sm md:text-base font-medium text-[#244a70]">
+<span className="flex items-center gap-2"><iconify-icon className="text-[#8ebb14] text-xl" icon="solar:check-circle-linear"></iconify-icon> Zero Diet</span>
+<span className="flex items-center gap-2"><iconify-icon className="text-[#8ebb14] text-xl" icon="solar:check-circle-linear"></iconify-icon> Zero Cardio</span>
+<span className="flex items-center gap-2"><iconify-icon className="text-[#8ebb14] text-xl" icon="solar:check-circle-linear"></iconify-icon> Zero Calorie Counting</span>
+<span className="flex items-center gap-2"><iconify-icon className="text-[#8ebb14] text-xl" icon="solar:check-circle-linear"></iconify-icon> Men &amp; Women</span>
+</div>
+<div className="flex flex-col items-center justify-center gap-4">
+<a className="pulse-btn w-full sm:w-auto px-10 py-5 bg-[#D4FF33] text-[#305F8E] text-xl font-bold rounded-lg hover:bg-[#ccee22] transition-all shadow-xl shadow-lime-400/30 uppercase tracking-wide" href="https://payhip.com/b/Efm8W">
+            Buy Now - Start With Coach
+          </a>
+<div className="flex flex-col items-center text-xs text-gray-400 gap-1">
+<span className="flex items-center gap-1"><iconify-icon icon="solar:lock-linear"></iconify-icon> Secure Checkout • Instant Digital Access</span>
+</div>
+</div>
+</div>
+<div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#305F8E]/40 animate-bounce">
+<iconify-icon height="32" icon="solar:arrow-down-linear" width="32"></iconify-icon>
+</div>
+</section>
+
+<section className="md:py-32 pt-24 pb-24 bg-gray-50" id="method">
+<div className="sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pr-4 pl-4">
+<div className="text-center max-w-3xl mx-auto mb-16">
+<span className="text-[#305F8E] font-medium text-xs uppercase tracking-widest mb-3 block">
+            The Biological Advantage
+          </span>
+<h2 className="font-bebas text-6xl text-[#305F8E] mb-6 tracking-tight">
+            Why It Works
+          </h2>
+<p className="text-neutral-500 text-xl font-light">
+            Diets fail biologically. Cardio causes exhaustion and rebound hunger. We use your body's natural mechanisms for elite body recomposition.
+          </p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<div className="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full min-h-[300px] p-8 flex flex-col">
+<div className="w-14 h-14 rounded-lg bg-[#305F8E]/5 border border-[#305F8E]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4FF33] group-hover:border-[#D4FF33] transition-colors relative z-10">
+<iconify-icon className="text-[#305F8E] w-7 h-7" icon="solar:forbidden-circle-linear"></iconify-icon>
+</div>
+<h3 className="font-bebas text-3xl mb-3 text-[#244a70] tracking-wide relative z-10">
+              No Diet Plans
+            </h3>
+<p className="text-gray-500 text-lg leading-relaxed mb-6 font-light relative z-10">
+              Calorie restriction slows metabolism. Our system allows you to eat until satisfied while triggering fat usage.
+            </p>
+</div>
+
+<div className="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full min-h-[300px] p-8 flex flex-col">
+<div className="w-14 h-14 rounded-lg bg-[#305F8E]/5 border border-[#305F8E]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4FF33] group-hover:border-[#D4FF33] transition-colors relative z-10">
+<iconify-icon className="text-[#305F8E] w-7 h-7" icon="solar:heart-pulse-linear"></iconify-icon>
+</div>
+<h3 className="font-bebas text-3xl mb-3 text-[#244a70] tracking-wide relative z-10">
+              No Cardio Required
+            </h3>
+<p className="text-gray-500 text-lg leading-relaxed mb-6 font-light relative z-10">
+              Stop wasting hours running. We focus on hormonal optimization rather than caloric burn for sustainable leanness.
+            </p>
+</div>
+
+<div className="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full min-h-[300px] p-8 flex flex-col">
+<div className="w-14 h-14 rounded-lg bg-[#305F8E]/5 border border-[#305F8E]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4FF33] group-hover:border-[#D4FF33] transition-colors relative z-10">
+<iconify-icon className="text-[#305F8E] w-7 h-7" icon="solar:user-speak-linear"></iconify-icon>
+</div>
+<h3 className="font-bebas text-3xl mb-3 text-[#244a70] tracking-wide relative z-10">
+              24/7 Personal Coach
+            </h3>
+<p className="text-gray-500 text-lg leading-relaxed mb-6 font-light relative z-10">
+              Not a bot. A real human expert available anytime to guide you, answer questions, and ensure your success.
+            </p>
+</div>
+
+<div className="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full min-h-[300px] p-8 flex flex-col">
+<div className="w-14 h-14 rounded-lg bg-[#305F8E]/5 border border-[#305F8E]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4FF33] group-hover:border-[#D4FF33] transition-colors relative z-10">
+<iconify-icon className="text-[#305F8E] w-7 h-7" icon="solar:users-group-two-rounded-linear"></iconify-icon>
+</div>
+<h3 className="font-bebas text-3xl mb-3 text-[#244a70] tracking-wide relative z-10">
+              Men &amp; Women
+            </h3>
+<p className="text-gray-500 text-lg leading-relaxed mb-6 font-light relative z-10">
+              Biological principles that work universally. Whether you want to shred fat or build lean definition.
+            </p>
+</div>
+
+<div className="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full min-h-[300px] p-8 flex flex-col">
+<div className="w-14 h-14 rounded-lg bg-[#305F8E]/5 border border-[#305F8E]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4FF33] group-hover:border-[#D4FF33] transition-colors relative z-10">
+<iconify-icon className="text-[#305F8E] w-7 h-7" icon="solar:test-tube-linear"></iconify-icon>
+</div>
+<h3 className="font-bebas text-3xl mb-3 text-[#244a70] tracking-wide relative z-10">
+              Medical Grade
+            </h3>
+<p className="text-gray-500 text-lg leading-relaxed mb-6 font-light relative z-10">
+              Designed by Dr. Julian. Based on biological intelligence, not fleeting social media trends.
+            </p>
+</div>
+
+<div className="group relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full min-h-[300px] p-8 flex flex-col">
+<div className="w-14 h-14 rounded-lg bg-[#305F8E]/5 border border-[#305F8E]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4FF33] group-hover:border-[#D4FF33] transition-colors relative z-10">
+<iconify-icon className="text-[#305F8E] w-7 h-7" icon="solar:shield-check-linear"></iconify-icon>
+</div>
+<h3 className="font-bebas text-3xl mb-3 text-[#244a70] tracking-wide relative z-10">
+              Risk Free
+            </h3>
+<p className="text-gray-500 text-lg leading-relaxed mb-6 font-light relative z-10">
+              Tested for 1 full year on 200 participants with 100% success rate. Guaranteed results or money back.
+            </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32 bg-[#305F8E] text-white overflow-hidden relative" id="science">
+
+<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<span className="text-[#D4FF33] font-medium text-xs uppercase tracking-widest mb-3 block">
+              Proven By Science
+            </span>
+<h2 className="font-bebas text-6xl text-white mb-6 tracking-tight">
+              Clinical Results
+            </h2>
+<p className="text-blue-100/80 text-xl mb-6 font-light leading-relaxed">
+              This isn't a theory. It's a proven biological protocol. We tested this system for one full year before releasing it to the public.
+            </p>
+<div className="grid grid-cols-2 gap-6 mt-8">
+<div className="p-4 rounded-lg bg-white/5 border border-white/10">
+<div className="text-4xl font-bold text-[#D4FF33] mb-1">200</div>
+<div className="text-sm text-blue-100">Participants Tested</div>
+</div>
+<div className="p-4 rounded-lg bg-white/5 border border-white/10">
+<div className="text-4xl font-bold text-[#D4FF33] mb-1">100%</div>
+<div className="text-sm text-blue-100">Success Rate</div>
+</div>
+<div className="p-4 rounded-lg bg-white/5 border border-white/10">
+<div className="text-4xl font-bold text-[#D4FF33] mb-1">10k+</div>
+<div className="text-sm text-blue-100">Global Sales</div>
+</div>
+<div className="p-4 rounded-lg bg-white/5 border border-white/10">
+<div className="text-4xl font-bold text-[#D4FF33] mb-1">0</div>
+<div className="text-sm text-blue-100">Diets or Cardio Sessions</div>
+</div>
+</div>
+</div>
+<div className="relative">
+
+<div className="relative rounded-2xl border border-white/20 bg-gradient-to-br from-[#244a70] to-[#1e3a5c] p-8 shadow-2xl">
+<div className="absolute top-0 right-0 p-4">
+<span className="px-3 py-1 bg-[#D4FF33] text-[#305F8E] text-xs font-bold rounded-full uppercase">Verified</span>
+</div>
+<div className="flex items-center justify-center py-10">
+
+<div className="flex items-center gap-8 opacity-90">
+<div className="text-center">
+<iconify-icon className="text-white/40 text-8xl" icon="solar:body-shape-linear"></iconify-icon>
+<p className="mt-2 text-sm text-white/40">Before</p>
+</div>
+<iconify-icon className="text-[#D4FF33] text-4xl" icon="solar:arrow-right-linear"></iconify-icon>
+<div className="text-center">
+<iconify-icon className="text-[#D4FF33] text-8xl filter drop-shadow-[0_0_15px_rgba(212,255,51,0.5)]" icon="solar:body-shape-bold"></iconify-icon>
+<p className="mt-2 text-sm text-[#D4FF33] font-bold">After (Lean)</p>
+</div>
+</div>
+</div>
+<blockquote className="text-center text-lg italic text-blue-100 font-light border-t border-white/10 pt-6">
+                    "Real body recomposition — without dieting or cardio. The visuals don't lie."
+                </blockquote>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32 bg-white" id="results">
+<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center mb-16">
+<span className="text-[#305F8E] font-medium text-xs uppercase tracking-widest mb-3 block">
+            What's Included
+          </span>
+<h2 className="font-bebas text-6xl text-[#305F8E] mb-6 tracking-tight">
+            The Complete System
+          </h2>
+</div>
+<div className="relative rounded-2xl p-8 md:p-12 border border-[#305F8E]/20 bg-white shadow-2xl shadow-[#305F8E]/10 overflow-hidden group">
+<div className="absolute top-0 right-0 w-32 h-32 bg-[#D4FF33]/20 rounded-bl-full -mr-8 -mt-8 z-0"></div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
+<div>
+<h3 className="text-3xl font-semibold mb-2 text-[#244a70] tracking-tight">
+                        Smart Lean Strategy
+                    </h3>
+<div className="flex items-baseline gap-2 mb-6">
+<span className="font-bebas text-6xl text-[#305F8E] tracking-tight">$37</span>
+<span className="text-gray-400 line-through text-xl">$197</span>
+</div>
+<p className="text-gray-600 mb-8">
+                        The exact protocol used by Dr. Julian to transform 200+ clients worldwide. Instant digital access.
+                    </p>
+<a className="pulse-btn block w-full text-center py-4 rounded-lg bg-[#D4FF33] hover:bg-[#ccee22] text-[#305F8E] transition-colors font-bold text-lg uppercase shadow-lg shadow-lime-400/20" href="https://payhip.com/b/Efm8W">
+                        Buy Now
+                    </a>
+<p className="text-center text-xs text-gray-400 mt-3">14-Day Money Back Guarantee</p>
+</div>
+<div>
+<h4 className="font-semibold text-[#305F8E] mb-4 uppercase text-sm tracking-widest">You Will Receive:</h4>
+<ul className="space-y-4">
+<li className="flex items-start gap-3 text-gray-700">
+<iconify-icon className="text-[#8ebb14] text-xl shrink-0" icon="solar:check-circle-bold"></iconify-icon>
+<span><strong className="text-[#244a70]">PDF Transformation System:</strong> Step-by-step biological protocol.</span>
+</li>
+<li className="flex items-start gap-3 text-gray-700">
+<iconify-icon className="text-[#8ebb14] text-xl shrink-0" icon="solar:check-circle-bold"></iconify-icon>
+<span><strong className="text-[#244a70]">24/7 Personal Coach:</strong> Real human access via chat.</span>
+</li>
+<li className="flex items-start gap-3 text-gray-700">
+<iconify-icon className="text-[#8ebb14] text-xl shrink-0" icon="solar:check-circle-bold"></iconify-icon>
+<span><strong className="text-[#244a70]">No Equipment Needed:</strong> Works at home or anywhere.</span>
+</li>
+<li className="flex items-start gap-3 text-gray-700">
+<iconify-icon className="text-[#8ebb14] text-xl shrink-0" icon="solar:check-circle-bold"></iconify-icon>
+<span><strong className="text-[#244a70]">Lifetime Access:</strong> One time payment, yours forever.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-12 bg-gray-50 border-y border-gray-100" id="reviews">
+<div className="w-full pt-6 pb-6">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10">
+<span className="text-[#305F8E] font-medium text-xs uppercase tracking-widest mb-3 block">
+            Testimonials
+          </span>
+<h2 className="font-bebas text-5xl text-[#305F8E] tracking-tight">
+            Real Stories (Verified)
+          </h2>
+</div>
+<div className="relative w-full overflow-hidden mask-linear">
+<div className="flex gap-6 w-max animate-marquee px-4" id="marquee-track" style={{animationDuration: '80s'}}>
+
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32 bg-white" id="guarantee">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+<div>
+<span className="text-[#305F8E] font-medium text-xs uppercase tracking-widest mb-3 block">
+              Common Questions
+            </span>
+<h2 className="font-bebas text-6xl text-[#305F8E] mb-6 tracking-tight">
+              Risk Free Trial
+            </h2>
+<div className="space-y-6">
+<div className="border-b border-gray-100 pb-4">
+<h4 className="font-semibold text-[#244a70] mb-2">Does this really work without dieting?</h4>
+<p className="text-gray-500 font-light">Yes. By optimizing biology instead of restricting calories, your body shifts into a fat-burning state naturally without hunger.</p>
+</div>
+<div className="border-b border-gray-100 pb-4">
+<h4 className="font-semibold text-[#244a70] mb-2">Is it suitable for beginners?</h4>
+<p className="text-gray-500 font-light">Absolutely. There is no intense cardio or heavy lifting required. It is designed for real life.</p>
+</div>
+<div className="border-b border-gray-100 pb-4">
+<h4 className="font-semibold text-[#244a70] mb-2">How fast will I see results?</h4>
+<p className="text-gray-500 font-light">Most participants report feeling lighter and more energetic within 3 days, with visible lean changes by day 14.</p>
+</div>
+</div>
+<div className="mt-10 p-6 bg-[#f0f9ff] rounded-xl border border-[#305F8E]/20 flex gap-4 items-start">
+<iconify-icon className="text-[#305F8E] text-4xl shrink-0" icon="solar:shield-check-bold"></iconify-icon>
+<div>
+<h4 className="font-bold text-[#244a70] text-lg">14-Day Money Back Guarantee</h4>
+<p className="text-sm text-gray-600 mt-1">If you don't feel a real difference, get a full refund. No questions asked.</p>
+</div>
+</div>
+</div>
+
+<div className="bg-[#305F8E] p-8 md:p-12 rounded-xl border border-[#305F8E] shadow-2xl text-white flex flex-col justify-center text-center relative overflow-hidden">
+<div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_50%,transparent_75%,transparent_100%)] animate-[spin_60s_linear_infinite]"></div>
+<span className="relative z-10 inline-block mx-auto px-3 py-1 bg-[#D4FF33] text-[#305F8E] text-xs font-bold rounded-full uppercase mb-6 animate-pulse">Limited Availability</span>
+<h3 className="relative z-10 font-bebas text-5xl md:text-6xl mb-4">
+                Start Your Transformation
+             </h3>
+<p className="relative z-10 text-blue-100 text-lg mb-8 font-light">
+                Join 10,000+ others. Get the system and your personal coach today.
+             </p>
+<a className="relative z-10 w-full py-5 bg-[#D4FF33] text-[#305F8E] font-bold rounded-lg hover:bg-[#ccee22] transition-transform hover:scale-[1.02] shadow-xl shadow-black/20 text-xl uppercase tracking-wide" href="https://payhip.com/b/Efm8W">
+                Buy Now - $37
+             </a>
+<p className="relative z-10 mt-4 text-xs text-blue-200/60">
+                Secure 256-bit SSL Encrypted Payment
+             </p>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="bg-white border-t border-gray-100 text-gray-600" id="contact">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div className="col-span-1">
+<a className="font-bebas text-4xl tracking-tight text-[#305F8E] transition-colors duration-300 block mb-6" href="#">
+              SMART
+              <span className="text-[#8ebb14]">LEAN</span>
+</a>
+<p className="max-w-sm mb-6 text-sm font-light">
+              The Smart Lean Strategy is a registered trademark of Dr. Julian's Protocol. Elite body transformation for the modern world.
+            </p>
+</div>
+<div>
+<h4 className="text-[#305F8E] uppercase tracking-widest text-xs font-semibold mb-6">
+              Legal
+            </h4>
+<ul className="space-y-2 text-sm">
+<li><a className="hover:text-[#305F8E]" href="#">Privacy Policy</a></li>
+<li><a className="hover:text-[#305F8E]" href="#">Terms of Service</a></li>
+<li><a className="hover:text-[#305F8E]" href="#">Disclaimer</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-[#305F8E] uppercase tracking-widest text-xs font-semibold mb-6">
+              Contact
+            </h4>
+<ul className="space-y-4 text-sm font-light">
+<li className="flex items-center gap-3">
+<iconify-icon className="text-[#305F8E]" icon="solar:letter-linear"></iconify-icon>
+<a href="mailto:support@smartlean.com">support@smartlean.com</a>
+</li>
+<li className="flex items-center gap-3">
+<span className="px-2 py-1 bg-[#f0f9ff] text-[#305F8E] text-xs font-bold rounded">Coach Response: &lt; 15 Mins</span>
+</li>
+</ul>
+</div>
+</div>
+<div className="border-t border-gray-100 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p className="text-xs text-gray-400">
+            © 2024 The Smart Lean Strategy. All rights reserved. Results may vary.
+          </p>
+</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

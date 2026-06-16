@@ -1,0 +1,14 @@
+# Fractional CTO & CPO Services Landing Page Template
+
+A sleek French-language landing page template for showcasing fractional CTO & CPO executive services to seed-stage startups, ready to customize for your brand.
+
+## Project Details
+- **Slug:** `fractional-cpo-12`
+- **Views:** 31
+- **Tags:** Landing Page, Business, Services, Technology, Brand, Dark, Clean, Gradient, Minimal, Large Type
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

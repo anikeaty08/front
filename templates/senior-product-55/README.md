@@ -1,0 +1,14 @@
+# Senior Product Designer Portfolio Template
+
+A sleek portfolio template for senior product designers to showcase case studies, experience, and tools with a dark, minimal aesthetic.
+
+## Project Details
+- **Slug:** `senior-product-55`
+- **Views:** 15
+- **Tags:** Landing Page, Portfolio, Art & Design, Brand, Clean, Dark, Minimal, Large Type, Technology, Resume
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

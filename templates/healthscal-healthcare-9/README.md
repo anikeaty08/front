@@ -1,0 +1,14 @@
+# Health Analytics Dashboard UI Template
+
+A reusable HealthScale-inspired analytics dashboard template for healthcare platforms, featuring multi-tenant management, clinical insights, and system monitoring UI.
+
+## Project Details
+- **Slug:** `healthscal-healthcare-9`
+- **Views:** 105
+- **Tags:** Health, Technology, Landing Page, Brand, Clean, Minimal, Dashboard, Healthcare Analytics, Admin Panel, Multi-tenant
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

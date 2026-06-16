@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+*.log
+templates_metadata_cache.json
+similar_arcade_templates.json
+all_scraped_projects.json

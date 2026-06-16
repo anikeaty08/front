@@ -1,0 +1,14 @@
+# Fitness Performance Landing Page Template
+
+A dark, minimalist landing page template for selling a 21-day performance protocol or training program, optimized for high-intent fitness audiences.
+
+## Project Details
+- **Slug:** `21-day-challenger`
+- **Views:** 107
+- **Tags:** Landing Page, Health, Brand, Clean, Dark, Minimal, Large Type, Fitness, Performance, Training Program
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

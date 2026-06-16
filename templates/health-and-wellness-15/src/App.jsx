@@ -1,0 +1,161 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="py-6 px-6 md:px-12 flex justify-start items-center max-w-screen-xl mx-auto">
+<div className="text-xl font-semibold tracking-tighter text-[#6B97C4]">
+            ICFM
+        </div>
+</header>
+
+<section className="py-16 md:py-32 px-6 md:px-12 max-w-screen-xl mx-auto">
+<div className="max-w-3xl">
+<h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-tight mb-6">
+                You Don't Have to Be an Athlete to Get Treated Like One.
+            </h1>
+<p className="text-lg md:text-xl text-gray-500 mb-10 leading-relaxed">
+                Dr. Kyle at Integrative Chiropractic in Gretna, NE helps you move better, feel better, and get back to the life you actually want to live. No long treatment plans. No unnecessary visits. Just real results.
+            </p>
+<a className="inline-flex items-center justify-center bg-[#6B97C4] text-white px-8 py-4 rounded-full text-lg font-medium transition-transform hover:scale-105" href="#">
+                Click Here to Book Your Consultation
+            </a>
+</div>
+</section>
+
+<section className="py-12 md:py-20 px-6 bg-white">
+<div className="max-w-screen-lg mx-auto text-center">
+<span className="block text-xs font-semibold tracking-widest text-gray-400 uppercase mb-4">Watch This First</span>
+<div className="aspect-video w-full bg-gray-100 rounded-2xl flex items-center justify-center border border-gray-200 overflow-hidden shadow-sm">
+<iconify-icon className="text-6xl text-gray-300" icon="solar:play-circle-linear" strokeWidth="1.5"></iconify-icon>
+</div>
+<p className="mt-6 text-gray-400 italic text-sm">
+                Watch to see how patients in Gretna are getting out of pain faster than they expected.
+            </p>
+</div>
+</section>
+
+<section className="py-20 md:py-32 px-6 bg-white border-t border-gray-50">
+<div className="max-w-2xl mx-auto text-center">
+<span className="block text-xs font-semibold tracking-widest text-[#6B97C4] uppercase mb-4">What We Do</span>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-12">Pain Relief That Actually Lasts.</h2>
+<div className="space-y-6 text-base md:text-lg text-gray-600 leading-relaxed">
+<p>Dr. Kyle doesn't just treat the symptom.</p>
+<p>He finds the root cause of your pain and builds a plan around you.</p>
+<p className="font-medium text-black">Spinal adjustments. Dry needling. Soft tissue therapy. Rehab exercises.</p>
+<p>All of it personalized. None of it cookie-cutter.</p>
+<p>He's a Certified McKenzie Method Practitioner and a Certified Chiropractic Sports Physician.</p>
+<p>That's a pretty rare combo in the Omaha and Gretna area.</p>
+<p className="text-black font-medium">You get sports-medicine-level care... even if you've never played a sport in your life.</p>
+</div>
+</div>
+</section>
+
+<section className="py-20 md:py-32 px-6 bg-[#F5F5F5]">
+<div className="max-w-screen-lg mx-auto text-center">
+<span className="block text-xs font-semibold tracking-widest text-[#6B97C4] uppercase mb-4">We Can Help With</span>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-8">Sound Familiar?</h2>
+<div className="max-w-3xl mx-auto text-lg md:text-xl text-gray-600 leading-relaxed">
+                Back pain and neck pain. Sciatica. Headaches. Hip and shoulder issues. Sports injuries. Post-surgery recovery. Plantar fasciitis. Herniated discs.
+            </div>
+<p className="mt-8 text-gray-500">
+                If you've been dealing with pain that just won't go away... this is the place.
+            </p>
+</div>
+</section>
+
+<section className="py-20 md:py-32 px-6 bg-white">
+<div className="max-w-screen-md mx-auto text-center">
+<span className="block text-xs font-semibold tracking-widest text-[#6B97C4] uppercase mb-4">What Patients Are Saying</span>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-16">Real People. Real Results.</h2>
+<div className="space-y-8 text-left">
+
+<div className="bg-[#F5F5F5] p-8 rounded-3xl border border-gray-100">
+<p className="text-gray-700 text-lg mb-6 leading-relaxed">
+                        "After being down in the back for several weeks, Dr. Kyle had me on my feet and out of pain in just a few visits. Dry needling and adjustments worked great. He sent me home with a couple exercises and followed up with me that evening to see how I was doing."
+                    </p>
+<span className="text-xs font-semibold tracking-widest uppercase text-gray-400">— Kelly</span>
+</div>
+
+<div className="bg-[#F5F5F5] p-8 rounded-3xl border border-gray-100">
+<p className="text-gray-700 text-lg mb-6 leading-relaxed">
+                        "He treats with the goal of resolving issues and not constant ongoing visits. After just a few sessions I noticed a significant improvement in my posture and a major reduction in my neck pain."
+                    </p>
+<span className="text-xs font-semibold tracking-widest uppercase text-gray-400">— Julie</span>
+</div>
+
+<div className="bg-[#F5F5F5] p-8 rounded-3xl border border-gray-100">
+<p className="text-gray-700 text-lg mb-6 leading-relaxed">
+                        "Thanks to Kyle's expertise in dry needling, I bounced back in half the time I expected. His treatment not only relieved my pain but helped me regain strength and mobility quickly."
+                    </p>
+<span className="text-xs font-semibold tracking-widest uppercase text-gray-400">— Luke</span>
+</div>
+</div>
+<div className="mt-12 flex items-center justify-center gap-2 text-gray-400 text-sm">
+<iconify-icon className="text-[#6B97C4]" icon="solar:verified-check-linear" strokeWidth="1.5"></iconify-icon>
+                100% recommendation rate from verified patients.
+            </div>
+</div>
+</section>
+
+<section className="py-20 md:py-32 px-6 bg-[#F5F5F5]">
+<div className="max-w-screen-lg mx-auto text-center">
+<span className="block text-xs font-semibold tracking-widest text-[#6B97C4] uppercase mb-4">Patient Stories</span>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-12">See It For Yourself.</h2>
+<div className="aspect-video w-full bg-white rounded-2xl flex items-center justify-center border border-gray-200 shadow-sm overflow-hidden">
+<iconify-icon className="text-6xl text-gray-200" icon="solar:play-linear" strokeWidth="1.5"></iconify-icon>
+</div>
+<p className="mt-6 text-gray-400 italic text-sm">
+                Real patients. Real outcomes. No scripts.
+            </p>
+</div>
+</section>
+
+<section className="py-24 md:py-40 px-6 bg-[#6B97C4] text-white text-center">
+<div className="max-w-3xl mx-auto">
+<h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-6">Ready to Stop Living With Pain?</h2>
+<p className="text-lg md:text-xl mb-12 opacity-90">
+                Book a free consultation with Dr. Kyle. No pressure. No long-term commitment. Just a real conversation about what's going on and how we can help.
+            </p>
+<a className="inline-block bg-white text-[#6B97C4] px-10 py-5 rounded-full text-xl font-semibold mb-8 transition-all hover:bg-gray-50 shadow-lg" href="#">
+                Click Here to Book Your Consultation
+            </a>
+<div className="text-sm space-y-1 opacity-80 font-light">
+<p>Serving Gretna, Omaha, and Elkhorn, NE.</p>
+<p>(402) 769-6824</p>
+</div>
+</div>
+</section>
+
+<footer className="py-16 px-6 bg-white border-t border-gray-100 text-center">
+<div className="max-w-screen-xl mx-auto">
+<div className="text-lg font-semibold tracking-tighter text-[#6B97C4] mb-8">
+                ICFM
+            </div>
+<div className="text-xs text-gray-400 space-y-2 uppercase tracking-widest font-medium">
+<p>Integrative Chiropractic &amp; Functional Medicine</p>
+<p>11922 Standing Stone Drive STE 200, Gretna, NE 68028</p>
+<p>doctors@integrativegretna.com</p>
+<p>(402) 769-6624</p>
+</div>
+</div>
+</footer>
+
+    </>
+  );
+}

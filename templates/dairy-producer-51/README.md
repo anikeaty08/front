@@ -1,0 +1,14 @@
+# Dairy Agribusiness Landing Page Template
+
+A modern landing page template for dairy and agribusiness brands to showcase production, farms, and feed innovations with immersive visuals and stats.
+
+## Project Details
+- **Slug:** `dairy-producer-51`
+- **Views:** 81
+- **Tags:** Landing Page, Business, Brand, Clean, Large Type, Minimal, Gradient, Technology
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

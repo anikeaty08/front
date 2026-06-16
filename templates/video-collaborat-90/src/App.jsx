@@ -1,0 +1,560 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('menu-btn');
+            menu.classList.toggle('open');
+            // Toggle opacity/visiblity logic handled by CSS classes for animation
+        }
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<nav className="fixed top-0 left-0 right-0 z-[100] transition-all duration-300 group/nav hover:bg-[#0b1221] hover:shadow-xl bg-[#0b1221]/80 backdrop-blur-md border-b border-white/5">
+<div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
+<div className="flex items-center justify-between h-[72px]">
+
+<div className="flex items-center gap-10">
+<a className="flex items-center gap-2 text-[22px] font-bold tracking-tight text-white pb-1 focus:outline-none" href="#">
+<div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+<span className="iconify" data-icon="lucide:plus" data-width="20"></span>
+</div>
+                        CareFinder
+                    </a>
+
+<div className="hidden xl:flex items-center h-full">
+<ul className="flex items-center gap-1 h-full">
+<li className="group h-full flex items-center">
+<button className="flex items-center gap-1.5 text-[15px] font-medium text-slate-300 group-hover:text-white px-3 py-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none">
+                                    Find Doctors <span className="iconify group-hover:rotate-180 transition-transform duration-300" data-icon="lucide:chevron-down" data-width="12"></span>
+</button>
+
+<div className="mega-menu invisible opacity-0 -translate-y-2 absolute top-[72px] left-0 w-full bg-white shadow-2xl border-t border-slate-100 transition-all duration-300 ease-out cursor-default">
+<div className="max-w-[1400px] mx-auto p-8 grid grid-cols-12 gap-8">
+
+<div className="col-span-3 border-r border-slate-100 pr-8">
+<div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Top Rated</div>
+<a className="block p-4 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors group/item" href="#">
+<div className="flex items-center gap-2 mb-2">
+<span className="iconify text-blue-600" data-icon="lucide:star" data-width="18"></span>
+<span className="font-semibold text-slate-900">Best Specialists</span>
+</div>
+<p className="text-sm text-slate-600 leading-snug">Browse verified patient reviews.</p>
+</a>
+</div>
+
+<div className="col-span-3">
+<div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-3">Specialties</div>
+<ul className="space-y-1">
+<li><a className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors" href="#"><span className="iconify text-blue-600" data-icon="lucide:stethoscope" data-width="18"></span><span className="text-sm font-semibold text-slate-900">Primary Care</span></a></li>
+<li><a className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors" href="#"><span className="iconify text-pink-600" data-icon="lucide:heart" data-width="18"></span><span className="text-sm font-semibold text-slate-900">Cardiology</span></a></li>
+<li><a className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors" href="#"><span className="iconify text-teal-600" data-icon="lucide:smile" data-width="18"></span><span className="text-sm font-semibold text-slate-900">Dentistry</span></a></li>
+</ul>
+</div>
+
+<div className="col-span-3">
+<div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-3">Services</div>
+<ul className="space-y-1">
+<li><a className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors" href="#"><span className="iconify text-orange-600" data-icon="lucide:video" data-width="18"></span><span className="text-sm font-semibold text-slate-900">Telehealth</span></a></li>
+<li><a className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors" href="#"><span className="iconify text-indigo-600" data-icon="lucide:activity" data-width="18"></span><span className="text-sm font-semibold text-slate-900">Urgent Care</span></a></li>
+<li><a className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors" href="#"><span className="iconify text-green-600" data-icon="lucide:pill" data-width="18"></span><span className="text-sm font-semibold text-slate-900">Pharmacy</span></a></li>
+</ul>
+</div>
+
+<div className="col-span-3 bg-slate-50 -my-8 -mr-8 p-8 border-l border-slate-100">
+<div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Featured</div>
+<div className="h-32 bg-slate-200 rounded-lg mb-3 overflow-hidden relative group/img cursor-pointer">
+<img className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500" src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&amp;fit=crop&amp;w=400&amp;q=80"/>
+<div className="absolute inset-0 bg-black/20 group-hover/img:bg-black/10 transition-colors"></div>
+<div className="absolute bottom-2 left-2 text-white font-semibold text-sm">24/7 Virtual Care</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li className="group h-full flex items-center">
+<button className="flex items-center gap-1.5 text-[15px] font-medium text-slate-300 group-hover:text-white px-3 py-2 rounded-full hover:bg-white/10 transition-colors focus:outline-none">Insurance</button>
+</li>
+<li className="h-full flex items-center">
+<a className="text-[15px] font-medium text-slate-300 hover:text-white px-3 py-2 rounded-full hover:bg-white/10 transition-colors" href="#">Patients</a>
+</li>
+<li className="h-full flex items-center">
+<a className="text-[15px] font-medium text-slate-300 hover:text-white px-3 py-2 rounded-full hover:bg-white/10 transition-colors" href="#">Resources</a>
+</li>
+</ul>
+</div>
+</div>
+
+<div className="flex items-center gap-3">
+<a className="hidden sm:inline-flex items-center justify-center text-[15px] font-semibold text-slate-200 hover:text-white px-4 py-2 transition-all" href="#">Log In</a>
+<a className="inline-flex items-center justify-center text-[14px] font-semibold text-white bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-full transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-600/30" href="#">
+                        Book Now
+                    </a>
+<button className="xl:hidden text-white ml-1 p-2 hover:bg-white/10 rounded-full transition-colors" id="menu-btn" onclick="toggleMenu()">
+<span className="iconify" data-icon="lucide:menu" data-width="24"></span>
+</button>
+</div>
+</div>
+</div>
+
+<div className="xl:hidden bg-[#0b1221] border-b border-white/10" id="mobile-menu">
+<div className="px-6 py-4 space-y-4">
+<div className="space-y-1">
+<a className="block text-slate-300 hover:text-white py-2 font-medium" href="#">Find Doctors</a>
+<div className="pl-4 space-y-2 border-l border-white/10 ml-1">
+<a className="block text-sm text-slate-400 hover:text-blue-400 py-1" href="#">Primary Care</a>
+<a className="block text-sm text-slate-400 hover:text-blue-400 py-1" href="#">Specialists</a>
+<a className="block text-sm text-slate-400 hover:text-blue-400 py-1" href="#">Telehealth</a>
+</div>
+</div>
+<a className="block text-slate-300 hover:text-white py-2 font-medium" href="#">Insurance</a>
+<a className="block text-slate-300 hover:text-white py-2 font-medium" href="#">Patients</a>
+<a className="block text-slate-300 hover:text-white py-2 font-medium" href="#">For Doctors</a>
+<div className="pt-4 border-t border-white/10 flex flex-col gap-3">
+<button className="w-full py-3 rounded-lg border border-white/10 text-white font-medium hover:bg-white/5">Sign In</button>
+</div>
+</div>
+</div>
+</nav>
+
+<div className="hero-gradient relative w-full text-white min-h-[110vh] flex flex-col overflow-hidden">
+<main className="flex-grow flex flex-col pt-32 lg:pt-40 pb-12 relative z-10">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+<div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+
+<div className="text-center lg:text-left">
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs font-semibold uppercase tracking-wider mb-6">
+<span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> New: AI Symptom Checker
+                        </div>
+<h1 className="text-5xl lg:text-7xl font-semibold text-white tracking-tight mb-6 leading-[1.1]">
+                            Healthcare that <br/> revolves around <span className="text-blue-400">you</span>
+</h1>
+<p className="text-lg text-blue-100/80 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-10 font-normal">
+                            Find top-rated doctors, book instant appointments, and manage your health history—all from one secure platform.
+                        </p>
+
+<div className="bg-white p-2 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-2 max-w-2xl mx-auto lg:mx-0">
+
+<div className="flex-1 relative group">
+<div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+<span className="iconify" data-icon="lucide:search" data-width="20"></span>
+</div>
+<input className="w-full h-12 pl-12 pr-4 rounded-xl bg-slate-50 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900 placeholder:text-slate-500 text-sm font-medium outline-none transition-all" placeholder="Condition, doctor, or specialty" type="text"/>
+</div>
+
+<div className="flex-1 relative group md:border-l md:border-slate-100 md:pl-2">
+<div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400">
+<span className="iconify" data-icon="lucide:map-pin" data-width="20"></span>
+</div>
+<input className="w-full h-12 pl-12 pr-4 rounded-xl bg-slate-50 md:bg-transparent border-transparent focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900 placeholder:text-slate-500 text-sm font-medium outline-none transition-all" placeholder="New York, NY" type="text"/>
+</div>
+<button className="h-12 px-8 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                                Search
+                            </button>
+</div>
+<div className="mt-6 flex flex-wrap gap-3 justify-center lg:justify-start text-sm text-blue-200/60">
+<span>Popular:</span>
+<a className="hover:text-white underline decoration-blue-500/50 underline-offset-4" href="#">Dermatologist</a>
+<a className="hover:text-white underline decoration-blue-500/50 underline-offset-4" href="#">Primary Care</a>
+<a className="hover:text-white underline decoration-blue-500/50 underline-offset-4" href="#">Therapist</a>
+</div>
+</div>
+
+<div className="hidden lg:block relative h-[600px] w-full">
+
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[100px] rounded-full pointer-events-none"></div>
+
+<div className="absolute inset-0 flex items-center justify-center">
+<div className="grid grid-cols-2 gap-6 rotate-[-12deg] scale-[0.85] hover:scale-[0.9] hover:rotate-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]">
+
+<div className="w-64 h-80 bg-slate-800 rounded-2xl border border-white/10 overflow-hidden relative shadow-2xl translate-y-12">
+<img className="w-full h-full object-cover opacity-80" src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&amp;fit=crop&amp;w=400&amp;q=80"/>
+<div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
+<div className="text-white font-semibold">Dr. Sarah Smith</div>
+<div className="text-xs text-blue-300">Available Today</div>
+</div>
+<div className="absolute top-3 right-3 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Online</div>
+</div>
+
+<div className="w-64 h-80 bg-blue-600 rounded-2xl border border-white/10 p-5 flex flex-col justify-between shadow-2xl relative overflow-hidden group">
+<div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-400/30 rounded-full blur-2xl"></div>
+<div>
+<div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mb-4"><span className="iconify text-white" data-icon="lucide:calendar" data-width="20"></span></div>
+<div className="text-2xl font-bold text-white mb-1">Oct 24</div>
+<div className="text-blue-100 text-sm">Upcoming Checkup</div>
+</div>
+<div className="space-y-2">
+<div className="h-2 bg-white/20 rounded w-full"></div>
+<div className="h-2 bg-white/20 rounded w-2/3"></div>
+</div>
+</div>
+
+<div className="w-64 h-80 bg-white rounded-2xl border border-white/10 p-4 shadow-2xl -translate-y-8 flex flex-col">
+<div className="flex items-center gap-3 mb-4">
+<div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-blue-600">
+<span className="iconify" data-icon="lucide:message-square" data-width="20"></span>
+</div>
+<div>
+<div className="text-xs font-bold text-slate-900">Dr. James</div>
+<div className="text-[10px] text-slate-500">Cardiologist</div>
+</div>
+</div>
+<div className="flex-1 bg-slate-50 rounded-xl p-3 space-y-3">
+<div className="bg-white p-2 rounded-lg text-xs text-slate-600 shadow-sm">Your test results look great! Keep up the good work.</div>
+<div className="bg-blue-600 text-white p-2 rounded-lg text-xs self-end ml-auto w-fit shadow-sm">Thanks doctor!</div>
+</div>
+<div className="mt-3">
+<div className="h-8 bg-slate-100 rounded-lg w-full"></div>
+</div>
+</div>
+
+<div className="w-64 h-80 bg-slate-900 rounded-2xl border border-white/10 overflow-hidden relative shadow-2xl">
+<img className="w-full h-full object-cover opacity-60" src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&amp;fit=crop&amp;w=400&amp;q=80"/>
+<div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+<div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center mb-3">
+<span className="iconify text-white" data-icon="lucide:play" data-width="20"></span>
+</div>
+<div className="font-semibold text-white">How it works</div>
+<div className="text-xs text-slate-300 mt-1">Watch 1 min video</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="lg:hidden w-full overflow-x-auto hide-scroll px-6 pb-8">
+<div className="flex gap-4 min-w-max">
+<div className="w-64 h-40 bg-slate-800 rounded-xl relative overflow-hidden border border-white/10 p-4">
+<div className="flex items-start justify-between mb-8">
+<div className="bg-blue-600/20 p-2 rounded-lg"><span className="iconify text-blue-400" data-icon="lucide:video" data-width="20"></span></div>
+<span className="text-xs font-bold text-green-400 bg-green-400/10 px-2 py-1 rounded">Active</span>
+</div>
+<div className="text-white font-semibold">Telehealth Visit</div>
+<div className="text-xs text-slate-400">Connect in seconds</div>
+</div>
+<div className="w-64 h-40 bg-white rounded-xl relative overflow-hidden border border-white/10 p-4">
+<div className="flex items-start justify-between mb-8">
+<div className="bg-slate-100 p-2 rounded-lg"><span className="iconify text-slate-900" data-icon="lucide:search" data-width="20"></span></div>
+</div>
+<div className="text-slate-900 font-semibold">Find Specialists</div>
+<div className="text-xs text-slate-500">Reviews &amp; Ratings</div>
+</div>
+<div className="w-64 h-40 bg-[#0e2a85] rounded-xl relative overflow-hidden border border-white/10 p-4">
+<div className="flex items-start justify-between mb-8">
+<div className="bg-white/10 p-2 rounded-lg"><span className="iconify text-white" data-icon="lucide:pill" data-width="20"></span></div>
+</div>
+<div className="text-white font-semibold">Prescriptions</div>
+<div className="text-xs text-blue-200">Delivery included</div>
+</div>
+</div>
+</div>
+
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-auto">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/10 pt-8">
+<div>
+<div className="text-3xl font-bold text-white mb-1">10k+</div>
+<div className="text-sm text-blue-200/60 font-medium">Verified Doctors</div>
+</div>
+<div>
+<div className="text-3xl font-bold text-white mb-1">1M+</div>
+<div className="text-sm text-blue-200/60 font-medium">Monthly Patients</div>
+</div>
+<div>
+<div className="text-3xl font-bold text-white mb-1">98%</div>
+<div className="text-sm text-blue-200/60 font-medium">Satisfaction Rate</div>
+</div>
+<div>
+<div className="text-3xl font-bold text-white mb-1">24/7</div>
+<div className="text-sm text-blue-200/60 font-medium">Support Available</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<section className="border-b border-slate-100 py-12 bg-slate-50">
+<div className="max-w-7xl mx-auto px-4 text-center">
+<p className="text-xs font-bold text-slate-400 mb-8 uppercase tracking-widest">Trusted by leading insurance providers</p>
+<div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+
+<div className="flex items-center gap-2 font-bold text-xl text-slate-800"><span className="iconify text-blue-600" data-icon="lucide:shield" data-width="24"></span> Aetna</div>
+<div className="flex items-center gap-2 font-bold text-xl text-slate-800"><span className="iconify text-blue-600" data-icon="lucide:cross" data-width="24"></span> BlueCross</div>
+<div className="flex items-center gap-2 font-bold text-xl text-slate-800"><span className="iconify text-blue-600" data-icon="lucide:heart" data-width="24"></span> Cigna</div>
+<div className="flex items-center gap-2 font-bold text-xl text-slate-800"><span className="iconify text-blue-600" data-icon="lucide:umbrella" data-width="24"></span> UnitedHealth</div>
+<div className="flex items-center gap-2 font-bold text-xl text-slate-800"><span className="iconify text-blue-600" data-icon="lucide:activity" data-width="24"></span> Humana</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-white">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center max-w-2xl mx-auto mb-20">
+<h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">Simple, seamless healthcare</h2>
+<p className="text-slate-500 text-lg">Get the care you need in three easy steps.</p>
+</div>
+<div className="grid md:grid-cols-3 gap-12 relative">
+
+<div className="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50 z-0"></div>
+
+<div className="relative z-10 flex flex-col items-center text-center group">
+<div className="w-24 h-24 bg-white border border-slate-100 shadow-xl shadow-slate-200/50 rounded-2xl flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300">
+<span className="iconify text-blue-600" data-icon="lucide:search" data-width="32"></span>
+</div>
+<h3 className="text-xl font-semibold text-slate-900 mb-3">1. Search</h3>
+<p className="text-slate-500 leading-relaxed">Browse by specialty, location, or insurance to find the perfect match for your needs.</p>
+</div>
+
+<div className="relative z-10 flex flex-col items-center text-center group">
+<div className="w-24 h-24 bg-white border border-slate-100 shadow-xl shadow-slate-200/50 rounded-2xl flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300">
+<span className="iconify text-blue-600" data-icon="lucide:calendar-check" data-width="32"></span>
+</div>
+<h3 className="text-xl font-semibold text-slate-900 mb-3">2. Book</h3>
+<p className="text-slate-500 leading-relaxed">View real-time availability and book an appointment instantly online.</p>
+</div>
+
+<div className="relative z-10 flex flex-col items-center text-center group">
+<div className="w-24 h-24 bg-white border border-slate-100 shadow-xl shadow-slate-200/50 rounded-2xl flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300">
+<span className="iconify text-blue-600" data-icon="lucide:video" data-width="32"></span>
+</div>
+<h3 className="text-xl font-semibold text-slate-900 mb-3">3. Meet</h3>
+<p className="text-slate-500 leading-relaxed">Connect with your doctor in-person or via high-quality video call.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-slate-50">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="flex flex-col sm:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-2">Top-Rated Specialists Near You</h2>
+<p className="text-slate-500">Book highly rated doctors with immediate availability.</p>
+</div>
+<a className="text-blue-600 font-semibold hover:text-blue-700 flex items-center gap-1 group" href="#">
+                    View all doctors <span className="iconify group-hover:translate-x-1 transition-transform" data-icon="lucide:arrow-right" data-width="18"></span>
+</a>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer">
+<div className="flex items-start gap-4 mb-4">
+<img className="w-16 h-16 rounded-full object-cover border-2 border-slate-50" src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&amp;fit=crop&amp;w=200&amp;q=80"/>
+<div>
+<h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Dr. Emily Chen</h3>
+<p className="text-sm text-slate-500 mb-1">Dermatologist • 12 Yrs Exp</p>
+<div className="flex items-center gap-1 text-xs font-semibold">
+<span className="iconify text-yellow-400" data-icon="lucide:star" data-width="14"></span>
+<span>4.9</span>
+<span className="text-slate-400 font-normal">(120 reviews)</span>
+</div>
+</div>
+</div>
+<div className="flex items-center gap-2 mb-6">
+<span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Available Today</span>
+<span className="bg-slate-100 text-slate-600 text-xs font-medium px-2 py-1 rounded flex items-center gap-1"><span className="iconify" data-icon="lucide:video" data-width="12"></span> Video</span>
+</div>
+<div className="grid grid-cols-3 gap-2 text-center">
+<button className="py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:border-blue-600 hover:text-blue-600 transition-colors">10:00 AM</button>
+<button className="py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:border-blue-600 hover:text-blue-600 transition-colors">1:30 PM</button>
+<button className="py-2 rounded-lg bg-blue-600 border border-blue-600 text-xs font-medium text-white hover:bg-blue-700 transition-colors">Book</button>
+</div>
+</div>
+
+<div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer">
+<div className="flex items-start gap-4 mb-4">
+<img className="w-16 h-16 rounded-full object-cover border-2 border-slate-50" src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&amp;fit=crop&amp;w=200&amp;q=80"/>
+<div>
+<h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Dr. Michael Ross</h3>
+<p className="text-sm text-slate-500 mb-1">Cardiologist • 15 Yrs Exp</p>
+<div className="flex items-center gap-1 text-xs font-semibold">
+<span className="iconify text-yellow-400" data-icon="lucide:star" data-width="14"></span>
+<span>5.0</span>
+<span className="text-slate-400 font-normal">(85 reviews)</span>
+</div>
+</div>
+</div>
+<div className="flex items-center gap-2 mb-6">
+<span className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded">Next Available: Tom</span>
+<span className="bg-slate-100 text-slate-600 text-xs font-medium px-2 py-1 rounded flex items-center gap-1"><span className="iconify" data-icon="lucide:map-pin" data-width="12"></span> In-Person</span>
+</div>
+<div className="grid grid-cols-3 gap-2 text-center">
+<button className="py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:border-blue-600 hover:text-blue-600 transition-colors">9:00 AM</button>
+<button className="py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:border-blue-600 hover:text-blue-600 transition-colors">11:15 AM</button>
+<button className="py-2 rounded-lg bg-blue-600 border border-blue-600 text-xs font-medium text-white hover:bg-blue-700 transition-colors">Book</button>
+</div>
+</div>
+
+<div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer">
+<div className="flex items-start gap-4 mb-4">
+<img className="w-16 h-16 rounded-full object-cover border-2 border-slate-50" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&amp;fit=crop&amp;w=200&amp;q=80"/>
+<div>
+<h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">Dr. Sarah Kline</h3>
+<p className="text-sm text-slate-500 mb-1">Psychiatrist • 8 Yrs Exp</p>
+<div className="flex items-center gap-1 text-xs font-semibold">
+<span className="iconify text-yellow-400" data-icon="lucide:star" data-width="14"></span>
+<span>4.8</span>
+<span className="text-slate-400 font-normal">(210 reviews)</span>
+</div>
+</div>
+</div>
+<div className="flex items-center gap-2 mb-6">
+<span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Available Today</span>
+<span className="bg-slate-100 text-slate-600 text-xs font-medium px-2 py-1 rounded flex items-center gap-1"><span className="iconify" data-icon="lucide:video" data-width="12"></span> Video</span>
+</div>
+<div className="grid grid-cols-3 gap-2 text-center">
+<button className="py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:border-blue-600 hover:text-blue-600 transition-colors">4:00 PM</button>
+<button className="py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:border-blue-600 hover:text-blue-600 transition-colors">5:30 PM</button>
+<button className="py-2 rounded-lg bg-blue-600 border border-blue-600 text-xs font-medium text-white hover:bg-blue-700 transition-colors">Book</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-white">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="mb-16">
+<h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">Complete care ecosystem</h2>
+<p className="text-slate-500 text-lg max-w-2xl">Everything you need to manage your health in one place.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div className="md:col-span-2 bg-[#0b1221] rounded-2xl p-8 text-white relative overflow-hidden flex flex-col justify-center min-h-[300px]">
+<div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-blue-900/40 to-transparent"></div>
+<div className="relative z-10 max-w-lg">
+<div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
+<span className="iconify" data-icon="lucide:sparkles" data-width="24"></span>
+</div>
+<h3 className="text-2xl font-semibold mb-2">AI-Powered Health Assistant</h3>
+<p className="text-slate-400 mb-8">Unsure about your symptoms? Our intelligent assistant helps triage your condition and recommends the appropriate specialist instantly.</p>
+<button className="bg-white text-slate-900 px-6 py-2.5 rounded-full font-medium text-sm hover:bg-blue-50 transition-colors">Try Symptom Checker</button>
+</div>
+</div>
+<div className="bg-blue-50 rounded-2xl p-8 flex flex-col justify-center border border-blue-100">
+<div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6">
+<span className="iconify" data-icon="lucide:file-text" data-width="24"></span>
+</div>
+<h3 className="text-xl font-semibold text-slate-900 mb-2">Unified Records</h3>
+<p className="text-slate-500 text-sm mb-6">Access lab results, prescriptions, and visit summaries from all your providers.</p>
+<a className="text-blue-600 font-medium text-sm hover:underline" href="#">View sample record</a>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-slate-50 border-t border-slate-200">
+<div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+<h2 className="text-3xl font-bold text-center tracking-tight text-slate-900 mb-12">Frequently Asked Questions</h2>
+<div className="space-y-4">
+<details className="group bg-white rounded-xl border border-slate-200 overflow-hidden">
+<summary className="flex items-center justify-between p-6 cursor-pointer font-medium text-slate-900 hover:bg-slate-50 transition-colors">
+                        How does CareFinder verify doctors?
+                        <span className="iconify transition-transform group-open:rotate-180 text-slate-400" data-icon="lucide:chevron-down" data-width="20"></span>
+</summary>
+<div className="px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-4">
+                        We verify every doctor's medical license, board certifications, and education. We also collect real patient reviews to ensure you get the highest quality care.
+                    </div>
+</details>
+<details className="group bg-white rounded-xl border border-slate-200 overflow-hidden">
+<summary className="flex items-center justify-between p-6 cursor-pointer font-medium text-slate-900 hover:bg-slate-50 transition-colors">
+                        Do you accept my insurance?
+                        <span className="iconify transition-transform group-open:rotate-180 text-slate-400" data-icon="lucide:chevron-down" data-width="20"></span>
+</summary>
+<div className="px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-4">
+                        CareFinder partners with most major insurance providers including Aetna, BlueCross BlueShield, Cigna, UnitedHealthcare, and Medicare. You can filter search results by your specific plan.
+                    </div>
+</details>
+<details className="group bg-white rounded-xl border border-slate-200 overflow-hidden">
+<summary className="flex items-center justify-between p-6 cursor-pointer font-medium text-slate-900 hover:bg-slate-50 transition-colors">
+                        Is telehealth available for all conditions?
+                        <span className="iconify transition-transform group-open:rotate-180 text-slate-400" data-icon="lucide:chevron-down" data-width="20"></span>
+</summary>
+<div className="px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-100 pt-4">
+                        Telehealth is great for common conditions like allergies, cold/flu, and mental health. However, some conditions may require an in-person physical examination. Our booking flow will help guide you.
+                    </div>
+</details>
+</div>
+</div>
+</section>
+
+<footer className="bg-white border-t border-slate-200 pt-16 pb-8">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-16">
+<div className="col-span-2 lg:col-span-2">
+<a className="text-xl font-bold tracking-tight text-blue-600 flex items-center gap-2 mb-4" href="#">
+<span className="iconify" data-icon="lucide:plus-square" data-width="20"></span> CareFinder
+                    </a>
+<p className="text-slate-500 text-sm leading-relaxed mb-6 max-w-xs">
+                        Making healthcare accessible, transparent, and efficient for everyone.
+                    </p>
+<div className="flex gap-4">
+<a className="text-slate-400 hover:text-blue-600 transition-colors" href="#"><span className="iconify" data-icon="lucide:twitter" data-width="20"></span></a>
+<a className="text-slate-400 hover:text-blue-600 transition-colors" href="#"><span className="iconify" data-icon="lucide:github" data-width="20"></span></a>
+<a className="text-slate-400 hover:text-blue-600 transition-colors" href="#"><span className="iconify" data-icon="lucide:linkedin" data-width="20"></span></a>
+</div>
+</div>
+<div>
+<h4 className="font-semibold text-slate-900 text-sm mb-4">Specialties</h4>
+<ul className="space-y-2 text-sm text-slate-500">
+<li><a className="hover:text-blue-600" href="#">Primary Care</a></li>
+<li><a className="hover:text-blue-600" href="#">Dermatology</a></li>
+<li><a className="hover:text-blue-600" href="#">Psychiatry</a></li>
+<li><a className="hover:text-blue-600" href="#">Dentistry</a></li>
+</ul>
+</div>
+<div>
+<h4 className="font-semibold text-slate-900 text-sm mb-4">Company</h4>
+<ul className="space-y-2 text-sm text-slate-500">
+<li><a className="hover:text-blue-600" href="#">About Us</a></li>
+<li><a className="hover:text-blue-600" href="#">Careers</a></li>
+<li><a className="hover:text-blue-600" href="#">Press</a></li>
+<li><a className="hover:text-blue-600" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 className="font-semibold text-slate-900 text-sm mb-4">Patients</h4>
+<ul className="space-y-2 text-sm text-slate-500">
+<li><a className="hover:text-blue-600" href="#">Login</a></li>
+<li><a className="hover:text-blue-600" href="#">Sign Up</a></li>
+<li><a className="hover:text-blue-600" href="#">Insurance</a></li>
+<li><a className="hover:text-blue-600" href="#">Help Center</a></li>
+</ul>
+</div>
+<div>
+<h4 className="font-semibold text-slate-900 text-sm mb-4">Legal</h4>
+<ul className="space-y-2 text-sm text-slate-500">
+<li><a className="hover:text-blue-600" href="#">Privacy</a></li>
+<li><a className="hover:text-blue-600" href="#">Terms</a></li>
+<li><a className="hover:text-blue-600" href="#">HIPAA</a></li>
+</ul>
+</div>
+</div>
+<div className="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+<p>© 2024 CareFinder Inc. All rights reserved.</p>
+<div className="flex gap-6">
+<a className="hover:text-slate-600" href="#">Privacy Policy</a>
+<a className="hover:text-slate-600" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

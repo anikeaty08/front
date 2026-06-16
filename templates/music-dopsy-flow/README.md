@@ -1,0 +1,14 @@
+# Dopsy Flow Music
+
+A cinematic artist website template for musicians to showcase releases, discography, videos, and social links with an immersive editorial feel.
+
+## Project Details
+- **Slug:** `music-dopsy-flow`
+- **Views:** 40
+- **Tags:** Portfolio, Artist, Entertainment, Landing Page, Dark, Minimal, Large Type, Animated, music, discography
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

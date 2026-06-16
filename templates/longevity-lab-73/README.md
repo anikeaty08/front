@@ -1,0 +1,14 @@
+# Longevity Lab Landing Page Template
+
+A high-contrast, science-forward landing page template for longevity, health optimization, and performance lab membership sites.
+
+## Project Details
+- **Slug:** `longevity-lab-73`
+- **Views:** 225
+- **Tags:** Landing Page, Health, Technology, Brand, Clean, Dark, Minimal, Large Type, Gradient, Futuristic
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

@@ -1,0 +1,497 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+        }
+    }
+    
+
+
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Three.js setup
+        let scene, camera, renderer, controls, iPhone, autoRotate = false;
+        let bodyMaterial, frameMaterial;
+        const canvas = document.getElementById('canvas');
+        const loading = document.getElementById('loading');
+
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf7fafc);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.set(2, 2, 4);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+
+            // Controls
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 2;
+            controls.maxDistance = 10;
+
+            // Enhanced Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            directionalLight.position.set(10, 10, 5);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            fillLight.position.set(-5, 0, -5);
+            scene.add(fillLight);
+
+            // Environment
+            const pmremGenerator = new THREE.PMREMGenerator(renderer);
+            scene.environment = pmremGenerator.fromScene(new THREE.Scene()).texture;
+
+            // Create iPhone
+            createiPhone();
+
+            // Hide loading
+            loading.style.display = 'none';
+
+            // Start render loop
+            animate();
+        }
+
+        function createiPhone() {
+            const group = new THREE.Group();
+
+            // Main body with rounded corners (iPhone 15 Pro dimensions)
+            const bodyGeometry = new RoundedBoxGeometry(2.4, 4.8, 0.32, 10, 0.3);
+            bodyMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x2c2c2c,
+                metalness: 0.9,
+                roughness: 0.1,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.05,
+                reflectivity: 0.8
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.castShadow = true;
+            body.receiveShadow = true;
+            group.add(body);
+
+            // Titanium frame
+            const frameGeometry = new RoundedBoxGeometry(2.45, 4.85, 0.34, 10, 0.32);
+            frameMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x4a4a4a,
+                metalness: 0.95,
+                roughness: 0.15,
+                clearcoat: 0.8
+            });
+            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+            frame.castShadow = true;
+            group.add(frame);
+
+            // Screen with proper proportions
+            const screenGeometry = new RoundedBoxGeometry(2.25, 4.55, 0.05, 10, 0.1);
+            const screenMaterial = new THREE.MeshPhysicalMaterial({ 
+                color: 0x000000,
+                metalness: 0.1,
+                roughness: 0.05,
+                transmission: 0.9,
+                thickness: 0.02
+            });
+            const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+            screen.position.z = 0.18;
+            group.add(screen);
+
+            // Dynamic Island
+            const islandGeometry = new RoundedBoxGeometry(0.4, 0.12, 0.01, 10, 0.06);
+            const islandMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+            const dynamicIsland = new THREE.Mesh(islandGeometry, islandMaterial);
+            dynamicIsland.position.set(0, 1.8, 0.19);
+            group.add(dynamicIsland);
+
+            // Triple Camera System (Pro model)
+            const cameraModule = new THREE.Group();
+            
+            // Camera bump
+            const bumpGeometry = new RoundedBoxGeometry(1.2, 1.2, 0.15, 10, 0.1);
+            const bumpMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x3a3a3a,
+                metalness: 0.8,
+                roughness: 0.2
+            });
+            const cameraBump = new THREE.Mesh(bumpGeometry, bumpMaterial);
+            cameraBump.position.set(-0.4, 1.2, -0.24);
+            cameraModule.add(cameraBump);
+
+            // Main camera
+            const mainCamGeometry = new THREE.CylinderGeometry(0.18, 0.18, 0.1, 32);
+            const camMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x000000,
+                metalness: 0.5,
+                roughness: 0.1
+            });
+            const mainCam = new THREE.Mesh(mainCamGeometry, camMaterial);
+            mainCam.position.set(-0.6, 1.4, -0.19);
+            mainCam.rotation.x = Math.PI / 2;
+            cameraModule.add(mainCam);
+
+            // Ultra-wide camera
+            const ultraWideCam = new THREE.Mesh(mainCamGeometry, camMaterial);
+            ultraWideCam.position.set(-0.6, 1.0, -0.19);
+            ultraWideCam.rotation.x = Math.PI / 2;
+            cameraModule.add(ultraWideCam);
+
+            // Telephoto camera
+            const telephotoGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.12, 32);
+            const telephoto = new THREE.Mesh(telephotoGeometry, camMaterial);
+            telephoto.position.set(-0.2, 1.2, -0.19);
+            telephoto.rotation.x = Math.PI / 2;
+            cameraModule.add(telephoto);
+
+            // Flash
+            const flashGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.05, 16);
+            const flashMaterial = new THREE.MeshBasicMaterial({ color: 0xffffdd });
+            const flash = new THREE.Mesh(flashGeometry, flashMaterial);
+            flash.position.set(-0.2, 0.8, -0.19);
+            flash.rotation.x = Math.PI / 2;
+            cameraModule.add(flash);
+
+            // LiDAR scanner
+            const lidarGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.03, 16);
+            const lidarMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
+            const lidar = new THREE.Mesh(lidarGeometry, lidarMaterial);
+            lidar.position.set(-0.4, 0.8, -0.19);
+            lidar.rotation.x = Math.PI / 2;
+            cameraModule.add(lidar);
+
+            group.add(cameraModule);
+
+            // Side buttons
+            // Volume buttons
+            const volumeUpGeometry = new THREE.BoxGeometry(0.05, 0.3, 0.15);
+            const buttonMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x4a4a4a,
+                metalness: 0.9,
+                roughness: 0.1
+            });
+            const volumeUp = new THREE.Mesh(volumeUpGeometry, buttonMaterial);
+            volumeUp.position.set(-1.25, 0.8, 0);
+            group.add(volumeUp);
+
+            const volumeDown = new THREE.Mesh(volumeUpGeometry, buttonMaterial);
+            volumeDown.position.set(-1.25, 0.4, 0);
+            group.add(volumeDown);
+
+            // Action button (new in iPhone 15 Pro)
+            const actionButtonGeometry = new THREE.BoxGeometry(0.05, 0.2, 0.1);
+            const actionButton = new THREE.Mesh(actionButtonGeometry, buttonMaterial);
+            actionButton.position.set(-1.25, 1.4, 0);
+            group.add(actionButton);
+
+            // Power button
+            const powerButtonGeometry = new THREE.BoxGeometry(0.05, 0.4, 0.15);
+            const powerButton = new THREE.Mesh(powerButtonGeometry, buttonMaterial);
+            powerButton.position.set(1.25, 0.8, 0);
+            group.add(powerButton);
+
+            // Lightning/USB-C port
+            const portGeometry = new THREE.BoxGeometry(0.3, 0.08, 0.05);
+            const portMaterial = new THREE.MeshBasicMaterial({ color: 0x1a1a1a });
+            const port = new THREE.Mesh(portGeometry, portMaterial);
+            port.position.set(0, -2.2, 0);
+            group.add(port);
+
+            // Speakers
+            for (let i = 0; i < 6; i++) {
+                const speakerGeometry = new THREE.CylinderGeometry(0.02, 0.02, 0.05, 8);
+                const speakerMaterial = new THREE.MeshBasicMaterial({ color: 0x2a2a2a });
+                const speaker = new THREE.Mesh(speakerGeometry, speakerMaterial);
+                speaker.position.set(-0.8 + i * 0.1, -2.2, 0);
+                speaker.rotation.x = Math.PI / 2;
+                group.add(speaker);
+            }
+
+            // Apple logo
+            const logoGeometry = new THREE.CylinderGeometry(0.15, 0.15, 0.01, 32);
+            const logoMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x666666,
+                metalness: 0.8,
+                roughness: 0.2
+            });
+            const logo = new THREE.Mesh(logoGeometry, logoMaterial);
+            logo.position.set(0, 0, -0.17);
+            logo.rotation.x = Math.PI / 2;
+            group.add(logo);
+
+            iPhone = group;
+            scene.add(iPhone);
+
+            // Update model info
+            updateModelInfo();
+        }
+
+        function updateModelInfo() {
+            let vertices = 0, faces = 0, materials = 0;
+            
+            iPhone.traverse((child) => {
+                if (child.isMesh) {
+                    vertices += child.geometry.attributes.position.count;
+                    faces += child.geometry.index ? child.geometry.index.count / 3 : child.geometry.attributes.position.count / 3;
+                    materials++;
+                }
+            });
+
+            document.getElementById('vertexCount').textContent = vertices.toLocaleString();
+            document.getElementById('faceCount').textContent = Math.floor(faces).toLocaleString();
+            document.getElementById('materialCount').textContent = materials;
+        }
+
+        function changeColor(colorName) {
+            const colors = {
+                'space-black': { body: 0x2c2c2c, frame: 0x4a4a4a },
+                'deep-purple': { body: 0x4a3c5a, frame: 0x6a5a7a },
+                'gold': { body: 0xd4af37, frame: 0xe6c757 },
+                'silver': { body: 0xc0c0c0, frame: 0xd3d3d3 }
+            };
+
+            if (colors[colorName]) {
+                bodyMaterial.color.setHex(colors[colorName].body);
+                frameMaterial.color.setHex(colors[colorName].frame);
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            controls.update();
+            
+            if (autoRotate && iPhone) {
+                iPhone.rotation.y += 0.005;
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // Event listeners
+        window.addEventListener('resize', () => {
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        });
+
+        // Color change
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active state from all buttons
+                document.querySelectorAll('.color-btn').forEach(b => {
+                    b.classList.remove('border-blue-500', 'bg-blue-50');
+                    b.classList.add('border-gray-300');
+                });
+                
+                // Add active state to clicked button
+                btn.classList.add('border-blue-500', 'bg-blue-50');
+                btn.classList.remove('border-gray-300');
+                
+                const color = btn.dataset.color;
+                changeColor(color);
+            });
+        });
+
+        // Auto rotate toggle
+        document.getElementById('autoRotateToggle').addEventListener('click', (e) => {
+            autoRotate = !autoRotate;
+            const toggle = e.target.closest('button');
+            const span = toggle.querySelector('span');
+            
+            if (autoRotate) {
+                toggle.classList.add('bg-blue-600');
+                toggle.classList.remove('bg-gray-200');
+                span.classList.add('translate-x-6');
+                span.classList.remove('translate-x-1');
+            } else {
+                toggle.classList.remove('bg-blue-600');
+                toggle.classList.add('bg-gray-200');
+                span.classList.remove('translate-x-6');
+                span.classList.add('translate-x-1');
+            }
+        });
+
+        // Preset views
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const view = btn.dataset.view;
+                switch(view) {
+                    case 'front':
+                        camera.position.set(0, 0, 5);
+                        break;
+                    case 'back':
+                        camera.position.set(0, 0, -5);
+                        break;
+                    case 'side':
+                        camera.position.set(5, 0, 0);
+                        break;
+                    case 'iso':
+                        camera.position.set(3, 3, 4);
+                        break;
+                }
+                controls.target.set(0, 0, 0);
+                controls.update();
+            });
+        });
+
+        // Reset button
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            camera.position.set(2, 2, 4);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        });
+
+        // Initialize when page loads
+        init();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="min-h-screen flex flex-col">
+
+<header className="bg-white border-b border-gray-200">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="flex items-center justify-between h-16">
+<div className="flex items-center space-x-3">
+<i className="w-6 h-6 text-gray-900" data-lucide="smartphone"></i>
+<h1 className="text-xl font-semibold text-gray-900">iPhone 15 Pro</h1>
+</div>
+<div className="flex items-center space-x-4">
+<button className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" id="resetBtn">
+<i className="w-4 h-4 mr-2" data-lucide="rotate-ccw"></i>
+                            Reset View
+                        </button>
+</div>
+</div>
+</div>
+</header>
+
+<main className="flex-1 flex">
+
+<div className="flex-1 relative">
+<canvas className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" id="canvas"></canvas>
+
+<div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center" id="loading">
+<div className="text-center">
+<div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-900 mx-auto mb-3"></div>
+<p className="text-sm text-gray-600">Loading 3D Model...</p>
+</div>
+</div>
+
+<div className="absolute bottom-4 left-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-600 border border-gray-200">
+<div className="flex items-center space-x-4">
+<span>🖱️ Drag to rotate</span>
+<span>⚪ Scroll to zoom</span>
+</div>
+</div>
+</div>
+
+<div className="w-80 bg-white border-l border-gray-200 p-6">
+<div className="space-y-6">
+<div>
+<h2 className="text-lg font-semibold text-gray-900 mb-4">Model Settings</h2>
+
+<div className="space-y-3">
+<label className="block text-sm font-medium text-gray-700">Device Color</label>
+<div className="grid grid-cols-2 gap-3">
+<button className="color-btn flex items-center space-x-2 p-2 rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors" data-color="space-black">
+<div className="w-6 h-6 rounded-full bg-gray-900"></div>
+<span className="text-sm">Space Black</span>
+</button>
+<button className="color-btn flex items-center space-x-2 p-2 rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors" data-color="deep-purple">
+<div className="w-6 h-6 rounded-full bg-purple-900"></div>
+<span className="text-sm">Deep Purple</span>
+</button>
+<button className="color-btn flex items-center space-x-2 p-2 rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors" data-color="gold">
+<div className="w-6 h-6 rounded-full bg-yellow-400"></div>
+<span className="text-sm">Gold</span>
+</button>
+<button className="color-btn flex items-center space-x-2 p-2 rounded-lg border-2 border-gray-300 hover:border-gray-400 transition-colors" data-color="silver">
+<div className="w-6 h-6 rounded-full bg-gray-300"></div>
+<span className="text-sm">Silver</span>
+</button>
+</div>
+</div>
+
+<div className="pt-4 border-t border-gray-100">
+<div className="flex items-center justify-between">
+<label className="text-sm font-medium text-gray-700">Auto Rotate</label>
+<button className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="autoRotateToggle">
+<span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+</button>
+</div>
+</div>
+</div>
+
+<div className="pt-4 border-t border-gray-100">
+<h3 className="text-sm font-medium text-gray-900 mb-3">Model Information</h3>
+<div className="space-y-2 text-xs text-gray-600">
+<div className="flex justify-between">
+<span>Vertices:</span>
+<span id="vertexCount">-</span>
+</div>
+<div className="flex justify-between">
+<span>Faces:</span>
+<span id="faceCount">-</span>
+</div>
+<div className="flex justify-between">
+<span>Materials:</span>
+<span id="materialCount">-</span>
+</div>
+</div>
+</div>
+
+<div className="pt-4 border-t border-gray-100">
+<h3 className="text-sm font-medium text-gray-900 mb-3">Preset Views</h3>
+<div className="grid grid-cols-2 gap-2">
+<button className="view-btn px-3 py-2 text-xs font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-view="front">Front</button>
+<button className="view-btn px-3 py-2 text-xs font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-view="back">Back</button>
+<button className="view-btn px-3 py-2 text-xs font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-view="side">Side</button>
+<button className="view-btn px-3 py-2 text-xs font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-view="iso">Isometric</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+
+
+    </>
+  );
+}

@@ -1,0 +1,14 @@
+# Lumina E-commerce Landing Page Template
+
+A clean, modern e-commerce landing page template for showcasing premium workspace essentials, ready to adapt for your own online store.
+
+## Project Details
+- **Slug:** `lumina-e-commerce-65`
+- **Views:** 21
+- **Tags:** E-commerce, Landing Page, Brand, Clean, Minimal, Gradient, Technology, Large Type, Grid, Portfolio
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

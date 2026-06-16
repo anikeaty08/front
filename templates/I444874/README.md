@@ -1,0 +1,14 @@
+# Mobile Beauty Shop Interface
+
+Responsive mobile UI featuring search, trending products, user stories, and bottom navigation using Tailwind CSS.
+
+## Project Details
+- **Slug:** `I444874`
+- **Views:** 489
+- **Tags:** Mobile UI, E-commerce, Tailwind CSS, Search Bar, Trending Products, User Stories, Navigation
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

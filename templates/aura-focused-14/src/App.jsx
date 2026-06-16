@@ -1,0 +1,389 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+      // initialize lucide icons
+      lucide.createIcons();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="flex-1 flex flex-col">
+
+<header className="w-full">
+<div className="max-w-6xl mx-auto flex items-center justify-between gap-6 px-6 sm:px-8 lg:px-12 py-5 sm:py-6">
+
+<div className="flex items-center gap-2">
+<div className="h-8 w-8 rounded-2xl bg-gradient-to-tr shadow-sm flex items-center justify-center from-zinc-900 via-black to-zinc-700 shadow-white/30">
+<span className="text-sm font-semibold tracking-tight text-zinc-100" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>A</span>
+</div>
+<span className="text-base font-medium tracking-tight text-zinc-900" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>Aura</span>
+</div>
+
+<nav className="hidden md:flex items-center gap-8 text-sm text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+<a className="transition-colors hover:text-zinc-900" href="#how-it-works">How it works</a>
+<a className="transition-colors hover:text-zinc-900" href="#features">Features</a>
+<a className="transition-colors hover:text-zinc-900" href="#preview">Preview</a>
+</nav>
+
+<div className="flex items-center gap-3">
+<button className="hidden sm:inline-flex items-center rounded-full border bg-transparent text-xs sm:text-sm transition-colors px-3.5 sm:px-4 py-1.5 border-zinc-200 text-zinc-900/80 hover:text-zinc-950 hover:bg-zinc-100/60" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+              Sign in
+            </button>
+<button className="inline-flex items-center gap-1.5 rounded-full text-xs sm:text-sm font-medium tracking-tight transition-colors px-3.5 sm:px-4 py-1.5 shadow-sm bg-zinc-950 text-zinc-50 hover:bg-zinc-800/90 shadow-white/40" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+              Get Aura
+              <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</button>
+</div>
+</div>
+</header>
+
+<main className="flex-1">
+<section className="sm:pt-10 sm:pb-16 w-full pt-6 pb-12">
+<div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+<div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
+
+<div className="space-y-6 sm:space-y-8">
+<div className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 border-zinc-200 bg-zinc-100/60">
+<span className="h-1.5 w-1.5 rounded-full shadow-[0_0_0_3px_rgba(16,185,129,0.25)] bg-emerald-600"></span>
+<span className="text-xs font-medium text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>Now in early access</span>
+</div>
+<div className="space-y-3 sm:space-y-4">
+<h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight font-semibold text-zinc-950" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>
+                    Chat without
+                    <span className="text-zinc-600">the noise.</span><br/>
+                    Meet <span className="text-zinc-900">Aura.</span>
+</h1>
+<p className="text-base sm:text-lg leading-relaxed sm:leading-relaxed max-w-xl text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                    Aura is a focused chat app that quietly removes clutter,
+                    threads, and visual distraction—so every conversation feels
+                    calm, intentional, and easy to follow.
+                  </p>
+</div>
+<div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+<button className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium tracking-tight transition-colors px-5 sm:px-6 py-2.5 shadow-sm bg-zinc-950 text-zinc-50 hover:bg-zinc-800/90 shadow-white/40" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                    Get early access
+                    <svg className="lucide lucide-sparkles w-4 h-4" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+</button>
+<button className="inline-flex items-center justify-center gap-2 rounded-full border bg-transparent text-sm transition-colors px-5 sm:px-6 py-2.5 border-zinc-200 text-zinc-900/85 hover:bg-zinc-100/60 hover:text-zinc-950" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                    Watch 60s overview
+                    <svg className="lucide lucide-play w-4 h-4" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>
+</button>
+</div>
+<div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-zinc-600" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+<div className="flex items-center gap-2">
+<div className="flex -space-x-2 rtl:space-x-reverse items-center">
+<div className="h-6 w-6 rounded-full bg-gradient-to-tr border from-zinc-800 to-zinc-950 border-zinc-100/80"></div>
+<div className="h-6 w-6 rounded-full bg-gradient-to-tr border from-zinc-700 to-zinc-900 border-zinc-100/80"></div>
+<div className="h-6 w-6 rounded-full bg-gradient-to-tr border from-zinc-600 to-zinc-800 border-zinc-100/80"></div>
+</div>
+<span>Trusted by teams who care about focus.</span>
+</div>
+<span className="hidden sm:inline text-zinc-400">•</span>
+<span>Available on macOS, iOS, Web.</span>
+</div>
+</div>
+
+<div className="relative">
+<div className="absolute -inset-x-10 -inset-y-10 bg-gradient-to-b pointer-events-none blur-3xl opacity-60 from-zinc-950/5 via-zinc-950/0 to-zinc-50"></div>
+<div className="relative rounded-3xl border bg-gradient-to-b shadow-2xl overflow-hidden border-zinc-200/80 from-zinc-100/90 via-zinc-50 to-white shadow-white/60">
+
+<div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b backdrop-blur border-zinc-200/80 bg-zinc-100/60">
+<div className="flex items-center gap-2">
+<div className="flex gap-1.5">
+<span className="h-2.5 w-2.5 rounded-full bg-zinc-300"></span>
+<span className="h-2.5 w-2.5 rounded-full bg-zinc-300"></span>
+<span className="h-2.5 w-2.5 rounded-full bg-zinc-300"></span>
+</div>
+<span className="ml-2 text-xs text-zinc-600" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>Aura / Focused Chat</span>
+</div>
+<div className="flex items-center gap-3 text-zinc-600">
+<svg className="lucide lucide-search w-4 h-4" data-lucide="search" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+<svg className="lucide lucide-bell w-4 h-4" data-lucide="bell" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+<div className="h-6 w-6 rounded-full bg-gradient-to-tr border from-zinc-800 to-zinc-950 border-zinc-200"></div>
+</div>
+</div>
+<div className="grid grid-cols-[auto_minmax(0,1fr)]">
+
+<aside className="hidden sm:flex flex-col border-r backdrop-blur-sm w-40 border-zinc-200/80 bg-zinc-50/80">
+<div className="p-3 flex items-center justify-between">
+<span className="text-xs font-medium text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>Conversations</span>
+<button className="h-5 w-5 rounded-full border flex items-center justify-center border-zinc-300 text-zinc-700">
+<span className="text-xs">+</span>
+</button>
+</div>
+<div className="space-y-1.5 px-2 pb-3">
+<button className="w-full flex items-center gap-2 rounded-xl px-2.5 py-2 bg-zinc-900 text-zinc-50">
+<div className="h-7 w-7 rounded-full bg-gradient-to-tr border from-zinc-800 to-zinc-950 border-zinc-700"></div>
+<div className="flex-1 text-left">
+<p className="text-xs font-medium tracking-tight" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                              Design team
+                            </p>
+<p className="text-[0.7rem] text-zinc-500" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                              Today · 3 replies
+                            </p>
+</div>
+</button>
+<button className="w-full flex items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-zinc-100/70 text-zinc-800">
+<div className="h-7 w-7 rounded-full border flex items-center justify-center bg-zinc-100 border-zinc-300">
+<svg className="lucide lucide-bot w-3.5 h-3.5" data-lucide="bot" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+</div>
+<div className="flex-1 text-left">
+<p className="text-xs font-medium tracking-tight" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                              Aura / Daily
+                            </p>
+<p className="text-[0.7rem] text-zinc-500" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                              Summaries at 9:00
+                            </p>
+</div>
+</button>
+<button className="w-full flex items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-zinc-100/70 text-zinc-800">
+<div className="h-7 w-7 rounded-full bg-gradient-to-tr from-zinc-500 border to-zinc-700 border-zinc-400"></div>
+<div className="flex-1 text-left">
+<p className="text-xs font-medium tracking-tight" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                              Product decisions
+                            </p>
+<p className="text-[0.7rem] text-zinc-500" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                              Yesterday
+                            </p>
+</div>
+</button>
+</div>
+</aside>
+
+<div className="flex flex-col">
+
+<div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b backdrop-blur-sm border-zinc-200/80 bg-zinc-50/60">
+<div className="space-y-0.5">
+<p className="text-sm font-medium tracking-tight text-zinc-950" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                            Design team
+                          </p>
+<p className="text-[0.75rem] text-zinc-500" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                            Aura quietly organizes messages into clean, daily
+                            summaries.
+                          </p>
+</div>
+<div className="hidden sm:flex items-center gap-3">
+<div className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 bg-zinc-100/80 border-zinc-200">
+<span className="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>
+<span className="text-[0.7rem] text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>Clutter filter is on</span>
+</div>
+</div>
+</div>
+
+<div className="relative flex-1 flex flex-col gap-3 sm:gap-4 px-3 sm:px-6 py-4 sm:py-6 bg-gradient-to-b from-zinc-50 via-zinc-50/95 to-white">
+
+<div className="flex items-center gap-3">
+<div className="h-px flex-1 bg-zinc-200/80"></div>
+<span className="text-[0.7rem] text-zinc-500" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>Today</span>
+<div className="h-px flex-1 bg-zinc-200/80"></div>
+</div>
+
+<div className="max-w-lg rounded-2xl border backdrop-blur-sm p-3.5 sm:p-4 space-y-3 border-zinc-200/90 bg-zinc-100/80">
+<div className="flex items-center justify-between gap-3">
+<div>
+<p className="text-xs font-medium tracking-tight text-zinc-800" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                                Morning summary · 9:02
+                              </p>
+<p className="text-[0.75rem] text-zinc-600" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                                Aura condensed 124 messages into 4 clear
+                                decisions.
+                              </p>
+</div>
+<div className="h-7 w-7 rounded-full border flex items-center justify-center bg-zinc-100 border-zinc-300 text-zinc-800">
+<svg className="lucide lucide-sparkles w-3.5 h-3.5" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+</div>
+</div>
+<div className="space-y-2">
+<div className="flex items-start gap-2">
+<span className="mt-0.5 h-1.5 w-1.5 rounded-full bg-zinc-500"></span>
+<p className="text-xs leading-relaxed text-zinc-800" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+<span className="font-medium text-zinc-950">Launch timing:</span>
+                                Homepage refresh locked for Thursday, 10:00.
+                              </p>
+</div>
+<div className="flex items-start gap-2">
+<span className="mt-0.5 h-1.5 w-1.5 rounded-full bg-zinc-500"></span>
+<p className="text-xs leading-relaxed text-zinc-800" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+<span className="font-medium text-zinc-950">Messaging:</span>
+                                “Clutter-free conversations” approved as hero
+                                copy.
+                              </p>
+</div>
+<div className="flex items-start gap-2">
+<span className="mt-0.5 h-1.5 w-1.5 rounded-full bg-zinc-500"></span>
+<p className="text-xs leading-relaxed text-zinc-800" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+<span className="font-medium text-zinc-950">Next step:</span>
+                                Prepare a clean launch checklist for tomorrow’s
+                                standup.
+                              </p>
+</div>
+</div>
+<button className="inline-flex items-center gap-1.5 rounded-full border text-[0.75rem] px-2.5 py-1 transition-colors bg-zinc-950/5 hover:bg-zinc-950/10 border-zinc-200 text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                            View original thread
+                            <svg className="lucide lucide-chevron-right w-3.5 h-3.5" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+</button>
+</div>
+
+<div className="flex flex-col gap-2">
+<div className="flex items-center gap-2">
+<div className="h-6 w-6 rounded-full bg-gradient-to-tr border from-zinc-800 to-zinc-950 border-zinc-300"></div>
+<div className="rounded-2xl border px-3 py-2 max-w-xs bg-zinc-100/90 border-zinc-200">
+<p className="text-xs leading-relaxed text-zinc-900" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                                This is so much calmer. I can actually see what
+                                matters without 100 notifications.
+                              </p>
+</div>
+</div>
+<div className="flex items-center justify-end gap-2">
+<div className="rounded-2xl px-3 py-2 max-w-xs bg-zinc-950 text-zinc-50">
+<p className="text-xs leading-relaxed" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                                That’s Aura. Clutter filtered. Context preserved.
+                              </p>
+</div>
+<div className="h-6 w-6 rounded-full border flex items-center justify-center bg-zinc-100 border-zinc-300">
+<svg className="lucide lucide-bot w-3.5 h-3.5 text-zinc-800" data-lucide="bot" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+</div>
+</div>
+</div>
+
+<div className="pt-1 sm:pt-2">
+<div className="flex items-center gap-2 sm:gap-3 rounded-2xl border backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 border-zinc-200 bg-zinc-100/80">
+<div className="hidden sm:flex items-center gap-1 rounded-full border px-2 py-1 bg-zinc-100 border-zinc-200">
+<svg className="lucide lucide-wand-2 w-3.5 h-3.5 text-zinc-800" data-lucide="wand-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"></path><path d="m14 7 3 3"></path><path d="M5 6v4"></path><path d="M19 14v4"></path><path d="M10 2v2"></path><path d="M7 8H3"></path><path d="M21 16h-4"></path><path d="M11 3H9"></path></svg>
+<span className="text-[0.7rem] text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>Summarize</span>
+</div>
+<input className="flex-1 bg-transparent border-none outline-none text-xs sm:text-sm placeholder:text-zinc-500 text-zinc-900" placeholder="Reply, and Aura keeps it clean…" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}} type="text"/>
+<div className="flex items-center gap-2 sm:gap-3">
+<button className="text-zinc-600 hover:text-zinc-800">
+<svg className="lucide lucide-paperclip w-4 h-4" data-lucide="paperclip" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"></path></svg>
+</button>
+<button className="inline-flex items-center justify-center rounded-full transition-colors h-7 w-7 bg-zinc-950 text-zinc-50 hover:bg-zinc-800/90">
+<svg className="lucide lucide-arrow-up w-3.5 h-3.5" data-lucide="arrow-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<section className="mt-12 sm:mt-16 lg:mt-20 space-y-8 sm:space-y-10" id="how-it-works">
+<div className="max-w-2xl">
+<h2 className="text-2xl sm:text-3xl tracking-tight font-semibold text-zinc-950" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>
+                  Aura turns messy chats into a calm daily rhythm.
+                </h2>
+<p className="mt-3 text-base sm:text-lg leading-relaxed text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                  Instead of a firehose of notifications, Aura quietly filters,
+                  groups, and summarizes messages for you. You see what matters,
+                  when it matters—and nothing else.
+                </p>
+</div>
+<div className="grid gap-6 sm:gap-8 lg:grid-cols-3" id="features">
+
+<div className="rounded-2xl border p-5 flex flex-col gap-3 border-zinc-200 bg-zinc-50/70">
+<div className="h-9 w-9 rounded-2xl flex items-center justify-center shadow-sm bg-zinc-900 text-zinc-50 shadow-white/30">
+<svg className="lucide lucide-layers w-4 h-4" data-lucide="layers" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
+</div>
+<h3 className="text-base sm:text-lg font-medium tracking-tight text-zinc-950" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>
+                    Automatic clutter filter
+                  </h3>
+<p className="text-sm sm:text-base leading-relaxed text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                    Aura learns which messages are signal and which are noise.
+                    Status updates, side jokes, and reactions fade into the
+                    background until you need them.
+                  </p>
+</div>
+
+<div className="rounded-2xl border p-5 flex flex-col gap-3 border-zinc-200 bg-zinc-50/70" id="preview">
+<div className="h-9 w-9 rounded-2xl flex items-center justify-center shadow-sm bg-zinc-900 text-zinc-50 shadow-white/30">
+<svg className="lucide lucide-focus w-4 h-4" data-lucide="focus" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3"></circle><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path></svg>
+</div>
+<h3 className="text-base sm:text-lg font-medium tracking-tight text-zinc-950" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>
+                    One clean timeline
+                  </h3>
+<p className="text-sm sm:text-base leading-relaxed text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                    No channels to micromanage, no threaded rabbit holes. Aura
+                    keeps your day in a single, beautifully ordered timeline
+                    that feels effortless to scan.
+                  </p>
+</div>
+
+<div className="rounded-2xl border p-5 flex flex-col gap-3 border-zinc-200 bg-zinc-50/70">
+<div className="h-9 w-9 rounded-2xl flex items-center justify-center shadow-sm bg-zinc-900 text-zinc-50 shadow-white/30">
+<svg className="lucide lucide-sun-medium w-4 h-4" data-lucide="sun-medium" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v1"></path><path d="M12 20v1"></path><path d="M3 12h1"></path><path d="M20 12h1"></path><path d="m18.364 5.636-.707.707"></path><path d="m6.343 17.657-.707.707"></path><path d="m5.636 5.636.707.707"></path><path d="m17.657 17.657.707.707"></path></svg>
+</div>
+<h3 className="text-base sm:text-lg font-medium tracking-tight text-zinc-950" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>
+                    Designed to disappear
+                  </h3>
+<p className="text-sm sm:text-base leading-relaxed text-zinc-700" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                    Minimal, balanced typography and subtle motion keep Aura
+                    feeling calm. The interface gets out of the way so your
+                    conversations can take the stage.
+                  </p>
+</div>
+</div>
+</section>
+
+<section className="mt-12 sm:mt-16 lg:mt-20 mb-10 sm:mb-16 lg:mb-20">
+<div className="relative overflow-hidden rounded-3xl border bg-gradient-to-r px-6 sm:px-10 py-8 sm:py-10 border-zinc-200 from-zinc-900 to-zinc-800 text-zinc-100">
+<div className="absolute -right-24 sm:-right-16 top-10 h-40 w-40 sm:h-52 sm:w-52 rounded-full bg-gradient-to-tr blur-3xl from-zinc-100/10 to-black/0"></div>
+<div className="max-w-3xl relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+<div className="space-y-3">
+<h3 className="text-2xl sm:text-3xl tracking-tight font-semibold" style={{fontFamily: 'system, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>
+                      Be one of the first to experience clutter‑free chat.
+                    </h3>
+<p className="text-base sm:text-lg leading-relaxed text-zinc-300" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+                      We’re inviting a small group of teams into Aura every
+                      week. Share your email, and we’ll reach out with an
+                      invite and setup call.
+                    </p>
+</div>
+<form className="w-full md:w-auto flex flex-col sm:flex-row gap-3">
+<input className="flex-1 md:w-64 rounded-full border text-sm placeholder:text-zinc-500 px-4 py-2 outline-none focus:ring-2 focus:ring-zinc-900/80 focus:border-zinc-900/80 border-zinc-600/70 bg-black/80 text-zinc-100" placeholder="you@company.com" required="" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}} type="email"/>
+<button className="inline-flex items-center justify-center gap-2 rounded-full text-sm font-medium tracking-tight transition-colors px-5 py-2 shadow-sm bg-zinc-100 text-zinc-950 hover:bg-white shadow-white/30" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}} type="submit">
+                      Request access
+                      <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</button>
+</form>
+</div>
+</div>
+</section>
+</div>
+</section>
+</main>
+
+<footer className="border-t border-zinc-100/80">
+<div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs sm:text-sm text-zinc-500" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Text\', sans-serif'}}>
+<div className="flex items-center gap-2 text-zinc-500">
+<span className="text-sm font-medium tracking-tight text-zinc-800" style={{fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, \'SF Pro Display\', sans-serif'}}>Aura</span>
+<span>·</span>
+<span>Clutter‑free conversations</span>
+</div>
+<div className="flex items-center gap-4">
+<a className="hover:text-zinc-700" href="#">Privacy</a>
+<a className="hover:text-zinc-700" href="#">Status</a>
+<span className="text-zinc-400">© 2025</span>
+</div>
+</div>
+</footer>
+</div>
+
+
+    </>
+  );
+}

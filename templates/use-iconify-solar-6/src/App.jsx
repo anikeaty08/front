@@ -1,0 +1,134 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+      // Flashlight Logic
+      const spotlight = document.getElementById('global-spotlight');
+      const cards = document.querySelectorAll('.flashlight-card');
+
+      document.addEventListener('mousemove', (e) => {
+          const x = e.clientX;
+          const y = e.clientY;
+
+          // Global background spotlight
+          spotlight.style.setProperty('--mouse-x', `${x}px`);
+          spotlight.style.setProperty('--mouse-y', `${y}px`);
+
+          // Card borders spotlight
+          cards.forEach(card => {
+              const rect = card.getBoundingClientRect();
+              const cardX = x - rect.left;
+              const cardY = y - rect.top;
+
+              card.style.setProperty('--card-x', `${cardX}px`);
+              card.style.setProperty('--card-y', `${cardY}px`);
+          });
+      });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 pointer-events-none flashlight-bg z-0 mix-blend-screen opacity-60" id="global-spotlight" style={{-MouseX: '787px', -MouseY: '6px'}}></div>
+
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-10 bg-contain bg-no-repeat bg-center mix-blend-overlay z-0 pointer-events-none bg-[url(https://images.unsplash.com/photo-1643780668909-580822430155?w=1600&amp;q=80)]"></div>
+
+<div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+<img alt="Katana" className="w-[120%] h-auto max-w-none opacity-90 object-cover rotate-[20deg] translate-y-20 scale-110 md:w-[80%] md:rotate-[15deg] brightness-[0.6] contrast-125 saturate-0 mix-blend-lighten" src="https://images.unsplash.com/photo-1696550580343-4f339143b465?w=3840&amp;q=80"/>
+
+<div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-transparent to-[#030303]"></div>
+<div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303]"></div>
+</div>
+
+<nav className="relative z-40 w-full px-6 py-6 md:px-12 md:py-8 flex justify-between items-start animate-enter">
+
+<div className="flex gap-4 items-center group cursor-pointer">
+<div className="relative w-10 h-10 border border-zinc-700 rounded-full flex items-center justify-center bg-zinc-900/50 backdrop-blur-md overflow-hidden transition-colors hover:border-zinc-500">
+<div className="absolute inset-0 flex items-center justify-center">
+<span className="text-xs font-light opacity-60 font-geist">8</span>
+</div>
+
+<div className="absolute w-full h-[1px] bg-zinc-700 top-1/2 left-0"></div>
+<div className="absolute h-full w-[1px] bg-zinc-700 left-1/2 top-0"></div>
+</div>
+<div className="h-10 px-3 bg-[#FF4533] rounded-lg flex items-center justify-center text-black shadow-[0_0_15px_rgba(255,69,51,0.4)] transition-transform group-hover:scale-105 relative group">
+<div className="absolute inset-0 rounded-lg bg-inherit -z-10 sonar-ring"></div>
+<iconify-icon className="mr-2 text-black" height="24" icon="solar:sword-linear" width="24"></iconify-icon>
+<span className="font-medium text-sm tracking-tight font-geist">べ</span>
+</div>
+</div>
+
+<div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-10 font-mono text-xs text-zinc-600 tracking-widest font-geist">
+        V_ 1.1.41
+      </div>
+
+<div className="flex items-center gap-4">
+<div className="w-8 h-8 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-600 transition-colors cursor-pointer">
+<iconify-icon height="20" icon="solar:info-circle-linear" width="20"></iconify-icon>
+</div>
+<button className="relative group bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-full px-5 py-2 overflow-hidden transition-all hover:border-zinc-600">
+<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+<span className="relative text-sm text-zinc-300 group-hover:text-white transition-colors font-geist">
+            Skill Hub
+          </span>
+</button>
+</div>
+</nav>
+
+<main className="z-10 md:px-12 h-[calc(100vh-100px)] flex flex-col pr-6 pl-6 relative justify-between">
+
+<div className="mt-8 md:mt-16 max-w-2xl relative">
+<h1 className="text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-white mix-blend-normal font-geist tracking-tighter font-medium animate-enter delay-100" style={{}}>
+          Master
+          <br/>
+<span className="text-zinc-400 font-geist tracking-tighter font-medium" style={{}}>
+            Your
+          </span>
+<br/>
+          Skills
+        </h1>
+</div>
+
+
+<div className="relative w-full pb-0 md:pb-4 flex flex-col md:flex-row items-end justify-between pointer-events-none z-20">
+
+<div className="hidden md:flex flex-col gap-2 mb-6 text-[10px] md:text-xs leading-relaxed text-zinc-500 font-mono tracking-wide max-w-[200px] animate-enter delay-300">
+<p className="font-geist">FOR SMOOTH</p>
+<p className="font-geist">SCROLLING AND CORE</p>
+<p className="font-geist">WEB ANIMATIONS</p>
+</div>
+
+<div className="absolute bottom-[-5%] left-1/2 -translate-x-1/2 w-full text-center mix-blend-overlay z-0">
+<h2 className="text-[16vw] text-white opacity-20 leading-none select-none whitespace-nowrap font-geist tracking-tighter font-medium animate-enter delay-200" style={{}}>
+            StringTune
+          </h2>
+</div>
+
+<div className="hidden md:block absolute right-[5%] bottom-[25%] text-zinc-700 text-6xl md:text-8xl opacity-50 font-geist font-semibold tracking-tighter" style={{}}>
+          ©
+        </div>
+
+<div className="flex md:hidden flex-col gap-1 mb-4 text-[10px] text-zinc-600 font-mono tracking-wide">
+<p className="font-geist">CSS-FIRST. JS-LIGHT</p>
+</div>
+<div className="hidden md:block mb-6 text-xs text-zinc-500 font-mono tracking-wide font-geist">
+          CSS-FIRST. JS-LIGHT
+        </div>
+</div>
+</main>
+
+
+    </>
+  );
+}

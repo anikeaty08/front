@@ -1,0 +1,482 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="sticky top-0 z-50 w-full bg-[#0D1B2A]/80 backdrop-blur-md border-b border-white/5">
+<div className="max-w-7xl mx-auto px-5 md:px-20 h-20 flex items-center justify-between">
+
+<a className="font-['Montserrat'] font-semibold text-2xl tracking-tighter uppercase flex items-center gap-1" href="#">
+          SECURE
+          <span className="text-[#CCAC6E]">PRO</span>
+</a>
+
+<nav className="hidden md:flex items-center gap-8 font-['Inter'] font-semibold text-sm">
+<a className="text-[#CCAC6E] hover:text-[#CCAC6E]/80 transition-colors" href="#services">
+            Services
+          </a>
+<a className="text-[#A0AFBA] hover:text-white transition-colors" href="#urgences">
+            Urgences
+          </a>
+<a className="text-[#A0AFBA] hover:text-white transition-colors" href="#tarifs">
+            Tarifs
+          </a>
+<a className="text-[#A0AFBA] hover:text-white transition-colors" href="#faq">
+            FAQ
+          </a>
+</nav>
+
+<div className="flex items-center gap-4">
+<a className="bg-[#CCAC6E] text-[#0D1B2A] font-['Inter'] font-semibold text-sm px-6 py-2.5 rounded-lg hover:bg-[#e9c787] hover:-translate-y-0.5 transition-all duration-300 shadow-[0_8px_30px_-4px_rgba(204,172,110,0.3)] flex items-center gap-2" href="tel:0653789008">
+<iconify-icon className="text-lg" icon="solar:phone-calling-linear"></iconify-icon>
+<span className="hidden sm:inline">06 53 78 90 08</span>
+</a>
+</div>
+</div>
+</header>
+<main className="flex-grow">
+
+<section className="relative pt-24 pb-32 md:pt-32 md:pb-48 overflow-hidden flex items-center justify-center min-h-[85vh]">
+
+<div className="absolute inset-0 z-0">
+<img alt="Professional locksmith working on high-security door lock in dramatic lighting" className="w-full h-full object-cover opacity-25 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf8V7hqDK-ZaNrTHevd_IAmM2qn4x-rzPHwOp0-ZuqRrbotH6iqw2cUiuAFKdafy9CVuhyqGEtyOOPnc03YSTBTH42eSJ-xv4GwPgQ_E8xpoph40oiCNFU8x3_NU7j-0ppWSQZkUYsZevl7Wk8sbqNPZjSgUwjaMsE-dHJ35UpkwNkWYg9i5q4UtYza2qlux5lfdD7VR6euYGwe02UENVQ6LvgeRpcrW8pQis-T9DnQlbVLCOo4o4dtX6ROB51FzmcZxsl1mW98Rpl"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A] via-[#0D1B2A]/60 to-transparent"></div>
+</div>
+
+<div className="relative z-10 max-w-7xl mx-auto px-5 md:px-20 text-center w-full flex flex-col items-center">
+
+<div className="inline-flex items-center gap-2.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 mb-8">
+<span className="w-2 h-2 rounded-full bg-[#E63946] animate-pulse shadow-[0_0_8px_rgba(230,57,70,0.8)]"></span>
+<span className="font-['Inter'] font-semibold text-xs tracking-wider uppercase text-white">
+              Intervention en 30 min
+            </span>
+</div>
+<h1 className="font-['Montserrat'] font-semibold text-4xl md:text-6xl tracking-tight text-white mb-6 max-w-4xl leading-[1.1]">
+            Serrurier de Confiance :
+            <br className="hidden md:block"/>
+<span className="text-[#CCAC6E]">Intervention Urgente</span>
+</h1>
+<p className="font-['Inter'] font-light text-lg md:text-xl text-[#A0AFBA] max-w-2xl mx-auto mb-10 leading-relaxed">
+            Une porte claquée ? Une serrure bloquée ? Votre sécurité n'attend
+            pas. Artisans certifiés disponibles 24h/24 et 7j/7 pour un dépannage
+            immédiat et sans dégâts.
+          </p>
+<div className="flex flex-col sm:flex-row justify-center gap-4 w-full sm:w-auto">
+<a className="bg-[#CCAC6E] text-[#0D1B2A] font-['Inter'] font-semibold text-base px-8 py-4 rounded-lg hover:bg-[#e9c787] transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_8px_32px_-6px_rgba(204,172,110,0.4)] hover:-translate-y-1" href="tel:0653789008">
+<iconify-icon className="text-xl" icon="solar:danger-triangle-linear"></iconify-icon>
+              Urgence : Appeler Maintenant
+              <iconify-icon className="text-xl ml-1" icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+<a className="border-2 border-[#CCAC6E] text-[#CCAC6E] font-['Inter'] font-semibold text-base px-8 py-4 rounded-lg hover:bg-[#CCAC6E]/10 transition-colors duration-300 flex items-center justify-center gap-2" href="#contact">
+              Demander un Devis
+            </a>
+</div>
+</div>
+</section>
+
+<section className="max-w-7xl mx-auto px-5 md:px-20 -mt-12 md:-mt-20 relative z-20 mb-24">
+<div className="bg-[#1B263B]/80 backdrop-blur-xl rounded-xl p-6 md:p-10 border border-white/5 shadow-2xl grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+<div className="flex items-start gap-4">
+<div className="w-12 h-12 shrink-0 rounded-lg bg-white/5 flex items-center justify-center text-[#CCAC6E] border border-white/5">
+<iconify-icon className="text-3xl" icon="solar:shield-check-linear"></iconify-icon>
+</div>
+<div>
+<h3 className="font-['Inter'] font-semibold text-sm tracking-wider text-white mb-1 uppercase">
+                Agréé Assurances
+              </h3>
+<p className="text-sm text-[#A0AFBA] font-light">
+                Tarifs validés et démarches facilitées.
+              </p>
+</div>
+</div>
+<div className="flex items-start gap-4">
+<div className="w-12 h-12 shrink-0 rounded-lg bg-white/5 flex items-center justify-center text-[#CCAC6E] border border-white/5">
+<iconify-icon className="text-3xl" icon="solar:document-text-linear"></iconify-icon>
+</div>
+<div>
+<h3 className="font-['Inter'] font-semibold text-sm tracking-wider text-white mb-1 uppercase">
+                Devis Transparent
+              </h3>
+<p className="text-sm text-[#A0AFBA] font-light">
+                Validation du prix avant toute action.
+              </p>
+</div>
+</div>
+<div className="flex items-start gap-4">
+<div className="w-12 h-12 shrink-0 rounded-lg bg-white/5 flex items-center justify-center text-[#CCAC6E] border border-white/5">
+<iconify-icon className="text-3xl" icon="solar:diploma-verified-linear"></iconify-icon>
+</div>
+<div>
+<h3 className="font-['Inter'] font-semibold text-sm tracking-wider text-white mb-1 uppercase">
+                Artisan Certifié
+              </h3>
+<p className="text-sm text-[#A0AFBA] font-light">
+                Professionnels locaux qualifiés A2P.
+              </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="max-w-7xl mx-auto px-5 md:px-20 py-12 md:py-24" id="services">
+<div className="text-center mb-16 md:mb-20">
+<h2 className="font-['Montserrat'] font-medium text-3xl md:text-4xl tracking-tight text-white mb-4">
+            Notre Expertise
+          </h2>
+<p className="font-['Inter'] font-light text-base md:text-lg text-[#A0AFBA] max-w-2xl mx-auto">
+            Des interventions rapides et un savoir-faire reconnu pour garantir
+            la sécurité de votre domicile ou de vos locaux professionnels.
+          </p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+
+<div className="bg-[#1B263B] rounded-xl p-8 md:p-10 border border-white/5 hover:border-[#CCAC6E]/30 transition-colors duration-300 flex flex-col h-full group">
+<div className="w-14 h-14 rounded-lg bg-[#E63946]/10 flex items-center justify-center text-[#E63946] mb-8">
+<iconify-icon className="text-3xl" icon="solar:alarm-linear"></iconify-icon>
+</div>
+<h3 className="font-['Montserrat'] font-medium text-2xl tracking-tight text-white mb-8">
+              Dépannage Urgent
+            </h3>
+<div className="space-y-6 flex-grow">
+<div className="flex justify-between items-start border-b border-white/5 pb-5">
+<div>
+<h4 className="font-['Inter'] font-semibold text-sm text-white mb-1">
+                    Porte Claquée
+                  </h4>
+<p className="text-sm font-light text-[#A0AFBA]">
+                    Ouverture non-destructive garantie.
+                  </p>
+</div>
+</div>
+<div className="flex justify-between items-start border-b border-white/5 pb-5">
+<div>
+<h4 className="font-['Inter'] font-semibold text-sm text-white mb-1">
+                    Clé Cassée / Perdue
+                  </h4>
+<p className="text-sm font-light text-[#A0AFBA]">
+                    Extraction et remplacement immédiat.
+                  </p>
+</div>
+</div>
+<div className="flex justify-between items-start border-b border-white/5 pb-5">
+<div>
+<h4 className="font-['Inter'] font-semibold text-sm text-white mb-1">
+                    Mise en Sécurité
+                  </h4>
+<p className="text-sm font-light text-[#A0AFBA]">
+                    Fermeture provisoire suite effraction.
+                  </p>
+</div>
+</div>
+</div>
+<a className="w-full mt-8 bg-white/5 hover:bg-white/10 text-white font-['Inter'] font-semibold text-sm py-4 rounded-lg border border-white/10 transition-colors flex justify-center items-center gap-2" href="tel:0653789008">
+              Intervention Immédiate
+              <iconify-icon className="text-lg" icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+
+<div className="bg-[#1B263B] rounded-xl p-8 md:p-10 border border-white/5 hover:border-[#CCAC6E]/30 transition-colors duration-300 flex flex-col h-full relative overflow-hidden group">
+<div className="absolute -top-10 -right-10 text-white/5 pointer-events-none transform group-hover:scale-110 transition-transform duration-700">
+<iconify-icon className="text-[16rem]" icon="solar:shield-keyhole-linear"></iconify-icon>
+</div>
+<div className="w-14 h-14 rounded-lg bg-[#CCAC6E]/10 flex items-center justify-center text-[#CCAC6E] mb-8 relative z-10">
+<iconify-icon className="text-3xl" icon="solar:settings-linear"></iconify-icon>
+</div>
+<h3 className="font-['Montserrat'] font-medium text-2xl tracking-tight text-white mb-8 relative z-10">
+              Installations Sûreté
+            </h3>
+<ul className="space-y-6 flex-grow relative z-10">
+<li className="flex items-start gap-4">
+<iconify-icon className="text-[#CCAC6E] text-xl shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<div>
+<h4 className="font-['Inter'] font-semibold text-sm text-white mb-1">
+                    Blindage de porte
+                  </h4>
+<p className="text-sm font-light text-[#A0AFBA]">
+                    Renforcement acier sur-mesure pour une résistance optimale
+                    aux assauts.
+                  </p>
+</div>
+</li>
+<li className="flex items-start gap-4">
+<iconify-icon className="text-[#CCAC6E] text-xl shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<div>
+<h4 className="font-['Inter'] font-semibold text-sm text-white mb-1">
+                    Serrures Multipoints (A2P)
+                  </h4>
+<p className="text-sm font-light text-[#A0AFBA]">
+                    Installation de cylindres haute sécurité certifiés
+                    anti-crochetage.
+                  </p>
+</div>
+</li>
+<li className="flex items-start gap-4">
+<iconify-icon className="text-[#CCAC6E] text-xl shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<div>
+<h4 className="font-['Inter'] font-semibold text-sm text-white mb-1">
+                    Contrôle d'accès
+                  </h4>
+<p className="text-sm font-light text-[#A0AFBA]">
+                    Claviers, badges et systèmes connectés pour immeubles et
+                    bureaux.
+                  </p>
+</div>
+</li>
+</ul>
+<a className="w-full mt-8 border border-[#CCAC6E]/50 text-[#CCAC6E] hover:bg-[#CCAC6E]/10 font-['Inter'] font-semibold text-sm py-4 rounded-lg transition-colors flex justify-center items-center gap-2 relative z-10" href="#contact">
+              Obtenir un devis d'installation
+            </a>
+</div>
+</div>
+</section>
+
+<section className="bg-[#1B263B]/40 py-24 border-y border-white/5">
+<div className="max-w-7xl mx-auto px-5 md:px-20">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+<div>
+<h2 className="font-['Montserrat'] font-medium text-3xl md:text-4xl tracking-tight text-white mb-6">
+                Contre les arnaques, faites le choix de la transparence.
+              </h2>
+<div className="space-y-6 font-['Inter'] font-light text-base text-[#A0AFBA]">
+<p>
+                  Le secteur de la serrurerie souffre d'une réputation entachée
+                  par des pratiques douteuses. Notre entreprise a été fondée
+                  pour offrir l'exact opposé :
+                  <strong className="text-white font-semibold">
+                    une intégrité absolue.
+                  </strong>
+</p>
+<p>
+                  Chaque artisan de notre réseau s'engage sur une charte
+                  stricte. Nous analysons la panne avec vous, détaillons le
+                  matériel nécessaire, et ne remplaçons que ce qui est
+                  inévitable.
+                  <strong className="text-white font-semibold">
+                    Aucune intervention n'est facturée sans devis signé.
+                  </strong>
+</p>
+<p>
+                  Opérant localement, nous réduisons nos frais de déplacement
+                  pour vous proposer une tarification juste, respectant les
+                  barèmes des grandes compagnies d'assurance.
+                </p>
+</div>
+</div>
+<div className="relative h-[450px] rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+<img alt="Portrait d'un artisan professionnel en tenue de travail propre tenant un cylindre de serrure haute sécurité" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhFsf2NL7cdQ7YP6NEJu__OUSRCdygT1Tk2UH0PBSq5U8LsZgaxdMTvhw1FN5BuPj-5nTnny7lGGUKLl1TFV8mrlVrLrhPxS8HGRS27qm5cplVPWujRf8SQCtnjcbSs_tnGxxWHgKKDYYZJiJcFI9Jkvrkl0HCHbUFMm6vT4-aoJ8H_RdqzB3o-OviTgBDkkfX0yW8g2THUlgijny2YMXK7QhFtgGAT51EOpX1oW48HahExxrLXObSZ588buCXrB1OKKR5_ADrjkRA"/>
+<div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-xl pointer-events-none"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="max-w-4xl mx-auto px-5 md:px-20 py-24" id="faq">
+<div className="text-center mb-16">
+<h2 className="font-['Montserrat'] font-medium text-3xl md:text-4xl tracking-tight text-white mb-4">
+            Foire Aux Questions
+          </h2>
+<p className="font-['Inter'] font-light text-base text-[#A0AFBA]">
+            Des réponses claires pour des interventions en toute sérénité.
+          </p>
+</div>
+<div className="space-y-4">
+
+<details className="group bg-[#1B263B] rounded-lg border border-white/5 overflow-hidden transition-all duration-300" open="">
+<summary className="flex justify-between items-center font-['Montserrat'] font-medium text-xl md:text-2xl tracking-tight text-white p-6 cursor-pointer list-none hover:bg-white/5 transition-colors">
+              Quel est le délai d'intervention pour une urgence ?
+              <iconify-icon className="text-2xl text-[#CCAC6E] transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</summary>
+<div className="p-6 pt-0 font-['Inter'] font-light text-base leading-relaxed text-[#A0AFBA] border-t border-transparent group-open:border-white/5 mt-2 transition-all">
+              Pour toute urgence telle qu'une porte claquée ou une clé perdue,
+              nous garantissons une arrivée sur les lieux en
+              <strong className="text-white font-semibold">
+                moins de 30 minutes
+              </strong>
+              . Nos véhicules sont équipés du matériel nécessaire pour résoudre
+              95% des pannes sur-le-champ.
+            </div>
+</details>
+
+<details className="group bg-[#1B263B] rounded-lg border border-white/5 overflow-hidden transition-all duration-300">
+<summary className="flex justify-between items-center font-['Montserrat'] font-medium text-xl md:text-2xl tracking-tight text-white p-6 cursor-pointer list-none hover:bg-white/5 transition-colors">
+              Combien coûte l'ouverture d'une porte claquée ?
+              <iconify-icon className="text-2xl text-[#CCAC6E] transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</summary>
+<div className="p-6 pt-0 font-['Inter'] font-light text-base leading-relaxed text-[#A0AFBA] border-t border-transparent group-open:border-white/5 mt-2 transition-all">
+              Notre tarif pour une ouverture de porte claquée standard (sans
+              verrouillage) débute à
+              <strong className="text-white font-semibold">80€</strong>
+              . Ce prix inclut le déplacement et la main-d'œuvre. Vous recevrez
+              un devis exact avant le début de l'intervention.
+            </div>
+</details>
+
+<details className="group bg-[#1B263B] rounded-lg border border-white/5 overflow-hidden transition-all duration-300">
+<summary className="flex justify-between items-center font-['Montserrat'] font-medium text-xl md:text-2xl tracking-tight text-white p-6 cursor-pointer list-none hover:bg-white/5 transition-colors">
+              L'intervention est-elle remboursée par l'assurance ?
+              <iconify-icon className="text-2xl text-[#CCAC6E] transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</summary>
+<div className="p-6 pt-0 font-['Inter'] font-light text-base leading-relaxed text-[#A0AFBA] border-t border-transparent group-open:border-white/5 mt-2 transition-all">
+              Oui, dans le cadre d'un vol de clés, d'une tentative d'effraction
+              ou de vandalisme, l'intervention est souvent prise en charge par
+              votre assurance habitation. Nous vous fournissons une facture
+              agréée aux normes pour simplifier vos démarches de remboursement.
+            </div>
+</details>
+</div>
+</section>
+
+<section className="bg-[#CCAC6E] py-20">
+<div className="max-w-4xl mx-auto px-5 md:px-20 text-center">
+<h2 className="font-['Montserrat'] font-semibold text-3xl md:text-4xl tracking-tight text-[#0D1B2A] mb-6">
+            Besoin d'un artisan serrurier dès maintenant ?
+          </h2>
+<p className="font-['Inter'] font-medium text-base md:text-lg text-[#0D1B2A]/80 mb-10 max-w-2xl mx-auto">
+            Ne restez pas bloqué dehors. Nos techniciens sont prêts à intervenir
+            24/7 dans tout votre secteur.
+          </p>
+<a className="inline-flex items-center gap-3 bg-[#0D1B2A] text-[#CCAC6E] font-['Montserrat'] font-medium text-xl px-10 py-5 rounded-lg hover:bg-[#1B263B] transition-colors shadow-2xl hover:-translate-y-1 duration-300" href="tel:0653789008">
+<iconify-icon className="text-2xl" icon="solar:phone-bold"></iconify-icon>
+            Appeler le 06 53 78 90 08
+          </a>
+</div>
+</section>
+</main>
+
+<footer className="bg-[#0D1B2A] border-t border-white/5 py-12 md:py-16">
+<div className="max-w-7xl mx-auto px-5 md:px-20 flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+<div className="text-center md:text-left">
+<a className="font-['Montserrat'] font-semibold text-xl tracking-tighter uppercase text-white mb-2 block" href="#">
+            SECURE
+            <span className="text-[#CCAC6E]">PRO</span>
+</a>
+<p className="font-['Inter'] font-light text-sm text-[#A0AFBA]">
+            © 2026 SecurePro Serrurier. Tous droits réservés.
+          </p>
+</div>
+<div className="flex flex-wrap justify-center gap-6 font-['Inter'] font-semibold text-sm">
+<a className="text-[#A0AFBA] hover:text-[#CCAC6E] transition-colors" href="#">
+            Mentions légales
+          </a>
+<a className="text-[#A0AFBA] hover:text-[#CCAC6E] transition-colors" href="#">
+            Politique de confidentialité
+          </a>
+<a className="text-[#A0AFBA] hover:text-[#CCAC6E] transition-colors" href="#">
+            Zones d'intervention
+          </a>
+<a className="text-[#A0AFBA] hover:text-[#CCAC6E] transition-colors" href="#">
+            Assurances &amp; Agréments
+          </a>
+</div>
+</div>
+</footer>
+
+    </>
+  );
+}

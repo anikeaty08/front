@@ -1,0 +1,14 @@
+# Luxury Real Estate Landing Page
+
+A dark, cinematic luxury real estate landing page template for showcasing premium listings, communities, and agent credentials in style.
+
+## Project Details
+- **Slug:** `behrensgroup-real`
+- **Views:** 268
+- **Tags:** Landing Page, Real Estate, Brand, Clean, Dark, Minimal, Large Type, Portfolio, luxury real estate, agent
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

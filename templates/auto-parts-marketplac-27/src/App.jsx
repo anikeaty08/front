@@ -1,0 +1,834 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+      lucide.createIcons();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="fixed top-2 md:top-4 left-2 right-2 md:left-4 md:right-4 max-w-7xl mx-auto z-50 bg-neutral-950/80 backdrop-blur-2xl border border-neutral-800 transition-all rounded-2xl shadow-xl">
+<div className="px-6 h-16 flex items-center justify-between">
+<div className="flex items-center gap-8">
+
+<a className="text-2xl font-semibold tracking-tight text-white flex items-center gap-2" href="#">
+<span className="text-[#E63946]">OEM</span>
+            Yadak
+          </a>
+
+<nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-300">
+<a className="text-white" href="#">صفحه اصلی</a>
+<a className="hover:text-white transition-colors" href="#">محصولات</a>
+<a className="hover:text-white transition-colors" href="#">برندها</a>
+<a className="hover:text-white transition-colors" href="#">درباره ما</a>
+</nav>
+</div>
+<div className="flex items-center gap-4">
+<button className="text-neutral-300 hover:text-white transition-colors">
+<i className="w-5 h-5" data-lucide="search" strokeWidth="1.5"></i>
+</button>
+<div className="hidden md:flex items-center gap-2 text-white bg-[#E63946] px-4 py-2 rounded-full text-sm font-medium">
+<i className="w-4 h-4" data-lucide="phone" strokeWidth="1.5"></i>
+            ۰۲۱ - ۸۸۷۴ ۱۰۳۰
+          </div>
+<button className="md:hidden text-white">
+<i className="w-6 h-6" data-lucide="menu" strokeWidth="1.5"></i>
+</button>
+</div>
+</div>
+</header>
+
+<section className="relative pt-20 bg-neutral-950 min-h-screen flex items-center overflow-hidden">
+
+<div className="absolute left-0 top-1/4 bottom-0 w-1/2 bg-[#E63946]/20 hidden lg:block opacity-100 blur-[120px] rounded-full pointer-events-none"></div>
+<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.05)_0,transparent_70%)] pointer-events-none"></div>
+<div className="max-w-7xl mx-auto px-6 w-full relative z-10 flex flex-col lg:flex-row items-center gap-16 py-20 pb-40">
+
+<div className="w-full lg:w-1/2 text-white">
+<span className="inline-block py-1 px-3 rounded-full bg-neutral-800 text-[#E63946] text-sm font-medium mb-6">
+            فروشگاه تخصصی قطعات اورجینال
+          </span>
+<h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.1] mb-6 text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-neutral-500">
+            قلب تپنده خودروی
+            <br/>
+            خود را تضمین کنید
+          </h1>
+<p className="text-lg text-neutral-400 mb-10 max-w-lg leading-relaxed">
+            تامین‌کننده مستقیم قطعات اصلی موتور و گیربکس با ضمانت اصالت کالا.
+            ارسال سریع به سراسر کشور برای تعمیرکاران و مصرف‌کنندگان.
+          </p>
+<a className="inline-flex items-center gap-3 bg-[#E63946] hover:bg-red-600 text-white px-8 py-4 rounded-full transition-all duration-300 font-medium text-lg group hover:-translate-y-1 shadow-xl shadow-[#E63946]/20 hover:shadow-2xl hover:shadow-[#E63946]/30" href="#">
+            مشاهده کاتالوگ
+            <i className="w-5 h-5 group-hover:-translate-x-1 transition-transform" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</a>
+</div>
+
+<div className="w-full lg:w-1/2 relative">
+<div className="aspect-square bg-gradient-to-tr from-neutral-900 to-neutral-800 border border-neutral-700/50 shadow-2xl flex items-center justify-center relative overflow-hidden rotate-2 hover:rotate-0 transition-transform duration-700 group rounded-3xl">
+<div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.02)_50%,transparent_75%,transparent_100%)] bg-[length:250px_250px] animate-[gradient_3s_linear_infinite]"></div>
+<i className="w-48 h-48 text-neutral-700 opacity-30" data-lucide="cog" strokeWidth="1.5"></i>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-0 left-0 w-full transform translate-y-1/2 z-20 px-6">
+<div className="max-w-5xl mx-auto bg-white/95 backdrop-blur-2xl border border-white/50 p-3 flex flex-col md:flex-row items-center gap-3 rounded-2xl shadow-xl">
+<div className="flex-1 w-full relative bg-neutral-50/50 hover:bg-neutral-50 rounded-2xl transition-colors">
+<select className="w-full appearance-none bg-transparent py-4 pl-4 pr-12 text-base text-neutral-700 outline-none cursor-pointer">
+<option value="">نوع قطعه</option>
+<option value="1">سرسیلندر</option>
+<option value="2">میل‌لنگ</option>
+</select>
+<i className="w-5 h-5 text-neutral-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" data-lucide="chevron-down" strokeWidth="1.5"></i>
+</div>
+<div className="flex-1 w-full relative">
+<select className="w-full appearance-none bg-transparent py-4 pl-4 pr-12 text-base text-neutral-700 outline-none cursor-pointer">
+<option value="">برند</option>
+<option value="1">Mahle</option>
+<option value="2">Elring</option>
+</select>
+<i className="w-5 h-5 text-neutral-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" data-lucide="chevron-down" strokeWidth="1.5"></i>
+</div>
+<div className="flex-1 w-full relative bg-neutral-50/50 hover:bg-neutral-50 rounded-2xl transition-colors"></div>
+<button className="w-full md:w-auto bg-[#E63946] hover:bg-red-600 text-white px-8 py-4 transition-all duration-300 font-medium flex items-center justify-center gap-2 hover:-translate-y-0.5 rounded-xl shadow-lg shadow-[#E63946]/20">
+<i className="w-5 h-5" data-lucide="search" strokeWidth="1.5"></i>
+            جستجو
+          </button>
+</div>
+</div>
+</section>
+
+<section className="py-32 bg-white px-6">
+<div className="max-w-7xl mx-auto">
+<div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+<h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-neutral-900">
+            دسته‌بندی قطعات موتور و گیربکس
+          </h2>
+<div className="flex gap-2">
+<button className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-900 transition-colors">
+<i className="w-5 h-5" data-lucide="chevron-right" strokeWidth="1.5"></i>
+</button>
+<button className="w-10 h-10 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-900 transition-colors">
+<i className="w-5 h-5" data-lucide="chevron-left" strokeWidth="1.5"></i>
+</button>
+</div>
+</div>
+
+<div className="inline-flex gap-2 border border-neutral-200/60 bg-neutral-50/50 p-1.5 rounded-full overflow-x-auto no-scrollbar mb-12 w-full md:w-auto">
+<button className="bg-white text-[#E63946] shadow-sm rounded-full px-6 py-2.5 whitespace-nowrap font-medium text-sm">
+            واشرها
+          </button>
+<button className="text-neutral-500 hover:text-neutral-900 hover:bg-white/50 px-6 py-2.5 rounded-full transition-colors whitespace-nowrap font-medium text-sm">
+            پیستون و شاتون
+          </button>
+<button className="text-neutral-500 hover:text-neutral-900 hover:bg-white/50 px-6 py-2.5 rounded-full transition-colors whitespace-nowrap font-medium text-sm">
+            میل‌لنگ و میل‌سوپاپ
+          </button>
+<button className="text-neutral-500 hover:text-neutral-900 hover:bg-white/50 px-6 py-2.5 rounded-full transition-colors whitespace-nowrap font-medium text-sm">
+            یاتاقان
+          </button>
+<button className="text-neutral-500 hover:text-neutral-900 hover:bg-white/50 px-6 py-2.5 rounded-full transition-colors whitespace-nowrap font-medium text-sm">
+            سیستم خنک‌کاری
+          </button>
+</div>
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+<a className="group bg-white border overflow-hidden transition-all duration-500 hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-white shadow-sm rounded-xl border border-neutral-100 group-hover:scale-105 transition-transform duration-500"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                ELRING
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                واشر سرسیلندر فلزی TU5
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: ER-54321
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+
+<a className="group bg-white border overflow-hidden transition-all duration-500 hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-white shadow-sm rounded-xl border border-neutral-100 group-hover:scale-105 transition-transform duration-500"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                MAHLE
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                پیستون سایز استاندارد L90
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: MH-8890
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+
+<a className="group bg-white border overflow-hidden transition-all duration-500 hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-white shadow-sm rounded-xl border border-neutral-100 group-hover:scale-105 transition-transform duration-500"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                KOLBENSCHMIDT
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                یاتاقان ثابت و متحرک EF7
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: KS-1122
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+
+<a className="group bg-white border overflow-hidden transition-all duration-500 hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-white shadow-sm rounded-xl border border-neutral-100 group-hover:scale-105 transition-transform duration-500"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                GATES
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                کیت تسمه تایم مگان ۲۰۰۰
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: GT-9090
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-neutral-950 text-white px-6">
+<div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+
+<div className="w-full lg:w-1/2">
+<div className="aspect-[4/3] bg-neutral-900 border border-neutral-800 flex items-center justify-center overflow-hidden relative rounded-2xl">
+<i className="w-32 h-32 text-neutral-800" data-lucide="building-2" strokeWidth="1.5"></i>
+</div>
+</div>
+
+<div className="w-full lg:w-1/2">
+<h2 className="text-4xl lg:text-5xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-400">
+            درباره OEM Yadak
+          </h2>
+<p className="text-lg text-neutral-400 leading-relaxed mb-10">
+            ما با بیش از یک دهه تجربه در واردات و تامین قطعات یدکی اصلی خودرو،
+            شبکه‌ای گسترده از برترین برندهای جهانی را گرد هم آورده‌ایم. هدف ما
+            ارائه قطعات باکیفیت برای افزایش عمر مفید و راندمان موتور خودروهای
+            شماست.
+          </p>
+<div className="flex flex-wrap gap-12 mb-10 border-t border-neutral-800 pt-8">
+<div>
+<div className="text-4xl font-semibold text-[#E63946] mb-2">
+                +۳۰۰۰
+              </div>
+<div className="text-sm text-neutral-400">محصول در انبار</div>
+</div>
+<div>
+<div className="text-4xl font-semibold text-[#E63946] mb-2">+۵۰</div>
+<div className="text-sm text-neutral-400">برند معتبر جهانی</div>
+</div>
+<div>
+<div className="text-4xl font-semibold text-[#E63946] mb-2">+۱۰</div>
+<div className="text-sm text-neutral-400">سال سابقه تخصصی</div>
+</div>
+</div>
+<div className="flex gap-4">
+<a className="bg-[#E63946] hover:bg-red-600 text-white px-8 py-3.5 rounded-full transition-all font-medium shadow-[0_10px_30px_-10px_#E63946] hover:-translate-y-0.5" href="#">
+              مشاهده محصولات
+            </a>
+<a className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 text-white px-8 py-3.5 rounded-full transition-all font-medium hover:-translate-y-0.5" href="#">
+              تماس با ما
+            </a>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-neutral-100 px-6">
+<div className="max-w-4xl mx-auto text-center">
+<h2 className="text-3xl font-semibold tracking-tight text-neutral-900 mb-10">
+          جستجوی سریع قطعه
+        </h2>
+<div className="bg-white border border-neutral-100 p-2 flex flex-col md:flex-row items-center mb-8 rounded-2xl shadow-lg">
+<div className="flex-1 w-full relative hover:bg-neutral-50 rounded-xl transition-colors">
+<select className="w-full appearance-none bg-transparent py-3 pl-4 pr-12 text-base text-neutral-600 outline-none cursor-pointer">
+<option value="">نوع قطعه (مثال: شاتون)</option>
+</select>
+<i className="w-5 h-5 text-neutral-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" data-lucide="chevron-down" strokeWidth="1.5"></i>
+</div>
+<div className="hidden md:block w-px h-6 bg-neutral-200"></div>
+<div className="flex-1 w-full relative hover:bg-neutral-50 rounded-xl transition-colors">
+<select className="w-full appearance-none bg-transparent py-3 pl-4 pr-12 text-base text-neutral-600 outline-none cursor-pointer">
+<option value="">برند سازنده</option>
+</select>
+<i className="w-5 h-5 text-neutral-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" data-lucide="chevron-down" strokeWidth="1.5"></i>
+</div>
+<div className="hidden md:block w-px h-6 bg-neutral-200"></div>
+<div className="flex-1 w-full relative hover:bg-neutral-50 rounded-xl transition-colors">
+<select className="w-full appearance-none bg-transparent py-3 pl-4 pr-12 text-base text-neutral-600 outline-none cursor-pointer">
+<option value="">نوع موتور</option>
+</select>
+<i className="w-5 h-5 text-neutral-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" data-lucide="chevron-down" strokeWidth="1.5"></i>
+</div>
+<button className="w-full md:w-auto bg-[#E63946] text-white p-4 rounded-xl hover:bg-red-600 transition-all hover:-translate-y-0.5 flex items-center justify-center shadow-lg shadow-[#E63946]/20">
+<i className="w-5 h-5" data-lucide="search" strokeWidth="1.5"></i>
+</button>
+</div>
+
+<div className="flex flex-wrap justify-center gap-3">
+<span className="text-sm text-neutral-500">جستجوهای پرطرفدار:</span>
+<a className="inline-flex items-center gap-1 bg-white border border-neutral-200 text-neutral-600 px-3 py-1 rounded-full text-sm hover:border-neutral-300 transition-colors" href="#">
+<i className="w-3 h-3" data-lucide="tag" strokeWidth="1.5"></i>
+            واشر سرسیلندر
+          </a>
+<a className="inline-flex items-center gap-1 bg-white border border-neutral-200 text-neutral-600 px-3 py-1 rounded-full text-sm hover:border-neutral-300 transition-colors" href="#">
+<i className="w-3 h-3" data-lucide="tag" strokeWidth="1.5"></i>
+            کیت تایم
+          </a>
+<a className="inline-flex items-center gap-1 bg-white border border-neutral-200 text-neutral-600 px-3 py-1 rounded-full text-sm hover:border-neutral-300 transition-colors" href="#">
+<i className="w-3 h-3" data-lucide="tag" strokeWidth="1.5"></i>
+            اویل پمپ
+          </a>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-neutral-950 text-white px-6 overflow-hidden">
+<div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
+
+<div className="w-full lg:w-1/3 shrink-0">
+<div className="text-[#E63946] text-sm font-medium uppercase tracking-widest mb-4">
+            برند ویژه ماه
+          </div>
+<h2 className="text-6xl font-bold tracking-tighter mb-4 font-mono text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500">
+            ELRING
+          </h2>
+<p className="text-lg text-neutral-400 mb-8">
+            شرکت الرینگ، پیشرو در تولید انواع واشرآلات و سیستم‌های آب‌بندی موتور
+            در آلمان. کیفیتی برابر با استانداردهای خط تولید خودروسازان بزرگ.
+          </p>
+<div className="flex gap-4 border-b border-neutral-800 pb-4 mb-4">
+<button className="text-white font-medium border-b-2 border-white pb-2">
+              Elring
+            </button>
+<button className="text-neutral-500 hover:text-neutral-300 pb-2 transition-colors">
+              Mahle
+            </button>
+<button className="text-neutral-500 hover:text-neutral-300 pb-2 transition-colors">
+              Gates
+            </button>
+<button className="text-neutral-500 hover:text-neutral-300 pb-2 transition-colors">
+              Victor Reinz
+            </button>
+</div>
+<a className="inline-flex items-center gap-2 text-sm text-[#E63946] hover:text-white transition-colors" href="#">
+            مشاهده همه محصولات این برند
+            <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</a>
+</div>
+
+<div className="w-full lg:w-2/3 flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 no-scrollbar">
+
+<a className="snap-start shrink-0 w-72 group bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 overflow-hidden hover:bg-neutral-900 hover:border-neutral-700 transition-all duration-500 hover:-translate-y-1 rounded-2xl" href="#">
+<div className="aspect-[4/3] bg-neutral-800 flex items-center justify-center p-6">
+<div className="w-full h-full bg-neutral-700 rounded-lg"></div>
+</div>
+<div className="p-5">
+<h3 className="text-lg font-semibold text-white mb-1">
+                کاسه نمد میل‌لنگ
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: EL-234
+              </p>
+<div className="inline-block bg-neutral-800 text-white text-sm px-4 py-2 rounded-lg group-hover:bg-[#E63946] transition-colors">
+                مشاهده
+              </div>
+</div>
+</a>
+
+<a className="snap-start shrink-0 w-72 group bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 overflow-hidden hover:bg-neutral-900 hover:border-neutral-700 transition-all duration-500 hover:-translate-y-1 rounded-2xl" href="#">
+<div className="aspect-[4/3] bg-neutral-800 flex items-center justify-center p-6">
+<div className="w-full h-full bg-neutral-700 rounded-lg"></div>
+</div>
+<div className="p-5">
+<h3 className="text-lg font-semibold text-white mb-1">
+                واشر منیفولد دود
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: EL-556
+              </p>
+<div className="inline-block bg-neutral-800 text-white text-sm px-4 py-2 rounded-lg group-hover:bg-[#E63946] transition-colors">
+                مشاهده
+              </div>
+</div>
+</a>
+
+<a className="snap-start shrink-0 w-72 group bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 overflow-hidden hover:bg-neutral-900 hover:border-neutral-700 transition-all duration-500 hover:-translate-y-1 rounded-2xl" href="#">
+<div className="aspect-[4/3] bg-neutral-800 flex items-center justify-center p-6">
+<div className="w-full h-full bg-neutral-700 rounded-lg"></div>
+</div>
+<div className="p-5">
+<h3 className="text-lg font-semibold text-white mb-1">
+                پیچ سرسیلندر دست کامل
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: EL-789
+              </p>
+<div className="inline-block bg-neutral-800 text-white text-sm px-4 py-2 rounded-lg group-hover:bg-[#E63946] transition-colors">
+                مشاهده
+              </div>
+</div>
+</a>
+</div>
+</div>
+</section>
+
+<section className="bg-gradient-to-br from-[#E63946] to-red-800 py-24 px-6 text-white relative overflow-hidden">
+<div className="max-w-4xl mx-auto text-center">
+<h2 className="text-4xl font-semibold tracking-tight mb-4">
+          جشنواره قطعات اصلی موتور
+        </h2>
+<p className="text-xl text-white/80 mb-10">
+          تخفیف ویژه برای خریدهای عمده تعمیرگاه‌ها. فرصت را از دست ندهید.
+        </p>
+<div className="flex justify-center gap-4 mb-10" dir="ltr">
+<div className="bg-white/10 backdrop-blur-xl border border-white/20 p-4 min-w-[80px] rounded-xl shadow-lg shadow-black/20">
+<div className="text-3xl font-semibold mb-1">05</div>
+<div className="text-xs text-white/70 uppercase tracking-widest">
+              Days
+            </div>
+</div>
+<div className="text-3xl font-semibold pt-4">:</div>
+<div className="bg-white/10 backdrop-blur-xl border border-white/20 p-4 min-w-[80px] rounded-xl shadow-lg shadow-black/20">
+<div className="text-3xl font-semibold mb-1">12</div>
+<div className="text-xs text-white/70 uppercase tracking-widest">
+              Hours
+            </div>
+</div>
+<div className="text-3xl font-semibold pt-4">:</div>
+<div className="bg-white/10 backdrop-blur-xl border border-white/20 p-4 min-w-[80px] rounded-xl shadow-lg shadow-black/20">
+<div className="text-3xl font-semibold mb-1">45</div>
+<div className="text-xs text-white/70 uppercase tracking-widest">
+              Mins
+            </div>
+</div>
+</div>
+<a className="inline-block bg-white text-[#E63946] hover:bg-neutral-50 px-8 py-4 rounded-full font-bold transition-all hover:-translate-y-1 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30" href="#">
+          دریافت لیست قیمت ویژه
+        </a>
+</div>
+</section>
+
+<section className="py-24 bg-white px-6">
+<div className="max-w-7xl mx-auto">
+<div className="flex justify-between items-end mb-12 border-b border-neutral-100 pb-6">
+<h2 className="text-3xl font-semibold tracking-tight text-neutral-900">
+            آخرین محصولات OEM Yadak
+          </h2>
+<a className="text-sm font-medium text-[#E63946] flex items-center gap-1 hover:gap-2 transition-all" href="#">
+            مشاهده همه
+            <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</a>
+</div>
+<div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 no-scrollbar">
+
+<a className="snap-start shrink-0 w-[280px] group bg-white border overflow-hidden transition-all duration-500 relative hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<span className="absolute top-0 right-0 bg-[#E63946] text-white text-xs px-3 py-1 rounded-bl-lg font-medium z-10">
+              جدید
+            </span>
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-neutral-200 rounded-lg"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                INA
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                استکانی تایپیت EF7
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: INA-4001
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+
+<a className="snap-start shrink-0 w-[280px] group bg-white border overflow-hidden transition-all duration-500 relative hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<span className="absolute top-0 right-0 bg-[#E63946] text-white text-xs px-3 py-1 rounded-bl-lg font-medium z-10">
+              جدید
+            </span>
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-neutral-200 rounded-lg"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                KS
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                بوش پیستون پژو 405
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: KS-8877
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+
+<a className="snap-start shrink-0 w-[280px] group bg-white border overflow-hidden transition-all duration-500 relative hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<span className="absolute top-0 right-0 bg-[#E63946] text-white text-xs px-3 py-1 rounded-bl-lg font-medium z-10">
+              جدید
+            </span>
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-neutral-200 rounded-lg"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                VALEO
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                کیت کلاچ زانتیا 2000
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: VL-1100
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+
+<a className="snap-start shrink-0 w-[280px] group bg-white border overflow-hidden transition-all duration-500 relative hover:-translate-y-1 rounded-2xl hover:shadow-xl border-neutral-200/60" href="#">
+<div className="aspect-[4/3] bg-neutral-100 p-6 flex items-center justify-center">
+<div className="w-full h-full bg-neutral-200 rounded-lg"></div>
+</div>
+<div className="p-5">
+<span className="text-xs text-neutral-500 font-medium uppercase tracking-widest block mb-2">
+                CORTECO
+              </span>
+<h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                دسته موتور راست 206
+              </h3>
+<p className="text-sm text-neutral-400 mb-4 text-left font-mono">
+                Code: CR-9988
+              </p>
+<div className="flex items-center text-[#E63946] font-medium text-sm gap-1 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                مشاهده محصول
+                <i className="w-4 h-4" data-lucide="arrow-left" strokeWidth="1.5"></i>
+</div>
+</div>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-neutral-950 text-white px-6">
+<div className="max-w-7xl mx-auto">
+<h2 className="text-4xl font-bold tracking-tighter mb-12 text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">
+          مقالات OEM Yadak
+        </h2>
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+<a className="lg:col-span-2 group bg-gradient-to-br from-neutral-900 to-neutral-900/50 overflow-hidden border border-neutral-800 hover:border-neutral-700 transition-all duration-500 flex flex-col h-full hover:-translate-y-1 rounded-3xl hover:shadow-2xl hover:shadow-black/50" href="#">
+<div className="h-64 bg-neutral-800 flex items-center justify-center relative overflow-hidden">
+<i className="w-12 h-12 text-neutral-700" data-lucide="image" strokeWidth="1.5"></i>
+</div>
+<div className="p-8 flex-1 flex flex-col justify-between">
+<div>
+<span className="text-[#E63946] text-sm font-medium mb-3 block">
+                  آموزش فنی
+                </span>
+<h3 className="text-2xl font-semibold mb-3 group-hover:text-neutral-300 transition-colors">
+                  نشانه‌های خرابی واشر سرسیلندر و راهنمای انتخاب قطعه جایگزین
+                </h3>
+<p className="text-neutral-400 text-lg line-clamp-2 mb-6">
+                  در این مقاله به بررسی علائم سوختن واشر سرسیلندر می‌پردازیم و
+                  تفاوت کیفیت برندهای مختلف موجود در بازار را مقایسه می‌کنیم تا
+                  بهترین انتخاب را برای تعمیر موتور داشته باشید.
+                </p>
+</div>
+<div className="text-sm text-neutral-500 flex items-center gap-2">
+<i className="w-4 h-4" data-lucide="calendar" strokeWidth="1.5"></i>
+                ۱۲ آبان ۱۴۰۲
+              </div>
+</div>
+</a>
+
+<div className="flex flex-col gap-6">
+<a className="group bg-gradient-to-br from-neutral-900 to-neutral-900/50 overflow-hidden border border-neutral-800 hover:border-neutral-700 transition-all duration-500 flex flex-col flex-1 hover:-translate-y-1 rounded-2xl hover:shadow-xl hover:shadow-black/50" href="#">
+<div className="h-40 bg-neutral-800 flex items-center justify-center">
+<i className="w-8 h-8 text-neutral-700" data-lucide="image" strokeWidth="1.5"></i>
+</div>
+<div className="p-6">
+<span className="text-[#E63946] text-xs font-medium mb-2 block">
+                  اخبار برندها
+                </span>
+<h3 className="text-lg font-semibold mb-2 group-hover:text-neutral-300 transition-colors">
+                  معرفی محصولات جدید INA
+                </h3>
+<div className="text-xs text-neutral-500 mt-4">۵ آبان ۱۴۰۲</div>
+</div>
+</a>
+<a className="group bg-gradient-to-br from-neutral-900 to-neutral-900/50 overflow-hidden border border-neutral-800 hover:border-neutral-700 transition-all duration-500 flex flex-col flex-1 hover:-translate-y-1 rounded-2xl hover:shadow-xl hover:shadow-black/50" href="#">
+<div className="h-40 bg-neutral-800 flex items-center justify-center">
+<i className="w-8 h-8 text-neutral-700" data-lucide="image" strokeWidth="1.5"></i>
+</div>
+<div className="p-6">
+<span className="text-[#E63946] text-xs font-medium mb-2 block">
+                  راهنمای خرید
+                </span>
+<h3 className="text-lg font-semibold mb-2 group-hover:text-neutral-300 transition-colors">
+                  چگونه قطعه اصلی را از تقلبی تشخیص دهیم؟
+                </h3>
+<div className="text-xs text-neutral-500 mt-4">۲۸ مهر ۱۴۰۲</div>
+</div>
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="bg-neutral-950 text-white border-t-4 border-[#E63946] pt-20 pb-8 px-6">
+<div className="max-w-7xl mx-auto">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+<div className="lg:col-span-2">
+<a className="text-3xl font-semibold tracking-tight text-white flex items-center gap-2 mb-6" href="#">
+<span className="text-[#E63946]">OEM</span>
+              Yadak
+            </a>
+<p className="text-neutral-400 text-lg mb-8 max-w-sm">
+              مرجع تخصصی فروش و توزیع قطعات اصلی موتور و گیربکس خودروهای سبک و
+              سنگین در سراسر ایران.
+            </p>
+<div className="flex items-center gap-4 text-neutral-400">
+<a className="hover:text-white transition-colors" href="#">
+<i className="w-6 h-6" data-lucide="instagram" strokeWidth="1.5"></i>
+</a>
+<a className="hover:text-white transition-colors" href="#">
+<i className="w-6 h-6" data-lucide="send" strokeWidth="1.5"></i>
+</a>
+<a className="hover:text-white transition-colors" href="#">
+<i className="w-6 h-6" data-lucide="linkedin" strokeWidth="1.5"></i>
+</a>
+</div>
+</div>
+<div>
+<h4 className="font-semibold text-lg mb-6">دسته‌بندی‌ها</h4>
+<ul className="space-y-4 text-neutral-400">
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                  قطعات سرسیلندر
+                </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                  بلوک سیلندر و پیستون
+                </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                  سیستم تایمینگ
+                </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                  قطعات گیربکس
+                </a>
+</li>
+</ul>
+</div>
+<div>
+<h4 className="font-semibold text-lg mb-6">برندهای همکار</h4>
+<ul className="space-y-4 text-neutral-400 font-mono text-sm">
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                  Elring
+                </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">Mahle</a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                  Kolbenschmidt
+                </a>
+</li>
+<li>
+<a className="hover:text-white transition-colors" href="#">
+                  Victor Reinz
+                </a>
+</li>
+</ul>
+</div>
+<div>
+<h4 className="font-semibold text-lg mb-6">ارتباط با ما</h4>
+<ul className="space-y-4 text-neutral-400">
+<li className="flex items-start gap-3">
+<i className="w-5 h-5 shrink-0 mt-0.5" data-lucide="map-pin" strokeWidth="1.5"></i>
+<span>تهران، خیابان امیرکبیر، کوچه ناظم الاطبا، پلاک ۱۲</span>
+</li>
+<li className="flex items-center gap-3">
+<i className="w-5 h-5 shrink-0" data-lucide="phone" strokeWidth="1.5"></i>
+<span dir="ltr">021 - 8874 1030</span>
+</li>
+<li className="flex items-center gap-3">
+<i className="w-5 h-5 shrink-0" data-lucide="mail" strokeWidth="1.5"></i>
+<span dir="ltr">info@oemyadak.com</span>
+</li>
+</ul>
+</div>
+</div>
+<div className="border-t border-neutral-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-500">
+<p>تمامی حقوق برای فروشگاه OEM Yadak محفوظ است. © ۱۴۰۲</p>
+<div className="flex gap-4">
+<a className="hover:text-white transition-colors" href="#">
+              قوانین و مقررات
+            </a>
+<a className="hover:text-white transition-colors" href="#">
+              حریم خصوصی
+            </a>
+</div>
+</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

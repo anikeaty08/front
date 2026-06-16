@@ -1,0 +1,862 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+(function () {
+const style = document.createElement("style");
+style.textContent = `
+.animate-on-scroll { animation-play-state: paused !important; }
+.animate-on-scroll.animate { animation-play-state: running !important; }
+`;
+document.head.appendChild(style);
+const once = true;
+if (!window.__inViewIO) {
+window.__inViewIO = new IntersectionObserver((entries) => {
+entries.forEach((entry) => {
+if (entry.isIntersecting) {
+entry.target.classList.add("animate");
+if (once) window.__inViewIO.unobserve(entry.target);
+}
+});
+}, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+}
+window.initInViewAnimations = function (selector = ".animate-on-scroll") {
+document.querySelectorAll(selector).forEach((el) => {
+window.__inViewIO.observe(el);
+});
+};
+document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
+})();
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+colors: {}
+}
+},
+plugins: [
+function({ addUtilities }) {
+const rotateXUtilities = {};
+const rotateYUtilities = {};
+const rotateZUtilities = {};
+const rotateValues = [0, 5, 10, 15, 20, 30, 45, 75];
+rotateValues.forEach((value) => {
+rotateXUtilities[`.rotate-x-${value}`] = {
+'--tw-rotate-x': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateXUtilities[`.-rotate-x-${value}`] = {
+'--tw-rotate-x': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+rotateValues.forEach((value) => {
+rotateYUtilities[`.rotate-y-${value}`] = {
+'--tw-rotate-y': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateYUtilities[`.-rotate-y-${value}`] = {
+'--tw-rotate-y': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+rotateValues.forEach((value) => {
+rotateZUtilities[`.rotate-z-${value}`] = {
+'--tw-rotate-z': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateZUtilities[`.-rotate-z-${value}`] = {
+'--tw-rotate-z': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+const perspectiveUtilities = {
+".perspective-none": { perspective: "none" },
+".perspective-dramatic": { perspective: "100px" },
+".perspective-near": { perspective: "300px" },
+".perspective-normal": { perspective: "500px" },
+".perspective-midrange": { perspective: "800px" },
+".perspective-distant": { perspective: "1200px" },
+};
+const transformStyleUtilities = {
+".transform-style-preserve-3d": { "transform-style": "preserve-3d" },
+".transform-style-flat": { "transform-style": "flat" },
+};
+addUtilities({
+...rotateXUtilities,
+...rotateYUtilities,
+...rotateZUtilities,
+...perspectiveUtilities,
+...transformStyleUtilities,
+});
+}
+]
+};
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 70, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.3, random: true },
+                size: { value: 2, random: true },
+                line_linked: { enable: true, distance: 160, color: "#ffffff", opacity: 0.25, width: 1 },
+                move: { enable: true, speed: 1.5, direction: "none", random: true, straight: false, out_mode: "bounce", bounce: false }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 200, line_linked: { opacity: 0.5 } }, push: { particles_nb: 3 } }
+            },
+            retina_detect: true
+        });
+    });
+  
+
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const translations = {
+    en: {
+      "nav.solutions": "Expertise", "nav.product": "Projects", "nav.services": "Approach", "nav.restaurants": "Resume", "nav.contact": "Contact",
+      "hero.pill": "mcmills • Software Engineer & Designer", "hero.headline": "Crafting Digital Experiences", "hero.headline2": "with Code & Design",
+      "hero.subheadline": "I am a software engineer specializing in front-end development, product design, prompt engineering, and project management.",
+      "hero.benefit": "Full-stack expertise", "hero.ctaPrimary": "View My Work", "hero.ctaSecondary": "Get in Touch",
+      "features.header": "My Expertise", "features.sub": "I don't just write code; I build complete products. My multidisciplinary approach integrates rigorous engineering with immersive design and AI.",
+      "features.link": "View full resume", "card1.title": "Software Engineering", "card1.desc": "Front-end, back-end, and scalable architecture.",
+      "card2.title": "Product Design", "card2.desc": "UI/UX, prototyping, and user-centric workflows.", "card3.title": "Prompt Engineering",
+      "card3.desc": "LLM optimization, AI integration, and workflow automation.", "card4.title": "Project Management", "card4.desc": "Agile methodologies, scoping, and product delivery.",
+      "meth.pill": "Brand & UI/UX Methodology", "meth.title.main": "Approach", "meth.title": "Crafting Meaningful Digital Systems", "meth.desc": "I combine technical rigor with design thinking to build end-to-end digital products. From pixel-perfect front-ends to robust AI integrations and efficient project management.",
+      "meth.cta": "View Process", "meth.m1": "Years Experience", "meth.m2": "Projects Shipped", "meth.m3": "User Focused",
+      "meth.c1": "Research", "meth.c2": "Strategy", "meth.c3": "Design & Build", "meth.c4": "Testing", "meth.c5": "Launch",
+      "projects.pill": "Selected Works", "projects.title": "Engineering for Real Users", "projects.desc": "A continuous stream of UI/UX, full-stack applications, and product management systems tailored to precise needs.",
+      "close.pill": "Ready to collaborate?", "close.title": "Let's Create Something Exceptional", "close.desc": "Trusted by brands, loved by clients. I'm always open to discussing new projects and creative ideas.",
+      "close.cta": "Contact Me", "close.cta2": "WhatsApp",
+      "footer.blurb": "Software engineer with a passion for building robust digital products, managing complex projects, and integrating AI.",
+      "footer.col1Title": "Portfolio", "footer.col1L1": "Expertise", "footer.col1L2": "Projects", "footer.col1L3": "Approach", "footer.col1L4": "Resume",
+      "footer.col4Title": "Contact", "footer.contactLink": "WhatsApp", "footer.rights": "All rights reserved."
+    },
+    es: {
+      "nav.solutions": "Experiencia", "nav.product": "Proyectos", "nav.services": "Enfoque", "nav.restaurants": "Currículum", "nav.contact": "Contacto",
+      "hero.pill": "mcmills • Ing. de Software y Diseñador", "hero.headline": "Creando Experiencias Digitales", "hero.headline2": "con Código y Diseño",
+      "hero.subheadline": "Soy un ingeniero de software especializado en desarrollo front-end, diseño de productos, ingeniería de prompts y gestión de proyectos.",
+      "hero.benefit": "Experiencia full-stack", "hero.ctaPrimary": "Ver Mi Trabajo", "hero.ctaSecondary": "Ponerse en Contacto",
+      "features.header": "Mi Experiencia", "features.sub": "No solo escribo código; construyo productos completos. Mi enfoque multidisciplinario integra ingeniería rigurosa con diseño inmersivo.",
+      "features.link": "Ver currículum completo", "card1.title": "Ingeniería de Software", "card1.desc": "Front-end, back-end y arquitectura escalable.",
+      "card2.title": "Diseño de Producto", "card2.desc": "UI/UX, prototipado y flujos de trabajo centrados en el usuario.", "card3.title": "Ingeniería de Prompts",
+      "card3.desc": "Optimización de LLM, integración de IA y automatización.", "card4.title": "Gestión de Proyectos", "card4.desc": "Metodologías ágiles, alcance y entrega de productos.",
+      "meth.pill": "Metodología UI/UX", "meth.title.main": "Enfoque", "meth.title": "Creando Sistemas Digitales Significativos", "meth.desc": "Combino rigor técnico con pensamiento de diseño para construir productos digitales completos. Desde front-ends perfectos hasta integraciones robustas de IA.",
+      "meth.cta": "Ver Proceso", "meth.m1": "Años de Experiencia", "meth.m2": "Proyectos Entregados", "meth.m3": "Enfoque en Usuario",
+      "meth.c1": "Investigación", "meth.c2": "Estrategia", "meth.c3": "Diseño y Desarr.", "meth.c4": "Pruebas", "meth.c5": "Lanzamiento",
+      "projects.pill": "Trabajos Seleccionados", "projects.title": "Ingeniería para Usuarios", "projects.desc": "Un flujo continuo de UI/UX, aplicaciones full-stack y sistemas de gestión.",
+      "close.pill": "¿Listo para colaborar?", "close.title": "Creemos Algo Excepcional", "close.desc": "Confiado por marcas, amado por clientes. Siempre abierto a nuevas ideas.",
+      "close.cta": "Contáctame", "close.cta2": "WhatsApp",
+      "footer.blurb": "Ingeniero de software con pasión por construir productos robustos e integrar IA.",
+      "footer.col1Title": "Portafolio", "footer.col1L1": "Experiencia", "footer.col1L2": "Proyectos", "footer.col1L3": "Enfoque", "footer.col1L4": "Currículum",
+      "footer.col4Title": "Contacto", "footer.contactLink": "WhatsApp", "footer.rights": "Todos los derechos reservados."
+    },
+    fr: {
+      "nav.solutions": "Expertise", "nav.product": "Projets", "nav.services": "Approche", "nav.restaurants": "CV", "nav.contact": "Contact",
+      "hero.pill": "mcmills • Ingénieur & Designer", "hero.headline": "Création d'Expériences Digitales", "hero.headline2": "avec Code et Design",
+      "hero.subheadline": "Ingénieur logiciel spécialisé dans le développement front-end, le design produit, l'ingénierie prompt et la gestion de projet.",
+      "hero.benefit": "Expertise full-stack", "hero.ctaPrimary": "Voir mon travail", "hero.ctaSecondary": "Prendre Contact",
+      "features.header": "Mon Expertise", "features.sub": "Je ne me contente pas de coder; je construis des produits complets. Mon approche multidisciplinaire intègre une ingénierie rigoureuse.",
+      "features.link": "Voir le CV complet", "card1.title": "Ingénierie Logicielle", "card1.desc": "Front-end, back-end et architecture évolutive.",
+      "card2.title": "Design Produit", "card2.desc": "UI/UX, prototypage et workflows centrés sur l'utilisateur.", "card3.title": "Ingénierie Prompt",
+      "card3.desc": "Optimisation LLM, intégration IA et automatisation.", "card4.title": "Gestion de Projet", "card4.desc": "Méthodes agiles, cadrage et livraison de produits.",
+      "meth.pill": "Méthodologie UI/UX", "meth.title.main": "Approche", "meth.title": "Création de Systèmes Significatifs", "meth.desc": "Je combine rigueur technique et design thinking pour construire des produits digitaux de bout en bout.",
+      "meth.cta": "Voir le processus", "meth.m1": "Années d'Expérience", "meth.m2": "Projets Livrés", "meth.m3": "Centré Utilisateur",
+      "meth.c1": "Recherche", "meth.c2": "Stratégie", "meth.c3": "Design & Dév", "meth.c4": "Tests", "meth.c5": "Lancement",
+      "projects.pill": "Travaux Sélectionnés", "projects.title": "Ingenierie pour les Utilisateurs", "projects.desc": "Un flux continu d'applications UI/UX et de systèmes full-stack.",
+      "close.pill": "Prêt à collaborer ?", "close.title": "Créons Quelque Chose d'Exceptionnel", "close.desc": "Approuvé par les marques, adoré par les clients. Toujours ouvert aux nouvelles idées.",
+      "close.cta": "Contactez-moi", "close.cta2": "WhatsApp",
+      "footer.blurb": "Ingénieur logiciel passionné par la création de produits digitaux robustes.",
+      "footer.col1Title": "Portfolio", "footer.col1L1": "Expertise", "footer.col1L2": "Projets", "footer.col1L3": "Approche", "footer.col1L4": "CV",
+      "footer.col4Title": "Contact", "footer.contactLink": "WhatsApp", "footer.rights": "Tous droits réservés."
+    }
+  };
+
+  function setLanguage(lang) {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang] && translations[lang][key]) {
+        el.innerHTML = translations[lang][key];
+      }
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      if (btn.getAttribute('data-lang') === lang) {
+        btn.classList.remove('font-normal', 'text-white/40');
+        btn.classList.add('font-semibold', 'text-white');
+      } else {
+        btn.classList.remove('font-semibold', 'text-white');
+        btn.classList.add('font-normal', 'text-white/40');
+      }
+    });
+  }
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="relative h-screen overflow-hidden bg-slate-950">
+
+<img alt="Hero Background" className="pointer-events-none w-full h-full object-cover object-center absolute top-0 right-0 bottom-0 left-0 opacity-60 animate-scale-pan z-0" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&amp;fit=crop&amp;q=80&amp;w=2564"/>
+
+<div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent pointer-events-none z-[1]"></div>
+<div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/50 to-slate-950 pointer-events-none z-[1]"></div>
+
+<div className="absolute inset-0 z-[2] mix-blend-screen opacity-100" id="particles-js"></div>
+
+
+
+<div className="pointer-events-none absolute inset-0 z-[3] opacity-50">
+<div className="absolute inset-y-0 left-[12.5%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-y-0 left-[25%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-y-0 left-[37.5%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-y-0 left-[50%] w-px bg-gradient-to-b from-transparent via-white/8 to-transparent"></div>
+<div className="absolute inset-y-0 left-[62.5%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-y-0 left-[75%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-y-0 left-[87.5%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-x-0 top-[20%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-x-0 top-[40%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-x-0 top-[60%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-x-0 top-[80%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+</div>
+
+<header className="z-20 border-white/5 border-b relative">
+<div className="flex md:px-8 max-w-7xl mr-auto ml-auto pt-5 pr-6 pb-5 pl-6 items-center justify-between">
+<div className="flex md:gap-6 ring-white/5 ring-1 [animation:fadeSlideIn_1s_ease-out_0.1s_both] rounded-full pt-1 pr-1 pb-1 pl-1 gap-x-4 gap-y-4 items-center bg-[#0B0B0B]/40 backdrop-blur-md">
+
+<a aria-label="mcmills" className="inline-flex items-center justify-center h-[36px] px-4 rounded-full text-xl font-semibold tracking-tight text-white font-geist" href="#">
+          mcmills.
+        </a>
+<nav className="hidden md:flex gap-2 gap-x-2 gap-y-2 items-center">
+<a className="inline-flex items-center gap-2 transition hover:bg-white/10 hover:ring-white/20 text-base font-normal text-white/90 font-geist bg-white/5 ring-white/10 ring-1 rounded-full pt-2 pr-3.5 pb-2 pl-3.5 backdrop-blur-sm" href="/#expertise">
+<span data-i18n="nav.solutions">Expertise</span>
+</a>
+<a className="inline-flex items-center gap-2 transition hover:bg-white/10 hover:ring-white/20 text-base font-normal text-white/90 font-geist bg-white/5 ring-white/10 ring-1 rounded-full pt-2 pr-3.5 pb-2 pl-3.5 backdrop-blur-sm" href="/#projects">
+<span data-i18n="nav.product">Projects</span>
+</a>
+<a className="inline-flex items-center gap-2 transition hover:bg-white/10 hover:ring-white/20 text-base font-normal text-white/90 font-geist bg-white/5 ring-white/10 ring-1 rounded-full pt-2 pr-3.5 pb-2 pl-3.5 backdrop-blur-sm" href="/#approach">
+<span data-i18n="nav.services">Approach</span>
+</a>
+<a className="inline-flex items-center gap-2 transition hover:bg-white/10 hover:ring-white/20 text-base font-normal text-white/90 font-geist bg-white/5 ring-white/10 ring-1 rounded-full pt-2 pr-3.5 pb-2 pl-3.5 backdrop-blur-sm" href="mailto:kusiboatengmills@gmail.com?subject=Resume%20Request">
+<span data-i18n="nav.restaurants">Resume</span>
+</a>
+</nav>
+</div>
+<div className="flex ring-white/5 ring-1 rounded-full pt-1 pr-1 pb-1 pl-1 gap-x-2 gap-y-2 items-center bg-[#0B0B0B]/40 backdrop-blur-md">
+
+<div className="hidden sm:inline-flex items-center gap-1 transition [animation:fadeSlideIn_1s_ease-out_0.2s_both] bg-white/5 ring-white/10 ring-1 rounded-full px-2 py-1.5 backdrop-blur-sm">
+<button className="lang-btn px-2 uppercase tracking-wide text-xs font-semibold text-white font-geist hover:text-white transition-colors" data-lang="en" onclick="setLanguage('en')" type="button">EN</button>
+<span className="text-white/20 text-xs">/</span>
+<button className="lang-btn px-2 uppercase tracking-wide text-xs font-normal text-white/40 font-geist hover:text-white transition-colors" data-lang="es" onclick="setLanguage('es')" type="button">ES</button>
+<span className="text-white/20 text-xs">/</span>
+<button className="lang-btn px-2 uppercase tracking-wide text-xs font-normal text-white/40 font-geist hover:text-white transition-colors" data-lang="fr" onclick="setLanguage('fr')" type="button">FR</button>
+</div>
+<a className="inline-flex items-center gap-2 transition hover:bg-white/15 hover:ring-white/25 ring-white/15 ring-1 [animation:fadeSlideIn_1s_ease-out_0.3s_both] text-base font-normal text-white/90 font-geist bg-white/10 rounded-full pt-2 pr-3.5 pb-2 pl-3.5 backdrop-blur-sm" href="mailto:kusiboatengmills@gmail.com">
+<span data-i18n="nav.contact">Contact</span>
+</a>
+</div>
+</div>
+</header>
+
+<main className="z-20 flex h-[calc(100vh-80px)] relative items-end pointer-events-none">
+<section className="md:px-8 md:pb-16 lg:pb-20 w-full max-w-7xl mr-auto ml-auto pr-6 pb-12 pl-6 pointer-events-auto">
+<div className="mb-12 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+<div className="grid grid-cols-1 md:grid-cols-12 md:gap-6 lg:gap-10 gap-x-8 gap-y-8 items-center">
+<div className="md:col-span-5 lg:col-span-5 relative">
+<div className="inline-flex text-sm font-normal text-white/80 font-geist bg-white/5 ring-white/10 ring-1 rounded-full mb-5 pt-1.5 pr-3 pb-1.5 pl-3 backdrop-blur-sm gap-x-2 gap-y-2 items-center [animation:fadeSlideIn_1s_ease-out_0.1s_both]">
+<iconify-icon className="text-white/80" height="16" icon="solar:user-circle-linear" width="16"></iconify-icon>
+<span data-i18n="hero.pill">mcmills • Software Engineer &amp; Designer</span>
+</div>
+<h1 className="leading-tight sm:text-5xl md:text-5xl lg:text-6xl [animation:fadeSlideIn_1s_ease-out_0.2s_both] text-4xl tracking-tight font-geist">
+<span data-i18n="hero.headline">Crafting Digital Experiences</span>
+<span className="block bg-clip-text text-transparent tracking-tight font-geist bg-gradient-to-r from-white via-white to-white/70" data-i18n="hero.headline2">with Code &amp; Design</span>
+</h1>
+</div>
+<div className="hidden md:block md:col-span-1 lg:col-span-1 relative">
+<div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-white/20 via-white/10 to-white/5 -translate-x-1/2"></div>
+</div>
+<div className="md:col-span-4 lg:col-span-3 [animation:fadeSlideIn_1s_ease-out_0.3s_both] relative">
+<p className="leading-relaxed md:text-xl text-lg text-white/70 font-geist" data-i18n="hero.subheadline">
+            I am a software engineer specializing in front-end development, product design, prompt engineering, and project management. I build scalable, user-centric experiences.
+          </p>
+<div className="border-white/10 border-t mt-6 pt-6">
+<div className="flex gap-4 text-base text-white/50 gap-x-4 gap-y-4 items-center">
+<div className="flex items-center gap-2">
+<iconify-icon className="opacity-50" height="16" icon="solar:bolt-linear" width="16"></iconify-icon>
+<span className="font-geist font-normal" data-i18n="hero.benefit">Full-stack expertise</span>
+</div>
+</div>
+</div>
+</div>
+<div className="hidden lg:block lg:col-span-1 relative">
+<div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-white/20 via-white/10 to-white/5 -translate-x-1/2"></div>
+</div>
+<div className="md:col-span-12 lg:col-span-2 relative">
+<div className="flex flex-row lg:flex-col gap-x-3 gap-y-3">
+<a className="inline-flex items-center justify-center gap-2 transition hover:bg-white/15 hover:ring-white/25 whitespace-nowrap text-base font-normal text-white/90 font-geist bg-white/10 ring-white/15 ring-1 rounded-full pt-2.5 pr-4 pb-2.5 pl-4 backdrop-blur-sm [animation:fadeSlideIn_1s_ease-out_0.3s_both]" href="/#projects">
+<span data-i18n="hero.ctaPrimary">View My Work</span>
+<iconify-icon height="16" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</a>
+<a className="inline-flex items-center justify-center gap-2 ring-1 ring-white/20 transition hover:bg-neutral-100 whitespace-nowrap [animation:fadeSlideIn_1s_ease-out_0.5s_both] text-base font-normal text-neutral-900 font-geist bg-white rounded-full pt-2.5 pr-4 pb-2.5 pl-4" href="https://wa.me/233559074843" target="_blank">
+<span data-i18n="hero.ctaSecondary">Get in Touch</span>
+<iconify-icon height="16" icon="solar:chat-square-linear" width="16"></iconify-icon>
+</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+
+<section className="relative z-10 py-32 px-6 lg:px-12" id="expertise">
+<div className="max-w-7xl mr-auto ml-auto">
+
+<div className="flex flex-col lg:flex-row justify-between items-start mb-16 gap-12">
+<h2 className="text-5xl md:text-6xl font-medium tracking-tight text-white max-w-4xl leading-[0.95]" data-i18n="features.header">
+        My Expertise
+      </h2>
+<div className="max-w-md flex flex-col gap-6 lg:pt-2">
+<p className="text-xl text-neutral-400 font-extralight leading-relaxed" data-i18n="features.sub">
+          I don't just write code; I build complete products. My multidisciplinary approach integrates rigorous engineering with immersive design and AI.
+        </p>
+<a className="group inline-flex items-center text-white font-normal text-lg hover:text-neutral-300 transition-colors" href="mailto:kusiboatengmills@gmail.com?subject=Resume%20Request">
+<span data-i18n="features.link">View full resume</span>
+<svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
+</a>
+</div>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+<div className="group relative h-96 rounded-[2rem] bg-[#0A0A0A] overflow-hidden border border-white/5 transition-colors duration-500 hover:bg-[#111] hover:border-white/10">
+<div className="absolute inset-0 flex items-center justify-center opacity-80 perspective-[1000px]">
+<div className="relative w-32 h-32 transform transition-transform duration-700 ease-out group-hover:scale-105 group-hover:translate-y-[-10px]">
+<div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent border border-white/10 rounded-2xl transform -translate-x-4 -translate-y-2 -rotate-[15deg] backdrop-blur-[2px] transition-transform duration-500 ease-out group-hover:-translate-x-8 group-hover:-rotate-[20deg]"></div>
+<div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent border border-white/15 rounded-2xl transform translate-x-0 translate-y-0 -rotate-[5deg] backdrop-blur-[4px] transition-transform duration-500 delay-75 ease-out group-hover:rotate-0"></div>
+<div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent border border-white/20 rounded-2xl transform translate-x-4 translate-y-2 rotate-[5deg] backdrop-blur-[6px] shadow-2xl transition-transform duration-500 delay-150 ease-out group-hover:translate-x-8 group-hover:rotate-[15deg] flex items-center justify-center">
+<div className="w-12 h-12 rounded-full bg-indigo-500/20 blur-xl"></div>
+</div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 right-0 p-8 flex items-end justify-between z-10">
+<div className="flex flex-col gap-2 max-w-[70%]">
+<h3 className="text-xl font-normal text-white tracking-tight leading-none group-hover:text-indigo-200 transition-colors" data-i18n="card1.title">Software Engineering</h3>
+<p className="text-sm text-neutral-500 line-clamp-2 leading-relaxed" data-i18n="card1.desc">Front-end, back-end, and scalable architecture.</p>
+</div>
+<button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110">
+<svg className="lucide lucide-plus" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</button>
+</div>
+</div>
+
+<div className="group relative h-96 rounded-[2rem] bg-[#0A0A0A] overflow-hidden border border-white/5 transition-colors duration-500 hover:bg-[#111] hover:border-white/10">
+<div className="absolute inset-0 overflow-hidden flex items-center justify-center">
+<div className="relative w-full h-full opacity-40 group-hover:opacity-60 transition-opacity duration-500">
+<div className="absolute top-1/4 left-[-20%] w-[140%] h-px bg-gradient-to-r from-transparent via-white/40 to-transparent transform -rotate-12 translate-x-[-10%] group-hover:translate-x-[10%] transition-transform duration-[2s] ease-in-out"></div>
+<div className="absolute top-1/3 left-[-20%] w-[140%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent transform -rotate-12 translate-x-[-20%] group-hover:translate-x-[5%] transition-transform duration-[2.5s] ease-in-out delay-75"></div>
+<div className="absolute top-1/2 left-[-20%] w-[140%] h-px bg-gradient-to-r from-transparent via-white/50 to-transparent transform -rotate-12 translate-x-[-15%] group-hover:translate-x-[15%] transition-transform duration-[1.8s] ease-in-out delay-100"></div>
+<div className="absolute top-2/3 left-[-20%] w-[140%] h-px bg-gradient-to-r from-transparent via-white/30 to-transparent transform -rotate-12 translate-x-[-5%] group-hover:translate-x-[20%] transition-transform duration-[2.2s] ease-in-out delay-150"></div>
+<div className="absolute top-1/2 left-1/2 w-40 h-40 bg-emerald-500/10 rounded-full blur-[60px] transform -translate-x-1/2 -translate-y-1/2 group-hover:bg-emerald-500/20 transition-colors duration-500"></div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 right-0 p-8 flex items-end justify-between z-10">
+<div className="flex flex-col gap-2 max-w-[70%]">
+<h3 className="text-xl font-normal text-white tracking-tight leading-none group-hover:text-emerald-200 transition-colors" data-i18n="card2.title">Product Design</h3>
+<p className="text-sm text-neutral-500 line-clamp-2 leading-relaxed" data-i18n="card2.desc">UI/UX, prototyping, and user-centric workflows.</p>
+</div>
+<button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110">
+<svg className="lucide lucide-plus" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</button>
+</div>
+</div>
+
+<div className="group relative h-96 rounded-[2rem] bg-[#0A0A0A] overflow-hidden border border-white/5 transition-colors duration-500 hover:bg-[#111] hover:border-white/10">
+<div className="absolute inset-0 flex items-center justify-center perspective-[800px] overflow-hidden">
+<div className="relative transform rotate-x-[60deg] rotate-z-[45deg] scale-75 group-hover:scale-90 transition-transform duration-700 ease-out">
+<div className="w-48 h-48 border border-white/10 bg-white/5 grid grid-cols-4 grid-rows-4 rounded-lg shadow-2xl">
+<div className="border-r border-b border-white/5"></div><div className="border-r border-b border-white/5"></div><div className="border-r border-b border-white/5"></div><div className="border-b border-white/5"></div>
+<div className="border-r border-b border-white/5"></div><div className="border-r border-b border-white/5 bg-rose-500/10 transition-colors duration-300 group-hover:bg-rose-500/20"></div><div className="border-r border-b border-white/5"></div><div className="border-b border-white/5"></div>
+<div className="border-r border-b border-white/5"></div><div className="border-r border-b border-white/5"></div><div className="border-r border-b border-white/5"></div><div className="border-b border-white/5"></div>
+<div className="border-r border-white/5"></div><div className="border-r border-white/5"></div><div className="border-r border-white/5"></div><div></div>
+</div>
+<div className="absolute -top-10 left-10 w-16 h-16 bg-[#1A1A1A] border border-white/20 rounded-xl shadow-2xl transform translate-z-20 group-hover:translate-z-40 transition-transform duration-500 ease-out flex items-center justify-center">
+<svg className="text-rose-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+</div>
+<div className="absolute top-1/2 left-1/2 w-0.5 h-20 bg-gradient-to-b from-rose-500/50 to-transparent transform -translate-x-1/2 -translate-y-1/2 group-hover:h-32 transition-all duration-700 ease-out origin-top"></div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 right-0 p-8 flex items-end justify-between z-10">
+<div className="flex flex-col gap-2 max-w-[70%]">
+<h3 className="text-xl font-normal text-white tracking-tight leading-none group-hover:text-rose-200 transition-colors" data-i18n="card3.title">Prompt Engineering</h3>
+<p className="text-sm text-neutral-500 line-clamp-2 leading-relaxed" data-i18n="card3.desc">LLM optimization, AI integration, and workflow automation.</p>
+</div>
+<button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110">
+<svg className="lucide lucide-plus" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</button>
+</div>
+</div>
+
+<div className="group relative h-96 rounded-[2rem] bg-[#0A0A0A] overflow-hidden border border-white/5 transition-colors duration-500 hover:bg-[#111] hover:border-white/10">
+<div className="absolute inset-0 flex items-center justify-center">
+<div className="relative w-40 h-40 flex items-center justify-center">
+<div className="absolute inset-0 rounded-full border border-white/5 scale-100 group-hover:scale-125 transition-transform duration-700 ease-out"></div>
+<div className="absolute inset-4 rounded-full border border-white/5 scale-100 group-hover:scale-110 transition-transform duration-700 delay-75 ease-out"></div>
+<div className="absolute inset-8 rounded-full border border-white/10 scale-100 group-hover:scale-105 transition-transform duration-700 delay-150 ease-out border-dashed opacity-50"></div>
+<div className="absolute inset-0 animate-[spin_12s_linear_infinite] group-hover:animate-[spin_4s_linear_infinite] opacity-30">
+<div className="absolute top-0 left-1/2 w-0.5 h-2 bg-white -translate-x-1/2"></div>
+<div className="absolute bottom-0 left-1/2 w-0.5 h-2 bg-white -translate-x-1/2"></div>
+<div className="absolute left-0 top-1/2 w-2 h-0.5 bg-white -translate-y-1/2"></div>
+<div className="absolute right-0 top-1/2 w-2 h-0.5 bg-white -translate-y-1/2"></div>
+</div>
+<div className="w-16 h-16 rounded-full bg-blue-500/10 blur-xl group-hover:bg-blue-500/20 transition-colors duration-500"></div>
+<div className="w-2 h-2 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] z-10"></div>
+</div>
+</div>
+<div className="absolute bottom-0 left-0 right-0 p-8 flex items-end justify-between z-10">
+<div className="flex flex-col gap-2 max-w-[70%]">
+<h3 className="text-xl font-normal text-white tracking-tight leading-none group-hover:text-blue-200 transition-colors" data-i18n="card4.title">Project Management</h3>
+<p className="text-sm text-neutral-500 line-clamp-2 leading-relaxed" data-i18n="card4.desc">Agile methodologies, scoping, and product delivery.</p>
+</div>
+<button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110">
+<svg className="lucide lucide-plus" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="relative min-h-[110vh] lg:min-h-screen bg-[#0A0A0E] overflow-hidden flex items-center py-24 z-20" id="approach">
+
+<div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#0F172A] to-[#0A0A0A] animate-gradient-shift z-0 opacity-80"></div>
+
+<div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] rounded-full bg-indigo-500/5 blur-[120px] animate-pulse-glow z-0"></div>
+<div className="absolute bottom-1/4 right-1/4 w-[30vw] h-[30vw] rounded-full bg-blue-500/5 blur-[100px] animate-pulse-glow-alt z-0"></div>
+
+<div className="absolute inset-y-0 left-0 w-full lg:w-[55%] h-full z-0 overflow-hidden">
+<img alt="Cinematic Dark Portrait" className="w-full h-full object-cover object-[80%_center] grayscale mix-blend-lighten opacity-50 animate-scale-pan" src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&amp;fit=crop&amp;q=80&amp;w=2000"/>
+<div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0E]/90 via-[#0A0A0E]/70 to-transparent"></div>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0E] via-transparent to-transparent lg:hidden"></div>
+</div>
+<div className="w-full max-w-[1600px] mx-auto px-6 lg:px-16 flex flex-col lg:flex-row relative z-10 h-full">
+
+<div className="w-full lg:w-[55%] flex flex-col justify-center pt-10 lg:pt-0">
+<div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-white/90 backdrop-blur-md border border-white/10 w-fit mb-8 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_both] shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+<span data-i18n="meth.pill">Brand &amp; UI/UX Methodology</span>
+</div>
+<h2 className="text-5xl md:text-6xl font-medium tracking-tight text-white max-w-4xl leading-[0.95] mb-8 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.1s_both]" data-i18n="meth.title.main" style={{textShadow: '0 10px 40px rgba(0,0,0,0.5)'}}>
+        Approach
+      </h2>
+<h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight mb-4 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.2s_both]" data-i18n="meth.title">
+        Crafting Meaningful Digital Systems
+      </h3>
+<p className="text-[#AAAAAA] text-base sm:text-lg max-w-[450px] leading-relaxed mb-10 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.3s_both]" data-i18n="meth.desc">
+        I combine technical rigor with design thinking to build end-to-end digital products. From pixel-perfect front-ends to robust AI integrations and efficient project management.
+      </p>
+<a className="group relative inline-flex items-center gap-3 bg-white text-neutral-900 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] w-fit animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.4s_both]" href="#projects">
+<span data-i18n="meth.cta">View Process</span>
+<iconify-icon className="transition-transform duration-300 group-hover:translate-x-1" height="20" icon="solar:arrow-right-linear" width="20"></iconify-icon>
+<div className="absolute inset-0 rounded-full ring-1 ring-white/50 opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-all duration-700"></div>
+</a>
+</div>
+
+<div className="w-full lg:w-[45%] flex flex-col justify-between mt-16 lg:mt-0 relative">
+
+<div className="flex flex-row lg:flex-col justify-end gap-6 lg:gap-8 lg:text-right mb-16 lg:mb-0 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.2s_both]">
+<div>
+<div className="text-3xl lg:text-4xl font-bold text-white tracking-tight">2+</div>
+<div className="text-xs lg:text-sm text-gray-400 mt-1 uppercase tracking-wider font-semibold" data-i18n="meth.m1">Years Experience</div>
+</div>
+<div>
+<div className="text-3xl lg:text-4xl font-bold text-white tracking-tight">50+</div>
+<div className="text-xs lg:text-sm text-gray-400 mt-1 uppercase tracking-wider font-semibold" data-i18n="meth.m2">Projects Shipped</div>
+</div>
+<div>
+<div className="text-3xl lg:text-4xl font-bold text-white tracking-tight">100%</div>
+<div className="text-xs lg:text-sm text-gray-400 mt-1 uppercase tracking-wider font-semibold" data-i18n="meth.m3">User Focused</div>
+</div>
+</div>
+
+<div className="relative w-full h-auto lg:h-[500px] flex flex-col gap-4 lg:block perspective-normal mt-10 lg:mt-0">
+
+<div className="lg:absolute lg:left-0 lg:top-[220px] -rotate-12 bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl lg:w-48 transform transition-all duration-500 hover:scale-110 hover:rotate-0 hover:z-50 hover:border-white/30 z-10 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 animate-float-card delay-1">
+<span className="text-white/40 font-bold text-2xl lg:text-xl">01</span>
+<h4 className="text-white font-medium lg:mt-2 text-lg lg:text-base" data-i18n="meth.c1">Research</h4>
+</div>
+
+<div className="lg:absolute lg:left-[22%] lg:top-[110px] -rotate-6 bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl lg:w-48 transform transition-all duration-500 hover:scale-110 hover:rotate-0 hover:z-50 hover:border-white/30 z-20 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 animate-float-card delay-2">
+<span className="text-white/40 font-bold text-2xl lg:text-xl">02</span>
+<h4 className="text-white font-medium lg:mt-2 text-lg lg:text-base" data-i18n="meth.c2">Strategy</h4>
+</div>
+
+<div className="lg:absolute lg:left-[45%] lg:top-[50px] rotate-0 bg-[#121212]/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-[0_0_30px_rgba(255,255,255,0.05)] lg:w-52 transform transition-all duration-500 hover:scale-110 hover:z-50 hover:border-white/40 z-30 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 animate-float-card delay-3">
+<span className="text-white/40 font-bold text-2xl lg:text-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">03</span>
+<h4 className="text-white font-medium lg:mt-2 text-lg lg:text-base" data-i18n="meth.c3">Design &amp; Build</h4>
+</div>
+
+<div className="lg:absolute lg:left-[68%] lg:top-[110px] rotate-6 bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl lg:w-48 transform transition-all duration-500 hover:scale-110 hover:rotate-0 hover:z-50 hover:border-white/30 z-20 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 animate-float-card delay-2">
+<span className="text-white/40 font-bold text-2xl lg:text-xl">04</span>
+<h4 className="text-white font-medium lg:mt-2 text-lg lg:text-base" data-i18n="meth.c4">Testing</h4>
+</div>
+
+<div className="lg:absolute lg:left-[88%] lg:top-[220px] rotate-12 bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl lg:w-48 transform transition-all duration-500 hover:scale-110 hover:rotate-0 hover:z-50 hover:border-white/30 z-10 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 animate-float-card delay-1">
+<span className="text-white/40 font-bold text-2xl lg:text-xl">05</span>
+<h4 className="text-white font-medium lg:mt-2 text-lg lg:text-base" data-i18n="meth.c5">Launch</h4>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="overflow-hidden bg-[#0A0A0A] py-24 relative z-20 border-y border-white/5" id="projects">
+<div className="max-w-7xl mx-auto px-6 md:px-8 mb-16 text-center">
+<div className="inline-flex text-xs ring-1 ring-white/10 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.05s_both] font-normal text-white/70 font-geist bg-white/5 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 mb-4">
+<span data-i18n="projects.pill">Selected Works</span>
+</div>
+<h2 className="sm:text-5xl md:text-6xl text-4xl font-bold tracking-tight text-white animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.15s_both]" data-i18n="projects.title">
+      Engineering for Real Users
+    </h2>
+<p className="mt-4 md:text-xl text-lg text-neutral-400 max-w-2xl mx-auto font-light leading-relaxed animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.25s_both]" data-i18n="projects.desc">
+      A continuous stream of UI/UX, full-stack applications, and product management systems tailored to precise needs.
+    </p>
+</div>
+
+<div className="relative w-full overflow-hidden flex flex-col gap-6">
+
+<div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10 pointer-events-none"></div>
+<div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10 pointer-events-none"></div>
+
+<div className="animate-marquee-left gap-6 items-center">
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/459579f4-e2d0-4218-a12d-f974a4b89651_800w.jpg"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">UI/UX Design</div>
+<h3 className="text-white text-xl font-medium">Fintech Dashboard</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:chart-square-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Project Mgmt</div>
+<h3 className="text-white text-xl font-medium">Enterprise Agile System</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2bad1237-d4b7-4abc-a4ff-4bb6e105b47d_1600w.png"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Prompt Eng</div>
+<h3 className="text-white text-xl font-medium">AI Generative System</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:smartphone-update-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Front-end</div>
+<h3 className="text-white text-xl font-medium">SaaS Web App</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d521c037-f8b6-43a7-ae68-c6c1d0215733_3840w.webp"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Full-Stack</div>
+<h3 className="text-white text-xl font-medium">E-Commerce Platform</h3>
+</div>
+</div>
+
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/459579f4-e2d0-4218-a12d-f974a4b89651_800w.jpg"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">UI/UX Design</div>
+<h3 className="text-white text-xl font-medium">Fintech Dashboard</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:chart-square-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Project Mgmt</div>
+<h3 className="text-white text-xl font-medium">Enterprise Agile System</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2bad1237-d4b7-4abc-a4ff-4bb6e105b47d_1600w.png"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Prompt Eng</div>
+<h3 className="text-white text-xl font-medium">AI Generative System</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:smartphone-update-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Front-end</div>
+<h3 className="text-white text-xl font-medium">SaaS Web App</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d521c037-f8b6-43a7-ae68-c6c1d0215733_3840w.webp"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Full-Stack</div>
+<h3 className="text-white text-xl font-medium">E-Commerce Platform</h3>
+</div>
+</div>
+</div>
+
+<div className="animate-marquee-right gap-6 items-center">
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A]">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60" src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&amp;fit=crop&amp;q=80&amp;w=800"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Strategy</div>
+<h3 className="text-white text-xl font-medium">Brand Identity Overhaul</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:widget-3-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Design System</div>
+<h3 className="text-white text-xl font-medium">Component Library</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/32b67867-f241-44ab-a57c-c87e60b99c25_3840w.webp"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Architecture</div>
+<h3 className="text-white text-xl font-medium">Cloud Infrastructure</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:bolt-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Performance</div>
+<h3 className="text-white text-xl font-medium">Web Optimization</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/72c90007-7638-4902-8dda-5a6c20e92741_3840w.jpg"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Full-Stack</div>
+<h3 className="text-white text-xl font-medium">Healthcare Portal</h3>
+</div>
+</div>
+
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A]">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60" src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&amp;fit=crop&amp;q=80&amp;w=800"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Strategy</div>
+<h3 className="text-white text-xl font-medium">Brand Identity Overhaul</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:widget-3-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Design System</div>
+<h3 className="text-white text-xl font-medium">Component Library</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/32b67867-f241-44ab-a57c-c87e60b99c25_3840w.webp"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Architecture</div>
+<h3 className="text-white text-xl font-medium">Cloud Infrastructure</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5 bg-[#0A0A0A] p-8 flex flex-col justify-between">
+<iconify-icon className="text-white/70" height="40" icon="solar:bolt-linear" width="40"></iconify-icon>
+<div>
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Performance</div>
+<h3 className="text-white text-xl font-medium">Web Optimization</h3>
+</div>
+</div>
+<div className="w-[400px] h-[280px] rounded-2xl overflow-hidden relative group shrink-0 border border-white/5">
+<img alt="Project" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/72c90007-7638-4902-8dda-5a6c20e92741_3840w.jpg"/>
+<div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+<div className="bg-transparent text-white/70 border border-white/20 w-fit px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2">Full-Stack</div>
+<h3 className="text-white text-xl font-medium">Healthcare Portal</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="overflow-hidden lg:py-24 pt-16 pb-16 relative z-20 group">
+<div className="absolute inset-0 opacity-40 mix-blend-screen bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/32b67867-f241-44ab-a57c-c87e60b99c25_3840w.webp)] bg-cover animate-scale-pan z-0"></div>
+<div className="pointer-events-none z-10 absolute inset-0">
+<div className="absolute inset-y-0 left-[12.5%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-y-0 left-[37.5%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div className="absolute inset-y-0 left-1/2 w-px bg-gradient-to-b from-transparent via-white/8 to-transparent"></div>
+<div className="absolute inset-y-0 left-[62.5%] w-px bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+</div>
+<div className="z-20 md:px-8 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.1s_both] max-w-7xl mr-auto ml-auto pr-6 pl-6 relative">
+<div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B0B0B] via-[#101018] to-[#05050A] animate-gradient-shift ring-1 ring-white/10 backdrop-blur-md shadow-[0_0_50px_rgba(0,0,0,0.8)] transition-all duration-700 group-hover:shadow-[0_0_80px_rgba(255,255,255,0.05)]">
+<div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700">
+<div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-[120px] animate-pulse-glow"></div>
+<div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] animate-pulse-glow-alt"></div>
+</div>
+<div className="relative px-6 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24 z-10">
+<div className="max-w-3xl mx-auto text-center transform transition-transform duration-700 group-hover:scale-[1.02]">
+<div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm font-normal text-white/80 ring-1 ring-white/10 font-geist mb-6 shadow-[0_0_15px_rgba(255,255,255,0.02)]">
+<iconify-icon className="animate-bounce" height="16" icon="solar:rocket-linear" width="16"></iconify-icon>
+<span data-i18n="close.pill">Ready to collaborate?</span>
+</div>
+<h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white" data-i18n="close.title">
+            Let's Create Something Exceptional
+          </h2>
+<p className="mt-6 text-xl text-neutral-400 leading-relaxed" data-i18n="close.desc">
+            Trusted by brands, loved by clients. I'm always open to discussing new projects and creative ideas.
+          </p>
+<div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+<a className="relative group/btn inline-flex items-center justify-center gap-2 rounded-full bg-white text-neutral-900 px-8 py-4 text-lg font-semibold hover:-translate-y-1 hover:scale-105 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]" href="mailto:kusiboatengmills@gmail.com">
+<span data-i18n="close.cta">Contact Me</span>
+<iconify-icon className="transition-transform duration-300 group-hover/btn:translate-x-1" height="20" icon="solar:letter-linear" width="20"></iconify-icon>
+</a>
+<a className="relative group/btn2 inline-flex items-center justify-center gap-2 rounded-full bg-white/5 text-white ring-1 ring-white/15 px-8 py-4 text-lg font-normal hover:bg-white/10 hover:-translate-y-1 hover:scale-105 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-sm" href="https://wa.me/233559074843" target="_blank">
+<span data-i18n="close.cta2">WhatsApp</span>
+<iconify-icon className="transition-transform duration-300 group-hover/btn2:scale-110" height="20" icon="solar:chat-square-linear" width="20"></iconify-icon>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer className="overflow-hidden bg-[#0A0A0A] border-white/5 border-t relative z-20">
+<div className="z-10 md:px-8 lg:py-20 max-w-7xl mr-auto ml-auto pt-16 pr-6 pb-16 pl-6 relative">
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12">
+<div className="col-span-2">
+<a aria-label="mcmills" className="inline-flex items-center justify-center h-[36px] rounded-full text-xl font-bold tracking-tight text-white" href="#">
+          mcmills.
+        </a>
+<p className="mt-4 text-base text-neutral-500 leading-relaxed max-w-xs" data-i18n="footer.blurb">
+          Software engineer with a passion for building robust digital products, managing complex projects, and integrating AI seamlessly into intuitive designs.
+        </p>
+</div>
+<div>
+<h3 className="text-base font-normal text-white" data-i18n="footer.col1Title">Portfolio</h3>
+<ul className="mt-4 space-y-3">
+<li><a className="text-base text-neutral-500 hover:text-white transition" data-i18n="footer.col1L1" href="#expertise">Expertise</a></li>
+<li><a className="text-base text-neutral-500 hover:text-white transition" data-i18n="footer.col1L2" href="#projects">Projects</a></li>
+<li><a className="text-base text-neutral-500 hover:text-white transition" data-i18n="footer.col1L3" href="#approach">Approach</a></li>
+<li><a className="text-base text-neutral-500 hover:text-white transition" data-i18n="footer.col1L4" href="mailto:kusiboatengmills@gmail.com?subject=Resume%20Request">Resume</a></li>
+</ul>
+</div>
+<div className="col-span-2 md:col-span-2 lg:col-span-1">
+<h3 className="text-base font-normal text-white" data-i18n="footer.col4Title">Contact</h3>
+<ul className="mt-4 space-y-3">
+<li>
+<a className="text-base text-neutral-500 hover:text-white transition inline-flex items-center gap-2" href="mailto:kusiboatengmills@gmail.com">
+<span className="inline-flex w-7 h-7 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
+<iconify-icon className="text-neutral-300" height="14" icon="solar:letter-linear" width="14"></iconify-icon>
+</span>
+<span>kusiboatengmills@gmail.com</span>
+</a>
+</li>
+<li>
+<a className="text-base text-neutral-500 hover:text-white transition inline-flex items-center gap-2" href="https://wa.me/233559074843" target="_blank">
+<span className="inline-flex w-7 h-7 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
+<iconify-icon className="text-neutral-300" height="14" icon="solar:chat-round-linear" width="14"></iconify-icon>
+</span>
+<span data-i18n="footer.contactLink">WhatsApp</span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+<div className="mt-14 pt-8 border-t border-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<p className="text-sm text-neutral-500">
+<span>© </span><span id="year"></span><span> mcmills</span>
+<span className="text-neutral-600"> • </span>
+<span data-i18n="footer.rights">All rights reserved.</span>
+</p>
+</div>
+</div>
+</footer>
+
+
+
+    </>
+  );
+}

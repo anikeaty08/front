@@ -1,0 +1,667 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+manrope: ['Manrope', 'sans-serif'],
+inter: ['Inter', 'sans-serif'],
+},
+colors: {
+noir: '#000000',
+accent: '#ef233c',
+'accent-dark': '#d90429',
+glass: 'rgba(255, 255, 255, 0.05)',
+},
+backgroundImage: {
+'radial-glow': 'radial-gradient(circle at center, var(--tw-gradient-stops))',
+},
+animation: {
+'spin-slow': 'spin 12s linear infinite',
+'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+'shimmer': 'shimmer 2s linear infinite',
+'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+},
+keyframes: {
+shimmer: {
+'0%': { backgroundPosition: '200% 0' },
+'100%': { backgroundPosition: '-200% 0' }
+},
+fadeInUp: {
+'0%': { opacity: '0', transform: 'translateY(20px)' },
+'100%': { opacity: '1', transform: 'translateY(0)' }
+}
+},
+screens: {
+'xs': '475px',
+}
+}
+}
+}
+
+
+
+        // --- STAR BACKGROUND ANIMATION ---
+        function generateBoxShadows(n, color) {
+            let value = '';
+            for (let i = 0; i < n; i++) {
+                const x = Math.floor(Math.random() * 2000);
+                const y = Math.floor(Math.random() * 2000);
+                value += `${x}px ${y}px ${color}`;
+                if (i < n - 1) value += ', ';
+            }
+            return value;
+        }
+        // REDUCED STAR COUNT FOR EFFICIENCY
+        document.getElementById('stars-small').style.boxShadow = generateBoxShadows(350, '#ffffff');
+        document.getElementById('stars-medium').style.boxShadow = generateBoxShadows(100, '#ffffff');
+        document.getElementById('stars-big').style.boxShadow = generateBoxShadows(40, '#ffffff');
+
+        // --- SCROLL PROGRESS ---
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + "%";
+        }, { passive: true }); // Optimized scroll listener
+
+        // --- GLOBE VISUALIZATION (Vanillajs port of wireframe-dotted-globe) ---
+        (function() {
+            const canvas = document.getElementById('globe-canvas');
+            const loader = document.getElementById('globe-loader');
+            const container = document.getElementById('globe-container');
+            if (!canvas || !container) return;
+
+            const context = canvas.getContext('2d', { alpha: true }); // optimize context
+            let width = container.clientWidth;
+            let height = container.clientHeight;
+            let radius = Math.min(width, height) / 2.2; 
+            
+            // State
+            let landFeatures = null;
+            let allDots = [];
+            let rotation = [0, 0];
+            let autoRotate = true;
+            let rotationSpeed = 0.5;
+            let rotationTimer = null;
+
+            // D3 Projection
+            const projection = d3.geoOrthographic()
+                .scale(radius)
+                .translate([width / 2, height / 2])
+                .clipAngle(90);
+
+            const path = d3.geoPath().projection(projection).context(context);
+
+            // Resizer
+            function resize() {
+                // Throttle check could be added here for extreme optimization
+                width = container.clientWidth;
+                height = container.clientHeight;
+                radius = Math.min(width, height) / 2.2;
+                
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                canvas.style.width = `${width}px`;
+                canvas.style.height = `${height}px`;
+                
+                context.scale(dpr, dpr);
+                projection.scale(radius).translate([width / 2, height / 2]);
+                
+                if (landFeatures) render();
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Geometry Helpers
+            function pointInPolygon(point, polygon) {
+                const [x, y] = point;
+                let inside = false;
+                for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                    const [xi, yi] = polygon[i];
+                    const [xj, yj] = polygon[j];
+                    if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+                        inside = !inside;
+                    }
+                }
+                return inside;
+            }
+
+            function pointInFeature(point, feature) {
+                const geometry = feature.geometry;
+                if (geometry.type === "Polygon") {
+                    const coordinates = geometry.coordinates;
+                    if (!pointInPolygon(point, coordinates[0])) return false;
+                    for (let i = 1; i < coordinates.length; i++) {
+                        if (pointInPolygon(point, coordinates[i])) return false;
+                    }
+                    return true;
+                } else if (geometry.type === "MultiPolygon") {
+                    for (const polygon of geometry.coordinates) {
+                        if (pointInPolygon(point, polygon[0])) {
+                            let inHole = false;
+                            for (let i = 1; i < polygon.length; i++) {
+                                if (pointInPolygon(point, polygon[i])) {
+                                    inHole = true;
+                                    break;
+                                }
+                            }
+                            if (!inHole) return true;
+                        }
+                    }
+                    return false;
+                }
+                return false;
+            }
+
+            function generateDotsInPolygon(feature, dotSpacing = 16) {
+                const dots = [];
+                const bounds = d3.geoBounds(feature);
+                const [[minLng, minLat], [maxLng, maxLat]] = bounds;
+                const stepSize = dotSpacing * 0.12; 
+
+                for (let lng = minLng; lng <= maxLng; lng += stepSize) {
+                    for (let lat = minLat; lat <= maxLat; lat += stepSize) {
+                        const point = [lng, lat];
+                        if (pointInFeature(point, feature)) {
+                            dots.push(point);
+                        }
+                    }
+                }
+                return dots;
+            }
+
+            // Render Loop
+            function render() {
+                context.clearRect(0, 0, width, height);
+
+                const currentScale = projection.scale();
+                const scaleFactor = currentScale / radius;
+
+                // 1. Globe Background (Ocean) - Transparent for holographic feel
+                context.beginPath();
+                context.arc(width / 2, height / 2, currentScale, 0, 2 * Math.PI);
+                // context.fillStyle = "rgba(0,0,0,0.2)"; // Optional subtle fill
+                // context.fill();
+                context.strokeStyle = "rgba(255,255,255,0.1)"; // Faint globe edge
+                context.lineWidth = 1 * scaleFactor;
+                context.stroke();
+
+                if (!landFeatures) return;
+
+                // 2. Graticule
+                const graticule = d3.geoGraticule();
+                context.beginPath();
+                path(graticule());
+                context.strokeStyle = "rgba(255,255,255,0.05)";
+                context.lineWidth = 0.5 * scaleFactor;
+                context.stroke();
+
+                // 3. Land Outlines
+                context.beginPath();
+                landFeatures.features.forEach(feature => path(feature));
+                context.strokeStyle = "rgba(255,255,255,0.15)";
+                context.lineWidth = 0.8 * scaleFactor;
+                context.stroke();
+
+                // 4. Dots (Data Points) - Using Theme Accent Color
+                context.fillStyle = "#ef233c"; // Accent Red
+                allDots.forEach(dot => {
+                    const projected = projection([dot.lng, dot.lat]);
+                    if (projected) {
+                         context.beginPath();
+                         context.arc(projected[0], projected[1], 1.2 * scaleFactor, 0, 2 * Math.PI);
+                         context.fill();
+                    }
+                });
+            }
+
+            // Init Data
+            async function loadWorldData() {
+                try {
+                    const response = await fetch("https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json");
+                    if (!response.ok) throw new Error("Failed");
+                    
+                    landFeatures = await response.json();
+                    
+                    // Generate dots
+                    // OPTIMIZED: Increased spacing (15 -> 22) for fewer dots and higher FPS
+                    landFeatures.features.forEach(feature => {
+                        const dots = generateDotsInPolygon(feature, 22); 
+                        dots.forEach(([lng, lat]) => allDots.push({ lng, lat }));
+                    });
+
+                    loader.style.display = 'none';
+                    canvas.classList.add('loaded');
+                    
+                    // Start Rotation
+                    rotationTimer = d3.timer(() => {
+                        if (autoRotate) {
+                            rotation[0] += rotationSpeed;
+                            projection.rotate(rotation);
+                            render();
+                        }
+                    });
+
+                } catch (e) {
+                    console.error("Globe Error:", e);
+                    loader.textContent = "SYSTEM OFFLINE";
+                    loader.style.color = "red";
+                }
+            }
+
+            // Interaction
+            function initInteraction() {
+                let startX, startY, startRotation;
+                
+                canvas.addEventListener('mousedown', (e) => {
+                    autoRotate = false;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startRotation = [...rotation];
+                    
+                    function onMouseMove(e) {
+                        const dx = e.clientX - startX;
+                        const dy = e.clientY - startY;
+                        rotation[0] = startRotation[0] + dx * 0.5;
+                        rotation[1] = Math.max(-90, Math.min(90, startRotation[1] - dy * 0.5));
+                        projection.rotate(rotation);
+                        render();
+                    }
+                    
+                    function onMouseUp() {
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                        // Resume auto-rotate after delay
+                        setTimeout(() => { autoRotate = true; }, 1000);
+                    }
+                    
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                });
+
+                // Touch support
+                canvas.addEventListener('touchstart', (e) => {
+                    if(e.touches.length === 1) {
+                        e.preventDefault();
+                        autoRotate = false;
+                        startX = e.touches[0].clientX;
+                        startY = e.touches[0].clientY;
+                        startRotation = [...rotation];
+                        
+                        function onTouchMove(e) {
+                            const dx = e.touches[0].clientX - startX;
+                            const dy = e.touches[0].clientY - startY;
+                            rotation[0] = startRotation[0] + dx * 0.5;
+                            rotation[1] = Math.max(-90, Math.min(90, startRotation[1] - dy * 0.5));
+                            projection.rotate(rotation);
+                            render();
+                        }
+                        
+                        function onTouchEnd() {
+                            document.removeEventListener('touchmove', onTouchMove);
+                            document.removeEventListener('touchend', onTouchEnd);
+                            setTimeout(() => { autoRotate = true; }, 1000);
+                        }
+                        
+                        document.addEventListener('touchmove', onTouchMove, {passive: false});
+                        document.addEventListener('touchend', onTouchEnd);
+                    }
+                }, {passive: false});
+
+                canvas.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
+                    const currentScale = projection.scale();
+                    const newScale = Math.max(radius * 0.5, Math.min(radius * 3, currentScale * scaleFactor));
+                    projection.scale(newScale);
+                    render();
+                }, {passive: false});
+            }
+
+            loadWorldData();
+            initInteraction();
+        })();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+
+<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_#1a0505_0%,_#000000_100%)]"></div>
+
+<div className="absolute inset-0 w-[1px] h-[1px] bg-transparent animate-[animStar_100s_linear_infinite] optimize-gpu" id="stars-small" style={{boxShadow: 'rgb(255, 255, 255) 104px 16px, rgb(255, 255, 255) 1470px 1039px, rgb(255, 255, 255) 1862px 1855px, rgb(255, 255, 255) 1170px 1421px, rgb(255, 255, 255) 177px 1835px, rgb(255, 255, 255) 1912px 152px, rgb(255, 255, 255) 1578px 604px, rgb(255, 255, 255) 1232px 247px, rgb(255, 255, 255) 294px 886px, rgb(255, 255, 255) 440px 44px, rgb(255, 255, 255) 1392px 1185px, rgb(255, 255, 255) 747px 359px, rgb(255, 255, 255) 1717px 448px, rgb(255, 255, 255) 1137px 651px, rgb(255, 255, 255) 801px 1606px, rgb(255, 255, 255) 621px 1033px, rgb(255, 255, 255) 754px 1127px, rgb(255, 255, 255) 1813px 703px, rgb(255, 255, 255) 21px 1814px, rgb(255, 255, 255) 1881px 1419px, rgb(255, 255, 255) 1021px 235px, rgb(255, 255, 255) 1343px 794px, rgb(255, 255, 255) 417px 1863px, rgb(255, 255, 255) 528px 1461px, rgb(255, 255, 255) 445px 528px, rgb(255, 255, 255) 1434px 1252px, rgb(255, 255, 255) 438px 1752px, rgb(255, 255, 255) 647px 724px, rgb(255, 255, 255) 983px 1836px, rgb(255, 255, 255) 1792px 1021px, rgb(255, 255, 255) 704px 1676px, rgb(255, 255, 255) 1044px 156px, rgb(255, 255, 255) 719px 1437px, rgb(255, 255, 255) 604px 1338px, rgb(255, 255, 255) 85px 427px, rgb(255, 255, 255) 1568px 522px, rgb(255, 255, 255) 618px 78px, rgb(255, 255, 255) 344px 22px, rgb(255, 255, 255) 640px 151px, rgb(255, 255, 255) 267px 535px, rgb(255, 255, 255) 1520px 660px, rgb(255, 255, 255) 1966px 367px, rgb(255, 255, 255) 93px 1702px, rgb(255, 255, 255) 613px 1330px, rgb(255, 255, 255) 1793px 1946px, rgb(255, 255, 255) 78px 952px, rgb(255, 255, 255) 55px 537px, rgb(255, 255, 255) 1828px 1151px, rgb(255, 255, 255) 259px 132px, rgb(255, 255, 255) 1776px 1560px, rgb(255, 255, 255) 404px 1675px, rgb(255, 255, 255) 1620px 996px, rgb(255, 255, 255) 1264px 1826px, rgb(255, 255, 255) 1149px 788px, rgb(255, 255, 255) 1093px 293px, rgb(255, 255, 255) 1121px 214px, rgb(255, 255, 255) 21px 1561px, rgb(255, 255, 255) 862px 1893px, rgb(255, 255, 255) 421px 822px, rgb(255, 255, 255) 343px 900px, rgb(255, 255, 255) 1215px 244px, rgb(255, 255, 255) 437px 1226px, rgb(255, 255, 255) 1575px 1095px, rgb(255, 255, 255) 1729px 1076px, rgb(255, 255, 255) 190px 1522px, rgb(255, 255, 255) 287px 1828px, rgb(255, 255, 255) 1046px 151px, rgb(255, 255, 255) 30px 1247px, rgb(255, 255, 255) 432px 553px, rgb(255, 255, 255) 1726px 515px, rgb(255, 255, 255) 1860px 1381px, rgb(255, 255, 255) 1397px 548px, rgb(255, 255, 255) 492px 841px, rgb(255, 255, 255) 1985px 1907px, rgb(255, 255, 255) 1771px 252px, rgb(255, 255, 255) 877px 1994px, rgb(255, 255, 255) 569px 1093px, rgb(255, 255, 255) 161px 39px, rgb(255, 255, 255) 172px 622px, rgb(255, 255, 255) 1889px 1083px, rgb(255, 255, 255) 1441px 1784px, rgb(255, 255, 255) 954px 216px, rgb(255, 255, 255) 1390px 1755px, rgb(255, 255, 255) 483px 254px, rgb(255, 255, 255) 195px 30px, rgb(255, 255, 255) 160px 1473px, rgb(255, 255, 255) 1706px 1980px, rgb(255, 255, 255) 218px 62px, rgb(255, 255, 255) 7px 509px, rgb(255, 255, 255) 23px 434px, rgb(255, 255, 255) 247px 1554px, rgb(255, 255, 255) 1753px 691px, rgb(255, 255, 255) 337px 1147px, rgb(255, 255, 255) 575px 1496px, rgb(255, 255, 255) 1500px 94px, rgb(255, 255, 255) 1482px 1224px, rgb(255, 255, 255) 839px 1389px, rgb(255, 255, 255) 1135px 1076px, rgb(255, 255, 255) 22px 1164px, rgb(255, 255, 255) 947px 1843px, rgb(255, 255, 255) 1307px 911px, rgb(255, 255, 255) 355px 607px, rgb(255, 255, 255) 1272px 898px, rgb(255, 255, 255) 923px 898px, rgb(255, 255, 255) 649px 1422px, rgb(255, 255, 255) 850px 822px, rgb(255, 255, 255) 840px 1545px, rgb(255, 255, 255) 117px 354px, rgb(255, 255, 255) 1757px 1496px, rgb(255, 255, 255) 1416px 502px, rgb(255, 255, 255) 701px 1013px, rgb(255, 255, 255) 996px 1576px, rgb(255, 255, 255) 1335px 1005px, rgb(255, 255, 255) 1272px 143px, rgb(255, 255, 255) 1800px 110px, rgb(255, 255, 255) 1847px 1672px, rgb(255, 255, 255) 91px 1948px, rgb(255, 255, 255) 1412px 1029px, rgb(255, 255, 255) 1183px 164px, rgb(255, 255, 255) 694px 192px, rgb(255, 255, 255) 1367px 1287px, rgb(255, 255, 255) 340px 1496px, rgb(255, 255, 255) 703px 1783px, rgb(255, 255, 255) 1658px 1997px, rgb(255, 255, 255) 1703px 1628px, rgb(255, 255, 255) 1976px 186px, rgb(255, 255, 255) 1783px 1785px, rgb(255, 255, 255) 1739px 1234px, rgb(255, 255, 255) 990px 1061px, rgb(255, 255, 255) 215px 277px, rgb(255, 255, 255) 127px 1250px, rgb(255, 255, 255) 840px 250px, rgb(255, 255, 255) 935px 1069px, rgb(255, 255, 255) 1831px 1753px, rgb(255, 255, 255) 439px 1729px, rgb(255, 255, 255) 81px 1786px, rgb(255, 255, 255) 1473px 530px, rgb(255, 255, 255) 736px 743px, rgb(255, 255, 255) 1597px 637px, rgb(255, 255, 255) 947px 1708px, rgb(255, 255, 255) 1473px 266px, rgb(255, 255, 255) 1369px 921px, rgb(255, 255, 255) 1219px 65px, rgb(255, 255, 255) 315px 1395px, rgb(255, 255, 255) 1702px 726px, rgb(255, 255, 255) 1258px 419px, rgb(255, 255, 255) 427px 325px, rgb(255, 255, 255) 356px 208px, rgb(255, 255, 255) 924px 1678px, rgb(255, 255, 255) 416px 1303px, rgb(255, 255, 255) 176px 956px, rgb(255, 255, 255) 762px 455px, rgb(255, 255, 255) 1288px 1915px, rgb(255, 255, 255) 389px 1897px, rgb(255, 255, 255) 727px 467px, rgb(255, 255, 255) 1354px 354px, rgb(255, 255, 255) 158px 1866px, rgb(255, 255, 255) 955px 1721px, rgb(255, 255, 255) 769px 520px, rgb(255, 255, 255) 556px 1280px, rgb(255, 255, 255) 1983px 520px, rgb(255, 255, 255) 162px 1730px, rgb(255, 255, 255) 1331px 597px, rgb(255, 255, 255) 205px 1699px, rgb(255, 255, 255) 1409px 1917px, rgb(255, 255, 255) 288px 855px, rgb(255, 255, 255) 1341px 1319px, rgb(255, 255, 255) 1730px 1654px, rgb(255, 255, 255) 1032px 1571px, rgb(255, 255, 255) 105px 1675px, rgb(255, 255, 255) 1722px 1076px, rgb(255, 255, 255) 1185px 438px, rgb(255, 255, 255) 1878px 709px, rgb(255, 255, 255) 937px 471px, rgb(255, 255, 255) 1886px 781px, rgb(255, 255, 255) 1848px 523px, rgb(255, 255, 255) 453px 275px, rgb(255, 255, 255) 1727px 686px, rgb(255, 255, 255) 586px 1496px, rgb(255, 255, 255) 445px 1779px, rgb(255, 255, 255) 931px 1227px, rgb(255, 255, 255) 945px 517px, rgb(255, 255, 255) 1384px 1078px, rgb(255, 255, 255) 128px 1901px, rgb(255, 255, 255) 554px 613px, rgb(255, 255, 255) 1983px 821px, rgb(255, 255, 255) 1149px 680px, rgb(255, 255, 255) 92px 965px, rgb(255, 255, 255) 869px 286px, rgb(255, 255, 255) 48px 798px, rgb(255, 255, 255) 1254px 1476px, rgb(255, 255, 255) 1331px 1667px, rgb(255, 255, 255) 771px 1989px, rgb(255, 255, 255) 620px 1592px, rgb(255, 255, 255) 853px 1506px, rgb(255, 255, 255) 1434px 907px, rgb(255, 255, 255) 1669px 225px, rgb(255, 255, 255) 154px 1313px, rgb(255, 255, 255) 1180px 175px, rgb(255, 255, 255) 1372px 1059px, rgb(255, 255, 255) 751px 950px, rgb(255, 255, 255) 788px 778px, rgb(255, 255, 255) 1168px 1257px, rgb(255, 255, 255) 480px 1466px, rgb(255, 255, 255) 1586px 467px, rgb(255, 255, 255) 892px 421px, rgb(255, 255, 255) 966px 87px, rgb(255, 255, 255) 826px 1594px, rgb(255, 255, 255) 824px 123px, rgb(255, 255, 255) 798px 1628px, rgb(255, 255, 255) 1574px 1087px, rgb(255, 255, 255) 482px 1176px, rgb(255, 255, 255) 1450px 439px, rgb(255, 255, 255) 262px 1253px, rgb(255, 255, 255) 1289px 3px, rgb(255, 255, 255) 1370px 1886px, rgb(255, 255, 255) 1745px 447px, rgb(255, 255, 255) 1268px 1066px, rgb(255, 255, 255) 1808px 1484px, rgb(255, 255, 255) 571px 1083px, rgb(255, 255, 255) 423px 652px, rgb(255, 255, 255) 257px 361px, rgb(255, 255, 255) 1562px 507px, rgb(255, 255, 255) 896px 1933px, rgb(255, 255, 255) 1250px 544px, rgb(255, 255, 255) 7px 196px, rgb(255, 255, 255) 1609px 1397px, rgb(255, 255, 255) 1212px 400px, rgb(255, 255, 255) 47px 1445px, rgb(255, 255, 255) 1889px 1877px, rgb(255, 255, 255) 1491px 638px, rgb(255, 255, 255) 1603px 1889px, rgb(255, 255, 255) 1416px 92px, rgb(255, 255, 255) 15px 1185px, rgb(255, 255, 255) 1696px 1793px, rgb(255, 255, 255) 846px 1298px, rgb(255, 255, 255) 1101px 498px, rgb(255, 255, 255) 1567px 795px, rgb(255, 255, 255) 1823px 1902px, rgb(255, 255, 255) 943px 855px, rgb(255, 255, 255) 1572px 1087px, rgb(255, 255, 255) 61px 1141px, rgb(255, 255, 255) 1908px 1129px, rgb(255, 255, 255) 1168px 599px, rgb(255, 255, 255) 1283px 1906px, rgb(255, 255, 255) 517px 458px, rgb(255, 255, 255) 98px 382px, rgb(255, 255, 255) 1965px 1539px, rgb(255, 255, 255) 1953px 446px, rgb(255, 255, 255) 524px 539px, rgb(255, 255, 255) 1982px 688px, rgb(255, 255, 255) 1055px 827px, rgb(255, 255, 255) 1485px 762px, rgb(255, 255, 255) 1641px 139px, rgb(255, 255, 255) 320px 1524px, rgb(255, 255, 255) 1709px 467px, rgb(255, 255, 255) 1488px 1394px, rgb(255, 255, 255) 910px 1836px, rgb(255, 255, 255) 1260px 505px, rgb(255, 255, 255) 1498px 117px, rgb(255, 255, 255) 1391px 503px, rgb(255, 255, 255) 1673px 370px, rgb(255, 255, 255) 166px 1770px, rgb(255, 255, 255) 1301px 297px, rgb(255, 255, 255) 846px 54px, rgb(255, 255, 255) 1425px 229px, rgb(255, 255, 255) 872px 1898px, rgb(255, 255, 255) 105px 1068px, rgb(255, 255, 255) 959px 501px, rgb(255, 255, 255) 764px 1523px, rgb(255, 255, 255) 1382px 1338px, rgb(255, 255, 255) 310px 1057px, rgb(255, 255, 255) 1386px 793px, rgb(255, 255, 255) 108px 588px, rgb(255, 255, 255) 1932px 1370px, rgb(255, 255, 255) 1752px 1846px, rgb(255, 255, 255) 1736px 1749px, rgb(255, 255, 255) 598px 726px, rgb(255, 255, 255) 1106px 1021px, rgb(255, 255, 255) 1397px 1513px, rgb(255, 255, 255) 1904px 472px, rgb(255, 255, 255) 1639px 1916px, rgb(255, 255, 255) 86px 1181px, rgb(255, 255, 255) 859px 1489px, rgb(255, 255, 255) 1220px 356px, rgb(255, 255, 255) 340px 1656px, rgb(255, 255, 255) 68px 467px, rgb(255, 255, 255) 388px 1895px, rgb(255, 255, 255) 798px 446px, rgb(255, 255, 255) 1182px 856px, rgb(255, 255, 255) 1379px 279px, rgb(255, 255, 255) 673px 865px, rgb(255, 255, 255) 324px 1063px, rgb(255, 255, 255) 1514px 17px, rgb(255, 255, 255) 1831px 1768px, rgb(255, 255, 255) 1832px 591px, rgb(255, 255, 255) 1071px 1756px, rgb(255, 255, 255) 1486px 911px, rgb(255, 255, 255) 1850px 742px, rgb(255, 255, 255) 761px 1828px, rgb(255, 255, 255) 1455px 1157px, rgb(255, 255, 255) 1283px 604px, rgb(255, 255, 255) 1266px 1154px, rgb(255, 255, 255) 1294px 1010px, rgb(255, 255, 255) 1454px 1855px, rgb(255, 255, 255) 622px 368px, rgb(255, 255, 255) 1699px 342px, rgb(255, 255, 255) 1415px 629px, rgb(255, 255, 255) 1796px 1461px, rgb(255, 255, 255) 204px 1824px, rgb(255, 255, 255) 1564px 1506px, rgb(255, 255, 255) 1903px 1401px, rgb(255, 255, 255) 1192px 525px, rgb(255, 255, 255) 1407px 1334px, rgb(255, 255, 255) 1388px 606px, rgb(255, 255, 255) 1059px 1678px, rgb(255, 255, 255) 1703px 1488px, rgb(255, 255, 255) 1232px 800px, rgb(255, 255, 255) 503px 1685px, rgb(255, 255, 255) 1689px 500px, rgb(255, 255, 255) 1289px 503px, rgb(255, 255, 255) 665px 783px, rgb(255, 255, 255) 1800px 189px, rgb(255, 255, 255) 792px 1490px, rgb(255, 255, 255) 1358px 1979px, rgb(255, 255, 255) 225px 1998px, rgb(255, 255, 255) 975px 950px, rgb(255, 255, 255) 328px 912px, rgb(255, 255, 255) 139px 919px, rgb(255, 255, 255) 829px 1675px, rgb(255, 255, 255) 1491px 622px, rgb(255, 255, 255) 1830px 1745px, rgb(255, 255, 255) 1777px 79px, rgb(255, 255, 255) 29px 1426px, rgb(255, 255, 255) 227px 1382px, rgb(255, 255, 255) 1093px 301px, rgb(255, 255, 255) 632px 914px, rgb(255, 255, 255) 383px 542px, rgb(255, 255, 255) 469px 917px, rgb(255, 255, 255) 1156px 1768px, rgb(255, 255, 255) 1807px 1662px, rgb(255, 255, 255) 1866px 1732px, rgb(255, 255, 255) 1085px 1819px, rgb(255, 255, 255) 128px 1396px, rgb(255, 255, 255) 790px 1923px, rgb(255, 255, 255) 1571px 1386px, rgb(255, 255, 255) 999px 109px, rgb(255, 255, 255) 317px 884px, rgb(255, 255, 255) 1407px 796px, rgb(255, 255, 255) 462px 1825px'}}></div>
+<div className="absolute inset-0 w-[2px] h-[2px] bg-transparent animate-[animStar_150s_linear_infinite] optimize-gpu" id="stars-medium" style={{boxShadow: 'rgb(255, 255, 255) 344px 150px, rgb(255, 255, 255) 93px 978px, rgb(255, 255, 255) 1873px 354px, rgb(255, 255, 255) 1432px 866px, rgb(255, 255, 255) 1611px 1565px, rgb(255, 255, 255) 964px 1038px, rgb(255, 255, 255) 447px 783px, rgb(255, 255, 255) 1364px 521px, rgb(255, 255, 255) 579px 1232px, rgb(255, 255, 255) 1849px 470px, rgb(255, 255, 255) 985px 235px, rgb(255, 255, 255) 672px 261px, rgb(255, 255, 255) 1319px 1476px, rgb(255, 255, 255) 320px 690px, rgb(255, 255, 255) 1033px 1873px, rgb(255, 255, 255) 1697px 801px, rgb(255, 255, 255) 1551px 698px, rgb(255, 255, 255) 229px 1602px, rgb(255, 255, 255) 1276px 382px, rgb(255, 255, 255) 1343px 360px, rgb(255, 255, 255) 1451px 1816px, rgb(255, 255, 255) 255px 1833px, rgb(255, 255, 255) 1329px 680px, rgb(255, 255, 255) 813px 558px, rgb(255, 255, 255) 1244px 1613px, rgb(255, 255, 255) 1301px 627px, rgb(255, 255, 255) 390px 289px, rgb(255, 255, 255) 791px 710px, rgb(255, 255, 255) 1758px 1296px, rgb(255, 255, 255) 565px 1532px, rgb(255, 255, 255) 381px 1296px, rgb(255, 255, 255) 520px 1919px, rgb(255, 255, 255) 313px 1064px, rgb(255, 255, 255) 812px 89px, rgb(255, 255, 255) 201px 1009px, rgb(255, 255, 255) 1482px 1230px, rgb(255, 255, 255) 1319px 555px, rgb(255, 255, 255) 1997px 1062px, rgb(255, 255, 255) 1505px 562px, rgb(255, 255, 255) 1663px 528px, rgb(255, 255, 255) 1490px 536px, rgb(255, 255, 255) 1715px 813px, rgb(255, 255, 255) 1488px 1745px, rgb(255, 255, 255) 1495px 1000px, rgb(255, 255, 255) 881px 650px, rgb(255, 255, 255) 346px 1676px, rgb(255, 255, 255) 134px 1828px, rgb(255, 255, 255) 1174px 979px, rgb(255, 255, 255) 182px 54px, rgb(255, 255, 255) 656px 1782px, rgb(255, 255, 255) 277px 1760px, rgb(255, 255, 255) 1823px 1352px, rgb(255, 255, 255) 498px 215px, rgb(255, 255, 255) 984px 1268px, rgb(255, 255, 255) 646px 466px, rgb(255, 255, 255) 628px 739px, rgb(255, 255, 255) 1228px 208px, rgb(255, 255, 255) 490px 573px, rgb(255, 255, 255) 961px 232px, rgb(255, 255, 255) 285px 1788px, rgb(255, 255, 255) 476px 1000px, rgb(255, 255, 255) 61px 76px, rgb(255, 255, 255) 1849px 879px, rgb(255, 255, 255) 1379px 348px, rgb(255, 255, 255) 1647px 1488px, rgb(255, 255, 255) 730px 1143px, rgb(255, 255, 255) 981px 146px, rgb(255, 255, 255) 1921px 1164px, rgb(255, 255, 255) 1440px 290px, rgb(255, 255, 255) 609px 304px, rgb(255, 255, 255) 1879px 1374px, rgb(255, 255, 255) 2px 1259px, rgb(255, 255, 255) 1453px 913px, rgb(255, 255, 255) 1654px 1125px, rgb(255, 255, 255) 1821px 1249px, rgb(255, 255, 255) 1689px 1739px, rgb(255, 255, 255) 366px 1255px, rgb(255, 255, 255) 1830px 1655px, rgb(255, 255, 255) 1788px 160px, rgb(255, 255, 255) 1744px 1796px, rgb(255, 255, 255) 248px 623px, rgb(255, 255, 255) 1370px 88px, rgb(255, 255, 255) 1010px 1965px, rgb(255, 255, 255) 1557px 641px, rgb(255, 255, 255) 1167px 388px, rgb(255, 255, 255) 163px 19px, rgb(255, 255, 255) 1660px 869px, rgb(255, 255, 255) 402px 1052px, rgb(255, 255, 255) 1472px 444px, rgb(255, 255, 255) 811px 1891px, rgb(255, 255, 255) 1686px 1862px, rgb(255, 255, 255) 382px 1883px, rgb(255, 255, 255) 136px 1298px, rgb(255, 255, 255) 678px 1133px, rgb(255, 255, 255) 1418px 205px, rgb(255, 255, 255) 1709px 1643px, rgb(255, 255, 255) 1072px 192px, rgb(255, 255, 255) 582px 715px, rgb(255, 255, 255) 1872px 366px, rgb(255, 255, 255) 1701px 160px'}}></div>
+<div className="absolute inset-0 w-[3px] h-[3px] bg-transparent animate-[animStar_200s_linear_infinite] optimize-gpu" id="stars-big" style={{boxShadow: 'rgb(255, 255, 255) 453px 1885px, rgb(255, 255, 255) 458px 1901px, rgb(255, 255, 255) 483px 416px, rgb(255, 255, 255) 999px 41px, rgb(255, 255, 255) 788px 899px, rgb(255, 255, 255) 1006px 1691px, rgb(255, 255, 255) 1527px 456px, rgb(255, 255, 255) 1730px 904px, rgb(255, 255, 255) 379px 71px, rgb(255, 255, 255) 251px 1129px, rgb(255, 255, 255) 298px 792px, rgb(255, 255, 255) 1631px 412px, rgb(255, 255, 255) 1230px 1556px, rgb(255, 255, 255) 1590px 1447px, rgb(255, 255, 255) 113px 1402px, rgb(255, 255, 255) 1143px 153px, rgb(255, 255, 255) 1651px 1040px, rgb(255, 255, 255) 1819px 1067px, rgb(255, 255, 255) 960px 1339px, rgb(255, 255, 255) 129px 917px, rgb(255, 255, 255) 1227px 1804px, rgb(255, 255, 255) 479px 935px, rgb(255, 255, 255) 1707px 1677px, rgb(255, 255, 255) 357px 1161px, rgb(255, 255, 255) 752px 490px, rgb(255, 255, 255) 1069px 444px, rgb(255, 255, 255) 900px 44px, rgb(255, 255, 255) 915px 390px, rgb(255, 255, 255) 213px 854px, rgb(255, 255, 255) 837px 1177px, rgb(255, 255, 255) 1079px 306px, rgb(255, 255, 255) 1170px 254px, rgb(255, 255, 255) 1056px 281px, rgb(255, 255, 255) 606px 1901px, rgb(255, 255, 255) 1070px 26px, rgb(255, 255, 255) 290px 1205px, rgb(255, 255, 255) 1370px 745px, rgb(255, 255, 255) 1093px 1223px, rgb(255, 255, 255) 578px 1509px, rgb(255, 255, 255) 635px 170px'}}></div>
+
+<div className="absolute inset-0 bg-grid-pattern z-[1] opacity-60"></div>
+
+<div className="absolute top-[-10%] left-[20%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-accent/10 rounded-full blur-[80px] md:blur-[120px] mix-blend-screen"></div>
+<div className="absolute bottom-[10%] right-[10%] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-accent/5 rounded-full blur-[60px] md:blur-[100px] mix-blend-screen"></div>
+</div>
+
+<div className="fixed top-0 left-0 w-full h-[2px] z-[60]">
+<div className="h-full bg-accent w-0 transition-all duration-100 ease-out shadow-[0_0_10px_#ef233c]" id="scroll-progress" style={{width: '0%'}}></div>
+</div>
+
+<header className="fixed top-0 w-full z-50 pt-4 md:pt-6 px-4">
+<div className="max-w-6xl mx-auto">
+<nav className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-2xl shadow-black/50 transition-all duration-300">
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-black flex items-center justify-center border border-white/10 shrink-0">
+<svg aria-hidden="true" className="iconify text-white iconify--lucide" data-icon="lucide:cpu" data-width="18" height="18" role="img" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M12 20v2m0-20v2m5 16v2m0-20v2M2 12h2m-2 5h2M2 7h2m16 5h2m-2 5h2M20 7h2M7 20v2M7 2v2"></path><rect height="16" rx="2" width="16" x="4" y="4"></rect><rect height="8" rx="1" width="8" x="8" y="8"></rect></g></svg>
+</div>
+<span className="text-base md:text-lg font-manrope font-bold tracking-tight text-white hidden xs:block">KORTEX</span>
+</div>
+<div className="hidden md:flex items-center gap-8">
+<a className="text-sm text-zinc-400 hover:text-white transition-colors duration-300" href="#features">Capabilities</a>
+<a className="text-sm text-zinc-400 hover:text-white transition-colors duration-300" href="#protocol">Protocol</a>
+<a className="text-sm text-zinc-400 hover:text-white transition-colors duration-300" href="#pricing">Access</a>
+</div>
+<div className="flex items-center gap-4">
+<a className="hidden sm:block text-sm font-medium text-zinc-300 hover:text-white transition-colors" href="#">Sign In</a>
+<button className="shiny-cta px-4 md:px-6 py-2 text-[10px] md:text-xs font-bold uppercase tracking-wider text-white group flex items-center gap-2 shrink-0">
+<span>Deploy Core</span>
+<svg aria-hidden="true" className="iconify group-hover:translate-x-1 transition-transform iconify--lucide" data-icon="lucide:arrow-right" data-width="14" height="14" role="img" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</button>
+</div>
+</nav>
+</div>
+</header>
+
+<main className="lg:pt-48 lg:pb-32 overflow-hidden md:px-6 z-10 pt-32 pr-4 pb-12 pl-4 relative">
+<div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+
+<div className="flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1 relative z-20">
+
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-black/40 backdrop-blur-md mb-6 md:mb-8 hover:bg-white/10 transition-colors cursor-pointer group animate-fade-in-up">
+<span className="relative flex h-2 w-2">
+<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+</span>
+<span className="text-[10px] md:text-xs font-medium text-red-100/90 tracking-wide font-manrope">System v2.4 Neural Upgrade</span>
+<svg aria-hidden="true" className="iconify text-zinc-400 group-hover:translate-x-0.5 transition-transform iconify--lucide" data-icon="lucide:chevron-right" data-width="12" height="12" role="img" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m9 18l6-6l-6-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</div>
+
+<h1 className="text-4xl xs:text-5xl md:text-7xl lg:text-8xl leading-[1.1] md:leading-[1.1] font-semibold text-slate-100 tracking-tighter font-manrope mb-6 md:mb-8 drop-shadow-2xl text-balance">
+                    The Neural Fabric <br className="hidden lg:block"/>
+                    of <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-[#dc8474] to-transparent">Cyber-Reality.</span>
+</h1>
+<p className="text-base md:text-lg lg:text-xl text-zinc-300/80 max-w-2xl mb-8 md:mb-12 font-light leading-relaxed text-balance">
+                    Kortex synthesizes predictive algorithms with autonomous defense layers. Experience the future of intelligent infrastructure, devoid of latency.
+                </p>
+
+<div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+<button className="w-full sm:w-auto group relative px-8 py-4 bg-accent hover:bg-red-600 text-white rounded-full font-bold tracking-wide transition-all shadow-[0_0_40px_-10px_rgba(239,35,60,0.5)] hover:shadow-[0_0_60px_-15px_rgba(239,35,60,0.7)] flex items-center justify-center gap-3 touch-manipulation">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:zap" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+                        Initialize System
+                    </button>
+<button className="w-full sm:w-auto px-8 py-4 rounded-full border border-zinc-800 bg-black/50 hover:bg-zinc-900/80 backdrop-blur text-zinc-300 hover:text-white transition-all flex items-center justify-center gap-3 font-medium touch-manipulation">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:terminal" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 19h8M4 17l6-6l-6-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+                        Read Documentation
+                    </button>
+</div>
+</div>
+
+<div className="relative w-full h-[400px] md:h-[600px] lg:h-[750px] flex items-center justify-center order-1 lg:order-2">
+
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] md:w-[300px] h-[250px] md:h-[300px] bg-accent/20 rounded-full blur-[80px] md:blur-[100px] mix-blend-screen pointer-events-none"></div>
+
+<div className="w-full h-full relative z-10 flex items-center justify-center" id="globe-container">
+<canvas className="w-full h-full max-w-[800px] aspect-square loaded" height="937" id="globe-canvas" style={{width: '484px', height: '750px'}} width="605"></canvas>
+<div className="absolute text-accent text-xs font-mono animate-pulse top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" id="globe-loader" style={{display: 'none'}}>INITIALIZING...</div>
+
+<div className="absolute bottom-0 lg:bottom-12 left-1/2 -translate-x-1/2 text-[10px] font-mono text-zinc-600 uppercase tracking-widest pointer-events-none flex items-center gap-2 whitespace-nowrap">
+<span className="w-1 h-1 bg-zinc-600 rounded-full"></span>
+                        Drag to rotate • Scroll to zoom
+                        <span className="w-1 h-1 bg-zinc-600 rounded-full"></span>
+</div>
+</div>
+</div>
+</div>
+
+<div className="mt-12 md:mt-20 border-y border-white/5 bg-black/20 backdrop-blur-sm py-8 md:py-12 relative z-10 -mx-4 md:-mx-6 lg:mx-0 lg:rounded-xl">
+<div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-6">
+<span className="text-xs font-bold tracking-[0.2em] text-zinc-600 uppercase text-center md:text-left">Trusted by Architectures</span>
+<div className="flex flex-wrap justify-center gap-x-8 gap-y-6 md:gap-12 grayscale opacity-50 hover:opacity-100 hover:grayscale-0 transition-all duration-700">
+<div className="flex items-center gap-2 text-white font-manrope font-semibold text-lg md:text-xl">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:hexagon" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> ACME Corp
+                    </div>
+<div className="flex items-center gap-2 text-white font-manrope font-semibold text-lg md:text-xl">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:triangle" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M13.73 4a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> VORTEX
+                    </div>
+<div className="flex items-center gap-2 text-white font-manrope font-semibold text-lg md:text-xl">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:circle-dashed" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10.1 2.182a10 10 0 0 1 3.8 0m0 19.636a10 10 0 0 1-3.8 0m7.509-18.097a10 10 0 0 1 2.69 2.7M2.182 13.9a10 10 0 0 1 0-3.8m18.097 7.509a10 10 0 0 1-2.7 2.69M21.818 10.1a10 10 0 0 1 0 3.8M3.721 6.391a10 10 0 0 1 2.7-2.69m-.03 16.578a10 10 0 0 1-2.69-2.7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> SPHERE
+                    </div>
+<div className="flex items-center gap-2 text-white font-manrope font-semibold text-lg md:text-xl">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:box" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7l8.7 5l8.7-5M12 22V12"></path></g></svg> CUBE.AI
+                    </div>
+</div>
+</div>
+</div>
+</main>
+
+<section className="py-16 md:py-24 px-4 md:px-6 relative z-10" id="features">
+<div className="max-w-7xl mx-auto">
+<div className="mb-12 md:mb-16">
+<h2 className="text-3xl md:text-5xl font-manrope font-semibold tracking-tight mb-4">
+                    Cognitive <span className="text-accent">Processing Units</span>
+</h2>
+<p className="text-zinc-400 max-w-xl text-balance">Modular intelligence designed to scale with your computational needs.</p>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-auto md:auto-rows-[300px]">
+
+<div className="glass-card md:col-span-2 rounded-3xl p-6 md:p-8 relative overflow-hidden group min-h-[300px] flex flex-col">
+<div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-accent/20 transition-all"></div>
+<div className="h-full flex flex-col justify-between relative z-10">
+<div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent mb-4">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:brain-circuit" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M12 5a3 3 0 1 0-5.997.125a4 4 0 0 0-2.526 5.77a4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M9 13a4.5 4.5 0 0 0 3-4M6.003 5.125A3 3 0 0 0 6.401 6.5m-2.924 4.396a4 4 0 0 1 .585-.396M6 18a4 4 0 0 1-1.967-.516M12 13h4m-4 5h6a2 2 0 0 1 2 2v1M12 8h8m-4 0V5a2 2 0 0 1 2-2"></path><circle cx="16" cy="13" r=".5"></circle><circle cx="18" cy="3" r=".5"></circle><circle cx="20" cy="21" r=".5"></circle><circle cx="20" cy="8" r=".5"></circle></g></svg>
+</div>
+<div>
+<h3 className="text-xl md:text-2xl font-bold font-manrope mb-2">Neural Synthesis</h3>
+<p className="text-zinc-400 text-sm md:text-base">Our proprietary LLM analyzes data streams in real-time, predicting anomalies before they manifest in the execution layer.</p>
+</div>
+<div className="mt-8 flex gap-2">
+<div className="h-1 w-16 bg-accent rounded-full"></div>
+<div className="h-1 w-4 bg-zinc-800 rounded-full"></div>
+<div className="h-1 w-4 bg-zinc-800 rounded-full"></div>
+</div>
+</div>
+</div>
+
+<div className="glass-card md:row-span-2 rounded-3xl p-6 md:p-8 relative overflow-hidden group min-h-[400px] flex flex-col">
+<div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div className="h-full flex flex-col">
+<div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-6">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:shield-check" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12l2 2l4-4"></path></g></svg>
+</div>
+<h3 className="text-xl md:text-2xl font-bold font-manrope mb-4">Red Team Automation</h3>
+<p className="text-zinc-400 mb-8 text-sm md:text-base">Continuous vulnerability scanning simulating millions of attack vectors per second.</p>
+<div className="mt-auto border border-zinc-800 bg-black/50 rounded-lg p-4 font-mono text-xs text-zinc-500">
+<div className="flex justify-between mb-2">
+<span>Status:</span>
+<span className="text-accent">ACTIVE</span>
+</div>
+<div className="flex justify-between mb-2">
+<span>Threats Blocked:</span>
+<span className="text-white">9,421</span>
+</div>
+<div className="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
+<div className="bg-accent h-full w-[85%] animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="glass-card rounded-3xl p-6 md:p-8 relative overflow-hidden group min-h-[250px] flex flex-col">
+<div className="h-full flex flex-col justify-between">
+<div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-4">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:activity" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</div>
+<div>
+<h3 className="text-lg md:text-xl font-bold font-manrope mb-2">Zero Latency</h3>
+<p className="text-zinc-400 text-sm">Edge computing distributed across 400+ nodes worldwide.</p>
+</div>
+</div>
+</div>
+
+<div className="glass-card rounded-3xl p-6 md:p-8 relative overflow-hidden group min-h-[250px] flex flex-col">
+<div className="h-full flex flex-col justify-between">
+<div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-4">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:layers" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></g></svg>
+</div>
+<div>
+<h3 className="text-lg md:text-xl font-bold font-manrope mb-2">Deep Integration</h3>
+<p className="text-zinc-400 text-sm">Seamlessly connects with your existing stack via GraphQL API.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="bg-accent py-16 md:py-20 relative overflow-hidden">
+<div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-30"></div>
+<div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+<div className="flex justify-center gap-2 mb-8 text-black">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-fill="currentColor" data-icon="lucide:star" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2.12 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.12 2.12 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.12 2.12 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-fill="currentColor" data-icon="lucide:star" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2.12 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.12 2.12 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.12 2.12 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-fill="currentColor" data-icon="lucide:star" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2.12 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.12 2.12 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.12 2.12 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-fill="currentColor" data-icon="lucide:star" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2.12 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.12 2.12 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.12 2.12 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-fill="currentColor" data-icon="lucide:star" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2.12 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.12 2.12 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.12 2.12 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</div>
+<h3 className="text-2xl md:text-5xl font-bold font-manrope text-black leading-tight mb-8 tracking-tight">
+                "Kortex isn't just a tool; it's a paradigm shift. We reduced our incident response time by 94% in the first week."
+            </h3>
+<div className="flex items-center justify-center gap-4">
+<div className="w-10 h-10 md:w-12 md:h-12 bg-black rounded-full border-2 border-white/20"></div>
+<div className="text-left">
+<div className="text-black font-bold font-manrope text-sm md:text-base">Sarah Chen</div>
+<div className="text-black/70 text-xs md:text-sm font-medium">CTO, HyperGrid Systems</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-32 px-4 md:px-6 relative" id="pricing">
+<div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"></div>
+<div className="max-w-7xl mx-auto">
+<div className="text-center mb-16 md:mb-20">
+<h2 className="text-3xl md:text-5xl font-bold font-manrope tracking-tight mb-4">Access the Mainframe</h2>
+<p className="text-zinc-400">Select your computational bandwidth.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start max-w-lg md:max-w-none mx-auto">
+
+<div className="p-6 md:p-8 rounded-2xl border border-white/10 bg-black hover:border-zinc-700 transition-colors">
+<h3 className="text-xl font-bold font-manrope mb-2">Initiate</h3>
+<div className="flex items-baseline gap-1 mb-6">
+<span className="text-3xl font-bold">$0</span>
+<span className="text-zinc-500">/mo</span>
+</div>
+<ul className="space-y-4 mb-8 text-sm text-zinc-400">
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-white iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> 1 Project Node</li>
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-white iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> Basic Analytics</li>
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-white iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> Community Support</li>
+</ul>
+<button className="w-full py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors font-medium text-sm">Start Free</button>
+</div>
+
+<div className="p-6 md:p-8 rounded-2xl border border-accent bg-zinc-900/40 relative transform md:-translate-y-4 shadow-[0_0_50px_-20px_rgba(239,35,60,0.3)] order-first md:order-none">
+<div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                        Recommended
+                    </div>
+<h3 className="text-xl font-bold font-manrope mb-2 text-white">Scale</h3>
+<div className="flex items-baseline gap-1 mb-6">
+<span className="text-3xl font-bold">$49</span>
+<span className="text-zinc-500">/mo</span>
+</div>
+<ul className="space-y-4 mb-8 text-sm text-zinc-300">
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-accent iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> Unlimited Nodes</li>
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-accent iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> AI Predictive Engine</li>
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-accent iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> 24/7 Priority Uplink</li>
+</ul>
+<button className="w-full py-3 rounded-lg bg-accent hover:bg-red-600 transition-colors font-bold text-sm text-white">Upgrade Protocol</button>
+</div>
+
+<div className="p-6 md:p-8 rounded-2xl border border-white/10 bg-black hover:border-zinc-700 transition-colors">
+<h3 className="text-xl font-bold font-manrope mb-2">Enterprise</h3>
+<div className="flex items-baseline gap-1 mb-6">
+<span className="text-3xl font-bold">Custom</span>
+</div>
+<ul className="space-y-4 mb-8 text-sm text-zinc-400">
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-white iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> Private Cloud Instance</li>
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-white iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> Custom Neural Training</li>
+<li className="flex items-center gap-3"><svg aria-hidden="true" className="iconify text-white iconify--lucide" data-icon="lucide:check" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg> Dedicated Engineer</li>
+</ul>
+<button className="w-full py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors font-medium text-sm">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="bg-black border-t border-zinc-900 pt-16 md:pt-24 pb-8 overflow-hidden relative">
+<div className="absolute inset-0 bg-radial-glow from-zinc-900/20 to-transparent opacity-50"></div>
+<div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative z-10 mb-16 md:mb-24">
+<div className="col-span-2">
+<div className="flex items-center gap-3 mb-6">
+<div className="w-6 h-6 bg-accent rounded-sm rotate-45"></div>
+<span className="text-xl font-bold font-manrope tracking-tight text-white">KORTEX</span>
+</div>
+<p className="text-zinc-500 text-sm max-w-xs leading-relaxed">
+                    Forging the next generation of artificial intelligence interfaces. Secure. Scalable. Noir.
+                </p>
+</div>
+<div>
+<h4 className="text-xs font-bold text-white uppercase tracking-widest mb-6">Product</h4>
+<ul className="space-y-3 text-zinc-500 text-sm">
+<li><a className="hover:text-accent transition-colors" href="#">Changelog</a></li>
+<li><a className="hover:text-accent transition-colors" href="#">Documentation</a></li>
+<li><a className="hover:text-accent transition-colors" href="#">Integration</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-xs font-bold text-white uppercase tracking-widest mb-6">Legal</h4>
+<ul className="space-y-3 text-zinc-500 text-sm">
+<li><a className="hover:text-accent transition-colors" href="#">Privacy Policy</a></li>
+<li><a className="hover:text-accent transition-colors" href="#">Terms of Service</a></li>
+<li><a className="hover:text-accent transition-colors" href="#">Security</a></li>
+</ul>
+</div>
+</div>
+
+<div className="relative w-full overflow-hidden opacity-10 select-none pointer-events-none flex justify-center">
+<h1 className="text-[15vw] md:text-[12vw] font-black font-manrope leading-none text-transparent tracking-tighter" style={{WebkitTextStroke: '1px #fff'}}>
+                KORTEX AI
+            </h1>
+</div>
+<div className="max-w-7xl mx-auto px-6 mt-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-600 uppercase tracking-wider">
+<p>© 2026 Kortex Systems Inc.</p>
+<div className="flex gap-6 mt-4 md:mt-0">
+<a className="hover:text-zinc-400" href="#">Twitter</a>
+<a className="hover:text-zinc-400" href="#">GitHub</a>
+<a className="hover:text-zinc-400" href="#">Discord</a>
+</div>
+</div>
+</footer>
+
+
+
+    </>
+  );
+}

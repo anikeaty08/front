@@ -1,0 +1,14 @@
+# Psicóloga Sistémica Landing Page Template
+
+Plantilla de landing page para psicóloga sistémica que ofrece terapia individual, de pareja y duelo, lista para personalizar y usar en tu consulta online.
+
+## Project Details
+- **Slug:** `psychologi-landing-52`
+- **Views:** 43
+- **Tags:** Landing Page, Services, Health, Brand, Clean, Minimal, Large Type, Gradient, Portfolio
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

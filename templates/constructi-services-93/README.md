@@ -1,0 +1,14 @@
+# Construction Services Business Landing Page Template
+
+Professional construction company landing page template for showcasing civil and industrial services, collaborators, and contact details for local clients.
+
+## Project Details
+- **Slug:** `constructi-services-93`
+- **Views:** 31
+- **Tags:** Landing Page, Services, Business, Brand, Clean, Minimal, Large Type, Technology, Real Estate, Construction
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

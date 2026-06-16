@@ -1,0 +1,14 @@
+# Morpheye — Automated Prediction Market Trading Template
+
+A high-performance terminal trading bot template designed for sub-second execution and strategy automation on Polymarket.
+
+## Project Details
+- **Slug:** `morpheye-trading-61`
+- **Views:** 492
+- **Tags:** Technology, Dark, Minimal, Clean, Landing Page, Futuristic, Services, Animated
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

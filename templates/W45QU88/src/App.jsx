@@ -1,0 +1,127 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        VANTA.CLOUDS({
+            el: "#cloud-background",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            skyColor: 0x68b8d7,
+            cloudColor: 0xadc1de,
+            cloudShadowColor: 0x183550,
+            sunColor: 0xff9919,
+            sunGlareColor: 0xff6633,
+            sunlightColor: 0xff9933,
+            speed: 1.2
+        });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div id="cloud-background"></div>
+<div className="content">
+<div className="max-w-sm w-full glass-card rounded-xl overflow-hidden">
+
+<div className="px-6 pt-6 pb-4 border-b glass-divider">
+<div className="flex items-center justify-between">
+<div className="flex items-center space-x-2">
+<div className="w-2 h-2 rounded-full bg-blue-400"></div>
+<h2 className="text-primary font-medium text-sm">San Francisco</h2>
+</div>
+<span className="text-xs text-secondary">Updated just now</span>
+</div>
+</div>
+
+<div className="px-6 py-8">
+<div className="flex items-center justify-between">
+<div>
+<div className="flex items-baseline">
+<span className="text-4xl font-light text-primary">68°</span>
+<span className="ml-1 text-secondary text-sm">F</span>
+</div>
+<p className="text-secondary text-sm mt-1">Partly Cloudy</p>
+</div>
+
+<div className="text-secondary">
+<svg className="w-14 h-14" fill="none" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" strokeLinecap="round" strokeLinejoin="round"></path>
+</svg>
+</div>
+</div>
+</div>
+
+<div className="px-6 py-4 glass-section grid grid-cols-3 gap-2 text-center">
+<div className="px-2 py-3">
+<p className="text-xs text-secondary uppercase tracking-wide">Humidity</p>
+<p className="text-primary font-medium mt-1">72%</p>
+</div>
+<div className="px-2 py-3">
+<p className="text-xs text-secondary uppercase tracking-wide">Wind</p>
+<p className="text-primary font-medium mt-1">8 mph</p>
+</div>
+<div className="px-2 py-3">
+<p className="text-xs text-secondary uppercase tracking-wide">Feels like</p>
+<p className="text-primary font-medium mt-1">70°</p>
+</div>
+</div>
+
+<div className="px-6 py-4 border-t glass-divider">
+<div className="grid grid-cols-5 gap-2">
+<div className="text-center">
+<p className="text-xs text-secondary">Mon</p>
+<svg className="w-6 h-6 mx-auto my-1 text-secondary" fill="none" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" strokeLinecap="round" strokeLinejoin="round"></path>
+</svg>
+<p className="text-xs font-medium text-primary">72°</p>
+</div>
+<div className="text-center">
+<p className="text-xs text-secondary">Tue</p>
+<svg className="w-6 h-6 mx-auto my-1 text-secondary" fill="none" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" strokeLinecap="round" strokeLinejoin="round"></path>
+</svg>
+<p className="text-xs font-medium text-primary">68°</p>
+</div>
+<div className="text-center">
+<p className="text-xs text-secondary">Wed</p>
+<svg className="w-6 h-6 mx-auto my-1 text-secondary" fill="none" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" strokeLinecap="round" strokeLinejoin="round"></path>
+</svg>
+<p className="text-xs font-medium text-primary">65°</p>
+</div>
+<div className="text-center">
+<p className="text-xs text-secondary">Thu</p>
+<svg className="w-6 h-6 mx-auto my-1 text-secondary" fill="none" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" strokeLinecap="round" strokeLinejoin="round"></path>
+</svg>
+<p className="text-xs font-medium text-primary">74°</p>
+</div>
+<div className="text-center">
+<p className="text-xs text-secondary">Fri</p>
+<svg className="w-6 h-6 mx-auto my-1 text-secondary" fill="none" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" strokeLinecap="round" strokeLinejoin="round"></path>
+</svg>
+<p className="text-xs font-medium text-primary">76°</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+    </>
+  );
+}

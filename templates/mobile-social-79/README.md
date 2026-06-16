@@ -1,0 +1,14 @@
+# Social Onboarding Mobile Screen Template
+
+A clean, mobile-style social onboarding UI template for welcoming new community members and driving signups with a bold central CTA.
+
+## Project Details
+- **Slug:** `mobile-social-79`
+- **Views:** 21
+- **Tags:** Landing Page, Brand, Clean, Minimal, Large Type, Technology, Social, Mobile UI, Onboarding, Community
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

@@ -1,0 +1,14 @@
+# Real Estate Landing Page Template
+
+Modern real estate landing page template for showcasing premium properties, rentals, and projects with WhatsApp contact and a clear, trust-focused layout.
+
+## Project Details
+- **Slug:** `real-estate-landing-46`
+- **Views:** 26
+- **Tags:** Landing Page, Real Estate, Services, Clean, Minimal, Brand
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

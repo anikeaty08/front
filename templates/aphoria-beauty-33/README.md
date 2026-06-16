@@ -1,0 +1,14 @@
+# Aphoria Beauty E-commerce Product Page Template
+
+A refined e-commerce template for beauty brands, showcasing premium skincare products with rich imagery, reviews, and cart-ready product details.
+
+## Project Details
+- **Slug:** `aphoria-beauty-33`
+- **Views:** 949
+- **Tags:** E-commerce, Beauty, Skincare, Landing Page, Brand, Clean, Minimal, Gradient, Large Type
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

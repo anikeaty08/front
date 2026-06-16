@@ -1,0 +1,243 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+brand: {
+navy: '#060B19',
+green: '#CCFF00',
+purple: '#8B5CF6',
+cyan: '#06B6D4',
+pink: '#EC4899',
+blue: '#3B82F6'
+}
+}
+}
+}
+}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        lucide.createIcons();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed top-0 w-full h-screen bg-cover bg-center -z-10 opacity-80" data-alpha-mask="80" style={{backgroundImage: 'url("https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/39c21dde-7288-4566-880b-805ca89ecc89_3840w.jpg")', maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}></div>
+
+<nav className="flex w-full z-50 border-white/5 border-b pt-4 pr-6 pb-4 pl-6 relative backdrop-blur-md items-center justify-between">
+<div className="flex items-center">
+<img alt="Logo MB Bank" className="h-10 w-auto object-contain" src="https://image2url.com/r2/default/images/1772098310455-b4d96461-708f-408b-8de6-063e193aacd5.png"/>
+</div>
+<div className="flex items-center gap-6">
+</div>
+</nav>
+<main className="flex-grow sm:px-6 flex flex-col w-full max-w-7xl mr-auto ml-auto pt-12 pr-4 pb-12 pl-4 gap-x-24 gap-y-24">
+
+<section className="w-full">
+<div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[minmax(180px,auto)] md:h-[600px] gap-x-6 gap-y-6">
+
+<div className="md:col-span-6 lg:col-span-7 glass-card md:p-12 overflow-hidden flex flex-col group rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative justify-between">
+
+<div className="-top-32 -left-32 blur-[100px] pointer-events-none transition-transform duration-700 group-hover:scale-110 w-96 h-96 rounded-full absolute">
+</div>
+<div className="blur-[80px] pointer-events-none w-64 h-64 rounded-full absolute right-0 bottom-0">
+</div>
+<div className="z-10 flex flex-col gap-6 relative gap-x-3 gap-y-3">
+<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card w-fit">
+<span className="w-2 h-2 rounded-full bg-brand-green animate-pulse"></span>
+<span className="text-sm font-medium text-slate-300">Dịch vụ thẻ MBBank</span>
+</div>
+<h1 className="md:text-6xl lg:text-7xl leading-[1.1] text-5xl font-semibold text-white tracking-tight">
+                    ƯU ĐÃI <br/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-green via-brand-cyan to-brand-blue glow-text">365 NGÀY</span>
+<br/>
+                            VỚI THẺ MB
+                </h1>
+<p className="md:text-xl text-lg text-slate-400 max-w-md mt-2">Dành riêng cho chủ thẻ MB: Cập nhật top deal hời, kết hợp cùng mạng lưới 10,000++ đối tác tại lĩnh vực: Mua sắm, Giải trí, Du lịch,...</p>
+</div>
+<div className="z-10 md:mt-0 mt-10 relative">
+<a className="no-underline" href="#uu-dai-hot">
+</a><a className="inline-block no-underline" href="#uu-dai-hot">
+</a><a className="inline-block no-underline" href="#uu-dai-hot">
+<button className="hover:bg-[#b5e600] transition-all duration-300 transform hover:scale-[1.05] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(204,255,0,0.5)] flex cursor-pointer text-lg font-semibold text-black bg-lime-400 rounded-full pt-4 pr-8 pb-4 pl-8 shadow-[0_0_20px_rgba(204,255,0,0.3)] gap-x-3 gap-y-3 items-center" onclick="window.location.href='/uu-dai-hot'" role="button">
+        KHÁM PHÁ NGAY
+    </button>
+</a>
+</div>
+</div>
+
+
+<div className="md:col-span-3 lg:col-span-3 glass-card rounded-[32px] p-6 relative overflow-hidden flex items-center justify-center min-h-[300px] md:min-h-0 bg-gradient-to-b from-white/[0.05] to-transparent">
+
+<div className="opacity-25 mt-0 mr-0 mb-0 ml-0 absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '24px 24px'}}>
+</div>
+<div className="flex overflow-hidden w-full h-[500px] relative items-center justify-center">
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 blur-[60px] bg-gradient-to-tr from-brand-cyan/20 to-brand-purple/20 w-3/4 h-3/4 rounded-full">
+</div>
+<div className="relative z-10 animate-float">
+<div className="relative z-10 animate-ultra-float flex justify-center w-full">
+<img alt="MB Card Floating" className="w-auto h-72 object-contain drop-shadow-[0_40px_80px_rgba(0,0,0,0.5)] transition-all duration-500" src="https://image2url.com/r2/default/images/1772099841928-435ad4d1-741a-4192-938e-a3894b42ec4b.png"/>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<section className="w-full gap-x-4 gap-y-4" id="uu-dai-hot">
+<div className="flex flex-col md:flex-row md:items-end gap-4 mb-10 gap-x-4 gap-y-4 justify-between">
+<div className="">
+<h2 className="md:text-5xl text-3xl font-semibold text-white tracking-tight mb-4">Ưu đãi hot tuần này🔥</h2>
+<p className="text-lg text-slate-400 max-w-xl">Top 4 ưu đãi mới hot nhất tuần này bạn không nên bỏ lỡ!</p>
+</div>
+</div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+<div className="glass-card glass-card-hover overflow-hidden group cursor-pointer rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative" onclick="window.location.href='https://www.mbbank.com.vn/26/213/2608/Chi-tiet/the-tin-dung-quoc-te-mb-visa-priority-signature-2026-1-29-13-53-43'" role="button">
+<div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-green/20 to-brand-green/5 border border-brand-green/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+<i className="w-7 h-7 text-brand-green stroke-[1.5]" data-lucide="badge-percent"></i>
+</div>
+<h3 className="text-2xl font-semibold text-white tracking-tight mb-3">12.9 triệu đ
+                Hoàn tiền</h3>
+<p className="leading-relaxed text-lg text-slate-400">khi chi tiêu với thẻ MB Visa Signature.</p>
+</div>
+
+<div className="glass-card glass-card-hover overflow-hidden group rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative">
+<div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-cyan/20 to-brand-cyan/5 border border-brand-cyan/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+<i className="w-7 h-7 text-brand-cyan stroke-[1.5]" data-lucide="globe-2"></i>
+</div>
+<h3 className="text-2xl font-semibold text-white tracking-tight mb-3">0Đ Phí chuyển đổi ngoại tệ</h3>
+<p className="leading-relaxed text-lg text-slate-400">Hoàn 100% phí chuyển đổi ngoại tệ khi thanh toán tại
+                nước ngoài.</p>
+</div>
+
+<div className="glass-card glass-card-hover overflow-hidden group cursor-pointer rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative" onclick="window.location.href='https://www.mbbank.com.vn/chi-tiet/tin-khuyen-mai-khcn/giam-50-tai-chuoi-nha-hang-michelin-voi-mb-mastercard-2025-12-16-17-52-2/6901'" role="button">
+<div className="border-brand-purple/20 flex group-hover:scale-110 transition-transform duration-300 bg-gradient-to-br from-brand-purple/20 to-brand-purple/5 w-14 h-14 border rounded-2xl mb-8 items-center justify-center">
+<i className="w-7 h-7 text-brand-purple stroke-[1.5]" data-lucide="layers"></i>
+</div>
+<h3 className="text-2xl font-semibold text-white tracking-tight mb-3">Giảm 50% Micheline</h3>
+<p className="leading-relaxed text-lg text-slate-400">Giảm 50% tối đa 500K chuỗi nhà hàng Michelin.</p>
+</div>
+
+<div className="glass-card glass-card-hover overflow-hidden group cursor-pointer rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative" onclick="window.location.href='https://www.mbbank.com.vn/chi-tiet/tin-khuyen-mai-khcn/hoan-tien-50-khi-thanh-toan-hoa-don-dien-nuoc-tren-app-mbbank-2026-2-25-9-15-4/7015'" role="button">
+<div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-pink/20 to-brand-pink/5 border border-brand-pink/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+<i className="w-7 h-7 text-brand-pink stroke-[1.5]" data-lucide="gift"></i>
+</div>
+<h3 className="text-2xl font-semibold text-white tracking-tight mb-3">Giảm 50% hóa đơn điện nước</h3>
+<p className="leading-relaxed text-lg text-slate-400">Khi thanh toán với thẻ MB. Áp dụng đến 30/06/2026.</p>
+</div>
+</div>
+</section>
+
+<section className="w-full mb-20">
+<h2 className="md:text-5xl text-3xl font-semibold text-white tracking-tight text-center mb-2">Thiết kế riêng cho bạn
+        </h2>
+<p className="md:text text-base text-slate-400 text-center mb-10">Bạn đang sở hữu thẻ MB Mastercard, Visa hay JCB?
+            Khám phá các gói ưu đãi dành riêng cho bạn</p>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 gap-x-6 gap-y-6">
+
+<div className="group relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-auto md:h-[500px] border border-white/10 shadow-lg">
+<div className="absolute inset-0 bg-gradient-to-b from-brand-blue/80 via-blue-900/90 to-brand-navy z-10 transition-opacity duration-300 group-hover:opacity-90">
+</div>
+
+<img alt="Gen Z Lifestyle" className="absolute inset-0 w-full h-full object-cover z-0 mix-blend-overlay opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
+<div className="z-20 flex flex-col cursor-pointer h-full pt-8 pr-8 pb-8 pl-8 relative justify-between" onclick="window.location.href='https://www.mbbank.com.vn/chi-tiet/tin-khuyen-mai-khcn/xai-the-mb-mastercard-365-ngay-uu-dai-2024-5-23-16-6-57/4291'" role="button">
+<div className="">
+<div className="inline-flex text-sm font-medium text-blue-200 bg-white/10 border-white/20 border rounded-full mb-6 pt-1.5 pr-4 pb-1.5 pl-4 backdrop-blur-md items-center justify-center">
+                            Gen Z / Lifestyle
+                        </div>
+<h3 className="text-3xl font-semibold text-white tracking-tight mb-4">MB Mastercard: Live Loud,
+                            Spend Smart</h3>
+<p className="text-lg text-blue-100/80">Cashback on streaming, fashion, and cafe hopping. Your
+                            digital life,
+                            rewarded.</p>
+</div>
+<div className="flex group-hover:bg-brand-blue group-hover:border-transparent transition-colors cursor-pointer bg-blue-600/90 w-12 h-12 border-white/20 border rounded-full backdrop-blur-md items-center justify-center">
+<i className="w-6 h-6 text-white stroke-[1.5]" data-lucide="arrow-up-right"></i>
+</div>
+</div>
+</div>
+
+<div className="group relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-auto md:h-[500px] border border-white/10 shadow-lg">
+<div className="absolute inset-0 bg-gradient-to-b from-brand-pink/80 via-rose-900/90 to-brand-navy z-10 transition-opacity duration-300 group-hover:opacity-90">
+</div>
+
+<img alt="Family Health" className="absolute inset-0 w-full h-full object-cover z-0 mix-blend-overlay opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
+<div className="z-20 flex flex-col cursor-pointer h-full pt-8 pr-8 pb-8 pl-8 relative justify-between" onclick="window.location.href='https://www.mbbank.com.vn/chi-tiet/tin-khuyen-mai-khcn/xai-the-mb-jcb-uu-dai-365-ngay-2025-7-9-10-22-46/5481'" role="button">
+<div className="">
+<div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sm font-medium text-pink-200 mb-6">
+                            Family / Health
+                        </div>
+<h3 className="text-3xl font-semibold text-white tracking-tight mb-4">MB JCB: Care for What Matters
+                        </h3>
+<p className="text-lg text-pink-100/80">Special privileges at top hospitals, supermarkets, and
+                            educational
+                            institutions.</p>
+</div>
+<div className="flex group-hover:bg-brand-pink group-hover:border-transparent transition-colors cursor-pointer bg-pink-500/90 w-12 h-12 border-white/20 border rounded-full backdrop-blur-md items-center justify-center">
+<i className="w-6 h-6 text-white stroke-[1.5]" data-lucide="arrow-up-right"></i>
+</div>
+</div>
+</div>
+
+<div className="group relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-auto md:h-[500px] border border-white/10 shadow-lg">
+<div className="absolute inset-0 bg-gradient-to-b from-brand-cyan/80 via-teal-900/90 to-brand-navy z-10 transition-opacity duration-300 group-hover:opacity-90">
+</div>
+
+<img alt="Business Travel" className="absolute inset-0 w-full h-full object-cover z-0 mix-blend-overlay opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
+<div className="flex flex-col z-20 cursor-pointer h-full pt-8 pr-8 pb-8 pl-8 relative justify-between" onclick="window.location.href='https://www.mbbank.com.vn/chi-tiet/tin-khuyen-mai-khcn/xai-the-mb-visa-nhan-uu-dai-365-ngay-2025-6-10-10-41-26/5412'" role="button">
+<div className="">
+<div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sm font-medium text-cyan-200 mb-6">
+                            Business / Travel
+                        </div>
+<h3 className="text-3xl font-semibold text-white tracking-tight mb-4">MB Visa: Elevate Every Journey
+                        </h3>
+<p className="text-lg text-cyan-100/80">Lounge access, priority check-in, and premium miles
+                            accumulation globally.
+                        </p>
+</div>
+<div className="flex group-hover:bg-brand-cyan group-hover:border-transparent transition-colors cursor-pointer bg-teal-500/90 w-12 h-12 border-white/20 border rounded-full backdrop-blur-md items-center justify-center">
+<i className="w-6 h-6 text-white stroke-[1.5]" data-lucide="arrow-up-right"></i>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer className="w-full border-t border-white/10 py-12 text-center text-slate-500 text-lg">
+<p className="">Chi tiết liên hệ MB247: 1900545426 hoặc chi nhánh/PGD gần nhất để được hỗ trợ!</p>
+</footer>
+
+
+
+
+    </>
+  );
+}

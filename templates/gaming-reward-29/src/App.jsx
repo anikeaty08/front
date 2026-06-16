@@ -1,0 +1,637 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 z-[-1] bg-grid-pattern pointer-events-none"></div>
+<div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#1f6feb] rounded-full mix-blend-screen filter blur-[150px] opacity-20 pointer-events-none"></div>
+<div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#c89b3c] rounded-full mix-blend-screen filter blur-[150px] opacity-10 pointer-events-none"></div>
+
+<header className="w-full border-b border-[#785a28]/20 bg-[#061426]/80 backdrop-blur-md sticky top-0 z-50">
+<div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<div className="flex items-center gap-2">
+<iconify-icon className="text-3xl text-[#c89b3c]" icon="solar:gamepad-bold-duotone"></iconify-icon>
+<span className="font-heading font-semibold text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#f0c674] to-[#c89b3c] uppercase tracking-widest">GIFT RIFT</span>
+</div>
+<a className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-sm border border-[#0a58ca] text-[#00d4ff] font-medium text-sm hover:bg-[#0a58ca]/10 transition-colors" href="https://amazerevenue.com/click/fcb8680224e">
+                View Offer
+                <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+</header>
+
+<section className="relative pt-20 pb-32 overflow-hidden">
+<div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-16">
+<div className="w-full lg:w-1/2 flex flex-col items-start text-left">
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1f6feb]/10 border border-[#1f6feb]/30 text-[#00d4ff] text-xs font-medium mb-6">
+<iconify-icon icon="solar:star-fall-linear"></iconify-icon>
+                    Digital Gaming Reward
+                </div>
+<h1 className="font-heading font-semibold text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] mb-6">
+                    Power Up Your <br/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f0c674] to-[#c89b3c]">League of Legends</span> <br/>
+                    Experience
+                </h1>
+<p className="text-lg text-slate-300 mb-10 max-w-xl leading-relaxed">
+                    Use a League of Legends Gift Card to unlock in-game content, upgrade your experience, and enjoy more flexibility inside the League universe.
+                </p>
+<div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+<a className="group relative inline-flex justify-center items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#c89b3c] to-[#f0c674] text-[#061426] font-semibold text-base rounded-sm hover:shadow-[0_0_20px_rgba(200,155,60,0.5)] transition-all duration-300" href="https://amazerevenue.com/click/fcb8680224e">
+                        Check Gift Card Availability
+                        <iconify-icon className="group-hover:translate-x-1 transition-transform" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</a>
+<a className="inline-flex justify-center items-center gap-2 px-8 py-4 border border-[#1f6feb]/50 text-[#f5f7fa] font-medium text-base rounded-sm hover:bg-[#1f6feb]/10 hover:border-[#1f6feb] transition-colors duration-300" href="https://amazerevenue.com/click/fcb8680224e">
+                        View Current Offer
+                    </a>
+</div>
+<div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-slate-400">
+<div className="flex items-center gap-2">
+<iconify-icon className="text-[#00d4ff] text-lg" icon="solar:shield-check-linear"></iconify-icon>
+                        Digital Gaming Gift Card
+                    </div>
+<div className="flex items-center gap-2">
+<iconify-icon className="text-[#00d4ff] text-lg" icon="solar:gamepad-linear"></iconify-icon>
+                        Great for Gamers
+                    </div>
+<div className="flex items-center gap-2">
+<iconify-icon className="text-[#00d4ff] text-lg" icon="solar:bolt-circle-linear"></iconify-icon>
+                        Easy to Redeem
+                    </div>
+<div className="flex items-center gap-2">
+<iconify-icon className="text-[#00d4ff] text-lg" icon="solar:gift-linear"></iconify-icon>
+                        Perfect Gift Choice
+                    </div>
+</div>
+</div>
+<div className="w-full lg:w-1/2 relative flex justify-center">
+
+<div className="relative w-full max-w-md aspect-[1.58] bg-gradient-to-br from-[#08111f] to-[#061426] rounded-xl border border-[#785a28]/50 glow-gold p-6 flex flex-col justify-between overflow-hidden transform hover:-translate-y-2 transition-transform duration-500">
+
+<div className="absolute top-0 right-0 w-64 h-64 bg-[#0a58ca]/20 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+<div className="absolute bottom-0 left-0 w-48 h-48 bg-[#c89b3c]/20 rounded-full blur-[40px] translate-y-1/3 -translate-x-1/4 pointer-events-none"></div>
+<div className="relative z-10 flex justify-between items-start">
+<div className="text-transparent bg-clip-text bg-gradient-to-r from-[#f0c674] to-[#c89b3c] font-heading font-semibold text-2xl tracking-tight uppercase">
+                            Digital Reward
+                        </div>
+<iconify-icon className="text-3xl text-[#c89b3c]" icon="solar:crown-minimalistic-linear"></iconify-icon>
+</div>
+<div className="relative z-10 flex items-center justify-center flex-grow">
+<div className="w-24 h-24 border-2 border-[#1f6feb]/40 rounded-full flex items-center justify-center relative">
+<div className="absolute inset-0 bg-[#00d4ff]/10 rounded-full blur-md"></div>
+<iconify-icon className="text-5xl text-[#00d4ff]" icon="solar:gamepad-bold-duotone"></iconify-icon>
+</div>
+</div>
+<div className="relative z-10 flex justify-between items-end mt-4">
+<div className="font-mono text-slate-400 text-sm tracking-widest">
+                            •••• •••• •••• ••••
+                        </div>
+<div className="text-[#f5f7fa] font-medium text-sm">
+                            Gaming Balance
+                        </div>
+</div>
+</div>
+
+<div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80')] bg-cover bg-center opacity-10 rounded-full blur-3xl z-[-1]"></div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-[#08111f]/50 border-y border-[#785a28]/10 relative">
+<div className="max-w-7xl mx-auto px-6">
+<div className="text-center mb-16">
+<h2 className="font-heading font-semibold text-3xl md:text-4xl tracking-tight mb-4">
+                    Want More Freedom Inside Your Favorite Game?
+                </h2>
+<p className="text-slate-400 max-w-2xl mx-auto text-base">
+                    Many gamers want a simple way to access in-game purchases, gift balance to friends, or enjoy premium game content without using a credit card every time.
+                </p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+<div className="bg-[#061426] border border-[#1f6feb]/20 p-6 rounded-sm hover:border-[#1f6feb]/60 transition-colors">
+<div className="w-12 h-12 rounded-full bg-[#1f6feb]/10 flex items-center justify-center mb-4">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:wallet-money-linear"></iconify-icon>
+</div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-2">Need In-Game Balance</h3>
+<p className="text-sm text-slate-400">Looking for a straightforward way to top up your account for the latest skins and items.</p>
+</div>
+
+<div className="bg-[#061426] border border-[#1f6feb]/20 p-6 rounded-sm hover:border-[#1f6feb]/60 transition-colors">
+<div className="w-12 h-12 rounded-full bg-[#1f6feb]/10 flex items-center justify-center mb-4">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:gift-linear"></iconify-icon>
+</div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-2">Want a Gamer Gift</h3>
+<p className="text-sm text-slate-400">Searching for the ideal present that any dedicated player would actually appreciate.</p>
+</div>
+
+<div className="bg-[#061426] border border-[#1f6feb]/20 p-6 rounded-sm hover:border-[#1f6feb]/60 transition-colors">
+<div className="w-12 h-12 rounded-full bg-[#1f6feb]/10 flex items-center justify-center mb-4">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:card-2-linear"></iconify-icon>
+</div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-2">No Credit Card Hassle</h3>
+<p className="text-sm text-slate-400">Prefer not to link a credit card directly to your gaming client or web account.</p>
+</div>
+
+<div className="bg-[#061426] border border-[#1f6feb]/20 p-6 rounded-sm hover:border-[#1f6feb]/60 transition-colors">
+<div className="w-12 h-12 rounded-full bg-[#1f6feb]/10 flex items-center justify-center mb-4">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:slider-minimalistic-horizontal-linear"></iconify-icon>
+</div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-2">Flexible Spending</h3>
+<p className="text-sm text-slate-400">Want to manage your digital entertainment budget securely and easily.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 relative overflow-hidden">
+<div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80')] bg-cover bg-center opacity-5"></div>
+<div className="absolute inset-0 bg-gradient-to-t from-[#061426] via-transparent to-[#061426]"></div>
+<div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+<iconify-icon className="text-4xl text-[#c89b3c] mb-6" icon="solar:stars-linear"></iconify-icon>
+<h2 className="font-heading font-semibold text-3xl md:text-5xl tracking-tight mb-6">
+                League of Legends Gift Card <br/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#1f6feb]">Makes It Simple</span>
+</h2>
+<p className="text-lg text-slate-300 mb-10 leading-relaxed">
+                A League of Legends Gift Card can be a convenient option for gamers who want to add balance and enjoy in-game content more easily. No complicated setups, just straightforward gaming power.
+            </p>
+<a className="inline-flex justify-center items-center gap-2 px-8 py-4 bg-[#1f6feb] text-white font-medium text-base rounded-sm hover:bg-[#0a58ca] glow-cyan transition-all duration-300" href="https://amazerevenue.com/click/fcb8680224e">
+                Check Current Offer
+                <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+</section>
+
+<section className="py-24 bg-[#08111f]">
+<div className="max-w-7xl mx-auto px-6">
+<div className="mb-16">
+<h2 className="font-heading font-semibold text-3xl md:text-4xl tracking-tight mb-4">
+                    Why Choose a League of Legends Gift Card?
+                </h2>
+<div className="w-20 h-1 bg-gradient-to-r from-[#c89b3c] to-transparent"></div>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<div className="group bg-[#061426] border border-[#785a28]/30 p-8 rounded-sm hover:border-[#c89b3c] hover:shadow-[0_0_15px_rgba(0,212,255,0.1)] transition-all duration-300">
+<iconify-icon className="text-3xl text-[#c89b3c] mb-4 group-hover:scale-110 transition-transform" icon="solar:gamepad-linear"></iconify-icon>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Perfect for Gamers</h3>
+<p className="text-slate-400 text-sm">A simple and useful gift option for League of Legends players.</p>
+</div>
+
+<div className="group bg-[#061426] border border-[#785a28]/30 p-8 rounded-sm hover:border-[#c89b3c] hover:shadow-[0_0_15px_rgba(0,212,255,0.1)] transition-all duration-300">
+<iconify-icon className="text-3xl text-[#c89b3c] mb-4 group-hover:scale-110 transition-transform" icon="solar:devices-linear"></iconify-icon>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Easy Digital Access</h3>
+<p className="text-slate-400 text-sm">Gift cards are convenient for online gaming purchases and digital rewards.</p>
+</div>
+
+<div className="group bg-[#061426] border border-[#785a28]/30 p-8 rounded-sm hover:border-[#c89b3c] hover:shadow-[0_0_15px_rgba(0,212,255,0.1)] transition-all duration-300">
+<iconify-icon className="text-3xl text-[#c89b3c] mb-4 group-hover:scale-110 transition-transform" icon="solar:bag-3-linear"></iconify-icon>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Flexible Spending</h3>
+<p className="text-slate-400 text-sm">Use balance for available in-game content depending on region and account eligibility.</p>
+</div>
+
+<div className="group bg-[#061426] border border-[#785a28]/30 p-8 rounded-sm hover:border-[#c89b3c] hover:shadow-[0_0_15px_rgba(0,212,255,0.1)] transition-all duration-300">
+<iconify-icon className="text-3xl text-[#c89b3c] mb-4 group-hover:scale-110 transition-transform" icon="solar:present-linear"></iconify-icon>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Great Gift Idea</h3>
+<p className="text-slate-400 text-sm">Useful for birthdays, holidays, gaming events, or surprising a gaming friend.</p>
+</div>
+
+<div className="group bg-[#061426] border border-[#785a28]/30 p-8 rounded-sm hover:border-[#c89b3c] hover:shadow-[0_0_15px_rgba(0,212,255,0.1)] transition-all duration-300">
+<iconify-icon className="text-3xl text-[#c89b3c] mb-4 group-hover:scale-110 transition-transform" icon="solar:ticket-linear"></iconify-icon>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">No Physical Product Needed</h3>
+<p className="text-slate-400 text-sm">A digital-style gift card offer is easy to access and simple to understand.</p>
+</div>
+
+<div className="group bg-[#061426] border border-[#785a28]/30 p-8 rounded-sm hover:border-[#c89b3c] hover:shadow-[0_0_15px_rgba(0,212,255,0.1)] transition-all duration-300">
+<iconify-icon className="text-3xl text-[#c89b3c] mb-4 group-hover:scale-110 transition-transform" icon="solar:crown-star-linear"></iconify-icon>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Premium Gaming Experience</h3>
+<p className="text-slate-400 text-sm">Enjoy a smoother way to support your favorite gaming experience.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-t border-[#785a28]/10">
+<div className="max-w-7xl mx-auto px-6">
+<div className="text-center mb-16">
+<h2 className="font-heading font-semibold text-3xl md:text-4xl tracking-tight mb-4">
+                    How Gamers Can Use It
+                </h2>
+<p className="text-slate-400 max-w-2xl mx-auto text-base">
+                    Discover the different ways a gift card can enhance the digital experience.
+                </p>
+</div>
+<div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 max-w-4xl mx-auto">
+<div className="flex flex-col items-center text-center gap-3">
+<div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#1f6feb]/20 to-transparent flex items-center justify-center border border-[#1f6feb]/30">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:user-linear"></iconify-icon>
+</div>
+<span className="text-sm font-medium">For personal gaming balance</span>
+</div>
+<div className="flex flex-col items-center text-center gap-3">
+<div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#1f6feb]/20 to-transparent flex items-center justify-center border border-[#1f6feb]/30">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:users-group-two-rounded-linear"></iconify-icon>
+</div>
+<span className="text-sm font-medium">For gifting to friends</span>
+</div>
+<div className="flex flex-col items-center text-center gap-3">
+<div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#1f6feb]/20 to-transparent flex items-center justify-center border border-[#1f6feb]/30">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:cup-star-linear"></iconify-icon>
+</div>
+<span className="text-sm font-medium">For special gaming events</span>
+</div>
+<div className="flex flex-col items-center text-center gap-3">
+<div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#1f6feb]/20 to-transparent flex items-center justify-center border border-[#1f6feb]/30">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:calendar-linear"></iconify-icon>
+</div>
+<span className="text-sm font-medium">For seasonal content</span>
+</div>
+<div className="flex flex-col items-center text-center gap-3">
+<div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#1f6feb]/20 to-transparent flex items-center justify-center border border-[#1f6feb]/30">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:medal-ribbon-linear"></iconify-icon>
+</div>
+<span className="text-sm font-medium">For tournament rewards</span>
+</div>
+<div className="flex flex-col items-center text-center gap-3">
+<div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#1f6feb]/20 to-transparent flex items-center justify-center border border-[#1f6feb]/30">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:global-linear"></iconify-icon>
+</div>
+<span className="text-sm font-medium">For online gamer communities</span>
+</div>
+</div>
+<div className="mt-12 text-center">
+<p className="inline-block bg-[#08111f] border border-[#785a28]/30 text-slate-400 text-xs px-4 py-2 rounded-sm">
+<iconify-icon className="inline align-middle mr-1" icon="solar:info-circle-linear"></iconify-icon>
+                    Availability and redeem options may vary by region, account, and platform rules.
+                </p>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-[#08111f]">
+<div className="max-w-5xl mx-auto px-6">
+<h2 className="font-heading font-semibold text-3xl md:text-4xl tracking-tight mb-12 text-center">
+                Gift Card vs Direct Payment
+            </h2>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+<div className="bg-[#061426] border border-red-900/30 p-8 rounded-sm relative overflow-hidden">
+<div className="absolute top-0 right-0 bg-red-900/10 w-32 h-32 rounded-full blur-2xl"></div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-6 text-slate-300">Direct Payment</h3>
+<ul className="space-y-4 text-slate-400 text-sm">
+<li className="flex items-start gap-3">
+<iconify-icon className="text-red-500 text-lg shrink-0 mt-0.5" icon="solar:close-circle-linear"></iconify-icon>
+<span>Requires payment method stored online</span>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-red-500 text-lg shrink-0 mt-0.5" icon="solar:close-circle-linear"></iconify-icon>
+<span>Less convenient for gifting to others</span>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-red-500 text-lg shrink-0 mt-0.5" icon="solar:close-circle-linear"></iconify-icon>
+<span>Not ideal for younger gamers</span>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-red-500 text-lg shrink-0 mt-0.5" icon="solar:close-circle-linear"></iconify-icon>
+<span>Can feel less flexible for budgeting</span>
+</li>
+</ul>
+</div>
+
+<div className="bg-gradient-to-b from-[#0a58ca]/10 to-[#061426] border border-[#1f6feb]/50 p-8 rounded-sm relative overflow-hidden glow-cyan">
+<div className="absolute top-0 right-0 bg-[#00d4ff]/10 w-32 h-32 rounded-full blur-2xl"></div>
+<h3 className="font-heading font-semibold text-2xl tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#f5f7fa]">League of Legends Gift Card</h3>
+<ul className="space-y-4 text-[#f5f7fa] text-sm font-medium">
+<li className="flex items-start gap-3">
+<iconify-icon className="text-[#00d4ff] text-lg shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<span>Gamer-friendly, secure option</span>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-[#00d4ff] text-lg shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<span>Easier to gift to any player</span>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-[#00d4ff] text-lg shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<span>Flexible balance use for content</span>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-[#00d4ff] text-lg shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<span>Convenient for digital gaming control</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-t border-[#785a28]/10">
+<div className="max-w-7xl mx-auto px-6">
+<h2 className="font-heading font-semibold text-3xl md:text-4xl tracking-tight mb-16 text-center">
+                How It Works in 3 Simple Steps
+            </h2>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+
+<div className="hidden md:block absolute top-6 left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-[#1f6feb]/50 to-transparent z-0"></div>
+
+<div className="relative z-10 flex flex-col items-center text-center group">
+<div className="w-12 h-12 rounded-full bg-[#061426] border-2 border-[#1f6feb] text-[#00d4ff] font-heading font-semibold text-xl flex items-center justify-center mb-6 group-hover:bg-[#1f6feb] group-hover:text-white transition-colors">1</div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Click the offer button</h3>
+<p className="text-sm text-slate-400">Visit the offer page through the secure link on this site.</p>
+</div>
+
+<div className="relative z-10 flex flex-col items-center text-center group">
+<div className="w-12 h-12 rounded-full bg-[#061426] border-2 border-[#1f6feb] text-[#00d4ff] font-heading font-semibold text-xl flex items-center justify-center mb-6 group-hover:bg-[#1f6feb] group-hover:text-white transition-colors">2</div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Check availability</h3>
+<p className="text-sm text-slate-400">Review the current gift card offer and requirements.</p>
+</div>
+
+<div className="relative z-10 flex flex-col items-center text-center group">
+<div className="w-12 h-12 rounded-full bg-[#061426] border-2 border-[#c89b3c] text-[#c89b3c] font-heading font-semibold text-xl flex items-center justify-center mb-6 group-hover:bg-[#c89b3c] group-hover:text-[#061426] transition-colors">3</div>
+<h3 className="font-heading font-semibold text-xl tracking-tight mb-3">Follow instructions</h3>
+<p className="text-sm text-slate-400">Complete the steps shown on the offer page if eligible.</p>
+</div>
+</div>
+<div className="mt-16 text-center">
+<a className="inline-flex justify-center items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#c89b3c] to-[#f0c674] text-[#061426] font-semibold text-base rounded-sm hover:shadow-[0_0_20px_rgba(200,155,60,0.5)] transition-all duration-300" href="https://amazerevenue.com/click/fcb8680224e">
+                    Check Availability Now
+                    <iconify-icon icon="solar:alt-arrow-right-linear"></iconify-icon>
+</a>
+</div>
+</div>
+</section>
+
+<section className="relative py-32 overflow-hidden border-y border-[#785a28]/20">
+<div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1616523992224-b580dce6876c?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80')] bg-cover bg-fixed bg-center opacity-20"></div>
+<div className="absolute inset-0 bg-gradient-to-r from-[#061426] via-[#061426]/80 to-transparent"></div>
+<div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#1f6feb]/20 rounded-full blur-[100px] pointer-events-none"></div>
+<div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center">
+<div className="w-full md:w-3/5">
+<div className="inline-flex items-center gap-2 mb-4">
+<div className="w-8 h-px bg-[#c89b3c]"></div>
+<span className="text-[#c89b3c] font-medium text-xs tracking-widest uppercase">For The Players</span>
+</div>
+<h2 className="font-heading font-semibold text-4xl md:text-5xl tracking-tight mb-6 leading-tight">
+                    Built for Players Who <br/>Love the Rift
+                </h2>
+<p className="text-lg text-slate-300 mb-8 max-w-xl leading-relaxed">
+                    Whether you play casually, grind ranked, enjoy champions, skins, events, or simply want a better gaming experience, a League of Legends Gift Card can be a smart and exciting option. Level up your journey today.
+                </p>
+<div className="flex gap-4">
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:mouse-minimalistic-linear"></iconify-icon>
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:keyboard-linear"></iconify-icon>
+<iconify-icon className="text-2xl text-[#00d4ff]" icon="solar:monitor-linear"></iconify-icon>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-[#08111f] relative overflow-hidden">
+<div className="absolute inset-0 bg-gradient-to-b from-[#1f6feb]/10 to-transparent"></div>
+<div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+<h2 className="font-heading font-semibold text-4xl md:text-6xl tracking-tight mb-6">
+                Ready to Unlock More <br/>
+<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f0c674] to-[#c89b3c]">Gaming Possibilities?</span>
+</h2>
+<p className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto">
+                Check the current League of Legends Gift Card offer and see if it is available for you.
+            </p>
+<a className="inline-flex justify-center items-center gap-2 px-10 py-5 bg-[#1f6feb] text-white font-medium text-lg rounded-sm hover:bg-[#0a58ca] hover:scale-105 transition-all duration-300 glow-cyan" href="https://amazerevenue.com/click/fcb8680224e">
+                View Gift Card Offer
+                <iconify-icon className="text-xl" icon="solar:gamepad-linear"></iconify-icon>
+</a>
+</div>
+</section>
+
+<section className="py-24 border-t border-[#785a28]/10">
+<div className="max-w-3xl mx-auto px-6">
+<h2 className="font-heading font-semibold text-3xl md:text-4xl tracking-tight mb-12 text-center">
+                Frequently Asked Questions
+            </h2>
+<div className="space-y-4">
+
+<details className="group bg-[#08111f] border border-[#1f6feb]/20 rounded-sm">
+<summary className="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-200 hover:text-[#00d4ff] transition-colors">
+<span>What is a League of Legends Gift Card?</span>
+<span className="transition group-open:rotate-180">
+<iconify-icon className="text-xl" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</span>
+</summary>
+<div className="text-slate-400 text-sm p-5 pt-0 leading-relaxed border-t border-[#1f6feb]/10 mt-2">
+                        It is a gaming gift card that can be used for eligible League of Legends-related purchases depending on region, account, and redemption rules.
+                    </div>
+</details>
+
+<details className="group bg-[#08111f] border border-[#1f6feb]/20 rounded-sm">
+<summary className="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-200 hover:text-[#00d4ff] transition-colors">
+<span>Is this an official League of Legends website?</span>
+<span className="transition group-open:rotate-180">
+<iconify-icon className="text-xl" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</span>
+</summary>
+<div className="text-slate-400 text-sm p-5 pt-0 leading-relaxed border-t border-[#1f6feb]/10 mt-2">
+                        No. This is an independent informational landing page and may contain affiliate links. We are not endorsed by or affiliated with Riot Games.
+                    </div>
+</details>
+
+<details className="group bg-[#08111f] border border-[#1f6feb]/20 rounded-sm">
+<summary className="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-200 hover:text-[#00d4ff] transition-colors">
+<span>Can I gift it to a friend?</span>
+<span className="transition group-open:rotate-180">
+<iconify-icon className="text-xl" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</span>
+</summary>
+<div className="text-slate-400 text-sm p-5 pt-0 leading-relaxed border-t border-[#1f6feb]/10 mt-2">
+                        Gift cards are often used as gaming gifts, but availability and usage rules may vary based on the specific offer terms.
+                    </div>
+</details>
+
+<details className="group bg-[#08111f] border border-[#1f6feb]/20 rounded-sm">
+<summary className="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-200 hover:text-[#00d4ff] transition-colors">
+<span>Does it work in every country?</span>
+<span className="transition group-open:rotate-180">
+<iconify-icon className="text-xl" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</span>
+</summary>
+<div className="text-slate-400 text-sm p-5 pt-0 leading-relaxed border-t border-[#1f6feb]/10 mt-2">
+                        Availability and redemption rules may vary by region. Users should check the offer page details carefully before continuing.
+                    </div>
+</details>
+
+<details className="group bg-[#08111f] border border-[#1f6feb]/20 rounded-sm">
+<summary className="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-200 hover:text-[#00d4ff] transition-colors">
+<span>Is this a free gift card?</span>
+<span className="transition group-open:rotate-180">
+<iconify-icon className="text-xl" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</span>
+</summary>
+<div className="text-slate-400 text-sm p-5 pt-0 leading-relaxed border-t border-[#1f6feb]/10 mt-2">
+                        Users should check the current offer details after clicking the CTA to understand any requirements, tasks, or conditions associated with the offer.
+                    </div>
+</details>
+
+<details className="group bg-[#08111f] border border-[#1f6feb]/20 rounded-sm">
+<summary className="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-200 hover:text-[#00d4ff] transition-colors">
+<span>Where can I check the offer?</span>
+<span className="transition group-open:rotate-180">
+<iconify-icon className="text-xl" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</span>
+</summary>
+<div className="text-slate-400 text-sm p-5 pt-0 leading-relaxed border-t border-[#1f6feb]/10 mt-2">
+                        Click any "Check Availability" or "View Offer" button on this page to be securely redirected to the current promotion.
+                    </div>
+</details>
+</div>
+</div>
+</section>
+
+<section className="py-20 bg-gradient-to-br from-[#061426] to-[#08111f] border-t border-[#785a28]/30">
+<div className="max-w-3xl mx-auto px-6 text-center">
+<h2 className="font-heading font-semibold text-3xl md:text-4xl tracking-tight mb-6">
+                Level Up Your Gaming Experience Today
+            </h2>
+<p className="text-slate-400 mb-10 text-base">
+                League of Legends Gift Card is a smart option for players who want flexibility, convenience, and a better digital gaming experience.
+            </p>
+<a className="inline-flex justify-center items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#c89b3c] to-[#f0c674] text-[#061426] font-semibold text-base rounded-sm hover:shadow-[0_0_20px_rgba(200,155,60,0.5)] transition-all duration-300" href="https://amazerevenue.com/click/fcb8680224e">
+                Check Gift Card Availability
+                <iconify-icon className="text-xl" icon="solar:bolt-circle-linear"></iconify-icon>
+</a>
+</div>
+</section>
+
+<footer className="bg-[#040d1a] py-12 border-t border-slate-800">
+<div className="max-w-7xl mx-auto px-6">
+<div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
+<div className="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity">
+<iconify-icon className="text-2xl text-slate-300" icon="solar:gamepad-bold-duotone"></iconify-icon>
+<span className="font-heading font-semibold text-lg tracking-tight text-slate-300 uppercase">League of Legends Gift Card Info</span>
+</div>
+<div className="flex gap-6 text-xs font-medium text-slate-500">
+<a className="hover:text-slate-300 transition-colors" href="#">Privacy Policy</a>
+<a className="hover:text-slate-300 transition-colors" href="#">Terms &amp; Conditions</a>
+<a className="hover:text-slate-300 transition-colors" href="#">Contact</a>
+</div>
+</div>
+<div className="border-t border-slate-800/50 pt-8 space-y-4 text-center md:text-left">
+<p className="text-xs text-slate-500 leading-relaxed">
+<strong>Affiliate Disclosure:</strong> This page may contain affiliate links. We may earn a commission when you click through our link.
+                </p>
+<p className="text-xs text-slate-500 leading-relaxed">
+<strong>Trademark Disclaimer:</strong> League of Legends and Riot Games are trademarks of Riot Games, Inc. This website is not affiliated with or endorsed by Riot Games. This is an independent promotional landing page.
+                </p>
+<p className="text-xs text-slate-600 mt-6">
+                    © 2023 Digital Gaming Rewards. All rights reserved.
+                </p>
+</div>
+</div>
+</footer>
+
+    </>
+  );
+}

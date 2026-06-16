@@ -1,0 +1,14 @@
+# Construction Materials Landing Page Template
+
+A modern template for promoting high‑performance building materials, ideal for showcasing aluminum roofing and concrete paver products to trade audiences.
+
+## Project Details
+- **Slug:** `steelrock-construction`
+- **Views:** 27
+- **Tags:** Landing Page, Business, Brand, Clean, Minimal, Technology, Services, Large Type
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

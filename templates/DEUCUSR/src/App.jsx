@@ -1,0 +1,508 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        satoshi: ['Satoshi', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9', 
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a'
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'fade-in-down': 'fadeInDown 0.8s ease-out forwards',
+                        'fade-in-left': 'fadeInLeft 0.8s ease-out forwards',
+                        'fade-in-right': 'fadeInRight 0.8s ease-out forwards',
+                        'blur-in': 'blurIn 1s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                        'glow': 'glow 2s ease-in-out infinite alternate'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-40px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        fadeInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(40px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        blurIn: {
+                            '0%': { opacity: '0', filter: 'blur(10px)' },
+                            '100%': { opacity: '1', filter: 'blur(0px)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(60px) scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(148, 163, 184, 0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(148, 163, 184, 0.6)' }
+                        }
+                    }
+                }
+            }
+        }
+    
+
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Matter.js Setup for MASSIVE Falling Letters
+        const canvas = document.getElementById('matter-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Resize canvas to fill entire viewport
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Matter.js engine setup
+        const Engine = Matter.Engine,
+              World = Matter.World,
+              Bodies = Matter.Bodies,
+              Body = Matter.Body;
+        
+        const engine = Engine.create();
+        engine.world.gravity.y = 0.3; // Slightly stronger gravity for bigger letters
+        
+        // AI-related words and letters - more variety for huge display
+        const aiWords = ['AI', 'ML', 'GPT', 'NLP', 'LLM', 'RAG', 'API', 'BERT', 'NEURAL', 'PROMPT', 'TRAIN', 'MODEL', 'CLAUDE', 'FINE-TUNE', 'VECTOR', 'EMBEDDINGS'];
+        const letters = ['A', 'I', 'G', 'P', 'T', 'N', 'L', 'M', 'R', 'C', 'O', 'D', 'E', 'X', 'Y', 'Z', 'Q', 'W', 'S', 'F', 'H', 'J', 'K', 'V', 'B'];
+        
+        // Create invisible boundaries
+        const ground = Bodies.rectangle(canvas.width / 2, canvas.height + 200, canvas.width, 400, { isStatic: true });
+        const leftWall = Bodies.rectangle(-200, canvas.height / 2, 400, canvas.height, { isStatic: true });
+        const rightWall = Bodies.rectangle(canvas.width + 200, canvas.height / 2, 400, canvas.height, { isStatic: true });
+        World.add(engine.world, [ground, leftWall, rightWall]);
+        
+        // Store falling objects
+        const fallingObjects = [];
+        // Function to create massive falling letter
+        function createFallingLetter() {
+            // Random position across screen width
+            const x = Math.random() * canvas.width;
+            const y = -300; // Start well above screen
+            
+            // Choose random text - mix of letters and words
+            const allTexts = [...letters, ...aiWords];
+            const text = allTexts[Math.floor(Math.random() * allTexts.length)];
+            
+            // MASSIVE sizes - much bigger than before
+            const fontSize = Math.random() * 100 + 200; // 200px to 300px font size!
+            const letterWidth = text.length * fontSize * 0.6;
+            const letterHeight = fontSize;
+            
+            // Create physics body with huge dimensions
+            const body = Bodies.rectangle(x, y, letterWidth, letterHeight, {
+                frictionAir: 0.01,
+                restitution: 0.3,
+                density: 0.0005,
+                angle: (Math.random() - 0.5) * 0.5 // Slight random rotation
+            });
+            
+            // Store visual properties
+            body.text = text;
+            body.fontSize = fontSize;
+            body.opacity = Math.random() * 0.3 + 0.1; // Very subtle opacity
+            body.color = `rgba(${100 + Math.random() * 100}, ${100 + Math.random() * 100}, ${120 + Math.random() * 135}, ${body.opacity})`;
+            
+            World.add(engine.world, body);
+            fallingObjects.push(body);
+        }
+        
+        // Render function for massive letters
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            fallingObjects.forEach((body, index) => {
+                // Remove objects that are too far down
+                if (body.position.y > canvas.height + 500) {
+                    World.remove(engine.world, body);
+                    fallingObjects.splice(index, 1);
+                    return;
+                }
+                
+                ctx.save();
+                ctx.translate(body.position.x, body.position.y);
+                ctx.rotate(body.angle);
+                
+                // Massive font rendering
+                ctx.font = `700 ${body.fontSize}px 'Inter', sans-serif`;
+                ctx.fillStyle = body.color;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // Add subtle glow effect for huge letters
+                ctx.shadowColor = body.color;
+                ctx.shadowBlur = 20;
+                
+                ctx.fillText(body.text, 0, 0);
+                ctx.restore();
+            });
+        }
+        
+        // Animation loop
+        function animate() {
+            Engine.update(engine, 1000 / 60);
+            render();
+            requestAnimationFrame(animate);
+        }
+        
+        // Create letters periodically - less frequent due to size
+        setInterval(createFallingLetter, 2000); // Every 2 seconds
+        
+        // Start with a few letters
+        for (let i = 0; i < 3; i++) {
+            setTimeout(createFallingLetter, i * 800);
+        }
+        
+        // Start animation
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            // Update world boundaries
+            World.remove(engine.world, [ground, leftWall, rightWall]);
+            const newGround = Bodies.rectangle(canvas.width / 2, canvas.height + 200, canvas.width, 400, { isStatic: true });
+            const newLeftWall = Bodies.rectangle(-200, canvas.height / 2, 400, canvas.height, { isStatic: true });
+            const newRightWall = Bodies.rectangle(canvas.width + 200, canvas.height / 2, 400, canvas.height, { isStatic: true });
+            World.add(engine.world, [newGround, newLeftWall, newRightWall]);
+        });
+        
+        // Smooth scroll behavior for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all animated elements
+        document.querySelectorAll('[class*="animate-"]').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Add hover effects to cards
+        document.querySelectorAll('.hover-lift').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Performance optimization - reduce particles on mobile
+        if (window.innerWidth < 768) {
+            engine.world.gravity.y = 0.5; // Faster fall on mobile
+        }
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<canvas height="1199" id="matter-canvas" width="1822"></canvas>
+<div className="min-h-screen">
+
+<header className="content-layer animate-fade-in-down animate-delay-100 flex items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-12 py-4 lg:py-6 border-b border-zinc-800/50 bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-50" style={{opacity: '1'}}>
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 bg-gradient-to-br from-zinc-500 to-zinc-600 rounded-lg flex items-center justify-center">
+<svg className="lucide lucide-brain-circuit w-5 h-5 text-white" data-lucide="brain-circuit" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M9 13a4.5 4.5 0 0 0 3-4"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M12 13h4"></path><path d="M12 18h6a2 2 0 0 1 2 2v1"></path><path d="M12 8h8"></path><path d="M16 8V5a2 2 0 0 1 2-2"></path><circle cx="16" cy="13" r=".5"></circle><circle cx="18" cy="3" r=".5"></circle><circle cx="20" cy="21" r=".5"></circle><circle cx="20" cy="8" r=".5"></circle></svg>
+</div>
+<a className="lg:text-2xl text-xl font-bold text-white tracking-tight font-satoshi hover:text-zinc-400 transition-colors duration-300" href="#">Alex Chen</a>
+</div>
+<nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium">
+<a className="hover:text-zinc-400 text-zinc-500 transition-all duration-300 flex items-center gap-2 hover:scale-105 hover:bg-zinc-800/30 px-3 py-2 rounded-lg" href="#expertise">
+<svg className="lucide lucide-brain w-4 h-4" data-lucide="brain" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>
+<span className="hidden lg:inline">Expertise</span>
+</a>
+<a className="hover:text-zinc-400 text-zinc-500 transition-all duration-300 flex items-center gap-2 hover:scale-105 hover:bg-zinc-800/30 px-3 py-2 rounded-lg" href="#projects">
+<svg className="lucide lucide-folder w-4 h-4" data-lucide="folder" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path></svg>
+<span className="hidden lg:inline">Projects</span>
+</a>
+<a className="hover:text-zinc-400 text-zinc-500 transition-all duration-300 flex items-center gap-2 hover:scale-105 hover:bg-zinc-800/30 px-3 py-2 rounded-lg" href="#experience">
+<svg className="lucide lucide-briefcase w-4 h-4" data-lucide="briefcase" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><rect height="14" rx="2" width="20" x="2" y="6"></rect></svg>
+<span className="hidden lg:inline">Experience</span>
+</a>
+</nav>
+<div className="flex items-center gap-2 lg:gap-4">
+<button className="flex items-center gap-2 text-xs lg:text-sm font-semibold px-3 lg:px-5 py-2 lg:py-2.5 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-zinc-500/50 hover:scale-105 hover:-translate-y-1">
+<svg className="lucide lucide-mail w-4 h-4" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></svg>
+<span className="hidden sm:inline">Get In Touch</span>
+<span className="sm:hidden">Contact</span>
+</button>
+</div>
+</header>
+
+<div className="content-layer grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+
+<section className="lg:col-span-8 relative overflow-hidden bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-6 lg:p-12 border border-zinc-800/50">
+
+<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-700/10 via-transparent to-transparent"></div>
+<div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-500/5 rounded-full blur-3xl animate-pulse" style={{opacity: '1'}}></div>
+<div className="absolute bottom-0 right-1/4 w-96 h-96 bg-zinc-400/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s', opacity: '1'}}></div>
+<div className="relative z-10">
+
+<div className="animate-fade-in-up animate-delay-200 inline-flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 text-zinc-300 rounded-full text-sm font-medium mb-8 backdrop-blur-sm hover:bg-zinc-800/70 hover:border-zinc-600/70 transition-all duration-300 hover:scale-105" style={{opacity: '1'}}>
+<svg className="lucide lucide-trending-up w-4 h-4" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+<span className="hidden sm:inline">Optimizing AI systems for</span>
+<span className="sm:hidden">Working with</span>
+<span className="font-semibold">Fortune 500 companies</span>
+</div>
+
+<h1 className="animate-blur-in animate-delay-300 text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight font-satoshi text-white leading-tight lg:leading-[1.1] mb-6" style={{opacity: '1'}}>
+                        Senior Prompt<br/>
+<span className="bg-clip-text text-transparent bg-gradient-to-r from-zinc-400 to-zinc-600 hover:from-zinc-300 hover:to-zinc-500 transition-all duration-500">Engineer.</span><br/>
+<span className="text-zinc-300">AI Specialist.</span>
+</h1>
+
+<p className="animate-fade-in-up animate-delay-400 text-base leading-relaxed text-zinc-300 mb-8 max-w-2xl" style={{opacity: '1'}}>
+                        Crafting intelligent AI conversations and optimizing language models for enterprise solutions. 
+                        <span className="text-white font-medium hover:text-zinc-400 transition-colors duration-300 cursor-default">Specialized in GPT-4, Claude, and custom model fine-tuning</span> with 5+ years of experience.
+                    </p>
+
+<div className="animate-fade-in-up animate-delay-500 flex flex-wrap items-center gap-4 lg:gap-8 text-sm text-zinc-400 mb-8" style={{opacity: '1'}}>
+<div className="flex items-center gap-2 hover:text-green-400 transition-all duration-300 hover:scale-110">
+<svg className="lucide lucide-shield-check w-4 h-4 text-green-400" data-lucide="shield-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+<span className="">99% Model Accuracy</span>
+</div>
+<div className="flex items-center gap-2 hover:text-blue-400 transition-all duration-300 hover:scale-110">
+<svg className="lucide lucide-zap w-4 h-4 text-blue-400" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+<span className="">75% Efficiency Boost</span>
+</div>
+<div className="flex items-center gap-2 hover:text-purple-400 transition-all duration-300 hover:scale-110">
+<svg className="lucide lucide-users w-4 h-4 text-purple-400" data-lucide="users" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+<span className="">50+ Enterprise Clients</span>
+</div>
+</div>
+
+<div className="animate-slide-up animate-delay-600" style={{opacity: '1'}}>
+<div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+<a className="flex gap-2 lg:px-8 lg:py-4 bg-gradient-to-r from-zinc-600 to-zinc-700 hover:from-zinc-500 hover:to-zinc-600 transition-all duration-300 hover:shadow-xl hover:shadow-zinc-500/25 lg:text-base group text-sm font-semibold text-white rounded-xl pt-3 pr-6 pb-3 pl-6 items-center justify-center hover:scale-105 hover:-translate-y-1" href="mailto:alex.chen@email.com">
+<svg className="lucide lucide-mail w-4 h-4" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></svg>
+<span>Let's Collaborate</span>
+<svg className="lucide lucide-arrow-right w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</a>
+<a className="flex gap-2 lg:px-8 lg:py-4 bg-zinc-800/50 hover:bg-zinc-700/50 border border-zinc-700 hover:border-zinc-600 transition-all duration-300 hover:shadow-xl lg:text-base group text-sm font-semibold text-white rounded-xl pt-3 pr-6 pb-3 pl-6 items-center justify-center hover:scale-105 hover:-translate-y-1 backdrop-blur-sm" href="https://linkedin.com/in/alexchen">
+<svg className="lucide lucide-linkedin w-4 h-4" data-lucide="linkedin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect height="12" width="4" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+<span>View Profile</span>
+</a>
+</div>
+<p className="mt-4 text-xs lg:text-sm text-zinc-500 flex flex-wrap items-center gap-4">
+<span className="flex items-center gap-1 hover:text-green-400 transition-colors duration-300">
+<svg className="lucide lucide-clock w-3 h-3 text-green-400" data-lucide="clock" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                Response within 24h
+                            </span>
+<span className="flex items-center gap-1 hover:text-blue-400 transition-colors duration-300">
+<svg className="lucide lucide-globe w-3 h-3 text-blue-400" data-lucide="globe" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                                Remote &amp; On-site
+                            </span>
+<span className="flex items-center gap-1 hover:text-purple-400 transition-colors duration-300">
+<svg className="lucide lucide-calendar w-3 h-3 text-purple-400" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg>
+                                Available for projects
+                            </span>
+</p>
+</div>
+</div>
+</section>
+
+<aside className="lg:col-span-4 space-y-4 lg:space-y-6">
+
+<div className="animate-fade-in-right animate-delay-700 group hover-lift hover:border-blue-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20 text-left border border-zinc-700/50 rounded-2xl p-6 backdrop-blur-sm bg-zinc-900/30 hover:bg-zinc-900/50" style={{opacity: '1', transform: 'translateY(0px) scale(1)'}}>
+<div className="flex items-center justify-between mb-6">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+<svg className="lucide lucide-edit-3 w-5 h-5 text-white" data-lucide="edit-3" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"></path></svg>
+</div>
+<div>
+<h3 className="font-semibold text-white group-hover:text-blue-400 transition-colors duration-300">Prompt Engineering</h3>
+<p className="text-xs text-zinc-400">Advanced Optimization</p>
+</div>
+</div>
+<div className="flex items-center gap-1">
+<div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{opacity: '1'}}></div>
+<span className="text-xs text-blue-400 font-medium">Expert</span>
+</div>
+</div>
+<div className="space-y-4">
+<p className="text-sm text-zinc-300 leading-relaxed">
+                            Advanced prompt optimization techniques for maximum model performance and reliability.
+                        </p>
+<div className="space-y-2">
+<div className="text-xs text-zinc-400">Expertise Level</div>
+<div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+<div className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-1000" style={{width: '95%'}}></div>
+</div>
+</div>
+<div className="flex flex-wrap gap-2 mt-4">
+<span className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs">Chain-of-Thought</span>
+<span className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs">Few-shot Learning</span>
+</div>
+</div>
+</div>
+
+<div className="animate-slide-up animate-delay-800 border-purple-500/30 hover:border-purple-500/60 hover-lift hover:shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 text-center bg-gradient-to-t from-purple-500/10 to-indigo-600/5 hover:from-purple-500/20 hover:to-indigo-600/10 border border-zinc-700/50 rounded-2xl p-6 backdrop-blur-sm group" style={{opacity: '1', transform: 'translateY(0px) scale(1)'}}>
+<div className="flex gap-2 mb-6 items-center justify-start">
+<div className="w-10 h-10 flex bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl items-center justify-center group-hover:scale-110 transition-transform duration-300">
+<svg className="lucide lucide-settings w-5 h-5 text-white" data-lucide="settings" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+</div>
+<div className="text-left">
+<h3 className="font-semibold text-white group-hover:text-purple-400 transition-colors duration-300">Model Fine-tuning</h3>
+<p className="text-xs text-zinc-400">Custom Training</p>
+</div>
+</div>
+<div className="space-y-4">
+<div>
+<div className="text-4xl font-bold font-satoshi text-white mb-1 group-hover:text-purple-400 transition-colors duration-500">88%</div>
+<p className="text-sm text-zinc-300">Performance improvement</p>
+</div>
+<div className="grid grid-cols-2 gap-4 text-center">
+<div className="bg-white/5 hover:bg-white/10 rounded-lg p-3 transition-all duration-300 hover:scale-105">
+<div className="text-xl font-bold text-green-400">15+</div>
+<p className="text-xs text-zinc-400">Models trained</p>
+</div>
+<div className="bg-white/5 hover:bg-white/10 rounded-lg p-3 transition-all duration-300 hover:scale-105">
+<div className="text-xl font-bold text-blue-400">99.2%</div>
+<p className="text-xs text-zinc-400">Accuracy rate</p>
+</div>
+</div>
+</div>
+</div>
+
+<div className="animate-fade-in-right animate-delay-900 relative overflow-hidden hover-lift hover:border-emerald-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/20 border border-zinc-700/50 rounded-2xl p-6 backdrop-blur-sm bg-zinc-900/30 hover:bg-zinc-900/50 group" style={{opacity: '1', transform: 'translateY(0px) scale(1)'}}>
+<div className="flex items-center justify-between mb-6 relative z-40">
+<div>
+<h3 className="font-semibold text-white group-hover:text-emerald-400 transition-colors duration-300">AI Integration</h3>
+<p className="text-xs text-zinc-400">Enterprise Solutions</p>
+</div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-zap w-4 h-4 text-emerald-400 group-hover:animate-pulse" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{opacity: '1'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+<span className="text-xs text-emerald-400 font-medium">Live</span>
+</div>
+</div>
+<div className="space-y-3 relative z-30">
+<div className="flex gap-3 bg-zinc-700/20 border border-zinc-800 rounded-lg p-3 hover:bg-zinc-700/30 hover:border-zinc-700 transition-all duration-300">
+<div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+<svg className="lucide lucide-check w-3 h-3 text-white" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</div>
+<div className="flex-1 min-w-0">
+<p className="text-sm font-medium text-white mb-1">API Integration</p>
+<p className="text-xs text-zinc-400">Seamless workflow automation</p>
+</div>
+</div>
+<div className="flex items-center justify-between text-xs text-zinc-500 px-1">
+<span className="flex items-center gap-1 hover:text-emerald-400 transition-colors duration-300">
+<svg className="lucide lucide-activity w-3 h-3" data-lucide="activity" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+<span>Real-time sync</span>
+</span>
+<span className="flex items-center gap-1 hover:text-emerald-400 transition-colors duration-300">
+<svg className="lucide lucide-shield w-3 h-3" data-lucide="shield" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+<span>Enterprise grade</span>
+</span>
+</div>
+</div>
+</div>
+</aside>
+
+<div className="lg:col-span-6 animate-fade-in-up animate-delay-1000 bg-zinc-900/30 border border-zinc-700/50 rounded-2xl p-6 hover:bg-zinc-900/50 transition-all duration-300 hover:border-zinc-600/50 group" style={{opacity: '1'}}>
+<div className="flex items-center gap-3 mb-4">
+<div className="w-8 h-8 bg-gradient-to-br from-zinc-500 to-zinc-600 rounded-lg flex items-center justify-center">
+<svg className="lucide lucide-trophy w-4 h-4 text-white" data-lucide="trophy" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"></path><path d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"></path><path d="M18 9h1.5a1 1 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"></path><path d="M6 9H4.5a1 1 0 0 1 0-5H6"></path></svg>
+</div>
+<h4 className="font-semibold text-white group-hover:text-zinc-300 transition-colors duration-300">Recent Achievements</h4>
+</div>
+<div className="space-y-3">
+<div className="flex items-center gap-3 p-3 bg-zinc-800/30 rounded-lg hover:bg-zinc-800/50 transition-all duration-300">
+<div className="w-2 h-2 bg-green-400 rounded-full"></div>
+<span className="text-sm text-zinc-300">Reduced hallucination rate by 40% for healthcare AI</span>
+</div>
+<div className="flex items-center gap-3 p-3 bg-zinc-800/30 rounded-lg hover:bg-zinc-800/50 transition-all duration-300">
+<div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+<span className="text-sm text-zinc-300">Implemented multi-modal RAG system for fintech</span>
+</div>
+</div>
+</div>
+<div className="lg:col-span-6 animate-fade-in-up animate-delay-1100 bg-zinc-900/30 border border-zinc-700/50 rounded-2xl p-6 hover:bg-zinc-900/50 transition-all duration-300 hover:border-zinc-600/50 group" style={{opacity: '1'}}>
+<div className="flex items-center gap-3 mb-4">
+<div className="w-8 h-8 bg-gradient-to-br from-zinc-500 to-zinc-600 rounded-lg flex items-center justify-center">
+<svg className="lucide lucide-code w-4 h-4 text-white" data-lucide="code" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg>
+</div>
+<h4 className="font-semibold text-white group-hover:text-zinc-300 transition-colors duration-300">Tech Stack</h4>
+</div>
+<div className="flex flex-wrap gap-2">
+<span className="px-3 py-1 bg-zinc-700/50 text-zinc-300 rounded-full text-xs hover:bg-zinc-600/50 transition-colors duration-300">OpenAI API</span>
+<span className="px-3 py-1 bg-zinc-700/50 text-zinc-300 rounded-full text-xs hover:bg-zinc-600/50 transition-colors duration-300">Anthropic Claude</span>
+<span className="px-3 py-1 bg-zinc-700/50 text-zinc-300 rounded-full text-xs hover:bg-zinc-600/50 transition-colors duration-300">LangChain</span>
+<span className="px-3 py-1 bg-zinc-700/50 text-zinc-300 rounded-full text-xs hover:bg-zinc-600/50 transition-colors duration-300">Hugging Face</span>
+<span className="px-3 py-1 bg-zinc-700/50 text-zinc-300 rounded-full text-xs hover:bg-zinc-600/50 transition-colors duration-300">Vector DBs</span>
+</div>
+</div>
+</div>
+</div>
+
+
+
+    </>
+  );
+}

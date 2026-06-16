@@ -1,0 +1,331 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        lucide.createIcons();
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 z-0 pointer-events-none overflow-hidden flex justify-center">
+<div className="absolute top-[-20%] w-[70%] h-[50%] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#00FF00]/15 via-black/0 to-transparent blur-[120px]"></div>
+</div>
+
+<nav className="relative z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl sticky top-0">
+<div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<a className="text-2xl font-medium tracking-tight text-white flex items-center" href="#">
+                Bot<span className="text-[#00FF00]">m</span>atex
+            </a>
+<div className="hidden md:flex items-center gap-8">
+<a className="text-base font-normal text-neutral-400 hover:text-white transition-colors" href="#how-it-works">Services</a>
+<a className="text-base font-normal text-neutral-400 hover:text-white transition-colors" href="#results">Results</a>
+<a className="px-5 py-2.5 rounded-full bg-[#00FF00] text-black text-base font-normal hover:bg-[#00cc00] transition-all duration-300" href="#audit">
+                    Get Free Audit
+                </a>
+</div>
+</div>
+</nav>
+<main className="relative z-10">
+
+<section className="pt-32 pb-24 md:pt-40 md:pb-32 px-6">
+<div className="max-w-4xl mx-auto text-center flex flex-col items-center">
+<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] mb-8 backdrop-blur-sm">
+<span className="flex h-1.5 w-1.5 rounded-full bg-[#00FF00] animate-pulse"></span>
+<span className="text-sm text-neutral-300 font-normal uppercase tracking-widest">AI Automation Agency</span>
+</div>
+<h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-white leading-[1.05] mb-8">
+                    Autopilot Your <br className="hidden md:block"/>
+<span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500">Business Growth</span>
+</h1>
+<p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                    Stop losing potential clients. We build automated lead generation systems and high-converting websites that multiply your revenue.
+                </p>
+<div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+<a className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#00FF00] text-black text-lg font-normal hover:scale-[1.02] hover:bg-[#00dd00] transition-all duration-300 flex items-center justify-center gap-2" href="#audit">
+                        Get Free Audit
+                        <i className="w-5 h-5" data-lucide="arrow-right"></i>
+</a>
+<a className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/[0.03] border border-white/10 text-white text-lg font-normal hover:bg-white/[0.08] transition-all duration-300 flex items-center justify-center gap-2" href="#">
+<i className="w-5 h-5 text-neutral-400" data-lucide="calendar"></i>
+                        Book Discovery Call
+                    </a>
+</div>
+<div className="mt-24 pt-8 w-full flex flex-col items-center">
+<p className="text-sm text-neutral-500 mb-8 font-normal uppercase tracking-widest">Trusted by innovative companies</p>
+<div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500 text-neutral-400">
+<div className="flex items-center gap-2 text-2xl font-medium tracking-tight"><i className="w-6 h-6" data-lucide="building-2"></i> REALTY CO.</div>
+<div className="flex items-center gap-2 text-2xl font-medium tracking-tight"><i className="w-6 h-6" data-lucide="graduation-cap"></i> ELITE ED</div>
+<div className="flex items-center gap-2 text-2xl font-medium tracking-tight"><i className="w-6 h-6" data-lucide="ship"></i> GLOBAL LOGISTICS</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-y border-white/5 bg-white/[0.01] px-6">
+<div className="max-w-7xl mx-auto">
+<div className="text-center max-w-2xl mx-auto mb-16">
+<h2 className="text-3xl md:text-5xl font-medium tracking-tight text-white mb-6">Running a business is hard enough.</h2>
+<p className="text-lg md:text-xl text-neutral-400 font-light">Don't let outdated bottlenecks hold back your potential.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00FF00]/30 transition-colors group">
+<div className="w-12 h-12 rounded-lg border border-white/10 bg-white/[0.02] flex items-center justify-center mb-6 text-neutral-300 group-hover:text-[#00FF00] transition-colors">
+<i className="w-6 h-6" data-lucide="trending-down"></i>
+</div>
+<h3 className="text-2xl font-medium tracking-tight text-white mb-3">Inconsistent Leads</h3>
+<p className="text-lg text-neutral-400 leading-relaxed font-light">Relying on word-of-mouth or manual outreach leaves your pipeline dry and revenue unpredictable.</p>
+</div>
+<div className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00FF00]/30 transition-colors group">
+<div className="w-12 h-12 rounded-lg border border-white/10 bg-white/[0.02] flex items-center justify-center mb-6 text-neutral-300 group-hover:text-[#00FF00] transition-colors">
+<i className="w-6 h-6" data-lucide="clock"></i>
+</div>
+<h3 className="text-2xl font-medium tracking-tight text-white mb-3">Wasted Time</h3>
+<p className="text-lg text-neutral-400 leading-relaxed font-light">Spending hours answering basic inquiries instead of focusing on high-leverage closing activities.</p>
+</div>
+<div className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00FF00]/30 transition-colors group">
+<div className="w-12 h-12 rounded-lg border border-white/10 bg-white/[0.02] flex items-center justify-center mb-6 text-neutral-300 group-hover:text-[#00FF00] transition-colors">
+<i className="w-6 h-6" data-lucide="mouse-pointer-click"></i>
+</div>
+<h3 className="text-2xl font-medium tracking-tight text-white mb-3">Low Conversion</h3>
+<p className="text-lg text-neutral-400 leading-relaxed font-light">Your current website acts as a static digital brochure rather than a dedicated 24/7 sales engine.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-32 px-6 relative" id="how-it-works">
+<div className="max-w-7xl mx-auto">
+<div className="flex flex-col md:flex-row gap-16 md:gap-24 items-center">
+<div className="w-full md:w-1/2">
+<div className="text-sm text-[#00FF00] mb-6 font-normal uppercase tracking-widest">Our Capabilities</div>
+<h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-6 leading-[1.1]">
+                            The System: <br/>
+<span className="text-neutral-500">Autopilot Your Growth</span>
+</h2>
+<p className="text-lg md:text-xl text-neutral-400 mb-10 leading-relaxed font-light">
+                            We implement custom AI-driven infrastructures designed specifically for modern service businesses to capture, nurture, and convert leads.
+                        </p>
+<div className="space-y-8 border-l border-white/10 pl-6 md:pl-8">
+<div>
+<h4 className="text-xl font-medium tracking-tight text-white mb-2 flex items-center gap-3">
+<i className="w-5 h-5 text-[#00FF00]" data-lucide="bot"></i>
+                                    AI Chatbots &amp; Agents
+                                </h4>
+<p className="text-lg text-neutral-400 font-light">Engage visitors instantly on WhatsApp and web, answering FAQs and qualifying leads 24/7.</p>
+</div>
+<div>
+<h4 className="text-xl font-medium tracking-tight text-white mb-2 flex items-center gap-3">
+<i className="w-5 h-5 text-[#00FF00]" data-lucide="magnet"></i>
+                                    Automated Lead Systems
+                                </h4>
+<p className="text-lg text-neutral-400 font-light">Connect your marketing directly to your CRM, triggering automated intelligent follow-ups.</p>
+</div>
+<div>
+<h4 className="text-xl font-medium tracking-tight text-white mb-2 flex items-center gap-3">
+<i className="w-5 h-5 text-[#00FF00]" data-lucide="layout-template"></i>
+                                    High-Conversion Web
+                                </h4>
+<p className="text-lg text-neutral-400 font-light">Fast, modern web infrastructure designed purely to turn traffic into booked calls and sales.</p>
+</div>
+</div>
+</div>
+<div className="w-full md:w-1/2">
+<div className="p-10 rounded-3xl bg-white/[0.02] border border-white/5 relative overflow-hidden backdrop-blur-md">
+<div className="absolute top-0 right-0 w-64 h-64 bg-[#00FF00]/5 blur-[80px] rounded-full"></div>
+<h3 className="text-2xl font-medium tracking-tight text-white mb-10 relative z-10">Implementation Process</h3>
+<div className="space-y-10 relative z-10">
+<div className="flex items-start gap-5">
+<div className="text-base font-medium text-neutral-500 shrink-0 mt-0.5 w-6">01</div>
+<div>
+<h4 className="text-lg font-medium text-white tracking-tight">System Audit</h4>
+<p className="text-base text-neutral-400 mt-2 leading-relaxed font-light">We analyze your current workflow and identify critical revenue bottlenecks.</p>
+</div>
+</div>
+<div className="flex items-start gap-5">
+<div className="text-base font-medium text-neutral-500 shrink-0 mt-0.5 w-6">02</div>
+<div>
+<h4 className="text-lg font-medium text-white tracking-tight">Infrastructure Build</h4>
+<p className="text-base text-neutral-400 mt-2 leading-relaxed font-light">We develop your custom AI agents, landing pages, and deep CRM integrations.</p>
+</div>
+</div>
+<div className="flex items-start gap-5">
+<div className="text-base font-medium text-[#00FF00] shrink-0 mt-0.5 w-6 drop-shadow-[0_0_8px_rgba(0,255,0,0.5)]">03</div>
+<div>
+<h4 className="text-lg font-medium text-white tracking-tight">Deploy &amp; Scale</h4>
+<p className="text-base text-neutral-400 mt-2 leading-relaxed font-light">Launch the system, watch qualified leads flow in automatically, and scale operations.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-y border-white/5 bg-white/[0.01] px-6" id="results">
+<div className="max-w-7xl mx-auto">
+<div className="text-center mb-20">
+<h2 className="text-3xl md:text-5xl font-medium tracking-tight text-white mb-6">Real Results. Less Effort.</h2>
+<p className="text-lg md:text-xl text-neutral-400 font-light">Replace manual work with deterministic AI systems.</p>
+</div>
+<div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 border border-white/5 rounded-2xl overflow-hidden mb-20">
+<div className="p-8 bg-black text-center flex flex-col items-center justify-center">
+<span className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-2">+140%</span>
+<span className="text-base text-neutral-500 font-normal uppercase tracking-widest">Lead Volume</span>
+</div>
+<div className="p-8 bg-black text-center flex flex-col items-center justify-center">
+<span className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-2">24/7</span>
+<span className="text-base text-neutral-500 font-normal uppercase tracking-widest">Response</span>
+</div>
+<div className="p-8 bg-black text-center flex flex-col items-center justify-center">
+<span className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-2">3x</span>
+<span className="text-base text-neutral-500 font-normal uppercase tracking-widest">Conversion</span>
+</div>
+<div className="p-8 bg-black text-center flex flex-col items-center justify-center">
+<span className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-2">20h</span>
+<span className="text-base text-neutral-500 font-normal uppercase tracking-widest">Saved Weekly</span>
+</div>
+</div>
+<div className="max-w-3xl mx-auto">
+<div className="p-10 md:p-12 rounded-3xl bg-white/[0.02] border border-white/5 relative">
+<i className="w-10 h-10 text-[#00FF00]/20 absolute top-10 left-10" data-lucide="quote"></i>
+<p className="text-xl md:text-2xl text-neutral-300 font-light leading-relaxed relative z-10 mb-8 pt-10">
+                            "Botmatex completely transformed how we handle client inquiries. Before, we were missing messages. Now, the AI handles qualification, and we wake up to booked strategy calls. It's like having a top-tier sales rep working for free."
+                        </p>
+<div className="flex items-center gap-4 relative z-10">
+<div className="w-12 h-12 rounded-full bg-white/5 border border-[#00FF00]/30 flex items-center justify-center text-neutral-300 font-normal text-xl">JD</div>
+<div>
+<h4 className="text-lg font-medium text-white tracking-tight">James D.</h4>
+<p className="text-base text-neutral-500 font-light">Director, Premium Real Estate</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-32 px-6 relative overflow-hidden" id="audit">
+<div className="max-w-6xl mx-auto relative z-10">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
+<div>
+<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00FF00]/10 text-[#00FF00] text-base font-normal mb-8 border border-[#00FF00]/20">
+<i className="w-5 h-5" data-lucide="gift"></i> Free for a limited time
+                        </div>
+<h2 className="text-4xl md:text-6xl font-medium tracking-tight text-white mb-6 leading-[1.1]">
+                            Claim Your AI <br/> Growth Audit
+                        </h2>
+<p className="text-lg md:text-xl text-neutral-400 mb-10 leading-relaxed font-light">
+                            Let our experts analyze your current setup. We'll show you exactly where you're losing money and how AI can automate your specific process.
+                        </p>
+<div className="space-y-5 mb-10">
+<div className="flex items-center gap-4">
+<i className="w-6 h-6 text-[#00FF00] shrink-0" data-lucide="check-circle"></i>
+<span className="text-lg text-neutral-300 font-light">Uncover hidden revenue bottlenecks</span>
+</div>
+<div className="flex items-center gap-4">
+<i className="w-6 h-6 text-[#00FF00] shrink-0" data-lucide="check-circle"></i>
+<span className="text-lg text-neutral-300 font-light">Custom AI Generation Blueprint</span>
+</div>
+<div className="flex items-center gap-4">
+<i className="w-6 h-6 text-[#00FF00] shrink-0" data-lucide="check-circle"></i>
+<span className="text-lg text-neutral-300 font-light">Conversion Rate Architecture Review</span>
+</div>
+</div>
+</div>
+
+<div className="bg-white/[0.02] border border-white/5 p-8 md:p-10 rounded-3xl h-full flex flex-col backdrop-blur-sm">
+<h3 className="text-3xl font-medium tracking-tight text-white mb-8">Request Audit</h3>
+<form className="space-y-6 flex-grow flex flex-col">
+<div>
+<label className="block text-base font-normal text-neutral-400 mb-2" htmlFor="name">Full Name</label>
+<input className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-lg text-white font-light placeholder-neutral-600 focus:outline-none focus:border-[#00FF00]/50 focus:bg-white/[0.02] transition-all" id="name" placeholder="John Doe" type="text"/>
+</div>
+<div>
+<label className="block text-base font-normal text-neutral-400 mb-2" htmlFor="business">Business Name</label>
+<input className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-lg text-white font-light placeholder-neutral-600 focus:outline-none focus:border-[#00FF00]/50 focus:bg-white/[0.02] transition-all" id="business" placeholder="Company Ltd" type="text"/>
+</div>
+<div>
+<label className="block text-base font-normal text-neutral-400 mb-2" htmlFor="email">Work Email</label>
+<input className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-lg text-white font-light placeholder-neutral-600 focus:outline-none focus:border-[#00FF00]/50 focus:bg-white/[0.02] transition-all" id="email" placeholder="john@company.com" type="email"/>
+</div>
+<div>
+<label className="block text-base font-normal text-neutral-400 mb-2" htmlFor="phone">WhatsApp Number</label>
+<div className="relative">
+<div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<i className="w-5 h-5 text-neutral-500" data-lucide="phone"></i>
+</div>
+<input className="w-full bg-black/50 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-lg text-white font-light placeholder-neutral-600 focus:outline-none focus:border-[#00FF00]/50 focus:bg-white/[0.02] transition-all" id="phone" placeholder="+1 234 567 890" type="tel"/>
+</div>
+</div>
+<div className="mt-4 pt-2">
+<button className="w-full py-4 rounded-xl bg-[#00FF00] text-black text-lg font-normal hover:bg-[#00dd00] transition-all duration-300 flex items-center justify-center gap-2" type="button">
+                                    Submit Request
+                                    <i className="w-5 h-5" data-lucide="arrow-right"></i>
+</button>
+<p className="text-sm text-neutral-500 mt-4 text-center font-light">100% free. No obligation.</p>
+</div>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-32 px-6 border-t border-white/5 relative overflow-hidden bg-white/[0.01]">
+<div className="max-w-4xl mx-auto text-center relative z-10">
+<h2 className="text-4xl md:text-6xl font-medium tracking-tight text-white mb-8">
+                    Ready to Scale Automatically?
+                </h2>
+<p className="text-lg md:text-xl text-neutral-400 mb-12 max-w-2xl mx-auto font-light">
+                    Stop letting leads slip through the cracks. Partner with Botmatex to build a modern, high-converting digital infrastructure for your business.
+                </p>
+<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+<a className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#00FF00] text-black text-lg font-normal hover:bg-[#00cc00] transition-all duration-300" href="#audit">
+                        Get Free Audit
+                    </a>
+<a className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/[0.03] border border-white/10 text-white text-lg font-normal hover:bg-white/[0.08] transition-all duration-300 flex items-center justify-center gap-2" href="#">
+<i className="w-5 h-5 text-[#00FF00]" data-lucide="message-circle"></i>
+                        Chat on WhatsApp
+                    </a>
+</div>
+</div>
+</section>
+</main>
+
+<footer className="py-12 border-t border-white/5 bg-black text-center relative z-10">
+<div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+<div className="text-2xl font-medium tracking-tight text-white flex items-center">
+                Bot<span className="text-[#00FF00]">m</span>atex
+            </div>
+<p className="text-base text-neutral-500 font-light">
+                © 2024 Botmatex. All rights reserved.
+            </p>
+<div className="flex gap-6">
+<a className="text-neutral-500 hover:text-white transition-colors text-base font-light" href="#">Privacy</a>
+<a className="text-neutral-500 hover:text-white transition-colors text-base font-light" href="#">Terms</a>
+</div>
+</div>
+</footer>
+
+
+    </>
+  );
+}

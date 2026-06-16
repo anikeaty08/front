@@ -1,0 +1,147 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="iphone-frame">
+<div className="iphone-notch"></div>
+<div className="iphone-screen bg-neutral-950">
+
+<div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-10"></div>
+
+<div className="modal-card w-full z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[330px]">
+<div className="modal-content shadow-xl">
+
+<div className="p-4 border-b border-neutral-800">
+<div className="flex justify-between items-center">
+<h2 className="text-base font-semibold text-white">Complete Your Account Setup</h2>
+<button className="text-neutral-400 hover:text-white transition">
+<svg className="h-4 w-4" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" fill-rule="evenodd"></path>
+</svg>
+</button>
+</div>
+</div>
+
+<div className="px-4 pt-4">
+<div className="flex items-center justify-between mb-4">
+<div className="flex flex-col items-center">
+<div className="step-indicator step-completed">
+<svg className="h-3 w-3" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span className="text-[10px] text-neutral-400 mt-1">Account</span>
+</div>
+<div className="w-full mx-1 h-0.5 bg-neutral-800">
+<div className="w-1/3 h-0.5 bg-blue-500"></div>
+</div>
+<div className="flex flex-col items-center">
+<div className="step-indicator step-active text-xs">2</div>
+<span className="text-[10px] text-white mt-1">Security</span>
+</div>
+<div className="w-full mx-1 h-0.5 bg-neutral-800"></div>
+<div className="flex flex-col items-center">
+<div className="step-indicator step-inactive text-xs">3</div>
+<span className="text-[10px] text-neutral-500 mt-1">Prefs</span>
+</div>
+<div className="w-full mx-1 h-0.5 bg-neutral-800"></div>
+<div className="flex flex-col items-center">
+<div className="step-indicator step-inactive text-xs">4</div>
+<span className="text-[10px] text-neutral-500 mt-1">Done</span>
+</div>
+</div>
+</div>
+
+<div className="px-4 pb-4">
+<h3 className="text-sm font-medium text-white mb-2">Set Up Your Security Preferences</h3>
+<p className="text-xs text-neutral-400 mb-4">Enhance your account security by configuring these important settings.</p>
+
+<div className="bg-neutral-800/40 rounded-lg p-3 mb-3">
+<div className="flex items-start">
+<div className="flex-shrink-0 mt-1">
+<svg className="h-4 w-4 text-blue-500" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div className="ml-2 flex-1">
+<div className="flex justify-between items-center">
+<h4 className="text-xs text-white font-medium">Two-Factor Authentication</h4>
+<label className="relative inline-flex items-center cursor-pointer">
+<input checked="" className="sr-only peer" type="checkbox" value=""/>
+<div className="w-8 h-4 bg-neutral-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
+</label>
+</div>
+<p className="text-neutral-400 text-[10px] mt-1">Add an extra layer of security to your account by requiring a verification code.</p>
+</div>
+</div>
+</div>
+
+<div className="bg-neutral-800/40 rounded-lg p-3 mb-3">
+<div className="flex items-start">
+<div className="flex-shrink-0 mt-1">
+<svg className="h-4 w-4 text-blue-500" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<div className="ml-2 flex-1">
+<div className="flex justify-between items-center">
+<h4 className="text-xs text-white font-medium">Strong Password Requirements</h4>
+<label className="relative inline-flex items-center cursor-pointer">
+<input checked="" className="sr-only peer" type="checkbox" value=""/>
+<div className="w-8 h-4 bg-neutral-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
+</label>
+</div>
+<p className="text-neutral-400 text-[10px] mt-1">Enforce strong password policies including minimum length and special characters.</p>
+</div>
+</div>
+</div>
+
+<div className="bg-neutral-800/40 rounded-lg p-3 mb-4">
+<div className="flex items-start">
+<div className="flex-shrink-0 mt-1">
+<svg className="h-4 w-4 text-blue-500" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+</svg>
+</div>
+<div className="ml-2 flex-1">
+<div className="flex justify-between items-center">
+<h4 className="text-xs text-white font-medium">Login Notifications</h4>
+<label className="relative inline-flex items-center cursor-pointer">
+<input className="sr-only peer" type="checkbox" value=""/>
+<div className="w-8 h-4 bg-neutral-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600"></div>
+</label>
+</div>
+<p className="text-neutral-400 text-[10px] mt-1">Receive email notifications when there are new login attempts.</p>
+</div>
+</div>
+</div>
+
+<div className="flex justify-between">
+<button className="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 rounded-lg transition text-xs">
+                Back
+              </button>
+<button className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium text-xs">
+                Continue
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    </>
+  );
+}

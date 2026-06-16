@@ -1,0 +1,373 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+navy: {
+50: '#f0f4ff',
+100: '#e0eaff',
+200: '#c7d9fe',
+800: '#1b2559', // Primary Text
+900: '#0b1437', // Deep Navy Brand
+950: '#050a1f',
+},
+secondary: {
+gray: '#a3aed0', // Soft secondary text
+light: '#f4f7fe', // Background
+}
+},
+boxShadow: {
+'soft': '0px 18px 40px rgba(112, 144, 176, 0.12)',
+'card': '0px 3px 20px rgba(112, 144, 176, 0.08)',
+},
+borderRadius: {
+'xl': '20px',
+'2xl': '24px',
+}
+}
+}
+}
+
+
+
+        // Simple JS for Date
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', dateOptions);
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<aside className="w-72 bg-white flex flex-col h-full shadow-soft z-20 hidden md:flex">
+
+<div className="h-24 flex items-center px-8 border-b border-gray-50">
+<div className="flex items-center gap-3">
+<div className="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center">
+<iconify-icon icon="lucide:hexagon" width="20"></iconify-icon>
+</div>
+<h1 className="text-xl font-semibold tracking-tight text-navy-900">LUMINA</h1>
+</div>
+</div>
+
+<nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto hide-scrollbar">
+<p className="px-4 text-xs font-medium text-secondary-gray uppercase tracking-wider mb-2 pl-4">Main Menu</p>
+<a className="sidebar-link active flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-navy-900 text-white transition-all shadow-lg shadow-navy-900/20" href="#">
+<iconify-icon icon="lucide:layout-grid" width="20"></iconify-icon>
+<span className="font-medium text-sm">Dashboard</span>
+</a>
+<a className="sidebar-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-secondary-gray hover:bg-gray-50 hover:text-navy-900 transition-all" href="#">
+<iconify-icon icon="lucide:users" width="20"></iconify-icon>
+<span className="font-medium text-sm">Employees</span>
+</a>
+<a className="sidebar-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-secondary-gray hover:bg-gray-50 hover:text-navy-900 transition-all" href="#">
+<iconify-icon icon="lucide:clock" width="20"></iconify-icon>
+<span className="font-medium text-sm">Attendance</span>
+</a>
+<a className="sidebar-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-secondary-gray hover:bg-gray-50 hover:text-navy-900 transition-all" href="#">
+<iconify-icon icon="lucide:wallet" width="20"></iconify-icon>
+<span className="font-medium text-sm">Payroll</span>
+</a>
+<a className="sidebar-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-secondary-gray hover:bg-gray-50 hover:text-navy-900 transition-all" href="#">
+<iconify-icon icon="lucide:file-bar-chart" width="20"></iconify-icon>
+<span className="font-medium text-sm">Reports</span>
+</a>
+<p className="px-4 text-xs font-medium text-secondary-gray uppercase tracking-wider mt-8 mb-2 pl-4">Organization</p>
+<a className="sidebar-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-secondary-gray hover:bg-gray-50 hover:text-navy-900 transition-all" href="#">
+<iconify-icon icon="lucide:briefcase" width="20"></iconify-icon>
+<span className="font-medium text-sm">Recruitment</span>
+</a>
+<a className="sidebar-link flex items-center gap-3 px-4 py-3.5 rounded-2xl text-secondary-gray hover:bg-gray-50 hover:text-navy-900 transition-all" href="#">
+<iconify-icon icon="lucide:settings" width="20"></iconify-icon>
+<span className="font-medium text-sm">Settings</span>
+</a>
+</nav>
+
+<div className="p-6 border-t border-gray-50">
+<div className="flex items-center gap-3 p-3 rounded-2xl border border-gray-100 bg-gray-50/50">
+<img alt="User" className="w-10 h-10 rounded-full object-cover" src="https://i.pravatar.cc/150?u=a042581f4e29026024d"/>
+<div className="flex-1 min-w-0">
+<p className="text-sm font-semibold text-navy-900 truncate">Alex Morgan</p>
+<p className="text-xs text-secondary-gray truncate">Product Design Lead</p>
+</div>
+<button className="text-secondary-gray hover:text-navy-900"><iconify-icon icon="lucide:log-out" width="18"></iconify-icon></button>
+</div>
+</div>
+</aside>
+
+<main className="flex-1 flex flex-col h-full relative overflow-hidden">
+
+<header className="h-20 px-8 flex items-center justify-between bg-secondary-light/80 backdrop-blur-sm z-10 sticky top-0">
+
+<button className="md:hidden p-2 text-navy-800"><iconify-icon icon="lucide:menu" width="24"></iconify-icon></button>
+<div className="flex flex-col justify-center">
+<p className="text-xs text-secondary-gray">Pages / Dashboard</p>
+<h2 className="text-xl font-semibold text-navy-900 tracking-tight">Main Dashboard</h2>
+</div>
+<div className="flex items-center gap-4 bg-white p-2.5 rounded-full shadow-card">
+<div className="relative bg-secondary-light rounded-full px-4 py-2 flex items-center gap-2 w-64">
+<iconify-icon className="text-navy-900" icon="lucide:search" width="16"></iconify-icon>
+<input className="bg-transparent border-none outline-none text-sm text-navy-900 placeholder:text-secondary-gray w-full" placeholder="Search..." type="text"/>
+</div>
+<button className="text-secondary-gray hover:text-navy-900 relative">
+<iconify-icon icon="lucide:bell" width="20"></iconify-icon>
+<span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+</button>
+<button className="text-secondary-gray hover:text-navy-900">
+<iconify-icon icon="lucide:moon" width="20"></iconify-icon>
+</button>
+<button className="text-secondary-gray hover:text-navy-900">
+<iconify-icon icon="lucide:info" width="20"></iconify-icon>
+</button>
+</div>
+</header>
+
+<div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
+
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+<div className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-8 shadow-card flex flex-col md:flex-row justify-between items-center relative overflow-hidden">
+<div className="relative z-10 w-full md:w-2/3">
+<div className="flex items-center gap-3 mb-2">
+<span className="px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-semibold uppercase tracking-wide border border-green-100 flex items-center gap-1.5">
+<span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                                Online
+                            </span>
+<span className="text-xs text-secondary-gray font-medium" id="current-date">Wednesday, 25 October</span>
+</div>
+<h2 className="text-2xl md:text-3xl font-semibold text-navy-900 mb-2 tracking-tight">Good Morning, Alex!</h2>
+<p className="text-secondary-gray text-sm leading-relaxed max-w-md">You have 3 meetings today and 2 pending tasks. Your team attendance is at 98%.</p>
+<div className="mt-8 flex gap-4">
+<button className="px-6 py-2.5 bg-navy-900 hover:bg-navy-800 text-white text-sm font-medium rounded-xl shadow-lg shadow-navy-900/20 transition-all flex items-center gap-2">
+<iconify-icon icon="lucide:calendar-plus" width="16"></iconify-icon> View Schedule
+                            </button>
+<button className="px-6 py-2.5 bg-white border border-gray-100 hover:bg-gray-50 text-navy-900 text-sm font-medium rounded-xl transition-all">
+                                Request Leave
+                            </button>
+</div>
+</div>
+
+<div className="mt-6 md:mt-0 relative flex items-center justify-center">
+
+<div className="absolute inset-0 bg-blue-50 rounded-full blur-2xl opacity-50 transform scale-150"></div>
+<div className="relative w-32 h-32 rounded-full border-4 border-gray-50 flex items-center justify-center bg-white shadow-sm group cursor-pointer hover:border-blue-50 transition-colors">
+<div className="text-center">
+<iconify-icon className="text-navy-900 mb-1 group-hover:text-blue-600 transition-colors" icon="lucide:fingerprint" width="32"></iconify-icon>
+<p className="text-[10px] text-secondary-gray uppercase tracking-widest font-semibold">Punch Out</p>
+<p className="text-xs font-mono font-medium text-navy-900 mt-0.5">04:23:10</p>
+</div>
+</div>
+</div>
+</div>
+
+<div className="lg:col-span-1 bg-navy-900 rounded-2xl p-6 md:p-8 shadow-card text-white flex flex-col justify-between relative overflow-hidden group">
+<div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl transform translate-x-10 -translate-y-10"></div>
+<div className="relative z-10 flex justify-between items-start">
+<div>
+<p className="text-navy-200 text-xs font-medium uppercase tracking-wider mb-1">Net Pay • October</p>
+<h3 className="text-3xl font-semibold tracking-tight">$8,450.00</h3>
+</div>
+<div className="p-2 bg-white/10 rounded-lg backdrop-blur-md">
+<iconify-icon icon="lucide:credit-card" width="20"></iconify-icon>
+</div>
+</div>
+
+<div className="relative z-10 flex items-end gap-2 h-16 mt-6 mb-2">
+<div className="flex-1 bg-white/10 rounded-t-sm h-[40%] group-hover:bg-white/20 transition-all"></div>
+<div className="flex-1 bg-white/10 rounded-t-sm h-[60%] group-hover:bg-white/20 transition-all"></div>
+<div className="flex-1 bg-white/10 rounded-t-sm h-[30%] group-hover:bg-white/20 transition-all"></div>
+<div className="flex-1 bg-white/10 rounded-t-sm h-[75%] group-hover:bg-white/20 transition-all"></div>
+<div className="flex-1 bg-white/10 rounded-t-sm h-[50%] group-hover:bg-white/20 transition-all"></div>
+<div className="flex-1 bg-blue-500 rounded-t-sm h-[90%] shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
+</div>
+<div className="relative z-10 mt-4">
+<button className="w-full py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 rounded-xl text-xs font-medium transition-all flex items-center justify-center gap-2">
+<iconify-icon icon="lucide:download" width="14"></iconify-icon> Download Payslip
+                        </button>
+</div>
+</div>
+</div>
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div className="bg-white p-5 rounded-2xl shadow-card flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+<div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+<iconify-icon icon="lucide:timer" width="22"></iconify-icon>
+</div>
+<div>
+<p className="text-xs text-secondary-gray font-medium">Avg. Hours</p>
+<h4 className="text-xl font-bold text-navy-900">7h 45m</h4>
+</div>
+</div>
+<div className="bg-white p-5 rounded-2xl shadow-card flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+<div className="w-12 h-12 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center">
+<iconify-icon icon="lucide:palmtree" width="22"></iconify-icon>
+</div>
+<div>
+<p className="text-xs text-secondary-gray font-medium">Leave Bal</p>
+<h4 className="text-xl font-bold text-navy-900">12 Days</h4>
+</div>
+</div>
+<div className="bg-white p-5 rounded-2xl shadow-card flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+<div className="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center">
+<iconify-icon icon="lucide:users" width="22"></iconify-icon>
+</div>
+<div>
+<p className="text-xs text-secondary-gray font-medium">My Team</p>
+<h4 className="text-xl font-bold text-navy-900">24 Active</h4>
+</div>
+</div>
+<div className="bg-white p-5 rounded-2xl shadow-card flex items-center gap-4 hover:-translate-y-1 transition-transform duration-300">
+<div className="w-12 h-12 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center">
+<iconify-icon icon="lucide:check-circle-2" width="22"></iconify-icon>
+</div>
+<div>
+<p className="text-xs text-secondary-gray font-medium">Tasks</p>
+<h4 className="text-xl font-bold text-navy-900">8 Pending</h4>
+</div>
+</div>
+</div>
+
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+<div className="bg-white rounded-2xl p-6 shadow-card h-full">
+<div className="flex justify-between items-center mb-6">
+<h3 className="text-lg font-semibold text-navy-900">Work Location</h3>
+<button className="text-secondary-gray hover:text-navy-900"><iconify-icon icon="lucide:more-horizontal" width="20"></iconify-icon></button>
+</div>
+<div className="flex items-center gap-4 mb-6 p-4 rounded-xl bg-gray-50 border border-gray-100">
+<div className="p-3 bg-white rounded-lg shadow-sm text-navy-900">
+<iconify-icon icon="lucide:map-pin" width="24"></iconify-icon>
+</div>
+<div>
+<h4 className="font-semibold text-navy-900">Headquarters</h4>
+<p className="text-xs text-secondary-gray">San Francisco, CA</p>
+</div>
+<span className="ml-auto px-2.5 py-1 rounded-md bg-blue-50 text-blue-600 text-xs font-semibold">On-site</span>
+</div>
+<div className="space-y-4">
+<div className="flex justify-between items-center">
+<span className="text-sm text-secondary-gray flex items-center gap-2"><iconify-icon icon="lucide:arrow-right-circle" width="14"></iconify-icon> Clock In</span>
+<span className="text-sm font-medium text-navy-900">09:00 AM</span>
+</div>
+<div className="flex justify-between items-center">
+<span className="text-sm text-secondary-gray flex items-center gap-2"><iconify-icon icon="lucide:arrow-left-circle" width="14"></iconify-icon> Est. Clock Out</span>
+<span className="text-sm font-medium text-navy-900">06:00 PM</span>
+</div>
+<div className="pt-4 border-t border-gray-100 flex justify-between items-center">
+<span className="text-sm text-secondary-gray">Overtime Status</span>
+<span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">+2h 15m This Week</span>
+</div>
+</div>
+</div>
+
+<div className="bg-white rounded-2xl p-6 shadow-card h-full">
+<div className="flex justify-between items-center mb-6">
+<h3 className="text-lg font-semibold text-navy-900">Schedule</h3>
+<button className="text-xs font-medium text-blue-600 hover:text-blue-700">View All</button>
+</div>
+<div className="space-y-5">
+<div className="flex gap-4 items-start group">
+<div className="flex flex-col items-center justify-center w-12 h-12 bg-navy-50 text-navy-900 rounded-xl border border-navy-100">
+<span className="text-[10px] font-medium uppercase text-secondary-gray">Oct</span>
+<span className="text-lg font-bold leading-none">25</span>
+</div>
+<div className="flex-1">
+<h4 className="text-sm font-semibold text-navy-900 group-hover:text-blue-600 transition-colors">Quarterly Review</h4>
+<p className="text-xs text-secondary-gray mt-1 flex items-center gap-1"><iconify-icon icon="lucide:clock" width="12"></iconify-icon> 10:00 AM - 11:30 AM</p>
+</div>
+</div>
+<div className="flex gap-4 items-start group">
+<div className="flex flex-col items-center justify-center w-12 h-12 bg-purple-50 text-purple-900 rounded-xl border border-purple-100">
+<span className="text-[10px] font-medium uppercase text-secondary-gray">Oct</span>
+<span className="text-lg font-bold leading-none">27</span>
+</div>
+<div className="flex-1">
+<h4 className="text-sm font-semibold text-navy-900 group-hover:text-purple-600 transition-colors">Design Sync</h4>
+<p className="text-xs text-secondary-gray mt-1 flex items-center gap-1"><iconify-icon icon="lucide:video" width="12"></iconify-icon> Google Meet</p>
+</div>
+</div>
+<div className="flex gap-4 items-start group">
+<div className="flex flex-col items-center justify-center w-12 h-12 bg-orange-50 text-orange-900 rounded-xl border border-orange-100">
+<span className="text-[10px] font-medium uppercase text-secondary-gray">Nov</span>
+<span className="text-lg font-bold leading-none">01</span>
+</div>
+<div className="flex-1">
+<h4 className="text-sm font-semibold text-navy-900 group-hover:text-orange-600 transition-colors">Public Holiday</h4>
+<p className="text-xs text-secondary-gray mt-1">Diwali Festival</p>
+</div>
+</div>
+</div>
+</div>
+
+<div className="bg-white rounded-2xl p-6 shadow-card h-full">
+<div className="flex justify-between items-center mb-6">
+<h3 className="text-lg font-semibold text-navy-900">Priority Tasks</h3>
+<button className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-50 text-navy-900">
+<iconify-icon icon="lucide:plus" width="16"></iconify-icon>
+</button>
+</div>
+<div className="space-y-1">
+
+<div className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors group cursor-pointer">
+<div className="pt-0.5">
+<input className="custom-checkbox appearance-none w-4 h-4 border border-gray-300 rounded checked:bg-navy-900 checked:border-navy-900 focus:ring-0 cursor-pointer relative" type="checkbox"/>
+</div>
+<div className="flex-1">
+<p className="text-sm font-medium text-navy-900 group-hover:text-blue-600 transition-colors">Approve Intern Timesheets</p>
+<p className="text-xs text-secondary-gray mt-0.5">Due Today</p>
+</div>
+<span className="w-2 h-2 rounded-full bg-red-500 mt-1.5" title="High Priority"></span>
+</div>
+
+<div className="h-px bg-gray-50 mx-2"></div>
+
+<div className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors group cursor-pointer">
+<div className="pt-0.5">
+<input className="custom-checkbox appearance-none w-4 h-4 border border-gray-300 rounded checked:bg-navy-900 checked:border-navy-900 focus:ring-0 cursor-pointer relative" type="checkbox"/>
+</div>
+<div className="flex-1">
+<p className="text-sm font-medium text-navy-900 group-hover:text-blue-600 transition-colors">Update Profile Bio</p>
+<p className="text-xs text-secondary-gray mt-0.5">Pending Review</p>
+</div>
+</div>
+
+<div className="h-px bg-gray-50 mx-2"></div>
+
+<div className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors group cursor-pointer">
+<div className="pt-0.5">
+<input checked="" className="custom-checkbox appearance-none w-4 h-4 border border-gray-300 rounded checked:bg-navy-900 checked:border-navy-900 focus:ring-0 cursor-pointer relative" type="checkbox"/>
+</div>
+<div className="flex-1 opacity-50">
+<p className="text-sm font-medium text-navy-900 line-through">Submit Expense Report</p>
+<p className="text-xs text-secondary-gray mt-0.5">Completed</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div className="text-center pb-4 pt-2">
+<p className="text-xs text-secondary-gray">© 2023 Lumina Systems Inc. Enterprise Edition v2.4</p>
+</div>
+</div>
+</main>
+
+
+    </>
+  );
+}

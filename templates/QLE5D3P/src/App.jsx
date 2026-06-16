@@ -1,0 +1,432 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        // Render lucide icons with 1.5 stroke width
+        if (window.lucide && typeof lucide.createIcons === 'function') {
+          lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        }
+
+        const overlay = document.getElementById('quizOverlay');
+        const overlayBg = document.getElementById('overlayBg');
+        const quizPanel = document.getElementById('quizPanel');
+        const startBtn = document.getElementById('startTestBtn');
+        const closeBtn = document.getElementById('closeQuizBtn');
+        const stepLabel = document.getElementById('stepLabel');
+        const progressBar = document.getElementById('progressBar');
+        const steps = Array.from(document.querySelectorAll('.step-section'));
+        const totalSteps = steps.length; // 6 (steps 2..7)
+        const absoluteStart = 2; // Etapa 2
+        const absoluteTotal = 7; // Até Etapa 7
+
+        let currentStep = 0;
+        let branch = null;
+
+        function updateLabel() {
+          const absoluteStep = absoluteStart + currentStep;
+          stepLabel.textContent = `Etapa ${absoluteStep} de ${absoluteTotal}`;
+        }
+
+        function updateProgress() {
+          const pct = ((currentStep + 1) / totalSteps) * 100;
+          progressBar.style.width = `${pct}%`;
+        }
+
+        function showStep(index) {
+          steps.forEach((s, i) => s.classList.toggle('hidden', i !== index));
+          currentStep = index;
+          updateLabel();
+          updateProgress();
+        }
+
+        function resetQuiz() {
+          // Clear selections
+          document.querySelectorAll('.option.selected').forEach(el => el.classList.remove('selected'));
+          document.querySelectorAll('.option[aria-checked="true"]').forEach(el => el.setAttribute('aria-checked', 'false'));
+          // Hide all results
+          document.querySelectorAll('[data-result]').forEach(el => el.classList.add('hidden'));
+          branch = null;
+          showStep(0);
+        }
+
+        function openOverlay() {
+          overlay.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            overlayBg.style.opacity = '1';
+            quizPanel.style.opacity = '1';
+            quizPanel.style.transform = 'translateY(0)';
+          });
+          resetQuiz();
+        }
+
+        function closeOverlay() {
+          overlayBg.style.opacity = '0';
+          quizPanel.style.opacity = '0';
+          quizPanel.style.transform = 'translateY(1rem)';
+          setTimeout(() => {
+            overlay.classList.add('hidden');
+          }, 250);
+        }
+
+        startBtn?.addEventListener('click', (e) => {
+          e.preventDefault();
+          openOverlay();
+        });
+
+        closeBtn?.addEventListener('click', () => closeOverlay());
+        overlayBg?.addEventListener('click', () => closeOverlay());
+
+        // Option behavior
+        steps.forEach((step, stepIndex) => {
+          step.querySelectorAll('.option').forEach(btn => {
+            btn.addEventListener('click', () => {
+              // Set selection within this step
+              step.querySelectorAll('.option').forEach(o => {
+                o.classList.remove('selected');
+                o.setAttribute('aria-checked', 'false');
+              });
+              btn.classList.add('selected');
+              btn.setAttribute('aria-checked', 'true');
+
+              // Capture branch on first step
+              if (stepIndex === 0 && btn.dataset.branch) {
+                branch = btn.dataset.branch;
+              }
+
+              // If last question step, go to result
+              if (stepIndex === 4) {
+                // Show result matching branch
+                const resultSelector = branch ? `[data-result="${branch}"]` : null;
+                if (resultSelector) {
+                  document.querySelectorAll('[data-result]').forEach(el => el.classList.add('hidden'));
+                  const resultEl = document.querySelector(resultSelector);
+                  if (resultEl) resultEl.classList.remove('hidden');
+                }
+                showStep(5);
+              } else {
+                // Advance to next step
+                setTimeout(() => showStep(stepIndex + 1), 180);
+              }
+            });
+          });
+        });
+
+        // Initialize state
+        showStep(0);
+      });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="fixed inset-0 -z-10">
+<div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: 'url(\'Você.png\')'}}></div>
+
+<div className="absolute inset-0 bg-[#1B0F23]/70 mix-blend-multiply"></div>
+
+<div className="absolute inset-0 pointer-events-none">
+<div className="absolute -top-24 -right-16 w-[48rem] h-[48rem] rounded-full blur-[120px] opacity-30 bg-[#4B0082]"></div>
+<div className="absolute bottom-0 -left-10 w-[36rem] h-[36rem] rounded-full blur-[140px] opacity-20 bg-[#FFD700]"></div>
+</div>
+
+<div className="absolute inset-0 opacity-[0.08] mix-blend-overlay" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 1px)', backgroundSize: '24px 24px'}}></div>
+</div>
+
+<header className="relative z-10">
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="flex items-center justify-between py-6">
+<a className="inline-flex items-center gap-2" href="#">
+<span className="text-[15px] sm:text-base font-medium tracking-tight text-white/90">Oráculo do Amor</span>
+</a>
+<nav className="hidden sm:flex items-center gap-6">
+<a className="text-sm font-normal text-white/70 hover:text-white transition-colors" href="#">Sobre</a>
+<a className="text-sm font-normal text-white/70 hover:text-white transition-colors" href="#">Depoimentos</a>
+<a className="text-sm font-normal text-white/70 hover:text-white transition-colors" href="#">Contato</a>
+</nav>
+</div>
+</div>
+</header>
+
+<main className="relative z-10">
+<section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="min-h-[70vh] sm:min-h-[78vh] lg:min-h-[82vh] flex items-center">
+<div className="w-full">
+<div className="max-w-2xl">
+<div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur">
+<i className="w-4 h-4 text-[#FFD700]" data-lucide="sparkles"></i>
+<span className="text-[12.5px] font-medium text-[#E6D7FF]">Leitura inicial gratuita</span>
+</div>
+<h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl tracking-tight font-semibold text-white">
+                🔮 Descubra agora se o seu relacionamento tem futuro
+              </h1>
+<p className="mt-4 sm:mt-5 text-base sm:text-lg leading-relaxed text-[#E6D7FF] max-w-xl">
+                Responda 5 perguntas rápidas e receba minha análise inicial gratuita sobre o que está acontecendo e como reverter.
+              </p>
+<div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
+<a className="group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-white font-semibold text-[15px] tracking-tight transition-all bg-[#6A0DAD] hover:bg-[#6A0DAD]/90 ring-1 ring-white/10 shadow-[0_10px_30px_-10px_rgba(106,13,173,0.8)] hover:shadow-[0_16px_40px_-12px_rgba(106,13,173,0.95)]" href="#" id="startTestBtn">
+<span>Começar teste gratuito</span>
+<i className="w-5 h-5 transition-transform group-hover:translate-x-0.5" data-lucide="chevron-right"></i>
+</a>
+<div className="flex items-center gap-3">
+<div className="flex -space-x-3">
+<img alt="Pessoa 1" className="h-9 w-9 rounded-full ring-2 ring-[#1B0F23] object-cover" src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&amp;w=64&amp;auto=format&amp;fit=crop"/>
+<img alt="Pessoa 2" className="h-9 w-9 rounded-full ring-2 ring-[#1B0F23] object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&amp;w=64&amp;auto=format&amp;fit=crop"/>
+<img alt="Pessoa 3" className="h-9 w-9 rounded-full ring-2 ring-[#1B0F23] object-cover" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&amp;w=64&amp;auto=format&amp;fit=crop"/>
+</div>
+<span className="text-sm text-white/80 font-normal">+2.000 leituras esta semana</span>
+</div>
+</div>
+
+<div className="mt-6 flex items-center gap-3 text-white/70">
+<i className="w-5 h-5 text-[#FFD700]" data-lucide="shield-check"></i>
+<p className="text-sm font-normal">Privado e confidencial • Sem cartão necessário</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1/2">
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div className="h-px w-full bg-gradient-to-r from-transparent via-[#FFD700]/40 to-transparent"></div>
+</div>
+</div>
+</main>
+
+<div className="fixed inset-0 z-50 hidden" id="quizOverlay">
+<div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] opacity-0 transition-opacity duration-300" id="overlayBg"></div>
+<div className="relative mx-auto max-w-xl px-4 sm:px-6 h-full flex items-center justify-center">
+<div className="w-full translate-y-4 opacity-0 transition-all duration-300" id="quizPanel">
+<div className="rounded-xl border border-white/10 bg-[#110918]/95 shadow-2xl ring-1 ring-white/10">
+
+<div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-white/10">
+<div className="flex items-center gap-3">
+<span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#6A0DAD]/20 ring-1 ring-white/10">
+<i className="w-4 h-4 text-[#FFD700]" data-lucide="sparkles"></i>
+</span>
+<div>
+<p className="text-[13px] text-white/60">Análise do Relacionamento</p>
+<p aria-live="polite" className="text-sm sm:text-[15px] font-medium tracking-tight text-white/90" id="stepLabel">Etapa 2 de 7</p>
+</div>
+</div>
+<button aria-label="Fechar" className="inline-flex items-center justify-center h-9 w-9 rounded-lg hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition" id="closeQuizBtn">
+<i className="w-[18px] h-[18px]" data-lucide="x"></i>
+</button>
+</div>
+
+<div className="px-5 sm:px-6 pt-3">
+<div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div className="h-full bg-[#6A0DAD] rounded-full transition-all duration-300" id="progressBar" style={{width: '0%'}}></div>
+</div>
+</div>
+
+<div className="px-5 sm:px-6 py-6">
+
+<section className="step-section" data-step-index="0">
+<h2 className="text-xl sm:text-2xl tracking-tight font-semibold" id="q1">Situação atual</h2>
+<p className="mt-2 text-[15px] text-[#E6D7FF]">Vamos começar... me conta qual é a sua situação hoje:</p>
+<div aria-labelledby="q1" className="mt-5 space-y-3" role="radiogroup">
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" data-branch="R1" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Estamos juntos, mas ele está distante</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" data-branch="R2" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Terminamos há pouco tempo</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" data-branch="R3" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Estamos afastados há meses</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" data-branch="R4" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Nunca ficamos, mas quero conquistar</span>
+</button>
+</div>
+</section>
+
+<section className="step-section hidden" data-step-index="1">
+<h2 className="text-xl sm:text-2xl tracking-tight font-semibold" id="q2">Principal preocupação</h2>
+<p className="mt-2 text-[15px] text-[#E6D7FF]">Qual dessas situações mais descreve o que te tira o sono?</p>
+<div aria-labelledby="q2" className="mt-5 space-y-3" role="radiogroup">
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Que ele não me ame mais</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Que tenha outra pessoa</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Que nunca mais volte</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Não saber o que ele sente</span>
+</button>
+</div>
+</section>
+
+<section className="step-section hidden" data-step-index="2">
+<h2 className="text-xl sm:text-2xl tracking-tight font-semibold" id="q3">Tempo de problema</h2>
+<p className="mt-2 text-[15px] text-[#E6D7FF]">Há quanto tempo você sente que algo está errado?</p>
+<div aria-labelledby="q3" className="mt-5 space-y-3" role="radiogroup">
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Dias</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Semanas</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Meses</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Mais de um ano</span>
+</button>
+</div>
+</section>
+
+<section className="step-section hidden" data-step-index="3">
+<h2 className="text-xl sm:text-2xl tracking-tight font-semibold" id="q4">Tentativas anteriores</h2>
+<p className="mt-2 text-[15px] text-[#E6D7FF]">Você já tentou alguma solução para mudar essa situação?</p>
+<div aria-labelledby="q4" className="mt-5 space-y-3" role="radiogroup">
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Sim, mas não funcionou</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Não, essa é a primeira vez</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Já tentei várias vezes</span>
+</button>
+</div>
+</section>
+
+<section className="step-section hidden" data-step-index="4">
+<h2 className="text-xl sm:text-2xl tracking-tight font-semibold" id="q5">Receber no WhatsApp</h2>
+<p className="mt-2 text-[15px] text-[#E6D7FF]">Quer receber minha análise aprofundada no seu WhatsApp?</p>
+<div aria-labelledby="q5" className="mt-5 space-y-3" role="radiogroup">
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Sim, quero agora</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Sim, mais tarde hoje</span>
+</button>
+<button aria-checked="false" className="option group w-full text-left rounded-lg ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition px-4 py-3 flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-[#6A0DAD] focus:ring-offset-2 focus:ring-offset-[#110918]" role="radio" type="button">
+<span className="flex h-5 w-5 items-center justify-center rounded-full ring-1 ring-white/20 group-[.selected]:bg-[#6A0DAD] group-[.selected]:ring-[#6A0DAD] transition">
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-[.selected]:bg-white transition"></span>
+</span>
+<span className="text-[15px] text-white/90">Não tenho certeza</span>
+</button>
+</div>
+</section>
+
+<section className="step-section hidden" data-step-index="5">
+<div className="flex items-start gap-3">
+<span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFD700]/10 ring-1 ring-white/10">
+<i className="w-4.5 h-4.5 text-[#FFD700]" data-lucide="message-circle"></i>
+</span>
+<div className="flex-1">
+<h2 className="text-xl sm:text-2xl tracking-tight font-semibold">Mensagem final</h2>
+<p className="mt-1.5 text-[15px] text-white/70">Preparada especialmente para o seu caso.</p>
+</div>
+</div>
+
+<div className="mt-5 rounded-lg ring-1 ring-white/10 bg-white/5 p-4 sm:p-5 hidden" data-result="R1">
+<p className="text-[15px] text-white/90">Pelas suas respostas, vejo sinais de afastamento emocional que podem se intensificar se nada for feito.</p>
+<p className="mt-2 text-[15px] text-white/90">A boa notícia é que essa situação pode ser revertida mais rápido do que você imagina.</p>
+<a className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-white font-semibold text-[15px] tracking-tight transition-all bg-[#6A0DAD] hover:bg-[#6A0DAD]/90 ring-1 ring-white/10" href="https://wa.me/558596395837?text=Oi%2C+acabei+de+fazer+o+quiz.+Estou+junto+com+ele%2C+mas+ele+est%C3%A1+distante.+Quero+sua+an%C3%A1lise" rel="noopener noreferrer" target="_blank">
+                    Receber análise no WhatsApp
+                    <i className="w-5 h-5" data-lucide="arrow-right"></i>
+</a>
+</div>
+
+<div className="mt-5 rounded-lg ring-1 ring-white/10 bg-white/5 p-4 sm:p-5 hidden" data-result="R2">
+<p className="text-[15px] text-white/90">Ainda existe energia forte entre vocês, mas ela está se dissipando rapidamente.</p>
+<p className="mt-2 text-[15px] text-white/90">O tempo é crucial para reacender o vínculo.</p>
+<a className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-white font-semibold text-[15px] tracking-tight transition-all bg-[#6A0DAD] hover:bg-[#6A0DAD]/90 ring-1 ring-white/10" href="https://wa.me/558596395837?text=Oi%2C+acabei+de+fazer+o+quiz.+Terminamos+h%C3%A1+pouco+tempo.+Quero+sua+an%C3%A1lise+para+reconquistar" rel="noopener noreferrer" target="_blank">
+                    Receber análise no WhatsApp
+                    <i className="w-5 h-5" data-lucide="arrow-right"></i>
+</a>
+</div>
+
+<div className="mt-5 rounded-lg ring-1 ring-white/10 bg-white/5 p-4 sm:p-5 hidden" data-result="R3">
+<p className="text-[15px] text-white/90">O vínculo esfriou, mas ainda há caminhos para reativar o interesse.</p>
+<p className="mt-2 text-[15px] text-white/90">Isso precisa ser feito com estratégia.</p>
+<a className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-white font-semibold text-[15px] tracking-tight transition-all bg-[#6A0DAD] hover:bg-[#6A0DAD]/90 ring-1 ring-white/10" href="https://wa.me/558596395837?text=Oi%2C+acabei+de+fazer+o+quiz.+Estamos+afastados+h%C3%A1+meses.+Quero+sua+an%C3%A1lise+para+restaurar+o+relacionamento" rel="noopener noreferrer" target="_blank">
+                    Receber análise no WhatsApp
+                    <i className="w-5 h-5" data-lucide="arrow-right"></i>
+</a>
+</div>
+
+<div className="mt-5 rounded-lg ring-1 ring-white/10 bg-white/5 p-4 sm:p-5 hidden" data-result="R4">
+<p className="text-[15px] text-white/90">Existe desejo, mas ainda não há vínculo consolidado.</p>
+<p className="mt-2 text-[15px] text-white/90">Vou te mostrar como despertar o interesse dessa pessoa usando uma leitura direcionada ao seu caso.</p>
+<a className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-white font-semibold text-[15px] tracking-tight transition-all bg-[#6A0DAD] hover:bg-[#6A0DAD]/90 ring-1 ring-white/10" href="https://wa.me/558596395837?text=Oi%2C+acabei+de+fazer+o+quiz.+Nunca+ficamos,+mas+quero+conquistar+essa+pessoa.+Quero+sua+an%C3%A1lise" rel="noopener noreferrer" target="_blank">
+                    Receber análise no WhatsApp
+                    <i className="w-5 h-5" data-lucide="arrow-right"></i>
+</a>
+</div>
+</section>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+    </>
+  );
+}

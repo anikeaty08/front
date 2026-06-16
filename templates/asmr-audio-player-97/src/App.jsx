@@ -1,0 +1,244 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const progressBar = document.getElementById('progress');
+        const timeCurrent = document.getElementById('timeCurrent');
+        const volumeCtrl = document.getElementById('volume');
+        const ring1 = document.getElementById('ring1');
+        const ring2 = document.getElementById('ring2');
+        const ambientGlow = document.getElementById('ambientGlow');
+
+        let audioCtx, noiseNode, filterNode, masterGain, lfoGain, lfoNode;
+        let isPlaying = false;
+        let startTime = 0;
+        let pauseTime = 0;
+        let animationFrame;
+        const DURATION = 60; // 1 minute ASMR track
+        const LFO_FREQUENCY = 0.1; // Slower frequency for realistic ocean wave rhythm
+
+        function initAudio() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            masterGain = audioCtx.createGain();
+            masterGain.gain.value = Math.pow(volumeCtrl.value, 2);
+            masterGain.connect(audioCtx.destination);
+
+            // Generate Pink Noise (Base for ocean sound)
+            const bufferSize = 2 * audioCtx.sampleRate;
+            const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+            for (let i = 0; i < bufferSize; i++) {
+                let white = Math.random() * 2 - 1;
+                b0 = 0.99886 * b0 + white * 0.0555179;
+                b1 = 0.99332 * b1 + white * 0.0750759;
+                b2 = 0.96900 * b2 + white * 0.1538520;
+                b3 = 0.86650 * b3 + white * 0.3104856;
+                b4 = 0.55000 * b4 + white * 0.5329522;
+                b5 = -0.7616 * b5 - white * 0.0168980;
+                output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                output[i] *= 0.11;
+                b6 = white * 0.115926;
+            }
+            
+            noiseNode = audioCtx.createBufferSource();
+            noiseNode.buffer = noiseBuffer;
+            noiseNode.loop = true;
+
+            // Lowpass Filter (Dynamic to simulate wave crash and retreat)
+            filterNode = audioCtx.createBiquadFilter();
+            filterNode.type = 'lowpass';
+            filterNode.frequency.value = 500; // Base rumble frequency
+
+            // Gain node for the wave volume
+            const waveGain = audioCtx.createGain();
+            waveGain.gain.value = 0.5; 
+
+            // Oscillator for the ocean wave cycle (swell)
+            lfoNode = audioCtx.createOscillator();
+            lfoNode.type = 'sine';
+            lfoNode.frequency.value = LFO_FREQUENCY;
+
+            // 1. Modulate Volume (Fade in/out like waves)
+            lfoGain = audioCtx.createGain();
+            lfoGain.gain.value = 0.45; 
+            lfoNode.connect(lfoGain);
+            lfoGain.connect(waveGain.gain);
+
+            // 2. Modulate Filter Frequency (Adds high pitch "hiss" when wave crashes)
+            const filterModNode = audioCtx.createGain();
+            filterModNode.gain.value = 450; // Sweeps frequency up by 450Hz at the peak
+            lfoNode.connect(filterModNode);
+            filterModNode.connect(filterNode.frequency);
+
+            noiseNode.connect(filterNode);
+            filterNode.connect(waveGain);
+            waveGain.connect(masterGain);
+
+            noiseNode.start();
+            lfoNode.start();
+        }
+
+        function syncVisualsAndProgress() {
+            if (!isPlaying) return;
+
+            const currentTime = audioCtx.currentTime;
+            const elapsed = currentTime - startTime;
+            
+            // Progress Bar Logic
+            if (elapsed >= DURATION) {
+                stopAudio();
+                return;
+            }
+
+            const progressPercent = (elapsed / DURATION) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            
+            const seconds = Math.floor(elapsed);
+            timeCurrent.textContent = `0:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            // Visualizer Logic (Syncing with LFO phase)
+            const lfoPhase = (currentTime * LFO_FREQUENCY * Math.PI * 2);
+            const pulseValue = (Math.sin(lfoPhase - Math.PI/2) + 1) / 2; // Normalize 0 to 1
+
+            const scale1 = 1 + (pulseValue * 0.4);
+            const opacity1 = 0.05 + (pulseValue * 0.15);
+            ring1.style.transform = `scale(${scale1})`;
+            ring1.style.opacity = opacity1;
+
+            const scale2 = 0.8 + (pulseValue * 0.3);
+            const opacity2 = 0.02 + (pulseValue * 0.1);
+            ring2.style.transform = `scale(${scale2})`;
+            ring2.style.opacity = opacity2;
+
+            animationFrame = requestAnimationFrame(syncVisualsAndProgress);
+        }
+
+        function playAudio() {
+            if (!audioCtx) initAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            // Calculate correct start time based on previous pauses
+            const offset = (parseFloat(progressBar.style.width || 0) / 100) * DURATION;
+            startTime = audioCtx.currentTime - offset;
+            
+            isPlaying = true;
+            playIcon.setAttribute('icon', 'solar:pause-linear');
+            playIcon.classList.remove('ml-1');
+            ambientGlow.style.opacity = '0.4';
+
+            syncVisualsAndProgress();
+        }
+
+        function pauseAudio() {
+            if (audioCtx) audioCtx.suspend();
+            isPlaying = false;
+            
+            playIcon.setAttribute('icon', 'solar:play-linear');
+            playIcon.classList.add('ml-1');
+            ambientGlow.style.opacity = '0.2';
+            
+            cancelAnimationFrame(animationFrame);
+            
+            // Gently reset visuals
+            ring1.style.transform = 'scale(0.8)';
+            ring1.style.opacity = '0';
+            ring2.style.transform = 'scale(0.6)';
+            ring2.style.opacity = '0';
+        }
+
+        function stopAudio() {
+            pauseAudio();
+            progressBar.style.width = '0%';
+            timeCurrent.textContent = '0:00';
+            startTime = 0;
+            if (audioCtx) {
+                // Completely reset context to start fresh next time
+                audioCtx.close();
+                audioCtx = null;
+            }
+        }
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) pauseAudio();
+            else playAudio();
+        });
+
+        volumeCtrl.addEventListener('input', (e) => {
+            if (masterGain) {
+                // Exponential volume curve for better human perception
+                masterGain.gain.value = Math.pow(e.target.value, 2);
+            }
+        });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="w-full max-w-sm mx-auto p-8 flex flex-col items-center relative z-10">
+
+<div className="w-full flex justify-between items-center mb-16 opacity-50">
+<span className="text-xs font-medium tracking-tighter uppercase">ASMR</span>
+<button className="text-zinc-400 hover:text-zinc-100 transition-colors flex items-center">
+<iconify-icon icon="solar:moon-sleep-linear" strokeWidth="1.5" width="20"></iconify-icon>
+</button>
+</div>
+
+<div className="relative w-48 h-48 mb-14 flex items-center justify-center">
+
+<div className="absolute w-full h-full border border-zinc-500 rounded-full opacity-0 transition-transform duration-100 ease-out pointer-events-none" id="ring1" style={{transform: 'scale(0.8)'}}></div>
+<div className="absolute w-full h-full border border-zinc-600 rounded-full opacity-0 transition-transform duration-100 ease-out pointer-events-none" id="ring2" style={{transform: 'scale(0.6)'}}></div>
+
+<button className="relative z-10 w-16 h-16 bg-zinc-100 text-[#09090b] rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(255,255,255,0.05)]" id="playBtn">
+<iconify-icon className="ml-1" icon="solar:play-linear" id="playIcon" strokeWidth="1.5" width="28"></iconify-icon>
+</button>
+</div>
+
+<div className="text-center mb-10 w-full">
+<h1 className="text-2xl font-medium tracking-tight mb-1">Gentle Ocean Waves</h1>
+<p className="text-sm text-zinc-500">1 Minute Ocean Cycle</p>
+</div>
+
+<div className="w-full mb-10">
+<div className="h-1 bg-zinc-800 rounded-full overflow-hidden relative">
+<div className="absolute top-0 left-0 h-full bg-zinc-300 w-0 transition-all duration-1000 ease-linear rounded-full" id="progress"></div>
+</div>
+<div className="flex justify-between mt-3 text-xs text-zinc-500 font-medium">
+<span id="timeCurrent">0:00</span>
+<span>1:00</span>
+</div>
+</div>
+
+<div className="w-full flex items-center gap-4 opacity-40 hover:opacity-100 transition-opacity">
+<iconify-icon className="text-zinc-400" icon="solar:volume-small-linear" strokeWidth="1.5" width="18"></iconify-icon>
+<input className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-zinc-300" id="volume" max="1" min="0" step="0.01" type="range" value="0.6"/>
+<iconify-icon className="text-zinc-400" icon="solar:volume-loud-linear" strokeWidth="1.5" width="18"></iconify-icon>
+</div>
+</div>
+
+<div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-zinc-800 rounded-full blur-[120px] opacity-20 pointer-events-none transition-opacity duration-1000" id="ambientGlow"></div>
+
+
+    </>
+  );
+}

@@ -1,0 +1,14 @@
+# Agence digitale Level UP
+
+A premium Social Grow-inspired landing page template for social media and growth agencies to showcase services, case studies, team, and drive discovery calls.
+
+## Project Details
+- **Slug:** `levelupagencyweb`
+- **Views:** 17
+- **Tags:** Landing Page, Services, Technology, Brand, Clean, Gradient, Large Type, Minimal, Social Media Agency, Case Studies
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

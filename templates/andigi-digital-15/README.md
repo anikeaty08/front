@@ -1,0 +1,14 @@
+# Digital Agency Landing Page Template
+
+A high-end, futuristic digital agency template designed for software engineering firms and design studios looking for a professional, dark-themed online presence.
+
+## Project Details
+- **Slug:** `andigi-digital-15`
+- **Views:** 339
+- **Tags:** Landing Page, Technology, Services, Dark, Clean, Futuristic, Animated, Grid
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

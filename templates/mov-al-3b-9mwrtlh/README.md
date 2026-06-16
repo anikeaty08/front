@@ -1,0 +1,14 @@
+# Grassy RTO CRM Training Landing Page Template
+
+No description provided.
+
+## Project Details
+- **Slug:** `mov-al-3b-9mwrtlh`
+- **Views:** 12
+- **Tags:** 
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

@@ -1,0 +1,240 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<nav className="fixed w-full z-50 top-0 py-8 px-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-[#030303]/80 to-transparent backdrop-blur-sm">
+<div className="text-xl tracking-[0.25em] uppercase font-serif font-medium text-white mix-blend-difference">Aethel</div>
+<div className="hidden md:flex space-x-14 text-xs uppercase tracking-[0.15em] font-light text-neutral-300">
+<a className="hover:text-[#bca37f] transition-colors duration-500" href="#ethos">Ethos</a>
+<a className="hover:text-[#bca37f] transition-colors duration-500" href="#atelier">Atelier</a>
+<a className="hover:text-[#bca37f] transition-colors duration-500" href="#experience">Experience</a>
+</div>
+<a className="hidden md:block text-xs uppercase tracking-[0.15em] font-light text-white border-b border-white/30 hover:border-[#bca37f] hover:text-[#bca37f] transition-all duration-500 pb-1" href="#reserve">
+            Reserve
+        </a>
+<button className="md:hidden text-neutral-300 hover:text-white transition-colors">
+<iconify-icon icon="solar:hamburger-menu-linear" strokeWidth="1.5" width="24"></iconify-icon>
+</button>
+</nav>
+
+<header className="relative w-full h-screen flex flex-col justify-end pb-24 md:pb-32 px-6 md:px-12 overflow-hidden">
+<div className="absolute inset-0 z-0 bg-[#030303]">
+<img alt="Moody barbershop interior" className="absolute inset-0 w-full h-full object-cover opacity-40 scale-105" src="https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?q=80&amp;w=2940&amp;auto=format&amp;fit=crop"/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/20 to-transparent"></div>
+<div className="absolute inset-0 vignette"></div>
+</div>
+<div className="relative z-10 max-w-5xl">
+<p className="text-xs uppercase tracking-[0.3em] text-[#bca37f] mb-6 font-light">A Private Grooming Enclave</p>
+<h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-light tracking-tight leading-[0.9] text-white mb-10">
+                Refinement<br/>
+<span className="italic text-neutral-400 font-light">is a discipline.</span>
+</h1>
+<a className="inline-flex items-center space-x-4 text-xs uppercase tracking-[0.2em] font-light text-neutral-300 group" href="#reserve">
+<span className="border-b border-neutral-600 group-hover:border-[#bca37f] group-hover:text-[#bca37f] transition-all duration-500 pb-1">Request Membership</span>
+<iconify-icon className="group-hover:text-[#bca37f] group-hover:translate-x-1 transition-all duration-500" icon="solar:arrow-right-linear" width="16"></iconify-icon>
+</a>
+</div>
+</header>
+
+<section className="py-40 md:py-56 px-6 max-w-4xl mx-auto text-center relative" id="ethos">
+<iconify-icon className="text-[#bca37f]/50 mx-auto mb-16" icon="solar:star-fall-minimalistic-2-linear" width="24"></iconify-icon>
+<h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-light leading-snug text-neutral-200 tracking-tight">
+            Beyond a mere service, we provide a sanctuary for the modern gentleman. A space where time slows, and the pursuit of quiet perfection takes precedence.
+        </h2>
+</section>
+
+<section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto border-t border-neutral-900" id="atelier">
+<div className="flex flex-col lg:flex-row justify-between items-start mb-24 lg:mb-32">
+<h3 className="text-xs uppercase tracking-[0.25em] text-[#bca37f] font-light lg:w-1/4 mb-8 lg:mb-0">The Atelier</h3>
+<div className="lg:w-2/3 xl:w-1/2">
+<p className="text-xl md:text-2xl font-light text-neutral-400 leading-relaxed">
+                    Our offerings are curated to ensure absolute precision. Each appointment is conducted in complete privacy, allowing our master artisans to focus solely on your distinct structural requirements.
+                </p>
+</div>
+</div>
+<div className="w-full">
+
+<div className="group flex flex-col md:flex-row justify-between items-baseline border-b border-neutral-900 py-12 transition-colors hover:bg-neutral-950/50 px-4 md:px-8 -mx-4 md:-mx-8">
+<div className="md:w-3/5">
+<h4 className="text-3xl md:text-4xl font-serif font-light text-neutral-200 tracking-tight group-hover:text-white transition-colors">The Signature Scissor Trim</h4>
+<p className="text-sm text-neutral-500 mt-4 font-light max-w-lg leading-relaxed">A bespoke structural cut, executing classic proportions with modern sensibilities. Includes a meticulous purifying wash, conditioning treatment, and structural styling.</p>
+</div>
+<div className="mt-8 md:mt-0 flex flex-col items-end w-full md:w-auto">
+<span className="text-2xl font-serif font-light text-[#bca37f] tracking-tight">£120</span>
+<span className="text-xs text-neutral-500 font-light tracking-[0.2em] mt-2 uppercase">60 Minutes</span>
+</div>
+</div>
+
+<div className="group flex flex-col md:flex-row justify-between items-baseline border-b border-neutral-900 py-12 transition-colors hover:bg-neutral-950/50 px-4 md:px-8 -mx-4 md:-mx-8">
+<div className="md:w-3/5">
+<h4 className="text-3xl md:text-4xl font-serif font-light text-neutral-200 tracking-tight group-hover:text-white transition-colors">Traditional Hot Towel Shave</h4>
+<p className="text-sm text-neutral-500 mt-4 font-light max-w-lg leading-relaxed">The pinnacle straight razor experience. Botanical pre-shave oils, multiple steaming restorative towels, rich lather, and a calming post-shave balm application.</p>
+</div>
+<div className="mt-8 md:mt-0 flex flex-col items-end w-full md:w-auto">
+<span className="text-2xl font-serif font-light text-[#bca37f] tracking-tight">£85</span>
+<span className="text-xs text-neutral-500 font-light tracking-[0.2em] mt-2 uppercase">45 Minutes</span>
+</div>
+</div>
+
+<div className="group flex flex-col md:flex-row justify-between items-baseline border-b border-neutral-900 py-12 transition-colors hover:bg-neutral-950/50 px-4 md:px-8 -mx-4 md:-mx-8">
+<div className="md:w-3/5">
+<h4 className="text-3xl md:text-4xl font-serif font-light text-neutral-200 tracking-tight group-hover:text-white transition-colors">The Executive Restitution</h4>
+<p className="text-sm text-neutral-500 mt-4 font-light max-w-lg leading-relaxed">Our most comprehensive offering. Combining the Signature Trim, Hot Towel Shave, an active botanical facial treatment, and deeply restorative scalp massage.</p>
+</div>
+<div className="mt-8 md:mt-0 flex flex-col items-end w-full md:w-auto">
+<span className="text-2xl font-serif font-light text-[#bca37f] tracking-tight">£250</span>
+<span className="text-xs text-neutral-500 font-light tracking-[0.2em] mt-2 uppercase">120 Minutes</span>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 md:py-40 overflow-hidden bg-[#050505]">
+<div className="max-w-[1600px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
+<div className="lg:col-span-7 relative">
+<div className="aspect-[4/5] w-full overflow-hidden">
+<img alt="Precision tools detail" className="w-full h-full object-cover opacity-70 grayscale-[30%] hover:scale-105 transition-transform duration-[2s] ease-out" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&amp;w=2940&amp;auto=format&amp;fit=crop"/>
+</div>
+<div className="absolute -bottom-8 -right-8 w-1/2 aspect-square bg-[#030303] hidden md:block"></div>
+</div>
+<div className="lg:col-span-5 flex flex-col justify-center relative z-10 pt-12 lg:pt-0">
+<h3 className="text-4xl md:text-6xl font-serif font-light text-white mb-10 tracking-tight leading-[1.1]">The Art of <br/><span className="italic text-neutral-500">Restraint</span></h3>
+<p className="text-neutral-400 font-light leading-relaxed mb-16 text-base max-w-md">
+                    True luxury whispers. We eschew the ostentatious in favor of quiet excellence. From the balanced weight of our Japanese steel shears to the rare, cold-pressed botanicals formulated exclusively for our house.
+                </p>
+<div className="w-full md:w-[70%] aspect-[3/4] overflow-hidden self-end">
+<img alt="Master barber at work" className="w-full h-full object-cover opacity-60 sepia-[0.3] hover:scale-105 transition-transform duration-[2s] ease-out" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&amp;w=2788&amp;auto=format&amp;fit=crop"/>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-32 md:py-48 px-6 max-w-[1400px] mx-auto border-t border-neutral-900" id="experience">
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32">
+<div className="lg:col-span-4 flex flex-col justify-between">
+<div>
+<span className="text-xs uppercase tracking-[0.25em] text-[#bca37f] font-light block mb-6">Environment</span>
+<h2 className="text-4xl md:text-5xl font-serif font-light text-neutral-200 tracking-tight leading-tight">
+                        Designed for absolute discretion.
+                    </h2>
+</div>
+</div>
+<div className="lg:col-span-8 space-y-12 lg:pt-12">
+<p className="text-2xl md:text-3xl font-serif font-light text-neutral-300 leading-snug tracking-tight">
+                    Step away from the clamor of the city. Aethel is designed as a private study—dark smoked oak, vintage leather, and an atmosphere of profound, unhurried calm.
+                </p>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-neutral-900">
+<p className="text-sm text-neutral-500 font-light leading-relaxed">
+                        Appointments are intentionally staggered to ensure you rarely encounter another patron. Upon arrival, our concierge offers a curated selection of rare single malts, artisanal espresso, or mineral water.
+                    </p>
+<p className="text-sm text-neutral-500 font-light leading-relaxed">
+                        The acoustic environment is precisely managed. The soundtrack is ambient, minimalist, and unintrusive. Here, grooming is not viewed as a chore, but rather a vital ritual of restoration.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-40 bg-[#020202] border-t border-b border-neutral-900">
+<div className="max-w-4xl mx-auto px-6 text-center">
+<h3 className="text-3xl md:text-5xl font-serif font-light text-neutral-300 leading-[1.3] tracking-tight mb-16 italic">
+                "Finding a craftsman who inherently understands the nuance of restraint is rare. Aethel provides not merely a service, but a standard of living."
+            </h3>
+<div className="flex flex-col items-center justify-center">
+<div className="w-px h-12 bg-neutral-800 mb-8"></div>
+<p className="text-xs uppercase tracking-[0.2em] text-[#bca37f] font-light">E. Montgomery</p>
+<p className="text-xs text-neutral-600 font-light mt-2 tracking-widest">Member since 2019</p>
+</div>
+</div>
+</section>
+
+<section className="py-48 relative overflow-hidden flex items-center justify-center" id="reserve">
+
+<div className="absolute inset-0 z-0 opacity-20">
+<div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-transparent to-[#030303] z-10"></div>
+<img alt="Dark texture" className="w-full h-full object-cover blur-sm" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
+</div>
+<div className="relative z-10 text-center px-6 max-w-2xl mx-auto w-full">
+<h2 className="text-4xl md:text-6xl font-serif font-light text-white tracking-tight mb-8">Secure an Appointment</h2>
+<p className="text-neutral-400 font-light mb-16 text-sm leading-relaxed max-w-md mx-auto">
+                Membership applications and select guest bookings are currently subject to a brief waiting period to maintain our exacting standard of service.
+            </p>
+<form className="max-w-sm mx-auto space-y-8">
+<div className="relative">
+<input className="peer w-full bg-transparent border-b border-neutral-700 py-2 text-white placeholder-transparent focus:outline-none focus:border-[#bca37f] transition-colors font-light text-sm" id="email" placeholder=" " type="email"/>
+<label className="absolute left-0 -top-3.5 text-xs text-neutral-600 font-light transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-neutral-500 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-[#bca37f] uppercase tracking-widest" htmlFor="email">Email Address</label>
+</div>
+<button className="w-full bg-white text-black py-4 uppercase tracking-[0.2em] text-xs font-medium hover:bg-[#bca37f] hover:text-white transition-all duration-500 mt-4 group flex justify-center items-center space-x-2" type="button">
+<span>Request Availability</span>
+</button>
+</form>
+</div>
+</section>
+
+<footer className="bg-[#020202] pt-24 pb-12 border-t border-neutral-900">
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
+<div className="md:col-span-4 lg:col-span-5">
+<div className="text-2xl tracking-[0.25em] uppercase font-serif font-light text-white mb-8">Aethel</div>
+<p className="text-sm text-neutral-500 font-light leading-relaxed max-w-sm">
+                    An enclave of refinement for the modern gentleman. Purveyors of exceptional, discreet grooming experiences.
+                </p>
+</div>
+<div className="md:col-span-8 lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-12">
+<div>
+<h4 className="text-xs uppercase tracking-[0.2em] text-[#bca37f] font-light mb-8">Location</h4>
+<p className="text-sm text-neutral-400 font-light leading-relaxed">
+                        42 Savile Row<br/>
+                        Mayfair, London<br/>
+                        W1S 3ER
+                    </p>
+</div>
+<div>
+<h4 className="text-xs uppercase tracking-[0.2em] text-[#bca37f] font-light mb-8">Hours</h4>
+<p className="text-sm text-neutral-400 font-light leading-relaxed">
+                        Tue — Sat: 10am - 8pm<br/>
+                        Sun — Mon: Closed<br/>
+<span className="text-xs text-neutral-600 mt-4 block italic">By appointment only</span>
+</p>
+</div>
+<div>
+<h4 className="text-xs uppercase tracking-[0.2em] text-[#bca37f] font-light mb-8">Connect</h4>
+<ul className="space-y-4 text-sm font-light text-neutral-400">
+<li><a className="hover:text-white transition-colors duration-300" href="#">Concierge</a></li>
+<li><a className="hover:text-white transition-colors duration-300" href="#">Instagram</a></li>
+<li><a className="hover:text-white transition-colors duration-300" href="#">The Journal</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 border-t border-neutral-900 pt-10 flex flex-col md:flex-row justify-between items-start md:items-center text-xs text-neutral-600 font-light tracking-wide">
+<p>© 2024 Aethel Grooming Club. All rights reserved.</p>
+<div className="flex space-x-8 mt-6 md:mt-0">
+<a className="hover:text-neutral-300 transition-colors" href="#">Privacy Policy</a>
+<a className="hover:text-neutral-300 transition-colors" href="#">Terms of Membership</a>
+</div>
+</div>
+</footer>
+
+    </>
+  );
+}

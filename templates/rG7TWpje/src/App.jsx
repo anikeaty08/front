@@ -1,0 +1,169 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="fixed inset-0 z-0 overflow-hidden opacity-20">
+<div className="absolute inset-0 flex items-center justify-center">
+<div className="w-[200%] animate-wave">
+<svg preserveaspectratio="none" viewbox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#22d3ee" opacity="0.2"></path>
+</svg>
+</div>
+</div>
+<div className="absolute inset-0 flex items-center justify-center translate-y-24">
+<div className="w-[200%] animate-wave" style={{animationDelay: '-5s', animationDuration: '20s'}}>
+<svg preserveaspectratio="none" viewbox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="#0ea5e9" opacity="0.1"></path>
+</svg>
+</div>
+</div>
+</div>
+<header className="relative z-10 border-b border-slate-700">
+<div className="container mx-auto px-4 py-4 flex justify-between items-center">
+<div className="flex items-center space-x-2 opacity-0 animate-slide-up">
+<div className="w-8 h-8 rounded-md bg-cyan-500 flex items-center justify-center">
+<svg className="h-5 w-5 text-white" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+</svg>
+</div>
+<span className="font-light text-xl">AnalyticsPro</span>
+</div>
+<nav className="hidden md:block">
+<ul className="flex space-x-6">
+<li className="opacity-0 animate-slide-up delay-100"><a className="text-cyan-400 font-medium" href="#">Home</a></li>
+<li className="opacity-0 animate-slide-up delay-200"><a className="hover:text-cyan-400 transition-colors" href="#">Features</a></li>
+<li className="opacity-0 animate-slide-up delay-300"><a className="hover:text-cyan-400 transition-colors" href="#">Pricing</a></li>
+<li className="opacity-0 animate-slide-up delay-400"><a className="hover:text-cyan-400 transition-colors" href="#">About</a></li>
+</ul>
+</nav>
+<div className="hidden md:flex space-x-3">
+<a className="opacity-0 animate-slide-up delay-300 px-4 py-2 rounded-md text-cyan-400 border border-cyan-400/30 hover:bg-cyan-400/10 transition-colors" href="#">Log in</a>
+<a className="opacity-0 animate-slide-up delay-400 px-4 py-2 rounded-md bg-cyan-500 text-white hover:bg-cyan-600 transition-colors" href="#">Sign up</a>
+</div>
+<button className="md:hidden opacity-0 animate-slide-up">
+<svg className="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+</div>
+</header>
+<section className="relative z-10 py-20 overflow-hidden">
+<div className="absolute top-20 left-1/2 -translate-x-1/2 w-1/2 h-1/2 rounded-full glow blur-3xl opacity-20"></div>
+<div className="container mx-auto px-4">
+<div className="flex flex-col md:flex-row items-center">
+<div className="md:w-1/2 mb-12 md:mb-0">
+<h1 className="opacity-0 animate-slide-up text-5xl md:text-6xl font-light mb-6 leading-tight">
+            Unlock the Power of <span className="text-cyan-400">User Analytics</span>
+</h1>
+<p className="opacity-0 animate-slide-up delay-100 text-base text-slate-300 mb-8 max-w-lg">
+            Make data-driven decisions with our powerful analytics platform. Track user engagement, monitor performance, and optimize your digital experience.
+          </p>
+<div className="opacity-0 animate-slide-up delay-200 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+<a className="px-6 py-3 rounded-lg bg-cyan-500 text-white font-medium hover:bg-cyan-600 transition-colors text-center" href="#">
+              Get Started Free
+            </a>
+<a className="px-6 py-3 rounded-lg border border-slate-600 hover:border-cyan-400 hover:text-cyan-400 transition-colors text-center" href="#">
+              View Demo
+            </a>
+</div>
+<div className="opacity-0 animate-slide-up delay-300 mt-8 flex items-center">
+<div className="flex -space-x-2">
+<img alt="User" className="w-8 h-8 rounded-full border-2 border-slate-800" src="https://randomuser.me/api/portraits/women/42.jpg"/>
+<img alt="User" className="w-8 h-8 rounded-full border-2 border-slate-800" src="https://randomuser.me/api/portraits/men/32.jpg"/>
+<img alt="User" className="w-8 h-8 rounded-full border-2 border-slate-800" src="https://randomuser.me/api/portraits/women/24.jpg"/>
+</div>
+<p className="ml-4 text-sm text-slate-400">
+              Trusted by <span className="text-white font-medium">2,000+</span> companies worldwide
+            </p>
+</div>
+</div>
+<div className="md:w-1/2 relative opacity-0 animate-slide-up delay-400">
+<div className="rounded-xl border border-slate-700 overflow-hidden gradient-bg backdrop-blur-sm bg-slate-900/50">
+<div className="p-4 border-b border-slate-700 flex justify-between items-center">
+<div className="flex items-center space-x-2">
+<div className="flex space-x-1">
+<div className="w-3 h-3 rounded-full bg-red-400"></div>
+<div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+<div className="w-3 h-3 rounded-full bg-green-400"></div>
+</div>
+<span className="text-sm text-slate-400">analytics-dashboard.app</span>
+</div>
+<div className="text-sm text-slate-400">
+<svg className="h-4 w-4 inline" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+                Secure
+              </div>
+</div>
+<div className="p-6">
+<div className="flex justify-between items-center mb-8">
+<h2 className="text-xl font-semibold">Weekly Overview</h2>
+<div className="bg-slate-700/50 rounded-md px-2 py-1 text-xs">Last 7 days</div>
+</div>
+<div className="space-y-6">
+<div>
+<div className="flex justify-between mb-1">
+<span className="text-sm text-slate-400">User Growth</span>
+<span className="text-sm font-medium text-cyan-400">+24%</span>
+</div>
+<div className="w-full bg-slate-700 rounded-full h-2">
+<div className="bg-cyan-400 h-2 rounded-full" style={{width: '78%'}}></div>
+</div>
+</div>
+<div>
+<div className="flex justify-between mb-1">
+<span className="text-sm text-slate-400">Engagement Rate</span>
+<span className="text-sm font-medium text-cyan-400">+12%</span>
+</div>
+<div className="w-full bg-slate-700 rounded-full h-2">
+<div className="bg-cyan-400 h-2 rounded-full" style={{width: '64%'}}></div>
+</div>
+</div>
+<div>
+<div className="flex justify-between mb-1">
+<span className="text-sm text-slate-400">Conversion Rate</span>
+<span className="text-sm font-medium text-cyan-400">+8%</span>
+</div>
+<div className="w-full bg-slate-700 rounded-full h-2">
+<div className="bg-cyan-400 h-2 rounded-full" style={{width: '42%'}}></div>
+</div>
+</div>
+</div>
+<div className="mt-8 grid grid-cols-3 gap-4">
+<div className="bg-slate-800 rounded-lg p-3 border border-slate-700">
+<p className="text-xs text-slate-400">Active Users</p>
+<p className="text-lg font-bold">14.2K</p>
+</div>
+<div className="bg-slate-800 rounded-lg p-3 border border-slate-700">
+<p className="text-xs text-slate-400">Sessions</p>
+<p className="text-lg font-bold">28.6K</p>
+</div>
+<div className="bg-slate-800 rounded-lg p-3 border border-slate-700">
+<p className="text-xs text-slate-400">Avg. Duration</p>
+<p className="text-lg font-bold">4m 23s</p>
+</div>
+</div>
+</div>
+</div>
+<div className="absolute -top-4 -right-4 w-20 h-20 bg-cyan-400/20 rounded-full blur-2xl"></div>
+<div className="absolute -bottom-8 -left-8 w-28 h-28 bg-cyan-400/20 rounded-full blur-2xl"></div>
+</div>
+</div>
+</div>
+</section>
+
+    </>
+  );
+}

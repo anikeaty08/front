@@ -1,0 +1,14 @@
+# Cyberpunk Digital Society Landing Page Template
+
+A reusable landing page template designed to showcase a futuristic digital society platform with role selection, avatar generation, and integrated economy features.
+
+## Project Details
+- **Slug:** `zyraix-societyx`
+- **Views:** 655
+- **Tags:** Landing Page, Hero, Features, Role Selection, Avatar Generator, Economy Loop, Dashboard, Marketplace, Mobile Onboarding, Cyberpunk
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

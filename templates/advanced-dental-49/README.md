@@ -1,0 +1,14 @@
+# Advanced Dental Clinic Landing Page Template
+
+A modern Advanced Dental clinic website template for showcasing services, technology, memberships, and appointment booking for high-end dental practices.
+
+## Project Details
+- **Slug:** `advanced-dental-49`
+- **Views:** 19
+- **Tags:** Landing Page, Health, Services, Brand, Clean, Minimal, Large Type, Technology, Dental Clinic, Medical
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

@@ -1,0 +1,463 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+  
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-up');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="aura-background-component fixed top-0 w-full h-screen -z-10 brightness-50 opacity-70" data-alpha-mask="100" style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 100%, transparent)'}}><div className="aura-background-component top-0 w-full -z-10 absolute h-full">
+<div className="absolute w-full h-full left-0 top-0 -z-10" data-us-project="TIWE0oFfvUmetsFoxL6u"></div>
+
+</div></div>
+<div className="grain-overlay"></div>
+
+<nav className="fixed z-50 flex pr-4 pl-4 top-6 right-0 left-0 justify-center">
+<div className="flex shadow-black/50 transition-all duration-300 hover:border-white/20 bg-black/70 border-white/10 border rounded-full pt-4 pr-6 pb-4 pl-6 shadow-2xl backdrop-blur-xl gap-x-12 gap-y-12 items-center justify-between">
+<a className="uppercase flex items-center gap-1 text-lg font-bold text-white tracking-tighter" href="#">
+<span className="animate-pulse w-12 h-12 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e52be77d-5f76-406d-93e7-ead640b6d6d6_320w.png)] bg-cover bg-center rounded-full"></span>
+</a>
+<div className="hidden md:flex items-center gap-8 text-xs font-medium uppercase tracking-widest text-neutral-400">
+<a className="hover:text-white transition-colors" href="#portfolio">PORTFOLIO</a>
+<a className="hover:text-white transition-colors" href="#services">USŁUGI</a>
+<a className="hover:text-white transition-colors" href="#contact">KONTAKT</a>
+</div>
+<a className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-white text-black hover:bg-neutral-200 transition-transform hover:scale-110" href="#contact">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:arrow-up-right" data-width="16" height="16" role="img" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</a>
+<button className="md:hidden text-white">
+<svg aria-hidden="true" className="iconify iconify--lucide w-[20px] h-[20px]" data-icon="lucide:menu" data-icon-replaced="true" data-width="20" height="20" role="img" strokeWidth="2" style={{width: '20px', height: '20px', color: 'rgb(255, 255, 255)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path className="" d="M4 5h16M4 12h16M4 19h16" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</button>
+</div>
+</nav>
+
+<header className="relative w-full h-[100vh] overflow-hidden flex flex-col items-center justify-center">
+
+<div className="absolute top-0 right-0 bottom-0 left-0">
+<div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-black/30"></div>
+<div className="absolute top-0 right-0 bottom-0 left-0"></div>
+</div>
+<div className="text-center max-w-5xl z-20 mt-0 mr-auto ml-auto px-6 relative">
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8 fade-up visible" style={{}}>
+<span className="relative flex h-2 w-2">
+<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+<span className="inline-flex bg-orange-600 w-2 h-2 rounded-full relative"></span>
+</span>
+<span className="text-[10px] uppercase font-semibold text-neutral-300 tracking-[0.2em]">VIDEOGRAPHER / CONTENT CREATOR / PHOTOGRAPHER / AI CREATOR</span>
+</div>
+<h1 className="md:text-8xl lg:text-9xl leading-[0.9] fade-up text-6xl font-semibold text-white tracking-tighter mb-8 visible">Wizualna siła<br className=""/> <span className="bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(249,115,22,0.8)]" style={{background: 'linear-gradient(to right, #ea580c 20%, #fcd34d 30%, #f97316 70%, #c2410c 80%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', textFillColor: 'transparent', backgroundSize: '500% auto', animation: 'textShine 5s ease-in-out infinite alternate'}}><style>@keyframes textShine { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }</style>przekazu.</span></h1>
+<p className="leading-relaxed fade-up md:text-xl text-lg font-light text-stone-300 max-w-2xl mr-auto mb-10 ml-auto visible" style={{}}>Jestem niezależnym twórcą treści wideo, zdjęć oraz projektów AI. Pomagam markom i artystom wyróżnić się na tle innych.</p>
+<div className="flex flex-col sm:flex-row items-center justify-center gap-4 fade-up visible" style={{}}>
+<a className="group overflow-hidden z-0 text-sm font-semibold text-black tracking-wide bg-white rounded-3xl pt-4 pr-10 pb-4 pl-6 relative" href="#portfolio">
+<span className="z-10 relative">Obejrzyj moje realizacje</span>
+<div className="group-hover:translate-y-0 transition-transform duration-300 ease-out z-0">
+</div>
+<svg aria-hidden="true" className="iconify -translate-y-1/2 group-hover:opacity-100 duration-300 iconify--lucide z-10 opacity-0 absolute top-1/2 right-3" data-icon="lucide:play" data-icon-replaced="true" data-icon-set="lucide" data-lucide="circle-play" data-width="12" fill="none" height="20" role="img" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25" style={{color: 'rgb(0, 0, 0)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+</a>
+<a className="group hover:bg-white/5 transition-all text-sm font-bold text-white tracking-wide border-white/10 border rounded-full pt-4 pr-8 pb-4 pl-8 backdrop-blur-sm" href="#contact">Stwórz Projekt</a>
+</div>
+</div>
+
+<div className="w-full bg-neutral-900/30 border-y border-white/5 py-6 overflow-hidden absolute bottom-0 z-20 backdrop-blur-sm">
+<div className="flex whitespace-nowrap w-[200%] animate-scroll hover:[animation-play-state:paused]">
+<div className="flex items-center gap-12 mx-6">
+<span className="text-4xl font-bold uppercase tracking-tighter text-white/10">Cinematography</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="uppercase text-4xl font-bold text-white/10 tracking-tighter">PRODUKCJA</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="uppercase text-4xl font-bold text-white/10 tracking-tighter">Post-PRODUKCJA</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="text-4xl font-bold uppercase tracking-tighter text-white/10">Color Grading</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="text-4xl font-bold uppercase tracking-tighter text-white/10">Sound Design</span>
+<span className="text-red-600 text-xl">•</span>
+</div>
+<div className="flex items-center gap-12 mx-6">
+<span className="uppercase text-4xl font-bold text-white/10 tracking-tighter">PROJEKTY AI</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="uppercase text-4xl font-bold text-white/10 tracking-tighter">Produkcja</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="text-4xl font-bold uppercase tracking-tighter text-white/10">Post-Production</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="text-4xl font-bold uppercase tracking-tighter text-white/10">Color Grading</span>
+<span className="text-red-600 text-xl">•</span>
+<span className="text-4xl font-bold uppercase tracking-tighter text-white/10">Sound Design</span>
+<span className="text-red-600 text-xl">•</span>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+<div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-white to-transparent"></div>
+</div>
+</header>
+
+<section className="pt-32 pb-32 relative" id="vision">
+<div className="max-w-7xl mx-auto px-6">
+<div className="grid lg:grid-cols-12 gap-x-16 gap-y-16 items-start">
+<div className="lg:col-span-5 fade-up sticky top-32 visible">
+<span className="uppercase block text-xs text-red-500 tracking-widest font-mono mb-4">01 / Wizja</span>
+<h2 className="leading-[1.1] md:text-5xl text-4xl font-semibold text-white tracking-tighter mb-8">Nie łapie tylko momentów. <br/><span className="text-neutral-500">Konstruuje emocje.</span></h2>
+<p className="leading-relaxed font-light text-neutral-400 mb-8">Każda klatka to świadoma decyzja. Każde cięcie to uderzenie serca. Działam na styku surowych emocji i technicznej precyzji. Moje filmy są tworzone tak, by pozostać w pamięci na długo po tym, jak ekran zgaśnie.</p>
+<div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/10">
+<div className="">
+<span className="block text-3xl font-bold text-white mb-1">50+</span>
+<span className="uppercase text-xs text-neutral-500 tracking-widest">Oddanych projektów</span>
+</div>
+<div className="">
+<span className="block text-3xl font-bold text-white mb-1">37</span>
+<span className="uppercase text-xs text-neutral-500 tracking-widest">zadowolonych klientów</span>
+</div>
+</div>
+</div>
+<div className="lg:col-span-7 grid gap-6 fade-up visible">
+<div className="relative aspect-video group overflow-hidden rounded-sm border border-white/5">
+<video autoplay="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" loop="" muted="" playsinline="" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg">
+<source src="https://videos.pexels.com/video-files/3205647/3205647-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+</video>
+<div className="transition-opacity duration-300 bg-gradient-to-t from-black/80 to-transparent opacity-100 absolute top-0 right-0 bottom-0 left-0"></div>
+<div className="absolute bottom-6 left-6">
+<h3 className="text-xl font-medium text-white tracking-tight">Głębia narracji</h3>
+</div>
+</div>
+<div className="grid sm:grid-cols-2 gap-6">
+<div className="relative aspect-[4/5] group overflow-hidden rounded-sm border border-white/5">
+<img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale group-hover:grayscale-0" src="https://images.unsplash.com/photo-1518135714426-c18f5ffb6f4d?q=80&amp;w=2996&amp;auto=format&amp;fit=crop"/>
+<div className="absolute bottom-6 left-6">
+<h3 className="text-xl font-medium text-white tracking-tight">Oświetlenie</h3>
+</div>
+</div>
+<div className="relative aspect-[4/5] group overflow-hidden rounded-sm border border-white/5">
+<img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" src="https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&amp;w=2940&amp;auto=format&amp;fit=crop"/>
+<div className="absolute bottom-6 left-6">
+<h3 className="text-xl font-medium text-white tracking-tight">Kompozycja</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="bg-[#080808] border-white/5 border-t pt-32 pb-32" id="portfolio">
+<div className="max-w-7xl mr-auto ml-auto pr-6 pl-6">
+<div className="flex flex-col md:flex-row md:items-end justify-between mb-16 fade-up visible">
+<div className="">
+<span className="text-red-500 font-mono text-xs uppercase tracking-widest mb-2 block">02 / Portfolio</span>
+<h2 className="text-4xl font-semibold text-white tracking-tighter">Wybrane prace</h2>
+</div>
+<div className="flex items-center gap-6 mt-6 md:mt-0">
+<button className="text-white text-sm font-medium border-b border-red-500 pb-1">All</button>
+<button className="hover:text-white transition-colors text-sm font-medium text-neutral-500 pb-1">Reelsy</button>
+<button className="text-neutral-500 text-sm font-medium hover:text-white transition-colors pb-1">Kampanie reklamowe</button>
+<button className="text-neutral-500 text-sm font-medium hover:text-white transition-colors pb-1">Polaroidy</button>
+</div>
+</div>
+<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+<div className="group relative aspect-[3/4] overflow-hidden cursor-pointer rounded-sm border border-white/5 fade-up">
+<video autoplay="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-70 group-hover:opacity-100" loop="" muted="" playsinline="" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg">
+<source src="https://videos.pexels.com/video-files/3015511/3015511-hd_1920_1080_24fps.mp4" type="video/mp4"/>
+</video>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-500"></div>
+<div className="flex flex-col pt-8 pr-8 pb-8 pl-8 absolute top-0 right-0 bottom-0 left-0 justify-between">
+<div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-y-4 group-hover:translate-y-0">
+<span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest text-white border border-white/10">2023</span>
+<svg aria-hidden="true" className="iconify text-white rotate-45 group-hover:rotate-0 transition-transform duration-500 iconify--lucide" data-icon="lucide:arrow-up-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 7h10v10M7 17L17 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<p className="text-red-500 text-xs font-mono uppercase tracking-widest mb-2">Automotive</p>
+<h3 className="text-2xl font-semibold text-white tracking-tight">Apex Velocity</h3>
+</div>
+</div>
+</div>
+
+<div className="group relative aspect-[3/4] overflow-hidden cursor-pointer rounded-sm border border-white/5 fade-up" style={{}}>
+<video autoplay="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-70 group-hover:opacity-100" loop="" muted="" playsinline="" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg">
+<source src="https://videos.pexels.com/video-files/4057317/4057317-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+</video>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-500"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-between">
+<div className="flex group-hover:opacity-100 transition-opacity duration-500 -translate-y-4 group-hover:translate-y-0 opacity-0 items-start justify-between">
+<span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest text-white border border-white/10">2024</span>
+<svg aria-hidden="true" className="iconify text-white rotate-45 group-hover:rotate-0 transition-transform duration-500 iconify--lucide" data-icon="lucide:arrow-up-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</div>
+<div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<p className="text-red-500 text-xs font-mono uppercase tracking-widest mb-2">Music Video</p>
+<h3 className="text-2xl font-semibold text-white tracking-tight">Neon Nights</h3>
+</div>
+</div>
+</div>
+
+<div className="group relative aspect-[3/4] overflow-hidden cursor-pointer rounded-sm border border-white/5 fade-up" style={{}}>
+<video autoplay="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-70 group-hover:opacity-100" loop="" muted="" playsinline="" poster="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&amp;w=2874&amp;auto=format&amp;fit=crop">
+<source src="https://videos.pexels.com/video-files/3205915/3205915-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+</video>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-500"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-between">
+<div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-y-4 group-hover:translate-y-0">
+<span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest text-white border border-white/10">2023</span>
+<svg aria-hidden="true" className="iconify text-white rotate-45 group-hover:rotate-0 transition-transform duration-500 iconify--lucide" data-icon="lucide:arrow-up-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</div>
+<div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<p className="text-red-500 text-xs font-mono uppercase tracking-widest mb-2">Fashion</p>
+<h3 className="text-2xl font-semibold text-white tracking-tight">Vogue Noir</h3>
+</div>
+</div>
+</div>
+
+<div className="group relative aspect-[3/4] overflow-hidden cursor-pointer rounded-sm border border-white/5 fade-up">
+<video autoplay="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-70 group-hover:opacity-100" loop="" muted="" playsinline="" poster="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&amp;w=2788&amp;auto=format&amp;fit=crop">
+<source src="https://videos.pexels.com/video-files/3752535/3752535-hd_1920_1080_24fps.mp4" type="video/mp4"/>
+</video>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-500"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-between">
+<div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-y-4 group-hover:translate-y-0">
+<span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest text-white border border-white/10">2023</span>
+<svg aria-hidden="true" className="iconify text-white rotate-45 group-hover:rotate-0 transition-transform duration-500 iconify--lucide" data-icon="lucide:arrow-up-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 7h10v10M7 17L17 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<p className="text-red-500 text-xs font-mono uppercase tracking-widest mb-2">Experimental</p>
+<h3 className="text-2xl font-semibold text-white tracking-tight">Chromatic Echo</h3>
+</div>
+</div>
+</div>
+
+<div className="group relative aspect-[3/4] overflow-hidden cursor-pointer rounded-sm border border-white/5 fade-up" style={{}}>
+<video autoplay="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-70 group-hover:opacity-100" loop="" muted="" playsinline="" poster="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&amp;w=2942&amp;auto=format&amp;fit=crop">
+<source src="https://videos.pexels.com/video-files/853870/853870-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+</video>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-500"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-between">
+<div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-y-4 group-hover:translate-y-0">
+<span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest text-white border border-white/10">2024</span>
+<svg aria-hidden="true" className="iconify text-white rotate-45 group-hover:rotate-0 transition-transform duration-500 iconify--lucide" data-icon="lucide:arrow-up-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</div>
+<div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<p className="text-red-500 text-xs font-mono uppercase tracking-widest mb-2">Documentary</p>
+<h3 className="text-2xl font-semibold text-white tracking-tight">Terra Firma</h3>
+</div>
+</div>
+</div>
+
+<div className="group relative aspect-[3/4] overflow-hidden cursor-pointer rounded-sm border border-white/5 fade-up" style={{}}>
+<video autoplay="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-70 group-hover:opacity-100" loop="" muted="" playsinline="" poster="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&amp;w=2940&amp;auto=format&amp;fit=crop">
+<source src="https://videos.pexels.com/video-files/3195394/3195394-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+</video>
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-500"></div>
+<div className="absolute inset-0 p-8 flex flex-col justify-between">
+<div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-y-4 group-hover:translate-y-0">
+<span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest text-white border border-white/10">2023</span>
+<svg aria-hidden="true" className="iconify text-white rotate-45 group-hover:rotate-0 transition-transform duration-500 iconify--lucide" data-icon="lucide:arrow-up-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</div>
+<div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<p className="text-red-500 text-xs font-mono uppercase tracking-widest mb-2">Tech</p>
+<h3 className="text-2xl font-semibold text-white tracking-tight">Quantum Leap</h3>
+</div>
+</div>
+</div>
+</div>
+<div className="mt-16 text-center fade-up">
+<a className="inline-flex items-center justify-center gap-2 text-sm text-neutral-400 hover:text-white transition-colors uppercase tracking-widest group" href="#">
+                    View Full Archive
+                    <svg aria-hidden="true" className="iconify group-hover:translate-x-1 transition-transform iconify--lucide" data-icon="lucide:arrow-right" data-width="16" height="16" role="img" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-32 relative overflow-hidden" id="services">
+
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-900/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div className="max-w-7xl mx-auto px-6 relative z-10">
+<div className="mb-16 fade-up">
+<span className="text-red-500 font-mono text-xs uppercase tracking-widest mb-2 block">03 / Ekspertyza</span>
+<h2 className="text-4xl font-semibold tracking-tighter text-white">Usługi</h2>
+</div>
+
+<div className="grid md:grid-cols-3 gap-0 border border-white/10 bg-black">
+
+<div className="group hover-border-glow p-10 border-r border-b border-white/10 hover:bg-white/[0.02] transition-colors fade-up">
+<div className="w-12 h-12 bg-neutral-900 rounded-sm flex items-center justify-center mb-8 border border-white/5 group-hover:border-red-500/50 transition-colors">
+<svg aria-hidden="true" className="iconify text-neutral-300 group-hover:text-red-500 transition-colors iconify--lucide" data-icon="lucide:film" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 3v18M3 7.5h4M3 12h18M3 16.5h4M17 3v18m0-13.5h4m-4 9h4"></path></g></svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-3">Pre-Production</h3>
+<p className="text-sm text-neutral-400 leading-relaxed">Concept development, scriptwriting, and storyboarding. We lay the foundation for visual excellence.</p>
+</div>
+
+<div className="group hover-border-glow p-10 border-r border-b border-white/10 hover:bg-white/[0.02] transition-colors fade-up" style={{}}>
+<div className="w-12 h-12 bg-neutral-900 rounded-sm flex items-center justify-center mb-8 border border-white/5 group-hover:border-red-500/50 transition-colors">
+<svg aria-hidden="true" className="iconify text-neutral-300 group-hover:text-red-500 transition-colors iconify--lucide" data-icon="lucide:video" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="m16 13l5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path><rect height="12" rx="2" width="14" x="2" y="6"></rect></g></svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-3">Production</h3>
+<p className="text-sm text-neutral-400 leading-relaxed">High-end cinematography, directing, and on-set management using state-of-the-art cinema gear.</p>
+</div>
+
+<div className="group hover-border-glow p-10 border-b border-white/10 hover:bg-white/[0.02] transition-colors fade-up" style={{}}>
+<div className="w-12 h-12 bg-neutral-900 rounded-sm flex items-center justify-center mb-8 border border-white/5 group-hover:border-red-500/50 transition-colors">
+<svg aria-hidden="true" className="iconify text-neutral-300 group-hover:text-red-500 transition-colors iconify--lucide" data-icon="lucide:scissors" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12L12 12m8-8L8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8L20 20"></path></g></svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-3">Post-Production</h3>
+<p className="text-sm text-neutral-400 leading-relaxed">Editing, VFX, and sound mixing. We sculpt the raw footage into a polished narrative.</p>
+</div>
+
+<div className="group hover-border-glow p-10 border-r border-white/10 hover:bg-white/[0.02] transition-colors fade-up">
+<div className="w-12 h-12 bg-neutral-900 rounded-sm flex items-center justify-center mb-8 border border-white/5 group-hover:border-red-500/50 transition-colors">
+<svg aria-hidden="true" className="iconify text-neutral-300 group-hover:text-red-500 transition-colors iconify--lucide" data-icon="lucide:palette" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M12 22a1 1 0 0 1 0-20a10 9 0 0 1 10 9a5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle></g></svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-3">Color Grading</h3>
+<p className="text-sm text-neutral-400 leading-relaxed">Defining mood and tone through expert color science. Davinci Resolve certified workflow.</p>
+</div>
+
+<div className="group hover-border-glow p-10 border-r border-white/10 hover:bg-white/[0.02] transition-colors fade-up" style={{}}>
+<div className="w-12 h-12 bg-neutral-900 rounded-sm flex items-center justify-center mb-8 border border-white/5 group-hover:border-red-500/50 transition-colors">
+<svg aria-hidden="true" className="iconify text-neutral-300 group-hover:text-red-500 transition-colors iconify--lucide" data-icon="lucide:music-2" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><circle cx="8" cy="18" r="4"></circle><path d="M12 18V2l7 4"></path></g></svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-3">Sound Design</h3>
+<p className="text-sm text-neutral-400 leading-relaxed">Immersive audio landscapes that heighten emotional impact. Composition and SFX.</p>
+</div>
+
+<div className="group hover-border-glow p-10 hover:bg-white/[0.02] transition-colors fade-up" style={{}}>
+<div className="w-12 h-12 bg-neutral-900 rounded-sm flex items-center justify-center mb-8 border border-white/5 group-hover:border-red-500/50 transition-colors">
+<svg aria-hidden="true" className="iconify text-neutral-300 group-hover:text-red-500 transition-colors iconify--lucide" data-icon="lucide:monitor-play" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56zM12 17v4m-4 0h8"></path><rect height="14" rx="2" width="20" x="2" y="3"></rect></g></svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-3">Motion Graphics</h3>
+<p className="text-sm text-neutral-400 leading-relaxed">2D and 3D animation to explain complex concepts or add flair to your visual identity.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-[#080808]">
+<div className="max-w-7xl mx-auto px-6 mb-12 fade-up">
+<span className="text-red-500 font-mono text-xs uppercase tracking-widest mb-2 block">04 / Behind the Scenes</span>
+<h2 className="text-3xl font-semibold tracking-tighter text-white">On Location</h2>
+</div>
+<div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 grid-rows-2 gap-4 h-[600px]">
+<div className="col-span-2 row-span-2 relative group overflow-hidden rounded-sm fade-up">
+<img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-100 filter grayscale group-hover:grayscale-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5bab247f-35d9-400d-a82b-fd87cfe913d2_1600w.webp"/>
+<div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 text-[10px] text-white uppercase tracking-widest border border-white/10">Set Life</div>
+</div>
+<div className="col-span-1 row-span-1 relative group overflow-hidden rounded-sm fade-up" style={{}}>
+<img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-100 filter grayscale group-hover:grayscale-0" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&amp;w=2918&amp;auto=format&amp;fit=crop"/>
+</div>
+<div className="col-span-1 row-span-2 relative group overflow-hidden rounded-sm fade-up" style={{}}>
+<img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-100 filter grayscale group-hover:grayscale-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/30104e3c-5eea-4b93-93e9-5313698a7156_1600w.webp"/>
+</div>
+<div className="col-span-1 row-span-1 relative group overflow-hidden rounded-sm fade-up" style={{}}>
+<img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-100 filter grayscale group-hover:grayscale-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
+</div>
+</div>
+</section>
+
+<section className="py-32 relative bg-neutral-950 border-t border-white/5 overflow-hidden" id="contact">
+<div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 relative z-10">
+<div className="fade-up">
+<h2 className="text-6xl md:text-7xl font-semibold tracking-tighter text-white mb-8">
+                    Let's make <br/>
+<span className="text-neutral-600">history.</span>
+</h2>
+<p className="text-neutral-400 text-lg font-light mb-12 max-w-md">
+                    We are currently accepting new projects for Q4 2023. Reach out to discuss your vision.
+                </p>
+<div className="space-y-8">
+<a className="group flex items-center gap-6 text-white hover:text-red-500 transition-colors" href="mailto:hello@kabovelo.com">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-red-500 transition-colors">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:mail" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="m22 7l-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></g></svg>
+</div>
+<div>
+<span className="block text-xs text-neutral-500 uppercase tracking-widest mb-1">napisz do mnie</span>
+<span className="text-xl font-medium">kontakt@mateuszwisniewski.pl</span>
+</div>
+</a>
+<a className="group flex items-center gap-6 text-white hover:text-red-500 transition-colors" href="#">
+<div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-red-500 transition-colors">
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:instagram" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8A4 4 0 0 1 16 11.37m1.5-4.87h.01"></path></g></svg>
+</div>
+<div>
+<span className="block text-xs text-neutral-500 uppercase tracking-widest mb-1">Zaobserwuj mnie</span>
+<span className="text-xl font-medium">@mwmotion</span>
+</div>
+</a>
+</div>
+</div>
+<div className="bg-neutral-900/30 p-10 border border-white/10 rounded-sm backdrop-blur-sm fade-up" style={{}}>
+<form className="space-y-8">
+<div className="grid md:grid-cols-2 gap-8">
+<div className="group relative">
+<input className="peer w-full bg-transparent border-b border-neutral-700 py-3 text-white focus:outline-none focus:border-red-500 transition-colors placeholder-transparent" id="name" placeholder="Name" type="text"/>
+<label className="absolute left-0 -top-3.5 text-xs text-neutral-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-neutral-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-red-500" htmlFor="name">Name</label>
+</div>
+<div className="group relative">
+<input className="peer w-full bg-transparent border-b border-neutral-700 py-3 text-white focus:outline-none focus:border-red-500 transition-colors placeholder-transparent" id="email" placeholder="Email" type="email"/>
+<label className="absolute left-0 -top-3.5 text-xs text-neutral-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-neutral-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-red-500" htmlFor="email">Email</label>
+</div>
+</div>
+<div className="group relative">
+<input className="peer w-full bg-transparent border-b border-neutral-700 py-3 text-white focus:outline-none focus:border-red-500 transition-colors placeholder-transparent" id="budget" placeholder="Budget" type="text"/>
+<label className="absolute left-0 -top-3.5 text-xs text-neutral-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-neutral-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-red-500" htmlFor="budget">Estimated Budget</label>
+</div>
+<div className="group relative">
+<textarea className="peer w-full bg-transparent border-b border-neutral-700 py-3 text-white focus:outline-none focus:border-red-500 transition-colors placeholder-transparent resize-none" id="message" placeholder="Message" rows="4"></textarea>
+<label className="absolute left-0 -top-3.5 text-xs text-neutral-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-neutral-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-red-500" htmlFor="message">Project Details</label>
+</div>
+<button className="w-full py-5 bg-white text-black font-semibold uppercase tracking-widest hover:bg-neutral-200 transition-all flex items-center justify-center gap-3 group">
+                        Send Inquiry
+                        <svg aria-hidden="true" className="iconify group-hover:translate-x-1 transition-transform iconify--lucide" data-icon="lucide:arrow-right" data-width="18" height="18" role="img" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+</button>
+</form>
+</div>
+</div>
+</section>
+
+<footer className="bg-black py-12 border-t border-white/5">
+<div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+<span className="animate-pulse w-12 h-12 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e52be77d-5f76-406d-93e7-ead640b6d6d6_320w.png)] bg-cover bg-center rounded-full"></span>
+<p className="text-neutral-600 text-xs">© 2026 Mateusz Wiśniewski. Wszystkie prawa zastrzeżone.</p>
+</div>
+</footer>
+
+
+
+    </>
+  );
+}

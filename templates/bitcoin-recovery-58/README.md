@@ -1,0 +1,14 @@
+# Bitcoin Recovery Services Landing Page Template
+
+A reusable landing page template for promoting secure bitcoin wallet and device data recovery services with trust-building content, FAQs, and process sections.
+
+## Project Details
+- **Slug:** `bitcoin-recovery-58`
+- **Views:** 62
+- **Tags:** Landing Page, Services, Technology, Clean, Minimal, Dark, security, cryptocurrency, data recovery
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

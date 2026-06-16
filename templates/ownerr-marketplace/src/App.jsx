@@ -1,0 +1,706 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+brand: {
+50: '#f0fdfa',
+100: '#ccfbf1',
+500: '#14b8a6',
+600: '#0d9488',
+900: '#134e4a',
+}
+}
+}
+}
+}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+  (function () {
+    function ensureInit() {
+      if (window.UnicornStudio && window.UnicornStudio.init) {
+        if (!window.UnicornStudio.isInitialized) {
+          window.UnicornStudio.init();
+          window.UnicornStudio.isInitialized = true;
+        }
+        return true;
+      }
+      return false;
+    }
+
+    if (ensureInit()) return;
+
+    if (!window.UnicornStudio) window.UnicornStudio = { isInitialized: false };
+
+    var existing = document.querySelector('script[data-us-loader="1"]');
+    if (existing) {
+      // loader is coming, retry a few times
+      var tries = 0;
+      var t = setInterval(function () {
+        tries++;
+        if (ensureInit() || tries > 40) clearInterval(t);
+      }, 100);
+      return;
+    }
+
+    var s = document.createElement("script");
+    s.setAttribute("data-us-loader", "1");
+    s.src =
+      "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.0-1/dist/unicornStudio.umd.js";
+    s.onload = function () {
+      ensureInit();
+    };
+    (document.head || document.body).appendChild(s);
+  })();
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="aura-background-component fixed top-0 w-full h-screen -z-10" data-alpha-mask="80" style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}><div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+<div className="absolute inset-0 opacity-60 mix-blend-screen">
+<div className="absolute inset-0 w-full h-full" data-us-dpi="1.5" data-us-fps="60" data-us-lazyload="true" data-us-production="true" data-us-project="0bj47BRhqOMrgLlpMNC0"></div>
+</div>
+</div>
+</div>
+
+<nav className="sticky top-0 z-50 backdrop-blur-md border-b bg-black/80 border-gray-800">
+<div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+
+<a className="flex items-center gap-2" href="#">
+<span className="tracking-tighter text-xl text-gray-100 font-instrument-serif font-normal">OWNERR.</span>
+</a>
+
+<div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
+<a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Browse Startups</a>
+<a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">How It Works</a>
+<a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Financing</a>
+<a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Analytics</a>
+<a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Trust &amp; Verification</a>
+<a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Pricing</a>
+</div>
+
+<div className="hidden md:flex items-center gap-4">
+<a className="text-sm font-medium transition-colors text-gray-400 hover:text-gray-100 font-instrument-serif" href="#">Login</a>
+<a className="text-sm font-medium px-4 py-2 rounded-lg transition-colors shadow-sm bg-gray-100 text-black hover:bg-gray-200 font-instrument-serif" href="#">Get Started</a>
+</div>
+
+<button className="md:hidden text-gray-400">
+<iconify-icon className="text-2xl" icon="solar:hamburger-menu-linear"></iconify-icon>
+</button>
+</div>
+</nav>
+<main className="">
+
+<section className="overflow-hidden pt-24 pb-20 relative">
+
+<div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-gray-950 to-gray-950"></div>
+<div className="max-w-4xl mx-auto px-6 text-center">
+<h1 className="text-4xl md:text-5xl lg:text-6xl tracking-tight mb-6 leading-tight text-gray-100 font-instrument-serif font-normal">
+                    Acquire and Sell SaaS Startups with <span className="text-gray-500 font-instrument-serif font-normal">Verified Data</span> and Built-In Financing.
+                </h1>
+<p className="text-base md:text-lg text-gray-500 mb-10 max-w-3xl mx-auto leading-relaxed font-instrument-serif">
+                    Ownerr.io helps founders and investors close startup acquisition deals using verified revenue data, Business Score analytics, LendScore financial eligibility, and secure escrow infrastructure.
+                </p>
+
+<div className="p-2 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-2 mb-10 relative z-20 bg-black border-gray-800">
+<div className="flex-1 w-full flex items-center px-4 py-2 md:py-0 border-b md:border-b-0 md:border-r border-gray-900">
+<iconify-icon className="text-lg shrink-0 text-gray-600" icon="solar:magnifer-linear"></iconify-icon>
+<input className="w-full bg-transparent border-none focus:ring-0 text-sm px-3 py-2 outline-none placeholder:text-gray-400 text-gray-100" placeholder="Search startups, keywords..." type="text"/>
+</div>
+<div className="w-full md:w-auto flex items-center px-4 py-2 md:py-0 border-b md:border-b-0 md:border-r relative group cursor-pointer border-gray-900">
+<iconify-icon className="text-lg shrink-0 text-gray-600" icon="solar:chart-square-linear"></iconify-icon>
+<select className="w-full bg-transparent border-none focus:ring-0 text-sm px-3 py-2 outline-none appearance-none cursor-pointer text-gray-400">
+<option className="font-instrument-serif">Any MRR</option>
+<option className="font-instrument-serif">$1k - $5k</option>
+<option className="font-instrument-serif">$5k - $20k</option>
+<option className="font-instrument-serif">$20k+</option>
+</select>
+<iconify-icon className="absolute right-4 pointer-events-none text-gray-600" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</div>
+<div className="w-full md:w-auto flex items-center px-4 py-2 md:py-0 relative group cursor-pointer">
+<iconify-icon className="text-lg shrink-0 text-gray-600" icon="solar:tag-linear"></iconify-icon>
+<select className="w-full bg-transparent border-none focus:ring-0 text-sm px-3 py-2 outline-none appearance-none cursor-pointer text-gray-400">
+<option className="font-instrument-serif">All Categories</option>
+<option className="font-instrument-serif">B2B SaaS</option>
+<option className="font-instrument-serif">E-commerce</option>
+<option className="font-instrument-serif">AI Tools</option>
+</select>
+<iconify-icon className="absolute right-4 pointer-events-none text-gray-600" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</div>
+<button className="w-full md:w-auto px-6 py-3 rounded-xl text-sm font-medium transition-colors shadow-sm shrink-0 bg-gray-100 text-black hover:bg-gray-200 font-instrument-serif">
+                        Search
+                    </button>
+</div>
+
+<div className="flex items-center justify-center gap-4">
+<a className="px-6 py-3 rounded-lg border text-sm font-medium shadow-sm transition-colors bg-black border-gray-800 text-gray-100 hover:bg-gray-950 font-instrument-serif" href="#">Browse Startups</a>
+<a className="px-6 py-3 rounded-lg border text-sm font-medium shadow-sm transition-colors bg-black border-gray-800 text-gray-400 hover:bg-gray-950 hover:text-gray-100 font-instrument-serif" href="#">List Your Startup</a>
+</div>
+</div>
+</section>
+
+<section className="border-y border-gray-800 bg-black">
+<div className="max-w-7xl mx-auto px-6 py-12">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-gray-900">
+<div className="flex flex-col items-center">
+<span className="text-3xl tracking-tight mb-1 text-gray-100 font-instrument-serif font-normal">3,000+</span>
+<span className="text-xs text-gray-500 font-medium uppercase tracking-widest font-instrument-serif">Startups Listed</span>
+</div>
+<div className="flex flex-col items-center">
+<span className="text-3xl tracking-tight mb-1 text-gray-100 font-instrument-serif font-normal">15,000+</span>
+<span className="text-xs text-gray-500 font-medium uppercase tracking-widest font-instrument-serif">Active Buyers</span>
+</div>
+<div className="flex flex-col items-center">
+<span className="text-3xl tracking-tight mb-1 text-gray-100 font-instrument-serif font-normal">90%</span>
+<span className="text-xs text-gray-500 font-medium uppercase tracking-widest font-instrument-serif">Revenue Verified</span>
+</div>
+<div className="flex flex-col items-center">
+<span className="text-3xl tracking-tight mb-1 text-gray-100 font-instrument-serif font-normal">$100M+</span>
+<span className="text-xs text-gray-500 font-medium uppercase tracking-widest font-instrument-serif">Marketplace Volume</span>
+</div>
+</div>
+</div>
+</section>
+
+<section className="max-w-7xl mr-auto ml-auto pt-24 pr-6 pb-24 pl-6">
+<div className="text-center max-w-2xl mx-auto mb-16">
+<h2 className="text-2xl md:text-3xl tracking-tight mb-4 text-gray-100 font-instrument-serif font-normal">Intelligence meets Marketplace</h2>
+<p className="text-sm text-gray-500 leading-relaxed font-instrument-serif">Everything you need to confidently evaluate, finance, and acquire profitable software businesses.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+<div className="hover:shadow-md transition-shadow overflow-hidden group bg-black border-gray-800 border rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-[0_2px_10px_-3px_rgba(0,0,0,0.03)]">
+<div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-purple-950 text-purple-400">
+<iconify-icon className="text-2xl" icon="solar:pulse-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-gray-100 font-instrument-serif">Business Score Engine</h3>
+<p className="text-sm text-gray-500 leading-relaxed mb-6 font-instrument-serif">Automatically analyzes startup quality using metrics such as MRR growth, churn rate, customer retention, and traffic patterns to give you a clear assessment.</p>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-gray-950 border-gray-900">
+<div className="w-2 h-2 rounded-full bg-purple-500"></div>
+<span className="text-xs font-medium text-gray-300 font-instrument-serif">Example Score: 82/100</span>
+</div>
+</div>
+
+<div className="rounded-2xl p-8 border shadow-[0_2px_10px_-3px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow relative overflow-hidden group bg-black border-gray-800">
+<div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-blue-950 text-blue-400">
+<iconify-icon className="text-2xl" icon="solar:shield-check-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-gray-100 font-instrument-serif">LendScore Verification</h3>
+<p className="text-sm text-gray-500 leading-relaxed font-instrument-serif">Verifies buyer and seller financial health using secure bank account data connections and financial signals to determine eligibility for acquisition financing.</p>
+</div>
+
+<div className="rounded-2xl p-8 border shadow-[0_2px_10px_-3px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow relative overflow-hidden group bg-black border-gray-800">
+<div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-pink-950 text-pink-400">
+<iconify-icon className="text-2xl" icon="solar:chart-square-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-gray-100 font-instrument-serif">Verified Revenue Analytics</h3>
+<p className="text-sm text-gray-500 leading-relaxed mb-6 font-instrument-serif">Sellers connect payment gateways like Stripe or LemonSqueezy. We automatically import MRR, ARR, and subscription data so buyers can trust the numbers.</p>
+<div className="flex items-center gap-2">
+<span className="text-xs font-medium px-2 py-1 rounded bg-gray-900 text-gray-400 font-instrument-serif">Stripe Sync</span>
+<span className="text-xs font-medium px-2 py-1 rounded bg-gray-900 text-gray-400 font-instrument-serif">LemonSqueezy Sync</span>
+</div>
+</div>
+
+<div className="rounded-2xl p-8 border shadow-[0_2px_10px_-3px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow relative overflow-hidden group bg-black border-gray-800">
+<div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-brand-950 text-brand-400">
+<iconify-icon className="text-2xl" icon="solar:banknotes-linear"></iconify-icon>
+</div>
+<h3 className="text-lg font-semibold mb-2 text-gray-100 font-instrument-serif">Integrated Acquisition Financing</h3>
+<p className="text-sm text-gray-500 leading-relaxed font-instrument-serif">Buyers can apply for financing directly through our lending partners to acquire startups, even if they do not have full capital available upfront.</p>
+</div>
+</div>
+</section>
+
+<section className="py-24 border-y overflow-hidden bg-black border-gray-800">
+<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+<div className="">
+<h2 className="text-2xl md:text-3xl tracking-tight mb-8 text-gray-100 font-instrument-serif font-normal">How the marketplace works</h2>
+<div className="space-y-8 relative before:absolute before:inset-y-2 before:left-[19px] before:w-px before:bg-gray-100">
+<div className="flex gap-6 relative z-10 group">
+<div className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0 shadow-sm group-hover:border-gray-900 group-hover:text-gray-900 text-gray-500 transition-colors bg-black border-gray-800">
+<span className="text-sm font-medium font-instrument-serif">1</span>
+</div>
+<div className="pt-2">
+<h4 className="text-sm font-semibold mb-1 text-gray-100 font-instrument-serif">Create Account &amp; Verify</h4>
+<p className="text-sm text-gray-500 leading-relaxed font-instrument-serif">Verify identity, bank account, and build your financial profile securely.</p>
+</div>
+</div>
+<div className="flex gap-6 relative z-10 group">
+<div className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0 shadow-sm group-hover:border-gray-900 group-hover:text-gray-900 text-gray-500 transition-colors bg-black border-gray-800">
+<span className="text-sm font-medium font-instrument-serif">2</span>
+</div>
+<div className="pt-2">
+<h4 className="text-sm font-semibold mb-1 text-gray-100 font-instrument-serif">Connect APIs or Browse</h4>
+<p className="text-sm text-gray-500 leading-relaxed font-instrument-serif">Sellers connect revenue APIs to list startups. Buyers browse verified listings instantly.</p>
+</div>
+</div>
+<div className="flex gap-6 relative z-10 group">
+<div className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0 shadow-sm group-hover:border-gray-900 group-hover:text-gray-900 text-gray-500 transition-colors bg-black border-gray-800">
+<span className="text-sm font-medium font-instrument-serif">3</span>
+</div>
+<div className="pt-2">
+<h4 className="text-sm font-semibold mb-1 text-gray-100 font-instrument-serif">Score &amp; Analyze</h4>
+<p className="text-sm text-gray-500 leading-relaxed font-instrument-serif">The platform calculates the Business Score and opens access to deep analytics dashboards.</p>
+</div>
+</div>
+<div className="flex gap-6 relative z-10 group">
+<div className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0 shadow-sm group-hover:border-gray-900 group-hover:text-gray-900 text-gray-500 transition-colors bg-black border-gray-800">
+<span className="text-sm font-medium font-instrument-serif">4</span>
+</div>
+<div className="pt-2">
+<h4 className="text-sm font-semibold mb-1 text-gray-100 font-instrument-serif">Negotiate, Finance &amp; Close</h4>
+<p className="text-sm text-gray-500 leading-relaxed font-instrument-serif">Negotiate terms, apply for built-in financing if needed, and close deals safely through escrow.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div className="relative">
+<div className="absolute -inset-0.5 bg-gradient-to-r rounded-2xl blur opacity-50 from-gray-800 to-gray-900"></div>
+<div className="relative rounded-2xl border shadow-xl overflow-hidden bg-black border-gray-800">
+
+<div className="px-6 py-4 border-b flex justify-between items-center border-gray-900 bg-gray-950/50">
+<div className="flex items-center gap-2">
+<div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
+<span className="text-xs font-medium text-gray-400 font-instrument-serif">Live API Sync</span>
+</div>
+<div className="flex gap-1.5">
+<div className="w-2 h-2 rounded-full bg-gray-700"></div>
+<div className="w-2 h-2 rounded-full bg-gray-700"></div>
+<div className="w-2 h-2 rounded-full bg-gray-700"></div>
+</div>
+</div>
+<div className="p-6">
+
+<div className="flex items-center justify-between mb-8">
+<div className="">
+<div className="text-xs text-gray-500 mb-1 uppercase tracking-wider font-medium font-instrument-serif">Monthly Recurring Revenue</div>
+<div className="text-3xl tracking-tight text-gray-100 font-instrument-serif font-normal">$12,450</div>
+</div>
+<div className="text-right">
+<div className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-md text-purple-400 bg-purple-950 font-instrument-serif">
+<iconify-icon icon="solar:trend-up-linear"></iconify-icon>
+                                        +14.2% YoY
+                                    </div>
+</div>
+</div>
+
+<div className="h-40 border-b border-l relative flex items-end gap-2 px-2 pb-2 border-gray-900">
+
+<div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div className="border-t w-full h-0 border-gray-950"></div>
+<div className="border-t w-full h-0 border-gray-950"></div>
+<div className="border-t w-full h-0 border-gray-950"></div>
+<div className="border-t w-full h-0 border-gray-950"></div>
+</div>
+
+<div className="w-full rounded-t h-[40%] transition-colors relative z-10 bg-blue-950 hover:bg-blue-900"></div>
+<div className="w-full rounded-t h-[45%] transition-colors relative z-10 bg-blue-950 hover:bg-blue-900"></div>
+<div className="w-full rounded-t h-[35%] transition-colors relative z-10 bg-blue-950 hover:bg-blue-900"></div>
+<div className="w-full rounded-t h-[55%] transition-colors relative z-10 bg-blue-900 hover:bg-blue-800"></div>
+<div className="w-full rounded-t h-[60%] transition-colors relative z-10 bg-blue-900 hover:bg-blue-800"></div>
+<div className="w-full rounded-t h-[75%] transition-colors relative z-10 bg-blue-800 hover:bg-blue-700"></div>
+<div className="w-full bg-blue-500 rounded-t h-[90%] transition-colors relative shadow-[0_4px_12px_rgba(99,102,241,0.2)] z-10 hover:bg-blue-400"></div>
+</div>
+<div className="flex justify-between text-xs mt-2 font-medium uppercase text-gray-600">
+<span className="font-instrument-serif">Jan</span>
+<span className="font-instrument-serif">Feb</span>
+<span className="font-instrument-serif">Mar</span>
+<span className="font-instrument-serif">Apr</span>
+<span className="font-instrument-serif">May</span>
+<span className="font-instrument-serif">Jun</span>
+<span className="font-instrument-serif">Jul</span>
+</div>
+
+<div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-900">
+<div className="">
+<div className="text-xs uppercase tracking-wider mb-1 text-gray-600 font-instrument-serif">Traffic (Monthly)</div>
+<div className="text-sm font-semibold text-gray-100 font-instrument-serif">45.2K Uniques</div>
+</div>
+<div>
+<div className="text-xs uppercase tracking-wider mb-1 text-gray-600 font-instrument-serif">Customer Churn</div>
+<div className="text-sm font-semibold text-gray-100 font-instrument-serif">2.1% Avg</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 max-w-7xl mx-auto px-6">
+<div className="flex justify-between items-end mb-10">
+<div className="">
+<h2 className="text-2xl md:text-3xl tracking-tight mb-2 text-gray-100 font-instrument-serif font-normal">Featured Listings</h2>
+<p className="text-sm text-gray-500 font-instrument-serif">Discover vetted SaaS startups currently open for acquisition.</p>
+</div>
+<a className="hidden md:flex items-center gap-1 text-sm font-medium transition-colors text-gray-100 hover:text-gray-400 font-instrument-serif" href="#">
+                    View Marketplace
+                    <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+<a className="group rounded-2xl border shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-lg transition-all overflow-hidden flex flex-col bg-black border-gray-800" href="#">
+<div className="p-5 border-b flex justify-between items-start border-gray-900 bg-gray-950/50">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-inner border border-gray-800 bg-gradient-to-br from-gray-800 to-gray-950">
+<iconify-icon className="text-xl text-blue-400" icon="solar:chart-square-bold-duotone"></iconify-icon>
+</div>
+<div className="">
+<h3 className="font-semibold text-sm text-gray-100 font-instrument-serif">Nexus Analytics</h3>
+<div className="text-xs text-gray-500 font-instrument-serif">B2B SaaS</div>
+</div>
+</div>
+<div className="flex items-center gap-1 border rounded-full px-2 py-1 shadow-sm bg-black border-gray-800">
+<div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]"></div>
+<span className="text-xs font-semibold text-gray-300 font-instrument-serif">Verified</span>
+</div>
+</div>
+<div className="p-5 flex-1 space-y-4">
+<div className="grid grid-cols-2 gap-4">
+<div className="">
+<div className="text-xs uppercase tracking-wider mb-0.5 text-gray-600 font-instrument-serif">Verified MRR</div>
+<div className="text-lg tracking-tight font-semibold text-gray-100 font-instrument-serif">$7,120</div>
+</div>
+<div>
+<div className="text-xs uppercase tracking-wider mb-0.5 text-gray-600 font-instrument-serif">Asking Price</div>
+<div className="text-lg tracking-tight font-semibold text-gray-100 font-instrument-serif">$325,000</div>
+</div>
+</div>
+
+<div className="grid grid-cols-2 gap-4 pt-2">
+<div>
+<div className="flex justify-between text-xs text-gray-500 mb-1.5 uppercase tracking-wider font-instrument-serif">
+<span>Biz Score</span>
+<span className="text-blue-400 font-medium">88</span>
+</div>
+<div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
+<div className="h-full bg-blue-500 w-[88%] rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+</div>
+</div>
+<div>
+<div className="flex justify-between text-xs text-gray-500 mb-1.5 uppercase tracking-wider font-instrument-serif">
+<span>Risk</span>
+<span className="text-green-400 font-medium">Low</span>
+</div>
+<div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
+<div className="h-full bg-green-500 w-[20%] rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+</div>
+</div>
+</div>
+
+<div className="h-20 w-full rounded-lg border border-gray-800 bg-gray-950/80 relative flex justify-between items-end px-2 py-1 gap-1 overflow-hidden mt-2">
+<div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-20">
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+</div>
+
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[30%] bottom-[10%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[15%] bottom-[15%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[35%] bottom-[15%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[20%] bottom-[20%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[40%] bottom-[20%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[10%] bottom-[25%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[50%] bottom-[20%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[25%] bottom-[30%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[40%] bottom-[40%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[20%] bottom-[45%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[55%] bottom-[30%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[30%] bottom-[45%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[30%] bottom-[50%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[15%] bottom-[55%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[50%] bottom-[40%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[25%] bottom-[55%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[40%] bottom-[60%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[20%] bottom-[65%] rounded-sm"></div></div>
+</div>
+<div className="flex items-center gap-3 text-xs text-gray-500 pt-2 border-t border-gray-900">
+<span className="flex items-center gap-1 font-instrument-serif"><iconify-icon icon="solar:users-group-rounded-linear"></iconify-icon> 142 Subs</span>
+<span className="flex items-center gap-1 font-instrument-serif"><iconify-icon icon="solar:routing-2-linear"></iconify-icon> 12k Traffic</span>
+</div>
+</div>
+<div className="px-5 py-3 border-t flex items-center justify-center gap-2 bg-brand-950/50 border-brand-900 text-brand-300">
+<iconify-icon className="text-sm" icon="solar:wallet-money-linear"></iconify-icon>
+<span className="text-xs font-medium font-instrument-serif">Financing Eligible</span>
+</div>
+</a>
+
+<a className="group rounded-2xl border shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-lg transition-all overflow-hidden flex flex-col bg-black border-gray-800" href="#">
+<div className="p-5 border-b flex justify-between items-start border-gray-900 bg-gray-950/50">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-inner border border-gray-800 bg-gradient-to-br from-blue-900 to-gray-950">
+<iconify-icon className="text-xl text-cyan-400" icon="solar:cloud-bold-duotone"></iconify-icon>
+</div>
+<div>
+<h3 className="font-semibold text-sm text-gray-100 font-instrument-serif">CloudSync</h3>
+<div className="text-xs text-gray-500 font-instrument-serif">Dev Tools</div>
+</div>
+</div>
+<div className="flex items-center gap-1 border rounded-full px-2 py-1 shadow-sm bg-black border-gray-800">
+<div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]"></div>
+<span className="text-xs font-semibold text-gray-300 font-instrument-serif">Verified</span>
+</div>
+</div>
+<div className="p-5 flex-1 space-y-4">
+<div className="grid grid-cols-2 gap-4">
+<div>
+<div className="text-xs uppercase tracking-wider mb-0.5 text-gray-600 font-instrument-serif">Verified MRR</div>
+<div className="text-lg tracking-tight font-semibold text-gray-100 font-instrument-serif">$14,500</div>
+</div>
+<div className="">
+<div className="text-xs uppercase tracking-wider mb-0.5 text-gray-600 font-instrument-serif">Asking Price</div>
+<div className="text-lg tracking-tight font-semibold text-gray-100 font-instrument-serif">$650,000</div>
+</div>
+</div>
+
+<div className="grid grid-cols-2 gap-4 pt-2">
+<div>
+<div className="flex justify-between text-xs text-gray-500 mb-1.5 uppercase tracking-wider font-instrument-serif">
+<span>Biz Score</span>
+<span className="text-blue-400 font-medium">96</span>
+</div>
+<div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
+<div className="h-full bg-blue-500 w-[96%] rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+</div>
+</div>
+<div>
+<div className="flex justify-between text-xs text-gray-500 mb-1.5 uppercase tracking-wider font-instrument-serif">
+<span>Risk</span>
+<span className="text-green-400 font-medium">V. Low</span>
+</div>
+<div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
+<div className="h-full bg-green-500 w-[10%] rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+</div>
+</div>
+</div>
+
+<div className="h-20 w-full rounded-lg border border-gray-800 bg-gray-950/80 relative flex justify-between items-end px-2 py-1 gap-1 overflow-hidden mt-2">
+<div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-20">
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+</div>
+
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[25%] bottom-[5%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[15%] bottom-[10%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[30%] bottom-[15%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[20%] bottom-[20%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[40%] bottom-[25%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[25%] bottom-[30%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[45%] bottom-[35%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[30%] bottom-[40%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[20%] bottom-[60%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[10%] bottom-[65%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[50%] bottom-[55%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[35%] bottom-[60%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[40%] bottom-[70%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[20%] bottom-[75%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[30%] bottom-[75%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[15%] bottom-[85%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[25%] bottom-[80%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[10%] bottom-[90%] rounded-sm"></div></div>
+</div>
+<div className="flex items-center gap-3 text-xs text-gray-500 pt-2 border-t border-gray-900">
+<span className="flex items-center gap-1 font-instrument-serif"><iconify-icon icon="solar:users-group-rounded-linear"></iconify-icon> 890 Subs</span>
+<span className="flex items-center gap-1 font-instrument-serif"><iconify-icon icon="solar:routing-2-linear"></iconify-icon> 45k Traffic</span>
+</div>
+</div>
+<div className="px-5 py-3 border-t flex items-center justify-center gap-2 bg-brand-950/50 border-brand-900 text-brand-300">
+<iconify-icon className="text-sm" icon="solar:wallet-money-linear"></iconify-icon>
+<span className="text-xs font-medium font-instrument-serif">Financing Eligible</span>
+</div>
+</a>
+
+<a className="group rounded-2xl border shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-lg transition-all overflow-hidden flex flex-col bg-black border-gray-800" href="#">
+<div className="p-5 border-b flex justify-between items-start border-gray-900 bg-gray-950/50">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-inner border border-gray-800 bg-gradient-to-br from-purple-900 to-gray-950">
+<iconify-icon className="text-xl text-pink-400" icon="solar:magic-stick-3-bold-duotone"></iconify-icon>
+</div>
+<div>
+<h3 className="font-semibold text-sm text-gray-100 font-instrument-serif">Promptly AI</h3>
+<div className="text-xs text-gray-500 font-instrument-serif">AI Application</div>
+</div>
+</div>
+<div className="flex items-center gap-1 border rounded-full px-2 py-1 shadow-sm bg-black border-gray-800">
+<div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]"></div>
+<span className="text-xs font-semibold text-gray-300 font-instrument-serif">Verified</span>
+</div>
+</div>
+<div className="p-5 flex-1 space-y-4">
+<div className="grid grid-cols-2 gap-4">
+<div>
+<div className="text-xs uppercase tracking-wider mb-0.5 text-gray-600 font-instrument-serif">Verified MRR</div>
+<div className="text-lg tracking-tight font-semibold text-gray-100 font-instrument-serif">$3,200</div>
+</div>
+<div>
+<div className="text-xs uppercase tracking-wider mb-0.5 text-gray-600 font-instrument-serif">Asking Price</div>
+<div className="text-lg tracking-tight font-semibold text-gray-100 font-instrument-serif">$110,000</div>
+</div>
+</div>
+
+<div className="grid grid-cols-2 gap-4 pt-2">
+<div>
+<div className="flex justify-between text-xs text-gray-500 mb-1.5 uppercase tracking-wider font-instrument-serif">
+<span>Biz Score</span>
+<span className="text-blue-400 font-medium">76</span>
+</div>
+<div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
+<div className="h-full bg-blue-500 w-[76%] rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+</div>
+</div>
+<div>
+<div className="flex justify-between text-xs text-gray-500 mb-1.5 uppercase tracking-wider font-instrument-serif">
+<span>Risk</span>
+<span className="text-red-400 font-medium">High</span>
+</div>
+<div className="h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
+<div className="h-full bg-red-500 w-[70%] rounded-full shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+</div>
+</div>
+</div>
+
+<div className="h-20 w-full rounded-lg border border-gray-800 bg-gray-950/80 relative flex justify-between items-end px-2 py-1 gap-1 overflow-hidden mt-2">
+<div className="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none opacity-20">
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+<div className="w-full border-t border-gray-600"></div>
+</div>
+
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[30%] bottom-[40%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[15%] bottom-[45%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[40%] bottom-[20%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[20%] bottom-[30%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[50%] bottom-[15%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[30%] bottom-[25%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[60%] bottom-[10%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[35%] bottom-[20%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[30%] bottom-[5%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[15%] bottom-[10%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[45%] bottom-[10%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[25%] bottom-[15%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[35%] bottom-[10%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[20%] bottom-[15%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-green-500/50 h-[40%] bottom-[15%]"></div><div className="absolute w-[80%] max-w-[6px] bg-green-500 h-[20%] bottom-[25%] rounded-sm"></div></div>
+<div className="relative flex-1 h-full flex items-end justify-center z-10"><div className="absolute w-px bg-red-500/50 h-[25%] bottom-[10%]"></div><div className="absolute w-[80%] max-w-[6px] bg-red-500 h-[10%] bottom-[15%] rounded-sm"></div></div>
+</div>
+<div className="flex items-center gap-3 text-xs text-gray-500 pt-2 border-t border-gray-900">
+<span className="flex items-center gap-1 font-instrument-serif"><iconify-icon icon="solar:users-group-rounded-linear"></iconify-icon> 45 Subs</span>
+<span className="flex items-center gap-1 font-instrument-serif"><iconify-icon icon="solar:routing-2-linear"></iconify-icon> 8k Traffic</span>
+</div>
+</div>
+<div className="px-5 py-3 border-t flex items-center justify-center gap-2 text-gray-500 bg-gray-950 border-gray-900">
+<span className="text-xs font-medium font-instrument-serif">Cash Only</span>
+</div>
+</a>
+</div>
+<div className="mt-8 text-center md:hidden">
+<a className="inline-flex items-center gap-1 text-sm font-medium transition-colors text-gray-100 hover:text-gray-400 font-instrument-serif" href="#">
+                    View All Marketplace
+                    <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+</section>
+
+<section className="py-24 bg-gray-100 text-black">
+<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<div>
+<h2 className="text-2xl md:text-3xl tracking-tight mb-4 font-instrument-serif font-normal">Enterprise-Grade Trust &amp; Security</h2>
+<p className="text-sm leading-relaxed mb-8 text-gray-600 font-instrument-serif">Transactions on Ownerr.io are protected by multiple layers of verification, ensuring both buyers and sellers can transact with complete peace of mind.</p>
+<div className="flex flex-wrap gap-4">
+<div className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium bg-gray-200 border-gray-300 font-instrument-serif">
+<iconify-icon className="text-brand-500 text-lg" icon="solar:shield-check-bold-duotone"></iconify-icon> Identity KYC
+                        </div>
+<div className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium bg-gray-200 border-gray-300 font-instrument-serif">
+<iconify-icon className="text-lg text-purple-600" icon="solar:database-bold-duotone"></iconify-icon> API Revenue Check
+                        </div>
+<div className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium bg-gray-200 border-gray-300 font-instrument-serif">
+<iconify-icon className="text-lg text-purple-600" icon="solar:document-text-bold-duotone"></iconify-icon> Debt Disclosure
+                        </div>
+<div className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium bg-gray-200 border-gray-300 font-instrument-serif">
+<iconify-icon className="text-lg text-pink-600" icon="solar:safe-circle-bold-duotone"></iconify-icon> Escrow Integration
+                        </div>
+</div>
+</div>
+<div className="border rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden border-gray-200 bg-white/50">
+<div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 blur-3xl rounded-full"></div>
+<div className="space-y-6 relative z-10">
+<div className="flex gap-4 items-start">
+<div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-gray-200 text-brand-600">
+<iconify-icon icon="solar:lock-keyhole-linear"></iconify-icon>
+</div>
+<div>
+<h4 className="text-sm font-medium mb-1 font-instrument-serif">Secure Escrow Transactions</h4>
+<p className="text-xs leading-relaxed text-gray-600 font-instrument-serif">Funds are held safely in escrow until code, domains, and assets are fully transferred and verified by the buyer.</p>
+</div>
+</div>
+<div className="flex gap-4 items-start">
+<div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-gray-200 text-brand-600">
+<iconify-icon icon="solar:shield-warning-linear"></iconify-icon>
+</div>
+<div>
+<h4 className="text-sm font-medium mb-1 font-instrument-serif">Strict Vetting Process</h4>
+<p className="text-xs leading-relaxed text-gray-600 font-instrument-serif">Less than 30% of submitted startups are approved. We weed out fake metrics, hidden debts, and declining assets.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 text-center px-6 border-b bg-black border-gray-800">
+<div className="max-w-2xl mx-auto">
+<h2 className="text-3xl md:text-4xl tracking-tight mb-6 text-gray-100 font-instrument-serif font-normal">Start Your Startup Acquisition Journey Today.</h2>
+<p className="text-sm text-gray-500 mb-8 font-instrument-serif">Join thousands of founders and investors building wealth through software acquisitions.</p>
+<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+<a className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-sm font-medium shadow-md transition-colors bg-gray-100 text-black hover:bg-gray-200 font-instrument-serif" href="#">Browse Startups</a>
+<a className="w-full sm:w-auto px-8 py-3.5 rounded-xl border text-sm font-medium shadow-sm transition-colors bg-black border-gray-800 text-gray-100 hover:bg-gray-950 font-instrument-serif" href="#">List Your Startup</a>
+</div>
+</div>
+</section>
+</main>
+
+<footer className="pt-16 pb-8 border-t bg-gray-950 border-gray-800">
+<div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+<div>
+<div className="tracking-tighter text-lg font-semibold mb-4 text-gray-100 font-instrument-serif">OWNERR.</div>
+<p className="text-xs text-gray-500 max-w-xs leading-relaxed font-instrument-serif">The premier marketplace for buying and selling vetted SaaS startups with built-in financial intelligence.</p>
+</div>
+<div>
+<h4 className="text-xs font-semibold uppercase tracking-widest mb-4 text-gray-100 font-instrument-serif">Platform</h4>
+<ul className="space-y-3 text-sm text-gray-500">
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Marketplace</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Financing</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">How It Works</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Pricing</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-xs font-semibold uppercase tracking-widest mb-4 text-gray-100 font-instrument-serif">Resources</h4>
+<ul className="space-y-3 text-sm text-gray-500">
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Valuation Tool</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Blog &amp; Guides</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Help Center</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-xs font-semibold uppercase tracking-widest mb-4 text-gray-100 font-instrument-serif">Legal</h4>
+<ul className="space-y-3 text-sm text-gray-500">
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Security</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Terms of Service</a></li>
+<li><a className="transition-colors hover:text-gray-100 font-instrument-serif" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+</footer>
+    </>
+  );
+}

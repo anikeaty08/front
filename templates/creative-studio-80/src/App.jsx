@@ -1,0 +1,1028 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+                (function() {
+                  const el = document.getElementById('visual-os-display');
+                  let isAssembled = false;
+
+                  const assemble = () => {
+                    if (!isAssembled) {
+                      el.classList.add('assembled');
+                      isAssembled = true;
+                    }
+                  };
+
+                  const disperse = () => {
+                    if (isAssembled) {
+                      el.classList.remove('assembled');
+                      isAssembled = false;
+                    }
+                  };
+
+                  const toggle = (e) => {
+                    e.preventDefault();
+                    if (isAssembled) disperse();
+                    else assemble();
+                  };
+
+                  // Desktop Hover
+                  el.addEventListener('mouseenter', () => {
+                    if (window.matchMedia('(hover: hover)').matches) assemble();
+                  });
+                  el.addEventListener('mouseleave', () => {
+                    if (window.matchMedia('(hover: hover)').matches) disperse();
+                  });
+
+                  // Mobile/Tablet Tap
+                  el.addEventListener('click', toggle);
+                  el.addEventListener('touchstart', (e) => {}, { passive: true }); // Fixes iOS touch handling
+                })();
+              
+
+
+      // Scroll Reveal Logic
+      const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                  entry.target.classList.add('active');
+              }
+          });
+      }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+      document.querySelectorAll('.reveal').forEach((element) => {
+          observer.observe(element);
+      });
+    
+
+
+      // Optimized Smooth Parallax Background Script
+      document.addEventListener('DOMContentLoaded', () => {
+        const spline = document.getElementById('spline-container');
+        let currentY = 0;
+        let targetY = 0;
+        let ticking = false;
+
+        const ease = 0.05;
+
+        window.addEventListener('scroll', () => {
+          targetY = window.scrollY;
+          if (!ticking) {
+            requestAnimationFrame(animate);
+            ticking = true;
+          }
+        }, { passive: true });
+
+        function animate() {
+          const diff = targetY - currentY;
+          if (Math.abs(diff) > 0.5) {
+            currentY += diff * ease;
+            if (spline) {
+              spline.style.transform = `translate3d(0, ${currentY * 0.05}px, 0)`;
+            }
+            requestAnimationFrame(animate);
+          } else {
+            ticking = false;
+          }
+        }
+      });
+    
+
+
+      document.addEventListener('DOMContentLoaded', () => {
+                    const nav = document.querySelector('nav');
+                    let lastScroll = window.scrollY;
+
+                    const handleScroll = () => {
+                      const currentScroll = window.scrollY;
+                      const heroHeight = window.innerHeight * 0.9;
+                      const docHeight = document.documentElement.scrollHeight;
+                      const winHeight = window.innerHeight;
+                      const isBottom = (currentScroll + winHeight) >= (docHeight - 20);
+                      const isTop = currentScroll < heroHeight;
+                      const isScrollingUp = currentScroll < lastScroll;
+
+                      // LOGIC:
+                      // 1. Show if at TOP (first section)
+                      // 2. Show if at BOTTOM (last section)
+                      // 3. Show if Scrolling UP
+                      // 4. Hide if Scrolling DOWN AND past the first section
+
+                      let shouldShow = false;
+
+                      if (isTop) shouldShow = true;
+                      else if (isBottom) shouldShow = true;
+                      else if (isScrollingUp) shouldShow = true;
+
+                      if (shouldShow) {
+                        nav.style.transform = 'translateY(0)';
+                      } else {
+                        nav.style.transform = 'translateY(-200%)';
+                      }
+                      lastScroll = currentScroll;
+                    };
+
+                    window.addEventListener('scroll', handleScroll, { passive: true });
+                    handleScroll(); // Initial check
+                  });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="fixed -top-[20vh] left-0 w-full h-[140vh] z-0 pointer-events-none will-change-transform" id="spline-container">
+<iframe className="w-full h-full" frameborder="0" height="100%" loading="lazy" src="https://my.spline.design/iphone14wallpaper4copy-79eead3c8221db4e6fd870a3d5061aa0" width="100%"></iframe>
+</div>
+
+
+<div className="fixed inset-0 z-0 overflow-hidden pointer-events-none user-select-none">
+<div className="absolute blob blob-1 opacity-50 mix-blend-screen animate-blob rounded-full blur-3xl"></div>
+<div className="absolute blob blob-2 opacity-50 mix-blend-screen animate-blob animation-delay-2000 rounded-full blur-3xl"></div>
+<div className="absolute blob blob-3 opacity-50 mix-blend-screen animate-blob animation-delay-4000 rounded-full blur-3xl"></div>
+<div className="absolute blob blob-7 opacity-60 mix-blend-screen animate-blob rounded-full blur-3xl"></div>
+<div className="absolute blob blob-8 opacity-60 mix-blend-screen animate-blob rounded-full blur-3xl"></div>
+</div>
+<nav className="fixed left-0 right-0 z-50 flex justify-center w-full px-4 pointer-events-none top-16 md:top-6 transition-transform duration-500">
+<div className="glass-card flex shadow-indigo-500/5 float md:rounded-[20px] md:px-2 md:py-2 md:gap-1 pointer-events-auto rounded-[14px] pt-0 pr-0 pb-0 pl-0 shadow-sm gap-x-0 gap-y-0 items-center">
+<a className="px-2 py-1.5 md:px-5 md:py-2.5 rounded-[10px] md:rounded-[14px] hover:bg-black/5 text-[11px] md:text-sm font-semibold text-slate-600 hover:text-black transition-all" href="#">
+          Studio
+        </a>
+<a className="px-2 py-1.5 md:px-5 md:py-2.5 rounded-[10px] md:rounded-[14px] hover:bg-black/5 text-[11px] md:text-sm font-semibold text-slate-600 hover:text-black transition-all" href="#">
+          Services
+        </a>
+
+<div className="mx-0.5 md:mx-2 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center font-bold text-[9px] md:text-xs tracking-tighter shadow-md bg-white text-black">
+          IMX
+        </div>
+<a className="px-2 py-1.5 md:px-5 md:py-2.5 rounded-[10px] md:rounded-[14px] hover:bg-black/5 text-[11px] md:text-sm font-semibold text-slate-600 hover:text-black transition-all" href="#">
+          Contact
+        </a>
+<a className="px-2 py-1.5 md:px-5 md:py-2.5 rounded-[10px] md:rounded-[14px] hover:bg-black/5 text-[11px] md:text-sm font-semibold text-slate-600 hover:text-black transition-all" href="#">
+          About Us
+        </a>
+</div>
+</nav>
+
+<main className="z-10 md:px-12 flex flex-col gap-32 w-full max-w-[1280px] mr-auto ml-auto pt-32 pr-6 pb-32 pl-6 relative gap-x-32 gap-y-32">
+
+<section className="min-h-[85vh] flex flex-col relative items-center justify-center">
+
+<div className="text-center z-20 reveal active relative">
+<h1 className="text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6 text-slate-900 leading-[1.05] font-semibold">
+            IMX CREATIVE
+            <br/>
+<span className="bg-clip-text text-transparent bg-gradient-to-b inline-block drop-shadow-sm from-white via-slate-300 to-slate-500">
+              STUDIOS
+            </span>
+</h1>
+<p className="md:text-2xl text-xl font-medium text-slate-200 tracking-tight max-w-lg mr-auto mb-12 ml-auto">
+            Direction before design.
+          </p>
+
+<button className="float relative px-8 py-4 rounded-[20px] glass-card text-slate-900 font-semibold text-base transition-all duration-300 shadow-lg border-white/50">
+            Work With IMX
+          </button>
+</div>
+</section>
+
+<section className="w-full relative z-20 -mt-20">
+<div className="flex flex-wrap justify-center gap-6 reveal delay-100">
+
+<div className="glass-card px-8 py-5 rounded-[24px] flex items-center gap-4 hover:shadow-xl hover:shadow-indigo-500/10 cursor-default">
+<div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-indigo-500">
+<iconify-icon icon="solar:compass-linear" width="20"></iconify-icon>
+</div>
+<div className="">
+<div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                Focus
+              </div>
+<div className="text-sm font-semibold text-slate-800">
+                Creative Direction
+              </div>
+</div>
+</div>
+
+<div className="glass-card px-8 py-5 rounded-[24px] flex items-center gap-4 hover:shadow-xl hover:shadow-purple-500/10 cursor-default">
+<div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-purple-500">
+<iconify-icon className="" icon="solar:structure-linear" width="20"></iconify-icon>
+</div>
+<div className="">
+<div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                Core
+              </div>
+<div className="text-sm font-semibold text-slate-800">
+                Brand Strategy
+              </div>
+</div>
+</div>
+
+<div className="glass-card px-8 py-5 rounded-[24px] flex items-center gap-4 hover:shadow-xl hover:shadow-pink-500/10 cursor-default">
+<div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-pink-500">
+<iconify-icon icon="solar:magic-stick-3-linear" width="20"></iconify-icon>
+</div>
+<div className="">
+<div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                Output
+              </div>
+<div className="text-sm font-semibold text-slate-800">
+                Elevated Presence
+              </div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-8 md:py-12">
+<div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-10">
+<div className="lg:col-span-5 reveal">
+<h2 className="text-4xl md:text-5xl tracking-tight text-slate-900 mb-6 leading-tight font-semibold">
+              We build the
+              <br/>
+<span className="text-gradient-accent">visual OS</span>
+<br/>
+              for your brand.
+            </h2>
+<p className="leading-relaxed text-lg font-medium text-slate-100">
+              We translate your brand’s design DNA into a unified digital
+              presence.
+              <br/>
+              Every touchpoint. Every interaction. One clear perception.
+              <br/>
+              From websites to campaigns, content to interfaces, we ensure your
+              brand feels consistent and premium.
+            </p>
+</div>
+<div className="lg:col-span-7 relative reveal delay-200">
+
+<div className="relative w-full aspect-square md:aspect-[16/10] rounded-[32px] md:rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden group select-none touch-manipulation cursor-pointer" id="visual-os-display">
+
+<div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-purple-500/5 opacity-60 pointer-events-none transition-opacity duration-700"></div>
+
+<div className="flex w-full h-full relative items-center justify-center" id="os-scene">
+<svg className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-20">
+<defs>
+<lineargradient id="link-grad" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="rgba(255,255,255,0)"></stop>
+<stop offset="50%" stop-color="rgba(255,255,255,0.5)"></stop>
+<stop offset="100%" stop-color="rgba(255,255,255,0)"></stop>
+</lineargradient>
+</defs>
+
+<line className="animate-pulse" stroke="url(#link-grad)" stroke-dasharray="4 6" strokeWidth="1" x1="25%" x2="50%" y1="30%" y2="50%"></line>
+<line className="animate-pulse" stroke="url(#link-grad)" stroke-dasharray="4 6" strokeWidth="1" style={{animationDelay: '1s'}} x1="75%" x2="50%" y1="35%" y2="50%"></line>
+<line className="animate-pulse" stroke="url(#link-grad)" stroke-dasharray="4 6" strokeWidth="1" style={{animationDelay: '2s'}} x1="30%" x2="50%" y1="70%" y2="50%"></line>
+<line className="animate-pulse" stroke="url(#link-grad)" stroke-dasharray="4 6" strokeWidth="1" style={{animationDelay: '1.5s'}} x1="70%" x2="50%" y1="70%" y2="50%"></line>
+</svg>
+
+<div className="os-node absolute top-1/2 left-1/2 w-24 h-24 -ml-12 -mt-12 md:w-32 md:h-32 md:-ml-16 md:-mt-16 z-20" data-depth="0.05">
+<div className="float w-full h-full rounded-[20px] md:rounded-[24px] bg-white/5 border border-white/20 backdrop-blur-xl shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)] flex items-center justify-center transition-all duration-500 group-hover:bg-white/10 group-hover:scale-105">
+<div className="w-8 h-8 md:w-12 md:h-12 rounded-full border border-white/30 flex items-center justify-center bg-white/5 relative">
+<div className="absolute inset-0 rounded-full border-t border-white/40 animate-[spin_8s_linear_infinite]"></div>
+<div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-white shadow-[0_0_10px_white]"></div>
+</div>
+</div>
+</div>
+
+<div className="os-node absolute top-[20%] left-[10%] md:top-[25%] md:left-[20%] w-16 h-.12">
+<div className="float-delay-1 w-full h-full rounded-[16px] md:rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md flex flex-col p-2 md:p-3 gap-1.5 md:gap-2 transition-all duration-500 hover:bg-white/10 hover:-translate-y-1 justify-center">
+<div className="h-1 md:h-1.5 w-1/2 bg-white/30 rounded-full"></div>
+<div className="h-1 md:h-1.5 w-full bg-white/10 rounded-full"></div>
+<div className="h-1 md:h-1.5 w-3/4 bg-white/10 rounded-full"></div>
+</div>
+</div>
+
+<div className="os-node absolute bottom-[20%] right-[10%] md:bottom-[25%] md:right-[20%] w-auto h-auto z-10" data-depth="0.10">
+<div className="float-delay-2 p-2 md:p-3 rounded-[16px] md:rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md flex gap-1.5 md:gap-2 transition-all duration-500 hover:bg-white/10 hover:-translate-y-1">
+<div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-indigo-400/90 shadow-lg shadow-indigo-5 bg-purple-400/90 shadow-purple-500/20"></div>
+<div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-pink-400/90 shadow-lg shadow-pink-500/20"></div>
+</div>
+</div>
+
+<div className="os-node absolute top-[20%] right-[10%] md:top-[30%] md:right-[25%] w-12 h-12 md:w-16 md:h-16 z-10" data-depth="0.15">
+<div className="float w-full h-full rounded-[14px] md:rounded-[18px] bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:bg-white/10 hover:-translate-y-1">
+<div className="w-4 h-4 md:w-6 md:h-6 border-2 border-white/20 rounded-md opacity-60"></div>
+</div>
+</div>
+
+<div className="os-node absolute bottom-[20%] left-[1 md:w-28 md:h-20 z-10" data-depth="0.14">
+<div className="float-delay-1 w-full h-full rounded-[16px] md:rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-md grid2 transition-all duration-500 hover:bg-white/10 hover:-translate-y-1">
+<div className="bg-white/10 rounded-md"></div>
+<div className="bg-white/5 rounded-md"></div>
+<div className="bg-white/5 rounded-md"></div>
+<div className="bg-white/10 rounded-md"></div>
+</div>
+</div>
+</div>
+<style>
+                /* Motion System Variables */
+                .puzzle-piece {
+                  --amp: 1; /* Amplitude Multiplier */
+                  --ease-premium: cubic-bezier(0.2, 0, 0.1, 1); /* Smooth, non-elastic, guided */
+
+                  /* Initial State (Unassembled) */
+                  fill: var(--fill-init);
+                  stroke: rgba(255, 255, 255, 0.4);
+                  stroke-width: 1px;
+                  transform-box: fill-box;
+                  backdrop-filter: blur(4px);
+                  will-change: transform, fill;
+
+                  /* Idle Animation (Floating) */
+                  animation: float-idle 12s ease-in-out infinite alternate;
+
+                  /* Disassembly Transition (Reverse) */
+                  /* 1. Color separates first (fast) */
+                  /* 2. Movement releases slowly (delayed) */
+                  transition:
+                    transform 2s var(--ease-premium) 0.15s,
+                    fill 0.6s ease-out 0s,
+                    stroke 0.6s ease-out 0s;
+                }
+
+                /* Staggered offsets for organic float */
+                .float-1 { animation-delay: 0s; }
+                .float-2 { animation-delay: -2s; }
+                .float-3 { animation-delay: -4s; }
+                .float-4 { animation-delay: -6s; }
+                .float-5 { animation-delay: -3s; }
+
+                /* Assembled (Locked) State */
+                #visual-os-display.assembled .puzzle-piece {
+                  /* Target: Unified System */
+                  transform: translate(0, 0) rotate(0);
+                  fill: var(--fill-active);
+                  stroke: rgba(255, 255, 255, 0.1);
+
+                  /* Post-Assembly Breathing (Starts after transition) */
+                  animation: breathe 6s ease-in-out infinite alternate 1.8s;
+
+                  /* Assembly Transition */
+                  /* 1. Movement is slow, fluid, intentional */
+                  /* 2. Color unifies LATE (blending in) */
+                  transition:
+                    transform 1.8s var(--ease-premium) 0s,
+                    fill 1.2s ease-out 0.8s,
+                    stroke 1.2s ease-out 0.8s;
+                }
+
+                /* Animation Physics */
+                @keyframes float-idle {
+                  0% {
+                    transform: translate(calc(var(--tx) * var(--amp)), calc(var(--ty) * var(--amp))) rotate(var(--r));
+                  }
+                  100% {
+                    /* Gentle drift: slightly reduced radius, slight rotation shift */
+                    transform: translate(calc(var(--tx) * var(--amp) * 0.85), calc(var(--ty) * var(--amp) * 0.85)) rotate(calc(var(--r) * 0.9));
+                  }
+                }
+
+                @keyframes breathe {
+                  0% { transform: translate(0, 0) scale(1); }
+                  100% { transform: translate(0, 0) scale(0.995); } /* Extremely subtle */
+                }
+
+                /* Mobile Physics Adjustment */
+                @media (max-width: 768px) {
+                  .puzzle-piece {
+                    --amp: 0.6; /* Reduces spread by 40% on small screens */
+                    transition-duration: 1.5s; /* Slightly faster on mobile */
+                  }
+                }
+              </style>
+
+</div>
+</div>
+</div>
+</section>
+
+<section className="sm:px-6 lg:px-8 sm:mt-28 lg:mt-32 sm:mb-16 lg:mb-20 max-w-7xl mt-24 mr-auto mb-12 ml-auto pr-4 pl-4">
+
+<div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
+
+<div className="border-gradient animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.05s_both] flex flex-col animate bg-neutral-900/40 h-48 sm:h-56 lg:h-64 rounded-[24px] sm:rounded-[32px] p-4 sm:p-5 backdrop-blur-lg justify-between hover:-translate-y-1 hover:shadow-2xl hover:shadow-white/5 transition-all duration-500">
+<div className="flex items-center">
+<span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur flex-shrink-0">
+<svg className="sm:w-5 sm:h-5" data-icon-set="solar" data-solar="bolt-circle-line-duotone" height="16" style={{color: '#e5e7eb'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none" stroke="currentColor" strokeWidth="1.5">
+<path className="" d="m9.213 10.174l2.015-1.605c1.302-1.037 1.953-1.556 2.363-1.3s.197 1.05-.228 2.636l-.04.15c-.154.572-.23.858-.096 1.086l.007.012c.14.226.438.306 1.033.465c1.072.287 1.608.43 1.702.804l.004.019c.083.376-.34.712-1.185 1.386l-2.015 1.604c-1.303 1.038-1.954 1.556-2.364 1.3s-.196-1.05.229-2.636l.04-.15c.153-.571.23-.857.095-1.086l-.007-.012c-.14-.225-.438-.305-1.033-.465c-1.072-.287-1.608-.43-1.702-.804l-.004-.019c-.083-.375.34-.712 1.186-1.385Z"></path>
+<path className="" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12Z" opacity=".5"></path>
+</g>
+</svg>
+</span>
+</div>
+<div className="">
+<h3 className="mt-1 sm:mt-2 text-xs sm:text-sm font-semibold tracking-tight text-white">
+                Setup in minutes
+              </h3>
+<p className="mt-1 sm:mt-2 text-[10px] sm:text-xs text-neutral-400 leading-relaxed">
+                Drop-in SDK, no backend rewrites.
+              </p>
+</div>
+</div>
+
+<div className="border-gradient animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] flex flex-col animate bg-neutral-900/40 h-48 sm:h-56 lg:h-64 rounded-[24px] sm:rounded-[32px] p-4 sm:p-5 backdrop-blur-lg justify-between">
+<div className="flex items-center">
+<span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur flex-shrink-0">
+<svg className="sm:w-5 sm:h-5" data-icon-set="solar" data-solar="chart-2-line-duotone" height="16" style={{color: '#e5e7eb'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none" stroke="currentColor" strokeWidth="1.5">
+<path className="" d="M3 22h18" opacity=".5" strokeLinecap="round" strokeLinejoin="round"></path>
+<path className="" d="M3 11c0-.943 0-1.414.293-1.707S4.057 9 5 9s1.414 0 1.707.293S7 10.057 7 11v6c0 .943 0 1.414-.293 1.707S5.943 19 5 19s-1.414 0-1.707-.293S3 17.943 3 17zm7-4c0-.943 0-1.414.293-1.707S11.057 5 12 5s1.414 0 1.707.293S14 6.057 14 7v10c0 .943 0 1.414-.293 1.707S12.943 19 12 19s-1.414 0-1.707-.293S10 17.943 10 17zm7-3c0-.943 0-1.414.293-1.707S18.057 2 19 2s1.414 0 1.707.293S21 3.057 21 4v13c0 .943 0 1.414-.293 1.707S19.943 19 19 19s-1.414 0-1.707-.293S17 17.943 17 17z"></path>
+</g>
+</svg>
+</span>
+</div>
+<div className="">
+<h3 className="mt-1 sm:mt-2 text-xs sm:text-sm font-semibold tracking-tight text-white">
+                Track anomalies
+              </h3>
+<p className="mt-1 sm:mt-2 text-[10px] sm:text-xs text-neutral-400 leading-relaxed">
+                Real‑time behavior signals.
+              </p>
+</div>
+</div>
+
+<div className="border-gradient animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.15s_both] flex flex-col animate bg-neutral-900/40 h-48 sm:h-56 lg:h-64 rounded-[24px] sm:rounded-[32px] p-4 sm:p-5 backdrop-blur-lg justify-between">
+<div className="flex items-center">
+<span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur flex-shrink-0">
+<svg className="sm:w-5 sm:h-5" data-icon-set="solar" data-solar="wallet-money-line-duotone" height="16" style={{color: '#e5e7eb'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none" stroke="currentColor">
+<path className="" d="M6 9h4" opacity=".5" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+<path className="" d="M20.833 10h-2.602C16.446 10 15 11.343 15 13s1.447 3 3.23 3h2.603c.084 0 .125 0 .16-.002c.54-.033.97-.432 1.005-.933c.002-.032.002-.071.002-.148v-3.834c0-.077 0-.116-.002-.148c-.036-.501-.465-.9-1.005-.933c-.035-.002-.076-.002-.16-.002Z" strokeWidth="1.5"></path>
+<path className="" d="M20.965 10c-.078-1.872-.328-3.02-1.137-3.828C18.657 5 16.771 5 13 5h-3C6.229 5 4.343 5 3.172 6.172S2 9.229 2 13s0 5.657 1.172 6.828S6.229 21 10 21h3c3.771 0 5.657 0 6.828-1.172c.809-.808 1.06-1.956 1.137-3.828" strokeWidth="1.5"></path>
+<path className="" d="m6 5l3.735-2.477a3.24 3.24 0 0 1 3.53 0L17 5" opacity=".5" strokeLinecap="round" strokeWidth="1.5"></path>
+<path className="" d="M17.991 13H18" opacity=".5" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</g>
+</svg>
+</span>
+</div>
+<div className="">
+<h3 className="mt-1 sm:mt-2 text-xs sm:text-sm font-semibold tracking-tight text-white">
+                Optimized spend
+              </h3>
+<p className="mt-1 sm:mt-2 text-[10px] sm:text-xs text-neutral-400 leading-relaxed">
+                Smart policies reduce risk cost.
+              </p>
+</div>
+</div>
+
+<div className="border-gradient animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] flex flex-col animate bg-neutral-900/40 h-48 sm:h-56 lg:h-64 rounded-[24px] sm:rounded-[32px] p-4 sm:p-5 backdrop-blur-lg justify-between">
+<div className="flex items-center">
+<span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur flex-shrink-0">
+<svg className="sm:w-5 sm:h-5" data-icon-set="solar" data-solar="code-circle-line-duotone" height="16" style={{color: '#e5e7eb'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none" stroke="currentColor" strokeWidth="1.5">
+<path className="" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10Z" opacity=".5"></path>
+<path className="" d="m15.5 9l.172.172c1.333 1.333 2 2 2 2.828s-.667 1.495-2 2.828L15.5 15m-2.206-7.83L12 12l-1.294 4.83M8.5 9l-.172.172c-1.333 1.333-2 2-2 2.828s.667 1.495 2 2.828L8.5 15" strokeLinecap="round"></path>
+</g>
+</svg>
+</span>
+</div>
+<div className="">
+<h3 className="mt-1 sm:mt-2 text-xs sm:text-sm font-semibold tracking-tight text-white">
+                Open core
+              </h3>
+<p className="mt-1 sm:mt-2 text-[10px] sm:text-xs text-neutral-400 leading-relaxed">
+                Transparent by default.
+              </p>
+</div>
+</div>
+</div>
+
+<div className="grid md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 border-gradient p-3 sm:p-4 animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.25s_both] animate bg-neutral-900/40 rounded-[24px] sm:rounded-[32px] backdrop-blur-lg items-stretch">
+
+<div className="relative overflow-hidden rounded-[20px] sm:rounded-[24px] md:rounded-[32px] min-h-[240px] sm:min-h-[280px] md:min-h-[520px]">
+<img alt="Abstract face render" className="absolute inset-0 h-full w-full object-cover" loading="lazy" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3c47338a-7702-4975-a53f-3bcd74163776_1600w.webp"/>
+<div className="bg-gradient-to-t from-black/60 via-black/10 to-transparent absolute top-0 right-0 bottom-0 left-0"></div>
+<div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)]; [background-size:28px_28px]"></div>
+<div className="absolute left-3 sm:left-4 bottom-3 sm:bottom-4 flex items-center gap-2">
+<span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg sm:rounded-xl bg-white/10 backdrop-blur flex-shrink-0">
+<svg className="sm:w-4 sm:h-4" data-icon-set="solar" data-solar="shield-network-line-duotone" height="14" style={{color: '#fff'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none" stroke="currentColor" strokeWidth="1.5">
+<path className="" d="M3 10.417c0-3.198 0-4.797.378-5.335c.377-.537 1.88-1.052 4.887-2.081l.573-.196C10.405 2.268 11.188 2 12 2s1.595.268 3.162.805l.573.196c3.007 1.029 4.51 1.544 4.887 2.081C21 5.62 21 7.22 21 10.417v1.574c0 5.638-4.239 8.375-6.899 9.536C13.38 21.842 13.02 22 12 22s-1.38-.158-2.101-.473C7.239 20.365 3 17.63 3 11.991z" opacity=".5"></path>
+<path className="" d="M17 12a5 5 0 1 1-9.999 0A5 5 0 0 1 17 12Z"></path>
+<path className="" d="M13.848 13.913c.1-.606.152-1.256.152-1.913s-.052-1.307-.152-1.913a8 8 0 0 0-.434-1.623c-.185-.464-.406-.832-.649-1.083C12.523 7.129 12.263 7 12 7s-.523.13-.765.38c-.243.252-.463.62-.65 1.084a8 8 0 0 0-.433 1.623c-.1.606-.152 1.256-.152 1.913s.052 1.307.152 1.913s.248 1.158.434 1.623c.185.464.406.832.649 1.083c.242.252.502.381.765.381s.523-.13.765-.38c.243-.252.463-.62.65-1.085a8 8 0 0 0 .433-1.622Z"></path>
+<path className="" d="M7 12h10" strokeLinecap="round"></path>
+</g>
+</svg>
+</span>
+<p className="text-[10px] sm:text-xs text-neutral-200">
+                Adaptive identity graph
+              </p>
+</div>
+</div>
+
+<div className="flex flex-col sm:p-6 md:p-8 pt-4 pr-4 pb-4 pl-4 justify-center">
+<div className="flex items-center gap-2 text-[10px] sm:text-xs text-neutral-400">
+<svg className="sm:w-4 sm:h-4 flex-shrink-0" data-icon-set="solar" data-solar="stars-line-duotone" height="14" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none" stroke="currentColor" strokeWidth="1.5">
+<path className="" d="m9.99 16.5l-.975.474c-1.98.548-2.971.822-3.505.245c-.534-.576-.258-1.62.295-3.71l.142-.54c.157-.595.236-.891.197-1.186c-.04-.294-.193-.553-.499-1.07l-.278-.47C4.29 8.422 3.752 7.512 4.11 6.787c.36-.724 1.379-.783 3.418-.9l.527-.03c.58-.034.869-.05 1.122-.185c.252-.135.439-.372.813-.848l.34-.432c1.316-1.673 1.974-2.509 2.73-2.38s1.11 1.137 1.817 3.154l.183.522c.201.573.302.86.497 1.07c.196.212.464.324 1.001.547l.489.204c1.89.786 2.835 1.18 2.942 1.983c.092.686-.477 1.283-1.64 2.29" opacity=".5"></path>
+<path className="" d="M15.252 10.689c-.987-1.18-1.48-1.77-2.048-1.68c-.567.091-.832.803-1.362 2.227l-.138.368c-.15.405-.226.607-.373.756c-.146.149-.348.228-.75.386l-.367.143c-1.417.555-2.126.833-2.207 1.4s.52 1.049 1.721 2.011l.31.25c.342.273.513.41.611.597c.1.187.115.404.146.837l.029.394c.11 1.523.166 2.285.683 2.545s1.154-.155 2.427-.983l.329-.215c.362-.235.543-.353.75-.387c.208-.033.42.022.841.132l.385.1c1.485.386 2.228.58 2.629.173s.193-1.144-.221-2.62l-.108-.38c-.117-.42-.176-.63-.147-.837c.03-.208.145-.39.374-.756l.21-.332c.807-1.285 1.21-1.927.94-2.438c-.269-.511-1.033-.553-2.562-.635l-.396-.022c-.434-.023-.652-.035-.841-.13c-.19-.095-.33-.263-.61-.599z"></path>
+</g>
+</svg>
+<span className="">New in 2.7 — Lattice scoring</span>
+</div>
+<h1 className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white tracking-tighter font-light leading-tight">
+              Security, Reinvented
+            </h1>
+<p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-neutral-400 leading-relaxed">
+              Sentra delivers verifiable protection for modern apps.
+              Privacy‑first, open, and community‑audited. Own your data, control
+              every policy, and prove compliance with a single click.
+            </p>
+<div className="sm:mt-6 flex flex-col lg:flex-row lg:items-center mt-6 gap-x-3 gap-y-3 items-stretch">
+
+<button className="gradient-button" type="button">
+<div className="points_wrapper">
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+<i className="point"></i>
+</div>
+</button>
+
+</div>
+
+<div className="mt-6 sm:mt-7 grid grid-cols-3 gap-3 sm:gap-4">
+<div className="border-gradient before:rounded-[16px] sm:before:rounded-[20px] md:before:rounded-[24px] bg-neutral-900/60 rounded-[16px] sm:rounded-[20px] md:rounded-[24px] p-3 sm:p-4">
+<p className="text-[9px] sm:text-[10px] text-neutral-400">Active</p>
+<p className="text-base font-semibold text-white tracking-tight mt-0.5 sm:mt-1 sm:text-lg md:text-sm">
+                  46k+
+                </p>
+<p className="mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-neutral-400">
+                  Developers
+                </p>
+</div>
+<div className="border-gradient before:rounded-[16px] sm:before:rounded-[20px] md:before:rounded-[24px] bg-neutral-900/60 rounded-[16px] sm:rounded-[20px] md:rounded-[24px] p-3 sm:p-4">
+<p className="text-[9px] sm:text-[10px] text-neutral-400">Uptime</p>
+<p className="text-base font-semibold text-white tracking-tight mt-0.5 sm:mt-1 sm:text-lg md:text-sm">
+                  99.99%
+                </p>
+<p className="mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-neutral-400">
+                  Last 12 months
+                </p>
+</div>
+<div className="border-gradient before:rounded-[16px] sm:before:rounded-[20px] md:before:rounded-[24px] bg-neutral-900/60 rounded-[16px] sm:rounded-[20px] md:rounded-[24px] p-3 sm:p-4">
+<p className="text-[9px] sm:text-[10px] text-neutral-400">
+                  Encryption
+                </p>
+<p className="mt-0.5 text-base font-semibold tracking-tight text-white sm:mt-1 sm:text-lg md:text-sm">
+                  AES‑256
+                </p>
+<p className="mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-neutral-400">
+                  At rest &amp; transit
+                </p>
+</div>
+</div>
+</div>
+</div>
+
+<div className="mt-3 sm:mt-4 md:mt-6 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+
+<div className="border-gradient animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] flex flex-col overflow-hidden bg-neutral-900/40 h-[320px] sm:h-[360px] md:h-[400px] rounded-[24px] sm:rounded-[32px] ring-white/10 ring-1 justify-between animate">
+<div className="h-full relative">
+<img alt="Security visual" className="absolute inset-0 h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c18c71a7-b8f4-4628-881d-cf4f8c40d365_1600w.webp"/>
+<div className="bg-gradient-to-t from-black/90 via-black/50 to-transparent absolute top-0 right-0 bottom-0 left-0"></div>
+<div className="flex flex-col sm:p-5 h-full pt-4 pr-4 pb-4 pl-4 relative justify-end">
+<div className="flex items-start gap-2 sm:gap-3">
+<span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-emerald-500/15 backdrop-blur text-emerald-300 flex-shrink-0">
+<svg className="sm:w-5 sm:h-5" data-icon-set="solar" data-solar="lock-keyhole-line-duotone" height="16" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none" stroke="currentColor" strokeWidth="1.5">
+<path className="" d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16s0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z"></path>
+<circle className="" cx="12" cy="16" opacity=".5" r="2"></circle>
+<path className="" d="M6 10V8a6 6 0 1 1 12 0v2" opacity=".5" strokeLinecap="round"></path>
+</g>
+</svg>
+</span>
+<div>
+<h4 className="text-sm sm:text-base md:text-lg font-semibold tracking-tight text-white">
+                      Zero-trust by design
+                    </h4>
+<p className="mt-1 text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                      Hardware-backed keys, just‑in‑time access, and continuous
+                      verification.
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="border-gradient animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.15s_both] flex flex-col overflow-hidden bg-neutral-900/40 h-[320px] sm:h-[360px] md:h-[400px] rounded-[24px] sm:rounded-[32px] ring-white/10 ring-1 justify-between animate">
+<div className="h-full relative">
+<img alt="Open source visual" className="absolute inset-0 h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dda527a3-a7cd-4e3f-a750-90f31be3dde0_1600w.webp"/>
+<div className="bg-gradient-to-t from-black/90 via-black/50 to-transparent absolute top-0 right-0 bottom-0 left-0"></div>
+<div className="flex flex-col sm:p-5 h-full pt-4 pr-4 pb-4 pl-4 relative justify-end">
+<div className="flex items-start gap-2 sm:gap-3">
+<span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-indigo-500/15 backdrop-blur text-indigo-300 flex-shrink-0">
+<svg className="sm:w-5 sm:h-5" data-icon-set="solar" data-solar="code-file-line-duotone" height="16" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<g className="" fill="none">
+<path className="" d="m15.393 4.054l-.502.557zm3.959 3.563l-.502.557zm2.302 2.537l-.685.305zM3.172 20.828l.53-.53zm17.656 0l-.53-.53zM14 21.25h-4v1.5h4zM2.75 14v-4h-1.5v4zm18.5-.437V14h1.5v-.437zM14.891 4.61l3.959 3.563l1.003-1.115l-3.958-3.563zm7.859 8.952c0-1.689.015-2.758-.41-3.714l-1.371.61c.266.598.281 1.283.281 3.104zm-3.9-5.389c1.353 1.218 1.853 1.688 2.119 2.285l1.37-.61c-.426-.957-1.23-1.66-2.486-2.79zM10.03 2.75c1.582 0 2.179.012 2.71.216l.538-1.4c-.852-.328-1.78-.316-3.248-.316zm5.865.746c-1.086-.977-1.765-1.604-2.617-1.93l-.537 1.4c.532.204.98.592 2.15 1.645zM10 21.25c-1.907 0-3.261-.002-4.29-.14c-1.005-.135-1.585-.389-2.008-.812l-1.06 1.06c.748.75 1.697 1.081 2.869 1.239c1.15.155 2.625.153 4.489.153zM1.25 14c0 1.864-.002 3.338.153 4.489c.158 1.172.49 2.121 1.238 2.87l1.06-1.06c-.422-.424-.676-1.004-.811-2.01c-.138-1.027-.14-2.382-.14-4.289zM14 22.75c1.864 0 3.338.002 4.489-.153c1.172-.158 2.121-.49 2.87-1.238l-1.06-1.06c-.424.422-1.004.676-2.01.811c-1.027.138-2.382.14-4.289.14zM21.25 14c0 1.907-.002 3.262-.14 4.29c-.135 1.005-.389 1.585-.812 2.008l1.06 1.06c.75-.748 1.081-1.697 1.239-2.869c.155-1.15.153-2.625.153-4.489zm-18.5-4c0-1.907.002-3.261.14-4.29c.135-1.005.389-1.585.812-2.008l-1.06-1.06c-.75.748-1.081 1.697-1.239 2.869C1.248 6.661 1.25 8.136 1.25 10zm7.28-8.75c-1.875 0-3.356-.002-4.511.153c-1.177.158-2.129.49-2.878 1.238l1.06 1.06c.424-.422 1.005-.676 2.017-.811c1.033-.138 2.395-.14 4.312-.14z" fill="currentColor"></path>
+<path className="" d="M13 2.5V5c0 2.357 0 3.536.732 4.268S15.643 10 18 10h4" opacity=".5" stroke="currentColor" strokeWidth="1.5"></path>
+<path className="" d="m7 14l-1 1l1 1m4.5 0l1 1l-1 1M10 14l-1.5 4" opacity=".5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</g>
+</svg>
+</span>
+<div className="">
+<h4 className="text-sm sm:text-base md:text-lg font-semibold tracking-tight text-white">
+                      Built in public
+                    </h4>
+<p className="mt-1 text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                      Auditable code, community RFCs, and verifiable releases.
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-20">
+<div className="glass-card reveal rounded-[48px] overflow-hidden p-8 md:p-12 w-full relative">
+<div className="mx-auto max-w-4xl text-center mb-12">
+<h2 className="text-3xl md:text-4xl tracking-tight text-white font-semibold font-manrope">
+              Selected Work
+            </h2>
+<p className="mt-3 text-base md:text-lg text-slate-300 font-medium max-w-2xl mx-auto">
+              Strategy-led direction and tasteful execution across identity,
+              web, and motion.
+            </p>
+</div>
+<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+<a className="group relative overflow-hidden rounded-[32px] bg-slate-900/40 border border-white/5 hover:border-white/10 transition-colors duration-500" href="#">
+<div className="aspect-[16/10] w-full overflow-hidden">
+<img alt="Nimbus Identity System" className="h-full w-full object-cover transition duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" src="https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-80 transition-opacity duration-500"></div>
+</div>
+<div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+<div className="flex items-center justify-between mb-2">
+<h3 className="text-xl tracking-tight font-semibold text-white font-manrope">
+                    Nimbus Identity System
+                  </h3>
+<div className="bg-white/10 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0 backdrop-blur-md">
+<svg className="text-white" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 7h10v10"></path>
+<path d="M7 17 17 7"></path>
+</svg>
+</div>
+</div>
+<p className="text-sm text-slate-300 font-medium leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75 transform translate-y-2 group-hover:translate-y-0">
+                  A modular brand kit for a climate analytics platform.
+                </p>
+</div>
+</a>
+
+<a className="group relative overflow-hidden rounded-[32px] bg-slate-900/40 border border-white/5 hover:border-white/10 transition-colors duration-500" href="#">
+<div className="aspect-[16/10] w-full overflow-hidden">
+<img alt="Opal Product Launch" className="h-full w-full object-cover transition duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" src="https://images.unsplash.com/photo-1629946832022-c327f74956e0?w=2160&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-80 transition-opacity duration-500"></div>
+</div>
+<div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+<div className="flex items-center justify-between mb-2">
+<h3 className="text-xl tracking-tight font-semibold text-white font-manrope">
+                    Opal Product Launch
+                  </h3>
+<div className="bg-white/10 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0 backdrop-blur-md">
+<svg className="text-white" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 7h10v10"></path>
+<path d="M7 17 17 7"></path>
+</svg>
+</div>
+</div>
+<p className="text-sm text-slate-300 font-medium leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75 transform translate-y-2 group-hover:translate-y-0">
+                  Site, motion, and content system for a developer tool.
+                </p>
+</div>
+</a>
+
+<a className="group relative overflow-hidden rounded-[32px] bg-slate-900/40 border border-white/5 hover:border-white/10 transition-colors duration-500 md:col-span-2" href="#">
+<div className="aspect-[21/9] w-full overflow-hidden">
+<img alt="Asteron Visual Language" className="h-full w-full object-cover transition duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" src="https://images.unsplash.com/photo-1724525647065-f948fc102e68?w=2160&amp;q=80"/>
+<div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent opacity-80 transition-opacity duration-500"></div>
+</div>
+<div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+<div className="flex items-center justify-between mb-2">
+<h3 className="text-xl tracking-tight font-semibold text-white font-manrope">
+                    Asteron Visual Language
+                  </h3>
+<div className="bg-white/10 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0 backdrop-blur-md">
+<svg className="text-white" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 7h10v10"></path>
+<path d="M7 17 17 7"></path>
+</svg>
+</div>
+</div>
+<p className="text-sm text-slate-300 font-medium leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75 transform translate-y-2 group-hover:translate-y-0">
+                  A cohesive system spanning UI, iconography, and motion.
+                </p>
+</div>
+</a>
+</div>
+</div>
+</section>
+
+<section className="relative z-10 w-full max-w-7xl mx-auto reveal">
+<div className="p-8 md:p-12 rounded-[40px] border border-white/5 bg-zinc-950/40 backdrop-blur-xl shadow-2xl transition-all duration-500">
+
+<div className="flex gap-6 items-center mb-10">
+<div className="flex items-center gap-3">
+<h3 className="text-3xl md:text-4xl font-semibold text-white tracking-tight">
+                Testimonials
+              </h3>
+<span className="h-8 w-px bg-white/10"></span>
+<span className="text-sm font-medium text-slate-400 uppercase tracking-wider">
+                Client Success Stories
+              </span>
+</div>
+</div>
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+<div className="lg:col-span-5">
+<h2 className="text-5xl md:text-6xl font-semibold text-white tracking-tighter leading-[1.05] mb-6">
+                Clients love IMX
+              </h2>
+<p className="text-lg text-slate-300 font-medium leading-relaxed mb-10">
+                Trusted by innovative companies to deliver exceptional digital
+                experiences that drive real results.
+              </p>
+<div className="grid grid-cols-3 gap-4 mb-10">
+<div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+<div className="text-3xl font-bold text-white mb-1">50+</div>
+<div className="text-xs text-slate-400 font-medium">
+                    Projects Delivered
+                  </div>
+</div>
+<div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+<div className="text-3xl font-bold text-white mb-1">5</div>
+<div className="text-xs text-slate-400 font-medium">
+                    Years Experience
+                  </div>
+</div>
+</div>
+<div className="flex gap-4">
+<button className="px-6 py-3.5 rounded-xl bg-white text-slate-950 font-semibold text-sm hover:scale-105 transition-all duration-300">
+                  Book a Call
+                </button>
+<button className="px-6 py-3.5 rounded-xl bg-white/10 text-white font-semibold text-sm hover:bg-white/20 transition-all duration-300 flex items-center gap-2">
+                  Start Project
+                  <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+</button>
+</div>
+</div>
+
+<div className="lg:col-span-7 relative h-[500px] overflow-hidden rounded-3xl">
+
+<div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#050505] to-transparent z-10 pointer-events-none"></div>
+<div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#050505] to-transparent z-10 pointer-events-none"></div>
+<style>
+                @keyframes scroll-vertical {
+                  0% { transform: translateY(0); }
+                  100% { transform: translateY(-50%); }
+                }
+                .animate-scroll-vertical {
+                  animation: scroll-vertical 40s linear infinite;
+                }
+                .animate-scroll-vertical:hover {
+                  animation-play-state: paused;
+                }
+              </style>
+<div className="animate-scroll-vertical flex flex-col gap-6">
+
+<div className="p-6 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-white font-semibold">Sarah Thompson</div>
+<div className="text-xs text-slate-400">
+                        CEO, TechFlow Solutions
+                      </div>
+</div>
+<div className="flex text-amber-400 gap-0.5">
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+</div>
+</div>
+<p className="text-slate-300 text-sm leading-relaxed">
+                    "Working with IMX was exceptional. The team delivered a
+                    stunning website that perfectly captured our vision and
+                    significantly improved our user engagement."
+                  </p>
+<div className="mt-4 flex items-center gap-2">
+<span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-medium flex items-center gap-1">
+<iconify-icon icon="lucide:trending-up" width="12"></iconify-icon>
+                      +180% Engagement
+                    </span>
+</div>
+</div>
+
+<div className="p-6 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-white font-semibold">
+                        Marcus Rodriguez
+                      </div>
+<div className="text-xs text-slate-400">CTO, InnovateHub</div>
+</div>
+<div className="flex text-amber-400 gap-0.5">
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+</div>
+</div>
+<p className="text-slate-300 text-sm leading-relaxed">
+                    "The creative development process was seamless. IMX
+                    understood our technical requirements and delivered a
+                    solution that exceeded our expectations."
+                  </p>
+<div className="mt-4 flex items-center gap-2">
+<span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-medium flex items-center gap-1">
+<iconify-icon icon="lucide:smartphone" width="12"></iconify-icon>
+                      Mobile App
+                    </span>
+</div>
+</div>
+
+<div className="p-6 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-white font-semibold">Emma Chen</div>
+<div className="text-xs text-slate-400">CD, PixelCraft</div>
+</div>
+<div className="flex text-amber-400 gap-0.5">
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+</div>
+</div>
+<p className="text-slate-300 text-sm leading-relaxed">
+                    "Outstanding attention to detail and creative vision. The
+                    brand identity work exceeded our expectations and truly
+                    captured our company's essence."
+                  </p>
+<div className="mt-4 flex items-center gap-2">
+<span className="px-2 py-1 rounded-md bg-purple-500/10 text-purple-400 text-xs font-medium flex items-center gap-1">
+<iconify-icon icon="lucide:palette" width="12"></iconify-icon>
+                      Brand Identity
+                    </span>
+</div>
+</div>
+
+<div className="p-6 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-white font-semibold">David Park</div>
+<div className="text-xs text-slate-400">
+                        Founder, StartupLab
+                      </div>
+</div>
+<div className="flex text-amber-400 gap-0.5">
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+</div>
+</div>
+<p className="text-slate-300 text-sm leading-relaxed">
+                    "Fast turnaround, professional communication, and
+                    exceptional results. The full-stack solution helped us
+                    launch on time and under budget."
+                  </p>
+<div className="mt-4 flex items-center gap-2">
+<span className="px-2 py-1 rounded-md bg-orange-500/10 text-orange-400 text-xs font-medium flex items-center gap-1">
+<iconify-icon icon="lucide:code" width="12"></iconify-icon>
+                      Full Stack
+                    </span>
+</div>
+</div>
+
+<div className="p-6 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-white font-semibold">Sarah Thompson</div>
+<div className="text-xs text-slate-400">
+                        CEO, TechFlow Solutions
+                      </div>
+</div>
+<div className="flex text-amber-400 gap-0.5">
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+</div>
+</div>
+<p className="text-slate-300 text-sm leading-relaxed">
+                    "Working with IMX was exceptional. The team delivered a
+                    stunning website that perfectly captured our vision and
+                    significantly improved our user engagement."
+                  </p>
+<div className="mt-4 flex items-center gap-2">
+<span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-medium flex items-center gap-1">
+<iconify-icon icon="lucide:trending-up" width="12"></iconify-icon>
+                      +180% Engagement
+                    </span>
+</div>
+</div>
+<div className="p-6 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-white font-semibold">
+                        Marcus Rodriguez
+                      </div>
+<div className="text-xs text-slate-400">CTO, InnovateHub</div>
+</div>
+<div className="flex text-amber-400 gap-0.5">
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+<iconify-icon icon="solar:star-bold" width="14"></iconify-icon>
+</div>
+</div>
+<p className="text-slate-300 text-sm leading-relaxed">
+                    "The creative development process was seamless. IMX
+                    understood our technical requirements and delivered a
+                    solution that exceeded our expectations."
+                  </p>
+<div className="mt-4 flex items-center gap-2">
+<span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-medium flex items-center gap-1">
+<iconify-icon icon="lucide:smartphone" width="12"></iconify-icon>
+                      Mobile App
+                    </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section className="flex flex-col reveal pt-20 pb-20 items-center justify-center">
+<div className="rounded-[48px] p-12 md:p-24 text-center max-w-4xl w-full relative overflow-hidden bg-white/[0.02] backdrop-blur-xl shadow-2xl transition-all duration-500">
+
+<div className="bg-gradient-to-b from-white/50 to-transparent opacity-10 w-full h-full z-0 absolute top-0 left-0"></div>
+<div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-200 rounded-full blur-3xl opacity-30"></div>
+<div className="absolute -bottom-20 -left-20 w-64 h-64 bg-indigo-200 rounded-full blur-3xl opacity-30"></div>
+<div className="relative z-10">
+<h2 className="md:text-6xl text-5xl font-semibold text-slate-900 tracking-tight mb-8">
+              Elevate your brand’s digital presence today!
+            </h2>
+<p className="text-xl font-medium text-slate-100 max-w-xl mr-auto mb-12 ml-auto">
+              Partner with IMX to build a brand system that scales with intent.
+            </p>
+<button className="bg-slate-900 text-white px-10 py-5 rounded-[20px] font-semibold text-lg hover:scale-105 transition-all duration-300 shadow-xl shadow-slate-900/20 hover:bg-slate-800">
+              Start a Conversation
+            </button>
+</div>
+</div>
+
+<footer className="mt-24 w-full flex flex-col md:flex-row justify-between items-center text-sm text-slate-400 font-medium border-t border-slate-200/60 pt-10">
+<div className="flex gap-8 mb-4 md:mb-0">
+<a className="hover:text-indigo-600 transition-colors" href="#">
+              Studio
+            </a>
+<a className="hover:text-indigo-600 transition-colors" href="#">Work</a>
+<a className="hover:text-indigo-600 transition-colors" href="#">
+              Contact
+            </a>
+</div>
+<div className="">©2026 IMX Creative Studios. All Rights Reserved.</div>
+</footer>
+</section>
+</main>
+
+
+
+
+    </>
+  );
+}

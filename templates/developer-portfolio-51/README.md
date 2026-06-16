@@ -1,0 +1,14 @@
+# Developer Portfolio Website Template
+
+A reusable portfolio website template for freelance web developers and agencies to showcase services, projects, testimonials, blog content, and capture leads.
+
+## Project Details
+- **Slug:** `developer-portfolio-51`
+- **Views:** 63
+- **Tags:** Portfolio, Services, Landing Page, Blog, Clean, Minimal, Technology, Personal brand, Developer
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

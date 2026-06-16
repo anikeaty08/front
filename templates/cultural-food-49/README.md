@@ -1,0 +1,14 @@
+# Cultural Food Map Landing Page Template
+
+A reusable landing page template for showcasing local food heritage, GIS cultural maps, and community tourism routes in a clean editorial format.
+
+## Project Details
+- **Slug:** `cultural-food-49`
+- **Views:** 38
+- **Tags:** Landing Page, Food, Travel, Education, Cultural Heritage, Clean, Minimal, Grid, Brand
+- **Template Type:** Vite-React Project (Compiled from static HTML)
+
+## How to Run
+1. Open folder in VS Code / terminal.
+2. Run `npm install`.
+3. Run `npm run dev`.

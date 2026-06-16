@@ -1,0 +1,594 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        // --- 1. Countdown Timer (24h from load) ---
+        // Simulating a fixed 24h countdown for demo purposes. 
+        // In a real scenario, use a specific date or local storage to persist.
+        const countdownHours = 23;
+        const countdownMinutes = 59;
+        const countdownSeconds = 59;
+        
+        let targetTime = new Date().getTime() + (countdownHours * 60 * 60 * 1000) + (countdownMinutes * 60 * 1000) + (countdownSeconds * 1000);
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = targetTime - now;
+
+            if (distance < 0) {
+                // If timer ends, keep it at zero
+                document.querySelectorAll('.h-hours').forEach(el => el.innerText = "00");
+                document.querySelectorAll('.h-minutes').forEach(el => el.innerText = "00");
+                document.querySelectorAll('.h-seconds').forEach(el => el.innerText = "00");
+                return;
+            }
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update all instances
+            document.querySelectorAll('.h-hours').forEach(el => el.innerText = hours.toString().padStart(2, '0'));
+            document.querySelectorAll('.h-minutes').forEach(el => el.innerText = minutes.toString().padStart(2, '0'));
+            document.querySelectorAll('.h-seconds').forEach(el => el.innerText = seconds.toString().padStart(2, '0'));
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer(); // initial call
+
+        // --- 2. Scroll Reveal Observer ---
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            // Hero section is already active by default in CSS to avoid flicker
+            if(!el.classList.contains('active')) {
+                revealOnScroll.observe(el);
+            }
+        });
+
+        // --- 3. FAQ Accordion Logic ---
+        function toggleAccordion(button) {
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            const content = button.nextElementSibling;
+            
+            // Close all others (optional, comment out if you want multiple open)
+            document.querySelectorAll('.accordion-button').forEach(btn => {
+                if(btn !== button) {
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.nextElementSibling.setAttribute('aria-hidden', 'true');
+                }
+            });
+
+            // Toggle current
+            button.setAttribute('aria-expanded', !isExpanded);
+            content.setAttribute('aria-hidden', isExpanded);
+        }
+
+        // --- 4. Sticky Header Blur effect on scroll ---
+        const header = document.getElementById('sticky-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-lg', 'shadow-black/50');
+            } else {
+                header.classList.remove('shadow-lg', 'shadow-black/50');
+            }
+        });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+<div className="bg-noise"></div>
+
+<div className="fixed top-0 w-full z-40 bg-[#0A0A0A]/80 backdrop-blur-md border-b border-white/5 py-3 transition-transform duration-300" id="sticky-header">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
+<div className="flex items-center gap-2">
+<span className="font-display font-semibold text-sm tracking-tight text-white flex items-center gap-1.5">
+<iconify-icon className="text-neon" icon="solar:bolt-linear" strokeWidth="1.5"></iconify-icon>
+                    SR24/7
+                </span>
+</div>
+<div className="flex items-center gap-4">
+<div className="hidden sm:flex flex-col text-right">
+<span className="text-xs text-zinc-500 line-through">R$ 4.990</span>
+<span className="text-sm font-semibold text-neon">12x R$ 49</span>
+</div>
+<a className="bg-white text-black text-xs font-semibold px-4 py-2 rounded-full hover:bg-zinc-200 transition-colors" href="#cta">
+                    COMPRAR AGORA
+                </a>
+</div>
+</div>
+</div>
+
+<section className="relative pt-32 pb-20 sm:pt-40 sm:pb-32 overflow-hidden px-4">
+<div className="glow-blob top-0 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+<div className="max-w-4xl mx-auto text-center flex flex-col items-center z-10 relative reveal active">
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-xs text-zinc-300 mb-8">
+<span className="relative flex h-2 w-2">
+<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon opacity-75"></span>
+<span className="relative inline-flex rounded-full h-2 w-2 bg-neon"></span>
+</span>
+                Turma Promocional Liberada
+            </div>
+<h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.1] mb-6">
+                Enquanto você lê isso, seus concorrentes já têm um <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">robô trabalhando</span> por eles.
+            </h1>
+<p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mb-10 font-medium">
+                O curso definitivo de inteligência artificial com Claude. Pare de perder tempo com tarefas repetitivas e escale seus resultados hoje.
+            </p>
+
+<div className="glass-card rounded-2xl p-6 sm:p-8 w-full max-w-md mx-auto mb-10 flex flex-col items-center">
+<p className="text-sm text-zinc-400 mb-3 flex items-center gap-2">
+<iconify-icon icon="solar:clock-circle-linear" strokeWidth="1.5"></iconify-icon>
+                    Preço de lançamento encerra em:
+                </p>
+<div className="flex gap-4 sm:gap-6 text-center timer-container">
+<div className="flex flex-col">
+<span className="font-display text-3xl sm:text-4xl font-semibold text-white tracking-tight h-hours">23</span>
+<span className="text-xs text-zinc-500 uppercase tracking-widest mt-1">Horas</span>
+</div>
+<span className="font-display text-3xl sm:text-4xl text-zinc-700">:</span>
+<div className="flex flex-col">
+<span className="font-display text-3xl sm:text-4xl font-semibold text-white tracking-tight h-minutes">59</span>
+<span className="text-xs text-zinc-500 uppercase tracking-widest mt-1">Min</span>
+</div>
+<span className="font-display text-3xl sm:text-4xl text-zinc-700">:</span>
+<div className="flex flex-col">
+<span className="font-display text-3xl sm:text-4xl font-semibold text-neon tracking-tight h-seconds">59</span>
+<span className="text-xs text-neon/50 uppercase tracking-widest mt-1">Seg</span>
+</div>
+</div>
+</div>
+
+<div className="flex flex-col items-center mb-8">
+<span className="text-base text-zinc-500 line-through mb-1">De R$ 4.990 por apenas</span>
+<div className="flex items-end gap-2 mb-6">
+<span className="font-display text-2xl text-zinc-400 mb-1">12x</span>
+<span className="font-display text-5xl font-semibold text-neon tracking-tight">R$ 49</span>
+</div>
+<a className="bg-neon text-black font-semibold text-base sm:text-lg px-8 py-4 sm:px-10 sm:py-5 rounded-full shadow-neon hover-shadow-neon transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-3 w-full sm:w-auto justify-center" href="#cta">
+                    QUERO MEU ROBÔ AGORA
+                    <iconify-icon className="text-xl" icon="solar:arrow-right-linear" strokeWidth="1.5"></iconify-icon>
+</a>
+<p className="text-xs text-zinc-500 mt-4 flex items-center gap-1.5">
+<iconify-icon icon="solar:shield-check-linear" strokeWidth="1.5"></iconify-icon>
+                    Compra 100% segura. Acesso imediato.
+                </p>
+</div>
+</div>
+</section>
+
+<section className="py-20 px-4 bg-[#0A0A0A] border-y border-white/5 relative">
+<div className="max-w-5xl mx-auto reveal">
+<div className="text-center mb-16">
+<h2 className="font-display text-3xl sm:text-4xl font-semibold text-white tracking-tight mb-4">O momento da IA é agora.</h2>
+<p className="text-base text-zinc-400 max-w-3xl mx-auto">Em 1994, quem ignorou a internet ficou para trás. Em 2009, o Bitcoin foi a oportunidade de uma geração. Hoje, os profissionais que não dominarem a Inteligência Artificial perderão espaço em menos de 12 meses.</p>
+</div>
+<div className="flex flex-col sm:flex-row gap-6 sm:gap-4 items-center justify-between relative max-w-3xl mx-auto mb-16">
+
+<div className="hidden sm:block absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-white/10 -translate-y-1/2 z-0"></div>
+
+<div className="flex flex-col items-center bg-[#0A0A0A] z-10 px-4">
+<div className="w-12 h-12 rounded-full border border-white/10 bg-zinc-900 flex items-center justify-center text-zinc-400 mb-4">
+<iconify-icon className="text-xl" icon="solar:global-linear"></iconify-icon>
+</div>
+<span className="font-display text-lg font-semibold text-white tracking-tight">1994</span>
+<span className="text-xs text-zinc-500 uppercase tracking-widest mt-1">A Internet</span>
+</div>
+
+<div className="flex flex-col items-center bg-[#0A0A0A] z-10 px-4">
+<div className="w-12 h-12 rounded-full border border-white/10 bg-zinc-900 flex items-center justify-center text-zinc-400 mb-4">
+<iconify-icon className="text-xl" icon="solar:chart-square-linear"></iconify-icon>
+</div>
+<span className="font-display text-lg font-semibold text-white tracking-tight">2009</span>
+<span className="text-xs text-zinc-500 uppercase tracking-widest mt-1">O Bitcoin</span>
+</div>
+
+<div className="flex flex-col items-center bg-[#0A0A0A] z-10 px-4 scale-110">
+<div className="w-14 h-14 rounded-full border border-neon/30 bg-neon/5 flex items-center justify-center text-neon mb-4 shadow-[0_0_20px_rgba(212,255,0,0.1)]">
+<iconify-icon className="text-2xl" icon="solar:magic-stick-3-linear"></iconify-icon>
+</div>
+<span className="font-display text-lg font-semibold text-neon tracking-tight">HOJE</span>
+<span className="text-xs text-white uppercase tracking-widest mt-1">A Revolução da IA</span>
+</div>
+</div>
+<div className="text-center">
+<a className="inline-flex items-center gap-2 text-sm text-white hover:text-neon transition-colors font-medium border-b border-white/20 hover:border-neon pb-1" href="#cta">
+                    Não fique de fora desta vez <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-24 px-4">
+<div className="max-w-6xl mx-auto">
+<div className="text-center mb-16 reveal">
+<span className="text-neon text-sm font-medium tracking-wide uppercase mb-2 block">O Método</span>
+<h2 className="font-display text-3xl sm:text-5xl font-semibold text-white tracking-tight mb-4">O que você vai dominar</h2>
+<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-white/10 text-xs text-zinc-300">
+<iconify-icon className="text-neon text-base" icon="solar:library-linear"></iconify-icon>
+                    +21 módulos práticos e diretos ao ponto
+                </div>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-[minmax(180px,auto)]">
+
+<div className="glass-card rounded-3xl p-8 md:col-span-2 reveal flex flex-col justify-between group">
+<div>
+<span className="text-xs text-zinc-500 font-medium tracking-widest uppercase mb-4 block">Capítulo I</span>
+<h3 className="font-display text-2xl text-white font-semibold tracking-tight mb-3 group-hover:text-neon transition-colors">A Fundação do Seu Robô</h3>
+<p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+                            Entenda por que o Claude é superior. Aprenda a configurar sua conta, dominar a interface e estruturar prompts que geram resultados de nível profissional, não textos robóticos.
+                        </p>
+</div>
+<div className="flex flex-wrap gap-2">
+<span className="text-xs bg-white/5 border border-white/10 rounded-md px-2 py-1 text-zinc-300">Introdução</span>
+<span className="text-xs bg-white/5 border border-white/10 rounded-md px-2 py-1 text-zinc-300">Arte dos Prompts</span>
+</div>
+</div>
+
+<div className="glass-card rounded-3xl p-8 reveal reveal-delay-1 flex flex-col justify-between group">
+<div>
+<span className="text-xs text-zinc-500 font-medium tracking-widest uppercase mb-4 block">Capítulo II</span>
+<h3 className="font-display text-2xl text-white font-semibold tracking-tight mb-3 group-hover:text-neon transition-colors">Automação Diária</h3>
+<p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+                            Integre a IA nas ferramentas que você já usa todos os dias para economizar horas semanais.
+                        </p>
+</div>
+<ul className="text-xs text-zinc-500 space-y-2">
+<li className="flex items-center gap-2"><iconify-icon className="text-neon" icon="solar:check-circle-linear"></iconify-icon> Gmail &amp; WhatsApp</li>
+<li className="flex items-center gap-2"><iconify-icon className="text-neon" icon="solar:check-circle-linear"></iconify-icon> Excel &amp; Planilhas</li>
+<li className="flex items-center gap-2"><iconify-icon className="text-neon" icon="solar:check-circle-linear"></iconify-icon> Canva &amp; Instagram</li>
+</ul>
+</div>
+
+<div className="glass-card rounded-3xl p-8 reveal flex flex-col justify-between group">
+<div>
+<span className="text-xs text-zinc-500 font-medium tracking-widest uppercase mb-4 block">Capítulo IV</span>
+<h3 className="font-display text-2xl text-white font-semibold tracking-tight mb-3 group-hover:text-neon transition-colors">Segredos e Extras</h3>
+<p className="text-sm text-zinc-400 leading-relaxed">
+                            Dicas ocultas, atalhos de teclado e estratégias não documentadas para extrair 110% do Claude nas suas operações.
+                        </p>
+</div>
+</div>
+
+<div className="glass-card rounded-3xl p-8 md:col-span-2 reveal reveal-delay-1 flex flex-col justify-between group relative overflow-hidden">
+<div className="absolute right-0 bottom-0 opacity-10 pointer-events-none translate-x-1/4 translate-y-1/4">
+<iconify-icon height="200" icon="solar:rocket-linear" width="200"></iconify-icon>
+</div>
+<div className="relative z-10">
+<span className="text-xs text-zinc-500 font-medium tracking-widest uppercase mb-4 block">Capítulo III</span>
+<h3 className="font-display text-2xl text-white font-semibold tracking-tight mb-3 group-hover:text-neon transition-colors">Escala e Marketing</h3>
+<p className="text-sm text-zinc-400 mb-6 max-w-lg leading-relaxed">
+                            Crie campanhas que convertem. Use a IA para gerenciar anúncios, escrever landing pages persuasivas, gerir sua equipe com SOPs automatizados e dominar o YouTube.
+                        </p>
+<div className="flex flex-wrap gap-2 mt-auto">
+<span className="text-xs bg-neon/10 border border-neon/20 text-neon rounded-md px-2 py-1">Google &amp; Meta Ads</span>
+<span className="text-xs bg-white/5 border border-white/10 rounded-md px-2 py-1 text-zinc-300">Landing Pages</span>
+<span className="text-xs bg-white/5 border border-white/10 rounded-md px-2 py-1 text-zinc-300">Gestão de Time</span>
+</div>
+</div>
+</div>
+</div>
+<div className="mt-16 text-center reveal">
+<a className="inline-flex bg-white text-black font-semibold text-sm px-8 py-3.5 rounded-full hover:bg-zinc-200 transition-all items-center gap-2" href="#cta">
+                    VER GRADE COMPLETA <iconify-icon icon="solar:arrow-down-linear"></iconify-icon>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-zinc-900/30 border-y border-white/5 px-4 relative">
+<div className="max-w-6xl mx-auto">
+<div className="text-center mb-16 reveal">
+<h2 className="font-display text-3xl sm:text-4xl font-semibold text-white tracking-tight mb-4">Resultados reais de quem já implementou</h2>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
+<div className="glass-card rounded-2xl p-6 reveal">
+<div className="flex gap-1 mb-4">
+<iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm text-zinc-300 mb-6 leading-relaxed">"Reduzi 4h de trabalho por dia gerenciando o Instagram e WhatsApp da minha loja. O robô responde clientes melhor que eu mesma."</p>
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm font-display font-semibold border border-pink-500/30">ML</div>
+<div>
+<p className="text-xs text-white font-medium">Mariana L.</p>
+<p className="text-xs text-zinc-500">Dona de Loja, 38 anos</p>
+</div>
+</div>
+</div>
+
+<div className="glass-card rounded-2xl p-6 reveal reveal-delay-1">
+<div className="flex gap-1 mb-4">
+<iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm text-zinc-300 mb-6 leading-relaxed">"Triplicou meu volume de propostas comerciais. O Claude escreve e-mails perfeitos e estrutura minhas reuniões em segundos."</p>
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm font-display font-semibold border border-blue-500/30">RC</div>
+<div>
+<p className="text-xs text-white font-medium">Ricardo C.</p>
+<p className="text-xs text-zinc-500">Consultor de RH, 44 anos</p>
+</div>
+</div>
+</div>
+
+<div className="glass-card rounded-2xl p-6 reveal reveal-delay-2">
+<div className="flex gap-1 mb-4">
+<iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm text-zinc-300 mb-6 leading-relaxed">"Cortamos custos com freelancers de copy e planejamento. A IA cria nossos anúncios, legendas e relatórios de métricas em minutos."</p>
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-display font-semibold border border-emerald-500/30">FS</div>
+<div>
+<p className="text-xs text-white font-medium">Felipe S.</p>
+<p className="text-xs text-zinc-500">Sócio de Agência, 31 anos</p>
+</div>
+</div>
+</div>
+
+<div className="glass-card rounded-2xl p-6 reveal">
+<div className="flex gap-1 mb-4">
+<iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm text-zinc-300 mb-6 leading-relaxed">"Automatizei o pós-atendimento da clínica. Minha secretária agora foca no presencial, e o robô cuida do WhatsApp sem erros."</p>
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm font-display font-semibold border border-purple-500/30">AP</div>
+<div>
+<p className="text-xs text-white font-medium">Ana P.</p>
+<p className="text-xs text-zinc-500">Dentista, 46 anos</p>
+</div>
+</div>
+</div>
+
+<div className="glass-card rounded-2xl p-6 reveal reveal-delay-1">
+<div className="flex gap-1 mb-4">
+<iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm text-zinc-300 mb-6 leading-relaxed">"Crio planos alimentares básicos e e-books de receitas como iscas digitais muito mais rápido. Dobrou meu faturamento mensal."</p>
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-display font-semibold border border-amber-500/30">CT</div>
+<div>
+<p className="text-xs text-white font-medium">Camila T.</p>
+<p className="text-xs text-zinc-500">Nutricionista, 29 anos</p>
+</div>
+</div>
+</div>
+
+<div className="glass-card rounded-2xl p-6 reveal reveal-delay-2">
+<div className="flex gap-1 mb-4">
+<iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon><iconify-icon className="text-neon text-sm" icon="solar:star-bold"></iconify-icon>
+</div>
+<p className="text-sm text-zinc-300 mb-6 leading-relaxed">"Descrições de produtos cadastradas em massa e SAC nível premium no automático. Literalmente não vivo mais sem meu robô."</p>
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center text-sm font-display font-semibold border border-rose-500/30">DM</div>
+<div>
+<p className="text-xs text-white font-medium">Diego M.</p>
+<p className="text-xs text-zinc-500">E-commerce, 35 anos</p>
+</div>
+</div>
+</div>
+</div>
+<div className="mt-16 flex justify-center reveal">
+<a className="bg-zinc-800 text-white font-medium text-sm px-6 py-3 rounded-full hover:bg-zinc-700 transition-colors border border-white/10 flex items-center gap-2" href="#cta">
+                    EU QUERO ESSES RESULTADOS <iconify-icon icon="solar:arrow-up-right-linear"></iconify-icon>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-24 px-4 max-w-5xl mx-auto reveal">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+
+<div className="glass-card rounded-3xl p-8 border-t-neon/30">
+<h3 className="font-display text-2xl font-semibold text-white tracking-tight mb-6">Para quem é esse curso</h3>
+<ul className="space-y-4">
+<li className="flex items-start gap-3">
+<iconify-icon className="text-neon text-xl shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<p className="text-sm text-zinc-300"><strong className="text-white font-medium block">Empreendedores e Donos de PME</strong> Que precisam fazer mais com menos recursos e automatizar operações.</p>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-neon text-xl shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<p className="text-sm text-zinc-300"><strong className="text-white font-medium block">Profissionais Liberais e Autônomos</strong> Médicos, advogados, consultores que querem focar no serviço final e não na burocracia.</p>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-neon text-xl shrink-0 mt-0.5" icon="solar:check-circle-linear"></iconify-icon>
+<p className="text-sm text-zinc-300"><strong className="text-white font-medium block">Profissionais de Marketing e Vendas</strong> Que buscam vantagem competitiva absurda na criação de campanhas e copy.</p>
+</li>
+</ul>
+</div>
+
+<div className="glass-card rounded-3xl p-8 border-t-red-500/30">
+<h3 className="font-display text-2xl font-semibold text-white tracking-tight mb-6">NÃO é para você se...</h3>
+<ul className="space-y-4">
+<li className="flex items-start gap-3">
+<iconify-icon className="text-red-400 text-xl shrink-0 mt-0.5" icon="solar:close-circle-linear"></iconify-icon>
+<p className="text-sm text-zinc-400">Busca uma fórmula mágica de ficar rico apertando apenas um botão sem configurar nada.</p>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-red-400 text-xl shrink-0 mt-0.5" icon="solar:close-circle-linear"></iconify-icon>
+<p className="text-sm text-zinc-400">Já é um engenheiro de machine learning ou domina integrações via API do Claude em nível avançado de programação.</p>
+</li>
+<li className="flex items-start gap-3">
+<iconify-icon className="text-red-400 text-xl shrink-0 mt-0.5" icon="solar:close-circle-linear"></iconify-icon>
+<p className="text-sm text-zinc-400">Acha que a inteligência artificial é só uma moda passageira e prefere manter processos 100% manuais.</p>
+</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section className="py-16 px-4">
+<div className="max-w-3xl mx-auto glass-card rounded-3xl p-8 sm:p-12 text-center reveal border-neon/20 shadow-[0_0_40px_rgba(212,255,0,0.05)] relative overflow-hidden">
+<div className="absolute -top-24 -left-24 w-48 h-48 bg-neon/10 rounded-full blur-3xl"></div>
+<div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-zinc-900 border border-white/10 mb-6 text-neon relative">
+<iconify-icon className="text-4xl" icon="solar:shield-check-bold"></iconify-icon>
+<div className="absolute -bottom-2 bg-neon text-black text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">7 Dias</div>
+</div>
+<h2 className="font-display text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-4">Garantia Incondicional de 7 Dias</h2>
+<p className="text-sm text-zinc-400 mb-8 max-w-lg mx-auto leading-relaxed">
+                Risco zero. Entre, assista às aulas, configure seu robô. Se em até 7 dias você achar que o curso não economizou pelo menos 10x o valor investido em horas de trabalho, devolvemos 100% do seu dinheiro. Sem perguntas.
+            </p>
+</div>
+</section>
+
+<section className="py-24 px-4 bg-zinc-950">
+<div className="max-w-3xl mx-auto reveal">
+<h2 className="font-display text-3xl font-semibold text-white tracking-tight mb-10 text-center">Perguntas Frequentes</h2>
+<div className="space-y-3">
+<div className="glass-card rounded-xl">
+<button aria-expanded="false" className="accordion-button w-full text-left p-5 flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+<span className="text-sm font-medium text-white">Preciso saber programar?</span>
+<iconify-icon className="accordion-icon text-zinc-500 text-lg" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</button>
+<div aria-hidden="true" className="accordion-content">
+<div className="accordion-inner px-5 pb-5 pt-0">
+<p className="text-sm text-zinc-400">Absolutamente não. O curso é focado no uso da interface visual do Claude e integrações no-code (sem código). Qualquer pessoa que saiba usar um navegador consegue aplicar 100% do conteúdo.</p>
+</div>
+</div>
+</div>
+<div className="glass-card rounded-xl">
+<button aria-expanded="false" className="accordion-button w-full text-left p-5 flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+<span className="text-sm font-medium text-white">Funciona para qualquer nicho de mercado?</span>
+<iconify-icon className="accordion-icon text-zinc-500 text-lg" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</button>
+<div aria-hidden="true" className="accordion-content">
+<div className="accordion-inner px-5 pb-5 pt-0">
+<p className="text-sm text-zinc-400">Sim. A inteligência artificial adapta-se ao contexto que você fornece. Ensinamos o framework exato para você contextualizar o Claude sobre o seu nicho específico, seja saúde, comércio, serviços ou digital.</p>
+</div>
+</div>
+</div>
+<div className="glass-card rounded-xl">
+<button aria-expanded="false" className="accordion-button w-full text-left p-5 flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+<span className="text-sm font-medium text-white">Por quanto tempo tenho acesso ao curso?</span>
+<iconify-icon className="accordion-icon text-zinc-500 text-lg" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</button>
+<div aria-hidden="true" className="accordion-content">
+<div className="accordion-inner px-5 pb-5 pt-0">
+<p className="text-sm text-zinc-400">O acesso é vitalício para esta turma promocional. Você pode assistir no seu próprio ritmo e rever sempre que precisar.</p>
+</div>
+</div>
+</div>
+<div className="glass-card rounded-xl">
+<button aria-expanded="false" className="accordion-button w-full text-left p-5 flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+<span className="text-sm font-medium text-white">O conteúdo é atualizado?</span>
+<iconify-icon className="accordion-icon text-zinc-500 text-lg" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</button>
+<div aria-hidden="true" className="accordion-content">
+<div className="accordion-inner px-5 pb-5 pt-0">
+<p className="text-sm text-zinc-400">Sim. O mercado de IA muda rápido. Sempre que o Claude lançar uma funcionalidade importante que impacte nossa metodologia, adicionaremos módulos extras sem custo adicional para os alunos.</p>
+</div>
+</div>
+</div>
+<div className="glass-card rounded-xl">
+<button aria-expanded="false" className="accordion-button w-full text-left p-5 flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+<span className="text-sm font-medium text-white">Como eu acesso o curso?</span>
+<iconify-icon className="accordion-icon text-zinc-500 text-lg" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</button>
+<div aria-hidden="true" className="accordion-content">
+<div className="accordion-inner px-5 pb-5 pt-0">
+<p className="text-sm text-zinc-400">Imediatamente após a aprovação do pagamento, você receberá um e-mail com seu login e senha exclusivos para acessar a área de membros.</p>
+</div>
+</div>
+</div>
+<div className="glass-card rounded-xl">
+<button aria-expanded="false" className="accordion-button w-full text-left p-5 flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+<span className="text-sm font-medium text-white">E se eu não gostar?</span>
+<iconify-icon className="accordion-icon text-zinc-500 text-lg" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</button>
+<div aria-hidden="true" className="accordion-content">
+<div className="accordion-inner px-5 pb-5 pt-0">
+<p className="text-sm text-zinc-400">Você está protegido pela nossa garantia de 7 dias. Basta enviar um único e-mail para nosso suporte dentro do prazo, e estornaremos 100% do seu pagamento.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 sm:py-32 px-4 relative overflow-hidden" id="cta">
+<div className="glow-blob bottom-0 right-0 translate-x-1/4 translate-y-1/4"></div>
+<div className="max-w-4xl mx-auto text-center reveal relative z-10 glass-card rounded-3xl p-8 sm:p-16 border-white/10 bg-zinc-900/40">
+<div className="mb-8 inline-block px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium tracking-wide">
+<span className="flex items-center gap-2">
+<span className="relative flex h-2 w-2">
+<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+</span>
+                    ÚLTIMAS HORAS DA PROMOÇÃO
+                </span>
+</div>
+<h2 className="font-display text-4xl sm:text-5xl font-semibold text-white tracking-tight mb-6">A decisão é sua.</h2>
+<p className="text-base text-zinc-400 mb-10 max-w-2xl mx-auto">
+                Você pode continuar perdendo tempo com processos manuais, ou pode ter um assistente brilhante trabalhando por você 24 horas por dia, 7 dias por semana.
+            </p>
+<ul className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 mb-10 text-sm text-zinc-300">
+<li className="flex items-center justify-center gap-2"><iconify-icon className="text-neon" icon="solar:check-circle-linear"></iconify-icon> Acesso Vitalício</li>
+<li className="flex items-center justify-center gap-2"><iconify-icon className="text-neon" icon="solar:check-circle-linear"></iconify-icon> +21 Módulos</li>
+<li className="flex items-center justify-center gap-2"><iconify-icon className="text-neon" icon="solar:check-circle-linear"></iconify-icon> Suporte Premium</li>
+</ul>
+<div className="flex flex-col items-center">
+<div className="flex items-center gap-3 mb-2 text-zinc-500">
+<span className="text-sm line-through">R$ 4.990</span>
+<span className="text-xs border border-zinc-700 px-2 py-0.5 rounded">-88% OFF</span>
+</div>
+<div className="flex items-end gap-2 mb-8">
+<span className="font-display text-2xl text-zinc-400 mb-1">12x</span>
+<span className="font-display text-6xl font-semibold text-white tracking-tight">R$ 49</span>
+</div>
+<span className="text-xs text-zinc-500 mb-6">ou R$ 590 à vista</span>
+<a className="bg-neon text-black font-semibold text-lg sm:text-xl px-10 py-5 sm:px-14 sm:py-6 rounded-full shadow-neon hover-shadow-neon transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-3 w-full sm:w-auto justify-center mb-6" href="#">
+                    QUERO MEU ROBÔ AGORA
+                    <iconify-icon icon="solar:lock-keyhole-linear" strokeWidth="1.5"></iconify-icon>
+</a>
+<div className="flex items-center gap-4 text-zinc-500 text-xl">
+<iconify-icon icon="solar:card-2-linear" strokeWidth="1.5"></iconify-icon>
+<iconify-icon icon="solar:shield-check-linear" strokeWidth="1.5"></iconify-icon>
+<iconify-icon icon="solar:qr-code-linear" strokeWidth="1.5"></iconify-icon>
+</div>
+<p className="text-[10px] text-zinc-600 mt-3 uppercase tracking-widest">Pagamento 100% Seguro &amp; Criptografado</p>
+</div>
+</div>
+</section>
+
+<footer className="py-8 text-center text-xs text-zinc-600 border-t border-white/5">
+<p>© 2026 Seu Robô 24/7. Todos os direitos reservados.</p>
+<div className="mt-2 flex justify-center gap-4">
+<a className="hover:text-zinc-400 transition-colors" href="#">Termos de Uso</a>
+<a className="hover:text-zinc-400 transition-colors" href="#">Política de Privacidade</a>
+</div>
+</footer>
+
+
+    </>
+  );
+}

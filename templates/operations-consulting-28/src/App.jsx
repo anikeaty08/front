@@ -1,0 +1,214 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(element => {
+                observer.observe(element);
+            });
+            
+            // Immediately reveal the first section if it's already in view
+            setTimeout(() => {
+                const firstSection = document.querySelector('.reveal');
+                if (firstSection) firstSection.classList.add('active');
+            }, 100);
+        });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+  }, []);
+
+  return (
+    <>
+      
+
+<header className="fixed top-0 left-0 w-full z-50 bg-[#FCFCFC]/90 backdrop-blur-md">
+<div className="max-w-[720px] mx-auto px-6 sm:px-8 py-8 flex justify-between items-center">
+<div className="font-sans text-xs uppercase tracking-tighter font-medium text-neutral-900">
+                JP COMMAND
+            </div>
+<a className="font-sans text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 transition-colors duration-300" href="#">
+                Request access
+            </a>
+</div>
+</header>
+
+<main className="flex-grow max-w-[720px] mx-auto w-full px-6 sm:px-8 pt-48 sm:pt-64 pb-32 flex flex-col gap-y-[140px] sm:gap-y-[180px]">
+
+<section className="reveal">
+<h1 className="text-2xl sm:text-3xl tracking-tight text-neutral-900 font-normal leading-snug">
+                Your firm runs on email.<br/>
+                It was never designed to.
+            </h1>
+<div className="mt-10 text-sm sm:text-base leading-loose text-neutral-600 space-y-6 max-w-[600px]">
+<p>
+                    Decisions, deal flow, internal coordination —<br/>
+                    all routed through an unstructured system.
+                </p>
+<p>
+                    It works.<br/>
+                    Until it becomes the constraint.
+                </p>
+</div>
+<div className="mt-14">
+<a className="inline-block font-sans text-xs uppercase tracking-widest border border-neutral-200 px-6 py-3 text-neutral-900 hover:opacity-50 transition-opacity duration-300" href="#">
+                    Request access
+                </a>
+</div>
+</section>
+
+<section className="reveal max-w-[600px]">
+<p className="text-sm sm:text-base leading-loose text-neutral-900 mb-6">
+                At scale, this creates:
+            </p>
+<ul className="dossier-list space-y-4 text-sm sm:text-base leading-relaxed text-neutral-600 mb-8">
+<li>Decisions delayed by fragmented threads</li>
+<li>Responsibility diluted across CCs</li>
+<li>Critical information buried in volume</li>
+<li>Partners pulled into operational noise</li>
+</ul>
+<p className="text-sm sm:text-base leading-loose text-neutral-600">
+                No single failure.<br/>
+                Just continuous friction.
+            </p>
+</section>
+
+<section className="reveal max-w-[600px]">
+<div className="text-sm sm:text-base leading-loose text-neutral-600 space-y-8">
+<p>
+                    This is not an email problem.
+                </p>
+<p className="text-neutral-900 font-normal">
+                    It is a control problem.
+                </p>
+<p>
+                    Email became the operating layer of the firm —<br/>
+                    without structure, ownership, or visibility.
+                </p>
+</div>
+</section>
+
+<section className="reveal max-w-[600px]">
+<p className="text-sm sm:text-base leading-loose text-neutral-900 mb-6">
+                We replace inbox-driven operations<br/>
+                with a controlled execution layer.
+            </p>
+<ul className="dossier-list space-y-4 text-sm sm:text-base leading-relaxed text-neutral-600 mb-8">
+<li>What requires attention is explicit</li>
+<li>Ownership is defined</li>
+<li>Noise is removed at the source</li>
+<li>Flow becomes predictable</li>
+</ul>
+<div className="text-sm sm:text-base leading-loose text-neutral-600 space-y-6">
+<p>
+                    No new tools.<br/>
+                    No added complexity.
+                </p>
+<p className="text-neutral-900">
+                    A system that holds under pressure.
+                </p>
+</div>
+</section>
+
+<section className="reveal max-w-[600px]">
+<p className="text-sm sm:text-base leading-loose text-neutral-900 mb-6">
+                Partners recover:
+            </p>
+<ul className="dossier-list space-y-4 text-sm sm:text-base leading-relaxed text-neutral-600 mb-8">
+<li>Time to think</li>
+<li>Clarity in decision-making</li>
+<li>Confidence in execution</li>
+</ul>
+<p className="text-sm sm:text-base leading-loose text-neutral-600">
+                The firm operates without depending on individual inboxes.
+            </p>
+</section>
+
+<section className="reveal max-w-[600px]">
+<div className="text-sm sm:text-base leading-loose text-neutral-900 mb-8">
+<p>One engagement.</p>
+<p>Five days.</p>
+</div>
+<ul className="dossier-list space-y-4 text-sm sm:text-base leading-relaxed text-neutral-600 mb-8">
+<li>Diagnose</li>
+<li>Restructure</li>
+<li>Deploy</li>
+<li>Stabilise</li>
+</ul>
+<div className="text-sm sm:text-base leading-loose text-neutral-600 space-y-8 mb-12">
+<p>
+                    No internal project.<br/>
+                    No dependency created.
+                </p>
+<div>
+<span className="text-neutral-900">Commitment:</span><br/>
+                    If the system does not hold,<br/>
+                    the engagement continues at no cost until it does.
+                </div>
+</div>
+<div>
+<a className="inline-block font-sans text-xs uppercase tracking-widest border border-neutral-200 px-6 py-3 text-neutral-900 hover:opacity-50 transition-opacity duration-300" href="#">
+                    Request access
+                </a>
+</div>
+</section>
+
+<section className="reveal max-w-[600px]">
+<div className="text-sm sm:text-base leading-loose text-neutral-600 space-y-6">
+<p>
+                    This is not for firms looking for tools, training, or advice.
+                </p>
+<p>
+                    It is for partners who want control restored —<br/>
+                    without adding overhead.
+                </p>
+</div>
+</section>
+</main>
+
+<footer className="mt-auto border-t border-neutral-200">
+<div className="max-w-[720px] mx-auto px-6 sm:px-8 py-24 sm:py-32 flex flex-col items-center text-center reveal">
+<div className="font-sans text-3xl sm:text-4xl uppercase tracking-tighter font-medium text-neutral-900 mb-10">
+                JP COMMAND
+            </div>
+<div className="text-sm leading-loose text-neutral-500">
+<p>Private engagements only.</p>
+<p>By introduction or request.</p>
+</div>
+</div>
+</footer>
+
+
+
+    </>
+  );
+}

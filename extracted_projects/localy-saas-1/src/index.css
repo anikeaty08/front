@@ -1,0 +1,14 @@
+/* Custom resets and styling per original HTML file requirements */
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Custom Toggle Styling for Mockup */
+.mockup-toggle:checked + div {
+    background-color: #0f172a; /* slate-900 */
+}
+
+.mockup-toggle:checked + div > div {
+    transform: translateX(100%);
+}

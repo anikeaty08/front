@@ -1,0 +1,29 @@
+/* Basic CSS Reset & Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #030303;
+}
+
+/* Custom utilities that Tailwind might miss in strict environments */
+.text-shadow-sm {
+  text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+/* Ensure canvas doesn't scroll or capture events */
+#glcanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}

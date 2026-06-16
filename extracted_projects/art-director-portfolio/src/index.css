@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F7F7F5;
+  color: #1A1A1A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom utility for the vertical guide lines */
+.guide-lines {
+  position: relative;
+}
+
+.guide-lines::before,
+.guide-lines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.06);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.guide-lines::before {
+  left: 0;
+}
+
+.guide-lines::after {
+  right: 0;
+}
+
+/* Hide scrollbar for clean aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F7F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+::selection {
+  background-color: #1A1A1A;
+  color: #F7F7F5;
+}
+
+/* Typography Helpers */
+.tracking-tighter { letter-spacing: -0.05em; }
+.tracking-tight { letter-spacing: -0.025em; }
+
+/* Custom Accent */
+.bg-lavender {
+  background-color: #E0E7FF;
+}
+
+.text-lavender-dark {
+  color: #4F46E5;
+}

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valerie Vance – Visual Architect & Brand Director</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/style.css">
+    
+    <!-- Prevent FOUC for scroll animations -->
+    <script>document.documentElement.classList.add('js-ready');</script>
+
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased overflow-x-hidden selection:bg-slate-900 selection:text-slate-50 font-geist">
+    
+    <!-- Parallax Background Element -->
+    <div class="parallax-bg"></div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Scroll Animation Logic -->
+    <script>
+      const initGSAP = () => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Background Parallax Scrolling
+        gsap.to('.parallax-bg', {
+          yPercent: 25,
+          ease: "none",
+          scrollTrigger: {
+            trigger: document.body,
+            start: "top top",
+            end: "bottom top",
+            scrub: true
+          }
+        });
+
+        // 2. Masked Staggered Word Reveal
+        const targets = document.querySelectorAll('.tracking-tighter');
+        
+        targets.forEach(target => {
+          const text = target.textContent;
+          if (!text.trim()) return;
+
+          const words = text.split(/\s+/).filter(w => w.length > 0).map(word => {
+            return `<span class="word-mask"><span class="word-inner">${word}</span></span>`;
+          }).join(' ');
+
+          target.innerHTML = words;
+
+          gsap.to(target.querySelectorAll('.word-inner'), {
+            y: "0%",
+            duration: 1.2,
+            ease: "power4.out",
+            stagger: 0.05,
+            scrollTrigger: {
+              trigger: target,
+              start: "top 90%",
+              toggleActions: "play none none reverse"
+            }
+          });
+        });
+
+        // 3. Batch Element Reveal (Fade, Slide, Blur)
+        const rawElements = document.querySelectorAll(`
+          #root section:not(.sticky) img, 
+          #root section:not(.sticky) p, 
+          #root section:not(.sticky) h2:not(.tracking-tighter), 
+          #root section:not(.sticky) h3:not(.tracking-tighter), 
+          #root section:not(.sticky) li, 
+          #root section:not(.sticky) a, 
+          #root footer .group,
+          #root footer p,
+          #root footer h4
+        `);
+
+        const elementsToAnimate = Array.from(rawElements).filter(el => {
+          // Exclude sticky nav elements or elements inside already animated word masks
+          if (el.closest('.sticky') || el.closest('.word-mask')) return false;
+          return true;
+        });
+
+        // Set explicit initial state for GSAP to control
+        gsap.set(elementsToAnimate, { 
+          opacity: 0, 
+          y: 30, 
+          filter: "blur(8px)" 
+        });
+
+        // Batch them so elements entering together stagger nicely element-by-element
+        ScrollTrigger.batch(elementsToAnimate, {
+          start: "top 85%",
+          onEnter: batch => gsap.to(batch, {
+            opacity: 1, 
+            y: 0, 
+            filter: "blur(0px)", 
+            stagger: 0.1, 
+            duration: 1.2,
+            ease: "power3.out",
+            overwrite: true
+          }),
+          onLeaveBack: batch => gsap.to(batch, {
+            opacity: 0, 
+            y: 30, 
+            filter: "blur(8px)", 
+            stagger: 0.05, 
+            duration: 0.8,
+            ease: "power3.in",
+            overwrite: true
+          })
+        });
+      };
+
+      const observer = new MutationObserver((mutations, obs) => {
+        if (document.querySelector('.tracking-tighter')) {
+          obs.disconnect(); // Stop observing once content is loaded
+          requestAnimationFrame(() => setTimeout(initGSAP, 50));
+        }
+      });
+      
+      observer.observe(document.getElementById('root'), { childList: true, subtree: true });
+    </script>
+  </body>
+</html>

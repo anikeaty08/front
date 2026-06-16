@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 360px;
+  background: #020617;
+  color: #0f172a;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.font-display {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.blob {
+  border-radius: 40% 60% 65% 35% / 40% 30% 70% 60%;
+  filter: drop-shadow(0 2.5rem 3.5rem rgb(15 23 42 / 0.2));
+}
+
+.burst {
+  clip-path: polygon(
+    50% 0%,
+    60% 15%,
+    80% 10%,
+    75% 30%,
+    95% 35%,
+    80% 50%,
+    95% 65%,
+    75% 70%,
+    80% 90%,
+    60% 85%,
+    50% 100%,
+    40% 85%,
+    20% 90%,
+    25% 70%,
+    5% 65%,
+    20% 50%,
+    5% 35%,
+    25% 30%,
+    20% 10%,
+    40% 15%
+  );
+}
+
+::selection {
+  background: #e3000f;
+  color: #ffffff;
+}
+
+@keyframes village-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-12.5%); }
+}
+
+.animate-village-marquee {
+  animation: village-marquee 4s linear infinite;
+}
+
+.village-reveal.is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}

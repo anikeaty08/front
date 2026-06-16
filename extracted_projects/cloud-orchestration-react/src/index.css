@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { background-color: #09090b; color: #a1a1aa; }
+  ::selection { background-color: rgba(255, 255, 255, 0.15); color: #ffffff; }
+  ::-webkit-scrollbar { width: 0px; }
+}
+
+@layer utilities {
+  .word-mask { 
+    overflow: hidden; 
+    display: inline-block; 
+    vertical-align: bottom; 
+  }
+  
+  .word-reveal {
+    opacity: 0;
+    transform: translateY(110%) rotateX(20deg);
+    transform-origin: top left;
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .animate .word-reveal { 
+    opacity: 1; 
+    transform: translateY(0) rotateX(0deg); 
+  }
+
+  .animate-on-scroll { 
+    opacity: 0; 
+    transform: translateY(30px); 
+    filter: blur(10px); 
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); 
+  }
+  
+  .animate-on-scroll.animate { 
+    opacity: 1; 
+    transform: translateY(0); 
+    filter: blur(0px); 
+  }
+
+  .animate-line {
+    opacity: 0;
+    animation: reveal-vertical 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .spotlight-group:hover .spotlight-border { 
+    opacity: 1; 
+  }
+
+  .marquee-mask {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+}
+
+@keyframes reveal-vertical {
+  0% { clip-path: inset(0 0 100% 0); opacity: 0; }
+  1% { opacity: 1; }
+  100% { clip-path: inset(0 0 0 0); opacity: 0.15; }
+}

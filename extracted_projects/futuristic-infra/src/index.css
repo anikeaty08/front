@@ -1,0 +1,74 @@
+/* Custom utility and animation classes translated from source HTML <style> tags */
+
+/* Reveal Animations (Replacing GSAP) */
+.reveal-fade {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.reveal-fade.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gsap-reveal .word {
+    transform: translateY(110%);
+    transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.gsap-reveal.is-visible .word {
+    transform: translateY(0%);
+}
+
+/* Engineering Section Animations */
+@keyframes typing {
+    0% { max-width: 0; opacity: 0; }
+    1% { opacity: 1; }
+    100% { max-width: 100%; opacity: 1; }
+}
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #10b981; }
+}
+.animate-type-1 { overflow: hidden; white-space: nowrap; max-width: 0; opacity: 0; animation: typing 1s steps(30, end) forwards; border-right: 2px solid transparent; }
+.animate-type-2 { overflow: hidden; white-space: nowrap; max-width: 0; opacity: 0; animation: typing 1s steps(30, end) forwards 1s; border-right: 2px solid transparent; }
+.animate-type-3 { overflow: hidden; white-space: nowrap; max-width: 0; opacity: 0; animation: typing 1s steps(30, end) forwards 2s; border-right: 2px solid transparent; }
+.animate-type-4 { overflow: hidden; white-space: nowrap; max-width: 0; opacity: 0; animation: typing 1s steps(30, end) forwards 3s; border-right: 2px solid transparent; }
+.animate-type-5 { overflow: hidden; white-space: nowrap; max-width: 0; opacity: 0; animation: typing 1s steps(30, end) forwards 4s; border-right: 2px solid transparent; }
+.animate-type-6 { overflow: hidden; white-space: nowrap; max-width: 0; opacity: 0; animation: typing 1s steps(30, end) forwards 5s; border-right: 2px solid transparent; }
+.animate-type-7 { overflow: hidden; white-space: nowrap; max-width: 0; opacity: 0; animation: typing 1s steps(30, end) forwards 6s; border-right: 2px solid #10b981; animation: typing 1s steps(30, end) forwards 6s, blink-caret .75s step-end infinite 7s; }
+
+@keyframes reverse-spin {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+.animate-reverse-spin {
+    animation: reverse-spin 20s linear infinite;
+}
+
+@keyframes sonar-ripple {
+    0% { transform: scale(0.5); opacity: 1; border-width: 2px; }
+    100% { transform: scale(2.5); opacity: 0; border-width: 1px; }
+}
+.animate-sonar {
+    animation: sonar-ripple 4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes flashlight-move {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+.flashlight-bg {
+    background: radial-gradient(circle at center, rgba(255,255,255,0.06) 0%, transparent 50%);
+    background-size: 200% 200%;
+    animation: flashlight-move 8s ease-in-out infinite;
+}
+
+@keyframes dropLine {
+    0% { transform: translateY(-100px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(200px); opacity: 1; }
+}
+.drop-line {
+    animation: dropLine linear infinite;
+}

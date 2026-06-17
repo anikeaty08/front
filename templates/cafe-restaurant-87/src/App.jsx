@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -78,6 +114,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -129,7 +171,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="relative min-h-screen flex items-center pt-16 lg:pt-20" id="home">
 <div className="absolute inset-0 z-0">
-<div className="absolute top-0 right-0 bottom-0 left-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to bottom right, rgba(254, 243, 199, 0.75), rgba(255, 247, 237, 0.75), rgba(231, 229, 228, 0.75)), url(\'https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&amp'}}></div>
+<div className="absolute top-0 right-0 bottom-0 left-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to bottom right, rgba(254, 243, 199, 0.75), rgba(255, 247, 237, 0.75), rgba(231, 229, 228, 0.75)), url(\'https: //images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&amp'}}></div>
 <div className="bg-amber-200/30 w-72 h-72 rounded-full absolute top-20 right-10 blur-3xl"></div>
 <div className="absolute bottom-20 left-10 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl"></div>
 </div>

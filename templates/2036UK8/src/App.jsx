@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -46,6 +82,12 @@ document.querySelectorAll('[class*="group"]').forEach(card => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -70,7 +112,7 @@ document.querySelectorAll('[class*="group"]').forEach(card => {
 <main className="max-w-7xl md:px-10 mr-auto ml-auto pt-32 pr-6 pb-24 pl-6">
 
 <div className="opacity-0 animate-slide-up text-center mb-20" style={{animationDelay: '0.6s'}}>
-<h1 className="sm:text-7xl md:text-8xl lg:text-9xl text-6xl font-light tracking-tighter mb-6" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h1 className="sm:text-7xl md:text-8xl lg:text-9xl text-6xl font-light tracking-tighter mb-6" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Featured Cases
         </h1>
 <p className="md:text-xl max-w-2xl leading-relaxed text-lg text-gray-400 mr-auto ml-auto">
@@ -104,7 +146,7 @@ document.querySelectorAll('[class*="group"]').forEach(card => {
 <svg className="lucide lucide-zap w-4 h-4" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
 <span className="font-medium tracking-wide">AI × SPORTS TECHNOLOGY</span>
 </div>
-<h3 className="text-3xl lg:text-4xl font-light leading-tight mb-3" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-3xl lg:text-4xl font-light leading-tight mb-3" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Nike Training Intelligence: Personalized Athletic Performance
                 </h3>
 <p className="leading-relaxed max-w-md font-thin text-gray-300 mb-4">
@@ -134,7 +176,7 @@ document.querySelectorAll('[class*="group"]').forEach(card => {
 <svg className="lucide lucide-headphones w-4 h-4" data-lucide="headphones" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
 <span className="font-medium tracking-wide">IMMERSIVE DESIGN</span>
 </div>
-<h3 className="text-2xl font-light leading-tight mb-2" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-2xl font-light leading-tight mb-2" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     MetaSpace: Virtual Reality Collaboration Hub
                 </h3>
 <p className="leading-relaxed text-sm font-light text-gray-300">
@@ -154,7 +196,7 @@ document.querySelectorAll('[class*="group"]').forEach(card => {
 <svg className="lucide lucide-shield w-4 h-4" data-lucide="shield" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
 <span className="font-medium tracking-wide">FINTECH SECURITY</span>
 </div>
-<h3 className="text-2xl font-light leading-tight mb-2" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-2xl font-light leading-tight mb-2" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     CryptoVault: Decentralized Asset Management
                 </h3>
 <p className="leading-relaxed text-sm font-light text-gray-300">
@@ -174,7 +216,7 @@ document.querySelectorAll('[class*="group"]').forEach(card => {
 <svg className="lucide lucide-activity w-4 h-4" data-lucide="activity" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
 <span className="font-medium tracking-wide">MEDICAL INNOVATION</span>
 </div>
-<h3 className="text-2xl font-light leading-tight mb-2" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-2xl font-light leading-tight mb-2" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     MediCore: AI-Powered Diagnostics Platform
                 </h3>
 <p className="leading-relaxed text-sm font-light text-gray-300">
@@ -194,7 +236,7 @@ document.querySelectorAll('[class*="group"]').forEach(card => {
 <svg className="lucide lucide-palette w-4 h-4" data-lucide="palette" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle></svg>
 <span className="font-medium tracking-wide">AI × CREATIVE ARTS</span>
 </div>
-<h3 className="leading-tight text-3xl font-light mb-3" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="leading-tight text-3xl font-light mb-3" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     ArtisanAI: The Future of Digital Creativity
                 </h3>
 <p className="leading-relaxed max-w-lg font-light text-gray-300 mb-4 line-clamp-2">

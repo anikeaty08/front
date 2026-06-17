@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
 
@@ -290,6 +326,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -302,7 +344,7 @@ export default function App() {
 </div>
 
 <header className="fixed top-0 left-0 right-0 z-50 pt-6 pr-6 pb-6 pl-6">
-<div className="max-w-4xl mx-auto border border-white/10 rounded-3xl px-8 py-4" style={{background: 'linear-gradient(135deg, rgba(59,130,246,0.10) 0%, rgba(147,51,234,0.10) 100%)', backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)'}}>
+<div className="max-w-4xl mx-auto border border-white/10 rounded-3xl px-8 py-4" style={{background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.10) 0%, rgba(147, 51, 234, 0.10) 100%)', backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center">
 <span className="text-lg font-semibold text-white tracking-tight" style={{fontFamily: 'Inter'}}>Infinity Live</span>
@@ -345,7 +387,7 @@ export default function App() {
 <button className="relative inline-flex items-center justify-center px-8 py-4 rounded-full text-sm sm:text-base font-medium text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:scale-[1.01] active:translate-y-px focus:outline-none focus:ring-2 focus:ring-blue-500" style={{fontFamily: 'Inter', isolation: 'isolate', background: 'transparent'}}>
 <span aria-hidden="true" className="absolute inset-0 rounded-full pointer-events-none animate-spin" style={{padding: '2px', background: 'conic-gradient(from 0deg, transparent 0%, #1d4ed8 5%, #8484ff 15%, #1d4ed8 30%, transparent 40%, transparent 100%)', WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', WebkitMaskComposite: 'xor', mask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', maskComposite: 'exclude', animationDuration: '2.5s'}}></span>
 <span aria-hidden="true" className="absolute inset-[3px] rounded-full bg-black/80 ring-1 ring-white/10 pointer-events-none"></span>
-<span aria-hidden="true" className="absolute inset-0 rounded-full pointer-events-none opacity-60 animate-spin" style={{background: 'linear-gradient(-50deg, transparent, rgba(29,78,216,0.75), transparent)', maskImage: 'radial-gradient(circle at bottom, transparent 45%, black 65%)', animationDuration: '4s', animationDirection: 'reverse'}}></span>
+<span aria-hidden="true" className="absolute inset-0 rounded-full pointer-events-none opacity-60 animate-spin" style={{background: 'linear-gradient(-50deg, transparent, rgba(29, 78, 216, 0.75), transparent)', maskImage: 'radial-gradient(circle at bottom, transparent 45%, black 65%)', animationDuration: '4s', animationDirection: 'reverse'}}></span>
 <span className="relative z-10">Enter a venue</span>
 <svg className="lucide lucide-play w-4 h-4 ml-2 relative z-10" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>
 </button>
@@ -389,7 +431,7 @@ export default function App() {
 </div>
 <div className="absolute bottom-8 left-8 right-8 grid grid-cols-2 gap-6">
 <div className="bg-white/10 border-white/20 border rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-lg backdrop-blur-xl group relative" id="" style={{fontFamily: 'Inter', perspective: '1000px', padding: '20px'}}>
-<div className="transition-all duration-500 w-full group-hover:[transform:rotate3d(0.5,1,0,30deg)] group-hover:[background-position:-100px_100px,_-100px_100px]" style={{paddingTop: '50px', border: '3px solid rgb(255, 255, 255)', transformStyle: 'preserve-3d', background: 'linear-gradient(135deg,#0000 18.75%,#f3f3f3 0 31.25%,#0000 0), repeating-linear-gradient(45deg,#f3f3f3 -6.25% 6.25%,#ffffff 0 18.75%)', backgroundSize: '60px 60px', backgroundPosition: '0 0, 0 0', backgroundColor: '#f0f0f0', boxShadow: 'rgba(142, 142, 142, 0.3) 0px 30px 30px -10px'}}>
+<div className="transition-all duration-500 w-full group-hover:[transform:rotate3d(0.5,1,0,30deg)] group-hover:[background-position:-100px_100px,_-100px_100px]" style={{paddingTop: '50px', border: '3px solid rgb(255, 255, 255)', transformStyle: 'preserve-3d', background: 'linear-gradient(135deg, #0000 18.75%, #f3f3f3 0 31.25%, #0000 0), repeating-linear-gradient(45deg, #f3f3f3 -6.25% 6.25%, #ffffff 0 18.75%)', backgroundSize: '60px 60px', backgroundPosition: '0 0, 0 0', backgroundColor: '#f0f0f0', boxShadow: 'rgba(142, 142, 142, 0.3) 0px 30px 30px -10px'}}>
 <div className="absolute" style={{top: '30px', right: '30px', height: '60px', width: '60px', background: 'white', border: '1px solid rgb(7, 185, 255)', padding: '10px', transform: 'translate3d(0px, 0px, 80px)', boxShadow: 'rgba(100, 100, 111, 0.2) 0px 17px 10px -10px'}}>
 <span className="block text-center uppercase" style={{fontSize: '9px', fontWeight: '700', color: 'rgb(4, 193, 250)', letterSpacing: '0.04em'}}>Stages</span>
 <span className="block text-center" style={{fontSize: '20px', fontWeight: '800', color: 'rgb(4, 193, 250)'}}>120+</span>
@@ -667,7 +709,7 @@ export default function App() {
 <span className="font-light tracking-tight" id="highlightTail" style={{fontFamily: 'Inter'}}>with your crew</span>
 </h3>
 </div>
-<p className="mt-5 text-neutral-400 leading-relaxed max-w-prose text-[17px] sm:text-lg" id="bodyCopy" style={{fontFamily: 'Inter'}}>Form private parties, share links, and meet at the rail. Proximity <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(245,158,11,0.18)', boxShadow: 'inset 0 0 0 1px rgba(245,158,11,0.35)'}}>voice</span> makes your <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(16,185,129,0.18)', boxShadow: 'inset 0 0 0 1px rgba(16,185,129,0.35)'}}>crew</span> sound close—even in a packed crowd.</p>
+<p className="mt-5 text-neutral-400 leading-relaxed max-w-prose text-[17px] sm:text-lg" id="bodyCopy" style={{fontFamily: 'Inter'}}>Form private parties, share links, and meet at the rail. Proximity <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(245, 158, 11, 0.18)', boxShadow: 'inset 0 0 0 1px rgba(245,158,11,0.35)'}}>voice</span> makes your <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(16, 185, 129, 0.18)', boxShadow: 'inset 0 0 0 1px rgba(16,185,129,0.35)'}}>crew</span> sound close—even in a packed crowd.</p>
 <div className="mt-8 space-y-2">
 <div className="h-3 rounded bg-neutral-800/70 w-2/3"></div>
 <div className="h-3 rounded bg-neutral-800/70 w-5/6"></div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -322,6 +358,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -338,7 +380,7 @@ gtag('config', 'G-2M6V79H761');
 <a className="hover:text-black transition-colors" href="#work">Projects</a>
 </div>
 <div className="magnetic-wrap">
-<button className="magnetic-btn btn-beam rounded-full px-6 py-2 text-xs font-medium text-brand group" style={{-BgInner: '#fff', -BeamColor: '#E05D3A'}}>
+<button className="magnetic-btn btn-beam rounded-full px-6 py-2 text-xs font-medium text-brand group" style={{'--bg-inner': '#fff', '--beam-color': '#E05D3A'}}>
 <span className="btn-beam-content flex items-center gap-2">
                     Book Strategy Call
                     <i className="w-3.5 h-3.5 stroke-[1.5] group-hover:translate-x-1 transition-transform" data-lucide="arrow-right"></i>
@@ -627,7 +669,7 @@ gtag('config', 'G-2M6V79H761');
 <input className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand transition-colors text-white placeholder:text-gray-600 font-light" placeholder="Email" type="email"/>
 <textarea className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand transition-colors text-white placeholder:text-gray-600 font-light resize-none" placeholder="Message" rows="3"></textarea>
 <div className="magnetic-wrap mt-2">
-<button className="btn-beam magnetic-btn w-full rounded-xl px-6 py-3 text-sm font-medium text-white group" style={{-BgInner: '#111', -BeamColor: '#E05D3A'}} type="button">
+<button className="btn-beam magnetic-btn w-full rounded-xl px-6 py-3 text-sm font-medium text-white group" style={{'--bg-inner': '#111', '--beam-color': '#E05D3A'}} type="button">
 <span className="btn-beam-content flex items-center justify-center gap-2">
                                 Send Message
                                 <i className="w-4 h-4 stroke-[1.5]" data-lucide="send"></i>

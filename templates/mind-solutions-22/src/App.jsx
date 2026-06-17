@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,6 +139,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -121,7 +163,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-base" icon="solar:stars-linear"></iconify-icon>
           Wach auf × Mind Solutions
         </span>
-<h1 className="leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-white tracking-tight pb-6 sm:pb-8" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h1 className="leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-white tracking-tight pb-6 sm:pb-8" style={{fontFamily: '\'Playfair Display\', serif'}}>
           Was, wenn dir kein Wissen fehlt — sondern dein Unterbewusstsein dich
           blockiert?
         </h1>
@@ -167,7 +209,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="w-full max-w-3xl mb-12 sm:mb-16">
 <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Kommt dir dieser unsichtbare Widerstand bekannt vor?
           </h2>
 </div>
@@ -210,7 +252,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="mt-12 sm:mt-16 p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-[#C5A059]/20 text-center relative overflow-hidden">
 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(197,160,89,0.05),transparent_70%)]"></div>
-<p className="relative z-10 text-base sm:text-lg text-white font-medium leading-relaxed" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<p className="relative z-10 text-base sm:text-lg text-white font-medium leading-relaxed" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Dein Problem ist nicht mangelnde Disziplin oder zu wenig Wissen. Das
             eigentliche Problem ist dein überreiztes Nervensystem und ein
             Unterbewusstsein, das am alten Zustand festhält. Genau hier greift
@@ -222,7 +264,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="w-full flex flex-col md:flex-row items-center gap-10 md:gap-16 mb-20 sm:mb-32">
 <div className="w-full md:w-1/2">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-6 sm:mb-8" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-6 sm:mb-8" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Der Ausweg aus dem mentalen Hamsterrad
           </h2>
 <div className="space-y-4 sm:space-y-6 text-slate-300 font-light text-sm sm:text-base leading-relaxed">
@@ -255,7 +297,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="w-full mb-20 sm:mb-32">
 <div className="text-center mb-12 sm:mb-20">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Dein 4-Stufen System für nachhaltige Neuausrichtung
           </h2>
 </div>
@@ -269,7 +311,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[#C5A059] text-xs font-medium tracking-widest uppercase mb-2">
                 Stufe 1
               </span>
-<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Nervous System Reset
               </h3>
 <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-light mb-6">
@@ -303,7 +345,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[#C5A059] text-xs font-medium tracking-widest uppercase mb-2">
                 Stufe 2
               </span>
-<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Shadow Release
               </h3>
 <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-light mb-6">
@@ -338,7 +380,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[#C5A059] text-xs font-medium tracking-widest uppercase mb-2">
                 Stufe 3
               </span>
-<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Creator Awakening
               </h3>
 <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-light mb-4">
@@ -377,7 +419,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[#C5A059] text-xs font-medium tracking-widest uppercase mb-2">
                 Stufe 4
               </span>
-<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-xl sm:text-2xl text-white font-medium tracking-tight mb-4" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Identity Anchor
               </h3>
 <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-light mb-6">
@@ -407,7 +449,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="w-full mb-20 sm:mb-32">
 <div className="text-center mb-12">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Der Unterschied in deiner Realität
           </h2>
 </div>
@@ -465,7 +507,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-full mb-20 sm:mb-32">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 max-w-5xl mx-auto">
 <div>
-<h3 className="text-xl sm:text-2xl text-white font-medium mb-6" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-xl sm:text-2xl text-white font-medium mb-6" style={{fontFamily: '\'Playfair Display\', serif'}}>
               Dieser Prozess ist für dich, wenn…
             </h3>
 <ul className="space-y-4 text-sm sm:text-base text-slate-300 font-light">
@@ -487,7 +529,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 <div>
-<h3 className="text-xl sm:text-2xl text-white font-medium mb-6 opacity-70" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-xl sm:text-2xl text-white font-medium mb-6 opacity-70" style={{fontFamily: '\'Playfair Display\', serif'}}>
               Subconscious Recode ist nicht das Richtige, wenn…
             </h3>
 <ul className="space-y-4 text-sm sm:text-base text-slate-500 font-light">
@@ -514,7 +556,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-full mb-20 sm:mb-32">
 <div className="bg-gradient-to-b from-white/[0.02] to-transparent border border-white/[0.05] rounded-3xl p-8 sm:p-12 md:p-16 relative overflow-hidden backdrop-blur-sm">
 <div className="relative z-10 flex flex-col items-center mb-10 text-center">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-3" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-3" style={{fontFamily: '\'Playfair Display\', serif'}}>
               Wach auf
               <span className="text-[#C5A059] font-light mx-2 text-xl">×</span>
               Mind Solutions
@@ -552,7 +594,7 @@ gtag('config', 'G-2M6V79H761');
               im Bereich der Hypnose.
             </p>
 <div className="mt-10 pt-8 border-t border-white/[0.05]">
-<p className="text-lg sm:text-xl text-white font-medium italic" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<p className="text-lg sm:text-xl text-white font-medium italic" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 "Subconscious Recode ist die Essenz unserer Arbeit. Keine
                 Theorie. Sondern das, was messbar funktioniert, wenn du bereit
                 bist, die Ebene zu wechseln."
@@ -564,7 +606,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="w-full mb-20 sm:mb-32">
 <div className="flex flex-col items-center justify-center mb-12 sm:mb-16">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-4 text-center" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-4 text-center" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Erfahrungen von Menschen, die mit Abbas gearbeitet haben
           </h2>
 <p className="text-sm sm:text-base text-slate-400 font-light text-center max-w-3xl mx-auto mb-8 sm:mb-10 leading-relaxed px-4">
@@ -754,7 +796,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-full max-w-2xl mx-auto mb-16 sm:mb-24 relative" id="kaufen">
 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(197,160,89,0.1),transparent_70%)] pointer-events-none blur-xl"></div>
 <div className="text-center mb-6 sm:mb-10">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Dein direkter Weg zur Umsetzung
           </h2>
 </div>
@@ -852,7 +894,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-[#C5A059] text-3xl" icon="solar:shield-check-linear"></iconify-icon>
 </div>
 <div>
-<h3 className="text-white text-lg sm:text-xl font-medium mb-2" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-white text-lg sm:text-xl font-medium mb-2" style={{fontFamily: '\'Playfair Display\', serif'}}>
               Sichere Abwicklung &amp; Sofortiger Zugriff
             </h3>
 <p className="text-slate-400 text-sm sm:text-base font-light leading-relaxed">
@@ -865,7 +907,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="w-full max-w-3xl mx-auto mb-20 sm:mb-32">
-<h2 className="text-2xl sm:text-3xl text-white font-medium tracking-tight mb-10 text-center" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl text-white font-medium tracking-tight mb-10 text-center" style={{fontFamily: '\'Playfair Display\', serif'}}>
           Häufige Fragen
         </h2>
 <div className="space-y-4">
@@ -972,7 +1014,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="w-full max-w-4xl text-center flex flex-col items-center">
-<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-6" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-medium tracking-tight mb-6" style={{fontFamily: '\'Playfair Display\', serif'}}>
           Jeder Tag im alten Muster kostet dich unnötig Kraft.
         </h2>
 <p className="text-sm sm:text-base text-slate-300 font-light leading-relaxed max-w-2xl mb-10">

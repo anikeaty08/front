@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -796,6 +832,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -895,7 +937,7 @@ gtag('config', 'G-2M6V79H761');
           simulation and reality.
         </p>
 <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 interactive-element">
-<button className="btn-primary h-11 px-7 bg-accent hover:bg-accentGlow text-white text-[13px] font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2" style={{boxShadow: '0 0 30px rgba(16,185,129,0.25), 0 1px 3px rgba(0,0,0,0.2)'}}>
+<button className="btn-primary h-11 px-7 bg-accent hover:bg-accentGlow text-white text-[13px] font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2" style={{boxShadow: '0 0 30px rgba(16, 185, 129, 0.25), 0 1px 3px rgba(0,0,0,0.2)'}}>
             Start Simulation
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -1575,7 +1617,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="absolute top-0 left-0 w-1/2 h-full z-20 pointer-events-none" id="cta-door-left" style={{willChange: 'transform'}}>
-<div className="h-full w-full relative overflow-hidden" style={{background: 'linear-gradient(135deg,rgba(255,255,255,0.06),rgba(0,0,0,0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderRight: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="h-full w-full relative overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderRight: '1px solid rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 opacity-[0.04]" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%270 0 200 200%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.65%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E\')'}}></div>
 
 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[2px] h-24 bg-white/20 rounded-l-full"></div>
@@ -1584,7 +1626,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="absolute top-0 right-0 w-1/2 h-full z-20 pointer-events-none" id="cta-door-right" style={{willChange: 'transform'}}>
-<div className="h-full w-full relative overflow-hidden" style={{background: 'linear-gradient(225deg,rgba(16,185,129,0.08),rgba(0,0,0,0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderLeft: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="h-full w-full relative overflow-hidden" style={{background: 'linear-gradient(225deg, rgba(16, 185, 129, 0.08), rgba(0, 0, 0, 0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderLeft: '1px solid rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 opacity-[0.04]" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%270 0 200 200%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.65%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E\')'}}></div>
 <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-24 bg-white/20 rounded-r-full"></div>
 <div className="absolute inset-0 opacity-0" id="cta-sweep-right" style={{background: 'linear-gradient(255deg,transparent 30%,rgba(255,255,255,0.08) 50%,transparent 70%)'}}></div>
@@ -1593,7 +1635,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute inset-0 z-10 pointer-events-none opacity-0" id="cta-canvas-container" style={{willChange: 'opacity'}}></div>
 
-<div className="relative z-30 flex flex-col items-center text-center px-6 opacity-0" id="cta-content" style={{willChange: 'transform,opacity', pointerEvents: 'none'}}>
+<div className="relative z-30 flex flex-col items-center text-center px-6 opacity-0" id="cta-content" style={{willChange: 'transform, opacity', pointerEvents: 'none'}}>
 <div className="mb-8 inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-950/30 backdrop-blur-sm shadow-[0_0_15px_-3px_rgba(16,185,129,0.3)]">
 <span className="relative flex h-2 w-2">
 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -245,6 +281,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -295,7 +337,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col sm:flex-row items-start gap-4">
 <a className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium transition-all bg-white text-zinc-950 hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]" href="#">
                     Apply to Join
-                    <iconify-icon className="ml-2" height="16" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+                    <iconify-icon className="ml-2" height="16" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </a>
 <a className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium transition-all bg-transparent border border-white/10 text-white hover:bg-white/5" href="#">
                     View Open Roles
@@ -311,7 +353,7 @@ gtag('config', 'G-2M6V79H761');
 <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-8">Not another chat group.</h2>
 <div className="glass-panel rounded-2xl p-8 md:p-10 relative overflow-hidden group">
 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-<iconify-icon className="text-zinc-500 mb-6" height="32" icon="solar:network-linear" style={{-IconifyStrokeWidth: '1.5'}} width="32"></iconify-icon>
+<iconify-icon className="text-zinc-500 mb-6" height="32" icon="solar:network-linear" style={{'--iconify-stroke-width': '1.5'}} width="32"></iconify-icon>
 <p className="text-lg font-light text-zinc-300 leading-relaxed mb-6">
                     Youth Foundry is a highly curated network designed exclusively for people who actively start and operate companies.
                 </p>
@@ -326,27 +368,27 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-base font-light text-zinc-400 mb-10">We carefully review applications to ensure a high-signal environment across these key archetypes.</p>
 <div className="grid grid-cols-2 gap-3">
 <div className="glass-panel rounded-xl p-5 flex flex-col gap-3 hover:bg-white/5 transition-colors cursor-default">
-<iconify-icon className="text-zinc-400" height="20" icon="solar:lightbulb-bolt-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-400" height="20" icon="solar:lightbulb-bolt-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 <span className="text-sm font-medium tracking-tight">Startup Founders</span>
 </div>
 <div className="glass-panel rounded-xl p-5 flex flex-col gap-3 hover:bg-white/5 transition-colors cursor-default">
-<iconify-icon className="text-zinc-400" height="20" icon="solar:cpu-bolt-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-400" height="20" icon="solar:cpu-bolt-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 <span className="text-sm font-medium tracking-tight">Startup Operators</span>
 </div>
 <div className="glass-panel rounded-xl p-5 flex flex-col gap-3 hover:bg-white/5 transition-colors cursor-default">
-<iconify-icon className="text-zinc-400" height="20" icon="solar:code-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-400" height="20" icon="solar:code-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 <span className="text-sm font-medium tracking-tight">Engineers</span>
 </div>
 <div className="glass-panel rounded-xl p-5 flex flex-col gap-3 hover:bg-white/5 transition-colors cursor-default">
-<iconify-icon className="text-zinc-400" height="20" icon="solar:pen-new-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-400" height="20" icon="solar:pen-new-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 <span className="text-sm font-medium tracking-tight">Product Designers</span>
 </div>
 <div className="glass-panel rounded-xl p-5 flex flex-col gap-3 hover:bg-white/5 transition-colors cursor-default">
-<iconify-icon className="text-zinc-400" height="20" icon="solar:chart-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-400" height="20" icon="solar:chart-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 <span className="text-sm font-medium tracking-tight">Angel Investors</span>
 </div>
 <div className="glass-panel rounded-xl p-5 flex flex-col gap-3 hover:bg-white/5 transition-colors cursor-default">
-<iconify-icon className="text-zinc-400" height="20" icon="solar:users-group-two-rounded-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-400" height="20" icon="solar:users-group-two-rounded-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 <span className="text-sm font-medium tracking-tight">Co-founders</span>
 </div>
 </div>
@@ -379,7 +421,7 @@ gtag('config', 'G-2M6V79H761');
                     </p>
 <a className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-white hover:text-zinc-300 transition-colors group" href="#">
                         Submit application 
-                        <iconify-icon className="transition-transform group-hover:translate-x-1" height="16" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+                        <iconify-icon className="transition-transform group-hover:translate-x-1" height="16" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </a>
 </div>
 </div>

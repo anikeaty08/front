@@ -101,16 +101,16 @@ const SlideThumb = ({ project, onOpen, index }) => {
         <div className="absolute inset-0 opacity-90">
           <div
             className="absolute -top-10 -right-10 w-32 h-32 rounded-full"
-            style={{ background: project.color }}
+            style={{background: project.color}}
           />
           <div
             className="absolute bottom-4 left-4 w-16 h-16 rounded-full"
-            style={{ background: project.accent }}
+            style={{background: project.accent}}
           />
           <div className="absolute top-1/2 left-1/3 w-3 h-3 rounded-full bg-white/40" />
           <div
             className="absolute bottom-8 right-12 w-20 h-20 rounded-full border-2"
-            style={{ borderColor: project.accent }}
+            style={{borderColor: project.accent}}
           />
         </div>
 
@@ -134,7 +134,7 @@ const SlideThumb = ({ project, onOpen, index }) => {
 
           <div>
             <h3 className="font-display text-3xl md:text-4xl uppercase leading-none tracking-tight">
-              <span style={{ color: project.color }}>{project.title.split(" ")[0]}</span>{" "}
+              <span style={{color: project.color}}>{project.title.split(" ")[0]}</span>{" "}
               <span className="text-white">{project.title.split(" ").slice(1).join(" ")}</span>
             </h3>
             <div className="mt-4 flex items-center justify-between">
@@ -212,6 +212,42 @@ const Modal = ({ project, onClose }) => {
   const totalPreview = 6;
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowRight") setSlide(s => (s + 1) % totalPreview);
@@ -243,7 +279,7 @@ const Modal = ({ project, onClose }) => {
               {project.category} · {project.client}
             </span>
             <h3 className="mt-1 font-display text-3xl md:text-4xl uppercase tracking-tight">
-              <span style={{ color: project.color }}>{project.title.split(" ")[0]}</span>{" "}
+              <span style={{color: project.color}}>{project.title.split(" ")[0]}</span>{" "}
               {project.title.split(" ").slice(1).join(" ")}
             </h3>
           </div>
@@ -257,23 +293,11 @@ const Modal = ({ project, onClose }) => {
           <div className="absolute inset-0">
             <div
               className="absolute rounded-full"
-              style={{
-                background: project.color,
-                width: 180 + slide * 30,
-                height: 180 + slide * 30,
-                top: -60,
-                right: -40 + slide * 20,
-              }}
+              style={{background: project.color, width: 180 + slide * 30, height: 180 + slide * 30, top: -60, right: -40 + slide * 20}}
             />
             <div
               className="absolute rounded-full"
-              style={{
-                background: project.accent,
-                width: 120,
-                height: 120,
-                bottom: 40,
-                left: 60 + slide * 40,
-              }}
+              style={{background: project.accent, width: 120, height: 120, bottom: 40, left: 60 + slide * 40}}
             />
             <div className="absolute bottom-10 right-20 w-32 h-32 rounded-full border-2 border-dashed border-white/30 animate-spin-slow" />
           </div>
@@ -282,12 +306,12 @@ const Modal = ({ project, onClose }) => {
               {project.client} — {project.year}
             </span>
             <h4 className="font-display text-5xl md:text-7xl uppercase tracking-tight leading-[0.9]">
-              {slide === 0 && <><span style={{ color: project.color }}>Intro</span> Slide</>}
-              {slide === 1 && <><span style={{ color: project.color }}>The</span> Problem</>}
-              {slide === 2 && <><span style={{ color: project.color }}>Our</span> Solution</>}
-              {slide === 3 && <><span style={{ color: project.color }}>Market</span> Size</>}
-              {slide === 4 && <><span style={{ color: project.color }}>The</span> Team</>}
-              {slide === 5 && <><span style={{ color: project.color }}>Thank</span> You</>}
+              {slide === 0 && <><span style={{color: project.color}}>Intro</span> Slide</>}
+              {slide === 1 && <><span style={{color: project.color}}>The</span> Problem</>}
+              {slide === 2 && <><span style={{color: project.color}}>Our</span> Solution</>}
+              {slide === 3 && <><span style={{color: project.color}}>Market</span> Size</>}
+              {slide === 4 && <><span style={{color: project.color}}>The</span> Team</>}
+              {slide === 5 && <><span style={{color: project.color}}>Thank</span> You</>}
             </h4>
             <p className="mt-6 max-w-md text-sm text-white/60">
               {project.description}

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -46,6 +82,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -84,7 +126,7 @@ gtag('config', 'G-2M6V79H761');
           340+ faculty across 28 universities
         </span>
 </div>
-<h1 className="font-serif font-medium text-gradient tracking-tight leading-none mb-6 animate-fade-up delay-100" style={{fontSize: 'clamp(2.6rem,6.5vw,4.8rem)', lineHeight: '1.06', fontFamily: '\'Lora\',Georgia,serif'}}>
+<h1 className="font-serif font-medium text-gradient tracking-tight leading-none mb-6 animate-fade-up delay-100" style={{fontSize: 'clamp(2.6rem,6.5vw,4.8rem)', lineHeight: '1.06', fontFamily: '\'Lora\', Georgia, serif'}}>
         Grade smarter.<br/>Stay in control.
       </h1>
 <p className="text-sm text-gray-400 leading-relaxed max-w-md mb-10 animate-fade-up delay-200">
@@ -220,7 +262,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-5xl mx-auto relative z-10">
 <div className="max-w-md mb-14 reveal">
 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">How It Works</p>
-<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\',Georgia,serif'}}>
+<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\', Georgia, serif'}}>
           Three steps. Your rubric.<br/>Your final call.
         </h2>
 </div>
@@ -307,7 +349,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-5xl mx-auto">
 <div className="max-w-md mb-14 reveal">
 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Features</p>
-<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\',Georgia,serif'}}>
+<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\', Georgia, serif'}}>
           Built around your<br/>evaluative judgment.
         </h2>
 </div>
@@ -349,7 +391,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-5xl mx-auto flex flex-col lg:flex-row gap-14 items-center relative z-10">
 <div className="flex-1 max-w-sm reveal">
 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Analytics</p>
-<h2 className="font-serif font-medium tracking-tight leading-tight mb-4 text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\',Georgia,serif'}}>
+<h2 className="font-serif font-medium tracking-tight leading-tight mb-4 text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\', Georgia, serif'}}>
           Understand how your class is performing.
         </h2>
 <p className="text-xs text-gray-400 leading-relaxed mb-6">Surface patterns across your cohort — adapt your instruction, not just your gradebook.</p>
@@ -451,7 +493,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-5xl mx-auto">
 <div className="max-w-md mb-14 reveal">
 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Testimonials</p>
-<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\',Georgia,serif'}}>
+<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\', Georgia, serif'}}>
           From faculty who use it<br/>every semester.
         </h2>
 </div>
@@ -516,7 +558,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-5xl mx-auto relative z-10">
 <div className="max-w-md mb-14 reveal">
 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Security</p>
-<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\',Georgia,serif'}}>
+<h2 className="font-serif font-medium tracking-tight leading-tight text-gradient" style={{fontSize: 'clamp(1.5rem,3vw,2rem)', fontFamily: '\'Lora\', Georgia, serif'}}>
           Designed for institutional<br/>compliance.
         </h2>
 </div>
@@ -560,7 +602,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="glow-orb absolute pointer-events-none" style={{width: '600px', height: '400px', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}}></div>
 <div className="relative z-10 max-w-xl mx-auto text-center reveal">
 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">Get Started</p>
-<h2 className="font-serif font-medium tracking-tight leading-tight mb-5 text-gradient" style={{fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontFamily: '\'Lora\',Georgia,serif'}}>
+<h2 className="font-serif font-medium tracking-tight leading-tight mb-5 text-gradient" style={{fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontFamily: '\'Lora\', Georgia, serif'}}>
         Reclaim your time.<br/>Stay in control.
       </h2>
 <p className="text-xs text-gray-400 leading-relaxed mb-10 max-w-sm mx-auto">

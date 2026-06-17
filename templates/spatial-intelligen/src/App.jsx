@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -371,6 +407,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1317,13 +1359,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-1.5 w-32 z-20" style={{-Tx: '-240px', -Ty: '-240px', -Rot: '15deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '0.2s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-1.5 w-32 z-20" style={{'--tx': '-240px', '--ty': '-240px', '--rot': '15deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '0.2s'}}>
 <div className="h-1.5 w-1/2 bg-white/20 rounded"></div>
 <div className="h-1.5 w-3/4 bg-white/40 rounded"></div>
 <div className="h-1.5 w-2/3 bg-white/20 rounded"></div>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-neutral-300" style={{-Tx: '260px', -Ty: '-180px', -Rot: '-20deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '0.6s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-neutral-300" style={{'--tx': '260px', '--ty': '-180px', '--rot': '-20deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '0.6s'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
 <path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
@@ -1331,50 +1373,50 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-2.5 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20" style={{-Tx: '-180px', -Ty: '260px', -Rot: '30deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.0s'}}>
+<div className="absolute top-1/2 left-1/2 p-2.5 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20" style={{'--tx': '-180px', '--ty': '260px', '--rot': '30deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.0s'}}>
 <div className="w-8 h-4 bg-white/20 rounded-full relative">
 <div className="absolute right-1 top-[2px] w-3 h-3 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
 </div>
 </div>
 
-<div className="absolute top-1/2 left-1/2 px-4 py-2 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center gap-2 z-20" style={{-Tx: '220px', -Ty: '220px', -Rot: '-10deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.4s'}}>
+<div className="absolute top-1/2 left-1/2 px-4 py-2 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center gap-2 z-20" style={{'--tx': '220px', '--ty': '220px', '--rot': '-10deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.4s'}}>
 <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]"></div>
 <span className="text-xs font-mono text-white">99.9%</span>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-end gap-1.5 h-12 w-16 z-20" style={{-Tx: '-320px', -Ty: '20px', -Rot: '25deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.8s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-end gap-1.5 h-12 w-16 z-20" style={{'--tx': '-320px', '--ty': '20px', '--rot': '25deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.8s'}}>
 <div className="w-2 bg-white/20 rounded-t h-1/3"></div>
 <div className="w-2 bg-white/40 rounded-t h-2/3"></div>
 <div className="w-2 bg-white/60 rounded-t h-1/2"></div>
 <div className="w-2 bg-white/80 rounded-t h-full shadow-[0_0_8px_rgba(255,255,255,0.4)]"></div>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-neutral-300" style={{-Tx: '300px', -Ty: '60px', -Rot: '-25deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '2.2s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-neutral-300" style={{'--tx': '300px', '--ty': '60px', '--rot': '-25deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '2.2s'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
 <circle cx="12" cy="12" r="3"></circle>
 </svg>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-2 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center gap-2 z-20" style={{-Tx: '-80px', -Ty: '-300px', -Rot: '40deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '2.6s'}}>
+<div className="absolute top-1/2 left-1/2 p-2 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center gap-2 z-20" style={{'--tx': '-80px', '--ty': '-300px', '--rot': '40deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '2.6s'}}>
 <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-white/20 to-white/5 border border-white/20"></div>
 <div className="h-1.5 w-8 bg-white/20 rounded"></div>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-emerald-400" style={{-Tx: '100px', -Ty: '-280px', -Rot: '-15deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.0s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-emerald-400" style={{'--tx': '100px', '--ty': '-280px', '--rot': '-15deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.0s'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2-1 4-2 8-2 2 0 6 1 8 2a1 1 0 0 1 1 1z"></path>
 <path d="m9 12 2 2 4-4"></path>
 </svg>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] w-24 z-20" style={{-Tx: '-120px', -Ty: '320px', -Rot: '20deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.4s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] w-24 z-20" style={{'--tx': '-120px', '--ty': '320px', '--rot': '20deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.4s'}}>
 <div className="w-full h-1 bg-white/10 rounded-full relative">
 <div className="absolute left-1/3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.6)]"></div>
 </div>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-neutral-300" style={{-Tx: '160px', -Ty: '300px', -Rot: '-35deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.8s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 text-neutral-300" style={{'--tx': '160px', '--ty': '300px', '--rot': '-35deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.8s'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <rect height="16" rx="2" width="16" x="4" y="4"></rect>
 <rect height="6" rx="1" width="6" x="9" y="9"></rect>
@@ -1389,13 +1431,13 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] w-20 z-20" style={{-Tx: '-340px', -Ty: '-120px', -Rot: '10deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '4.2s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] w-20 z-20" style={{'--tx': '-340px', '--ty': '-120px', '--rot': '10deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '4.2s'}}>
 <svg className="w-full h-4 overflow-visible" viewbox="0 0 100 20">
 <path d="M0,10 Q15,20 25,10 T50,10 T75,5 T100,10" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2"></path>
 </svg>
 </div>
 
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-1.5 w-24 z-20" style={{-Tx: '340px', -Ty: '-80px', -Rot: '-5deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '4.6s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-1.5 w-24 z-20" style={{'--tx': '340px', '--ty': '-80px', '--rot': '-5deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '4.6s'}}>
 <div className="h-1.5 w-full bg-emerald-400/40 rounded"></div>
 <div className="h-1.5 w-2/3 bg-white/20 rounded"></div>
 </div>

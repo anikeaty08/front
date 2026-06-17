@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
 
@@ -213,6 +249,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1017,36 +1059,36 @@ addUtilities({
 <div className="relative">
 <img alt="Cyberpunk City" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/95221975-49b7-4db6-a8fe-15f9a78f1303_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Cyberpunk City</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Neon-lit metropolis</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Cyberpunk City</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Neon-lit metropolis</p>
 </div>
 </div>
 <div className="group overflow-hidden hover:ring-white/20 hover:shadow-xl transition ring-white/10 ring-1 rounded-2xl bg-zinc-900">
 <div className="relative">
 <img alt="Fantasy Landscape" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/46ed20b9-8613-42c5-b728-617b435290b4_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Fantasy Landscape</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Magical realm</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Fantasy Landscape</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Magical realm</p>
 </div>
 </div>
 <div className="group overflow-hidden hover:ring-white/20 hover:shadow-xl transition ring-white/10 ring-1 rounded-2xl bg-zinc-900">
 <div className="relative">
 <img alt="Abstract Art" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/48805e96-414c-4480-b758-2938cccff968_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Abstract Art</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Digital creation</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Abstract Art</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Digital creation</p>
 </div>
 </div>
 </div>
@@ -1061,13 +1103,13 @@ addUtilities({
 <div className="relative">
 <img alt="Calm modern workspace" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/f6a30d42-6743-483d-9bcf-9eb702125518_800w.jpg"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Calm modern workspace
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Calm modern workspace
             </h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Clean and focused environment
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Clean and focused environment
             </p>
 </div>
 </div>
@@ -1077,13 +1119,13 @@ addUtilities({
 <div className="relative">
 <img alt="Mountain Landscape" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1a40bff5-bbf9-4bda-b05d-e479626177de_800w.jpg"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="p-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Mountain Landscape
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Mountain Landscape
             </h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Nature photography</p>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Nature photography</p>
 </div>
 </div>
 </article>
@@ -1092,13 +1134,13 @@ addUtilities({
 <div className="relative">
 <img alt="Zen workspace aesthetic" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/cbd42f6a-8433-4bf4-bfa8-34c942421611_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="p-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Zen workspace
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Zen workspace
               aesthetic</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Minimalist productivity space
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Minimalist productivity space
             </p>
 </div>
 </div>
@@ -1108,12 +1150,12 @@ addUtilities({
 <div className="relative">
 <img alt="Interior Design" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/0507dacd-8de9-4e89-818e-41aaa3f63eff_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="p-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Interior Design</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Home decor ideas</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Interior Design</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Home decor ideas</p>
 </div>
 </div>
 </article>
@@ -1122,12 +1164,12 @@ addUtilities({
 <div className="relative">
 <img alt="Forest Path" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/886fdf92-24b5-46a8-929e-6b489c693321_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="p-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Forest Path</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Nature wanderlust</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Forest Path</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Nature wanderlust</p>
 </div>
 </div>
 </article>
@@ -1136,12 +1178,12 @@ addUtilities({
 <div className="relative">
 <img alt="Fashion Style" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/4b03cd7d-42d4-44d2-b798-b0d2bdb875d9_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="p-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Fashion Style</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Style inspiration</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Fashion Style</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Style inspiration</p>
 </div>
 </div>
 </article>
@@ -1150,12 +1192,12 @@ addUtilities({
 <div className="relative">
 <img alt="Tech Innovation" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/0b6d5bfd-1b46-4b40-ab34-933ab71441a3_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Tech Innovation</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Future technology</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Tech Innovation</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Future technology</p>
 </div>
 </div>
 </article>
@@ -1164,12 +1206,12 @@ addUtilities({
 <div className="relative">
 <img alt="Ocean Views" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/72c0a942-8db1-4109-b875-9ccb3cee3299_800w.jpg"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Collect</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-purple-50 hover:bg-purple-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Collect</button>
 </div>
 </div>
 <div className="p-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Ocean Views</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>Travel destinations</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Ocean Views</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>Travel destinations</p>
 </div>
 </div>
 </article>
@@ -1179,8 +1221,8 @@ addUtilities({
 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl border border-white/10 mb-4 bg-zinc-900">
 <svg className="lucide lucide-search text-slate-400" data-lucide="search" fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
 </div>
-<h4 className="text-lg font-medium mb-1" style={{fontFamily: '\'Inter\',sans-serif'}}>No results found</h4>
-<p className="text-sm text-slate-400" style={{fontFamily: '\'Inter\',sans-serif'}}>Try a different keyword or filter.</p>
+<h4 className="text-lg font-medium mb-1" style={{fontFamily: '\'Inter\', sans-serif'}}>No results found</h4>
+<p className="text-sm text-slate-400" style={{fontFamily: '\'Inter\', sans-serif'}}>Try a different keyword or filter.</p>
 </div>
 </div>
 </main>

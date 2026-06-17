@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -348,6 +384,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -452,22 +494,22 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           </span>
 </h1>
 
-<p aria-label="Specializing in concept art, character illustration, and visual development. Blending traditional painting with digital precision." className="max-w-3xl mx-auto text-lg md:text-xl text-white/80 type-words is-in" data-delay=".4s" data-duration="2s" data-ease="ease-in-out" data-stagger=".2s" style={{-Stagger: '0.2s', -Dur: '2s', -Ease: 'ease-in-out', -Delay: '0.4s'}}>
-<span className="w" style={{-I: '0'}}>Specializing </span>
-<span className="w" style={{-I: '1'}}>in </span>
-<span className="w" style={{-I: '2'}}>concept </span>
-<span className="w" style={{-I: '3'}}>art, </span>
-<span className="w" style={{-I: '4'}}>character </span>
-<span className="w" style={{-I: '5'}}>illustration, </span>
-<span className="w" style={{-I: '6'}}>and </span>
-<span className="w" style={{-I: '7'}}>visual </span>
-<span className="w" style={{-I: '8'}}>development. </span>
-<span className="w" style={{-I: '9'}}>Blending </span>
-<span className="w" style={{-I: '10'}}>traditional </span>
-<span className="w" style={{-I: '11'}}>painting </span>
-<span className="w" style={{-I: '12'}}>with </span>
-<span className="w" style={{-I: '13'}}>digital </span>
-<span className="w" style={{-I: '14'}}>precision. </span>
+<p aria-label="Specializing in concept art, character illustration, and visual development. Blending traditional painting with digital precision." className="max-w-3xl mx-auto text-lg md:text-xl text-white/80 type-words is-in" data-delay=".4s" data-duration="2s" data-ease="ease-in-out" data-stagger=".2s" style={{'--stagger': '0.2s', '--dur': '2s', '--ease': 'ease-in-out', '--delay': '0.4s'}}>
+<span className="w" style={{'--i': '0'}}>Specializing </span>
+<span className="w" style={{'--i': '1'}}>in </span>
+<span className="w" style={{'--i': '2'}}>concept </span>
+<span className="w" style={{'--i': '3'}}>art, </span>
+<span className="w" style={{'--i': '4'}}>character </span>
+<span className="w" style={{'--i': '5'}}>illustration, </span>
+<span className="w" style={{'--i': '6'}}>and </span>
+<span className="w" style={{'--i': '7'}}>visual </span>
+<span className="w" style={{'--i': '8'}}>development. </span>
+<span className="w" style={{'--i': '9'}}>Blending </span>
+<span className="w" style={{'--i': '10'}}>traditional </span>
+<span className="w" style={{'--i': '11'}}>painting </span>
+<span className="w" style={{'--i': '12'}}>with </span>
+<span className="w" style={{'--i': '13'}}>digital </span>
+<span className="w" style={{'--i': '14'}}>precision. </span>
 </p>
 
 <div className="mt-10 flex items-center justify-center gap-4">
@@ -488,7 +530,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="relative">Commission Me</span>
 <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139,92,246,.55), rgba(139,92,246,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139, 92, 246, .55), rgba(139, 92, 246, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 <div className="flex flex-wrap xl:py-24 text-xs text-white/60 mt-8 pt-24 pb-24 gap-x-6 gap-y-6 items-center justify-center" style={{animation: 'fadeSlideIn 0.5s ease-in-out 0.5s both'}}>

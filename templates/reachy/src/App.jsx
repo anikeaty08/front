@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -53,6 +89,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -69,10 +111,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <a className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-colors group bg-neutral-900 text-neutral-50 hover:bg-neutral-800" href="#pricing">
         Request Media Plan
-        <iconify-icon className="text-neutral-50" height="14" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+        <iconify-icon className="text-neutral-50" height="14" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </a>
 <button aria-label="Open menu" className="md:hidden p-2 text-neutral-600">
-<iconify-icon height="24" icon="solar:hamburger-menu-linear" style={{-IconifyStrokeWidth: '1.5'}} width="24"></iconify-icon>
+<iconify-icon height="24" icon="solar:hamburger-menu-linear" style={{'--iconify-stroke-width': '1.5'}} width="24"></iconify-icon>
 </button>
 </div>
 </nav>
@@ -121,7 +163,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Performance reporting" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1552581234-26160f608093?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
 <div className="absolute right-6 bottom-6 flex flex-col gap-2 z-10">
 <button aria-label="Scroll" className="w-10 h-10 rounded-full backdrop-blur border flex items-center justify-center transition-colors shadow-sm bg-white/90 border-white/20 hover:bg-white text-neutral-900">
-<iconify-icon height="16" icon="solar:arrow-up-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="solar:arrow-up-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </button>
 </div>
 <div className="absolute inset-0 bg-gradient-to-t to-transparent pointer-events-none from-neutral-900/10"></div>
@@ -132,7 +174,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Creator ecosystem" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
 <div className="absolute top-6 right-6 flex gap-3 z-20">
 <a aria-label="Request media plan" className="w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-md bg-white hover:bg-neutral-100 text-neutral-900" href="#pricing">
-<iconify-icon height="18" icon="solar:paper-plane-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:paper-plane-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 <div className="absolute top-6 left-6 max-w-[220px] rounded-2xl p-3 shadow-xl z-20 bg-white">
@@ -143,7 +185,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               Controlled distribution: verified creator reposts that generate real views and unlock organic uplift.
             </p>
 <button aria-label="More" className="w-8 h-8 rounded-full flex items-center justify-center ml-auto transition-colors bg-neutral-900 text-white hover:bg-neutral-800">
-<iconify-icon height="14" icon="solar:arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon height="14" icon="solar:arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </button>
 </div>
 <div className="absolute bottom-0 inset-x-0 p-8 bg-gradient-to-t to-transparent flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 z-20 from-black/80 via-black/40">
@@ -177,7 +219,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border rounded-2xl overflow-hidden shadow-sm bg-neutral-200 border-neutral-200">
 <div className="p-8 group transition-colors bg-white hover:bg-neutral-50">
 <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-neutral-100 text-neutral-900">
-<iconify-icon height="20" icon="solar:user-check-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:user-check-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2">Verified creator ecosystems</h3>
 <p className="text-sm text-neutral-500 leading-relaxed">
@@ -186,7 +228,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-8 group transition-colors bg-white hover:bg-neutral-50">
 <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-neutral-100 text-neutral-900">
-<iconify-icon height="20" icon="solar:copy-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:copy-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2">Clean repost mechanics</h3>
 <p className="text-sm text-neutral-500 leading-relaxed">
@@ -195,7 +237,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-8 group transition-colors bg-white hover:bg-neutral-50">
 <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-neutral-100 text-neutral-900">
-<iconify-icon height="20" icon="solar:graph-up-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:graph-up-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2">Algorithmic uplift</h3>
 <p className="text-sm text-neutral-500 leading-relaxed">
@@ -204,7 +246,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-8 group transition-colors bg-white hover:bg-neutral-50">
 <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-neutral-100 text-neutral-900">
-<iconify-icon height="20" icon="solar:camera-minimalistic-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:camera-minimalistic-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2">Reels + Stories distribution</h3>
 <p className="text-sm text-neutral-500 leading-relaxed">
@@ -213,7 +255,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-8 group transition-colors bg-white hover:bg-neutral-50">
 <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-neutral-100 text-neutral-900">
-<iconify-icon height="20" icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2">No fake traffic</h3>
 <p className="text-sm text-neutral-500 leading-relaxed">
@@ -222,7 +264,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-8 group transition-colors bg-white hover:bg-neutral-50">
 <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-neutral-100 text-neutral-900">
-<iconify-icon height="20" icon="solar:document-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:document-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2">Clear reporting</h3>
 <p className="text-sm text-neutral-500 leading-relaxed">
@@ -253,7 +295,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex justify-between items-start w-full">
 <h3 className="text-2xl md:text-3xl font-medium tracking-tight transition-colors mb-4 text-neutral-900" id="service-title-1">Option 1 — Pay per Integration</h3>
 <div className="w-10 h-10 rounded-full border flex items-center justify-center transition-all ml-4 shrink-0 border-neutral-900 bg-neutral-900 text-white" id="service-icon-1">
-<iconify-icon height="18" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 </div>
 <div className="grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out" id="service-content-1">
@@ -284,7 +326,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex justify-between items-start w-full">
 <h3 className="md:text-3xl transition-colors text-2xl font-medium text-neutral-500 tracking-tight mb-4" id="service-title-2">Option 2 — Pay per Views</h3>
 <div className="w-10 h-10 rounded-full border bg-transparent flex items-center justify-center transition-all ml-4 shrink-0 border-neutral-200 text-neutral-400" id="service-icon-2">
-<iconify-icon height="18" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5', transform: 'rotate(-45deg)'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5', transform: 'rotate(-45deg)'}} width="18"></iconify-icon>
 </div>
 </div>
 <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out" id="service-content-2">
@@ -315,7 +357,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex justify-between items-start w-full">
 <h3 className="text-2xl md:text-3xl font-medium tracking-tight text-neutral-500 transition-colors mb-4" id="service-title-3">Why Reachy</h3>
 <div className="w-10 h-10 rounded-full border bg-transparent flex items-center justify-center transition-all ml-4 shrink-0 border-neutral-200 text-neutral-400" id="service-icon-3">
-<iconify-icon height="18" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5', transform: 'rotate(-45deg)'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5', transform: 'rotate(-45deg)'}} width="18"></iconify-icon>
 </div>
 </div>
 <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out" id="service-content-3">
@@ -417,7 +459,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <button className="w-full font-medium rounded-md px-4 py-3 text-sm transition-colors flex justify-center items-center gap-2 bg-neutral-900 text-white hover:bg-neutral-800" type="button">
           Request Media Plan
-          <iconify-icon height="16" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+          <iconify-icon height="16" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </button>
 <p className="text-xs text-center mt-4 text-neutral-400">We’ll respond with a tailored plan and creator placement strategy.</p>
 </form>
@@ -445,11 +487,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h4 className="font-medium text-sm mb-4 text-neutral-900">Contact</h4>
 <ul className="space-y-3 text-sm text-neutral-500">
 <li className="flex items-center gap-2">
-<iconify-icon height="14" icon="solar:mailbox-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon height="14" icon="solar:mailbox-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
               hello@aura.build
             </li>
 <li className="flex items-center gap-2">
-<iconify-icon height="14" icon="solar:paper-plane-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon height="14" icon="solar:paper-plane-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
               @AuraBuild
             </li>
 </ul>
@@ -459,10 +501,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs text-neutral-400">© 2026 Aura.Build. All rights reserved.</p>
 <div className="flex gap-4">
 <a aria-label="X" className="transition-colors text-neutral-400 hover:text-neutral-900" href="#">
-<iconify-icon height="18" icon="solar:share-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:share-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <a aria-label="Request media plan" className="transition-colors text-neutral-400 hover:text-neutral-900" href="#contact">
-<iconify-icon height="18" icon="solar:document-add-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:document-add-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 </div>

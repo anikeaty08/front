@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -159,6 +195,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -267,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="spotlight [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] relative" id="spotCard" style={{-Mx: '44.92891751802885%', -My: '77.72939809679261%'}}>
+<div className="spotlight [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] relative" id="spotCard" style={{'--mx': '44.92891751802885%', '--my': '77.72939809679261%'}}>
 <div className="glass p-6 max-w-xl mx-auto">
 <div className="flex items-center justify-between">
 <h3 className="text-xl md:text-2xl font-semibold tracking-tight">
@@ -376,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-6">
 
 
-<article className="overflow-hidden spotlight [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" style={{-Mx: '86.89631081964258%', -My: '3.866246234939759%', position: 'relative'}}>
+<article className="overflow-hidden spotlight [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" style={{'--mx': '86.89631081964258%', '--my': '3.866246234939759%', position: 'relative'}}>
 <div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px)', backgroundSize: '18px 18px', opacity: '.06'}}></div>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-300 mb-6 font-geist">
 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -424,7 +466,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </article>
-<article className="overflow-hidden md:p-8 lg:col-span-2 spotlight [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" style={{-Mx: '49.678371887865126%', -My: '48.7178695249749%', position: 'relative'}}>
+<article className="overflow-hidden md:p-8 lg:col-span-2 spotlight [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" style={{'--mx': '49.678371887865126%', '--my': '48.7178695249749%', position: 'relative'}}>
 <div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px)', backgroundSize: '18px 18px', opacity: '.06'}}></div>
 <span className="inline-flex items-center gap-2 text-xs text-zinc-300 bg-white/5 border-white/10 border rounded-full mb-6 pt-1.5 pr-3 pb-1.5 pl-3 font-geist">
 <svg className="h-3.5 w-3.5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -491,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </article>
 
-<article className="overflow-hidden md:p-8 lg:col-span-2 spotlight [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -Mx: '13.827209466008844%', -My: '76.364208984375%'}}>
+<article className="overflow-hidden md:p-8 lg:col-span-2 spotlight [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', '--mx': '13.827209466008844%', '--my': '76.364208984375%'}}>
 <div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px)', backgroundSize: '18px 18px', opacity: '.06'}}></div>
 <span className="inline-flex items-center gap-2 text-xs text-zinc-300 bg-white/5 border-white/10 border rounded-full mb-6 pt-1.5 pr-3 pb-1.5 pl-3 font-geist">
 <svg className="h-3.5 w-3.5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -581,7 +623,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </article>
 
 <div className="grid grid-cols-1 lg:col-span-1 [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll gap-x-6 gap-y-6">
-<article className="overflow-hidden md:p-8 lg:col-span-2 lg:pl-6 lg:pt-6 lg:pr-6 lg:pb-6 bg-gradient-to-br from-neutral-900 to-[#000000] rounded-3xl pt-6 pr-6 pb-6 pl-6 relative spotlight" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px', -Mx: '2.7888580893786763%', -My: '95.5673076923077%'}}>
+<article className="overflow-hidden md:p-8 lg:col-span-2 lg:pl-6 lg:pt-6 lg:pr-6 lg:pb-6 bg-gradient-to-br from-neutral-900 to-[#000000] rounded-3xl pt-6 pr-6 pb-6 pl-6 relative spotlight" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px', '--mx': '2.7888580893786763%', '--my': '95.5673076923077%'}}>
 <div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(70% 50% at 60% -10%, rgba(255,255,255,0.06), transparent 60%)'}}></div>
 <div className="flex items-center justify-between mb-6"></div>
 <div className="flex items-end justify-between">
@@ -601,7 +643,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </svg>
 </div>
 </article>
-<article className="overflow-hidden md:p-8 lg:col-span-2 lg:pl-6 lg:pr-6 lg:pt-6 lg:pb-6 bg-gradient-to-br from-neutral-900 to-[#000000] rounded-3xl pt-6 pr-6 pb-6 pl-6 relative spotlight" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px', -Mx: '17.979401888535822%', -My: '3.3488063660477456%'}}>
+<article className="overflow-hidden md:p-8 lg:col-span-2 lg:pl-6 lg:pr-6 lg:pt-6 lg:pb-6 bg-gradient-to-br from-neutral-900 to-[#000000] rounded-3xl pt-6 pr-6 pb-6 pl-6 relative spotlight" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px', '--mx': '17.979401888535822%', '--my': '3.3488063660477456%'}}>
 <div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(70% 50% at 60% -10%, rgba(255,255,255,0.06), transparent 60%)'}}></div>
 <div className="flex items-center justify-between mb-6">
 <span className="inline-flex items-center gap-2 text-xs text-neutral-300 font-geist bg-neutral-800 border-white/10 border rounded-full pt-1 pr-3 pb-1 pl-3">
@@ -699,7 +741,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 
-<div className="grid md:grid-cols-[0.8fr_1.2fr] bg-gradient-to-br from-neutral-900 to-[#000000] w-full h-full rounded-3xl pt-6 pr-6 pb-6 pl-6 gap-x-0 gap-y-10 items-center spotlight" style={{minHeight: '420px', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px', -Mx: '32.31620788574219%', -My: '91.92836794078859%'}}>
+<div className="grid md:grid-cols-[0.8fr_1.2fr] bg-gradient-to-br from-neutral-900 to-[#000000] w-full h-full rounded-3xl pt-6 pr-6 pb-6 pl-6 gap-x-0 gap-y-10 items-center spotlight" style={{minHeight: '420px', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px', '--mx': '32.31620788574219%', '--my': '91.92836794078859%'}}>
 
 <div className="min-h-[420px] flex flex-col h-full max-w-sm relative space-y-8 justify-center">
 
@@ -815,7 +857,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </section>
 <div className="grid grid-cols-1 md:grid-cols-3 max-w-6xl mr-auto ml-auto pr-8 pl-8 gap-x-6 gap-y-6">
 
-<div className="glass col-span-1 overflow-hidden spotlight md:col-span-2 [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 pt-8 pr-8 pb-8 pl-8 relative" style={{-Mx: '49.0557747391579%', -My: '16.196821080172125%', position: 'relative'}}>
+<div className="glass col-span-1 overflow-hidden spotlight md:col-span-2 [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-gradient-to-br from-neutral-900 to-[#000000] from-white/10 to-white/0 pt-8 pr-8 pb-8 pl-8 relative" style={{'--mx': '49.0557747391579%', '--my': '16.196821080172125%', position: 'relative'}}>
 
 <div className="pointer-events-none absolute inset-0"></div>
 <div className="space-y-5 relative">
@@ -886,7 +928,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="[animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll space-y-4">
 
-<div className="spotlight transition hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6" style={{-Mx: '0.45635859644378335%', -My: '84.1248629385965%', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="spotlight transition hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6" style={{'--mx': '0.45635859644378335%', -My: '84.1248629385965%', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="absolute inset-0 pointer-events-none"></div>
 <div className="flex items-center justify-between gap-6">
@@ -913,7 +955,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="spotlight transition hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6" style={{-Mx: '71.26067653753408%', -My: '5.36938048245614%'}}>
+<div className="spotlight transition hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6" style={{'--mx': '71.26067653753408%', '--my': '5.36938048245614%'}}>
 <div className="flex items-center justify-between gap-6">
 <div className="flex items-center gap-3">
 <span className="grid place-items-center w-6 h-6 flex-none rounded-full border border-white/20 bg-transparent">
@@ -937,7 +979,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="spotlight transition hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 border-white/10 border rounded-3xl px-6 py-6" style={{-Mx: '72.01676695287675%', -My: '4.235197368421053%'}}>
+<div className="spotlight transition hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 border-white/10 border rounded-3xl px-6 py-6" style={{'--mx': '72.01676695287675%', '--my': '4.235197368421053%'}}>
 <div className="flex items-center justify-between gap-6">
 <div className="flex items-center gap-3">
 <span className="grid place-items-center w-6 h-6 flex-none rounded-full border border-white/20 bg-transparent">

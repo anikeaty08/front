@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     import createGlobe from 'https://cdn.skypack.dev/cobe'
@@ -28,6 +64,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -94,7 +136,7 @@ export default function App() {
 <div className="flex flex-col md:flex-row items-center">
 
 <div className="md:w-1/2 mb-12 md:mb-0 md:pr-12">
-<h1 className="text-5xl md:text-6xl lg:text-7xl font-light tracking-tighter mb-6 leading-tight" style={{fontFamily: '\'Poppins\',sans-serif'}}>
+<h1 className="text-5xl md:text-6xl lg:text-7xl font-light tracking-tighter mb-6 leading-tight" style={{fontFamily: '\'Poppins\', sans-serif'}}>
             Simplicity is power
           </h1>
 <p className="text-gray-600 text-xl md:text-2xl mb-8 max-w-lg font-extralight tracking-wide">
@@ -141,7 +183,7 @@ export default function App() {
 </section>
 
 <section className="container mx-auto px-6 py-20">
-<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\',sans-serif'}}>
+<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\', sans-serif'}}>
       We’ve been there. That’s why we built Pollux
     </h2>
 <div className="flex flex-col md:flex-row gap-12">
@@ -173,7 +215,7 @@ export default function App() {
 <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
 <section className="container mx-auto px-6 py-20">
-<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\',sans-serif'}}>
+<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\', sans-serif'}}>
       Getting started with Pollux is this easy
     </h2>
 <div className="grid md:grid-cols-3 gap-12">
@@ -181,21 +223,21 @@ export default function App() {
 <div className="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-sky-50">
 <svg className="h-6 w-6 text-sky-600" data-lucide="phone"></svg>
 </div>
-<h3 className="text-xl font-medium mb-2" style={{fontFamily: '\'Poppins\',sans-serif'}}>1. Schedule a call</h3>
+<h3 className="text-xl font-medium mb-2" style={{fontFamily: '\'Poppins\', sans-serif'}}>1. Schedule a call</h3>
 <p className="text-gray-600">Tell us about your goals and challenges.</p>
 </div>
 <div className="text-center">
 <div className="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-sky-50">
 <svg className="h-6 w-6 text-sky-600" data-lucide="target"></svg>
 </div>
-<h3 className="text-xl font-medium mb-2" style={{fontFamily: '\'Poppins\',sans-serif'}}>2. Set goals together</h3>
+<h3 className="text-xl font-medium mb-2" style={{fontFamily: '\'Poppins\', sans-serif'}}>2. Set goals together</h3>
 <p className="text-gray-600">We map out clear milestones you care about.</p>
 </div>
 <div className="text-center">
 <div className="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-sky-50">
 <svg className="h-6 w-6 text-sky-600" data-lucide="rocket"></svg>
 </div>
-<h3 className="text-xl font-medium mb-2" style={{fontFamily: '\'Poppins\',sans-serif'}}>3. Launch quickly</h3>
+<h3 className="text-xl font-medium mb-2" style={{fontFamily: '\'Poppins\', sans-serif'}}>3. Launch quickly</h3>
 <p className="text-gray-600">Go live with dedicated onboarding and support.</p>
 </div>
 </div>
@@ -206,7 +248,7 @@ export default function App() {
 <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
 <section className="container mx-auto px-6 py-20">
-<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\',sans-serif'}}>
+<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\', sans-serif'}}>
       Run your entire business from one platform
     </h2>
 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
@@ -240,13 +282,13 @@ export default function App() {
 <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
 <section className="container mx-auto px-6 py-20">
-<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\',sans-serif'}}>
+<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\', sans-serif'}}>
       Simple, transparent pricing
     </h2>
 <div className="grid md:grid-cols-3 gap-10">
 
 <div className="border border-gray-200 rounded-lg p-8 flex flex-col transform transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:scale-105">
-<h3 className="text-xl font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\',sans-serif'}}>Starter</h3>
+<h3 className="text-xl font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\', sans-serif'}}>Starter</h3>
 <p className="text-4xl font-light mb-2 text-gray-800 tracking-tight">$29<span className="text-base text-gray-500">/mo</span></p>
 <p className="text-gray-600 mb-6">Best for small teams starting out.</p>
 <ul className="space-y-3 text-gray-700 mb-8">
@@ -259,7 +301,7 @@ export default function App() {
 </div>
 
 <div className="border-2 border-sky-600 rounded-lg p-8 flex flex-col transform transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:scale-105">
-<h3 className="text-xl font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\',sans-serif'}}>Growth</h3>
+<h3 className="text-xl font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\', sans-serif'}}>Growth</h3>
 <p className="text-4xl font-light mb-2 text-gray-800 tracking-tight">$99<span className="text-base text-gray-500">/mo</span></p>
 <p className="text-gray-600 mb-6">For growing businesses that need more.</p>
 <ul className="space-y-3 text-gray-700 mb-8">
@@ -273,7 +315,7 @@ export default function App() {
 </div>
 
 <div className="border border-gray-200 rounded-lg p-8 flex flex-col transform transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:scale-105">
-<h3 className="text-xl font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\',sans-serif'}}>Enterprise</h3>
+<h3 className="text-xl font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\', sans-serif'}}>Enterprise</h3>
 <p className="text-4xl font-light mb-2 text-gray-800 tracking-tight">Custom</p>
 <p className="text-gray-600 mb-6">Tailored for complex needs.</p>
 <ul className="space-y-3 text-gray-700 mb-8">
@@ -290,7 +332,7 @@ export default function App() {
 <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
 <section className="container mx-auto px-6 py-20">
-<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\',sans-serif'}}>
+<h2 className="text-3xl md:text-4xl tracking-tight font-light mb-14 text-center" style={{fontFamily: '\'Poppins\', sans-serif'}}>
       Get in touch
     </h2>
 <form className="max-w-2xl mx-auto space-y-6">
@@ -310,7 +352,7 @@ export default function App() {
 <footer className="container mx-auto px-6 py-16">
 <div className="grid md:grid-cols-4 gap-10 text-sm text-gray-600">
 <div>
-<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\',sans-serif'}}>Sitemap</h4>
+<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\', sans-serif'}}>Sitemap</h4>
 <ul className="space-y-2">
 <li><a className="hover:text-sky-600" href="#">Solutions</a></li>
 <li><a className="hover:text-sky-600" href="#">Pricing</a></li>
@@ -321,19 +363,19 @@ export default function App() {
 </ul>
 </div>
 <div>
-<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\',sans-serif'}}>Legal</h4>
+<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\', sans-serif'}}>Legal</h4>
 <ul className="space-y-2">
 <li><a className="hover:text-sky-600" href="#">Privacy Policy</a></li>
 <li><a className="hover:text-sky-600" href="#">Terms of Use</a></li>
 </ul>
 </div>
 <div>
-<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\',sans-serif'}}>Contact</h4>
+<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\', sans-serif'}}>Contact</h4>
 <p className="mb-2">hello@pollux.io</p>
 <p>+1 (555) 123-4567</p>
 </div>
 <div>
-<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\',sans-serif'}}>Follow Us</h4>
+<h4 className="font-medium mb-4 text-gray-800" style={{fontFamily: '\'Poppins\', sans-serif'}}>Follow Us</h4>
 <div className="flex gap-4">
 <a aria-label="Twitter" href="#"><svg className="h-5 w-5 text-gray-500 hover:text-sky-600" data-lucide="twitter"></svg></a>
 <a aria-label="LinkedIn" href="#"><svg className="h-5 w-5 text-gray-500 hover:text-sky-600" data-lucide="linkedin"></svg></a>

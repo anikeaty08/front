@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -62,6 +98,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -142,21 +184,21 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="group relative cursor-help">
 <span className="inline-block px-4 py-2 rounded-xl text-sm font-medium bg-neutral-100 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 transition-colors hover:border-rose-300 dark:hover:border-rose-500/50">UX/UI Design</span>
-<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 bg-neutral-950 dark:bg-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20 shadow-2xl tooltip-arrow" style={{-TwProseBody: 'var(--tw-colors-neutral-950)'}}>
+<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 bg-neutral-950 dark:bg-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20 shadow-2xl tooltip-arrow" style={{'--tw-prose-body': 'var(--tw-colors-neutral-950)'}}>
 <p className="text-xs text-neutral-50 dark:text-neutral-900 text-center leading-relaxed" data-en="Planning how the user feels and interacts with the app, ensuring ease of use and aesthetics." data-pt="Planejamento de como o usuário se sente e interage com o aplicativo, garantindo facilidade e beleza.">Planejamento de como o usuário se sente e interage com o aplicativo, garantindo facilidade e beleza.</p>
 </div>
 </div>
 
 <div className="group relative cursor-help">
 <span className="inline-block px-4 py-2 rounded-xl text-sm font-medium bg-neutral-100 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 transition-colors hover:border-rose-300 dark:hover:border-rose-500/50">Figma</span>
-<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 bg-neutral-950 dark:bg-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20 shadow-2xl tooltip-arrow" style={{-TwProseBody: 'var(--tw-colors-neutral-950)'}}>
+<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 bg-neutral-950 dark:bg-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20 shadow-2xl tooltip-arrow" style={{'--tw-prose-body': 'var(--tw-colors-neutral-950)'}}>
 <p className="text-xs text-neutral-50 dark:text-neutral-900 text-center leading-relaxed" data-en="Professional tool where I draw the screens before they are programmed." data-pt="Ferramenta profissional onde desenho as telas antes de começarem a ser programadas.">Ferramenta profissional onde desenho as telas antes de começarem a ser programadas.</p>
 </div>
 </div>
 
 <div className="group relative cursor-help">
 <span className="inline-block px-4 py-2 rounded-xl text-sm font-medium bg-neutral-100 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 transition-colors hover:border-rose-300 dark:hover:border-rose-500/50">Acessibilidade</span>
-<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 bg-neutral-950 dark:bg-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20 shadow-2xl tooltip-arrow" style={{-TwProseBody: 'var(--tw-colors-neutral-950)'}}>
+<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-56 p-3 bg-neutral-950 dark:bg-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20 shadow-2xl tooltip-arrow" style={{'--tw-prose-body': 'var(--tw-colors-neutral-950)'}}>
 <p className="text-xs text-neutral-50 dark:text-neutral-900 text-center leading-relaxed" data-en="Practices to ensure the system can be used by anyone, regardless of visual or motor limitations." data-pt="Práticas para garantir que o sistema possa ser usado por qualquer pessoa, independente de limitações visuais ou motoras.">Práticas para garantir que o sistema possa ser usado por qualquer pessoa, independente de limitações visuais ou motoras.</p>
 </div>
 </div>

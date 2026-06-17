@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -135,6 +171,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -178,7 +220,7 @@ gtag('config', 'G-2M6V79H761');
 <div aria-hidden="true" className="Loader__wave"></div>
 <div className="Loader__body">
 <div className="Loader__layout Loader__layout--active">
-<button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(30, 174, 125)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{-VidPulseSize: '22.08px', color: 'rgb(30, 174, 125)'}}></div></div></button>
+<button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(30, 174, 125)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{'--vid-pulse-size': '22.08px', color: 'rgb(30, 174, 125)'}}></div></div></button>
 </div>
 <div className="Loader__layout Loader__layout--hidden">
 <div aria-label="Loading video" aria-valuetext="Loading in progress" className="LoaderProgress__progress" role="progressbar" style={{borderWidth: '3.45px', borderColor: 'rgba(255, 255, 255, 0.8)'}}></div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -243,6 +279,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -251,7 +293,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="fixed top-4 right-4 z-50 md:hidden">
 <button className="p-2 bg-[#1C1F24] border border-[#2A2F36] rounded text-gray-400">
-<iconify-icon icon="solar:hamburger-menu-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:hamburger-menu-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </button>
 </div>
 
@@ -270,33 +312,33 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="p-3 space-y-1 overflow-y-auto flex-1">
 <div className="px-3 py-2 text-[10px] uppercase font-semibold text-gray-500 tracking-wider">Main</div>
 <a className="flex items-center gap-3 px-3 py-2 text-sm text-white bg-[#1F242C] rounded-md border border-[#2A2F36] shadow-sm" href="#">
-<iconify-icon icon="solar:magic-stick-3-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:magic-stick-3-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Generate
                 </a>
 <a className="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[#1F242C]/50 rounded-md transition-all" href="#">
-<iconify-icon icon="solar:widget-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:widget-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Projects
                 </a>
 <a className="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[#1F242C]/50 rounded-md transition-all" href="#">
-<iconify-icon icon="solar:tuning-square-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:tuning-square-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Studio
                 </a>
 <a className="flex items-center gap-3 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[#1F242C]/50 rounded-md transition-all" href="#">
-<iconify-icon icon="solar:pie-chart-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:pie-chart-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Analytics
                 </a>
 <div className="mt-6 px-3 py-2 text-[10px] uppercase font-semibold text-gray-500 tracking-wider">Sources</div>
 <div className="space-y-0.5">
 <a className="flex items-center justify-between px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[#1F242C]/50 rounded-md group" href="#">
 <div className="flex items-center gap-3">
-<iconify-icon icon="solar:play-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:play-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <span>MKBHD</span>
 </div>
 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
 </a>
 <a className="flex items-center justify-between px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[#1F242C]/50 rounded-md group" href="#">
 <div className="flex items-center gap-3">
-<iconify-icon icon="solar:videocamera-record-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:videocamera-record-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <span>Twitch VODs</span>
 </div>
 <div className="w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-emerald-500 transition-colors"></div>
@@ -311,7 +353,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-xs font-medium text-white">Alex Creator</span>
 <span className="text-[10px] text-gray-500">Pro Plan</span>
 </div>
-<iconify-icon className="ml-auto text-gray-500" icon="solar:alt-arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon className="ml-auto text-gray-500" icon="solar:alt-arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </button>
 </div>
 </div>
@@ -327,11 +369,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center gap-4">
 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#16181D] border border-[#1F242C]">
-<iconify-icon className="text-[#4C6A6A]" icon="solar:clock-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon className="text-[#4C6A6A]" icon="solar:clock-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 <span className="text-xs text-gray-300">1h 45m left</span>
 </div>
 <button className="text-gray-400 hover:text-white transition-colors relative">
-<iconify-icon icon="solar:bell-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:bell-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-[#4C6A6A] rounded-full border border-[#0F1114]"></div>
 </button>
 </div>
@@ -352,19 +394,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 sm:grid-cols-5 gap-0 border-b border-[#2A2F36]">
 <div className="sm:col-span-2 flex items-center">
 <div className="pl-4 text-gray-500">
-<iconify-icon icon="solar:letter-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:letter-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <input autocomplete="email" className="w-full bg-transparent border-none focus:ring-0 text-sm text-white placeholder-gray-600 h-12 px-3 outline-none" id="emailInput" placeholder="you@domain.com" required="" type="email"/>
 </div>
 <div className="sm:col-span-3 flex items-center border-t sm:border-t-0 sm:border-l border-[#2A2F36]">
 <div className="pl-4 text-gray-500">
-<iconify-icon icon="solar:link-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:link-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <input className="w-full bg-transparent border-none focus:ring-0 text-sm text-white placeholder-gray-600 h-12 px-3 outline-none" id="urlInput" inputmode="url" placeholder="https://youtube.com/watch?v=..." type="text"/>
 <div className="pr-1.5">
 <button className="px-4 py-2 bg-white text-black text-xs font-semibold rounded hover:bg-gray-100 transition-colors flex items-center gap-2 disabled:opacity-60 disabled:hover:bg-white disabled:cursor-not-allowed" id="generateBtn">
 <span id="generateBtnText">Generate</span>
-<iconify-icon icon="solar:stars-minimalistic-linear" id="generateBtnIcon" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:stars-minimalistic-linear" id="generateBtnIcon" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </button>
 </div>
 </div>
@@ -372,13 +414,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 <div className="flex items-center gap-2 text-xs text-gray-400">
-<iconify-icon icon="solar:upload-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:upload-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <span>Or upload a video file</span>
 </div>
 <div className="flex items-center gap-3">
 <input accept="video/*" className="hidden" id="fileInput" type="file"/>
 <button className="h-8 px-3 rounded border border-[#2A2F36] bg-[#0F1114] text-xs font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-colors flex items-center gap-2" id="uploadBtn">
-<iconify-icon icon="solar:paperclip-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon icon="solar:paperclip-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
                                         Choose file
                                     </button>
 <span className="text-xs text-gray-500 truncate max-w-40 sm:max-w-56" id="fileName">No file selected</span>
@@ -423,7 +465,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute bottom-0 left-0 h-0.5 bg-[#4C6A6A]" id="progressBar" style={{width: '0%'}}></div>
 <div className="flex gap-3">
 <div className="w-12 h-12 bg-[#0F1114] rounded border border-[#2A2F36] flex items-center justify-center flex-shrink-0 text-gray-600">
-<iconify-icon className="animate-spin" icon="solar:refresh-circle-linear" id="activeJobIcon" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="animate-spin" icon="solar:refresh-circle-linear" id="activeJobIcon" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div className="flex-1 min-w-0 py-0.5">
 <h3 className="text-sm font-medium text-white truncate" id="activeJobTitle">Processing...</h3>
@@ -445,7 +487,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h3 className="text-sm font-medium text-white truncate">Design Systems 2024</h3>
 <div className="flex items-center gap-2 mt-1">
 <div className="flex items-center gap-1 text-[#8A7D5A]">
-<iconify-icon icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="10"></iconify-icon>
+<iconify-icon icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="10"></iconify-icon>
 <span className="text-[10px]">3 Shorts</span>
 </div>
 <span className="text-[10px] text-gray-600">•</span>
@@ -453,7 +495,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="self-center opacity-0 group-hover:opacity-100 transition-opacity">
-<button className="text-gray-400 hover:text-white"><iconify-icon icon="solar:menu-dots-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon></button>
+<button className="text-gray-400 hover:text-white"><iconify-icon icon="solar:menu-dots-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon></button>
 </div>
 </div>
 </div>
@@ -467,7 +509,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h3 className="text-sm font-medium text-white truncate">React vs Vue 2025</h3>
 <div className="flex items-center gap-2 mt-1">
 <div className="flex items-center gap-1 text-[#8A7D5A]">
-<iconify-icon icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="10"></iconify-icon>
+<iconify-icon icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="10"></iconify-icon>
 <span className="text-[10px]">5 Shorts</span>
 </div>
 <span className="text-[10px] text-gray-600">•</span>
@@ -493,17 +535,17 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
 <button className="w-12 h-12 rounded-full bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-white hover:scale-105 transition-transform">
-<iconify-icon icon="solar:play-bold" style={{-IconifyStrokeWidth: '1.5'}} width="24"></iconify-icon>
+<iconify-icon icon="solar:play-bold" style={{'--iconify-stroke-width': '1.5'}} width="24"></iconify-icon>
 </button>
 </div>
 </div>
 <div className="absolute bottom-6 flex gap-3">
 <button className="h-8 px-3 bg-white text-black text-xs font-semibold rounded hover:bg-gray-200 transition-colors flex items-center gap-2 disabled:opacity-60 disabled:hover:bg-white disabled:cursor-not-allowed" disabled="" id="exportBtn">
                                     Export
-                                    <iconify-icon icon="solar:download-minimalistic-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+                                    <iconify-icon icon="solar:download-minimalistic-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </button>
 <button className="h-8 w-8 rounded border border-[#2A2F36] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#2A2F36]">
-<iconify-icon icon="solar:share-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon icon="solar:share-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </button>
 </div>
 </div>
@@ -512,8 +554,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="p-4 border-b border-[#2A2F36] flex justify-between items-center">
 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Edit</span>
 <div className="flex gap-1">
-<button className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2A2F36] rounded"><iconify-icon icon="solar:undo-left-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon></button>
-<button className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2A2F36] rounded"><iconify-icon icon="solar:redo-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon></button>
+<button className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2A2F36] rounded"><iconify-icon icon="solar:undo-left-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon></button>
+<button className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2A2F36] rounded"><iconify-icon icon="solar:redo-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon></button>
 </div>
 </div>
 <div className="flex-1 p-4 space-y-6 overflow-y-auto">

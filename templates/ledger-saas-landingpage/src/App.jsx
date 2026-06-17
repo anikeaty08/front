@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -32,7 +74,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center gap-4">
 <a className="hover:text-white transition-colors text-sm font-semibold text-neutral-400 font-sans hidden sm:block" href="#">Login</a>
-<button className="group shadow-[#FF7F50]/30 hover:shadow-[#FF7F50]/50 transition-all duration-300 overflow-hidden cursor-pointer text-xs font-semibold text-white bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-full pt-2.5 pr-6 pb-2.5 pl-6 relative shadow-lg" style={{boxShadow: '0 10px 25px -10px rgba(255,127,80,0.5), inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.1)', borderRadius: '9999px'}}>
+<button className="group shadow-[#FF7F50]/30 hover:shadow-[#FF7F50]/50 transition-all duration-300 overflow-hidden cursor-pointer text-xs font-semibold text-white bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-full pt-2.5 pr-6 pb-2.5 pl-6 relative shadow-lg" style={{boxShadow: '0 10px 25px -10px rgba(255, 127, 80, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.2), inset 0 -2px 4px rgba(0,0,0,0.1)', borderRadius: '9999px'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full"></div>
 <span className="relative font-sans">Try for free</span>
 </button>
@@ -59,7 +101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <input className="w-full bg-white/80 backdrop-blur-sm border border-neutral-200 rounded-full pl-12 pr-6 py-4 text-base font-medium text-neutral-900 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500/40 transition-all placeholder:text-neutral-400 shadow-sm hover:border-neutral-300" placeholder="Enter your work email" type="email"/>
 </div>
-<button className="group shadow-[#FF7F50]/30 hover:shadow-[#FF7F50]/50 transition-all duration-300 overflow-hidden cursor-pointer font-medium text-white bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-full pt-4 pr-8 pb-4 pl-8 relative shadow-lg" onclick="window.location.href='/signup'" role="button" style={{boxShadow: '0 15px 33px -12px rgba(255,127,80,0.6), inset 0 4px 6.3px rgba(255,255,255,0.3), inset 0 -5px 6.3px rgba(0,0,0,0.1)', borderRadius: '9999px'}}>
+<button className="group shadow-[#FF7F50]/30 hover:shadow-[#FF7F50]/50 transition-all duration-300 overflow-hidden cursor-pointer font-medium text-white bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-full pt-4 pr-8 pb-4 pl-8 relative shadow-lg" onclick="window.location.href='/signup'" role="button" style={{boxShadow: '0 15px 33px -12px rgba(255, 127, 80, 0.6), inset 0 4px 6.3px rgba(255, 255, 255, 0.3), inset 0 -5px 6.3px rgba(0,0,0,0.1)', borderRadius: '9999px'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full"></div>
 <span className="relative flex items-center gap-2 font-sans">
         Get started for free

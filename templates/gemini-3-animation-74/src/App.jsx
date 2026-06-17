@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -156,6 +192,12 @@ blob: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -340,7 +382,7 @@ blob: {
 <div className="reveal-on-scroll group h-80 cursor-pointer" style={{transitionDelay: '250ms', marginTop: '30px'}}> 
 <div className="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
 <div className="absolute w-full h-full backface-hidden rounded-2xl bg-[#0A0A0C] border border-white/5 p-8 flex flex-col items-start justify-between overflow-hidden">
-<div className="border-beam" style={{-BeamColor: '#7000FF', animationDelay: '-1s'}}></div>
+<div className="border-beam" style={{'--beam-color': '#7000FF', animationDelay: '-1s'}}></div>
 <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-brand-neon">
 <i className="w-6 h-6" data-lucide="cpu"></i>
 </div>
@@ -362,7 +404,7 @@ blob: {
 <div className="reveal-on-scroll group h-80 cursor-pointer" style={{transitionDelay: '400ms'}}>
 <div className="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d">
 <div className="absolute w-full h-full backface-hidden rounded-2xl bg-[#0A0A0C] border border-white/5 p-8 flex flex-col items-start justify-between overflow-hidden">
-<div className="border-beam" style={{-BeamColor: '#00F0FF', animationDelay: '-2s'}}></div>
+<div className="border-beam" style={{'--beam-color': '#00F0FF', animationDelay: '-2s'}}></div>
 <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-brand-accent">
 <i className="w-6 h-6" data-lucide="boxes"></i>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -61,14 +97,7 @@ twinkle: {
                       <div
                           key={star.id}
                           className="absolute rounded-full bg-slate-400 animate-twinkle"
-                          style={{
-                              top: star.top,
-                              left: star.left,
-                              width: star.size + 'px',
-                              height: star.size + 'px',
-                              animationDelay: star.delay,
-                              opacity: star.opacity
-                          }}
+                          style={{top: star.top, left: star.left, width: star.size + 'px', height: star.size + 'px', animationDelay: star.delay, opacity: star.opacity}}
                       />
                   ))}
               </div>
@@ -78,8 +107,8 @@ twinkle: {
       // 2. Nebula
       const Nebula = () => (
           <div className="fixed inset-0 z-10 pointer-events-none overflow-hidden">
-              <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-purple-200/20 rounded-full blur-[120px] mix-blend-multiply animate-pulse" style={{ animationDuration: '12s' }}></div>
-              <div className="absolute bottom-[-10%] right-[-20%] w-[50vw] h-[50vw] bg-blue-200/20 rounded-full blur-[100px] mix-blend-multiply animate-pulse" style={{ animationDuration: '18s', animationDelay: '2s' }}></div>
+              <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-purple-200/20 rounded-full blur-[120px] mix-blend-multiply animate-pulse" style={{animationDuration: '12s'}}></div>
+              <div className="absolute bottom-[-10%] right-[-20%] w-[50vw] h-[50vw] bg-blue-200/20 rounded-full blur-[100px] mix-blend-multiply animate-pulse" style={{animationDuration: '18s', animationDelay: '2s'}}></div>
           </div>
       );
 
@@ -153,7 +182,7 @@ twinkle: {
                           className={`iconify w-8 h-8 transition-colors duration-300 ${revealed ? color : 'text-slate-400'}`}
                           data-icon="lucide:smile"
                           data-width="32"
-                          style={{ strokeWidth: '1.5' }}
+                          style={{strokeWidth: '1.5'}}
                       ></span>
                   </div>
               </div>
@@ -256,7 +285,7 @@ twinkle: {
                           <div
                               key={i}
                               className="mission-station absolute top-1/2 -translate-y-1/2 flex flex-col items-center"
-                              style={{ left: `${10 + (i * 18)}%` }}
+                              style={{left: `${10 + (i * 18)}%`}}
                           >
                               <div className="w-3 h-3 rounded-full bg-white border-2 border-brand-blue z-10 mb-8 shadow-sm" />
                               <div className="content opacity-0 absolute top-6 w-40 text-center">
@@ -499,6 +528,12 @@ twinkle: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

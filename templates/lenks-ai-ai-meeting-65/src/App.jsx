@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -27,6 +63,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -75,7 +117,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="flex items-center gap-2">
 <a className="inline-flex items-center gap-2 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition-colors px-3.5 py-2 text-sm text-zinc-100" href="#contact">
-<iconify-icon className="h-4 w-4" icon="lucide:message-square" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4" icon="lucide:message-square" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               Contact
             </a>
 </div>
@@ -102,11 +144,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <div className="mt-7 flex flex-wrap items-center gap-3">
 <a className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-violet-500/90 to-fuchsia-500/90 hover:from-violet-500 hover:to-fuchsia-500 transition-colors px-4 py-2.5 text-sm font-medium text-white shadow-sm" href="#process">
-<iconify-icon className="h-4 w-4" icon="lucide:play-circle" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4" icon="lucide:play-circle" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 See how it works
               </a>
 <a className="inline-flex items-center gap-2 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition-colors px-4 py-2.5 text-sm text-zinc-100" href="#modes">
-<iconify-icon className="h-4 w-4" icon="lucide:user-cog" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4" icon="lucide:user-cog" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Usage modes
               </a>
 </div>
@@ -129,11 +171,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center gap-3 text-xs text-zinc-400">
 <div className="inline-flex items-center gap-1">
-<iconify-icon className="h-3.5 w-3.5" icon="lucide:mic" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5" icon="lucide:mic" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                     On
                   </div>
 <div className="inline-flex items-center gap-1">
-<iconify-icon className="h-3.5 w-3.5" icon="lucide:waveform" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5" icon="lucide:waveform" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                     Processing
                   </div>
 </div>
@@ -142,7 +184,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid gap-3">
 <div className="flex items-start gap-3">
 <div className="h-8 w-8 rounded-full bg-violet-500/20 ring-1 ring-violet-500/30 flex items-center justify-center">
-<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:broadcast" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:broadcast" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="flex-1">
 <div className="flex items-center justify-between">
@@ -154,7 +196,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-start gap-3">
 <div className="h-8 w-8 rounded-full bg-fuchsia-500/20 ring-1 ring-fuchsia-500/30 flex items-center justify-center">
-<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:highlighter" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:highlighter" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="flex-1">
 <div className="flex items-center justify-between">
@@ -166,7 +208,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-start gap-3">
 <div className="h-8 w-8 rounded-full bg-emerald-500/20 ring-1 ring-emerald-500/30 flex items-center justify-center">
-<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:square-mouse-pointer" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:square-mouse-pointer" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="flex-1">
 <div className="flex items-center justify-between">
@@ -193,7 +235,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex items-center justify-between">
 <div className="flex items-center gap-2 text-xs text-zinc-400">
-<iconify-icon className="h-3.5 w-3.5" icon="lucide:shield-check" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5" icon="lucide:shield-check" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                     Enterprise-grade privacy
                   </div>
 <a className="text-xs text-violet-300 hover:text-violet-200" href="#security">Learn more</a>
@@ -223,19 +265,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex flex-wrap gap-3">
 <span className="inline-flex items-center gap-2 rounded-lg bg-white/5 ring-1 ring-white/10 px-3 py-2 text-xs text-zinc-300 hover:ring-white/20 transition">
-<iconify-icon className="h-3.5 w-3.5 text-violet-300" icon="lucide:bot" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-violet-300" icon="lucide:bot" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Live agent
               </span>
 <span className="inline-flex items-center gap-2 rounded-lg bg-white/5 ring-1 ring-white/10 px-3 py-2 text-xs text-zinc-300 hover:ring-white/20 transition">
-<iconify-icon className="h-3.5 w-3.5 text-fuchsia-300" icon="lucide:sparkles" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-fuchsia-300" icon="lucide:sparkles" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Real-time structuring
               </span>
 <span className="inline-flex items-center gap-2 rounded-lg bg-white/5 ring-1 ring-white/10 px-3 py-2 text-xs text-zinc-300 hover:ring-white/20 transition">
-<iconify-icon className="h-3.5 w-3.5 text-emerald-300" icon="lucide:clock" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-emerald-300" icon="lucide:clock" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Immediate outputs
               </span>
 <span className="inline-flex items-center gap-2 rounded-lg bg-white/5 ring-1 ring-white/10 px-3 py-2 text-xs text-zinc-300 hover:ring-white/20 transition">
-<iconify-icon className="h-3.5 w-3.5 text-cyan-300" icon="lucide:languages" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-cyan-300" icon="lucide:languages" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Language-aware
               </span>
 </div>
@@ -256,7 +298,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:-translate-y-0.5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:audio-lines" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:audio-lines" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               1 — Speech Processing
             </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -268,7 +310,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:-translate-y-0.5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:languages" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:languages" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               2 — Language &amp; Dialect Understanding
             </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -281,7 +323,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:-translate-y-0.5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-cyan-300" icon="lucide:waypoints" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-cyan-300" icon="lucide:waypoints" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               3 — Contextual Analysis
             </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -293,7 +335,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:-translate-y-0.5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:square-stack" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:square-stack" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               4 — Automated Output Generation
             </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -307,7 +349,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:-translate-y-0.5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-blue-300" icon="lucide:database" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-blue-300" icon="lucide:database" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               5 — Data Organization
             </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -336,25 +378,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-6 grid gap-3">
 <div className="flex items-start gap-3">
 <div className="mt-1 h-6 w-6 rounded-md bg-white/5 ring-1 ring-white/10 flex items-center justify-center">
-<iconify-icon className="h-3.5 w-3.5 text-violet-300" icon="lucide:map-pin" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-violet-300" icon="lucide:map-pin" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <p className="text-sm text-zinc-300">Understands regional accents and dialect variations</p>
 </div>
 <div className="flex items-start gap-3">
 <div className="mt-1 h-6 w-6 rounded-md bg-white/5 ring-1 ring-white/10 flex items-center justify-center">
-<iconify-icon className="h-3.5 w-3.5 text-fuchsia-300" icon="lucide:zap" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-fuchsia-300" icon="lucide:zap" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <p className="text-sm text-zinc-300">Handles fast, informal speech</p>
 </div>
 <div className="flex items-start gap-3">
 <div className="mt-1 h-6 w-6 rounded-md bg-white/5 ring-1 ring-white/10 flex items-center justify-center">
-<iconify-icon className="h-3.5 w-3.5 text-cyan-300" icon="lucide:shuffle" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-cyan-300" icon="lucide:shuffle" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <p className="text-sm text-zinc-300">Robust code-switching between Arabic and English</p>
 </div>
 <div className="flex items-start gap-3">
 <div className="mt-1 h-6 w-6 rounded-md bg-white/5 ring-1 ring-white/10 flex items-center justify-center">
-<iconify-icon className="h-3.5 w-3.5 text-emerald-300" icon="lucide:bookmark-check" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-3.5 w-3.5 text-emerald-300" icon="lucide:bookmark-check" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <p className="text-sm text-zinc-300">Prioritizes semantic understanding and intent</p>
 </div>
@@ -396,7 +438,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:ring-white/20 transition">
 <div className="absolute -top-3 left-5 rounded-full bg-violet-500/90 text-white text-xs px-2 py-0.5">Step 1</div>
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:radio" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:radio" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               Meeting Ingestion
             </div>
 <p className="mt-2 text-sm text-zinc-300">Lens joins the meeting and processes live audio streams.</p>
@@ -405,7 +447,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:ring-white/20 transition">
 <div className="absolute -top-3 left-5 rounded-full bg-fuchsia-500/90 text-white text-xs px-2 py-0.5">Step 2</div>
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:brain-circuit" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:brain-circuit" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               Language Understanding
             </div>
 <p className="mt-2 text-sm text-zinc-300">Analyzes speech for meaning, intent, and context across dialects and languages.</p>
@@ -414,7 +456,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:ring-white/20 transition">
 <div className="absolute -top-3 left-5 rounded-full bg-emerald-500/90 text-white text-xs px-2 py-0.5">Step 3</div>
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:boxes" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:boxes" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
               Output Creation
             </div>
 <ul className="mt-2 space-y-1 text-sm text-zinc-300">
@@ -442,7 +484,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 hover:border-white/15 transition">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-violet-300" icon="lucide:user" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-violet-300" icon="lucide:user" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 <h3 className="text-xl tracking-tight font-semibold text-zinc-100">Personal meetings</h3>
 </div>
 <ul className="mt-4 space-y-2 text-sm text-zinc-300">
@@ -455,7 +497,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 hover:border-white/15 transition">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-fuchsia-300" icon="lucide:users" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-fuchsia-300" icon="lucide:users" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 <h3 className="text-xl tracking-tight font-semibold text-zinc-100">Department / Workspace</h3>
 </div>
 <ul className="mt-4 space-y-2 text-sm text-zinc-300">
@@ -479,25 +521,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="lg:col-span-2 grid gap-4">
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:key-round" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-violet-300" icon="lucide:key-round" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Role-based access control
               </div>
 </div>
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:lock" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="lucide:lock" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Secure storage of meeting data
               </div>
 </div>
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-cyan-300" icon="lucide:share-2" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-cyan-300" icon="lucide:share-2" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Controlled sharing across teams
               </div>
 </div>
 <div className="rounded-xl bg-white/5 ring-1 ring-white/10 p-5 hover:ring-white/20 transition">
 <div className="flex items-center gap-2 text-sm text-zinc-200">
-<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:building-2" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-emerald-300" icon="lucide:building-2" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Designed for enterprise and institutional environments
               </div>
 </div>
@@ -514,7 +556,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 hover:border-white/15 transition">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-violet-300" icon="lucide:workflow" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-violet-300" icon="lucide:workflow" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 <h3 className="text-lg tracking-tight font-semibold text-zinc-100">Operational</h3>
 </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -527,7 +569,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 hover:border-white/15 transition">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-fuchsia-300" icon="lucide:group" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-fuchsia-300" icon="lucide:group" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 <h3 className="text-lg tracking-tight font-semibold text-zinc-100">Team</h3>
 </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -540,7 +582,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 hover:border-white/15 transition">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-emerald-300" icon="lucide:timer" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-emerald-300" icon="lucide:timer" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
 <h3 className="text-lg tracking-tight font-semibold text-zinc-100">Time &amp; productivity</h3>
 </div>
 <ul className="mt-3 space-y-2 text-sm text-zinc-300">
@@ -600,11 +642,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex gap-3">
 <a className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-violet-500/90 to-fuchsia-500/90 hover:from-violet-500 hover:to-fuchsia-500 transition-colors px-4 py-2.5 text-sm font-medium text-white" href="#">
-<iconify-icon className="h-4 w-4" icon="lucide:rocket" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4" icon="lucide:rocket" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Request access
               </a>
 <a className="inline-flex items-center gap-2 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition-colors px-4 py-2.5 text-sm text-zinc-100" href="#what">
-<iconify-icon className="h-4 w-4" icon="lucide:book-open" style={{-IconStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4" icon="lucide:book-open" style={{'--icon-stroke-width': '1.5'}}></iconify-icon>
                 Learn more
               </a>
 </div>

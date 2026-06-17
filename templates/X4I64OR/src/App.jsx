@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -370,6 +406,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -397,7 +439,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <header className="fixed top-0 left-0 right-0 z-30 pt-3 pr-4 pb-3 pl-4">
 <div className="max-w-7xl flex sticky top-0 z-40 mr-auto ml-auto items-center justify-between liquid-glass" style={{padding: '12px 20px', minHeight: '56px', borderRadius: '9999px'}}>
 <a aria-label="Voltar para a Home" href="#top">
-<h1 className="text-xl font-medium text-white tracking-tight" style={{fontFamily: '\'Geist\',sans-serif'}}>TrendlyAI</h1>
+<h1 className="text-xl font-medium text-white tracking-tight" style={{fontFamily: '\'Geist\', sans-serif'}}>TrendlyAI</h1>
 </a>
 <div className="flex items-center gap-2">
 <div className="relative">
@@ -452,7 +494,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="min-h-[40vh] flex flex-col items-center justify-center mt-12 mb-6">
 <div className="mb-6 text-center animate-entry">
-<h2 aria-label="Boa tarde, Sofia" className="text-3xl font-semibold text-white tracking-tight" id="dynamic-greeting" style={{fontFamily: '\'Geist\',sans-serif'}}></h2>
+<h2 aria-label="Boa tarde, Sofia" className="text-3xl font-semibold text-white tracking-tight" id="dynamic-greeting" style={{fontFamily: '\'Geist\', sans-serif'}}></h2>
 </div>
 <div className="w-full max-w-2xl mr-auto ml-auto animate-entry delay-1" id="hero-search">
 <div className="flex flex-wrap justify-center gap-2 mb-4" id="icebreakers" style={{display: 'none'}}>
@@ -474,7 +516,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="animate-entry delay-2 mb-20" id="popular">
 <div className="flex justify-between items-center mb-6">
-<h2 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Geist\',sans-serif'}}>Trilhas Populares</h2>
+<h2 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Geist\', sans-serif'}}>Trilhas Populares</h2>
 <div className="flex items-center gap-4">
 <div className="text-sm font-medium text-white/60 hidden sm:block" id="popular-indicators"></div>
 <a className="text-sm font-medium text-white/80 hover:text-white transition-colors" href="#">Ver todos</a>
@@ -500,7 +542,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="animate-entry delay-3 mb-20" id="recommended">
 <div className="flex justify-between items-center mb-6">
-<h2 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Geist\',sans-serif'}}>Trilhas recomendadas para você</h2>
+<h2 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Geist\', sans-serif'}}>Trilhas recomendadas para você</h2>
 <div className="flex items-center gap-4">
 <div className="text-sm font-medium text-white/60 hidden sm:block" id="recommended-indicators"></div>
 <a className="text-sm font-medium text-white/80 hover:text-white transition-colors" href="#">Ver todos</a>
@@ -525,7 +567,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="animate-entry delay-4 mb-20" id="tools">
 <div className="flex justify-between items-center mb-6">
-<h2 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Geist\',sans-serif'}}>Ferramentas recomendadas pra você</h2>
+<h2 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Geist\', sans-serif'}}>Ferramentas recomendadas pra você</h2>
 <div className="flex items-center gap-4">
 <div className="text-sm font-medium text-white/60 hidden sm:block" id="tools-indicators"></div>
 <a className="text-sm font-medium text-white/80 hover:text-white transition-colors" href="#">Ver todos</a>
@@ -546,7 +588,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative z-10 flex flex-col flex-grow">
 <div className="flex justify-between items-start mb-4 flex-grow">
 <div className="flex-1">
-<h3 className="text-lg font-semibold text-white mb-2 leading-snug" style={{fontFamily: '\'Geist\',sans-serif'}}>Crie um Roteiro Viral em 30 Segundos</h3>
+<h3 className="text-lg font-semibold text-white mb-2 leading-snug" style={{fontFamily: '\'Geist\', sans-serif'}}>Crie um Roteiro Viral em 30 Segundos</h3>
 <p className="text-sm text-white/70 line-clamp-2 leading-relaxed">Transforme qualquer ideia em uma estrutura de roteiro de 3 atos para engajamento máximo.</p>
 </div>
 <div className="ml-4 flex-shrink-0">
@@ -567,7 +609,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative z-10 flex flex-col flex-grow">
 <div className="flex justify-between items-start mb-4 flex-grow">
 <div className="flex-1">
-<h3 className="text-lg font-semibold text-white mb-2 leading-snug" style={{fontFamily: '\'Geist\',sans-serif'}}>Crie Títulos Otimizados para SEO</h3>
+<h3 className="text-lg font-semibold text-white mb-2 leading-snug" style={{fontFamily: '\'Geist\', sans-serif'}}>Crie Títulos Otimizados para SEO</h3>
 <p className="text-sm text-white/70 line-clamp-2 leading-relaxed">Use este prompt para gerar títulos magnéticos e otimizados para mecanismos de busca.</p>
 </div>
 <div className="ml-4 flex-shrink-0">
@@ -588,7 +630,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative z-10 flex flex-col flex-grow">
 <div className="flex justify-between items-start mb-4 flex-grow">
 <div className="flex-1">
-<h3 className="text-lg font-semibold text-white mb-2 leading-snug" style={{fontFamily: '\'Geist\',sans-serif'}}>Copy de Vendas Irresistível</h3>
+<h3 className="text-lg font-semibold text-white mb-2 leading-snug" style={{fontFamily: '\'Geist\', sans-serif'}}>Copy de Vendas Irresistível</h3>
 <p className="text-sm text-white/70 line-clamp-2 leading-relaxed">Crie textos persuasivos que convertem usando gatilhos mentais comprovados.</p>
 </div>
 <div className="ml-4 flex-shrink-0">

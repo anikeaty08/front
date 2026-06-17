@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -362,6 +398,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -635,7 +677,7 @@ gtag('config', 'G-2M6V79H761');
                 </p>
 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
 
-<article className="group flex flex-col overflow-hidden bg-gradient-to-br rounded-2xl from-blue-500/0 via-blue-500/10 to-blue-500/0" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<article className="group flex flex-col overflow-hidden bg-gradient-to-br rounded-2xl from-blue-500/0 via-blue-500/10 to-blue-500/0" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="overflow-hidden w-full h-32 relative">
 <img alt="Prism Echoes cover" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6f6eb6d2-42ff-4512-877b-fe27ef55c42a_800w.webp"/>
 <div className="bg-gradient-to-t from-black/70 via-black/20 to-transparent absolute top-0 right-0 bottom-0 left-0">
@@ -662,7 +704,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </article>
 
-<article className="group flex flex-col overflow-hidden bg-gradient-to-br rounded-2xl from-blue-500/0 via-blue-500/10 to-blue-500/0" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<article className="group flex flex-col overflow-hidden bg-gradient-to-br rounded-2xl from-blue-500/0 via-blue-500/10 to-blue-500/0" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="relative h-32 w-full overflow-hidden">
 <img alt="Liquid Neon cover" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/613b77bb-3447-42c7-93d2-2e919e00e1f7_800w.webp"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -902,7 +944,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 gap-6 md:grid-cols-3 gap-x-6 gap-y-6">
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-100 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-100 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 mb-8">
 <div className="flex items-center justify-between">
 <h3 className="text-lg font-semibold text-slate-200 transition-colors group-hover:text-blue-100 font-sans">Live Session Sync</h3>
@@ -945,7 +987,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl bg-gradient-to-b from-slate-900/60 to-black rounded-3xl pt-6 pr-6 pb-6 pl-6 relative animate-enter delay-200 hover:shadow-blue-500/20 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl bg-gradient-to-b from-slate-900/60 to-black rounded-3xl pt-6 pr-6 pb-6 pl-6 relative animate-enter delay-200 hover:shadow-blue-500/20 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <div className="absolute top-0 right-0 bottom-0 left-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 from-blue-900/20"></div>
 <div className="relative z-10 flex h-full min-h-[280px] flex-col items-center justify-center">
 
@@ -997,7 +1039,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-300 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-300 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 mb-6">
 <h3 className="text-lg font-semibold text-slate-200 transition-colors group-hover:text-blue-100 font-sans">Smart Versioning</h3>
 <p className="mt-2 text-xs text-slate-400 font-sans">Every generated take is saved and indexed automatically. Never lose an idea.</p>
@@ -1040,7 +1082,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group col-span-1 flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 md:col-span-2 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-100 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group col-span-1 flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 md:col-span-2 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-100 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 mb-6 max-w-md">
 <h3 className="text-lg font-semibold text-slate-200 transition-colors group-hover:text-blue-100 font-sans">Intelligent Arrangement</h3>
 <p className="mt-2 text-xs text-slate-400 font-sans">Stop searching for the right flow. Automatically generate song structures based on genre standards and energy levels.</p>
@@ -1095,7 +1137,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-200 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-slate-900/40 rounded-3xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-md justify-between animate-enter delay-200 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 mb-6">
 
 <div className="flex items-start justify-between">
@@ -1198,7 +1240,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 gap-5 md:grid-cols-3 h-auto gap-x-5 gap-y-5">
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-100 hover:shadow-blue-500/10 hover:border-blue-500/30 from-blue-500/10 to-blue-500/10" style={{-BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-slate-900/80 bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-100 hover:shadow-blue-500/10 hover:border-blue-500/30 from-blue-500/10 to-blue-500/10" style={{'--border-gradient': 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '24px'}}>
 <div className="z-10 flex-1 flex flex-col mb-6 relative justify-center">
 <div className="relative rounded-xl border border-white/10 bg-slate-950/50 p-4 shadow-2xl transition-colors group-hover:bg-slate-950/80">
 
@@ -1266,7 +1308,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden md:col-span-2 bg-gradient-to-tl via-slate-900/40 rounded-3xl px-6 py-6 relative transition-all duration-300 hover:shadow-2xl hover:bg-slate-900/60 animate-enter delay-200 from-blue-500/20 to-blue-500/20 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden md:col-span-2 bg-gradient-to-tl via-slate-900/40 rounded-3xl px-6 py-6 relative transition-all duration-300 hover:shadow-2xl hover:bg-slate-900/60 animate-enter delay-200 from-blue-500/20 to-blue-500/20 hover:shadow-blue-500/10 hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 flex h-full flex-col items-center justify-center py-8">
 
 <div className="relative flex h-32 w-full max-w-md items-center justify-center">
@@ -1321,7 +1363,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:bg-slate-900/60 hover:shadow-xl transition-all bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-300 from-blue-500/20 to-blue-500/20" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:bg-slate-900/60 hover:shadow-xl transition-all bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-300 from-blue-500/20 to-blue-500/20" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 flex-1 flex flex-col justify-center mb-6">
 <div className="relative w-full rounded-xl border border-white/5 bg-slate-950 p-4 group-hover:border-white/20 transition-colors">
 
@@ -1370,7 +1412,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:bg-slate-900/60 hover:shadow-xl transition-all bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-400 from-blue-500/20 to-blue-500/20" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:bg-slate-900/60 hover:shadow-xl transition-all bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-400 from-blue-500/20 to-blue-500/20" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '24px'}}>
 <div className="-translate-x-1/2 bg-gradient-to-b from-[#ffffff]/5 via-[#ffffff]/5 to-transparent w-full h-32 pointer-events-none absolute top-0 left-1/2"></div>
 <div className="relative z-10 flex-1 flex flex-col justify-center mb-6">
 <div className="relative w-full rounded-xl border border-white/5 bg-slate-950 p-4 group-hover:translate-y-1 transition-transform duration-500">
@@ -1397,7 +1439,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:bg-slate-900/60 hover:shadow-xl transition-all bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-400 from-blue-500/20 to-blue-500/20" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:bg-slate-900/60 hover:shadow-xl transition-all bg-gradient-to-tl via-slate-900/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-400 from-blue-500/20 to-blue-500/20" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 flex-1 flex flex-col justify-center mb-6">
 <div className="relative w-full overflow-hidden rounded-xl border border-white/5 bg-slate-950 p-4 transition-colors group-hover:border-blue-500/20">
 <div className="flex items-center gap-2 mb-3">
@@ -1463,7 +1505,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2 lg:gap-6 h-auto gap-x-4 gap-y-4">
 
-<div className="group col-span-1 overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] md:col-span-2 md:row-span-2 animate-enter delay-100 hover:-translate-y-1 bg-gradient-to-br from-slate-900/90 via-slate-900/50 to-black rounded-3xl pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="group col-span-1 overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] md:col-span-2 md:row-span-2 animate-enter delay-100 hover:-translate-y-1 bg-gradient-to-br from-slate-900/90 via-slate-900/50 to-black rounded-3xl pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm hover:border-blue-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '24px'}}>
 <div className="group-hover:opacity-100 transition-opacity duration-500 opacity-0 absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="relative z-10 flex h-full flex-col justify-between gap-8">
 <div className="space-y-4">
@@ -1664,7 +1706,7 @@ gtag('config', 'G-2M6V79H761');
             </button>
 </div>
 
-<div className="group relative flex flex-col rounded-3xl bg-slate-900/40 p-8 backdrop-blur-md transition-all hover:-translate-y-1 shadow-2xl shadow-blue-900/10" style={{-BorderGradient: 'linear-gradient(to bottom, rgba(59, 130, 246, 0.5), rgba(59, 130, 246, 0.1))', position: 'relative'}}>
+<div className="group relative flex flex-col rounded-3xl bg-slate-900/40 p-8 backdrop-blur-md transition-all hover:-translate-y-1 shadow-2xl shadow-blue-900/10" style={{'--border-gradient': 'linear-gradient(to bottom, rgba(59, 130, 246, 0.5), rgba(59, 130, 246, 0.1))', position: 'relative'}}>
 
 <div className="absolute inset-0 rounded-3xl p-[1px] bg-gradient-to-b from-blue-500/40 via-blue-500/10 to-transparent pointer-events-none"></div>
 

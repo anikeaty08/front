@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -39,6 +75,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -247,7 +289,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="position-absolute top-0 start-0 w-100 h-100 bg-overlay-dark opacity-75 group-hover-opacity transition-all-custom"></div>
 <div className="position-absolute bottom-0 start-0 w-100 p-4 d-flex justify-content-between align-items-end transition-all-custom" style={{transform: 'translateY(0.5rem)'}}>
 <h3 className="fs-xl fw-semibold text-white tracking-tight m-0" style={{maxWidth: '70%'}}>Manufacturing Engineering</h3>
-<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)'}}>
+<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(4px)'}}>
 <iconify-icon className="text-white fs-xl" icon="solar:arrow-right-up-linear"></iconify-icon>
 </div>
 </div>
@@ -259,7 +301,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="position-absolute top-0 start-0 w-100 h-100 bg-overlay-dark opacity-75 group-hover-opacity transition-all-custom"></div>
 <div className="position-absolute bottom-0 start-0 w-100 p-4 d-flex justify-content-between align-items-end transition-all-custom" style={{transform: 'translateY(0.5rem)'}}>
 <h3 className="fs-xl fw-semibold text-white tracking-tight m-0" style={{maxWidth: '70%'}}>Construction Engineering</h3>
-<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)'}}>
+<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(4px)'}}>
 <iconify-icon className="text-white fs-xl" icon="solar:arrow-right-up-linear"></iconify-icon>
 </div>
 </div>
@@ -271,7 +313,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="position-absolute top-0 start-0 w-100 h-100 bg-overlay-dark opacity-75 group-hover-opacity transition-all-custom"></div>
 <div className="position-absolute bottom-0 start-0 w-100 p-4 d-flex justify-content-between align-items-end transition-all-custom" style={{transform: 'translateY(0.5rem)'}}>
 <h3 className="fs-xl fw-semibold text-white tracking-tight m-0" style={{maxWidth: '70%'}}>Infrastructure Engineering</h3>
-<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)'}}>
+<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(4px)'}}>
 <iconify-icon className="text-white fs-xl" icon="solar:arrow-right-up-linear"></iconify-icon>
 </div>
 </div>
@@ -283,7 +325,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="position-absolute top-0 start-0 w-100 h-100 bg-overlay-dark opacity-75 group-hover-opacity transition-all-custom"></div>
 <div className="position-absolute bottom-0 start-0 w-100 p-4 d-flex justify-content-between align-items-end transition-all-custom" style={{transform: 'translateY(0.5rem)'}}>
 <h3 className="fs-xl fw-semibold text-white tracking-tight m-0" style={{maxWidth: '70%'}}>Building Services</h3>
-<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)'}}>
+<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(4px)'}}>
 <iconify-icon className="text-white fs-xl" icon="solar:arrow-right-up-linear"></iconify-icon>
 </div>
 </div>
@@ -295,7 +337,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="position-absolute top-0 start-0 w-100 h-100 bg-overlay-dark opacity-75 group-hover-opacity transition-all-custom"></div>
 <div className="position-absolute bottom-0 start-0 w-100 p-4 d-flex justify-content-between align-items-end transition-all-custom" style={{transform: 'translateY(0.5rem)'}}>
 <h3 className="fs-xl fw-semibold text-white tracking-tight m-0" style={{maxWidth: '70%'}}>BIM Services</h3>
-<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)'}}>
+<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(4px)'}}>
 <iconify-icon className="text-white fs-xl" icon="solar:arrow-right-up-linear"></iconify-icon>
 </div>
 </div>
@@ -307,7 +349,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="position-absolute top-0 start-0 w-100 h-100 bg-overlay-dark opacity-75 group-hover-opacity transition-all-custom"></div>
 <div className="position-absolute bottom-0 start-0 w-100 p-4 d-flex justify-content-between align-items-end transition-all-custom" style={{transform: 'translateY(0.5rem)'}}>
 <h3 className="fs-xl fw-semibold text-white tracking-tight m-0" style={{maxWidth: '70%'}}>Signage Engineering</h3>
-<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)'}}>
+<div className="rounded-circle d-flex align-items-center justify-content-center transition-all-custom group-hover-bg-cyan group-hover-rotate group-hover-scale" style={{width: '2.5rem', height: '2.5rem', background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(4px)'}}>
 <iconify-icon className="text-white fs-xl" icon="solar:arrow-right-up-linear"></iconify-icon>
 </div>
 </div>

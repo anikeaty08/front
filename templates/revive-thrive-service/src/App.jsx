@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -167,6 +203,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -584,7 +626,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
 <div className="reveal">
-<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{-SliderPos: '50%'}}>
+<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{'--slider-pos': '50%'}}>
 
 <img alt="Clean empty garage space" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8f07c2ee-5510-47d7-9cb3-7d3a2dc4c312_800w.png"/>
 
@@ -609,7 +651,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="reveal delay-100">
-<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{-SliderPos: '50%'}}>
+<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{'--slider-pos': '50%'}}>
 
 <img alt="Clean backyard grass" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/79200000-d453-4768-9337-22002c560be1_800w.png"/>
 
@@ -635,7 +677,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="reveal delay-200"></div>
 <div className="reveal">
-<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{-SliderPos: '50%'}}>
+<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{'--slider-pos': '50%'}}>
 
 <img alt="Clean space" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/72813b52-47cf-4e2f-b152-e03b22368206_800w.png"/>
 
@@ -659,7 +701,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="reveal delay-100">
-<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{-SliderPos: '50%'}}>
+<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{'--slider-pos': '50%'}}>
 
 <img alt="Clean space" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1429eb55-0376-4ef1-be8b-54f1a953a1c2_800w.jpg"/>
 
@@ -683,7 +725,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="reveal delay-200">
-<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{-SliderPos: '50%'}}>
+<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-slate-100 group hover-lift bg-slate-50" style={{'--slider-pos': '50%'}}>
 
 <img alt="Clean space" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/463cff91-9bae-4616-862e-64705611de0f_800w.jpg"/>
 

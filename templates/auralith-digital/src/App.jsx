@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -869,6 +905,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1059,7 +1101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
@@ -1223,14 +1265,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="mt-12">
 <div className="inline-block group relative">
-<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/60 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{-X: '199.6484375px', -Y: '12px', -O: '0'}}>
+<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/60 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{'--x': '199.6484375px', '--y': '12px', '--o': '0'}}>
 <span className="z-10 inline-flex items-center gap-2 font-semibold relative">Learn More<svg className="h-5 w-5 transition-transform duration-200 ease-out group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24">
 <path className="" d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg></span>
 <span className="pointer-events-none absolute bottom-0 left-1/2 right-1/2 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 transition-[left,right] duration-500 ease-out group-hover:left-0 group-hover:right-0"></span>
 <span aria-hidden="true" className="glow pointer-events-none absolute inset-0 -z-10" style={{transform: 'scale(0.95) translate(0px, -24px)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255,255,255,.55), rgba(255,255,255,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255, 255, 255, .55), rgba(255, 255, 255, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 
@@ -1455,14 +1497,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           }
         </style>
 <div className="inline-block group relative">
-<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/60 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{-X: '199.6484375px', -Y: '12px', -O: '0'}}>
+<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/60 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{'--x': '199.6484375px', '--y': '12px', '--o': '0'}}>
 <span className="relative z-10 inline-flex items-center gap-2 font-semibold" style={{}}>Book A Free Call<svg className="h-5 w-5 transition-transform duration-200 ease-out group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24">
 <path className="" d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg></span>
 <span className="pointer-events-none absolute bottom-0 left-1/2 right-1/2 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 transition-[left,right] duration-500 ease-out group-hover:left-0 group-hover:right-0"></span>
 <span aria-hidden="true" className="glow pointer-events-none absolute inset-0 -z-10" style={{transform: 'scale(0.95) translate(0px, -24px)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255,255,255,.55), rgba(255,255,255,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255, 255, 255, .55), rgba(255, 255, 255, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 </div>
@@ -1820,14 +1862,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="leading-relaxed text-base text-white/60 max-w-2xl mr-auto ml-auto" style={{animation: 'fadeSlideUp 1s ease-out 0.4s both'}}>Auralith is packed with cutting‑edge
           features designed to elevate your agency or portfolio.</p>
 <div className="inline-block group relative">
-<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/60 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{-X: '199.6484375px', -Y: '12px', -O: '0'}}>
+<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/60 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{'--x': '199.6484375px', '--y': '12px', '--o': '0'}}>
 <span className="z-10 inline-flex items-center gap-2 font-semibold relative" style={{}}>Book your call<svg className="h-5 w-5 transition-transform duration-200 ease-out group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24">
 <path className="" d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg></span>
 <span className="pointer-events-none absolute bottom-0 left-1/2 right-1/2 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 transition-[left,right] duration-500 ease-out group-hover:left-0 group-hover:right-0"></span>
 <span aria-hidden="true" className="glow pointer-events-none absolute inset-0 -z-10" style={{transform: 'scale(0.95) translate(0px, -24px)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255,255,255,.55), rgba(255,255,255,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255, 255, 255, .55), rgba(255, 255, 255, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 
@@ -1896,13 +1938,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="col-span-1 grid grid-cols-1 sm:px-6 md:col-span-3 md:grid-cols-3 md:pt-44 md:pb-20 w-full pt-44 pr-4 pb-20 pl-4 gap-x-6 gap-y-6">
 
-<div className="group overflow-hidden transition-all duration-100 hover:translate-y-[-6px] bg-white/5 border-white/10 border rounded-[28px] pt-6 pr-6 pb-6 pl-6 relative" style={{boxShadow: '0 16px 40px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.06)', animation: 'fadeSlideUp 0.8s ease-out 1.5s both'}}>
+<div className="group overflow-hidden transition-all duration-100 hover:translate-y-[-6px] bg-white/5 border-white/10 border rounded-[28px] pt-6 pr-6 pb-6 pl-6 relative" style={{boxShadow: '0 16px 40px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255,255,255,0.06)', animation: 'fadeSlideUp 0.8s ease-out 1.5s both'}}>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}>
 </div>
 <div className="absolute inset-0 pointer-events-none opacity-[0.12]" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.25) 1px, transparent 0)', backgroundSize: '18px 18px'}}>
 </div>
 <div className="relative flex items-center gap-3 mb-3">
-<div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{background: 'linear-gradient(135deg,#8b5cf6 0%, #7c3aed 100%)', boxShadow: '0 8px 24px rgba(124,58,237,0.45)', animation: 'pulse 2s ease-in-out infinite 0.2s'}}>
+<div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: '0 8px 24px rgba(124,58,237,0.45)', animation: 'pulse 2s ease-in-out infinite 0.2s'}}>
 <svg className="lucide lucide-message-circle-more text-white" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M3 12c0 1.7 1 3.3 2.7 4.5l-.7 3.5 3.5-.7C10.7 20 12.3 21 14 21c4.4 0 8-3.1 8-7s-3.6-7-8-7-8 3.1-8 7Z">
 </path>
@@ -1916,13 +1958,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="relative text-white/70 text-sm leading-relaxed">Get timely answers to your questions.</p>
 </div>
 
-<div className="group overflow-hidden transition-all duration-300 hover:translate-y-[-6px] bg-white/5 border-white/10 border rounded-[28px] pt-6 pr-6 pb-6 pl-6 relative" style={{boxShadow: '0 16px 40px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.06)', animation: 'fadeSlideUp 0.8s ease-out 1.6s both'}}>
+<div className="group overflow-hidden transition-all duration-300 hover:translate-y-[-6px] bg-white/5 border-white/10 border rounded-[28px] pt-6 pr-6 pb-6 pl-6 relative" style={{boxShadow: '0 16px 40px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255,255,255,0.06)', animation: 'fadeSlideUp 0.8s ease-out 1.6s both'}}>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}>
 </div>
 <div className="absolute inset-0 pointer-events-none opacity-[0.12]" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.25) 1px, transparent 0)', backgroundSize: '18px 18px'}}>
 </div>
 <div className="relative flex items-center gap-3 mb-3">
-<div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{background: 'linear-gradient(135deg,#8b5cf6 0%, #7c3aed 100%)', boxShadow: '0 8px 24px rgba(124,58,237,0.45)', animation: 'pulse 2s ease-in-out infinite 0.4s'}}>
+<div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: '0 8px 24px rgba(124,58,237,0.45)', animation: 'pulse 2s ease-in-out infinite 0.4s'}}>
 <svg className="lucide lucide-sparkles text-white" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
 </path>
@@ -1936,13 +1978,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="relative text-white/70 text-sm leading-relaxed">Our team understands both design and tech.</p>
 </div>
 
-<div className="group relative rounded-[28px] border border-white/10 bg-white/5 p-6 overflow-hidden transition-all duration-300 hover:translate-y-[-6px]" style={{boxShadow: '0 16px 40px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.06)', animation: 'fadeSlideUp 0.8s ease-out 1.7s both'}}>
+<div className="group relative rounded-[28px] border border-white/10 bg-white/5 p-6 overflow-hidden transition-all duration-300 hover:translate-y-[-6px]" style={{boxShadow: '0 16px 40px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255,255,255,0.06)', animation: 'fadeSlideUp 0.8s ease-out 1.7s both'}}>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}>
 </div>
 <div className="absolute inset-0 pointer-events-none opacity-[0.12]" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.25) 1px, transparent 0)', backgroundSize: '18px 18px'}}>
 </div>
 <div className="relative flex items-center gap-3 mb-3">
-<div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{background: 'linear-gradient(135deg,#8b5cf6 0%, #7c3aed 100%)', boxShadow: '0 8px 24px rgba(124,58,237,0.45)', animation: 'pulse 2s ease-in-out infinite 0.6s'}}>
+<div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: '0 8px 24px rgba(124,58,237,0.45)', animation: 'pulse 2s ease-in-out infinite 0.6s'}}>
 <svg className="lucide lucide-lock-keyhole text-white" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="16" r="1"></circle>
 <rect height="12" rx="2" width="18" x="3" y="10"></rect>

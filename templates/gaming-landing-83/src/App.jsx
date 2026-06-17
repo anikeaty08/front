@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -78,6 +114,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -156,7 +198,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative">
 
-<div className="overflow-hidden aspect-[4/3] group flashlight-card border-white/5 border rounded-3xl relative" style={{-MouseX: '-103px', -MouseY: '780.5px'}}>
+<div className="overflow-hidden aspect-[4/3] group flashlight-card border-white/5 border rounded-3xl relative" style={{'--mouse-x': '-103px', '--mouse-y': '780.5px'}}>
 <img alt="Snake Game Art" className="group-hover:scale-105 transition-transform duration-700 hover:mix-blend-normal opacity-60 mix-blend-luminosity w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/66b2e80b-6117-4db0-91de-959e8673e282_3840w.jpg?w=800&amp;q=80"/>
 <div className="bg-center bg-gradient-to-t from-[#020408] via-transparent to-transparent bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fd9bcd75-c237-42a6-a6a6-a9a2b276d0d5_1600w.webp)] bg-cover absolute top-0 right-0 bottom-0 left-0"></div>
 
@@ -208,7 +250,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="py-32 relative z-10">
 <div className="max-w-[1400px] mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
 
-<div className="relative flashlight-card rounded-3xl border p-0 border-white/5" style={{-MouseX: '605px', -MouseY: '-225px'}}>
+<div className="relative flashlight-card rounded-3xl border p-0 border-white/5" style={{'--mouse-x': '605px', '--mouse-y': '-225px'}}>
 <div className="aspect-square overflow-hidden rounded-3xl relative z-10 bg-slate-900">
 <img alt="Gameplay" className="w-full h-full object-cover opacity-60 mix-blend-luminosity hover:mix-blend-normal transition-all duration-500" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&amp;w=2070&amp;auto=format&amp;fit=crop"/>
 
@@ -270,7 +312,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="max-w-[1400px] mx-auto px-6">
 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{-MouseX: '605px', -MouseY: '-1145px'}}>
+<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{'--mouse-x': '605px', '--mouse-y': '-1145px'}}>
 <div className="mb-6 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 text-emerald-400">
 <iconify-icon icon="solar:rocket-2-linear" width="48"></iconify-icon>
 </div>
@@ -278,7 +320,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-lg font-light leading-relaxed text-slate-400">Get back into the action immediately without loading screens.</p>
 </div>
 
-<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{-MouseX: '261px', -MouseY: '-1145px'}}>
+<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{'--mouse-x': '261px', '--mouse-y': '-1145px'}}>
 <div className="mb-6 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 text-emerald-400">
 <iconify-icon icon="solar:wallet-money-linear" width="48"></iconify-icon>
 </div>
@@ -286,7 +328,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-lg font-light leading-relaxed text-slate-400">Withdraw your winnings to your connected wallet instantly.</p>
 </div>
 
-<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{-MouseX: '-83px', -MouseY: '-1145px'}}>
+<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{'--mouse-x': '-83px', '--mouse-y': '-1145px'}}>
 <div className="mb-6 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 text-emerald-400">
 <iconify-icon icon="solar:shield-check-linear" width="48"></iconify-icon>
 </div>
@@ -294,7 +336,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-lg font-light leading-relaxed text-slate-400">AI-driven behavioral analysis keeps the arena fair for everyone.</p>
 </div>
 
-<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{-MouseX: '-427px', -MouseY: '-1145px'}}>
+<div className="flashlight-card p-10 rounded-2xl border transition-colors group border-white/5" style={{'--mouse-x': '-427px', '--mouse-y': '-1145px'}}>
 <div className="mb-6 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 text-emerald-400">
 <iconify-icon icon="solar:headset-help-linear" width="48"></iconify-icon>
 </div>
@@ -311,7 +353,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-emerald-500 uppercase tracking-widest text-sm font-semibold mb-3">Gameplay</p>
 <h2 className="text-5xl font-light tracking-tighter text-white">Experience the Friction.</h2>
 </div>
-<div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden group flashlight-card border border-white/5" style={{-MouseX: '605px', -MouseY: '-1784px'}}>
+<div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden group flashlight-card border border-white/5" style={{'--mouse-x': '605px', '--mouse-y': '-1784px'}}>
 <img alt="Wide Gameplay" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-50 mix-blend-luminosity group-hover:mix-blend-normal" src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&amp;w=2071&amp;auto=format&amp;fit=crop"/>
 <div className="flex flex-col md:px-24 z-20 bg-gradient-to-r from-[#020408] via-[#020408]/50 to-transparent pr-12 pl-12 absolute top-0 right-0 bottom-0 left-0 justify-center">
 <div className="max-w-xl">
@@ -431,7 +473,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]" id="carouselTrack">
 
 <div className="w-full md:w-1/3 flex-shrink-0 px-4">
-<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{-MouseX: '589px', -MouseY: '-3759.421875px'}}>
+<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{'--mouse-x': '589px', '--mouse-y': '-3759.421875px'}}>
 <div className="flex justify-between items-start mb-8 relative z-10">
 <div>
 <h3 className="text-2xl font-medium tracking-tight text-white">Cyber Python</h3>
@@ -455,7 +497,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="w-full md:w-1/3 flex-shrink-0 px-4">
-<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{-MouseX: '138.34375px', -MouseY: '-3759.421875px'}}>
+<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{'--mouse-x': '138.34375px', '--mouse-y': '-3759.421875px'}}>
 <div className="flex justify-between items-start mb-8 relative z-10">
 <div>
 <h3 className="text-2xl font-medium tracking-tight text-white">Golden Mamba</h3>
@@ -479,7 +521,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="w-full md:w-1/3 flex-shrink-0 px-4">
-<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{-MouseX: '-312.3125px', -MouseY: '-3759.421875px'}}>
+<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{'--mouse-x': '-312.3125px', '--mouse-y': '-3759.421875px'}}>
 <div className="flex justify-between items-start mb-8 relative z-10">
 <div>
 <h3 className="text-2xl font-medium tracking-tight text-white">Neon Cobra</h3>
@@ -503,7 +545,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="w-full md:w-1/3 flex-shrink-0 px-4">
-<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{-MouseX: '-762.96875px', -MouseY: '-3759.421875px'}}>
+<div className="flashlight-card rounded-3xl p-8 border h-full group border-white/5" style={{'--mouse-x': '-762.96875px', '--mouse-y': '-3759.421875px'}}>
 <div className="flex justify-between items-start mb-8 relative z-10">
 <div>
 <h3 className="text-2xl font-medium tracking-tight text-white">Ghost Viper</h3>

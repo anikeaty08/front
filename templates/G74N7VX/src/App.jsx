@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     document.addEventListener('DOMContentLoaded', () => {
@@ -285,6 +321,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -454,7 +496,7 @@ export default function App() {
 
 <div className="mt-2 flex items-center justify-between">
 <div className="text-[12px] text-neutral-300">Account Equity</div>
-<button className="inline-flex items-center gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-black" style={{background: 'linear-gradient(180deg,#6EE7B7,#2CE39D)', boxShadow: '0 8px 20px -12px rgba(110,231,183,0.45)'}}>
+<button className="inline-flex items-center gap-2 rounded-md px-2.5 py-1.5 text-[12px] font-medium text-black" style={{background: 'linear-gradient(180deg, #6EE7B7, #2CE39D)', boxShadow: '0 8px 20px -12px rgba(110,231,183,0.45)'}}>
 <i className="w-4 h-4" data-lucide="download"></i>
                 Deposit
               </button>
@@ -683,7 +725,7 @@ export default function App() {
 </span>
 </button>
 </div>
-<button className="w-full group relative inline-flex items-center justify-center overflow-hidden rounded-lg px-3.5 py-2.5 text-[13px] font-semibold tracking-tight text-black" id="startBot" style={{background: 'linear-gradient(180deg,#6EE7B7,#2CE39D)', boxShadow: '0 12px 30px -10px rgba(110,231,183,0.55)'}}>
+<button className="w-full group relative inline-flex items-center justify-center overflow-hidden rounded-lg px-3.5 py-2.5 text-[13px] font-semibold tracking-tight text-black" id="startBot" style={{background: 'linear-gradient(180deg, #6EE7B7, #2CE39D)', boxShadow: '0 12px 30px -10px rgba(110,231,183,0.55)'}}>
 <i className="w-4 h-4 mr-2" data-lucide="play"></i>
 <span className="relative z-10">Start Bot</span>
 </button>
@@ -724,7 +766,7 @@ export default function App() {
 </div>
 <div className="mt-2.5 flex items-center justify-between">
 <div className="text-[12px] text-neutral-400">Higher leverage increases liquidation risk.</div>
-<button className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-[12px] font-semibold text-black" id="levConfirm" style={{background: 'linear-gradient(180deg,#6EE7B7,#2CE39D)', boxShadow: '0 10px 25px -10px rgba(110,231,183,0.55)'}}>
+<button className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-[12px] font-semibold text-black" id="levConfirm" style={{background: 'linear-gradient(180deg, #6EE7B7, #2CE39D)', boxShadow: '0 10px 25px -10px rgba(110,231,183,0.55)'}}>
 <i className="w-4 h-4" data-lucide="check"></i>
             Confirm
           </button>

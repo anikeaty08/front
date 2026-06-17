@@ -136,6 +136,42 @@ export default function App() {
 
   // Scroll Handler for Header Collapse with hysteresis
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleScroll = () => {
       if (!mainScrollRef.current) return;
       lastKnownScrollTop.current = mainScrollRef.current.scrollTop;
@@ -287,17 +323,17 @@ export default function App() {
         id="main-scroll"
         ref={mainScrollRef}
         className="w-full h-full overflow-y-auto no-scrollbar relative flex flex-col scroll-smooth"
-        style={{ overflowAnchor: 'none' }}
+        style={{overflowAnchor: 'none'}}
       >
         {/* Sticky Header */}
         <header
           className="sticky top-0 z-50 backdrop-blur-xl border-b transition-colors duration-300"
-          style={{ backgroundColor: 'var(--dash-card-bg-alpha)', borderColor: 'var(--dash-border-light)' }}
+          style={{backgroundColor: 'var(--dash-card-bg-alpha)', borderColor: 'var(--dash-border-light)'}}
         >
           {/* Header Search & Tabs Container */}
           <div 
             className="relative w-full transition-[height] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-20" 
-            style={{ height: isScrolled ? '72px' : '144px' }}
+            style={{height: isScrolled ? '72px' : '144px'}}
           >
             {/* Compact Search (Shows on Scroll) */}
             <div 

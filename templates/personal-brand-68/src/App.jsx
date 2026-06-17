@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -63,7 +105,7 @@ gtag('config', 'G-2M6V79H761');
       You’ve spent years mastering your craft. Now, let’s make sure the world knows it. Build a category-defining personal brand, scale your visibility, and attract high-value opportunities on autopilot in 2026.
     </p>
 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 mb-16">
-<button className="group shadow-blue-500/30 hover:shadow-blue-500/60 transition-all duration-300 overflow-hidden hover:bg-blue-700 font-medium text-white bg-blue-600 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: '0 18px 40px -15px rgba(37,99,235,0.85), inset 0 2px 4px rgba(255,255,255,0.2)', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(147, 197, 253, 0.4), rgba(37, 99, 235, 0.5))', -BorderRadiusBefore: '8px'}}>
+<button className="group shadow-blue-500/30 hover:shadow-blue-500/60 transition-all duration-300 overflow-hidden hover:bg-blue-700 font-medium text-white bg-blue-600 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: '0 18px 40px -15px rgba(37,99,235,0.85), inset 0 2px 4px rgba(255,255,255,0.2)', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(147, 197, 253, 0.4), rgba(37, 99, 235, 0.5))', '--border-radius-before': '8px'}}>
 <div className="group-hover:translate-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full"></div>
 <span className="flex items-center gap-2 relative font-geist">Audit Your Authority <iconify-icon className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" height="18" icon="solar:arrow-right-up-linear" strokeWidth="1.5" width="18"></iconify-icon></span>
 </button>

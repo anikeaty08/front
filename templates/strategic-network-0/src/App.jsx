@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -1032,6 +1068,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1048,7 +1090,7 @@ gtag('config', 'G-2M6V79H761');
       linear-gradient(90deg, rgba(34,197,94,0.12) 0.05rem, transparent 0.05rem);
       background-size: 2rem 2rem;"></div>
 <div className="absolute inset-0 pointer-events-none overflow-hidden">
-<div className="absolute rounded-full" id="radarSweep" style={{width: '55rem', height: '55rem', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', background: 'conic-gradient(from 0deg, rgba(16,185,129,0.00), rgba(16,185,129,0.00), rgba(16,185,129,0.18), rgba(16,185,129,0.00))', filter: 'blur(0.1rem)', opacity: '0.35'}}></div>
+<div className="absolute rounded-full" id="radarSweep" style={{width: '55rem', height: '55rem', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', background: 'conic-gradient(from 0deg, rgba(16, 185, 129, 0.00), rgba(16, 185, 129, 0.00), rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.00))', filter: 'blur(0.1rem)', opacity: '0.35'}}></div>
 <div className="absolute inset-0" style={{background: 'radial-gradient(circle at center, rgba(16,185,129,0.04), transparent 45%)'}}></div>
 </div>
 <div className="relative z-10 flex min-h-screen flex-col">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -677,6 +713,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1059,7 +1101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="tilt-card group/card flex flex-col cursor-pointer hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden bg-white h-full border-neutral-100 border rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-sm" onclick="window.location.href='/fiori-design-system'" role="button" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', -MouseX: '96.10688487038044%', -MouseY: '55.72665552589394%'}}>
+<div className="tilt-card group/card flex flex-col cursor-pointer hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden bg-white h-full border-neutral-100 border rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-sm" onclick="window.location.href='/fiori-design-system'" role="button" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', '--mouse-x': '96.10688487038044%', '--mouse-y': '55.72665552589394%'}}>
 <div className="card-glare rounded-2xl"></div>
 <div className="relative w-full overflow-hidden rounded-lg bg-neutral-100 z-0 tilt-content aspect-video md:aspect-[16/10]" style={{transform: 'translateZ(10px)'}}>
 <img alt="EcoPulse" className="object-top img-sharp w-full h-full object-cover" decoding="async" loading="lazy" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/69bcef7d-400a-48aa-b4f2-d7990102c1d1_1600w.png"/>
@@ -1546,7 +1588,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path className="" d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
 </svg>
 </button>
-<button aria-label="Ask Mianying" className="group/chat-btn flex hover:scale-105 transition-transform duration-300 cursor-pointer border-none text-white w-9 h-9 rounded-full ml-2 shadow-md items-center justify-center" id="chatbot-toggle" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(148, 163, 184, 1), rgba(71, 85, 105, 1))', -BorderRadiusBefore: '9999px'}}>
+<button aria-label="Ask Mianying" className="group/chat-btn flex hover:scale-105 transition-transform duration-300 cursor-pointer border-none text-white w-9 h-9 rounded-full ml-2 shadow-md items-center justify-center" id="chatbot-toggle" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(148, 163, 184, 1), rgba(71, 85, 105, 1))', '--border-radius-before': '9999px'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
 <path d="M20 3v4"></path>

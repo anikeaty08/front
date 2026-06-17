@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -26,6 +62,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -150,7 +192,7 @@ gtag('config', 'G-2M6V79H761');
     }
 </style><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '0s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '0s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '-8deg', -Y: '-15px', animation: 'floatMessy 4s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '-8deg', '--y': '-15px', animation: 'floatMessy 4s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">trading</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">Trade approved: BUY €5M AAPL before 16:00</span>
 </div>
@@ -175,7 +217,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '-3s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '-3s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '6deg', -Y: '25px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '6deg', '--y': '25px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-sky-50 text-sky-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">chat</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">"@trader ok to execute up to €10M"</span>
 </div>
@@ -200,7 +242,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '-6s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '-6s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '-12deg', -Y: '-25px', animation: 'floatMessy 4s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '-12deg', '--y': '-25px', animation: 'floatMessy 4s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">payment</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">Transfer approved (€250,000 to counterparty)</span>
 </div>
@@ -225,7 +267,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '-9s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '-9s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '8deg', -Y: '15px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '8deg', '--y': '15px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-orange-50 text-orange-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">risk</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">Daily trading limit validated ($25M)</span>
 </div>
@@ -250,7 +292,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '-12s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '-12s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '-5deg', -Y: '-35px', animation: 'floatMessy 4s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '-5deg', '--y': '-35px', animation: 'floatMessy 4s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">signature</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">Policy signed (commercial property)</span>
 </div>
@@ -275,7 +317,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '-15s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '-15s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '14deg', -Y: '35px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '14deg', '--y': '35px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">KYC</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">Claim documentation cleared</span>
 </div>
@@ -300,7 +342,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '-18s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '-18s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '-10deg', -Y: '-10px', animation: 'floatMessy 4s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '-10deg', '--y': '-10px', animation: 'floatMessy 4s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-purple-50 text-purple-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">database</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">appointment_status = authorized</span>
 </div>
@@ -325,7 +367,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div><div className="absolute top-1/2 left-1/2 w-[240px] h-[240px] -mt-[120px] -ml-[120px] z-10 pointer-events-none" style={{animation: 'slideAcross 24s infinite linear', animationDelay: '-21s'}}>
 <div className="absolute inset-0 flex items-center justify-center" style={{animation: 'chaosTransform 24s infinite linear', animationDelay: '-21s'}}>
-<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{-Rot: '12deg', -Y: '20px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
+<div className="bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-sm rounded-xl p-3 flex items-center gap-3 w-max max-w-[280px]" style={{'--rot': '12deg', '--y': '20px', animation: 'floatMessy 4.5s infinite ease-in-out'}}>
 <span className="px-2.5 py-1 bg-amber-50 text-amber-600 rounded-md text-[10px] font-semibold tracking-wide uppercase shrink-0">voice</span>
 <span className="text-xs text-slate-600 font-medium leading-tight text-left">Verbal consent confirmed (patient care)</span>
 </div>

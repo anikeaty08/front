@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -48,7 +90,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           Qrate
         </a>
 <a className="group relative inline-flex items-center justify-center" href="#book">
-<button className="hover:bg-white/5 transition-all flex gap-2 text-sm font-medium text-cyan-100 bg-gradient-to-b from-white/10 via-white/5 to-transparent rounded-full pt-2.5 pr-6 pb-2.5 pl-6 shadow-lg items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<button className="hover:bg-white/5 transition-all flex gap-2 text-sm font-medium text-cyan-100 bg-gradient-to-b from-white/10 via-white/5 to-transparent rounded-full pt-2.5 pr-6 pb-2.5 pl-6 shadow-lg items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <span className="font-pt-serif tracking-tighter" style={{}}>
               Book a Call
             </span>
@@ -305,7 +347,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         </h2>
 <div className="flex justify-center mb-16">
 
-<button className="hover:scale-105 transition-all duration-300 flex text-lg font-medium bg-gradient-to-b from-white/10 via-white/5 to-transparent rounded-full py-5 px-12 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.1)] gap-x-3 items-center group w-full md:w-auto justify-center text-cyan-100" style={{boxShadow: 'rgba(16, 185, 129, 0.15) 0px 0px 50px, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px', -BorderGradient: 'linear-gradient(180deg, rgba(52, 211, 153, 0.6), rgba(0, 0, 0, 0), rgba(52, 211, 153, 0.3))', -BorderRadiusBefore: '9999px'}}>
+<button className="hover:scale-105 transition-all duration-300 flex text-lg font-medium bg-gradient-to-b from-white/10 via-white/5 to-transparent rounded-full py-5 px-12 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.1)] gap-x-3 items-center group w-full md:w-auto justify-center text-cyan-100" style={{boxShadow: 'rgba(16, 185, 129, 0.15) 0px 0px 50px, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px', -BorderGradient: 'linear-gradient(180deg, rgba(52, 211, 153, 0.6), rgba(0, 0, 0, 0), rgba(52, 211, 153, 0.3))', '--border-radius-before': '9999px'}}>
 <span className="font-pt-serif tracking-tighter" style={{}}>
               Book Your Architect Call
             </span>

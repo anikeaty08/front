@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -32,7 +74,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <button className="md:hidden text-stone-800">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-height="24" data-icon="lucide:menu" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16M4 12h16M4 19h16" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-height="24" data-icon="lucide:menu" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16M4 12h16M4 19h16" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </button>
 </div>
 </nav>
@@ -62,7 +104,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-stone-400">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-height="20" data-icon="lucide:arrow-down" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14m7-7l-7 7l-7-7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-height="20" data-icon="lucide:arrow-down" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14m7-7l-7 7l-7-7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 </section>
 
@@ -109,7 +151,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h3 className="font-serif text-2xl text-stone-900 mb-2 group-hover:text-rose-900 transition-colors">Designer Suits</h3>
 <p className="text-sm text-stone-500 font-light max-w-sm">Premium unstitched ensembles perfect for weddings, festive galas, and special gatherings.</p>
 </div>
-<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 </div>
 
@@ -123,7 +165,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h3 className="font-serif text-2xl text-stone-900 mb-2 group-hover:text-rose-900 transition-colors">Handwork Suits</h3>
 <p className="text-sm text-stone-500 font-light max-w-sm">Intricate hand-embroidered designs showcasing precise needlework and artisanal skill.</p>
 </div>
-<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 </div>
 
@@ -137,7 +179,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h3 className="font-serif text-2xl text-stone-900 mb-2 group-hover:text-rose-900 transition-colors">Phulkari Heritage</h3>
 <p className="text-sm text-stone-500 font-light max-w-sm">Authentic Punjabi geometric flower work featuring vibrant embroidery and deep-rooted patterns.</p>
 </div>
-<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 </div>
 
@@ -151,7 +193,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h3 className="font-serif text-2xl text-stone-900 mb-2 group-hover:text-rose-900 transition-colors">Rumala Sahib</h3>
 <p className="text-sm text-stone-500 font-light max-w-sm">Respectfully crafted with the finest silks and traditional motifs for sacred offerings.</p>
 </div>
-<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify text-stone-300 group-hover:text-rose-900 transition-colors iconify--lucide" data-icon="lucide:arrow-up-right" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 </div>
 </div>
@@ -173,21 +215,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     </p>
 <ul className="space-y-4 mb-10">
 <li className="flex items-center gap-3">
-<svg aria-hidden="true" className="iconify text-amber-500/80 iconify--lucide" data-icon="lucide:check-circle-2" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}><circle cx="12" cy="12" r="10"></circle><path d="m9 12l2 2l4-4"></path></g></svg>
+<svg aria-hidden="true" className="iconify text-amber-500/80 iconify--lucide" data-icon="lucide:check-circle-2" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}><circle cx="12" cy="12" r="10"></circle><path d="m9 12l2 2l4-4"></path></g></svg>
 <span className="text-sm text-stone-200 font-light">Choose from premium Silks, Cottons, and Georgettes</span>
 </li>
 <li className="flex items-center gap-3">
-<svg aria-hidden="true" className="iconify text-amber-500/80 iconify--lucide" data-icon="lucide:palette" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}><path d="M12 22a1 1 0 0 1 0-20a10 9 0 0 1 10 9a5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{-DarkreaderInlineFill: 'currentColor'}}></circle><circle cx="17.5" cy="10.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{-DarkreaderInlineFill: 'currentColor'}}></circle><circle cx="6.5" cy="12.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{-DarkreaderInlineFill: 'currentColor'}}></circle><circle cx="8.5" cy="7.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{-DarkreaderInlineFill: 'currentColor'}}></circle></g></svg>
+<svg aria-hidden="true" className="iconify text-amber-500/80 iconify--lucide" data-icon="lucide:palette" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}><path d="M12 22a1 1 0 0 1 0-20a10 9 0 0 1 10 9a5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{'--darkreader-inline-fill': 'currentColor'}}></circle><circle cx="17.5" cy="10.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{'--darkreader-inline-fill': 'currentColor'}}></circle><circle cx="6.5" cy="12.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{'--darkreader-inline-fill': 'currentColor'}}></circle><circle cx="8.5" cy="7.5" data-darkreader-inline-fill="" fill="currentColor" r=".5" style={{'--darkreader-inline-fill': 'currentColor'}}></circle></g></svg>
 <span className="text-sm text-stone-200 font-light">Custom color matching for special occasions</span>
 </li>
 <li className="flex items-center gap-3">
-<svg aria-hidden="true" className="iconify text-amber-500/80 iconify--lucide" data-icon="lucide:scissors" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12L12 12m8-8L8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8L20 20"></path></g></svg>
+<svg aria-hidden="true" className="iconify text-amber-500/80 iconify--lucide" data-icon="lucide:scissors" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12L12 12m8-8L8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8L20 20"></path></g></svg>
 <span className="text-sm text-stone-200 font-light">Intricate detailing and threadwork selection</span>
 </li>
 </ul>
 <a className="inline-flex items-center gap-2 text-amber-50 text-sm border-b border-amber-50/30 pb-1 hover:border-amber-50 transition-all duration-300" href="#contact">
                         Request a Custom Order
-                        <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:arrow-right" data-width="16" height="16" role="img" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+                        <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:arrow-right" data-width="16" height="16" role="img" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </a>
 </div>
 <div className="md:w-5/12">
@@ -240,13 +282,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs text-stone-500 font-light tracking-wide mb-8">Honoring Tradition. Crafting Elegance.</p>
 <div className="flex gap-6 mb-12">
 <a className="text-stone-400 hover:text-rose-900 transition-colors" href="#">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:instagram" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8A4 4 0 0 1 16 11.37m1.5-4.87h.01"></path></g></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:instagram" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8A4 4 0 0 1 16 11.37m1.5-4.87h.01"></path></g></svg>
 </a>
 <a className="text-stone-400 hover:text-rose-900 transition-colors" href="#">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:facebook" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:facebook" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </a>
 <a className="text-stone-400 hover:text-rose-900 transition-colors" href="#">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:mail" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}><path d="m22 7l-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></g></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:mail" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}><path d="m22 7l-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></g></svg>
 </a>
 </div>
 <div className="text-center border-t border-stone-100 w-full pt-8">

@@ -9,7 +9,7 @@ function App() {
       <header className="h-14 border-b border-white/5 bg-black/20 backdrop-blur-md flex items-center px-6 shrink-0 z-10">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <iconify-icon icon="solar:pen-new-round-bold-duotone" width="20" style={{ color: 'white' }}></iconify-icon>
+            <iconify-icon icon="solar:pen-new-round-bold-duotone" width="20" style={{color: 'white'}}></iconify-icon>
           </div>
           <h1 className="font-semibold tracking-tight text-white/90">Motion Studio</h1>
         </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -230,6 +266,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -315,7 +357,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<nav className="flex flex-col relative pl-2" style={{-TotalRadio: '6'}}>
+<nav className="flex flex-col relative pl-2" style={{'--total-radio': '6'}}>
 <input checked="" className="absolute opacity-0 pointer-events-none" id="nav-1" name="nav" type="radio"/>
 <input className="absolute opacity-0 pointer-events-none" id="nav-2" name="nav" type="radio"/>
 <input className="absolute opacity-0 pointer-events-none" id="nav-3" name="nav" type="radio"/>
@@ -422,10 +464,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="pointer-events-none absolute inset-x-0 -bottom-6 h-20" style={{background: 'radial-gradient(60% 80% at 50% 0%, rgba(139,92,246,0.45), transparent 70%)', filter: 'blur(20px)'}}></div>
+<div className="pointer-events-none absolute inset-x-0 -bottom-6 h-20" style={{background: 'radial-gradient(60% 80% at 50% 0%, rgba(139, 92, 246, 0.45), transparent 70%)', filter: 'blur(20px)'}}></div>
 </div>
 </div>
-<div className="pointer-events-none absolute inset-x-0 bottom-0 h-40" style={{background: 'radial-gradient(60% 100% at 50% 100%, rgba(124,58,237,0.38), rgba(124,58,237,0.1) 60%, transparent 80%)', filter: 'blur(24px)'}}></div>
+<div className="pointer-events-none absolute inset-x-0 bottom-0 h-40" style={{background: 'radial-gradient(60% 100% at 50% 100%, rgba(124, 58, 237, 0.38), rgba(124, 58, 237, 0.1) 60%, transparent 80%)', filter: 'blur(24px)'}}></div>
 <style>
       input[name="nav"]:nth-of-type(1):checked ~ nav > div > div {
         transform: translateY(0);
@@ -497,12 +539,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute right-16 top-16 pointer-events-none opacity-60">
 <div className="container-loader">
-<div className="aro" style={{-S: '0'}}></div>
-<div className="aro" style={{-S: '1'}}></div>
-<div className="aro" style={{-S: '2'}}></div>
-<div className="aro" style={{-S: '3'}}></div>
-<div className="aro" style={{-S: '4'}}></div>
-<div className="aro" style={{-S: '5'}}></div>
+<div className="aro" style={{'--s': '0'}}></div>
+<div className="aro" style={{'--s': '1'}}></div>
+<div className="aro" style={{'--s': '2'}}></div>
+<div className="aro" style={{'--s': '3'}}></div>
+<div className="aro" style={{'--s': '4'}}></div>
+<div className="aro" style={{'--s': '5'}}></div>
 </div>
 </div>
 
@@ -684,7 +726,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="absolute z-30 flex items-center justify-center inset-0 pointer-events-none">
-<figure className="mx-auto w-64 sm:w-80 lg:w-[28rem] aspect-[3/4] rounded-2xl overflow-hidden ring-1 ring-white/10 bg-neutral-900/40 shadow-2xl" style={{transform: 'translateZ(120px)', boxShadow: '0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06)'}}>
+<figure className="mx-auto w-64 sm:w-80 lg:w-[28rem] aspect-[3/4] rounded-2xl overflow-hidden ring-1 ring-white/10 bg-neutral-900/40 shadow-2xl" style={{transform: 'translateZ(120px)', boxShadow: '0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.06)'}}>
 <img alt="Subject facing a roaring waterfall, bright jacket against mist" className="size-full object-cover absolute inset-0 w-full h-auto" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/7af84a6b-08df-48d8-93c9-11f1f36cb8cd_1600w.jpg"/>
 <div className="bg-gradient-to-t from-black/50 via-black/10 to-transparent absolute inset-0"></div>
 </figure>
@@ -731,7 +773,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div aria-hidden="true" className="pointer-events-none absolute inset-0">
 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 <div className="absolute -top-10 right-0 w-[70%] h-[60%] opacity-30" style={{background: 'radial-gradient(80% 60% at 80% 0%, rgba(255,255,255,0.18), transparent 60%)'}}></div>
-<div className="absolute inset-0" style={{background: 'repeating-linear-gradient(15deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 10px)', maskImage: 'radial-gradient(150% 80% at 50% 0%, black 0%, transparent 60%)', WebkitMaskImage: 'radial-gradient(150% 80% at 50% 0%, black 0%, transparent 60%)', opacity: '.12'}}></div>
+<div className="absolute inset-0" style={{background: 'repeating-linear-gradient(15deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 10px)', maskImage: 'radial-gradient(150% 80% at 50% 0%, black 0%, transparent 60%)', WebkitMaskImage: 'radial-gradient(150% 80% at 50% 0%, black 0%, transparent 60%)', opacity: '.12'}}></div>
 </div>
 
 <div className="mt-14 relative" data-animate-on-scroll="" style={{maskImage: 'linear-gradient(180deg, transparent, black 50%, black 50%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 50%, black 50%, transparent)'}}>

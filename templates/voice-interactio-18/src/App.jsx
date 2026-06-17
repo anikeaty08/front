@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -167,6 +203,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -196,14 +238,14 @@ gtag('config', 'G-2M6V79H761');
 <img alt="Atom" className="absolute inset-0 w-full h-full object-cover z-20" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1c4f0f65-083f-4410-9978-f6e1e109cf00_800w.png"/>
 
 <div aria-hidden="true" className="absolute inset-0 z-30 pointer-events-none">
-<iconify-icon className="heart text-sm" icon="solar:heart-bold" style={{left: '15%', -Scale: '0.8', -Duration: '4.5s', -Delay: '0s', -Drift: '15px', -Rotation: '10deg'}}></iconify-icon>
-<iconify-icon className="heart text-base" icon="solar:heart-bold" style={{left: '35%', -Scale: '1.1', -Duration: '5.2s', -Delay: '1.2s', -Drift: '-10px', -Rotation: '-15deg'}}></iconify-icon>
-<iconify-icon className="heart text-xs" icon="solar:heart-bold" style={{left: '55%', -Scale: '0.9', -Duration: '3.8s', -Delay: '2.5s', -Drift: '20px', -Rotation: '5deg'}}></iconify-icon>
-<iconify-icon className="heart text-sm" icon="solar:heart-bold" style={{left: '75%', -Scale: '1.2', -Duration: '4.8s', -Delay: '0.5s', -Drift: '-15px', -Rotation: '-5deg'}}></iconify-icon>
-<iconify-icon className="heart text-xs" icon="solar:heart-bold" style={{left: '25%', -Scale: '0.7', -Duration: '5.5s', -Delay: '3s', -Drift: '5px', -Rotation: '12deg'}}></iconify-icon>
-<iconify-icon className="heart text-sm" icon="solar:heart-bold" style={{left: '85%', -Scale: '1', -Duration: '4.2s', -Delay: '1.8s', -Drift: '-8px', -Rotation: '-10deg'}}></iconify-icon>
-<iconify-icon className="heart text-base" icon="solar:heart-bold" style={{left: '45%', -Scale: '0.8', -Duration: '6s', -Delay: '0.2s', -Drift: '12px', -Rotation: '8deg'}}></iconify-icon>
-<iconify-icon className="heart text-xs" icon="solar:heart-bold" style={{left: '65%', -Scale: '1.1', -Duration: '5.8s', -Delay: '3.5s', -Drift: '-12px', -Rotation: '15deg'}}></iconify-icon>
+<iconify-icon className="heart text-sm" icon="solar:heart-bold" style={{left: '15%', '--scale': '0.8', '--duration': '4.5s', '--delay': '0s', '--drift': '15px', '--rotation': '10deg'}}></iconify-icon>
+<iconify-icon className="heart text-base" icon="solar:heart-bold" style={{left: '35%', '--scale': '1.1', '--duration': '5.2s', '--delay': '1.2s', '--drift': '-10px', '--rotation': '-15deg'}}></iconify-icon>
+<iconify-icon className="heart text-xs" icon="solar:heart-bold" style={{left: '55%', '--scale': '0.9', '--duration': '3.8s', '--delay': '2.5s', '--drift': '20px', '--rotation': '5deg'}}></iconify-icon>
+<iconify-icon className="heart text-sm" icon="solar:heart-bold" style={{left: '75%', '--scale': '1.2', '--duration': '4.8s', '--delay': '0.5s', '--drift': '-15px', '--rotation': '-5deg'}}></iconify-icon>
+<iconify-icon className="heart text-xs" icon="solar:heart-bold" style={{left: '25%', '--scale': '0.7', '--duration': '5.5s', '--delay': '3s', '--drift': '5px', '--rotation': '12deg'}}></iconify-icon>
+<iconify-icon className="heart text-sm" icon="solar:heart-bold" style={{left: '85%', '--scale': '1', '--duration': '4.2s', '--delay': '1.8s', '--drift': '-8px', '--rotation': '-10deg'}}></iconify-icon>
+<iconify-icon className="heart text-base" icon="solar:heart-bold" style={{left: '45%', '--scale': '0.8', '--duration': '6s', '--delay': '0.2s', '--drift': '12px', '--rotation': '8deg'}}></iconify-icon>
+<iconify-icon className="heart text-xs" icon="solar:heart-bold" style={{left: '65%', '--scale': '1.1', '--duration': '5.8s', '--delay': '3.5s', '--drift': '-12px', '--rotation': '15deg'}}></iconify-icon>
 </div>
 </div>
 <h2 className="text-xl sm:text-2xl md:text-3xl font-medium tracking-tight text-white">ATOM LOVES YOU TOO</h2>

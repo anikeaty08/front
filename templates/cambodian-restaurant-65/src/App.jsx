@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -25,6 +61,12 @@ card.style.setProperty('--mouse-y', `${y}px`);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -71,7 +113,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 </nav>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-32 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '972.5999908447266px', -MouseY: '137px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-32 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '972.5999908447266px', '--mouse-y': '137px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col min-h-[850px] z-10 rounded-[40px] justify-center bg-white">
 
 <div className="absolute top-8 right-8 z-20 pointer-events-none">
@@ -163,7 +205,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:ml-auto xl:mr-auto rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="tradition" style={{-MouseX: '1246.5999908447266px', -MouseY: '129px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:ml-auto xl:mr-auto rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="tradition" style={{'--mouse-x': '1246.5999908447266px', '--mouse-y': '129px'}}>
 <div className="spotlight-inner sm:p-12 flex flex-col lg:flex-row lg:items-center gap-12 bg-white rounded-[40px] pt-8 pr-8 pb-8 pl-8 gap-x-12 gap-y-12 justify-between">
 <div className="max-w-lg">
 <span className="text-amber-600 font-bold tracking-widest text-xs uppercase mb-2 block">Notre Secret</span>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -43,6 +79,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -105,7 +147,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                         We bridge the gap between emerging models and enterprise value. Architecting custom neural infrastructure for the Fortune 500.
                     </p>
 <div className="flex flex-col sm:flex-row gap-5 pt-4 [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate">
-<button className="group shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all duration-300 overflow-hidden font-medium text-indigo-950 bg-gradient-to-r from-[#e0e7ff] to-[#a5b4fc] rounded-sm pt-3 pr-8 pb-3 pl-8 relative shadow-lg" style={{boxShadow: '0 15px 33px -12px rgba(99,102,241,0.6), inset 0 4px 6.3px rgba(255,255,255,0.8)'}}>
+<button className="group shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all duration-300 overflow-hidden font-medium text-indigo-950 bg-gradient-to-r from-[#e0e7ff] to-[#a5b4fc] rounded-sm pt-3 pr-8 pb-3 pl-8 relative shadow-lg" style={{boxShadow: '0 15px 33px -12px rgba(99, 102, 241, 0.6), inset 0 4px 6.3px rgba(255,255,255,0.8)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/40 absolute top-0 right-0 bottom-0 left-0 translate-y-full"></div>
 <span className="relative flex items-center gap-2 text-sm tracking-tight font-semibold font-sans" style={{}}>
                                 Book Consultation
@@ -156,7 +198,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="grid border-white/[0.03] md:grid-cols-2 lg:grid-cols-3 md:p-12 lg:p-24 bg-[#020202] border-b px-6 py-6 gap-x-6 gap-y-6">
 
-<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate" style={{-MouseX: '437px', -MouseY: '-907.5px'}}>
+<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll animate" style={{'--mouse-x': '437px', '--mouse-y': '-907.5px'}}>
 <span className="absolute top-8 right-8 text-[11px] font-mono text-white/20 font-sans" style={{}}>01</span>
 <div className="relative z-10 flex flex-col h-full justify-between gap-16">
 <div className="w-12 h-12 bg-white/[0.03] border border-white/5 flex items-center justify-center text-white/90 rounded-sm group-hover:scale-110 transition-transform duration-500">
@@ -169,7 +211,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate" style={{-MouseX: '13.671875px', -MouseY: '-907.5px'}}>
+<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate" style={{'--mouse-x': '13.671875px', '--mouse-y': '-907.5px'}}>
 <span className="absolute top-8 right-8 text-[11px] font-mono text-white/20 font-sans" style={{}}>02</span>
 <div className="relative z-10 flex flex-col h-full justify-between gap-16">
 <div className="w-12 h-12 bg-white/[0.03] border border-white/5 flex items-center justify-center text-white/90 rounded-sm group-hover:scale-110 transition-transform duration-500">
@@ -182,7 +224,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate" style={{-MouseX: '-409.6640625px', -MouseY: '-907.5px'}}>
+<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate" style={{'--mouse-x': '-409.6640625px', '--mouse-y': '-907.5px'}}>
 <span className="absolute top-8 right-8 text-[11px] font-mono text-white/20 font-sans" style={{}}>03</span>
 <div className="relative z-10 flex flex-col h-full justify-between gap-16">
 <div className="w-12 h-12 bg-white/[0.03] border border-white/5 flex items-center justify-center text-white/90 rounded-sm group-hover:scale-110 transition-transform duration-500">
@@ -195,7 +237,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate" style={{-MouseX: '437px', -MouseY: '-1247.75px'}}>
+<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate" style={{'--mouse-x': '437px', '--mouse-y': '-1247.75px'}}>
 <span className="absolute top-8 right-8 text-[11px] font-mono text-white/20 font-sans" style={{}}>04</span>
 <div className="relative z-10 flex flex-col h-full justify-between gap-16">
 <div className="w-12 h-12 bg-white/[0.03] border border-white/5 flex items-center justify-center text-white/90 rounded-sm group-hover:scale-110 transition-transform duration-500">
@@ -208,7 +250,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll animate" style={{-MouseX: '13.671875px', -MouseY: '-1247.75px'}}>
+<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll animate" style={{'--mouse-x': '13.671875px', '--mouse-y': '-1247.75px'}}>
 <span className="absolute top-8 right-8 text-[11px] font-mono text-white/20 font-sans" style={{}}>05</span>
 <div className="relative z-10 flex flex-col h-full justify-between gap-16">
 <div className="w-12 h-12 bg-white/[0.03] border border-white/5 flex items-center justify-center text-white/90 rounded-sm group-hover:scale-110 transition-transform duration-500">
@@ -221,7 +263,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate" style={{-MouseX: '-409.6640625px', -MouseY: '-1247.75px'}}>
+<div className="spotlight-card group p-8 lg:p-12 rounded-sm [animation:animationIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate" style={{'--mouse-x': '-409.6640625px', '--mouse-y': '-1247.75px'}}>
 <span className="absolute top-8 right-8 text-[11px] font-mono text-white/20 font-sans" style={{}}>06</span>
 <div className="relative z-10 flex flex-col h-full justify-between gap-16">
 <div className="w-12 h-12 bg-white/[0.03] border border-white/5 flex items-center justify-center text-white/90 rounded-sm group-hover:scale-110 transition-transform duration-500">
@@ -242,7 +284,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 auto-rows-auto text-white gap-x-4 gap-y-4">
 
-<div className="col-span-1 md:col-span-12 lg:col-span-4 row-span-1 lg:row-span-2 relative h-[300px] lg:h-auto overflow-hidden rounded-sm bg-zinc-900 group spotlight-card" style={{-MouseX: '437px', -MouseY: '-1881px'}}>
+<div className="col-span-1 md:col-span-12 lg:col-span-4 row-span-1 lg:row-span-2 relative h-[300px] lg:h-auto overflow-hidden rounded-sm bg-zinc-900 group spotlight-card" style={{'--mouse-x': '437px', '--mouse-y': '-1881px'}}>
 <img alt="AI Interface" className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-luminosity group-hover:scale-105 transition-transform duration-700" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6e701264-0c6f-4f78-93ad-7da3acbe3723_1600w.webp" style={{}}/>
 <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/80 to-transparent mix-blend-multiply"></div>
 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
@@ -262,7 +304,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 md:col-span-12 lg:col-span-8 bg-zinc-900/30 p-8 lg:p-10 rounded-sm flex flex-col justify-between min-h-[240px] spotlight-card group" style={{-MouseX: '16.3359375px', -MouseY: '-1881px'}}>
+<div className="col-span-1 md:col-span-12 lg:col-span-8 bg-zinc-900/30 p-8 lg:p-10 rounded-sm flex flex-col justify-between min-h-[240px] spotlight-card group" style={{'--mouse-x': '16.3359375px', '--mouse-y': '-1881px'}}>
 <div className="flex justify-between items-start">
 <h3 className="text-3xl md:text-5xl lg:text-5xl text-white tracking-tight leading-[1.1] font-newsreader font-light" style={{}}>
                     Scalable <span className="text-white/50 font-newsreader font-light" style={{}}>Inference</span> Architecture
@@ -279,7 +321,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="col-span-1 md:col-span-12 lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-4">
 
-<div className="bg-zinc-900/30 p-6 rounded-sm flex flex-col justify-between gap-6 group transition-colors spotlight-card" style={{-MouseX: '16.3359375px', -MouseY: '-2137px'}}>
+<div className="bg-zinc-900/30 p-6 rounded-sm flex flex-col justify-between gap-6 group transition-colors spotlight-card" style={{'--mouse-x': '16.3359375px', '--mouse-y': '-2137px'}}>
 <div className="">
 <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-2 font-medium font-sans" style={{}}>Latency</div>
 <div className="text-3xl text-white font-newsreader font-light" style={{}}>12ms</div>
@@ -301,7 +343,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bg-zinc-900/30 p-6 rounded-sm flex flex-col justify-between gap-6 group transition-colors spotlight-card" style={{-MouseX: '-264.1015625px', -MouseY: '-2137px'}}>
+<div className="bg-zinc-900/30 p-6 rounded-sm flex flex-col justify-between gap-6 group transition-colors spotlight-card" style={{'--mouse-x': '-264.1015625px', '--mouse-y': '-2137px'}}>
 <div className="">
 <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-2 font-medium font-sans" style={{}}>Uptime</div>
 <div className="text-3xl text-white font-newsreader font-light" style={{}}>99.99%</div>
@@ -323,7 +365,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bg-zinc-900/30 p-6 rounded-sm flex flex-col justify-between gap-6 group transition-colors spotlight-card" style={{-MouseX: '-544.546875px', -MouseY: '-2137px'}}>
+<div className="bg-zinc-900/30 p-6 rounded-sm flex flex-col justify-between gap-6 group transition-colors spotlight-card" style={{'--mouse-x': '-544.546875px', '--mouse-y': '-2137px'}}>
 <div className="">
 <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-2 font-medium font-sans" style={{}}>Throughput</div>
 <div className="text-3xl text-white font-newsreader font-light" style={{}}>850T</div>
@@ -346,7 +388,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 md:col-span-12 lg:col-span-4 lg:row-start-3 lg:col-start-9 lg:row-span-2 flex flex-col min-h-[300px] bg-zinc-900 h-[400px] rounded-sm pt-8 pr-8 pb-8 pl-8 justify-between spotlight-card group" style={{-MouseX: '-404.328125px', -MouseY: '-2313.5px'}}>
+<div className="col-span-1 md:col-span-12 lg:col-span-4 lg:row-start-3 lg:col-start-9 lg:row-span-2 flex flex-col min-h-[300px] bg-zinc-900 h-[400px] rounded-sm pt-8 pr-8 pb-8 pl-8 justify-between spotlight-card group" style={{'--mouse-x': '-404.328125px', '--mouse-y': '-2313.5px'}}>
 <div className="flex justify-between">
 <div className="text-[10px] font-mono text-zinc-500 tracking-widest font-sans" style={{}}>[005]</div>
 <div className="border border-white/10 w-8 h-8 rounded-full flex items-center justify-center text-white/60 bg-white/5">
@@ -375,7 +417,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 md:col-span-12 lg:col-span-4 min-h-[300px] flex flex-col text-white bg-[#080808] h-full rounded-sm pt-8 pr-8 pb-8 pl-8 justify-between h-[400px] spotlight-card group" style={{-MouseX: '437px', -MouseY: '-2313.5px'}}>
+<div className="col-span-1 md:col-span-12 lg:col-span-4 min-h-[300px] flex flex-col text-white bg-[#080808] h-full rounded-sm pt-8 pr-8 pb-8 pl-8 justify-between h-[400px] spotlight-card group" style={{'--mouse-x': '437px', '--mouse-y': '-2313.5px'}}>
 <div className="">
 <div className="text-[10px] text-zinc-500 mb-2 font-mono tracking-widest font-sans" style={{}}>(004)</div>
 <h3 className="text-3xl md:text-3xl tracking-tight mb-6 leading-tight font-newsreader font-light" style={{}}>Revenue <span className="text-white/50 font-newsreader font-light" style={{}}>Velocity</span></h3>
@@ -410,7 +452,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 md:col-span-12 lg:col-span-4 flex flex-col min-h-[300px] bg-zinc-900 h-full rounded-sm pt-8 pr-8 pb-8 pl-8 justify-between spotlight-card group" style={{-MouseX: '16.3359375px', -MouseY: '-2313.5px'}}>
+<div className="col-span-1 md:col-span-12 lg:col-span-4 flex flex-col min-h-[300px] bg-zinc-900 h-full rounded-sm pt-8 pr-8 pb-8 pl-8 justify-between spotlight-card group" style={{'--mouse-x': '16.3359375px', '--mouse-y': '-2313.5px'}}>
 <div className="">
 <div className="flex justify-between items-start mb-6">
 <div className="text-[10px] font-mono text-zinc-500 tracking-widest font-sans" style={{}}>(006)</div>
@@ -468,7 +510,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate" style={{-MouseX: '437px', -MouseY: '-3158.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate" style={{'--mouse-x': '437px', '--mouse-y': '-3158.5px'}}>
 <div className="relative z-10 flex flex-col h-full justify-between">
 <div className="">
 <div className="flex items-start justify-between border-b border-white/[0.06] pb-6 mb-8">
@@ -495,7 +537,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate" style={{-MouseX: '13.671875px', -MouseY: '-3158.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate" style={{'--mouse-x': '13.671875px', '--mouse-y': '-3158.5px'}}>
 <div className="relative z-10 flex flex-col h-full justify-between">
 <div className="">
 <div className="flex items-start justify-between border-b border-white/[0.06] pb-6 mb-8">
@@ -522,7 +564,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate" style={{-MouseX: '-409.6640625px', -MouseY: '-3158.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate" style={{'--mouse-x': '-409.6640625px', '--mouse-y': '-3158.5px'}}>
 <div className="relative z-10 flex flex-col h-full justify-between">
 <div className="">
 <div className="flex items-start justify-between border-b border-white/[0.06] pb-6 mb-8">
@@ -549,7 +591,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll animate" style={{-MouseX: '437px', -MouseY: '-3504.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll animate" style={{'--mouse-x': '437px', '--mouse-y': '-3504.5px'}}>
 <div className="relative z-10 flex flex-col h-full justify-between">
 <div className="">
 <div className="flex items-start justify-between border-b border-white/[0.06] pb-6 mb-8">
@@ -576,7 +618,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate" style={{-MouseX: '13.671875px', -MouseY: '-3504.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate" style={{'--mouse-x': '13.671875px', '--mouse-y': '-3504.5px'}}>
 <div className="relative z-10 flex flex-col h-full justify-between">
 <div className="">
 <div className="flex items-start justify-between border-b border-white/[0.06] pb-6 mb-8">
@@ -603,7 +645,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.8s_both] animate-on-scroll animate" style={{-MouseX: '-409.6640625px', -MouseY: '-3504.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.8s_both] animate-on-scroll animate" style={{'--mouse-x': '-409.6640625px', '--mouse-y': '-3504.5px'}}>
 <div className="relative z-10 flex flex-col h-full justify-between">
 <div className="">
 <div className="flex items-start justify-between border-b border-white/[0.06] pb-6 mb-8">
@@ -658,7 +700,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate flex flex-col h-full relative overflow-hidden" style={{-MouseX: '437px', -MouseY: '-4321.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate flex flex-col h-full relative overflow-hidden" style={{'--mouse-x': '437px', '--mouse-y': '-4321.5px'}}>
 <div className="absolute top-0 right-0 p-6 opacity-50 group-hover:opacity-100 transition-opacity">
 <button className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/5 transition-all">
 <iconify-icon icon="solar:add-linear" width="20"></iconify-icon>
@@ -701,7 +743,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate flex flex-col h-full relative overflow-hidden border border-white/10 bg-white/[0.02]" style={{-MouseX: '13.671875px', -MouseY: '-4321.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll animate flex flex-col h-full relative overflow-hidden border border-white/10 bg-white/[0.02]" style={{'--mouse-x': '13.671875px', '--mouse-y': '-4321.5px'}}>
 <div className="absolute top-0 right-0 p-6 opacity-50 group-hover:opacity-100 transition-opacity">
 <button className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/5 transition-all">
 <iconify-icon icon="solar:add-linear" width="20"></iconify-icon>
@@ -747,7 +789,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate flex flex-col h-full relative overflow-hidden" style={{-MouseX: '-409.6640625px', -MouseY: '-4321.5px'}}>
+<div className="spotlight-card group p-8 rounded-sm [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll animate flex flex-col h-full relative overflow-hidden" style={{'--mouse-x': '-409.6640625px', '--mouse-y': '-4321.5px'}}>
 <div className="absolute top-0 right-0 p-6 opacity-50 group-hover:opacity-100 transition-opacity">
 <button className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/5 transition-all">
 <iconify-icon icon="solar:add-linear" width="20"></iconify-icon>

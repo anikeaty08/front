@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -43,6 +79,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -176,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="w-32 h-24 relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 backdrop-blur-sm">
 <img alt="Headphone Preview" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/127fa0e4-6cac-4dd2-9e45-c8e78ccab6f2_320w.webp"/>
 </div>
-<button className="flex hover:bg-white/10 transition-colors group/btn shrink-0 bg-gradient-to-br from-white/20 via-white/0 to-white/10 w-20 h-20 rounded-full shadow-[4px_4px_6px_rgba(0,_0,_0,_0.098),_9.6px_9.6px_7.6px_rgba(0,_0,_0,_0.138),_18px_18px_14.3px_rgba(0,_0,_0,_0.172),_32px_32px_25.6px_rgba(0,_0,_0,_0.206),_60px_60px_47.8px_rgba(0,_0,_0,_0.246),_143px_143px_114.3px_rgba(0,_0,_0,_0.344)] backdrop-blur-md items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="flex hover:bg-white/10 transition-colors group/btn shrink-0 bg-gradient-to-br from-white/20 via-white/0 to-white/10 w-20 h-20 rounded-full shadow-[4px_4px_6px_rgba(0,_0,_0,_0.098),_9.6px_9.6px_7.6px_rgba(0,_0,_0,_0.138),_18px_18px_14.3px_rgba(0,_0,_0,_0.172),_32px_32px_25.6px_rgba(0,_0,_0,_0.206),_60px_60px_47.8px_rgba(0,_0,_0,_0.246),_143px_143px_114.3px_rgba(0,_0,_0,_0.344)] backdrop-blur-md items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg aria-hidden="true" className="iconify text-white group-hover/btn:rotate-45 transition-transform iconify--solar" data-icon="solar:arrow-right-up-linear" data-width="32" height="32" role="img" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 18L18 6m0 0H9m9 0v9" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
 </svg>
@@ -268,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 <div className="mt-auto relative z-10">
 <div className="flex gap-2 mb-2">
-<span className="text-[10px] uppercase text-white/40 tracking-widest rounded-full pt-1 pr-2 pb-1 pl-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>Pro</span>
+<span className="text-[10px] uppercase text-white/40 tracking-widest rounded-full pt-1 pr-2 pb-1 pl-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>Pro</span>
 </div>
 <h3 className="text-white text-2xl tracking-tight leading-none mb-4 font-bricolage font-light">Sony WH-1000XM5</h3>
 <div className="flex justify-between items-center text-white/90 border-t border-white/10 pt-4">
@@ -291,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 <div className="mt-auto relative z-10">
 <div className="flex gap-2 mb-2">
-<span className="text-[10px] uppercase text-gray-50 tracking-widest rounded-full pt-1 pr-2 pb-1 pl-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>New</span>
+<span className="text-[10px] uppercase text-gray-50 tracking-widest rounded-full pt-1 pr-2 pb-1 pl-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>New</span>
 </div>
 <h3 className="text-neutral-900 text-2xl tracking-tight leading-none mb-4 font-bricolage font-light">AirPods Max Silver</h3>
 <div className="flex justify-between items-center text-neutral-900 border-t border-neutral-300 pt-4">

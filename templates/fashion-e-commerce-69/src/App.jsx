@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -277,6 +313,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -760,14 +802,14 @@ gtag('config', 'G-2M6V79H761');
 
 <div aria-label="Shop menu" className="etha-contained-drop glass-wild" id="nav-drop-shop" role="menu" style={{maxWidth: '420px', width: '420px'}}>
 <div className="etha-contained-drop-inner" style={{padding: '24px 28px 28px 28px', display: 'flex', flexDirection: 'column', gap: '0'}}>
-<div style={{display: 'flex', alignItems: 'center', gap: '0', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '999px', padding: '3px', marginBottom: '20px', width: 'fit-content'}}>
-<button className="etha-shop-seg-btn etha-shop-seg-active font-geist" data-shop-filter="all" style={{padding: '7px 20px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\',sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'all 0.25s ease', background: 'rgba(255,255,255,0.14)', color: '#ffffff'}}>
+<div style={{display: 'flex', alignItems: 'center', gap: '0', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '999px', padding: '3px', marginBottom: '20px', width: 'fit-content'}}>
+<button className="etha-shop-seg-btn etha-shop-seg-active font-geist" data-shop-filter="all" style={{padding: '7px 20px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\', sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'all 0.25s ease', background: 'rgba(255,255,255,0.14)', color: '#ffffff'}}>
                   All
                 </button>
-<button className="etha-shop-seg-btn font-geist" data-shop-filter="women" style={{padding: '7px 20px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\',sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'all 0.25s ease', background: 'rgba(255,255,255,0.14)', color: '#ffffff'}}>
+<button className="etha-shop-seg-btn font-geist" data-shop-filter="women" style={{padding: '7px 20px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\', sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'all 0.25s ease', background: 'rgba(255,255,255,0.14)', color: '#ffffff'}}>
                   Women
                 </button>
-<button className="etha-shop-seg-btn font-geist" data-shop-filter="men" style={{padding: '7px 20px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\',sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'all 0.25s ease', background: 'rgba(255,255,255,0.14)', color: '#ffffff'}}>
+<button className="etha-shop-seg-btn font-geist" data-shop-filter="men" style={{padding: '7px 20px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\', sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'all 0.25s ease', background: 'rgba(255,255,255,0.14)', color: '#ffffff'}}>
                   Men
                 </button>
 </div>
@@ -817,7 +859,7 @@ gtag('config', 'G-2M6V79H761');
                 </a>
 </div>
 <div style={{marginTop: '16px', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.06)'}}>
-<a className="font-geist" href="#" style={{fontFamily: '\'Inter\',sans-serif', fontSize: '12px', fontWeight: '500', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'color 0.25s ease'}}>
+<a className="font-geist" href="#" style={{fontFamily: '\'Inter\', sans-serif', fontSize: '12px', fontWeight: '500', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'color 0.25s ease'}}>
                   View All →
                 </a>
 </div>
@@ -828,7 +870,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="etha-contained-drop-inner" style={{padding: '28px 32px'}}>
 <div style={{display: 'flex', flexDirection: 'column', gap: '0'}}>
 <a href="#" style={{display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 0px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', textDecoration: 'none'}}>
-<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
+<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
 <img alt="Cosmos" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7dc27b8a-06e6-401c-8ce1-ae764d88eb47_1600w.png?w=120&amp;q=80" style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
 </div>
 <div>
@@ -841,7 +883,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 <a href="#" style={{display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 0px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', textDecoration: 'none'}}>
-<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
+<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
 <img alt="Land" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f47a0318-7a78-45cc-b280-c510190c8182_1600w.png?w=120&amp;q=80" style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
 </div>
 <div>
@@ -854,7 +896,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 <a href="#" style={{display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 0px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', textDecoration: 'none'}}>
-<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
+<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
 <img alt="Soil" className="object-cover w-full h-auto" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b779dc3f-8379-4858-a8a4-1149caabe96d_320w.png?w=800&amp;q=80" style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
 </div>
 <div>
@@ -867,7 +909,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 <a href="#" style={{display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 0px', borderBottom: 'none', textDecoration: 'none'}}>
-<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
+<div style={{width: '48px', height: '48px', borderRadius: '12px', flexShrink: '0', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden'}}>
 <img alt="Sanctuary" className="object-cover w-full h-auto" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/964dfbee-b21d-4d39-b008-45fba5518f3b_320w.png" style={{width: '100%', height: '100%', objectFit: 'cover'}}/>
 </div>
 <div>
@@ -886,14 +928,14 @@ gtag('config', 'G-2M6V79H761');
 <div aria-label="World menu" className="etha-contained-drop glass-wild" id="nav-drop-world" role="menu" style={{maxWidth: '420px', width: '420px'}}>
 <div className="etha-contained-drop-inner" style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '28px', padding: '28px 32px'}}>
 <div>
-<p className="font-geist" style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', fontWeight: '500', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px'}}>
+<p className="font-geist" style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', fontWeight: '500', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px'}}>
                   Explore
                 </p>
 <a className="etha-world-link font-geist" href="#">Lookbook</a>
 <a className="etha-world-link font-geist" href="#">Campaign</a>
 </div>
 <div>
-<p className="font-geist" style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', fontWeight: '500', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px'}}>
+<p className="font-geist" style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', fontWeight: '500', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px'}}>
                   Stories
                 </p>
 <a className="etha-world-link font-geist" href="#">Journal</a>
@@ -902,7 +944,7 @@ gtag('config', 'G-2M6V79H761');
                 </a>
 </div>
 <div>
-<p className="font-geist" style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', fontWeight: '500', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px'}}>
+<p className="font-geist" style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', fontWeight: '500', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px'}}>
                   About
                 </p>
 <a className="etha-world-link font-geist" href="#">Our Story</a>
@@ -940,14 +982,14 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="etha-mob-acc-body" id="mob-shop">
-<div style={{display: 'flex', alignItems: 'center', gap: '0', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '999px', padding: '3px', margin: '8px 0 12px 0', width: 'fit-content'}}>
-<button className="etha-mob-shop-seg-active font-geist" data-mob-shop-filter="all" style={{padding: '6px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\',sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.14)', color: '#ffffff', transition: 'all 0.25s ease'}}>
+<div style={{display: 'flex', alignItems: 'center', gap: '0', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '999px', padding: '3px', margin: '8px 0 12px 0', width: 'fit-content'}}>
+<button className="etha-mob-shop-seg-active font-geist" data-mob-shop-filter="all" style={{padding: '6px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\', sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.14)', color: '#ffffff', transition: 'all 0.25s ease'}}>
                   All
                 </button>
-<button className="font-geist" data-mob-shop-filter="women" style={{padding: '6px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\',sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.14)', color: '#ffffff', transition: 'all 0.25s ease'}}>
+<button className="font-geist" data-mob-shop-filter="women" style={{padding: '6px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\', sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.14)', color: '#ffffff', transition: 'all 0.25s ease'}}>
                   Women
                 </button>
-<button className="font-geist" data-mob-shop-filter="men" style={{padding: '6px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\',sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.14)', color: '#ffffff', transition: 'all 0.25s ease'}}>
+<button className="font-geist" data-mob-shop-filter="men" style={{padding: '6px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\', sans-serif', fontSize: '11px', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.14)', color: '#ffffff', transition: 'all 0.25s ease'}}>
                   Men
                 </button>
 </div>
@@ -1275,11 +1317,11 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 </div>
-<div style={{display: 'inline-flex', width: 'fit-content', flexDirection: 'column', gap: '4px', background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '22px', padding: '14px 24px'}}>
+<div style={{display: 'inline-flex', width: 'fit-content', flexDirection: 'column', gap: '4px', background: 'rgba(255, 255, 255, 0.06)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '22px', padding: '14px 24px'}}>
 <span style={{fontSize: '11px', fontWeight: '400', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.02em'}}>
                   UK Time (Europe/London)
                 </span>
-<span id="etha-seed-clock" style={{fontFamily: '\'Geist Mono\',ui-monospace,SFMono-Regular,monospace', fontSize: '13px', fontWeight: '500', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.04em'}}>21:16:09</span>
+<span id="etha-seed-clock" style={{fontFamily: '\'Geist Mono\', ui-monospace, SFMono-Regular, monospace', fontSize: '13px', fontWeight: '500', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.04em'}}>21:16:09</span>
 </div>
 </div>
 <div className="" style={{display: 'flex', flexDirection: 'column', gap: '40px'}}>

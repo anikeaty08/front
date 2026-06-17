@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -214,7 +256,7 @@ gtag('config', 'G-2M6V79H761');
 
 <footer className="mt-auto pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-end gap-10">
 
-<div className="relative flex items-center justify-center w-36 h-36 rounded-full border border-[#c5a059] bg-[#faf9f6]" style={{boxShadow: 'inset 0 2px 5px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.02)'}}>
+<div className="relative flex items-center justify-center w-36 h-36 rounded-full border border-[#c5a059] bg-[#faf9f6]" style={{boxShadow: 'inset 0 2px 5px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0,0,0,0.02)'}}>
 <div className="absolute inset-1.5 rounded-full border border-dashed border-[#1e3a8a] opacity-40"></div>
 <div className="absolute inset-0 rounded-full border-4 border-[#faf9f6] opacity-50 shadow-[inset_0_0_10px_rgba(30,58,138,0.1)] pointer-events-none"></div>
 <div className="text-center px-4 flex flex-col items-center justify-center z-10">

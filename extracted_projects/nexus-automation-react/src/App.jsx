@@ -6,6 +6,42 @@ export default function App() {
 
   // Intersection Observer for scroll animations
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -38,10 +74,7 @@ export default function App() {
       <div 
         className="aura-background-component top-0 w-full h-screen mix-blend-screen -z-20 absolute" 
         data-alpha-mask="80" 
-        style={{ 
-          maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', 
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)' 
-        }}
+        style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}
       >
         <div className="aura-background-component top-0 w-full -z-10 absolute h-full">
           <div className="absolute w-full h-full left-0 top-0 -z-10">
@@ -74,11 +107,8 @@ export default function App() {
             {/* Dark Mode Gradient Pill Button */}
             <button 
               className="hover:bg-white/10 transition-all flex text-sm font-medium text-neutral-200 bg-gradient-to-b from-white/30 via-white/0 to-white/10 rounded-full px-4 py-2 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.1)_inset] gap-x-2 gap-y-x-2 items-center" 
-              style={{ 
-                position: 'relative', 
-                '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', 
-                '--border-radius-before': '9999px' 
-              }}
+              style={{position: 'relative', 
+                '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}
             >
               <span className="text-xs font-semibold tracking-tight">Start free</span>
               <iconify-icon icon="solar:arrow-right-linear" width="14" height="14" className="text-neutral-400" />
@@ -120,12 +150,9 @@ export default function App() {
             <button 
               type="submit"
               className="group flex overflow-hidden transition-all duration-300 hover:from-white/15 hover:via-white/10 hover:to-white/5 focus:ring-2 focus:ring-white/20 focus:outline-none sm:w-auto bg-gradient-to-b from-white/20 via-white/0 to-white/20 w-full h-[52px] rounded-full pt-3 pr-6 pb-3 pl-6 relative gap-x-2 gap-y-2 items-center justify-center" 
-              style={{ 
-                boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.4)', 
+              style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.4)', 
                 position: 'relative', 
-                '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', 
-                '--border-radius-before': '9999px' 
-              }}
+                '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}
             >
               <span className="text-sm font-semibold tracking-tight relative z-10 text-white/90 group-hover:text-white transition-colors">
                 Get Access
@@ -242,14 +269,14 @@ export default function App() {
               
               <div className="absolute top-0 left-8 right-8 h-56 bg-[#1A1A1A] rounded-3xl border border-white/5 shadow-sm opacity-60 scale-90 translate-y-6 -z-20 flex p-6">
                 <div className="flex items-center gap-2 text-neutral-500">
-                  <iconify-icon icon="simple-icons:jira" width="18" height="18" style={{ filter: 'grayscale(100%)' }}></iconify-icon>
+                  <iconify-icon icon="simple-icons:jira" width="18" height="18" style={{filter: 'grayscale(100%)'}}></iconify-icon>
                   <span className="text-xs font-semibold">Jira</span>
                 </div>
               </div>
 
               <div className="absolute top-5 left-4 right-4 h-60 bg-[#1A1A1A] rounded-3xl border border-white/10 shadow-sm opacity-90 scale-95 translate-y-3 -z-10 p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <iconify-icon icon="simple-icons:discord" width="18" height="18" style={{ filter: 'grayscale(100%)' }}></iconify-icon>
+                  <iconify-icon icon="simple-icons:discord" width="18" height="18" style={{filter: 'grayscale(100%)'}}></iconify-icon>
                   <span className="text-xs font-bold text-neutral-200">Discord</span>
                 </div>
                 <div className="h-2.5 w-2/3 bg-white/10 rounded-full mb-3"></div>
@@ -259,7 +286,7 @@ export default function App() {
               <div className="absolute top-10 left-0 right-0 bg-[#0C0D0F] rounded-3xl border border-white/10 shadow-xl p-8 z-10">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="p-1.5 rounded-lg bg-white/5 text-neutral-300 flex items-center justify-center">
-                    <iconify-icon icon="simple-icons:notion" width="18" height="18" style={{ filter: 'invert(1)' }}></iconify-icon>
+                    <iconify-icon icon="simple-icons:notion" width="18" height="18" style={{filter: 'invert(1)'}}></iconify-icon>
                   </div>
                   <span className="text-sm font-bold text-neutral-200">Notion</span>
                   <span className="ml-auto text-xs text-neutral-500 font-medium">Just now</span>
@@ -424,7 +451,7 @@ export default function App() {
       </div>
 
       <section className="relative bg-[#050505] text-white py-32 overflow-hidden border-b border-white/5">
-        <div className="z-0 opacity-[0.15] absolute top-0 right-0 bottom-0 left-0" style={{ backgroundImage: 'radial-gradient(#ffffff 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }}></div>
+        <div className="z-0 opacity-[0.15] absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'radial-gradient(#ffffff 0.5px, transparent 0.5px)', backgroundSize: '24px 24px'}}></div>
         <div className="max-w-7xl z-10 mr-auto ml-auto pt-6 pr-6 pb-24 pl-6 relative">
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 text-[10px] md:text-xs font-mono text-neutral-500 uppercase tracking-[0.2em] gap-4">

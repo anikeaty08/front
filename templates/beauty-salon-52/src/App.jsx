@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -69,7 +111,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative h-[400px] lg:h-[600px] w-full flex items-center justify-center hidden md:flex z-20" style={{perspective: '1200px'}}>
 
-<div className="absolute w-72 h-96 bg-neutral-900/60 backdrop-blur-2xl border border-white/[0.08] rounded-[2rem] p-6 shadow-2xl flex flex-col justify-between z-20" onmouseout="this.style.transform='rotateY(-10deg) rotateX(5deg) translateZ(50px)'" onmouseover="this.style.transform='rotateY(0deg) rotateX(0deg) translateZ(80px) scale(1.02)'" style={{transform: 'rotateY(-10deg) rotateX(5deg) translateZ(50px)', boxShadow: '-20px 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)', transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)'}}>
+<div className="absolute w-72 h-96 bg-neutral-900/60 backdrop-blur-2xl border border-white/[0.08] rounded-[2rem] p-6 shadow-2xl flex flex-col justify-between z-20" onmouseout="this.style.transform='rotateY(-10deg) rotateX(5deg) translateZ(50px)'" onmouseover="this.style.transform='rotateY(0deg) rotateX(0deg) translateZ(80px) scale(1.02)'" style={{transform: 'rotateY(-10deg) rotateX(5deg) translateZ(50px)', boxShadow: '-20px 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1)', transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)'}}>
 <div className="w-full h-40 bg-neutral-800/50 rounded-xl overflow-hidden relative mb-4 shadow-inner">
 <img alt="Precision haircut" className="w-full h-full object-cover opacity-80 mix-blend-lighten" src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/90 via-transparent to-transparent"></div>
@@ -199,7 +241,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex-1 relative w-full max-w-md mx-auto h-[450px]" style={{perspective: '1500px'}}>
 
-<div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/[0.1] rounded-[24px] shadow-2xl flex flex-col overflow-hidden" onmouseout="this.style.transform='rotateX(10deg) rotateY(-15deg) translateZ(0)'" onmouseover="this.style.transform='rotateX(5deg) rotateY(-5deg) translateZ(20px)'" style={{transform: 'rotateX(10deg) rotateY(-15deg) translateZ(0)', boxShadow: '-30px 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)', transition: 'transform 0.5s ease'}}>
+<div className="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/[0.1] rounded-[24px] shadow-2xl flex flex-col overflow-hidden" onmouseout="this.style.transform='rotateX(10deg) rotateY(-15deg) translateZ(0)'" onmouseover="this.style.transform='rotateX(5deg) rotateY(-5deg) translateZ(20px)'" style={{transform: 'rotateX(10deg) rotateY(-15deg) translateZ(0)', boxShadow: '-30px 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1)', transition: 'transform 0.5s ease'}}>
 
 <div className="px-6 py-5 border-b border-white/[0.05] flex justify-between items-center bg-neutral-900/50">
 <div>

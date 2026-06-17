@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -113,6 +149,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -202,7 +244,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="sticky top-24 mt-0 z-10 mx-auto max-w-6xl px-4">
 <div className="relative group cursor-pointer overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 to-gray-700 shadow-2xl transition-all duration-500 hover:shadow-3xl hover:scale-[1.02]">
 <div className="overflow-hidden">
-<img alt="Modern luxury residence interior design" className="w-full h-[450px] lg:h-[550px] object-cover opacity-90 transition-all duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/a4facd9f-e0bc-4f4e-a8c7-9d89b67603c3_3840w.jpg" style={{transform: 'translateY(var(--scroll-y, 0px))', -ScrollY: '608.3000000000001px', objectPosition: 'center center'}}/>
+<img alt="Modern luxury residence interior design" className="w-full h-[450px] lg:h-[550px] object-cover opacity-90 transition-all duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/a4facd9f-e0bc-4f4e-a8c7-9d89b67603c3_3840w.jpg" style={{transform: 'translateY(var(--scroll-y, 0px))', '--scroll-y': '608.3000000000001px', objectPosition: 'center center'}}/>
 </div>
 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 <div className="absolute inset-0 lg:p-14 flex flex-col group-hover:opacity-100 transition-opacity duration-500 opacity-0 pt-8 pr-8 pb-8 pl-8 justify-end">
@@ -241,7 +283,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="sticky top-24 mt-8 z-20 mx-auto max-w-6xl px-4">
 <div className="relative group cursor-pointer overflow-hidden rounded-3xl bg-white shadow-2xl transition-all duration-500 hover:shadow-3xl hover:scale-[1.02]">
 <div className="overflow-hidden">
-<img alt="Modern office space design" className="w-full h-[450px] lg:h-[550px] object-cover transition-all duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/a857c6c1-5a11-4c0d-beb0-1d8ec6e970c1_3840w.jpg" style={{transform: 'translateY(calc(var(--scroll-y, 0px) * 0.8))', -ScrollY: '486.6400000000001px', objectPosition: 'center center'}}/>
+<img alt="Modern office space design" className="w-full h-[450px] lg:h-[550px] object-cover transition-all duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/a857c6c1-5a11-4c0d-beb0-1d8ec6e970c1_3840w.jpg" style={{transform: 'translateY(calc(var(--scroll-y, 0px) * 0.8))', '--scroll-y': '486.6400000000001px', objectPosition: 'center center'}}/>
 </div>
 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 <div className="absolute inset-0 lg:p-14 flex flex-col pt-8 pr-8 pb-8 pl-8 justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -280,7 +322,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="sticky top-24 mt-16 z-30 mx-auto max-w-6xl px-4">
 <div className="relative group cursor-pointer overflow-hidden rounded-3xl bg-white shadow-2xl transition-all duration-500 hover:shadow-3xl hover:scale-[1.02]">
 <div className="overflow-hidden">
-<img alt="Luxury yacht interior design" className="w-full h-[450px] lg:h-[550px] object-cover transition-all duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/9c8a44a6-a501-401f-b95d-892f3b6df817_3840w.jpg" style={{transform: 'translateY(calc(var(--scroll-y, 0px) * 0.6))', -ScrollY: '364.98px', objectPosition: 'center center'}}/>
+<img alt="Luxury yacht interior design" className="w-full h-[450px] lg:h-[550px] object-cover transition-all duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/9c8a44a6-a501-401f-b95d-892f3b6df817_3840w.jpg" style={{transform: 'translateY(calc(var(--scroll-y, 0px) * 0.6))', '--scroll-y': '364.98px', objectPosition: 'center center'}}/>
 </div>
 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 <div className="absolute inset-0 lg:p-14 flex flex-col group-hover:opacity-100 transition-opacity duration-500 opacity-0 pt-8 pr-8 pb-8 pl-8 justify-end">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -189,6 +225,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -217,7 +259,7 @@ addUtilities({
 
 <nav bis_size='{"x":0,"y":0,"w":922,"h":95,"abs_x":440,"abs_y":43}' className="fixed top-0 w-full z-50 px-6 md:px-12 py-6 flex justify-between items-center backdrop-blur-sm border-b border-white/5">
 <div bis_size='{"x":48,"y":33,"w":88,"h":28,"abs_x":488,"abs_y":76}' className="flex items-center gap-3 group cursor-none">
-<div bis_size='{"x":48,"y":39,"w":16,"h":16,"abs_x":488,"abs_y":82}' className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-4 h-4 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', -BorderRadiusBefore: '8px'}}>
+<div bis_size='{"x":48,"y":39,"w":16,"h":16,"abs_x":488,"abs_y":82}' className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-4 h-4 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', '--border-radius-before': '8px'}}>
 <iconify-icon bis_size='{"x":56,"y":47,"w":0,"h":0,"abs_x":496,"abs_y":90}' className="text-white group-hover:text-orange-500 transition-colors" icon="solar:intelligent-correction-linear" width="20"></iconify-icon>
 </div>
 <span bis_size='{"x":76,"y":33,"w":60,"h":28,"abs_x":516,"abs_y":76}' className="group-hover:text-white/90 text-lg font-bold text-white tracking-tight font-display">Laticce</span>
@@ -473,7 +515,7 @@ addUtilities({
 <footer bis_size='{"x":0,"y":4509,"w":922,"h":121,"abs_x":440,"abs_y":4552}' className="border-t border-white/5 bg-gray-950 py-12 px-6">
 <div bis_size='{"x":24,"y":4558,"w":874,"h":24,"abs_x":464,"abs_y":4601}' className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
 <div bis_size='{"x":24,"y":4558,"w":82,"h":24,"abs_x":464,"abs_y":4601}' className="flex items-center gap-2">
-<div bis_size='{"x":24,"y":4562,"w":16,"h":16,"abs_x":464,"abs_y":4605}' className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-4 h-4 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', -BorderRadiusBefore: '8px'}}>
+<div bis_size='{"x":24,"y":4562,"w":16,"h":16,"abs_x":464,"abs_y":4605}' className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-4 h-4 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', '--border-radius-before': '8px'}}>
 <iconify-icon bis_size='{"x":32,"y":4570,"w":0,"h":0,"abs_x":472,"abs_y":4613}' className="text-white group-hover:text-orange-500 transition-colors" icon="solar:intelligent-correction-linear" width="20"></iconify-icon>
 </div>
 <span bis_size='{"x":48,"y":4558,"w":58,"h":24,"abs_x":488,"abs_y":4601}' className="font-bold text-white tracking-tight font-display" style={{}}>LATICCE</span>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -20,6 +56,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -204,7 +246,7 @@ gtag('config', 'G-2M6V79H761');
       </h2>
 <div className="grid md:grid-cols-3 gap-6 md:gap-8">
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', '--border-radius-before': '1.5rem'}}>
 <div className="md:w-12 md:h-12 flex md:mb-6 text-rose-400 bg-rose-900/20 w-10 h-10 border-rose-500/10 border rounded-xl mb-5 items-center justify-center">
 <svg aria-hidden="true" className="lucide lucide-arrow-up-right lucide-trending-down md:w-6 md:h-6 w-[20px] h-[20px]" data-icon-replaced="true" data-icon-set="lucide" data-lucide="arrow-up-right" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: 'rgb(251, 113, 133)', width: '20px', height: '20px'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
 </div>
@@ -212,7 +254,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="leading-relaxed text-sm font-light text-gray-400">Your current funnel attracts tire-kickers who waste your time on calls that go nowhere</p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-rose-900/20 text-rose-400 border border-rose-500/10">
 <svg aria-hidden="true" className="lucide lucide-ghost lucide-users md:w-6 md:h-6 w-[20px] h-[20px]" data-icon-replaced="true" data-icon-set="lucide" data-lucide="ghost" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: 'rgb(251, 113, 133)', width: '20px', height: '20px'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"></path></svg>
 </div>
@@ -220,7 +262,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="leading-relaxed text-sm font-light text-gray-400">You're spending thousands on ads that bring in leads who ghost your booking calendar or show up completely cold with zero buying intent. Every day you're jumping on calls with people who have no money, no urgency, and no real commitment to change. You're basically doing free therapy sessions for strangers while your bank account bleeds ad spend.</p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', '--border-radius-before': '1.5rem'}}>
 <div className="md:w-12 md:h-12 flex md:mb-6 text-rose-400 bg-rose-900/20 w-10 h-10 border-rose-500/10 border rounded-xl mb-5 items-center justify-center">
 <svg className="lucide lucide-clock md:w-6 md:h-6 w-[16px] h-[16px]" data-icon-replaced="true" data-icon-set="mingcute" data-mingcute="question-2-line" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{width: '16px', height: '16px', color: 'rgb(251, 113, 133)'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"></path><path d="M12.004 19a1 1 0 0 1 .116 1.993L12 21a1 1 0 0 1-.117-1.993zM12 3a6 6 0 0 1 6 6c0 1.61-.957 3.105-2.424 4.022l-.203.122c-.665.379-1.28.83-1.719 1.335c-.433.5-.654 1.002-.654 1.521v.5a1 1 0 1 1-2 0V16c0-1.138.498-2.087 1.144-2.831c.64-.738 1.464-1.321 2.238-1.763C15.465 10.788 16 9.831 16 9a4 4 0 0 0-8 0a1 1 0 0 1-2 0a6 6 0 0 1 6-6" fill="#fb7185"></path></g></svg>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -607,6 +643,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1621,7 +1663,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-10 md:gap-8 z-10" style={{perspective: '1200px'}}>
 
 <div className="draggable-card cursor-grab select-none relative w-full max-w-sm md:w-[24rem] h-[36rem] z-10">
-<div className="relative w-full h-full rounded-[2rem] p-8 flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 hover:rotate-0 md:-rotate-6 md:translate-x-12" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fc 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.08), 80px 120px 160px rgba(79, 70, 229, 0.08), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="relative w-full h-full rounded-[2rem] p-8 flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 hover:rotate-0 md:-rotate-6 md:translate-x-12" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fc 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.08), 80px 120px 160px rgba(79, 70, 229, 0.08), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <div className="flex justify-between items-start relative z-10 mb-8">
 <div className="w-16 h-16 rounded-xl p-2.5 flex items-end justify-between gap-0.5 bg-white shadow-sm border border-[#eaeaea]">
 <div className="w-full bg-[#4f46e5]/90 rounded-t-sm animate-pulse" style={{height: '40%', animationDuration: '0.7s'}}></div>
@@ -1678,7 +1720,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="draggable-card cursor-grab select-none relative w-full max-w-sm md:w-[24rem] h-[36rem] z-0">
-<div className="relative w-full h-full rounded-[2rem] p-8 flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 hover:rotate-0 md:rotate-6 md:-translate-x-12" style={{background: 'linear-gradient(145deg, #121212 0%, #050505 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.2), 8px 16px 24px rgba(0,0,0,0.3), 64px 96px 128px rgba(0,0,0,0.4), 80px 120px 160px rgba(10, 10, 10, 0.4), inset 0 1px 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(255,255,255,0.1)'}}>
+<div className="relative w-full h-full rounded-[2rem] p-8 flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 hover:rotate-0 md:rotate-6 md:-translate-x-12" style={{background: 'linear-gradient(145deg, #121212 0%, #050505 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.2), 8px 16px 24px rgba(0, 0, 0, 0.3), 64px 96px 128px rgba(0, 0, 0, 0.4), 80px 120px 160px rgba(10, 10, 10, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden rounded-[2rem]">
 <div className="absolute right-[-10%] top-[-10%] h-[15rem] w-[15rem] rounded-full bg-[#4f46e5] blur-[60px] opacity-20 group-hover:opacity-30 transition-opacity duration-700"></div>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -252,6 +288,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -449,7 +491,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="relative spotlight-wrapper group" style={{-CursorX: '465px', -CursorY: '377px'}}>
+<div className="relative spotlight-wrapper group" style={{'--cursor-x': '465px', '--cursor-y': '377px'}}>
 
 <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
 </div>
@@ -541,7 +583,7 @@ addUtilities({
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6" onmousemove="handleSpotlight(event)">
 
-<div className="relative group rounded-2xl bg-zinc-900 overflow-hidden spotlight-wrapper" style={{-CursorX: '465px', -CursorY: '-1053px'}}>
+<div className="relative group rounded-2xl bg-zinc-900 overflow-hidden spotlight-wrapper" style={{'--cursor-x': '465px', '--cursor-y': '-1053px'}}>
 <div className="absolute inset-0 spotlight-border opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div className="relative h-full bg-[#050505] m-[1px] rounded-2xl p-8 overflow-hidden z-10 glass-panel">
 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity group-hover:scale-110 duration-500">
@@ -555,7 +597,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="relative group rounded-2xl bg-zinc-900 overflow-hidden spotlight-wrapper" style={{-CursorX: '139.671875px', -CursorY: '-1053px'}}>
+<div className="relative group rounded-2xl bg-zinc-900 overflow-hidden spotlight-wrapper" style={{'--cursor-x': '139.671875px', '--cursor-y': '-1053px'}}>
 <div className="absolute inset-0 spotlight-border opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div className="relative h-full bg-[#050505] m-[1px] rounded-2xl p-8 overflow-hidden z-10 glass-panel">
 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity group-hover:scale-110 duration-500">
@@ -569,7 +611,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="relative group rounded-2xl bg-zinc-900 overflow-hidden spotlight-wrapper" style={{-CursorX: '-185.6640625px', -CursorY: '-1053px'}}>
+<div className="relative group rounded-2xl bg-zinc-900 overflow-hidden spotlight-wrapper" style={{'--cursor-x': '-185.6640625px', '--cursor-y': '-1053px'}}>
 <div className="absolute inset-0 spotlight-border opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div className="relative h-full bg-[#050505] m-[1px] rounded-2xl p-8 overflow-hidden z-10 glass-panel">
 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity group-hover:scale-110 duration-500">

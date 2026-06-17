@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -21,6 +57,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -30,8 +72,8 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-0 left-0 right-0 h-[800px] bg-gradient-to-br from-[#A58CC3]/10 via-[#F8F9FC]/5 to-transparent -z-10 blur-3xl pointer-events-none"></div>
 <div className="absolute top-[40%] right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#A58CC3]/5 to-transparent rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <div className="absolute top-0 left-0 w-full h-[900px] -z-20 overflow-hidden pointer-events-none">
-<div className="absolute inset-0" style={{backgroundImage: 'linear-gradient(to right, rgba(165,140,195,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(165,140,195,0.12) 1px, transparent 1px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)'}}></div>
-<div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at center, rgba(165,140,195,0.3) 1.5px, transparent 1.5px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)'}}></div>
+<div className="absolute inset-0" style={{backgroundImage: 'linear-gradient(to right, rgba(165, 140, 195, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(165, 140, 195, 0.12) 1px, transparent 1px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)'}}></div>
+<div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at center, rgba(165, 140, 195, 0.3) 1.5px, transparent 1.5px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%)'}}></div>
 </div>
 
 <nav className="fixed top-0 w-full z-50 bg-[#F8F9FC]/70 backdrop-blur-md border-b border-white/40 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">

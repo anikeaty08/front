@@ -16,6 +16,42 @@ import {
 function useReveal() {
   const ref = useRef(null);
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const el = ref.current;
     if (!el) return;
     const items = el.querySelectorAll(".reveal");
@@ -75,7 +111,7 @@ function SectionTitle({ children, light = false }) {
       className={`reveal font-serif mt-4 text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight leading-[1.12] ${
         light ? "text-[#fff9ef]" : "text-[#2b160c]"
       }`}
-      style={{ "--d": "100ms" }}
+      style={{"--d": "100ms"}}
     >
       {children}
     </h2>
@@ -90,7 +126,7 @@ function TarotMini({ icon, label, className = "", style }) {
       aria-hidden="true"
     >
       <div className="w-full gold-rule" />
-      <iconify-icon icon={icon} style={{ fontSize: "34px", color: "#b8893b" }} />
+      <iconify-icon icon={icon} style={{fontSize: "34px", color: "#b8893b"}} />
       <p className="font-serif text-[10px] tracking-[0.2em] uppercase text-[#7a4e1d]">{label}</p>
       <div className="w-full gold-rule" />
     </div>
@@ -108,7 +144,7 @@ function Header() {
     >
       <div className="mx-auto max-w-6xl px-5 flex items-center justify-between">
         <a href="#topo" className="flex items-center gap-2 group" aria-label="ESTELAR — início">
-          <iconify-icon icon="solar:moon-stars-bold-duotone" style={{ fontSize: "26px", color: "#b8893b" }} aria-hidden="true" />
+          <iconify-icon icon="solar:moon-stars-bold-duotone" style={{fontSize: "26px", color: "#b8893b"}} aria-hidden="true" />
           <span className="font-serif text-xl tracking-[0.32em] font-medium text-[#2b160c]">ESTELAR</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-[#7a4e1d]" aria-label="Navegação principal">
@@ -118,7 +154,7 @@ function Header() {
           <a href="#faq" className="hover:text-[#b8893b] transition-colors">Dúvidas</a>
         </nav>
         <GoldButton href={CTA_LINKS.reading}>
-          <iconify-icon icon="simple-icons:whatsapp" style={{ fontSize: "15px" }} aria-hidden="true" />
+          <iconify-icon icon="simple-icons:whatsapp" style={{fontSize: "15px"}} aria-hidden="true" />
           Receber minha leitura
         </GoldButton>
       </div>
@@ -133,7 +169,7 @@ function Hero() {
     <section id="topo" ref={ref} className="relative overflow-hidden pt-32 pb-20 lg:pt-44 lg:pb-32 paper-noise">
       {/* moon aura */}
       <div className="moon-glow absolute -top-32 right-[-10%] w-[480px] h-[480px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(216,174,94,0.35) 0%, rgba(216,174,94,0.08) 45%, transparent 70%)" }}
+        style={{background: "radial-gradient(circle, rgba(216,174,94,0.35) 0%, rgba(216,174,94,0.08) 45%, transparent 70%)"}}
         aria-hidden="true"
       />
       <div className="orbit-ring absolute -top-20 right-[-6%] w-[380px] h-[380px] rounded-full border border-[#b8893b]/15 pointer-events-none" aria-hidden="true" />
@@ -142,7 +178,7 @@ function Hero() {
         <span
           key={i}
           className="particle"
-          style={{ left: `${left}%`, bottom: "8%", width: i % 2 ? 3 : 4, height: i % 2 ? 3 : 4, "--t": `${8 + i * 2}s`, "--ad": `${i * 1.4}s` }}
+          style={{left: `${left}%`, bottom: "8%", width: i % 2 ? 3 : 4, height: i % 2 ? 3 : 4, "--t": `${8 + i * 2}s`, "--ad": `${i * 1.4}s`}}
           aria-hidden="true"
         />
       ))}
@@ -150,42 +186,42 @@ function Hero() {
       <div className="relative mx-auto max-w-6xl px-5 grid lg:grid-cols-[1.1fr_0.9fr] gap-14 items-center">
         <div>
           <p className="reveal inline-flex items-center gap-2 rounded-full border border-[#b8893b]/40 bg-[#fff9ef]/70 px-4 py-1.5 text-xs font-semibold text-[#7a4e1d] tracking-wide">
-            <iconify-icon icon="solar:star-bold-duotone" style={{ fontSize: "14px", color: "#b8893b" }} aria-hidden="true" />
+            <iconify-icon icon="solar:star-bold-duotone" style={{fontSize: "14px", color: "#b8893b"}} aria-hidden="true" />
             Leitura personalizada · Relatório premium · Orientação mensal
           </p>
           <h1
             className="reveal font-serif mt-6 text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.08] text-[#2b160c]"
-            style={{ "--d": "120ms", textWrap: "balance" }}
+            style={{"--d": "120ms", textWrap: "balance"}}
           >
             Receba uma leitura feita para a{" "}
             <span className="italic text-[#b8893b]">energia do seu próximo ciclo</span>.
           </h1>
-          <p className="reveal mt-6 max-w-md text-base sm:text-lg text-[#7a4e1d] leading-relaxed" style={{ "--d": "220ms" }}>
+          <p className="reveal mt-6 max-w-md text-base sm:text-lg text-[#7a4e1d] leading-relaxed" style={{"--d": "220ms"}}>
             Se algo dentro de você pediu uma resposta, comece por aqui. Uma leitura intuitiva,
             um relatório visual premium e uma mensagem escrita para você.
           </p>
-          <div className="reveal mt-8 flex flex-wrap items-center gap-4" style={{ "--d": "320ms" }}>
+          <div className="reveal mt-8 flex flex-wrap items-center gap-4" style={{"--d": "320ms"}}>
             <GoldButton href={CTA_LINKS.reading} big glow>
-              <iconify-icon icon="simple-icons:whatsapp" style={{ fontSize: "18px" }} aria-hidden="true" />
+              <iconify-icon icon="simple-icons:whatsapp" style={{fontSize: "18px"}} aria-hidden="true" />
               Receber minha leitura
             </GoldButton>
             <a href="#como-funciona" className="inline-flex items-center gap-2 text-sm font-semibold text-[#7a4e1d] hover:text-[#b8893b] transition-colors">
               Ver como funciona
-              <iconify-icon icon="solar:arrow-down-line-duotone" style={{ fontSize: "16px" }} aria-hidden="true" />
+              <iconify-icon icon="solar:arrow-down-line-duotone" style={{fontSize: "16px"}} aria-hidden="true" />
             </a>
           </div>
-          <p className="reveal mt-6 text-xs text-[#7a4e1d]/70" style={{ "--d": "420ms" }}>
+          <p className="reveal mt-6 text-xs text-[#7a4e1d]/70" style={{"--d": "420ms"}}>
             Sigilo absoluto · Linguagem clara · Atendimento humano
           </p>
         </div>
 
         {/* floating cards */}
-        <div className="reveal relative h-[320px] sm:h-[380px] hidden sm:block" style={{ "--d": "260ms" }} aria-hidden="true">
+        <div className="reveal relative h-[320px] sm:h-[380px] hidden sm:block" style={{"--d": "260ms"}} aria-hidden="true">
           <TarotMini icon="solar:sun-2-line-duotone" label="O Sol" className="float-a absolute left-2 top-12" />
           <TarotMini icon="solar:moon-stars-line-duotone" label="A Lua" className="float-b absolute left-1/2 -translate-x-1/2 top-0 scale-110 z-10" />
           <TarotMini icon="solar:star-fall-line-duotone" label="A Estrela" className="float-c absolute right-2 top-20" />
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-64 h-10 rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(43,22,12,0.18), transparent 70%)" }} />
+            style={{background: "radial-gradient(ellipse, rgba(43,22,12,0.18), transparent 70%)"}} />
         </div>
       </div>
     </section>
@@ -203,26 +239,26 @@ function EmotionalMirror() {
   return (
     <section ref={ref} className="relative py-24 lg:py-32 bg-gradient-to-b from-[#2b160c] to-[#140b07] text-center overflow-hidden">
       <div className="absolute inset-0 opacity-30 pointer-events-none"
-        style={{ background: "radial-gradient(60% 50% at 50% 30%, rgba(216,174,94,0.18), transparent 70%)" }} aria-hidden="true" />
+        style={{background: "radial-gradient(60% 50% at 50% 30%, rgba(216,174,94,0.18), transparent 70%)"}} aria-hidden="true" />
       <div className="relative mx-auto max-w-3xl px-5">
         <Eyebrow>Capítulo dois · O espelho</Eyebrow>
         <div className="mt-8 space-y-5">
           {lines.map((l, i) => (
             <p key={l} className="reveal font-serif text-2xl sm:text-3xl lg:text-4xl tracking-tight font-medium text-[#fff9ef]/90 italic"
-              style={{ "--d": `${120 + i * 160}ms` }}>
+              style={{"--d": `${120 + i * 160}ms`}}>
               {l}
             </p>
           ))}
         </div>
-        <div className="reveal gold-rule mx-auto mt-10 w-40" style={{ "--d": "560ms" }} />
-        <p className="reveal mt-8 text-base sm:text-lg text-[#d8bfa8] leading-relaxed max-w-xl mx-auto" style={{ "--d": "640ms" }}>
+        <div className="reveal gold-rule mx-auto mt-10 w-40" style={{"--d": "560ms"}} />
+        <p className="reveal mt-8 text-base sm:text-lg text-[#d8bfa8] leading-relaxed max-w-xl mx-auto" style={{"--d": "640ms"}}>
           Talvez você não precise de mais sinais.{" "}
           <span className="text-[#d8ae5e] font-semibold">Talvez precise de uma leitura feita para você.</span>
         </p>
-        <div className="reveal mt-10" style={{ "--d": "740ms" }}>
+        <div className="reveal mt-10" style={{"--d": "740ms"}}>
           <GoldButton href={CTA_LINKS.reading} big>
             Quero a minha leitura
-            <iconify-icon icon="solar:arrow-right-line-duotone" style={{ fontSize: "16px" }} aria-hidden="true" />
+            <iconify-icon icon="solar:arrow-right-line-duotone" style={{fontSize: "16px"}} aria-hidden="true" />
           </GoldButton>
         </div>
       </div>
@@ -242,7 +278,7 @@ function ReportShowcase() {
             <div className="gold-shimmer absolute inset-0 rounded-2xl pointer-events-none" />
             <div className="flex items-center justify-between">
               <span className="font-serif text-sm tracking-[0.3em]">ESTELAR</span>
-              <iconify-icon icon="solar:moon-stars-bold-duotone" style={{ fontSize: "20px", color: "#d8ae5e" }} />
+              <iconify-icon icon="solar:moon-stars-bold-duotone" style={{fontSize: "20px", color: "#d8ae5e"}} />
             </div>
             <div className="gold-rule my-4" />
             <p className="text-[10px] uppercase tracking-[0.25em] text-[#d8ae5e]">Relatório Estelar</p>
@@ -251,14 +287,14 @@ function ReportShowcase() {
             <div className="mt-5 rounded-xl bg-[#fff9ef]/5 border border-[#d8ae5e]/30 p-4">
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#d8ae5e]">Carta guia</p>
               <div className="flex items-center gap-3 mt-2">
-                <iconify-icon icon="solar:star-fall-line-duotone" style={{ fontSize: "28px", color: "#d8ae5e" }} />
+                <iconify-icon icon="solar:star-fall-line-duotone" style={{fontSize: "28px", color: "#d8ae5e"}} />
                 <p className="font-serif text-lg">A Estrela</p>
               </div>
             </div>
             <div className="mt-4 space-y-2.5">
               {["Previsão amorosa", "Bloqueios e caminhos", "Conselho espiritual", "Mensagem final"].map((t) => (
                 <div key={t} className="flex items-center gap-2 text-xs text-[#efe1cf]">
-                  <iconify-icon icon="solar:star-bold" style={{ fontSize: "10px", color: "#b8893b" }} />
+                  <iconify-icon icon="solar:star-bold" style={{fontSize: "10px", color: "#b8893b"}} />
                   {t}
                 </div>
               ))}
@@ -274,15 +310,15 @@ function ReportShowcase() {
           <SectionTitle>
             O Relatório Estelar <span className="italic text-[#b8893b]">Personalizado</span>
           </SectionTitle>
-          <p className="reveal mt-5 text-base sm:text-lg text-[#7a4e1d] leading-relaxed" style={{ "--d": "200ms" }}>
+          <p className="reveal mt-5 text-base sm:text-lg text-[#7a4e1d] leading-relaxed" style={{"--d": "200ms"}}>
             Sua leitura não some em uma conversa. Ela vira um guia visual premium — com seu nome —
             para consultar durante todo o mês.
           </p>
           <ul className="mt-8 grid sm:grid-cols-2 gap-4">
             {reportContents.map((item, i) => (
               <li key={item.title} className="reveal flex gap-3 rounded-xl border border-[#b8893b]/20 bg-[#fff9ef]/70 p-4 transition-all duration-300 hover:border-[#b8893b]/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-[#b8893b]/10"
-                style={{ "--d": `${240 + i * 70}ms` }}>
-                <iconify-icon icon={item.icon} style={{ fontSize: "22px", color: "#b8893b", flexShrink: 0 }} aria-hidden="true" />
+                style={{"--d": `${240 + i * 70}ms`}}>
+                <iconify-icon icon={item.icon} style={{fontSize: "22px", color: "#b8893b", flexShrink: 0}} aria-hidden="true" />
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-[#2b160c]">{item.title}</p>
                   <p className="text-xs text-[#7a4e1d] mt-0.5 leading-relaxed">{item.text}</p>
@@ -290,10 +326,10 @@ function ReportShowcase() {
               </li>
             ))}
           </ul>
-          <div className="reveal mt-9" style={{ "--d": "700ms" }}>
+          <div className="reveal mt-9" style={{"--d": "700ms"}}>
             <GoldButton href={CTA_LINKS.report} big>
               Quero meu Relatório Estelar
-              <iconify-icon icon="solar:star-line-duotone" style={{ fontSize: "16px" }} aria-hidden="true" />
+              <iconify-icon icon="solar:star-line-duotone" style={{fontSize: "16px"}} aria-hidden="true" />
             </GoldButton>
           </div>
         </div>
@@ -311,21 +347,21 @@ function ClubOffer() {
         <div className="text-center max-w-2xl mx-auto">
           <Eyebrow>O ritual mensal</Eyebrow>
           <SectionTitle>Clube Estelar Mensal</SectionTitle>
-          <p className="reveal mt-5 text-base sm:text-lg text-[#7a4e1d] leading-relaxed" style={{ "--d": "200ms" }}>
+          <p className="reveal mt-5 text-base sm:text-lg text-[#7a4e1d] leading-relaxed" style={{"--d": "200ms"}}>
             Todo mês, uma leitura feita para a sua energia — com relatório premium para
             atravessar seu ciclo com mais clareza, calma e direção.
           </p>
         </div>
 
-        <div className="reveal mt-14 mx-auto max-w-lg relative" style={{ "--d": "300ms" }}>
+        <div className="reveal mt-14 mx-auto max-w-lg relative" style={{"--d": "300ms"}}>
           <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-r from-[#b8893b]/30 via-[#d8ae5e]/40 to-[#b8893b]/30 blur-xl" aria-hidden="true" />
           <div className="relative rounded-3xl border border-[#b8893b]/40 bg-[#fff9ef] p-8 sm:p-10 shadow-2xl shadow-[#b8893b]/15">
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2b160c] px-3.5 py-1.5 text-xs font-semibold text-[#d8ae5e] tracking-wide">
-                <iconify-icon icon="solar:crown-line-duotone" style={{ fontSize: "14px" }} aria-hidden="true" />
+                <iconify-icon icon="solar:crown-line-duotone" style={{fontSize: "14px"}} aria-hidden="true" />
                 Melhor escolha
               </span>
-              <iconify-icon icon="solar:moon-stars-bold-duotone" style={{ fontSize: "26px", color: "#b8893b" }} aria-hidden="true" />
+              <iconify-icon icon="solar:moon-stars-bold-duotone" style={{fontSize: "26px", color: "#b8893b"}} aria-hidden="true" />
             </div>
             <div className="mt-6 flex items-end gap-2">
               <p className="font-serif text-5xl font-medium tracking-tight text-[#2b160c]">R$ XX</p>
@@ -335,7 +371,7 @@ function ClubOffer() {
             <ul className="space-y-3.5">
               {clubBenefits.map((b) => (
                 <li key={b} className="flex items-start gap-3 text-sm text-[#2b160c]">
-                  <iconify-icon icon="solar:check-circle-bold-duotone" style={{ fontSize: "18px", color: "#b8893b", flexShrink: 0, marginTop: "1px" }} aria-hidden="true" />
+                  <iconify-icon icon="solar:check-circle-bold-duotone" style={{fontSize: "18px", color: "#b8893b", flexShrink: 0, marginTop: "1px"}} aria-hidden="true" />
                   {b}
                 </li>
               ))}
@@ -343,7 +379,7 @@ function ClubOffer() {
             <div className="mt-8">
               <GoldButton href={CTA_LINKS.club} big glow>
                 Entrar para o Clube Estelar
-                <iconify-icon icon="solar:arrow-right-line-duotone" style={{ fontSize: "16px" }} aria-hidden="true" />
+                <iconify-icon icon="solar:arrow-right-line-duotone" style={{fontSize: "16px"}} aria-hidden="true" />
               </GoldButton>
             </div>
             <p className="mt-4 text-center text-xs text-[#7a4e1d]/70">
@@ -371,8 +407,8 @@ function ReadingsAndComparison() {
           {readings.map((r, i) => (
             <article key={r.name}
               className="reveal group rounded-2xl border border-[#b8893b]/25 bg-[#fff9ef]/80 p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#b8893b]/15 hover:border-[#b8893b]/50"
-              style={{ "--d": `${150 + i * 120}ms` }}>
-              <iconify-icon icon={r.icon} style={{ fontSize: "32px", color: "#b8893b" }} aria-hidden="true" />
+              style={{"--d": `${150 + i * 120}ms`}}>
+              <iconify-icon icon={r.icon} style={{fontSize: "32px", color: "#b8893b"}} aria-hidden="true" />
               <h3 className="font-serif text-xl font-medium tracking-tight text-[#2b160c] mt-4">{r.name}</h3>
               <p className="mt-2 text-sm text-[#7a4e1d] leading-relaxed">{r.desc}</p>
               <div className="gold-rule my-4" />
@@ -388,12 +424,12 @@ function ReadingsAndComparison() {
         </div>
 
         {/* comparison */}
-        <div className="reveal mt-20 mx-auto max-w-3xl rounded-3xl overflow-hidden border border-[#b8893b]/25 bg-[#fff9ef]" style={{ "--d": "200ms" }}>
+        <div className="reveal mt-20 mx-auto max-w-3xl rounded-3xl overflow-hidden border border-[#b8893b]/25 bg-[#fff9ef]" style={{"--d": "200ms"}}>
           <div className="grid grid-cols-[1.4fr_1fr_1fr] text-center text-xs sm:text-sm">
             <div className="p-4 sm:p-5 text-left font-serif text-base sm:text-lg text-[#2b160c] tracking-tight">Avulsa ou Clube?</div>
             <div className="p-4 sm:p-5 font-semibold text-[#7a4e1d] bg-[#efe1cf]/50">Leitura Avulsa</div>
             <div className="p-4 sm:p-5 font-semibold text-[#fff9ef] bg-[#2b160c] flex items-center justify-center gap-1.5">
-              <iconify-icon icon="solar:crown-line-duotone" style={{ fontSize: "14px", color: "#d8ae5e" }} aria-hidden="true" />
+              <iconify-icon icon="solar:crown-line-duotone" style={{fontSize: "14px", color: "#d8ae5e"}} aria-hidden="true" />
               <span className="text-[#d8ae5e]">Clube Estelar</span>
             </div>
             {comparison.map((row, i) => (
@@ -419,13 +455,13 @@ function FragRow({ row, odd }) {
       <div className={`p-3.5 sm:p-4 text-left text-[#2b160c] border-t border-[#b8893b]/15 ${bg}`}>{row.feature}</div>
       <div className={`p-3.5 sm:p-4 border-t border-[#b8893b]/15 ${bg} bg-[#efe1cf]/40`}>
         {row.single ? (
-          <iconify-icon icon="solar:check-circle-line-duotone" style={{ fontSize: "18px", color: "#b8893b" }} aria-label="Incluído" />
+          <iconify-icon icon="solar:check-circle-line-duotone" style={{fontSize: "18px", color: "#b8893b"}} aria-label="Incluído" />
         ) : (
           <span className="text-[#d8bfa8]" aria-label="Não incluído">—</span>
         )}
       </div>
       <div className={`p-3.5 sm:p-4 border-t border-[#d8ae5e]/20 bg-[#2b160c]`}>
-        <iconify-icon icon="solar:check-circle-bold-duotone" style={{ fontSize: "18px", color: "#d8ae5e" }} aria-label="Incluído" />
+        <iconify-icon icon="solar:check-circle-bold-duotone" style={{fontSize: "18px", color: "#d8ae5e"}} aria-label="Incluído" />
       </div>
     </>
   );
@@ -441,19 +477,19 @@ function ChooseACard() {
   return (
     <section id="carta" ref={ref} className="relative py-24 lg:py-36 bg-gradient-to-b from-[#140b07] via-[#2b160c] to-[#140b07] overflow-hidden">
       <div className="absolute inset-0 pointer-events-none opacity-40"
-        style={{ background: "radial-gradient(50% 40% at 50% 20%, rgba(216,174,94,0.2), transparent 70%)" }} aria-hidden="true" />
+        style={{background: "radial-gradient(50% 40% at 50% 20%, rgba(216,174,94,0.2), transparent 70%)"}} aria-hidden="true" />
       {[18, 44, 76].map((left, i) => (
-        <span key={i} className="particle" style={{ left: `${left}%`, bottom: "10%", width: 3, height: 3, "--t": `${10 + i * 3}s`, "--ad": `${i * 2}s` }} aria-hidden="true" />
+        <span key={i} className="particle" style={{left: `${left}%`, bottom: "10%", width: 3, height: 3, "--t": `${10 + i * 3}s`, "--ad": `${i * 2}s`}} aria-hidden="true" />
       ))}
 
       <div className="relative mx-auto max-w-4xl px-5 text-center">
         <Eyebrow>Um sinal para agora</Eyebrow>
         <SectionTitle light>Respire fundo. Escolha uma carta.</SectionTitle>
-        <p className="reveal mt-4 text-[#d8bfa8] text-sm sm:text-base max-w-md mx-auto" style={{ "--d": "200ms" }}>
+        <p className="reveal mt-4 text-[#d8bfa8] text-sm sm:text-base max-w-md mx-auto" style={{"--d": "200ms"}}>
           Pense no que mais pesa no seu coração — e toque na carta que te chamar.
         </p>
 
-        <div className="reveal mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-xl mx-auto" style={{ "--d": "320ms" }}>
+        <div className="reveal mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-xl mx-auto" style={{"--d": "320ms"}}>
           {cards3.map((card) => {
             const isPicked = picked === card.id;
             const dimmed = picked !== null && !isPicked;
@@ -470,14 +506,14 @@ function ChooseACard() {
                     {/* back of card (face down) */}
                     <div className="flip-front tarot-back flex flex-col items-center justify-center gap-3 p-3 transition-transform duration-300 hover:-translate-y-1.5">
                       <div className="w-10 h-10 rounded-full border border-[#d8ae5e]/50 flex items-center justify-center">
-                        <iconify-icon icon="solar:moon-stars-line-duotone" style={{ fontSize: "20px", color: "#d8ae5e" }} aria-hidden="true" />
+                        <iconify-icon icon="solar:moon-stars-line-duotone" style={{fontSize: "20px", color: "#d8ae5e"}} aria-hidden="true" />
                       </div>
                       <div className="gold-rule w-3/4" />
                       <p className="font-serif text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-[#d8ae5e]/80">Estelar</p>
                     </div>
                     {/* revealed face */}
                     <div className="flip-back tarot-face flex flex-col items-center justify-center gap-2 p-3 text-center">
-                      <iconify-icon icon={card.symbol} style={{ fontSize: "30px", color: "#b8893b" }} aria-hidden="true" />
+                      <iconify-icon icon={card.symbol} style={{fontSize: "30px", color: "#b8893b"}} aria-hidden="true" />
                       <p className="font-serif text-xs sm:text-sm font-medium text-[#2b160c]">{card.title}</p>
                       <div className="gold-rule w-2/3" />
                     </div>
@@ -500,7 +536,7 @@ function ChooseACard() {
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <GoldButton href={CTA_LINKS.reading} glow>
                   Receber leitura completa
-                  <iconify-icon icon="solar:arrow-right-line-duotone" style={{ fontSize: "16px" }} aria-hidden="true" />
+                  <iconify-icon icon="solar:arrow-right-line-duotone" style={{fontSize: "16px"}} aria-hidden="true" />
                 </GoldButton>
                 <button type="button" onClick={reset} className="text-xs text-[#d8bfa8] underline underline-offset-4 hover:text-[#d8ae5e] transition-colors">
                   Escolher outra carta
@@ -528,10 +564,10 @@ function SocialProof() {
           {testimonials.map((t, i) => (
             <figure key={t.name}
               className="reveal rounded-2xl border border-[#b8893b]/20 bg-[#fff9ef]/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#b8893b]/10"
-              style={{ "--d": `${120 + i * 100}ms` }}>
+              style={{"--d": `${120 + i * 100}ms`}}>
               <div className="flex gap-1" aria-label="5 estrelas">
                 {[...Array(5)].map((_, s) => (
-                  <iconify-icon key={s} icon="solar:star-bold" style={{ fontSize: "13px", color: "#d8ae5e" }} aria-hidden="true" />
+                  <iconify-icon key={s} icon="solar:star-bold" style={{fontSize: "13px", color: "#d8ae5e"}} aria-hidden="true" />
                 ))}
               </div>
               <blockquote className="font-serif italic text-base sm:text-lg text-[#2b160c] mt-4 leading-relaxed">
@@ -566,16 +602,16 @@ function HowItWorks() {
         <ol className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map((s, i) => (
             <li key={s.n} className="reveal relative rounded-2xl border border-[#b8893b]/20 bg-[#fff9ef] p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-[#b8893b]/10"
-              style={{ "--d": `${120 + i * 110}ms` }}>
+              style={{"--d": `${120 + i * 110}ms`}}>
               <span className="font-serif text-4xl font-medium text-[#d8ae5e]/60">{s.n}</span>
               <h3 className="font-serif text-lg font-medium tracking-tight text-[#2b160c] mt-3">{s.title}</h3>
               <p className="text-sm text-[#7a4e1d] mt-1.5 leading-relaxed">{s.text}</p>
             </li>
           ))}
         </ol>
-        <div className="reveal mt-12 text-center" style={{ "--d": "560ms" }}>
+        <div className="reveal mt-12 text-center" style={{"--d": "560ms"}}>
           <GoldButton href={CTA_LINKS.start} big>
-            <iconify-icon icon="simple-icons:whatsapp" style={{ fontSize: "18px" }} aria-hidden="true" />
+            <iconify-icon icon="simple-icons:whatsapp" style={{fontSize: "18px"}} aria-hidden="true" />
             Começar pelo WhatsApp
           </GoldButton>
         </div>
@@ -596,8 +632,8 @@ function Differentials() {
         <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {differentials.map((d, i) => (
             <div key={d.title} className="reveal flex gap-4 rounded-2xl border border-[#b8893b]/15 bg-[#fff9ef]/60 p-6 transition-colors duration-300 hover:border-[#b8893b]/40"
-              style={{ "--d": `${100 + i * 80}ms` }}>
-              <iconify-icon icon={d.icon} style={{ fontSize: "26px", color: "#b8893b", flexShrink: 0 }} aria-hidden="true" />
+              style={{"--d": `${100 + i * 80}ms`}}>
+              <iconify-icon icon={d.icon} style={{fontSize: "26px", color: "#b8893b", flexShrink: 0}} aria-hidden="true" />
               <div className="min-w-0">
                 <h3 className="text-sm font-semibold text-[#2b160c]">{d.title}</h3>
                 <p className="text-xs text-[#7a4e1d] mt-1 leading-relaxed">{d.text}</p>
@@ -625,7 +661,7 @@ function FAQ() {
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
-              <div key={f.q} className="reveal rounded-xl border border-[#b8893b]/25 bg-[#fff9ef] overflow-hidden" style={{ "--d": `${i * 50}ms` }}>
+              <div key={f.q} className="reveal rounded-xl border border-[#b8893b]/25 bg-[#fff9ef] overflow-hidden" style={{"--d": `${i * 50}ms`}}>
                 <button
                   type="button"
                   onClick={() => setOpen(isOpen ? -1 : i)}
@@ -635,7 +671,7 @@ function FAQ() {
                   <span className="text-sm font-semibold text-[#2b160c]">{f.q}</span>
                   <iconify-icon
                     icon="solar:alt-arrow-down-line-duotone"
-                    style={{ fontSize: "18px", color: "#b8893b", transition: "transform 0.3s", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", flexShrink: 0 }}
+                    style={{fontSize: "18px", color: "#b8893b", transition: "transform 0.3s", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", flexShrink: 0}}
                     aria-hidden="true"
                   />
                 </button>
@@ -648,7 +684,7 @@ function FAQ() {
             );
           })}
         </div>
-        <p className="reveal mt-8 text-center text-xs text-[#7a4e1d]/70 leading-relaxed max-w-xl mx-auto" style={{ "--d": "300ms" }}>
+        <p className="reveal mt-8 text-center text-xs text-[#7a4e1d]/70 leading-relaxed max-w-xl mx-auto" style={{"--d": "300ms"}}>
           As leituras têm caráter simbólico, espiritual e reflexivo, voltadas para autoconhecimento
           e orientação pessoal. Não substituem aconselhamento médico, psicológico, jurídico ou financeiro.
         </p>
@@ -663,26 +699,26 @@ function FinalCTA() {
   return (
     <section ref={ref} className="relative py-28 lg:py-36 bg-gradient-to-b from-[#2b160c] to-[#140b07] text-center overflow-hidden">
       <div className="moon-glow absolute top-[-120px] left-1/2 -translate-x-1/2 w-[520px] h-[520px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(216,174,94,0.3), transparent 65%)" }} aria-hidden="true" />
+        style={{background: "radial-gradient(circle, rgba(216,174,94,0.3), transparent 65%)"}} aria-hidden="true" />
       <div className="relative mx-auto max-w-2xl px-5">
-        <iconify-icon icon="solar:moon-stars-bold-duotone" style={{ fontSize: "40px", color: "#d8ae5e" }} aria-hidden="true" />
+        <iconify-icon icon="solar:moon-stars-bold-duotone" style={{fontSize: "40px", color: "#d8ae5e"}} aria-hidden="true" />
         <SectionTitle light>
           Seu próximo ciclo pode começar <span className="italic text-[#d8ae5e]">com mais clareza</span>.
         </SectionTitle>
-        <p className="reveal mt-5 text-base sm:text-lg text-[#d8bfa8] leading-relaxed" style={{ "--d": "200ms" }}>
+        <p className="reveal mt-5 text-base sm:text-lg text-[#d8bfa8] leading-relaxed" style={{"--d": "200ms"}}>
           Receba uma leitura personalizada e um Relatório Estelar premium criado para a sua energia.
           O sinal já apareceu — a mensagem completa está a uma conversa de distância.
         </p>
-        <div className="reveal mt-9 flex flex-wrap items-center justify-center gap-4" style={{ "--d": "320ms" }}>
+        <div className="reveal mt-9 flex flex-wrap items-center justify-center gap-4" style={{"--d": "320ms"}}>
           <GoldButton href={CTA_LINKS.reading} big glow>
-            <iconify-icon icon="simple-icons:whatsapp" style={{ fontSize: "18px" }} aria-hidden="true" />
+            <iconify-icon icon="simple-icons:whatsapp" style={{fontSize: "18px"}} aria-hidden="true" />
             Receber minha leitura agora
           </GoldButton>
           <GoldButton href={CTA_LINKS.club} big secondary>
             Entrar para o Clube Estelar
           </GoldButton>
         </div>
-        <p className="reveal mt-6 text-xs text-[#d8bfa8]/60" style={{ "--d": "420ms" }}>
+        <p className="reveal mt-6 text-xs text-[#d8bfa8]/60" style={{"--d": "420ms"}}>
           Vagas mensais limitadas para garantir leituras feitas com atenção.
         </p>
       </div>
@@ -706,13 +742,13 @@ function Footer() {
           </nav>
           <div className="flex items-center gap-5">
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram da ESTELAR" className="hover:opacity-80 transition-opacity">
-              <iconify-icon icon="simple-icons:instagram" style={{ fontSize: "18px", color: "#d8ae5e" }} aria-hidden="true" />
+              <iconify-icon icon="simple-icons:instagram" style={{fontSize: "18px", color: "#d8ae5e"}} aria-hidden="true" />
             </a>
             <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok da ESTELAR" className="hover:opacity-80 transition-opacity">
-              <iconify-icon icon="simple-icons:tiktok" style={{ fontSize: "18px", color: "#d8ae5e" }} aria-hidden="true" />
+              <iconify-icon icon="simple-icons:tiktok" style={{fontSize: "18px", color: "#d8ae5e"}} aria-hidden="true" />
             </a>
             <a href={CTA_LINKS.reading} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp da ESTELAR" className="hover:opacity-80 transition-opacity">
-              <iconify-icon icon="simple-icons:whatsapp" style={{ fontSize: "18px", color: "#d8ae5e" }} aria-hidden="true" />
+              <iconify-icon icon="simple-icons:whatsapp" style={{fontSize: "18px", color: "#d8ae5e"}} aria-hidden="true" />
             </a>
           </div>
         </div>
@@ -734,7 +770,7 @@ function StickyMobileCTA() {
       className={`fixed bottom-0 inset-x-0 z-50 md:hidden transition-all duration-500 ${
         show ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
       }`}
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      style={{paddingBottom: "env(safe-area-inset-bottom)"}}
     >
       <div className="bg-[#fff9ef]/90 backdrop-blur-md border-t border-[#b8893b]/30 px-5 py-3">
         <a
@@ -743,7 +779,7 @@ function StickyMobileCTA() {
           rel="noopener noreferrer"
           className="cta-glow flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#b8893b] via-[#d8ae5e] to-[#b8893b] py-3.5 text-sm font-semibold text-[#fff9ef]"
         >
-          <iconify-icon icon="simple-icons:whatsapp" style={{ fontSize: "17px" }} aria-hidden="true" />
+          <iconify-icon icon="simple-icons:whatsapp" style={{fontSize: "17px"}} aria-hidden="true" />
           Receber minha leitura
         </a>
       </div>

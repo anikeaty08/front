@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -36,6 +72,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -70,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
             Sign in
           </a>
 
-<button className="hover:bg-white/10 transition-all flex text-sm font-medium text-neutral-200 bg-gradient-to-b from-white/30 via-white/0 to-white/10 px-4 py-2 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.1)_inset] gap-x-2 gap-y-x-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '0px'}}>
+<button className="hover:bg-white/10 transition-all flex text-sm font-medium text-neutral-200 bg-gradient-to-b from-white/30 via-white/0 to-white/10 px-4 py-2 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.1)_inset] gap-x-2 gap-y-x-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '0px'}}>
 <span className="text-xs font-semibold tracking-tight">Try Mira</span>
 <svg className="text-neutral-400" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
@@ -102,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="animate-on-scroll [animation:animationIn_0.8s_ease-out_0.5s_both] flex flex-col sm:flex-row gap-3 group max-w-lg mr-auto ml-auto relative gap-x-3 gap-y-3 items-center justify-center">
 <input className="w-full sm:flex-1 bg-[#161616] border border-white/10 px-6 py-3.5 text-base outline-none focus:ring-1 focus:ring-white/20 focus:border-white/20 transition-all placeholder:text-neutral-600 shadow-lg h-[52px] text-white" placeholder="name@company.com" type="email"/>
 
-<button className="group flex overflow-hidden transition-all duration-300 hover:from-white/15 hover:via-white/10 hover:to-white/5 focus:ring-2 focus:ring-white/20 focus:outline-none sm:w-auto bg-gradient-to-b from-white/20 via-white/0 to-white/20 w-full h-[52px] pt-3 pr-6 pb-3 pl-6 relative gap-x-2 gap-y-2 items-center justify-center" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.4)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '0px'}}>
+<button className="group flex overflow-hidden transition-all duration-300 hover:from-white/15 hover:via-white/10 hover:to-white/5 focus:ring-2 focus:ring-white/20 focus:outline-none sm:w-auto bg-gradient-to-b from-white/20 via-white/0 to-white/20 w-full h-[52px] pt-3 pr-6 pb-3 pl-6 relative gap-x-2 gap-y-2 items-center justify-center" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.4)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '0px'}}>
 <span className="text-sm font-semibold tracking-tight relative z-10 text-white/90 group-hover:text-white transition-colors">
                 Start Building
               </span>

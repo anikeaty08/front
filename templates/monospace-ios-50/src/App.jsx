@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -166,6 +202,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -674,7 +716,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 pb-8 no-scrollbar max-w-full" id="services-slider">
 
-<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{-MouseX: '637.00852394104px', -MouseY: '2357.1220703125px'}}>
+<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{'--mouse-x': '637.00852394104px', '--mouse-y': '2357.1220703125px'}}>
 <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-100 mb-6 text-black">
 <svg aria-hidden="true" data-icon="lucide:clipboard-list" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><rect height="4" rx="1" ry="1" width="8" x="8" y="2"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m4 7h4m-4 5h4m-8-5h.01M8 16h.01"></path></g></svg>
 </div>
@@ -684,7 +726,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </p>
 </div>
 
-<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{-MouseX: '263.0170593261719px', -MouseY: '2357.1220703125px'}}>
+<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{'--mouse-x': '263.0170593261719px', '--mouse-y': '2357.1220703125px'}}>
 <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-100 mb-6 text-black">
 <svg aria-hidden="true" data-icon="lucide:book-open" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
 </div>
@@ -694,7 +736,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </p>
 </div>
 
-<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{-MouseX: '-110.97442626953125px', -MouseY: '2357.1220703125px'}}>
+<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{'--mouse-x': '-110.97442626953125px', '--mouse-y': '2357.1220703125px'}}>
 <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-100 mb-6 text-black">
 <svg aria-hidden="true" data-icon="lucide:users" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M16 3.128a4 4 0 0 1 0 7.744M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></g></svg>
 </div>
@@ -704,7 +746,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </p>
 </div>
 
-<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{-MouseX: '-484.9658203125px', -MouseY: '2357.1220703125px'}}>
+<div className="min-w-[300px] md:min-w-[350px] bg-white p-8 rounded-xl border border-gray-200 snap-center spotlight-card hover:border-gray-300 transition-colors" style={{'--mouse-x': '-484.9658203125px', '--mouse-y': '2357.1220703125px'}}>
 <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-100 mb-6 text-black">
 <svg aria-hidden="true" data-icon="lucide:rocket" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0m1 7v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></g></svg>
 </div>
@@ -772,7 +814,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 no-scrollbar" id="testimonial-slider">
 
-<div className="min-w-[300px] md:min-w-[400px] p-8 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between snap-center spotlight-card" style={{-MouseX: '598.9119338989258px', -MouseY: '1071.9942626953125px'}}>
+<div className="min-w-[300px] md:min-w-[400px] p-8 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between snap-center spotlight-card" style={{'--mouse-x': '598.9119338989258px', '--mouse-y': '1071.9942626953125px'}}>
 <div>
 <svg aria-hidden="true" data-icon="lucide:user" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></g></svg>
 <p className="text-xs text-gray-700 leading-relaxed font-medium">
@@ -788,7 +830,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="min-w-[300px] md:min-w-[400px] p-8 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between snap-center spotlight-card" style={{-MouseX: '174.92047119140625px', -MouseY: '1071.9942626953125px'}}>
+<div className="min-w-[300px] md:min-w-[400px] p-8 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between snap-center spotlight-card" style={{'--mouse-x': '174.92047119140625px', '--mouse-y': '1071.9942626953125px'}}>
 <div className="">
 <svg aria-hidden="true" data-icon="lucide:briefcase" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><rect height="14" rx="2" width="20" x="2" y="6"></rect></g></svg>
 <p className="text-xs text-gray-700 leading-relaxed font-medium">
@@ -804,7 +846,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="min-w-[300px] md:min-w-[400px] p-8 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between snap-center spotlight-card" style={{-MouseX: '-249.07098388671875px', -MouseY: '1071.9942626953125px'}}>
+<div className="min-w-[300px] md:min-w-[400px] p-8 bg-gray-50 rounded-xl border border-gray-100 flex flex-col justify-between snap-center spotlight-card" style={{'--mouse-x': '-249.07098388671875px', '--mouse-y': '1071.9942626953125px'}}>
 <div className="">
 <svg aria-hidden="true" data-icon="lucide:building" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M12 10h.01M12 14h.01M12 6h.01M16 10h.01M16 14h.01M16 6h.01M8 10h.01M8 14h.01M8 6h.01M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path><rect height="20" rx="2" width="16" x="4" y="2"></rect></g></svg>
 <p className="text-xs text-gray-700 leading-relaxed font-medium">

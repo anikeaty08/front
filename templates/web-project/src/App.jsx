@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -58,6 +94,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -75,7 +117,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative" style={{zIndex: '1'}}>
 
 <div className="fixed bg-transparent pt-6 pr-6 pb-6 pl-6 top-0 right-0 left-0" style={{zIndex: '50'}}>
-<div className="max-w-4xl border-white/10 border rounded-full mr-auto ml-auto pt-3 pr-6 pb-3 pl-6" style={{background: 'linear-gradient(180deg, rgba(14,16,26,0.55), rgba(14,16,26,0.35)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.35), rgba(255,255,255,0.08)) border-box', backdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="max-w-4xl border-white/10 border rounded-full mr-auto ml-auto pt-3 pr-6 pb-3 pl-6" style={{background: 'linear-gradient(180deg, rgba(14, 16, 26, 0.55), rgba(14, 16, 26, 0.35)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)) border-box', backdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <div className="flex items-center justify-between">
 <div className="flex flex-1 justify-start">
 <button aria-label="Menu" className="inline-flex md:hidden hover:bg-white/5 transition-all duration-300 border-white/5 border rounded-full pt-2 pr-2 pb-2 pl-2" id="btn-hamburguesa" onclick="const m = document.getElementById('movil-menu'); 'hidden flex fixed top-24 left-4 right-4 flex-col bg-[#0A0A0A] p-6 rounded-3xl border border-white/10 shadow-2xl z-50 gap-4 backdrop-blur-xl'.split(' ').forEach(c =&gt; m.classList.toggle(c));" style={{background: 'rgba(255, 255, 255, 0.02)'}}>
@@ -409,7 +451,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-sm text-zinc-400 font-sans">MXN</span>
 </div>
 <button className="inline-flex overflow-hidden cursor-pointer text-sm font-medium text-white font-sans w-full rounded-lg pt-3 pr-4 pb-3 pl-4 relative items-center justify-center" onclick="window.location.href='https://wa.me/18604137842'" role="button" style={{background: 'linear-gradient(to top right, #000000, #000000, #475569)', boxShadow: 'none'}}>
-<span className="" style={{position: 'absolute', inset: '0', borderRadius: '0.5rem', padding: '1px', background: 'conic-gradient(from var(--angle, 0deg), transparent 40%, rgba(255,255,255,0.8) 50%, transparent 60%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', animation: 'spinBorder 2s linear infinite', pointerEvents: 'none'}}></span>
+<span className="" style={{position: 'absolute', inset: '0', borderRadius: '0.5rem', padding: '1px', background: 'conic-gradient(from var(--angle, 0deg), transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', animation: 'spinBorder 2s linear infinite', pointerEvents: 'none'}}></span>
 <style className="">
                       @keyframes spinBorder { from { --angle: 0deg; } to { --angle: 360deg; } } @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
                     </style>
@@ -591,7 +633,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex animate-fadeInUp animation-delay-500 z-10 w-full mt-10 relative justify-center">
 <button aria-label="Create Account" className="group relative inline-flex shadow-[0_8px_16px_-4px_rgba(255,255,255,0.05)] hover:shadow-[0_12px_20px_-6px_rgba(255,255,255,0.1)] transition duration-300 ease-out select-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 transform-gpu hover:-translate-y-0.5 text-white rounded-lg pt-[1px] pr-[1px] pb-[1px] pl-[1px] items-center justify-center" role="button" style={{backgroundImage: 'linear-gradient(144deg,rgba(255,255,255,0.3), rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.2))'}} type="button">
 <span className="inline-flex overflow-hidden items-center justify-center min-w-[140px] cursor-pointer text-sm font-medium text-white font-sans w-full rounded-lg pt-3 pr-4 pb-3 pl-4 relative" onclick="window.location.href='https://wa.me/18604137842'" role="button" style={{background: 'linear-gradient(to top right, #000000, #000000, #475569)', boxShadow: 'none'}}>
-<span style={{position: 'absolute', inset: '0', borderRadius: '0.5rem', padding: '1px', background: 'conic-gradient(from var(--angle, 0deg), transparent 40,0.8) 50%, transparent 60%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', animation: 'spinBorder 2s linear infinite', pointerEvents: 'none'}}></span>
+<span style={{position: 'absolute', inset: '0', borderRadius: '0.5rem', padding: '1px', background: 'conic-gradient(from var(--angle, 0deg), transparent 40, 0.8) 50%, transparent 60%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', animation: 'spinBorder 2s linear infinite', pointerEvents: 'none'}}></span>
 <style>
                 @keyframes spinBorder { from { --angle: 0deg; } to { --angle: 360deg; } } @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
               </style>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -65,6 +101,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -101,8 +143,8 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-[#2B3534] to-transparent z-10 pointer-events-none"></div>
 
 <div className="relative z-20 w-full max-w-5xl mx-auto flex flex-col items-center text-center mt-[-5%]">
-<h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-6 tracking-tight font-medium animate-text-component drop-shadow-sm"><span className="inline-block opacity-0" style={{-Delay: '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Smart</span> <span className="inline-block opacity-0" style={{-Delay: '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Care</span> <span className="inline-block opacity-0" style={{-Delay: '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Begins</span> <span className="inline-block opacity-0" style={{-Delay: '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>with</span> <span className="inline-block opacity-0" style={{-Delay: '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Data</span> <span className="inline-block opacity-0" style={{-Delay: '0.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>+</span> <span className="inline-block opacity-0" style={{-Delay: '0.6000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Insight</span></h1>
-<p className="text-lg md:text-xl text-gray-200 mb-12 max-w-2xl font-normal animate-text-component drop-shadow-sm"><span className="inline-block opacity-0" style={{-Delay: '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Turn</span> <span className="inline-block opacity-0" style={{-Delay: '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>medical</span> <span className="inline-block opacity-0" style={{-Delay: '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>insights</span> <span className="inline-block opacity-0" style={{-Delay: '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>into</span> <span className="inline-block opacity-0" style={{-Delay: '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>personalized</span> <span className="inline-block opacity-0" style={{-Delay: '0.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>wellness</span> <span className="inline-block opacity-0" style={{-Delay: '0.6000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>plans.</span></p>
+<h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-6 tracking-tight font-medium animate-text-component drop-shadow-sm"><span className="inline-block opacity-0" style={{'--delay': '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Smart</span> <span className="inline-block opacity-0" style={{'--delay': '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Care</span> <span className="inline-block opacity-0" style={{'--delay': '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Begins</span> <span className="inline-block opacity-0" style={{'--delay': '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>with</span> <span className="inline-block opacity-0" style={{'--delay': '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Data</span> <span className="inline-block opacity-0" style={{'--delay': '0.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>+</span> <span className="inline-block opacity-0" style={{'--delay': '0.6000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Insight</span></h1>
+<p className="text-lg md:text-xl text-gray-200 mb-12 max-w-2xl font-normal animate-text-component drop-shadow-sm"><span className="inline-block opacity-0" style={{'--delay': '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Turn</span> <span className="inline-block opacity-0" style={{'--delay': '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>medical</span> <span className="inline-block opacity-0" style={{'--delay': '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>insights</span> <span className="inline-block opacity-0" style={{'--delay': '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>into</span> <span className="inline-block opacity-0" style={{'--delay': '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>personalized</span> <span className="inline-block opacity-0" style={{'--delay': '0.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>wellness</span> <span className="inline-block opacity-0" style={{'--delay': '0.6000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>plans.</span></p>
 
 <div className="w-full max-w-[36rem] bg-[#2B3534] rounded-2xl shadow-2xl p-5 text-left opacity-0 translate-y-[20px]" id="hero-input-box" style={{animation: '0.8s ease-out 0.8s 1 normal forwards running fadeUp'}}>
 <textarea className="w-full bg-transparent text-white placeholder-gray-400 resize-none outline-none min-h-[60px] text-sm md:text-base scrollbar-hide" placeholder="Welcome to Vitara — your care intelligence hub!"></textarea>
@@ -138,10 +180,10 @@ gtag('config', 'G-2M6V79H761');
 <section className="md:px-12 lg:px-20 md:py-32 bg-[#2B3534] w-full pt-24 pr-6 pb-24 pl-6">
 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
 <div className="flex flex-col">
-<h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight leading-tight animate-text-component"><span className="inline-block opacity-0" style={{-Delay: '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Your</span> <span className="inline-block opacity-0" style={{-Delay: '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>proactive</span> <span className="inline-block opacity-0" style={{-Delay: '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>shield</span> <span className="inline-block opacity-0" style={{-Delay: '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>against</span> <span className="inline-block opacity-0" style={{-Delay: '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>disease</span></h2>
+<h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-tight leading-tight animate-text-component"><span className="inline-block opacity-0" style={{'--delay': '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>Your</span> <span className="inline-block opacity-0" style={{'--delay': '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>proactive</span> <span className="inline-block opacity-0" style={{'--delay': '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>shield</span> <span className="inline-block opacity-0" style={{'--delay': '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>against</span> <span className="inline-block opacity-0" style={{'--delay': '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>disease</span></h2>
 </div>
 <div className="flex flex-col items-start md:items-end md:text-right">
-<p className="text-gray-300 text-sm md:text-base max-w-sm leading-relaxed animate-text-component font-medium"><span className="inline-block opacity-0" style={{-Delay: '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>We</span> <span className="inline-block opacity-0" style={{-Delay: '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>blend</span> <span className="inline-block opacity-0" style={{-Delay: '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>smart</span> <span className="inline-block opacity-0" style={{-Delay: '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>technology</span> <span className="inline-block opacity-0" style={{-Delay: '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>&amp;</span> <span className="inline-block opacity-0" style={{-Delay: '0.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>clinical</span> <span className="inline-block opacity-0" style={{-Delay: '0.6000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>wisdom</span> <span className="inline-block opacity-0" style={{-Delay: '0.7000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>to</span> <span className="inline-block opacity-0" style={{-Delay: '0.8s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>provide</span> <span className="inline-block opacity-0" style={{-Delay: '0.9s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>tailored,</span> <span className="inline-block opacity-0" style={{-Delay: '1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>preventive,</span> <span className="inline-block opacity-0" style={{-Delay: '1.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>&amp;</span> <span className="inline-block opacity-0" style={{-Delay: '1.2000000000000002s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>insight-rich</span> <span className="inline-block opacity-0" style={{-Delay: '1.3s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>medicine</span> <span className="inline-block opacity-0" style={{-Delay: '1.4000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>for</span> <span className="inline-block opacity-0" style={{-Delay: '1.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>tomorrow.</span></p>
+<p className="text-gray-300 text-sm md:text-base max-w-sm leading-relaxed animate-text-component font-medium"><span className="inline-block opacity-0" style={{'--delay': '0s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>We</span> <span className="inline-block opacity-0" style={{'--delay': '0.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>blend</span> <span className="inline-block opacity-0" style={{'--delay': '0.2s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>smart</span> <span className="inline-block opacity-0" style={{'--delay': '0.30000000000000004s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>technology</span> <span className="inline-block opacity-0" style={{'--delay': '0.4s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>&amp;</span> <span className="inline-block opacity-0" style={{'--delay': '0.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>clinical</span> <span className="inline-block opacity-0" style={{'--delay': '0.6000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>wisdom</span> <span className="inline-block opacity-0" style={{'--delay': '0.7000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>to</span> <span className="inline-block opacity-0" style={{'--delay': '0.8s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>provide</span> <span className="inline-block opacity-0" style={{'--delay': '0.9s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>tailored,</span> <span className="inline-block opacity-0" style={{'--delay': '1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>preventive,</span> <span className="inline-block opacity-0" style={{'--delay': '1.1s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>&amp;</span> <span className="inline-block opacity-0" style={{'--delay': '1.2000000000000002s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>insight-rich</span> <span className="inline-block opacity-0" style={{'--delay': '1.3s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>medicine</span> <span className="inline-block opacity-0" style={{'--delay': '1.4000000000000001s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>for</span> <span className="inline-block opacity-0" style={{'--delay': '1.5s', animation: 'fadeUp 0.6s ease-out forwards var(--delay)'}}>tomorrow.</span></p>
 </div>
 </div>
 </section>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -286,6 +322,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -848,7 +890,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </section>
-<section className="my-12 py-16 sm:py-20 px-6 sm:px-10 lg:px-14 rounded-2xl border border-[#D8D0B8]/15 overflow-hidden text-[#F6F3EC] relative" style={{background: 'radial-gradient(circle at 88% 18%, rgba(124,141,82,0.9) 0%, rgba(124,141,82,0.42) 28%, transparent 45%), linear-gradient(135deg, #1D2718 0%, #35452A 55%, #12180F 100%)'}}>
+<section className="my-12 py-16 sm:py-20 px-6 sm:px-10 lg:px-14 rounded-2xl border border-[#D8D0B8]/15 overflow-hidden text-[#F6F3EC] relative" style={{background: 'radial-gradient(circle at 88% 18%, rgba(124, 141, 82, 0.9) 0%, rgba(124, 141, 82, 0.42) 28%, transparent 45%), linear-gradient(135deg, #1D2718 0%, #35452A 55%, #12180F 100%)'}}>
 <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 <div className="flex flex-col justify-center">
 <h2 className="text-4xl sm:text-5xl font-light tracking-tighter text-[#F6F3EC] mb-6">

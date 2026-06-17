@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -101,6 +137,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -237,7 +279,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="fixed top-0 left-0 right-0 z-50 bg-transparent pt-4 pr-6 pb-4 pl-6">
-<div className="max-w-4xl border-white/10 border rounded-none mr-auto ml-auto pt-3 pr-6 pb-3 pl-6" style={{background: 'linear-gradient(180deg, rgba(14,16,26,0.55), rgba(14,16,26,0.35)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.35), rgba(255,255,255,0.08)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="max-w-4xl border-white/10 border rounded-none mr-auto ml-auto pt-3 pr-6 pb-3 pl-6" style={{background: 'linear-gradient(180deg, rgba(14, 16, 26, 0.55), rgba(14, 16, 26, 0.35)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="text-lg font-semibold text-white/90 tracking-tight" style={{}}>TrustAI</span>
@@ -287,11 +329,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="sm:text-xl text-lg text-neutral-300 max-w-3xl mx-auto mb-8 font-light font-sans scroll-fade scroll-delay-300 animate" style={{}}>Take control of your finances with AI-driven insights, automated tracking, and personalized budget recommendations that adapt to your lifestyle.</p>
 
 <div className="flex flex-col sm:flex-row gap-4 mb-6 items-center justify-center scroll-fade scroll-delay-400 animate" id="aura-emfh1tmzs">
-<div className="inline-flex gap-3 relative transition-all duration-300 hover:border-white/20 hover:bg-white/5 hover:-translate-y-px cursor-pointer text-base font-medium text-neutral-300 border-white/10 border mb-6 pt-3 pr-6 pb-3 pl-6 items-center" id="aura-emfh21kx3" style={{background: 'linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(18,20,28,0.88) 12%, rgba(14,16,24,0.92) 50%, rgba(18,20,28,0.88) 88%, rgba(255,255,255,0.06) 100%)', backdropFilter: 'blur(10px) saturate(120%)', WebkitBackdropFilter: 'blur(10px) saturate(120%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.35)'}}>
+<div className="inline-flex gap-3 relative transition-all duration-300 hover:border-white/20 hover:bg-white/5 hover:-translate-y-px cursor-pointer text-base font-medium text-neutral-300 border-white/10 border mb-6 pt-3 pr-6 pb-3 pl-6 items-center" id="aura-emfh21kx3" style={{background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0%, rgba(18, 20, 28, 0.88) 12%, rgba(14, 16, 24, 0.92) 50%, rgba(18, 20, 28, 0.88) 88%, rgba(255, 255, 255, 0.06) 100%)', backdropFilter: 'blur(10px) saturate(120%)', WebkitBackdropFilter: 'blur(10px) saturate(120%)', boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0,0,0,0.35)'}}>
 <span className="pointer-events-none absolute left-0 top-0 h-full w-px bg-gradient-to-b from-white/70 via-white/40 to-transparent" style={{animation: 'fadeStroke 3s ease-in-out infinite'}}></span>
 <span className="pointer-events-none absolute right-0 top-0 h-full w-px bg-gradient-to-b from-white/70 via-white/40 to-transparent" style={{animation: 'fadeStroke 3s ease-in-out infinite 0.2s'}}></span>
 <span className="uppercase text-white/90 tracking-wide font-sans animated-text" style={{position: 'relative', zIndex: '2'}}>
-<span className="" style={{-I: '1'}}>S</span><span className="" style={{-I: '2'}}>T</span><span className="" style={{-I: '3'}}>A</span><span className="" style={{-I: '4'}}>R</span><span className="" style={{-I: '5'}}>T</span><span style={{-I: '6'}}> </span><span className="" style={{-I: '7'}}>F</span><span className="" style={{-I: '8'}}>R</span><span className="" style={{-I: '9'}}>E</span><span className="" style={{-I: '10'}}>E</span><span style={{-I: '11'}}> </span><span className="" style={{-I: '12'}}>T</span><span className="" style={{-I: '13'}}>R</span><span className="" style={{-I: '14'}}>I</span><span className="" style={{-I: '15'}}>A</span><span className="" style={{-I: '16'}}>L</span>
+<span className="" style={{'--i': '1'}}>S</span><span className="" style={{'--i': '2'}}>T</span><span className="" style={{'--i': '3'}}>A</span><span className="" style={{'--i': '4'}}>R</span><span className="" style={{'--i': '5'}}>T</span><span style={{'--i': '6'}}> </span><span className="" style={{'--i': '7'}}>F</span><span className="" style={{'--i': '8'}}>R</span><span className="" style={{'--i': '9'}}>E</span><span className="" style={{'--i': '10'}}>E</span><span style={{'--i': '11'}}> </span><span className="" style={{'--i': '12'}}>T</span><span className="" style={{'--i': '13'}}>R</span><span className="" style={{'--i': '14'}}>I</span><span className="" style={{'--i': '15'}}>A</span><span className="" style={{'--i': '16'}}>L</span>
 </span>
 <style>
       @keyframes fadeStroke {
@@ -352,10 +394,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       }
     </style>
 </div>
-<div className="inline-flex gap-3 relative transition-all duration-300 hover:-translate-y-px cursor-pointer hover:border-emerald-400/40 text-base font-medium text-neutral-400 border mb-6 pt-3 pr-8 pb-3 pl-8 items-center" id="aura-emfh2440r" style={{border: '1px solid transparent', background: 'linear-gradient(180deg, rgba(18,20,28,0.55), rgba(12,14,22,0.35)) padding-box, linear-gradient(180deg, rgba(52,211,153,0.45), rgba(52,211,153,0.18)) border-box', backdropFilter: 'blur(10px) saturate(120%)', WebkitBackdropFilter: 'blur(10px) saturate(120%)', boxShadow: '0 14px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06)'}}>
+<div className="inline-flex gap-3 relative transition-all duration-300 hover:-translate-y-px cursor-pointer hover:border-emerald-400/40 text-base font-medium text-neutral-400 border mb-6 pt-3 pr-8 pb-3 pl-8 items-center" id="aura-emfh2440r" style={{border: '1px solid transparent', background: 'linear-gradient(180deg, rgba(18, 20, 28, 0.55), rgba(12, 14, 22, 0.35)) padding-box, linear-gradient(180deg, rgba(52, 211, 153, 0.45), rgba(52, 211, 153, 0.18)) border-box', backdropFilter: 'blur(10px) saturate(120%)', WebkitBackdropFilter: 'blur(10px) saturate(120%)', boxShadow: '0 14px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.06)'}}>
 <span className="pointer-events-none absolute inset-0" style={{background: 'radial-gradient(140% 140% at 10% 0%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.02) 55%, transparent 70%)'}}></span>
 <span className="uppercase text-white/90 tracking-wide relative font-sans hover:text-emerald-300 transition-colors duration-300 animated-text" style={{position: 'relative', zIndex: '2'}}>
-<span className="" style={{-I: '1'}}>W</span><span className="" style={{-I: '2'}}>A</span><span className="" style={{-I: '3'}}>T</span><span className="" style={{-I: '4'}}>C</span><span className="" style={{-I: '5'}}>H</span><span style={{-I: '6'}}> </span><span className="" style={{-I: '7'}}>D</span><span className="" style={{-I: '8'}}>E</span><span className="" style={{-I: '9'}}>M</span><span className="" style={{-I: '10'}}>O</span>
+<span className="" style={{'--i': '1'}}>W</span><span className="" style={{'--i': '2'}}>A</span><span className="" style={{'--i': '3'}}>T</span><span className="" style={{'--i': '4'}}>C</span><span className="" style={{'--i': '5'}}>H</span><span style={{'--i': '6'}}> </span><span className="" style={{'--i': '7'}}>D</span><span className="" style={{'--i': '8'}}>E</span><span className="" style={{'--i': '9'}}>M</span><span className="" style={{'--i': '10'}}>O</span>
 </span>
 <style>
       .animated-text span {
@@ -416,12 +458,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-<div className="relative overflow-hidden sm:p-8 lg:col-span-2 max-w-none border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 scroll-scale scroll-delay-100 animate" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
+<div className="relative overflow-hidden sm:p-8 lg:col-span-2 max-w-none border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 scroll-scale scroll-delay-100 animate" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
 
-<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
 <div className="relative">
 <div className="flex items-start justify-between mb-6">
 <div className="">
@@ -633,12 +675,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     </style>
 </div>
 
-<div className="relative overflow-hidden sm:p-8 scroll-slide-right scroll-delay-200 animate border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6" id="aura-emfh32kqg" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
+<div className="relative overflow-hidden sm:p-8 scroll-slide-right scroll-delay-200 animate border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6" id="aura-emfh32kqg" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
 
-<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
 <div className="absolute right-6 top-6 hidden sm:block"></div>
 <div className="relative">
 <div className="inline-flex gap-2 text-xs font-medium text-emerald-200 tracking-wide border-emerald-300/20 border mb-4 pt-1 pr-3 pb-1 pl-3 items-center font-sans" style={{background: 'rgba(52, 211, 153, 0.1)', backdropFilter: 'blur(8px)'}}>
@@ -651,8 +693,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-neutral-300 text-sm font-medium font-sans">Food &amp; Dining</span>
 <div className="relative w-full h-3.5 rounded-full border border-emerald-300/20 overflow-hidden" style={{background: 'linear-gradient(90deg, rgba(10,10,10,0.8) 0%, rgba(24,24,24,0.8) 100%)'}}>
 <div className="relative h-full rounded-full animate-progress-bar" style={{width: '72%', transform: 'scaleX(0)', transformOrigin: 'left center', animation: 'progressFill 2s ease-out forwards'}}>
-<div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(90deg, rgba(52,211,153,0.25) 0%, rgba(16,185,129,0.65) 55%, rgba(52,211,153,0.95) 100%)', boxShadow: '0 0 20px rgba(52,211,153,0.25) inset, 0 0 24px rgba(52,211,153,0.35)'}}></div>
-<span className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full animate-pulse-glow" style={{background: 'radial-gradient(50% 50% at 50% 50%, rgba(167,243,208,1) 0%, rgba(167,243,208,0.65) 60%, rgba(167,243,208,0) 100%)', boxShadow: '0 0 12px rgba(167,243,208,0.8), 0 0 28px rgba(167,243,208,0.35)'}}></span>
+<div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(90deg, rgba(52, 211, 153, 0.25) 0%, rgba(16, 185, 129, 0.65) 55%, rgba(52, 211, 153, 0.95) 100%)', boxShadow: '0 0 20px rgba(52, 211, 153, 0.25) inset, 0 0 24px rgba(52,211,153,0.35)'}}></div>
+<span className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full animate-pulse-glow" style={{background: 'radial-gradient(50% 50% at 50% 50%, rgba(167, 243, 208, 1) 0%, rgba(167, 243, 208, 0.65) 60%, rgba(167, 243, 208, 0) 100%)', boxShadow: '0 0 12px rgba(167, 243, 208, 0.8), 0 0 28px rgba(167,243,208,0.35)'}}></span>
 </div>
 </div>
 </div>
@@ -660,8 +702,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-neutral-300 text-sm font-medium font-sans">Transportation</span>
 <div className="relative w-full h-3.5 rounded-full border border-emerald-300/20 overflow-hidden" style={{background: 'linear-gradient(90deg, rgba(10,10,10,0.8) 0%, rgba(24,24,24,0.8) 100%)'}}>
 <div className="relative h-full rounded-full animate-progress-bar" style={{width: '45%', transform: 'scaleX(0)', transformOrigin: 'left center', animation: 'progressFill 2s ease-out 0.5s forwards'}}>
-<div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(90deg, rgba(52,211,153,0.25) 0%, rgba(16,185,129,0.65) 55%, rgba(52,211,153,0.95) 100%)', boxShadow: '0 0 20px rgba(52,211,153,0.25) inset, 0 0 24px rgba(52,211,153,0.35)'}}></div>
-<span className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full animate-pulse-glow" style={{background: 'radial-gradient(50% 50% at 50% 50%, rgba(167,243,208,1) 0%, rgba(167,243,208,0.65) 60%, rgba(167,243,208,0) 100%)', boxShadow: '0 0 12px rgba(167,243,208,0.8), 0 0 28px rgba(167,243,208,0.35)', animationDelay: '0.5s'}}></span>
+<div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(90deg, rgba(52, 211, 153, 0.25) 0%, rgba(16, 185, 129, 0.65) 55%, rgba(52, 211, 153, 0.95) 100%)', boxShadow: '0 0 20px rgba(52, 211, 153, 0.25) inset, 0 0 24px rgba(52,211,153,0.35)'}}></div>
+<span className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full animate-pulse-glow" style={{background: 'radial-gradient(50% 50% at 50% 50%, rgba(167, 243, 208, 1) 0%, rgba(167, 243, 208, 0.65) 60%, rgba(167, 243, 208, 0) 100%)', boxShadow: '0 0 12px rgba(167, 243, 208, 0.8), 0 0 28px rgba(167,243,208,0.35)', animationDelay: '0.5s'}}></span>
 </div>
 </div>
 </div>
@@ -669,8 +711,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-neutral-300 text-sm font-medium font-sans">Shopping</span>
 <div className="relative w-full h-3.5 rounded-full border border-emerald-300/20 overflow-hidden" style={{background: 'linear-gradient(90deg, rgba(10,10,10,0.8) 0%, rgba(24,24,24,0.8) 100%)'}}>
 <div className="relative h-full rounded-full animate-progress-bar" style={{width: '88%', transform: 'scaleX(0)', transformOrigin: 'left center', animation: 'progressFill 2s ease-out 1s forwards'}}>
-<div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(90deg, rgba(52,211,153,0.25) 0%, rgba(16,185,129,0.65) 55%, rgba(52,211,153,0.95) 100%)', boxShadow: '0 0 20px rgba(52,211,153,0.25) inset, 0 0 24px rgba(52,211,153,0.35)'}}></div>
-<span className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full animate-pulse-glow" style={{background: 'radial-gradient(50% 50% at 50% 50%, rgba(167,243,208,1) 0%, rgba(167,243,208,0.65) 60%, rgba(167,243,208,0) 100%)', boxShadow: '0 0 12px rgba(167,243,208,0.8), 0 0 28px rgba(167,243,208,0.35)', animationDelay: '1s'}}></span>
+<div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(90deg, rgba(52, 211, 153, 0.25) 0%, rgba(16, 185, 129, 0.65) 55%, rgba(52, 211, 153, 0.95) 100%)', boxShadow: '0 0 20px rgba(52, 211, 153, 0.25) inset, 0 0 24px rgba(52,211,153,0.35)'}}></div>
+<span className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full animate-pulse-glow" style={{background: 'radial-gradient(50% 50% at 50% 50%, rgba(167, 243, 208, 1) 0%, rgba(167, 243, 208, 0.65) 60%, rgba(167, 243, 208, 0) 100%)', boxShadow: '0 0 12px rgba(167, 243, 208, 0.8), 0 0 28px rgba(167,243,208,0.35)', animationDelay: '1s'}}></span>
 </div>
 </div>
 </div>
@@ -711,12 +753,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     </style>
 </div>
 
-<div className="relative overflow-hidden sm:p-8 border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 scroll-slide-left scroll-delay-300" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
+<div className="relative overflow-hidden sm:p-8 border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 scroll-slide-left scroll-delay-300" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
 
-<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
 <div className="absolute right-6 top-6 hidden sm:block">
 </div>
 <div className="relative space-y-4">
@@ -766,12 +808,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)'}}></div>
 </div>
 
-<div className="relative overflow-hidden sm:p-8 lg:col-span-2 border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 scroll-scale scroll-delay-400" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
+<div className="relative overflow-hidden sm:p-8 lg:col-span-2 border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 scroll-scale scroll-delay-400" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)'}}>
 
-<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
 <div className="sm:p-6 border-0 rounded-none pt-4 pr-4 pb-4 pl-4 space-y-3">
 <div className="relative rounded-2xl border border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm flex-1 overflow-hidden" style={{animation: 'codeWindowGlow 4s ease-in-out infinite'}}>
 
@@ -1055,10 +1097,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative overflow-hidden sm:p-8 border-white/10 border pt-6 pr-6 pb-6 pl-6 scroll-slide-left scroll-delay-100" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'}}>
 
-<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
 <div className="absolute inset-0 pointer-events-none" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(8px)'}}></div>
 <div className="relative text-center max-w-3xl mr-auto ml-auto">
 
@@ -1082,10 +1124,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative overflow-hidden sm:p-8 border-white/10 border pt-8 pr-6 pb-8 pl-6 scroll-fade scroll-delay-200" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'}}>
 
-<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
 <div className="absolute inset-0 pointer-events-none" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(8px)'}}></div>
 <div className="relative text-center max-w-3xl mx-auto">
 
@@ -1109,10 +1151,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative overflow-hidden sm:p-8 border-white/10 border pt-8 pr-6 pb-8 pl-6 scroll-slide-right scroll-delay-300" style={{background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'}}>
 
-<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
-<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52,211,153,0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 top-1 w-3 h-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute left-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderLeft: '1px solid rgba(52,211,153,0.6)'}}></div>
+<div className="pointer-events-none absolute right-1 bottom-1 w-3 h-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.6)', borderRight: '1px solid rgba(52,211,153,0.6)'}}></div>
 <div className="absolute inset-0 pointer-events-none" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(8px)'}}></div>
 <div className="relative text-center max-w-3xl mx-auto">
 
@@ -1145,7 +1187,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
 <div className="relative flex flex-col scroll-slide-left">
-<div className="flex gap-2 text-xs font-medium text-emerald-300 tracking-wide w-fit border-emerald-300/20 border rounded-none pt-1 pr-3.5 pb-1 pl-3.5 items-center" style={{background: 'rgba(52,211,153,0.08)', backdropFilter: 'blur(6px)'}}>
+<div className="flex gap-2 text-xs font-medium text-emerald-300 tracking-wide w-fit border-emerald-300/20 border rounded-none pt-1 pr-3.5 pb-1 pl-3.5 items-center" style={{background: 'rgba(52, 211, 153, 0.08)', backdropFilter: 'blur(6px)'}}>
   Client Success
 </div>
 <h2 className="mt-4 text-4xl sm:text-6xl font-semibold tracking-tight text-white font-bricolage leading-[1.05]">
@@ -1157,7 +1199,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-8 space-y-3 flex-grow">
 
 <button className="group relative w-full text-left scroll-fade scroll-delay-100">
-<div className="relative flex items-center justify-between px-5 py-4 border border-emerald-300/20 rounded-none overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05))', boxShadow: 'inset 0 1px 0 rgba(52,211,153,0.2)'}}>
+<div className="relative flex items-center justify-between px-5 py-4 border border-emerald-300/20 rounded-none overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05))', boxShadow: 'inset 0 1px 0 rgba(52,211,153,0.2)'}}>
 <span className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-400/60 via-emerald-400/30 to-transparent"></span>
 <div className="flex items-center gap-3">
 <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
@@ -1193,14 +1235,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative min-h-full scroll-slide-right scroll-delay-100">
 <div className="relative overflow-hidden bg-neutral-50/5 w-full h-full border-emerald-300/20 border rounded-none">
 
-<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.4)', borderLeft: '1px solid rgba(52,211,153,0.4)'}}></span>
-<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.4)', borderRight: '1px solid rgba(52,211,153,0.4)'}}></span>
-<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.4)', borderLeft: '1px solid rgba(52,211,153,0.4)'}}></span>
-<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.4)', borderRight: '1px solid rgba(52,211,153,0.4)'}}></span>
+<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.4)', borderLeft: '1px solid rgba(52,211,153,0.4)'}}></span>
+<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.4)', borderRight: '1px solid rgba(52,211,153,0.4)'}}></span>
+<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.4)', borderLeft: '1px solid rgba(52,211,153,0.4)'}}></span>
+<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.4)', borderRight: '1px solid rgba(52,211,153,0.4)'}}></span>
 <img alt="AI-powered financial dashboard analytics" className="absolute inset-0 block w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/0465d628-a834-480c-8e14-ff665ed9a84b_800w.jpg" style={{}}/>
 
 <div className="absolute left-0 right-0 bottom-0">
-<div className="border-emerald-300/20 border-t pt-5 pr-6 pb-5 pl-6" style={{background: 'linear-gradient(0deg, rgba(14,16,24,0.95), rgba(14,16,24,0.7))', backdropFilter: 'blur(8px)'}}>
+<div className="border-emerald-300/20 border-t pt-5 pr-6 pb-5 pl-6" style={{background: 'linear-gradient(0deg, rgba(14, 16, 24, 0.95), rgba(14, 16, 24, 0.7))', backdropFilter: 'blur(8px)'}}>
 <h4 className="text-xl font-semibold tracking-tight text-white font-bricolage mb-2">AI Investment Analytics</h4>
 <p className="text-neutral-300 font-light">
               Our machine learning algorithms analyze market trends and user behavior to optimize portfolio allocation, resulting in 25% better returns.
@@ -1325,30 +1367,30 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-<div className="relative overflow-hidden border border-white/10 p-3 sm:p-4 scroll-scale scroll-delay-100" style={{background: 'radial-gradient(140% 120% at 10% 0%, rgba(52,211,153,0.06), rgba(14,16,24,0.6) 55%)', backdropFilter: 'blur(12px)'}}>
-<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<div className="relative overflow-hidden border border-white/10 p-3 sm:p-4 scroll-scale scroll-delay-100" style={{background: 'radial-gradient(140% 120% at 10% 0%, rgba(52, 211, 153, 0.06), rgba(14, 16, 24, 0.6) 55%)', backdropFilter: 'blur(12px)'}}>
+<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
 <div className="relative w-full h-64 sm:h-72 md:h-80 overflow-hidden">
 <img alt="FinanceAI user reviewing insights on mobile" className="absolute inset-0 h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/8dc2b898-c218-4c08-aae5-ed85b4dee85c_1600w.jpg"/>
 <div className="absolute inset-0" style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.15))'}}></div>
 <div className="absolute left-3 top-3">
-<span className="px-2.5 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52,211,153,0.12)', backdropFilter: 'blur(6px)'}}>Customer Story</span>
+<span className="px-2.5 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52, 211, 153, 0.12)', backdropFilter: 'blur(6px)'}}>Customer Story</span>
 </div>
 </div>
 </div>
 
-<div className="relative overflow-hidden border border-white/10 p-6 sm:p-8 scroll-slide-right scroll-delay-100" style={{background: 'linear-gradient(180deg, rgba(18,20,28,0.92), rgba(10,12,18,0.85))', backdropFilter: 'blur(14px)'}}>
-<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<div className="relative overflow-hidden border border-white/10 p-6 sm:p-8 scroll-slide-right scroll-delay-100" style={{background: 'linear-gradient(180deg, rgba(18, 20, 28, 0.92), rgba(10, 12, 18, 0.85))', backdropFilter: 'blur(14px)'}}>
+<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
 
 <div className="w-full flex items-center justify-center mb-6">
 <div className="relative inline-flex items-center">
 <span className="absolute -left-3 h-6 w-px bg-gradient-to-b from-emerald-400/70 to-emerald-400/10"></span>
-<span className="px-3 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52,211,153,0.12)', backdropFilter: 'blur(8px)'}}>Verified result</span>
+<span className="px-3 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52, 211, 153, 0.12)', backdropFilter: 'blur(8px)'}}>Verified result</span>
 <span className="absolute -right-3 h-6 w-px bg-gradient-to-b from-emerald-400/70 to-emerald-400/10"></span>
 </div>
 </div>
@@ -1361,16 +1403,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4 text-sm text-white/70 font-sans tracking-tight">— Maya R., Product Lead</div>
 </div>
 
-<div className="relative overflow-hidden sm:p-8 border-white/10 border pt-6 pr-6 pb-6 pl-6 scroll-slide-left scroll-delay-200" style={{background: 'linear-gradient(180deg, rgba(18,20,28,0.92), rgba(10,12,18,0.85))', backdropFilter: 'blur(14px)'}}>
-<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<div className="relative overflow-hidden sm:p-8 border-white/10 border pt-6 pr-6 pb-6 pl-6 scroll-slide-left scroll-delay-200" style={{background: 'linear-gradient(180deg, rgba(18, 20, 28, 0.92), rgba(10, 12, 18, 0.85))', backdropFilter: 'blur(14px)'}}>
+<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
 
 <div className="w-full flex items-center justify-center mb-6">
 <div className="relative inline-flex items-center">
 <span className="absolute -left-3 h-6 w-px bg-gradient-to-b from-emerald-400/70 to-emerald-400/10"></span>
-<span className="px-3 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52,211,153,0.12)', backdropFilter: 'blur(8px)'}}>Savings up 22%</span>
+<span className="px-3 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52, 211, 153, 0.12)', backdropFilter: 'blur(8px)'}}>Savings up 22%</span>
 <span className="absolute -right-3 h-6 w-px bg-gradient-to-b from-emerald-400/70 to-emerald-400/10"></span>
 </div>
 </div>
@@ -1382,16 +1424,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4 text-sm text-white/70 font-sans tracking-tight">— David L., Small Business Owner</div>
 </div>
 
-<div className="relative overflow-hidden border border-white/10 p-3 sm:p-4 scroll-scale scroll-delay-200" style={{background: 'radial-gradient(140% 120% at 90% 0%, rgba(52,211,153,0.06), rgba(14,16,24,0.6) 55%)', backdropFilter: 'blur(12px)'}}>
-<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
-<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52,211,153,0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<div className="relative overflow-hidden border border-white/10 p-3 sm:p-4 scroll-scale scroll-delay-200" style={{background: 'radial-gradient(140% 120% at 90% 0%, rgba(52, 211, 153, 0.06), rgba(14, 16, 24, 0.6) 55%)', backdropFilter: 'blur(12px)'}}>
+<span className="pointer-events-none absolute left-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 top-1 h-3 w-3" style={{borderTop: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute left-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderLeft: '1px solid rgba(52,211,153,0.35)'}}></span>
+<span className="pointer-events-none absolute right-1 bottom-1 h-3 w-3" style={{borderBottom: '1px solid rgba(52, 211, 153, 0.35)', borderRight: '1px solid rgba(52,211,153,0.35)'}}></span>
 <div className="relative w-full h-64 sm:h-72 md:h-80 overflow-hidden">
 <img alt="Financial success dashboard showing portfolio growth" className="absolute inset-0 h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/0465d628-a834-480c-8e14-ff665ed9a84b_800w.jpg"/>
 <div className="absolute inset-0" style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.15))'}}></div>
 <div className="absolute left-3 top-3">
-<span className="px-2.5 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52,211,153,0.12)', backdropFilter: 'blur(6px)'}}>Success Metrics</span>
+<span className="px-2.5 py-1 text-xs font-medium tracking-tight text-emerald-200 border border-emerald-300/30" style={{background: 'rgba(52, 211, 153, 0.12)', backdropFilter: 'blur(6px)'}}>Success Metrics</span>
 </div>
 </div>
 </div>

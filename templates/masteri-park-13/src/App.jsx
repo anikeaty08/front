@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -146,6 +182,12 @@ nunito: ['Nunito', 'sans-serif'],
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -926,7 +968,7 @@ The Global City</h3>
 
 <div className="md:hidden grid grid-cols-1 gap-4">
 
-<div className="flashlight-row bg-white rounded-xl p-5 border border-orange-200 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg cursor-pointer flex flex-col gap-3" onclick="openModal({type: '1PN', pn: 1, area: '48 - 52', view: 'Nội khu', price: '~6 - 7 tỷ', status: 'Đang cập nhật giỏ hàng'})" style={{-MouseX: '21.200000762939453px', -MouseY: '139px'}}>
+<div className="flashlight-row bg-white rounded-xl p-5 border border-orange-200 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg cursor-pointer flex flex-col gap-3" onclick="openModal({type: '1PN', pn: 1, area: '48 - 52', view: 'Nội khu', price: '~6 - 7 tỷ', status: 'Đang cập nhật giỏ hàng'})" style={{'--mouse-x': '21.200000762939453px', '--mouse-y': '139px'}}>
 <div className="flex justify-between items-start">
 <div>
 <h4 className="font-quicksand font-bold text-lg text-slate-800">
@@ -950,7 +992,7 @@ The Global City</h3>
 </div>
 </div>
 
-<div className="flashlight-row bg-white rounded-xl p-5 border border-orange-200 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg cursor-pointer flex flex-col gap-3" onclick="openModal({type: '2PN', pn: 2, area: '68 - 72', view: 'Sông', price: '~9 - 10 tỷ', status: 'Đang cập nhật giỏ hàng'})" style={{-MouseX: '25.200000762939453px', -MouseY: '105px'}}>
+<div className="flashlight-row bg-white rounded-xl p-5 border border-orange-200 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg cursor-pointer flex flex-col gap-3" onclick="openModal({type: '2PN', pn: 2, area: '68 - 72', view: 'Sông', price: '~9 - 10 tỷ', status: 'Đang cập nhật giỏ hàng'})" style={{'--mouse-x': '25.200000762939453px', '--mouse-y': '105px'}}>
 <div className="flex justify-between items-start">
 <div>
 <h4 className="font-quicksand font-bold text-lg text-slate-800">
@@ -1468,7 +1510,7 @@ Masteri Park Place</h3>
 </div>
 </div>
 
-<div className="flashlight-row bg-white/50 backdrop-blur-sm border border-orange-200 rounded-2xl p-4 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group relative overflow-hidden" style={{-MouseX: '117.19999694824219px', -MouseY: '36.25px'}}>
+<div className="flashlight-row bg-white/50 backdrop-blur-sm border border-orange-200 rounded-2xl p-4 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group relative overflow-hidden" style={{'--mouse-x': '117.19999694824219px', '--mouse-y': '36.25px'}}>
 <div className="flex flex-col items-start gap-2 md:gap-4">
 <div className="text-orange-500">
 <iconify-icon height="28" icon="solar:key-linear" strokeWidth="1.5" width="28"></iconify-icon>

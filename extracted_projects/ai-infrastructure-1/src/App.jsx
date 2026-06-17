@@ -7,6 +7,42 @@ export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleScroll = () => {
       if (scrollTrackRef.current) {
         setIsScrolled(scrollTrackRef.current.scrollTop > 50);
@@ -140,9 +176,9 @@ export default function App() {
                       <span className="text-xs text-indigo-400 font-mono bg-indigo-500/10 px-2 py-1 rounded">98% Util</span>
                     </div>
                      <div className="flex gap-2 h-20 items-end border-b border-white/5 pb-2">
-                        <div className="w-1/4 bg-indigo-500/40 rounded-t-sm transition-all duration-300" style={{ animation: 'aura-compute-bar-1 2s ease-in-out infinite' }}></div>
-                        <div className="w-1/4 bg-indigo-500/60 rounded-t-sm transition-all duration-300" style={{ animation: 'aura-compute-bar-2 2.5s ease-in-out infinite' }}></div>
-                        <div className="w-1/4 bg-indigo-500/30 rounded-t-sm transition-all duration-300" style={{ animation: 'aura-compute-bar-3 1.8s ease-in-out infinite' }}></div>
+                        <div className="w-1/4 bg-indigo-500/40 rounded-t-sm transition-all duration-300" style={{animation: 'aura-compute-bar-1 2s ease-in-out infinite'}}></div>
+                        <div className="w-1/4 bg-indigo-500/60 rounded-t-sm transition-all duration-300" style={{animation: 'aura-compute-bar-2 2.5s ease-in-out infinite'}}></div>
+                        <div className="w-1/4 bg-indigo-500/30 rounded-t-sm transition-all duration-300" style={{animation: 'aura-compute-bar-3 1.8s ease-in-out infinite'}}></div>
                         <div className="w-1/4 bg-indigo-500/80 rounded-t-sm h-[90%] transition-all duration-300"></div>
                      </div>
                  </div>

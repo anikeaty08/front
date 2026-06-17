@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -520,6 +556,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1795,7 +1837,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="sm:px-0 sm:pt-0 sm:pb-0 pt-6 pr-6 pb-6 pl-6">
 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4">
 
-<div className="overflow-hidden sm:px-8 sm:py-8 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl ring-0 pt-6 pr-5 pb-6 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="overflow-hidden sm:px-8 sm:py-8 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl ring-0 pt-6 pr-5 pb-6 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-[0.18]" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.25) 1px, transparent 1px)', backgroundSize: '18px 18px'}}></div>
 <div className="relative">
 <div className="flex items-end gap-3">
@@ -1850,7 +1892,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="sm:px-8 sm:py-8 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl ring-0 pt-6 pr-5 pb-6 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="sm:px-8 sm:py-8 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl ring-0 pt-6 pr-5 pb-6 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-[0.18]" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.25) 1px, transparent 1px)', backgroundSize: '18px 18px'}}></div>
 <div className="relative">
 <div className="flex items-end gap-3">

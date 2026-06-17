@@ -45,7 +45,7 @@ export default function App() {
             
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-white text-xs font-medium mb-4">
-                <iconify-icon icon="solar:star-linear" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:star-linear" style={{strokeWidth: "1.5"}}></iconify-icon>
                 New Clients Only
               </div>
               <h2 className="text-2xl font-semibold tracking-tight text-white mb-2">Introductory Offer</h2>
@@ -88,15 +88,15 @@ export default function App() {
               </a>
               <ul className="flex flex-col gap-4 text-sm text-zinc-600 font-medium mt-auto">
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>4 Classes per month</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>Unused classes roll over (max 1 month)</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>10% off retail purchases</span>
                 </li>
               </ul>
@@ -118,15 +118,15 @@ export default function App() {
               </a>
               <ul className="flex flex-col gap-4 text-sm text-zinc-600 font-medium mt-auto">
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-900 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-900 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span className="text-zinc-900">8 Classes per month</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>1 Complimentary guest pass per quarter</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>Priority waitlist booking</span>
                 </li>
               </ul>
@@ -145,15 +145,15 @@ export default function App() {
               </a>
               <ul className="flex flex-col gap-4 text-sm text-zinc-600 font-medium mt-auto">
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>Unlimited classes (1 per day)</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>Late cancel fee applies ($20)</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:check-circle-linear" className="text-zinc-400 mt-0.5 text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
                   <span>Free grip socks upon sign-up</span>
                 </li>
               </ul>
@@ -177,7 +177,7 @@ export default function App() {
                 <div className="text-2xl font-semibold tracking-tight text-zinc-900 mb-6">$40</div>
                 <a href="#" className="mt-auto inline-flex items-center justify-between w-full text-sm font-medium text-zinc-900 group-hover:text-zinc-600 transition-colors">
                   Buy Now
-                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{strokeWidth: "1.5"}}></iconify-icon>
                 </a>
               </div>
 
@@ -191,7 +191,7 @@ export default function App() {
                 </div>
                 <a href="#" className="mt-auto inline-flex items-center justify-between w-full text-sm font-medium text-zinc-900 group-hover:text-zinc-600 transition-colors">
                   Buy Now
-                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{strokeWidth: "1.5"}}></iconify-icon>
                 </a>
               </div>
 
@@ -205,7 +205,7 @@ export default function App() {
                 </div>
                 <a href="#" className="mt-auto inline-flex items-center justify-between w-full text-sm font-medium text-zinc-900 group-hover:text-zinc-600 transition-colors">
                   Buy Now
-                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{strokeWidth: "1.5"}}></iconify-icon>
                 </a>
               </div>
 
@@ -219,7 +219,7 @@ export default function App() {
                 </div>
                 <a href="#" className="mt-auto inline-flex items-center justify-between w-full text-sm font-medium text-zinc-900 group-hover:text-zinc-600 transition-colors">
                   Buy Now
-                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  <iconify-icon icon="solar:arrow-right-linear" className="text-lg transition-transform group-hover:translate-x-1" style={{strokeWidth: "1.5"}}></iconify-icon>
                 </a>
               </div>
 
@@ -233,13 +233,13 @@ export default function App() {
           {/* Private Sessions */}
           <div className="bg-zinc-100 rounded-2xl p-8">
             <div className="w-10 h-10 rounded-full bg-zinc-200 flex items-center justify-center mb-6">
-              <iconify-icon icon="solar:users-group-two-rounded-linear" className="text-xl text-zinc-700" style={{ strokeWidth: "1.5" }}></iconify-icon>
+              <iconify-icon icon="solar:users-group-two-rounded-linear" className="text-xl text-zinc-700" style={{strokeWidth: "1.5"}}></iconify-icon>
             </div>
             <h3 className="text-xl font-semibold tracking-tight text-zinc-900 mb-3">Private &amp; Semi-Private</h3>
             <p className="text-sm text-zinc-600 font-medium mb-6">Looking for personalized attention or rehabilitative focus? Our expert instructors offer one-on-one and duet sessions tailored strictly to your body's needs.</p>
             <a href="#" className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors">
               View Private Pricing
-              <iconify-icon icon="solar:arrow-right-linear" className="text-base" style={{ strokeWidth: "1.5" }}></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" className="text-base" style={{strokeWidth: "1.5"}}></iconify-icon>
             </a>
           </div>
 
@@ -248,15 +248,15 @@ export default function App() {
             <h3 className="text-sm font-semibold text-zinc-900 uppercase tracking-wider mb-6">Studio Policies</h3>
             <ul className="space-y-4">
               <li className="flex gap-4">
-                <iconify-icon icon="solar:info-circle-linear" className="text-zinc-400 mt-0.5 flex-shrink-0" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:info-circle-linear" className="text-zinc-400 mt-0.5 flex-shrink-0" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <p className="text-sm text-zinc-600 font-medium"><strong>12-Hour Cancellation:</strong> Classes cancelled within 12 hours of start time will be forfeited. Unlimited members incur a $20 late fee.</p>
               </li>
               <li className="flex gap-4">
-                <iconify-icon icon="solar:info-circle-linear" className="text-zinc-400 mt-0.5 flex-shrink-0" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:info-circle-linear" className="text-zinc-400 mt-0.5 flex-shrink-0" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <p className="text-sm text-zinc-600 font-medium"><strong>Grip Socks Required:</strong> For safety and hygiene, grip socks are mandatory for all classes. Available for purchase at the front desk.</p>
               </li>
                 <li className="flex gap-4">
-                <iconify-icon icon="solar:info-circle-linear" className="text-zinc-400 mt-0.5 flex-shrink-0" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:info-circle-linear" className="text-zinc-400 mt-0.5 flex-shrink-0" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <p className="text-sm text-zinc-600 font-medium"><strong>Waitlist:</strong> If a class is full, join the waitlist. You will be automatically added up to 12 hours before class if a spot opens.</p>
               </li>
             </ul>

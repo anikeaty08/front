@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -362,6 +398,12 @@ blink: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -385,7 +427,7 @@ blink: {
 </div>
 
 <div className="fixed left-8 top-1/2 -translate-y-1/2 z-50 hidden xl:block transition-all duration-700 ease-out opacity-0 rounded-full shadow-2xl backdrop-blur-3xl" style={{animationDelay: '1.8s', filter: 'drop-shadow(rgba(34, 197, 94, 0.3) 0px 0px 20px)', opacity: '1'}}>
-<div className="inline-flex gap-3 hover:shadow-green-500/20 transition-all duration-500 group cursor-pointer overflow-hidden bg-black/20 border-white/30 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-2xl backdrop-blur-3xl gap-x-3 gap-y-3 items-center" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)'}}>
+<div className="inline-flex gap-3 hover:shadow-green-500/20 transition-all duration-500 group cursor-pointer overflow-hidden bg-black/20 border-white/30 border rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-2xl backdrop-blur-3xl gap-x-3 gap-y-3 items-center" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)'}}>
 
 <div className="absolute inset-0 opacity-50 bg-gradient-to-br from-white/20 via-transparent to-black/20 rounded-full"></div>
 <div className="bg-gradient-to-br from-white/10 to-transparent opacity-30 rounded-full absolute top-[1px] right-[1px] bottom-[1px] left-[1px] shadow backdrop-blur-none"></div>
@@ -454,7 +496,7 @@ blink: {
 </div>
 </header>
 
-<section className="lg:pt-40 lg:pb-28 overflow-hidden cursor-invert-mask pt-32 pb-20 relative" id="heroSection" style={{-CursorX: '1436px', -CursorY: '321px'}}>
+<section className="lg:pt-40 lg:pb-28 overflow-hidden cursor-invert-mask pt-32 pb-20 relative" id="heroSection" style={{'--cursor-x': '1436px', '--cursor-y': '321px'}}>
 <div className="lg:px-8 max-w-7xl mr-auto ml-auto pr-6 pl-6">
 <div className="text-center">
 

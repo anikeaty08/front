@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     const $ = id => document.getElementById(id);
@@ -70,6 +106,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -80,7 +122,7 @@ export default function App() {
 
 <img alt="" className="absolute inset-0 -z-30 h-full w-full object-cover opacity-30" src="https://lemonchiffon-hornet-823603.hostingersite.com/lunarcrush-imgs/background.jpg?w=1080&amp;q=80"/>
 
-<div className="pointer-events-none absolute inset-0 -z-20 opacity-50" style={{background: 'hsla(209,100%,47%,0.1)', backgroundImage: 'radial-gradient(white 5%,transparent 0)', backgroundSize: '16px 16px'}}></div>
+<div className="pointer-events-none absolute inset-0 -z-20 opacity-50" style={{background: 'hsla(209, 100%, 47%, 0.1)', backgroundImage: 'radial-gradient(white 5%,transparent 0)', backgroundSize: '16px 16px'}}></div>
 
 <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-radial from-black/60 via-black/40 to-gray-900"></div>
 <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24 md:py-32">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -197,6 +233,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -402,7 +444,7 @@ addUtilities({
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4" id="cards-container">
 
-<div className="md:col-span-2 spotlight-card rounded-xl p-8 group transition-all duration-300 reveal h-[300px] flex flex-col justify-between" style={{-MouseX: '0px', -MouseY: '0px'}}>
+<div className="md:col-span-2 spotlight-card rounded-xl p-8 group transition-all duration-300 reveal h-[300px] flex flex-col justify-between" style={{'--mouse-x': '0px', '--mouse-y': '0px'}}>
 <div className="relative z-10">
 <div className="w-10 h-10 rounded-lg bg-slate-800/50 border border-white/10 flex items-center justify-center mb-6 text-sky-400 group-hover:scale-110 transition-transform duration-500 group-hover:bg-sky-500/20 group-hover:border-sky-500/20 group-hover:text-sky-300">
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">

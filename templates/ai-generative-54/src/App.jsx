@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -110,6 +146,12 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -140,7 +182,7 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
 <button className="hidden sm:flex text-[13px] font-medium text-neutral-400 hover:text-white transition-colors px-2">
             Sign In
           </button>
-<button className="group relative flex items-center gap-2 rounded-full bg-neutral-900 px-4 py-1.5 text-[13px] font-medium text-white transition-all hover:bg-neutral-800" style={{-BorderGradient: 'linear-gradient(to bottom, rgba(167, 139, 250, 0.5), rgba(167, 139, 250, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<button className="group relative flex items-center gap-2 rounded-full bg-neutral-900 px-4 py-1.5 text-[13px] font-medium text-white transition-all hover:bg-neutral-800" style={{'--border-gradient': 'linear-gradient(to bottom, rgba(167, 139, 250, 0.5), rgba(167, 139, 250, 0.1))', '--border-radius-before': '9999px'}}>
 <span>Start Creating</span>
 <iconify-icon className="transition-transform group-hover:translate-x-0.5" icon="lucide:arrow-right" width="12"></iconify-icon>
 </button>

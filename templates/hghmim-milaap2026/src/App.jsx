@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -179,6 +215,12 @@ window.addEventListener('load',()=>go('home'));
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -275,7 +317,7 @@ window.addEventListener('load',()=>go('home'));
 <div className="venue-block-main">H. &amp; G.H. Mansukhani Institute of Management</div>
 <div className="venue-block-sub">Smt. C.H.M. Campus, Opposite Ulhasnagar Railway Station,
                                     Ulhasnagar-3</div>
-<a href="https://maps.app.goo.gl/4CFUtHk7sQALhtc68" style={{display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.6rem', fontFamily: '\'DM Mono\',monospace', fontSize: '0.62rem', color: 'var(--gold)', textDecoration: 'none', letterSpacing: '0.06em'}} target="_blank">
+<a href="https://maps.app.goo.gl/4CFUtHk7sQALhtc68" style={{display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.6rem', fontFamily: '\'DM Mono\', monospace', fontSize: '0.62rem', color: 'var(--gold)', textDecoration: 'none', letterSpacing: '0.06em'}} target="_blank">
 <span>↗</span> Open in Google Maps
                                 </a>
 </div>
@@ -307,9 +349,9 @@ window.addEventListener('load',()=>go('home'));
 <div style={{marginBottom: '3rem', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(201,168,76,0.2)', position: 'relative'}}>
 <img alt="H. &amp; G.H. Mansukhani Institute of Management" onerror="this.parentElement.style.display='none'" src="https://hsncmim.in/wp-content/uploads/2017/10/MIM-A-Centre-of-Excellence.jpg" style={{width: '100%', display: 'block', objectFit: 'cover', maxHeight: '420px', filter: 'brightness(0.85) saturate(0.9)'}}/>
 <div style={{position: 'absolute', bottom: '0', left: '0', right: '0', padding: '1.5rem 2rem', background: 'linear-gradient(to top,rgba(6,5,10,0.92),transparent)'}}>
-<div style={{fontFamily: '\'Playfair Display\',serif', fontSize: '1.1rem', fontWeight: '700', color: 'var(--white)'}}>
+<div style={{fontFamily: '\'Playfair Display\', serif', fontSize: '1.1rem', fontWeight: '700', color: 'var(--white)'}}>
                             H. &amp; G.H. Mansukhani Institute of Management</div>
-<div style={{fontFamily: '\'DM Mono\',monospace', fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--gold)', marginTop: '0.3rem'}}>
+<div style={{fontFamily: '\'DM Mono\', monospace', fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--gold)', marginTop: '0.3rem'}}>
                             A Centre of Excellence · Ulhasnagar</div>
 </div>
 </div>
@@ -334,7 +376,7 @@ window.addEventListener('load',()=>go('home'));
                             catalyst for transformation. With wisdom, extensive knowledge, and compassion, he is the
                             cornerstone upon which our college stands — a mentor shaping destinies and instilling values
                             for a brighter tomorrow.</p>
-<p style={{fontFamily: '\'Playfair Display\',serif', fontStyle: 'italic', color: 'var(--muted)', fontSize: '0.85rem'}}>
+<p style={{fontFamily: '\'Playfair Display\', serif', fontStyle: 'italic', color: 'var(--muted)', fontSize: '0.85rem'}}>
                             "A good leader inspires confidence in their followers, while a great leader inspires
                             confidence within them." — Eleanor Roosevelt</p>
 </div>
@@ -344,25 +386,25 @@ window.addEventListener('load',()=>go('home'));
 <div className="team-member">
 <div className="team-role">Faculty Incharge</div>
 <div className="team-name">Prof. Bharti Bhojwani</div>
-<div style={{fontFamily: '\'DM Mono\',monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
+<div style={{fontFamily: '\'DM Mono\', monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
                             9511 984 490</div>
 </div>
 <div className="team-member">
 <div className="team-role">Student Coordinator</div>
 <div className="team-name">Gahana Aishani</div>
-<div style={{fontFamily: '\'DM Mono\',monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
+<div style={{fontFamily: '\'DM Mono\', monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
                             7058 603 784</div>
 </div>
 <div className="team-member">
 <div className="team-role">Student Coordinator</div>
 <div className="team-name">Ishita Jadhav</div>
-<div style={{fontFamily: '\'DM Mono\',monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
+<div style={{fontFamily: '\'DM Mono\', monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
                             7719 044 656</div>
 </div>
 <div className="team-member">
 <div className="team-role">Student Asst. Coordinator</div>
 <div className="team-name">Alshifa Shaikh</div>
-<div style={{fontFamily: '\'DM Mono\',monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
+<div style={{fontFamily: '\'DM Mono\', monospace', fontSize: '0.62rem', color: 'var(--gold)', marginTop: '0.3rem'}}>
                             7620 692 706</div>
 </div>
 </div>
@@ -658,14 +700,14 @@ window.addEventListener('load',()=>go('home'));
 
 <div style={{marginTop: '3rem'}}>
 <div className="sec-label" style={{marginBottom: '1.2rem'}}>Venue</div>
-<div style={{background: 'linear-gradient(135deg,rgba(201,168,76,0.06),rgba(124,92,252,0.03))', border: '1px solid rgba(201,168,76,0.2)', borderRadius: '16px', overflow: 'hidden'}}>
+<div style={{background: 'linear-gradient(135deg, rgba(201, 168, 76, 0.06), rgba(124, 92, 252, 0.03))', border: '1px solid rgba(201,168,76,0.2)', borderRadius: '16px', overflow: 'hidden'}}>
 <div style={{padding: '1.8rem 2rem', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', borderBottom: '1px solid rgba(201,168,76,0.15)'}}>
 <div>
-<div style={{fontFamily: '\'Playfair Display\',serif', fontSize: '1.1rem', fontWeight: '700', color: 'var(--white)', marginBottom: '0.3rem'}}>
+<div style={{fontFamily: '\'Playfair Display\', serif', fontSize: '1.1rem', fontWeight: '700', color: 'var(--white)', marginBottom: '0.3rem'}}>
                                     H. &amp; G.H. Mansukhani Institute of Management</div>
 <div style={{fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.6'}}>Smt. C.H.M. Campus,
                                     Opposite Ulhasnagar Railway Station, Ulhasnagar-3</div>
-<div style={{fontFamily: '\'DM Mono\',monospace', fontSize: '0.65rem', color: 'var(--gold)', marginTop: '0.5rem', letterSpacing: '0.06em'}}>
+<div style={{fontFamily: '\'DM Mono\', monospace', fontSize: '0.65rem', color: 'var(--gold)', marginTop: '0.5rem', letterSpacing: '0.06em'}}>
                                     📅 7th &amp; 8th March 2026</div>
 </div>
 <a className="btn-primary" href="https://maps.app.goo.gl/4CFUtHk7sQALhtc68" style={{textDecoration: 'none', whiteSpace: 'nowrap'}} target="_blank">📍 Get Directions ↗</a>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -246,6 +282,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -306,7 +348,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="relative w-full min-h-screen py-20 px-4 flex justify-center items-center bg-[#0d1210] overflow-hidden">
 <div className="absolute left-0 top-0 w-[40%] h-full bg-[#ff1a1a]/20 blur-[150px] pointer-events-none rounded-r-full transform -translate-x-1/2"></div>
 <div className="absolute right-0 top-0 w-[40%] h-full bg-[#ff1a1a]/20 blur-[150px] pointer-events-none rounded-l-full transform translate-x-1/2"></div>
-<div className="relative z-10 flex flex-col items-center justify-center font-['Anton',sans-serif] uppercase text-[#ff1a1a] leading-[0.85] text-[clamp(4rem,12vw,12rem)] tracking-tight text-center select-none" style={{textShadow: '0 0 40px rgba(255,26,26,0.5), 0 0 80px rgba(255,26,26,0.2)'}}>
+<div className="relative z-10 flex flex-col items-center justify-center font-['Anton',sans-serif] uppercase text-[#ff1a1a] leading-[0.85] text-[clamp(4rem,12vw,12rem)] tracking-tight text-center select-none" style={{textShadow: '0 0 40px rgba(255, 26, 26, 0.5), 0 0 80px rgba(255,26,26,0.2)'}}>
 <div className="relative whitespace-nowrap">
                     A CULTURE DRIVEN
                     <svg className="absolute left-[15%] -bottom-[10%] w-[35%] h-auto text-white/95 drop-shadow-md z-20" fill="none" stroke="currentColor" strokeLinecap="round" viewbox="0 0 100 20">

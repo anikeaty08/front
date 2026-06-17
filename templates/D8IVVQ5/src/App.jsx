@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Initialize Lucide icons
@@ -57,6 +93,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -158,7 +200,7 @@ export default function App() {
 
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-<div className="hotel-card group active" style={{-Rx: '0deg', -Ry: '0deg', -Mx: '45.22758122491305%', -My: '13.601184334677255%', -O: '0'}}>
+<div className="hotel-card group active" style={{'--rx': '0deg', '--ry': '0deg', '--mx': '45.22758122491305%', '--my': '13.601184334677255%', '--o': '0'}}>
 <div className="hotel-card__rotator bg-gray-800/60 backdrop-blur-sm border border-gray-700/50 rounded-3xl overflow-hidden">
 <div className="hotel-card__shine"></div>
 <div className="hotel-card__content">

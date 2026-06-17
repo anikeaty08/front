@@ -96,7 +96,7 @@ function Header() {
               <Link 
                 key={label} 
                 to={href}
-                style={{ color: location.pathname === href ? '#fff' : '' }}
+                style={{color: location.pathname === href ? '#fff' : ''}}
               >
                 {label}
               </Link>
@@ -125,7 +125,7 @@ function Header() {
                 key={label} 
                 to={href} 
                 onClick={() => setOpen(false)}
-                style={{ color: location.pathname === href ? '#fff' : '' }}
+                style={{color: location.pathname === href ? '#fff' : ''}}
               >
                 {label === "Resume" ? "Journal" : label}
               </Link>
@@ -167,7 +167,7 @@ function Hero() {
 
         <h1 className="hero-title slide-up">
           {"Product Designer".split("").map((c, i) => (
-            <span key={i} className="letter" style={{ animationDelay: `${1 + i * 0.025}s` }}>
+            <span key={i} className="letter" style={{animationDelay: `${1 + i * 0.025}s`}}>
               {c === " " ? "\u00A0" : c}
             </span>
           ))}
@@ -276,7 +276,7 @@ function DashboardMock() {
         <div className="mock-main">
           <div className="chart-card">
             {Array.from({ length: 10 }).map((_, i) => (
-              <i key={i} style={{ height: `${22 + i * 5}px` }} />
+              <i key={i} style={{height: `${22 + i * 5}px`}} />
             ))}
           </div>
           <div className="ui-lines">
@@ -493,7 +493,7 @@ function CoreValues() {
         <div className="service-grid">
            {values.map(v => (
              <div className="glass-card service-card" key={v.title}>
-                <Icon name={v.icon} style={{ fontSize: '32px', color: 'var(--green)', marginBottom: '16px' }} />
+                <Icon name={v.icon} style={{fontSize: '32px', color: 'var(--green)', marginBottom: '16px'}} />
                 <h3>{v.title}</h3>
                 <p>{v.desc}</p>
              </div>
@@ -506,7 +506,7 @@ function CoreValues() {
 
 function AboutGallery() {
   return (
-    <section className="section" style={{ paddingTop: 0 }}>
+    <section className="section" style={{paddingTop: 0}}>
       <div className="container gallery-grid">
         <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/variants/ba62ca8b-ac2e-44d4-ae6c-078346f8cc40/1600w.png" alt="Design workspace layout" className="gallery-img slide-up d12" />
         <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/variants/fe7606e5-3c38-49d5-8c6c-6591f296fa0e/1600w.jpg" alt="Team collaboration and sketching" className="gallery-img slide-up d14" />
@@ -539,7 +539,7 @@ function CodeIllustration() {
       <div className="code-bar"><i /><i /><i /></div>
       <div className="code-body">
         {codeLines.map((line, i) => (
-          <span key={line} style={{ animationDelay: `${i * 0.3}s` }}>
+          <span key={line} style={{animationDelay: `${i * 0.3}s`}}>
             {line}
           </span>
         ))}
@@ -555,7 +555,7 @@ function MetricsIllustration() {
         <div><span>USABILITY</span><b>+94%</b></div>
         <div className="mini-bars">
           {Array.from({ length: 11 }).map((_, i) => (
-            <i key={i} style={{ height: `${34 + i * 3}px` }} />
+            <i key={i} style={{height: `${34 + i * 3}px`}} />
           ))}
         </div>
       </div>
@@ -718,7 +718,7 @@ function Footer() {
 
 function PageWrapper({ children }) {
   return (
-    <div className="fade-in" style={{ paddingTop: "96px", minHeight: "80vh" }}>
+    <div className="fade-in" style={{paddingTop: "96px", minHeight: "80vh"}}>
       {children}
     </div>
   );
@@ -830,7 +830,7 @@ function ResumePage() {
                   </div>
                </div>
 
-               <h3 style={{ marginTop: '64px' }}>Core Skills</h3>
+               <h3 style={{marginTop: '64px'}}>Core Skills</h3>
                <div className="skills-flex">
                   {[
                     "UI/UX Design", "Interactive Prototyping", "Design Systems", 
@@ -852,6 +852,42 @@ function Layout() {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     window.scrollTo(0, 0);
   }, [pathname]);
 

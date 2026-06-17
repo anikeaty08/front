@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -129,6 +165,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -137,8 +179,8 @@ gtag('config', 'G-2M6V79H761');
 
 <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-black/70 border-b border-white/5">
 <nav className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
-<a className="text-lg font-bold tracking-tighter" href="#inicio" style={{fontFamily: '\'Sora\',sans-serif'}}>NMFT<span className="text-pink-500">.</span></a>
-<ul className="hidden lg:flex items-center gap-8 text-sm text-white/70" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<a className="text-lg font-bold tracking-tighter" href="#inicio" style={{fontFamily: '\'Sora\', sans-serif'}}>NMFT<span className="text-pink-500">.</span></a>
+<ul className="hidden lg:flex items-center gap-8 text-sm text-white/70" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <li><a className="hover:text-white transition" href="#inicio">Inicio</a></li>
 <li><a className="hover:text-white transition" href="#transformaciones">Transformaciones</a></li>
 <li><a className="hover:text-white transition" href="#servicios">Servicios</a></li>
@@ -174,7 +216,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-pink-400 mb-5 border border-pink-500/30 rounded-full px-3 py-1.5 bg-pink-500/10">
 <iconify-icon icon="solar:dumbbell-large-minimalistic-linear" width="14"></iconify-icon> NMFT by Noelia
     </span>
-<h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style={{fontFamily: '\'Sora\',sans-serif'}}>
+<h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl" style={{fontFamily: '\'Sora\', sans-serif'}}>
       No solo parecer fuerte<br/><span className="text-pink-500">sino serlo</span>
 </h1>
 <p className="mt-6 text-base md:text-lg text-white/70 max-w-xl font-light leading-relaxed">
@@ -198,7 +240,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="bg-white text-black py-20 md:py-28">
 <div className="max-w-5xl mx-auto px-5">
-<h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight max-w-2xl" style={{fontFamily: '\'Sora\',sans-serif'}}>
+<h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight max-w-2xl" style={{fontFamily: '\'Sora\', sans-serif'}}>
       Si te suena esto, no necesitas más motivación. <span className="text-pink-600">Necesitas un plan.</span>
 </h2>
 <div className="mt-12 grid sm:grid-cols-2 gap-4">
@@ -223,7 +265,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-sm text-neutral-700 leading-relaxed">Quieres perder grasa sin vivir obsesionada</p>
 </div>
 </div>
-<p className="mt-10 text-lg md:text-xl font-medium leading-snug max-w-2xl" style={{fontFamily: '\'Sora\',sans-serif'}}>
+<p className="mt-10 text-lg md:text-xl font-medium leading-snug max-w-2xl" style={{fontFamily: '\'Sora\', sans-serif'}}>
       NMFT está pensado para que <span className="text-pink-600">entrenes con estructura</span>, comas mejor y veas resultados reales.
     </p>
 </div>
@@ -234,7 +276,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative max-w-5xl mx-auto px-5">
 <div className="text-center max-w-2xl mx-auto">
 <span className="text-xs uppercase tracking-widest text-pink-400">Resultados reales</span>
-<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Transformaciones reales, no promesas vacías.</h2>
+<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Transformaciones reales, no promesas vacías.</h2>
 </div>
 
 <div className="mt-12 max-w-lg mx-auto">
@@ -268,27 +310,27 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-6xl mx-auto px-5">
 <div className="max-w-2xl">
 <span className="text-xs uppercase tracking-widest text-pink-600">Cómo trabajo</span>
-<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>El método NMFT</h2>
+<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>El método NMFT</h2>
 </div>
 <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
 <div className="rounded-2xl bg-neutral-50 border border-black/5 p-7 hover:shadow-xl hover:shadow-pink-100 transition">
-<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\',sans-serif'}}>01</div>
-<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Evaluamos tu punto de partida</h3>
+<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\', sans-serif'}}>01</div>
+<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Evaluamos tu punto de partida</h3>
 <p className="mt-2 text-sm text-neutral-600 leading-relaxed">Objetivo, nivel, hábitos, horarios y dificultades reales.</p>
 </div>
 <div className="rounded-2xl bg-neutral-50 border border-black/5 p-7 hover:shadow-xl hover:shadow-pink-100 transition">
-<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\',sans-serif'}}>02</div>
-<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Creamos tu plan</h3>
+<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\', sans-serif'}}>02</div>
+<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Creamos tu plan</h3>
 <p className="mt-2 text-sm text-neutral-600 leading-relaxed">Entrenamiento adaptado, guía de alimentación y estrategia clara.</p>
 </div>
 <div className="rounded-2xl bg-neutral-50 border border-black/5 p-7 hover:shadow-xl hover:shadow-pink-100 transition">
-<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\',sans-serif'}}>03</div>
-<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Te acompaño</h3>
+<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\', sans-serif'}}>03</div>
+<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Te acompaño</h3>
 <p className="mt-2 text-sm text-neutral-600 leading-relaxed">Seguimiento, ajustes y apoyo para que no vuelvas a abandonar.</p>
 </div>
 <div className="rounded-2xl bg-neutral-50 border border-black/5 p-7 hover:shadow-xl hover:shadow-pink-100 transition">
-<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\',sans-serif'}}>04</div>
-<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Construyes resultados</h3>
+<div className="w-11 h-11 rounded-xl bg-pink-600 text-white flex items-center justify-center text-sm font-bold mb-5" style={{fontFamily: '\'Sora\', sans-serif'}}>04</div>
+<h3 className="font-semibold text-lg tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Construyes resultados</h3>
 <p className="mt-2 text-sm text-neutral-600 leading-relaxed">Pierdes grasa, mejoras tu forma física y ganas confianza.</p>
 </div>
 </div>
@@ -300,13 +342,13 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative max-w-6xl mx-auto px-5">
 <div className="max-w-2xl">
 <span className="text-xs uppercase tracking-widest text-pink-400">Servicios</span>
-<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Programas para transformar tu cuerpo y tu rutina</h2>
+<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Programas para transformar tu cuerpo y tu rutina</h2>
 </div>
 <div className="mt-12 grid md:grid-cols-3 gap-5">
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] overflow-hidden hover:border-pink-500/40 transition group">
 <div className="h-44 bg-cover bg-center" style={{backgroundImage: 'url(\'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&amp'}}></div>
 <div className="p-7">
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Entrenamiento presencial</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Entrenamiento presencial</h3>
 <p className="mt-2 text-sm text-white/60 leading-relaxed">Coaching cara a cara y corrección de técnica para mujeres que quieren resultados con acompañamiento real.</p>
 <a className="mt-5 inline-flex items-center gap-2 bg-pink-600 hover:bg-pink-500 transition px-5 py-2.5 rounded-full text-sm font-medium" href="#contacto">Ver servicio <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
 </div>
@@ -316,7 +358,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="absolute top-3 right-3 text-xs bg-pink-600 px-3 py-1 rounded-full">Popular</span>
 </div>
 <div className="p-7">
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Coaching online</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Coaching online</h3>
 <p className="mt-2 text-sm text-white/60 leading-relaxed">Estructura, accountability y progreso desde cualquier lugar. Para mujeres que quieren autonomía sin perder guía.</p>
 <a className="mt-5 inline-flex items-center gap-2 bg-pink-600 hover:bg-pink-500 transition px-5 py-2.5 rounded-full text-sm font-medium" href="#contacto">Ver servicio <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
 </div>
@@ -324,7 +366,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] overflow-hidden hover:border-pink-500/40 transition">
 <div className="h-44 bg-cover bg-center" style={{backgroundImage: 'url(\'https://images.unsplash.com/photo-1550345332-09e3ac987658?q=80&amp'}}></div>
 <div className="p-7">
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Plan personalizado</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Plan personalizado</h3>
 <p className="mt-2 text-sm text-white/60 leading-relaxed">Entrenamiento, hábitos, guía de alimentación y seguimiento. Todo adaptado a tu vida real.</p>
 <a className="mt-5 inline-flex items-center gap-2 bg-pink-600 hover:bg-pink-500 transition px-5 py-2.5 rounded-full text-sm font-medium" href="#contacto">Ver servicio <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
 </div>
@@ -332,7 +374,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="mt-16 max-w-2xl mx-auto">
-<h3 className="text-center text-xl font-semibold tracking-tight mb-6" style={{fontFamily: '\'Sora\',sans-serif'}}>Preguntas frecuentes</h3>
+<h3 className="text-center text-xl font-semibold tracking-tight mb-6" style={{fontFamily: '\'Sora\', sans-serif'}}>Preguntas frecuentes</h3>
 <div className="space-y-3">
 <details className="group rounded-2xl border border-white/10 bg-white/[0.03] p-5">
 <summary className="flex justify-between items-center cursor-pointer text-sm font-medium list-none">¿Necesito experiencia previa? <iconify-icon className="group-open:rotate-180 transition text-pink-400" icon="solar:alt-arrow-down-linear" width="18"></iconify-icon></summary>
@@ -358,13 +400,13 @@ gtag('config', 'G-2M6V79H761');
 <img className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f180582f-303a-4c6c-8acb-6dbe830cc3df_1600w.png"/>
 </div>
 <div className="absolute -bottom-4 -right-4 bg-pink-600 text-white rounded-2xl px-5 py-4 shadow-xl">
-<p className="text-2xl font-bold" style={{fontFamily: '\'Sora\',sans-serif'}}>+10</p>
+<p className="text-2xl font-bold" style={{fontFamily: '\'Sora\', sans-serif'}}>+10</p>
 <p className="text-xs">mujeres transformadas</p>
 </div>
 </div>
 <div>
 <span className="text-xs uppercase tracking-widest text-pink-600">Sobre mí</span>
-<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight leading-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Soy Noelia, y sé lo que es empezar desde cero.</h2>
+<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight leading-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Soy Noelia, y sé lo que es empezar desde cero.</h2>
 <p className="mt-6 text-base text-neutral-600 leading-relaxed">
         NMFT nace para ayudar a mujeres que quieren cambiar su cuerpo sin caer en extremos. Mi objetivo no es que entrenes perfecto una semana, sino que construyas una versión de ti que pueda sostenerse en el tiempo.
       </p>
@@ -384,7 +426,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-6xl mx-auto px-5">
 <div className="text-center max-w-2xl mx-auto">
 <span className="text-xs uppercase tracking-widest text-pink-400">Testimonios</span>
-<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Lo que dicen mis chicas</h2>
+<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Lo que dicen mis chicas</h2>
 </div>
 <div className="mt-12 grid md:grid-cols-3 gap-5">
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-7">
@@ -433,7 +475,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="relative bg-black py-24 overflow-hidden">
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full" style={{background: 'radial-gradient(circle, rgba(236,72,153,0.25), transparent 65%)'}}></div>
 <div className="relative max-w-3xl mx-auto px-5 text-center">
-<h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.1]" style={{fontFamily: '\'Sora\',sans-serif'}}>
+<h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.1]" style={{fontFamily: '\'Sora\', sans-serif'}}>
       Tu cambio no empieza cuando tengas más tiempo.<br/><span className="text-pink-500">Empieza cuando tienes un plan.</span>
 </h2>
 <p className="mt-6 text-base text-white/60 font-light">Escríbeme y vemos qué necesitas para empezar.</p>
@@ -452,7 +494,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-5xl mx-auto px-5 grid md:grid-cols-2 gap-12">
 <div>
 <span className="text-xs uppercase tracking-widest text-pink-600">Contacto</span>
-<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\',sans-serif'}}>Cuéntame tu objetivo y te digo cómo puedo ayudarte.</h2>
+<h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight" style={{fontFamily: '\'Sora\', sans-serif'}}>Cuéntame tu objetivo y te digo cómo puedo ayudarte.</h2>
 <p className="mt-5 text-sm text-neutral-600 leading-relaxed">Respondo personalmente. Sin compromiso, sin presión. Solo el primer paso hacia tu cambio.</p>
 <div className="mt-8 space-y-3">
 <a className="flex items-center gap-3 p-4 rounded-2xl bg-pink-600 text-white hover:bg-pink-500 transition" href="#">
@@ -485,7 +527,7 @@ gtag('config', 'G-2M6V79H761');
 
 <footer className="bg-black border-t border-white/5 py-10">
 <div className="max-w-6xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-4">
-<span className="text-lg font-bold tracking-tighter" style={{fontFamily: '\'Sora\',sans-serif'}}>NMFT<span className="text-pink-500">.</span></span>
+<span className="text-lg font-bold tracking-tighter" style={{fontFamily: '\'Sora\', sans-serif'}}>NMFT<span className="text-pink-500">.</span></span>
 <p className="text-xs text-white/40">© 2024 NMFT by Noelia · Entrenamiento para mujeres</p>
 <div className="flex gap-4 text-white/50">
 <a className="hover:text-pink-500 transition" href="#"><iconify-icon icon="solar:gallery-linear" width="20"></iconify-icon></a>

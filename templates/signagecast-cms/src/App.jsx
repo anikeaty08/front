@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -50,7 +86,7 @@ gtag('config', 'G-2M6V79H761');
         };
 
         const Icon = ({ name, size = "20", className = "" }) => (
-            <iconify-icon icon={name} width={size} height={size} class={className} style={{ strokeWidth: "1.5" }}></iconify-icon>
+            <iconify-icon icon={name} width={size} height={size} class={className} style={{strokeWidth: "1.5"}}></iconify-icon>
         );
 
         // --- INITIAL DATA ---
@@ -468,9 +504,9 @@ gtag('config', 'G-2M6V79H761');
                         </div>
                         <div className="flex-1 flex overflow-hidden bg-gray-100">
                             <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
-                                <div className="relative bg-gray-800 shadow-2xl" style={{ width: '800px', height: '450px' }}>
+                                <div className="relative bg-gray-800 shadow-2xl" style={{width: '800px', height: '450px'}}>
                                     {template.zones.map(z => (
-                                        <div key={z.id} className="absolute border-2 border-blue-500 bg-blue-500/10 flex items-start justify-start p-2" style={{ left: `${z.x}%`, top: `${z.y}%`, width: `${z.w}%`, height: `${z.h}%` }}>
+                                        <div key={z.id} className="absolute border-2 border-blue-500 bg-blue-500/10 flex items-start justify-start p-2" style={{left: `${z.x}%`, top: `${z.y}%`, width: `${z.w}%`, height: `${z.h}%`}}>
                                             <span className="bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">{z.label}</span>
                                         </div>
                                     ))}
@@ -900,6 +936,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

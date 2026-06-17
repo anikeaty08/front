@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -93,6 +129,12 @@ gtag("config", "G-2M6V79H761");
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -871,7 +913,7 @@ gtag("config", "G-2M6V79H761");
 <div className="max-w-7xl mx-auto px-6">
 <h2 className="text-3xl font-semibold tracking-tight text-gray-900 mb-12 text-center">Testimonials</h2>
 <div className="columns-1 md:columns-3 space-y-6 gap-x-6 gap-y-6">
-<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <p className="text-gray-600 text-sm leading-relaxed mb-6">
               “IronGrid kept our schedule tight and our change orders clean. Communication was consistent, and the jobsite was managed professionally from day one.”
             </p>
@@ -883,7 +925,7 @@ gtag("config", "G-2M6V79H761");
 </div>
 </div>
 </div>
-<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <p className="text-gray-600 text-sm leading-relaxed mb-6">“Their foremen ran a safe site, and the workmanship is exactly what we were looking for—straight lines, tight tolerances, and a clean handoff.”</p>
 <div className="flex items-center gap-3">
 <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">JL</div>
@@ -893,7 +935,7 @@ gtag("config", "G-2M6V79H761");
 </div>
 </div>
 </div>
-<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <p className="text-gray-600 text-sm leading-relaxed mb-6">“Budget stayed disciplined, and the team stayed ahead of issues before they became delays. IronGrid is built for real delivery.”</p>
 <div className="flex items-center gap-3">
 <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs">DS</div>

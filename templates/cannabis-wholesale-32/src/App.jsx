@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,6 +48,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -72,19 +114,19 @@ gtag('config', 'G-2M6V79H761');
 </a>
 </div>
 <div className="mt-10 grid max-w-2xl grid-cols-2 gap-4 sm:grid-cols-4">
-<div className="rounded-2xl border border-lime-300/10 bg-emerald-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.02), 0 0 2rem rgba(34,197,94,0.06)'}}>
+<div className="rounded-2xl border border-lime-300/10 bg-emerald-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 0 2rem rgba(34,197,94,0.06)'}}>
 <div className="text-2xl font-medium tracking-tight text-white">25~</div>
 <div className="mt-1 text-sm text-emerald-50/55">Active SKUs</div>
 </div>
-<div className="rounded-2xl border border-lime-300/10 bg-emerald-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.02), 0 0 2rem rgba(34,197,94,0.06)'}}>
+<div className="rounded-2xl border border-lime-300/10 bg-emerald-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 0 2rem rgba(34,197,94,0.06)'}}>
 <div className="text-2xl font-medium tracking-tight text-white">LCB</div>
 <div className="mt-1 text-sm text-emerald-50/55">Certified producer</div>
 </div>
-<div className="rounded-2xl border border-cyan-300/10 bg-cyan-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.02), 0 0 2rem rgba(34,211,238,0.06)'}}>
+<div className="rounded-2xl border border-cyan-300/10 bg-cyan-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 0 2rem rgba(34,211,238,0.06)'}}>
 <div className="text-2xl font-medium tracking-tight text-white">Monthly</div>
 <div className="mt-1 text-sm text-emerald-50/55">Third-party testing</div>
 </div>
-<div className="rounded-2xl border border-fuchsia-300/10 bg-fuchsia-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.02), 0 0 2rem rgba(217,70,239,0.06)'}}>
+<div className="rounded-2xl border border-fuchsia-300/10 bg-fuchsia-400/10 p-4 backdrop-blur" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 0 2rem rgba(217,70,239,0.06)'}}>
 <div className="text-2xl font-medium text-white tracking-tight">$1k</div>
 <div className="mt-1 text-sm text-emerald-50/55">Minimum delivery threshold</div>
 </div>

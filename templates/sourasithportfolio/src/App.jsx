@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -154,6 +190,12 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -203,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div className="text-sm font-medium" id="section-number" style={{}}>01</div>
 </div>
 
-<div className="flex flex-col bg-white/5 max-w-fit border-white/15 border rounded-2xl p-2.5 shadow-2xl backdrop-blur-xl items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)'}}>
+<div className="flex flex-col bg-white/5 max-w-fit border-white/15 border rounded-2xl p-2.5 shadow-2xl backdrop-blur-xl items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)', border: '1px solid rgba(255, 255, 255, 0.15)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(20px)'}}>
 <style>
     .iso-pro span {
       opacity: 0;
@@ -240,12 +282,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <span></span>
 <span></span>
 <a className="relative z-10 flex items-center" href="#">
-<div className="icon-wrapper flex transition-all duration-300 hover:bg-white/15 bg-white/10 w-8 h-8 border-white/10 border rounded-lg backdrop-blur-md items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15)'}}>
+<div className="icon-wrapper flex transition-all duration-300 hover:bg-white/15 bg-white/10 w-8 h-8 border-white/10 border rounded-lg backdrop-blur-md items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255,255,255,0.15)'}}>
 <svg className="fill-white" height="16" viewbox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg">
 <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path>
 </svg>
 </div>
-<div className="text absolute text-xs font-medium font-geist rounded-md px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 shadow-lg whitespace-nowrap text-white" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="text absolute text-xs font-medium font-geist rounded-md px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 shadow-lg whitespace-nowrap text-white" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
           X
         </div>
 </a>
@@ -256,12 +298,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <span></span>
 <span></span>
 <a className="relative z-10 flex items-center" href="#">
-<div className="icon-wrapper flex transition-all duration-300 hover:bg-white/15 bg-white/10 backdrop-blur-md w-8 h-8 rounded-lg items-center justify-center border border-white/10" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15)'}}>
+<div className="icon-wrapper flex transition-all duration-300 hover:bg-white/15 bg-white/10 backdrop-blur-md w-8 h-8 rounded-lg items-center justify-center border border-white/10" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255,255,255,0.15)'}}>
 <svg className="fill-white" height="16" viewbox="0 0 448 512" width="16" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
 </svg>
 </div>
-<div className="text absolute text-xs font-medium font-geist rounded-md px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 shadow-lg whitespace-nowrap text-white" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="text absolute text-xs font-medium font-geist rounded-md px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 shadow-lg whitespace-nowrap text-white" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
           Instagram
         </div>
 </a>
@@ -272,12 +314,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <span></span>
 <span></span>
 <a className="relative z-10 flex items-center" href="#">
-<div className="icon-wrapper flex transition-all duration-300 hover:bg-white/15 bg-white/10 backdrop-blur-md w-8 h-8 rounded-lg items-center justify-center border border-white/10" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15)'}}>
+<div className="icon-wrapper flex transition-all duration-300 hover:bg-white/15 bg-white/10 backdrop-blur-md w-8 h-8 rounded-lg items-center justify-center border border-white/10" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255,255,255,0.15)'}}>
 <svg className="fill-white" height="16" viewbox="0 0 448 512" width="16" xmlns="http://www.w3.org/2000/svg">
 <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
 </svg>
 </div>
-<div className="text absolute text-xs font-medium font-geist rounded-md px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 shadow-lg whitespace-nowrap text-white" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="text absolute text-xs font-medium font-geist rounded-md px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 shadow-lg whitespace-nowrap text-white" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)', backdropFilter: 'blur(16px)', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
           LinkedIn
         </div>
 </a>
@@ -562,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </p>
 <div className="flex gap-6 animate-fadeInUp animation-delay-500 mt-5 gap-x-6 gap-y-6 items-center">
 <div className="inline-block group relative">
-<a className="" href="#resume" onmouseout="this.style.color='var(--purple)'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.4), 0 0 9px 3px rgba(155, 126, 218, 0.1)';" onmouseover="this.style.color='#BFA3F3'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.6), 0 0 9px 3px rgba(155, 126, 218, 0.2)';" style={{-Purple: '#9B7EDA', fontSize: '14px', padding: '0.8em 1.5em', letterSpacing: '0.08em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: '0.3s', lineHeight: '1.4em', border: '2px solid var(--purple)', background: 'linear-gradient(to right, rgba(155, 126, 218, 0.1) 1%, transparent 40%, transparent 60%, rgba(155, 126, 218, 0.1) 100%)', color: 'var(--purple)', boxShadow: 'rgba(155, 126, 218, 0.4) 0px 0px 10px inset, rgba(155, 126, 218, 0.1) 0px 0px 9px 3px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', marginTop: '1rem'}}>
+<a className="" href="#resume" onmouseout="this.style.color='var(--purple)'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.4), 0 0 9px 3px rgba(155, 126, 218, 0.1)';" onmouseover="this.style.color='#BFA3F3'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.6), 0 0 9px 3px rgba(155, 126, 218, 0.2)';" style={{'--purple': '#9B7EDA', fontSize: '14px', padding: '0.8em 1.5em', letterSpacing: '0.08em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: '0.3s', lineHeight: '1.4em', border: '2px solid var(--purple)', background: 'linear-gradient(to right, rgba(155, 126, 218, 0.1) 1%, transparent 40%, transparent 60%, rgba(155, 126, 218, 0.1) 100%)', color: 'var(--purple)', boxShadow: 'rgba(155, 126, 218, 0.4) 0px 0px 10px inset, rgba(155, 126, 218, 0.1) 0px 0px 9px 3px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', marginTop: '1rem'}}>
 <span className="" style={{position: 'relative', zIndex: '2', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>Get in touch</span>
 <span className="" onmouseout="this.style.transform='translateX(0)'" onmouseover="this.style.transform='translateX(15em)'" style={{content: '""', position: 'absolute', left: '-4em', width: '4em', height: '100%', top: '0px', transition: 'transform 0.4s ease-in-out', background: 'linear-gradient(to right, transparent 1%, rgba(155, 126, 218, 0.1) 40%, rgba(155, 126, 218, 0.1) 60%, transparent 100%)', zIndex: '1', transform: 'translateX(0px)'}}></span>
 </a>
@@ -713,7 +755,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </p>
 <div className="flex gap-6 animate-fadeInUp animation-delay-500 mt-5 gap-x-6 gap-y-6 items-center">
 <div className="inline-block group relative">
-<a className="" href="#resume" onmouseout="this.style.color='var(--purple)'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.4), 0 0 9px 3px rgba(155, 126, 218, 0.1)';" onmouseover="this.style.color='#BFA3F3'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.6), 0 0 9px 3px rgba(155, 126, 218, 0.2)';" style={{-Purple: '#9B7EDA', fontSize: '14px', padding: '0.8em 1.5em', letterSpacing: '0.08em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: '0.3s', lineHeight: '1.4em', border: '2px solid var(--purple)', background: 'linear-gradient(to right, rgba(155, 126, 218, 0.1) 1%, transparent 40%, transparent 60%, rgba(155, 126, 218, 0.1) 100%)', color: 'var(--purple)', boxShadow: 'rgba(155, 126, 218, 0.4) 0px 0px 10px inset, rgba(155, 126, 218, 0.1) 0px 0px 9px 3px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', marginTop: '1rem'}}>
+<a className="" href="#resume" onmouseout="this.style.color='var(--purple)'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.4), 0 0 9px 3px rgba(155, 126, 218, 0.1)';" onmouseover="this.style.color='#BFA3F3'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.6), 0 0 9px 3px rgba(155, 126, 218, 0.2)';" style={{'--purple': '#9B7EDA', fontSize: '14px', padding: '0.8em 1.5em', letterSpacing: '0.08em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: '0.3s', lineHeight: '1.4em', border: '2px solid var(--purple)', background: 'linear-gradient(to right, rgba(155, 126, 218, 0.1) 1%, transparent 40%, transparent 60%, rgba(155, 126, 218, 0.1) 100%)', color: 'var(--purple)', boxShadow: 'rgba(155, 126, 218, 0.4) 0px 0px 10px inset, rgba(155, 126, 218, 0.1) 0px 0px 9px 3px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', marginTop: '1rem'}}>
 <span className="" style={{position: 'relative', zIndex: '2', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>view Full Portfolio</span>
 <span className="" onmouseout="this.style.transform='translateX(0)'" onmouseover="this.style.transform='translateX(15em)'" style={{content: '""', position: 'absolute', left: '-4em', width: '4em', height: '100%', top: '0px', transition: 'transform 0.4s ease-in-out', background: 'linear-gradient(to right, transparent 1%, rgba(155, 126, 218, 0.1) 40%, rgba(155, 126, 218, 0.1) 60%, transparent 100%)', zIndex: '1', transform: 'translateX(0px)'}}></span>
 </a>
@@ -882,7 +924,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div className="flex gap-6 animate-fadeInUp animation-delay-500 mt-5 gap-x-6 gap-y-6 items-center">
 <div className="inline-block group relative">
-<a className="" href="#resume" onmouseout="this.style.color='var(--purple)'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.4), 0 0 9px 3px rgba(155, 126, 218, 0.1)';" onmouseover="this.style.color='#BFA3F3'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.6), 0 0 9px 3px rgba(155, 126, 218, 0.2)';" style={{-Purple: '#9B7EDA', fontSize: '14px', padding: '0.8em 1.5em', letterSpacing: '0.08em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: '0.3s', lineHeight: '1.4em', border: '2px solid var(--purple)', background: 'linear-gradient(to right, rgba(155, 126, 218, 0.1) 1%, transparent 40%, transparent 60%, rgba(155, 126, 218, 0.1) 100%)', color: 'var(--purple)', boxShadow: 'rgba(155, 126, 218, 0.4) 0px 0px 10px inset, rgba(155, 126, 218, 0.1) 0px 0px 9px 3px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', marginTop: '1rem'}}>
+<a className="" href="#resume" onmouseout="this.style.color='var(--purple)'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.4), 0 0 9px 3px rgba(155, 126, 218, 0.1)';" onmouseover="this.style.color='#BFA3F3'; this.style.boxShadow='inset 0 0 10px rgba(155, 126, 218, 0.6), 0 0 9px 3px rgba(155, 126, 218, 0.2)';" style={{'--purple': '#9B7EDA', fontSize: '14px', padding: '0.8em 1.5em', letterSpacing: '0.08em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: '0.3s', lineHeight: '1.4em', border: '2px solid var(--purple)', background: 'linear-gradient(to right, rgba(155, 126, 218, 0.1) 1%, transparent 40%, transparent 60%, rgba(155, 126, 218, 0.1) 100%)', color: 'var(--purple)', boxShadow: 'rgba(155, 126, 218, 0.4) 0px 0px 10px inset, rgba(155, 126, 218, 0.1) 0px 0px 9px 3px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', marginTop: '1rem'}}>
 <span className="" style={{position: 'relative', zIndex: '2', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>View My Work</span>
 <span className="" onmouseout="this.style.transform='translateX(0)'" onmouseover="this.style.transform='translateX(15em)'" style={{content: '""', position: 'absolute', left: '-4em', width: '4em', height: '100%', top: '0px', transition: 'transform 0.4s ease-in-out', background: 'linear-gradient(to right, transparent 1%, rgba(155, 126, 218, 0.1) 40%, rgba(155, 126, 218, 0.1) 60%, transparent 100%)', zIndex: '1', transform: 'translateX(0px)'}}></span>
 </a>

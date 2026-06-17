@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Theme: explicit dark/light apply and persist
@@ -218,6 +254,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -226,7 +268,7 @@ export default function App() {
 
 <div aria-hidden="true" className="fixed inset-0 pointer-events-none overflow-hidden select-none">
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{width: '70rem', height: '70rem', background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.30) 0%, rgba(168,85,247,0.24) 30%, rgba(34,197,94,0.18) 55%, rgba(6,182,212,0.16) 75%, transparent 85%)', filter: 'blur(85px)', opacity: '.60'}}></div>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{width: '70rem', height: '70rem', background: 'radial-gradient(ellipse at center, rgba(99, 102, 241, 0.30) 0%, rgba(168, 85, 247, 0.24) 30%, rgba(34, 197, 94, 0.18) 55%, rgba(6, 182, 212, 0.16) 75%, transparent 85%)', filter: 'blur(85px)', opacity: '.60'}}></div>
 
 <div className="absolute -top-40 left-1/2 -translate-x-1/2">
 <svg className="w-[140rem] opacity-70 blur-3xl mix-blend-screen" viewbox="0 0 1920 320">

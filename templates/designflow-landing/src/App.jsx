@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -41,6 +77,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -638,7 +680,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4" data-animate-children="true">
 
 <div className="lg:col-span-2 overflow-hidden transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn bg-neutral-900/60 ring-white/10 ring-1 rounded-2xl relative backdrop-blur [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll" style={{}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), 0 40px 120px rgba(37,99,235,0.18)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 40px 120px rgba(37,99,235,0.18)'}}></div>
 <div className="sm:p-6 pt-5 pr-5 pb-5 pl-5">
 <div className="flex items-center gap-2">
 <h3 className="sm:text-2xl text-xl text-white font-geist font-light tracking-tighter" style={{}}>
@@ -706,7 +748,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/10 bg-neutral-900/60 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll" style={{animationDelay: '.05s'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 24px 70px rgba(37,99,235,0.12)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 24px 70px rgba(37,99,235,0.12)'}}></div>
 <div className="p-4 sm:p-5">
 <div className="flex items-center justify-between">
 <h3 className="sm:text-2xl text-xl text-white font-geist font-light tracking-tighter" style={{}}>
@@ -760,7 +802,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/10 bg-neutral-900/60 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{animationDelay: '.1s'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 30px 80px rgba(37,99,235,0.10)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(37,99,235,0.10)'}}></div>
 <div className="p-4 sm:p-5">
 <h3 className="sm:text-2xl text-xl text-white font-geist font-light tracking-tighter" style={{}}>
                   Theme Control
@@ -808,7 +850,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/10 bg-neutral-900/60 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn [animation:fadeSlideIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style={{animationDelay: '.15s'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 30px 80px rgba(37,99,235,0.10)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(37,99,235,0.10)'}}></div>
 <div className="p-4 sm:p-5">
 <h3 className="sm:text-2xl text-xl text-white font-geist font-light tracking-tighter" style={{}}>
                   Team Collaboration
@@ -845,7 +887,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/10 bg-neutral-900/60 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn [animation:fadeSlideIn_0.8s_ease-out_0.5s_both] animate-on-scroll" style={{animationDelay: '.2s'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 30px 80px rgba(37,99,235,0.10)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl shimmer" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(37,99,235,0.10)'}}></div>
 <div className="p-4 sm:p-5">
 <h3 className="sm:text-2xl text-xl text-white font-geist font-light tracking-tighter" style={{}}>
                   Template Library

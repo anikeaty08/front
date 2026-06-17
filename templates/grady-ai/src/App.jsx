@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -143,6 +179,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -171,12 +213,12 @@ gtag('config', 'G-2M6V79H761');
 <div className="orb-drift absolute top-[50%] right-[45%] w-[250px] h-[250px] rounded-full opacity-10" style={{background: 'radial-gradient(circle, #20d7c240 0%, transparent 70%)', filter: 'blur(40px)'}}></div>
 </div>
 
-<div className="grid-layer absolute inset-0 pointer-events-none opacity-0" style={{backgroundImage: 'linear-gradient(rgba(32,215,194,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(32,215,194,0.04) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)'}}></div>
+<div className="grid-layer absolute inset-0 pointer-events-none opacity-0" style={{backgroundImage: 'linear-gradient(rgba(32, 215, 194, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(32, 215, 194, 0.04) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)'}}></div>
 
 <div className="absolute right-8 lg:right-24 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block" style={{perspective: '1200px'}}>
 
-<div className="float-card relative" style={{-Rot: '-2deg'}}>
-<div className="w-72 bg-[#0f0f0f] border border-white/10 rounded-xl overflow-hidden shadow-2xl" style={{boxShadow: '0 0 60px rgba(32,215,194,0.08), 0 30px 60px rgba(0,0,0,0.6)'}}>
+<div className="float-card relative" style={{'--rot': '-2deg'}}>
+<div className="w-72 bg-[#0f0f0f] border border-white/10 rounded-xl overflow-hidden shadow-2xl" style={{boxShadow: '0 0 60px rgba(32, 215, 194, 0.08), 0 30px 60px rgba(0,0,0,0.6)'}}>
 <div className="bg-[#20d7c2]/10 border-b border-[#20d7c2]/20 px-5 py-3.5 flex items-center justify-between">
 <div className="flex items-center gap-2">
 <i className="w-3.5 h-3.5 text-[#20d7c2] fill-[#20d7c2] rotate-90" data-lucide="triangle" strokeWidth="1.5"></i>
@@ -234,8 +276,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="float-card absolute -left-20 -bottom-8" style={{-Rot: '3deg', animationDelay: '-3s'}}>
-<div className="w-48 bg-[#0f0f0f] border border-white/10 rounded-xl p-4 shadow-xl" style={{boxShadow: '0 0 30px rgba(32,215,194,0.05), 0 20px 40px rgba(0,0,0,0.5)'}}>
+<div className="float-card absolute -left-20 -bottom-8" style={{'--rot': '3deg', animationDelay: '-3s'}}>
+<div className="w-48 bg-[#0f0f0f] border border-white/10 rounded-xl p-4 shadow-xl" style={{boxShadow: '0 0 30px rgba(32, 215, 194, 0.05), 0 20px 40px rgba(0,0,0,0.5)'}}>
 <div className="flex items-center gap-2 mb-3">
 <i className="w-4 h-4 text-[#20d7c2]" data-lucide="users" strokeWidth="1.5"></i>
 <span className="text-xs font-medium text-neutral-400">Graded today</span>
@@ -251,8 +293,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="float-card absolute -right-10 -top-12" style={{-Rot: '-1deg', animationDelay: '-5s'}}>
-<div className="w-44 bg-[#0f0f0f] border border-white/10 rounded-xl p-4 shadow-xl" style={{boxShadow: '0 0 30px rgba(32,215,194,0.05), 0 20px 40px rgba(0,0,0,0.5)'}}>
+<div className="float-card absolute -right-10 -top-12" style={{'--rot': '-1deg', animationDelay: '-5s'}}>
+<div className="w-44 bg-[#0f0f0f] border border-white/10 rounded-xl p-4 shadow-xl" style={{boxShadow: '0 0 30px rgba(32, 215, 194, 0.05), 0 20px 40px rgba(0,0,0,0.5)'}}>
 <div className="flex items-center gap-2 mb-3">
 <i className="w-4 h-4 text-[#20d7c2]" data-lucide="zap" strokeWidth="1.5"></i>
 <span className="text-xs font-medium text-neutral-400">Time saved</span>

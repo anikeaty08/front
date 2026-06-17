@@ -44,6 +44,42 @@ function useLocalStorage(key, initialValue) {
   });
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch {
@@ -110,7 +146,7 @@ function Toast({ toast, onDismiss }) {
             toast.type === "error" ? "bg-red-50 text-red-500" : "bg-emerald-50 text-emerald-600"
           )}
         >
-          <iconify-icon icon={icon} style={{ fontSize: "1.35rem" }} />
+          <iconify-icon icon={icon} style={{fontSize: "1.35rem"}} />
         </span>
         <div className="min-w-0">
           <p className="text-sm font-medium text-[#0D1117]">{toast.title}</p>
@@ -135,7 +171,7 @@ function WalletSummaryCard({ balance }) {
       <Card.Body>
         <div className="flex items-center gap-3">
           <span className="grid size-11 place-items-center rounded-2xl bg-black/[0.035] text-[#0D1117]">
-            <iconify-icon icon="solar:wallet-money-linear" style={{ fontSize: "1.35rem" }} />
+            <iconify-icon icon="solar:wallet-money-linear" style={{fontSize: "1.35rem"}} />
           </span>
           <p className="text-sm font-medium text-[#0D1117]">Wallet</p>
         </div>
@@ -155,7 +191,7 @@ function CardBalanceCard({ onTopUp }) {
       <Card.Body>
         <div className="flex items-center gap-3">
           <span className="grid size-11 place-items-center rounded-2xl bg-black/[0.035] text-[#0D1117]">
-            <iconify-icon icon="solar:card-2-linear" style={{ fontSize: "1.35rem" }} />
+            <iconify-icon icon="solar:card-2-linear" style={{fontSize: "1.35rem"}} />
           </span>
           <p className="text-sm font-medium text-[#0D1117]">Card Balance</p>
         </div>
@@ -245,7 +281,7 @@ const AssetCard = memo(function AssetCard() {
           <div className="flex items-start justify-between gap-5">
             <div className="flex items-center gap-4">
               <span className="grid size-14 place-items-center rounded-full border border-black/5 bg-[#FAFAF8] text-[#0D1117] shadow-inner">
-                <iconify-icon icon="solar:dollar-minimalistic-linear" style={{ fontSize: "1.8rem" }} />
+                <iconify-icon icon="solar:dollar-minimalistic-linear" style={{fontSize: "1.8rem"}} />
               </span>
               <div>
                 <p className="text-lg font-medium tracking-tight text-[#0D1117]">USD Coin</p>
@@ -286,7 +322,7 @@ function ActionTiles({ onSelect }) {
           className="group rounded-[1.45rem] border border-black/5 bg-[#FAFAF8] p-4 text-left transition duration-300 hover:-translate-y-1 hover:border-blue-500/25 hover:bg-white hover:shadow-[0_1rem_2.5rem_rgba(13,17,23,0.08)] focus:outline-none focus:ring-4 focus:ring-blue-500/15"
         >
           <span className="grid size-10 place-items-center rounded-2xl bg-white text-black/55 shadow-sm transition group-hover:text-[#0D1117]">
-            <iconify-icon icon={item.icon} style={{ fontSize: "1.25rem" }} />
+            <iconify-icon icon={item.icon} style={{fontSize: "1.25rem"}} />
           </span>
           <span className="mt-4 block text-sm font-medium text-[#0D1117]">{item.label}</span>
           <span className="mt-1 block text-xs leading-5 text-black/38">{item.hint}</span>
@@ -453,7 +489,7 @@ function WorkflowPanel({ action, balance, onClose, onSubmit, onCopy }) {
         <div className="flex items-start justify-between gap-5">
           <div className="flex items-start gap-4">
             <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#0D1117] text-white shadow-[0_1rem_2rem_rgba(13,17,23,0.16)]">
-              <iconify-icon icon={config.icon} style={{ fontSize: "1.45rem" }} />
+              <iconify-icon icon={config.icon} style={{fontSize: "1.45rem"}} />
             </span>
             <div>
               <h2 className="text-2xl font-medium tracking-tight text-[#0D1117]">{config.title}</h2>
@@ -466,7 +502,7 @@ function WorkflowPanel({ action, balance, onClose, onSubmit, onCopy }) {
             aria-label="Return to overview"
             className="grid size-10 shrink-0 place-items-center rounded-full text-black/35 transition hover:bg-black/5 hover:text-black"
           >
-            <iconify-icon icon="solar:close-circle-linear" style={{ fontSize: "1.35rem" }} />
+            <iconify-icon icon="solar:close-circle-linear" style={{fontSize: "1.35rem"}} />
           </button>
         </div>
 
@@ -507,7 +543,7 @@ function WorkflowPanel({ action, balance, onClose, onSubmit, onCopy }) {
                       method === item.id ? "border-blue-500/40 bg-blue-50/70" : "border-black/5 bg-white hover:bg-[#FAFAF8]"
                     )}
                   >
-                    <iconify-icon icon={item.icon} style={{ fontSize: "1.35rem" }} />
+                    <iconify-icon icon={item.icon} style={{fontSize: "1.35rem"}} />
                     <span className="mt-3 block text-xs font-medium text-[#0D1117]">{item.label}</span>
                   </button>
                 ))}
@@ -702,7 +738,7 @@ function BottomNav() {
                 : "text-black/28 hover:bg-black/[0.04] hover:text-[#0D1117]"
             )}
           >
-            <iconify-icon icon={item.icon} style={{ fontSize: "1.35rem" }} />
+            <iconify-icon icon={item.icon} style={{fontSize: "1.35rem"}} />
           </button>
         ))}
       </div>

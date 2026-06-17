@@ -28,6 +28,42 @@ function BlurText({
   const hasAnimated = useRef(false);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const el = ref.current;
     if (!el) return;
 
@@ -74,7 +110,7 @@ function BlurText({
       /\s+/.test(part) ? (
         part
       ) : (
-        <span key={i} className="bw" style={{ display: 'inline-block' }}>
+        <span key={i} className="bw" style={{display: 'inline-block'}}>
           {part}
         </span>
       )
@@ -101,7 +137,7 @@ function splitWords(text) {
     /\s+/.test(part) ? (
       part
     ) : (
-      <span key={i} className="bw" style={{ display: 'inline-block' }}>
+      <span key={i} className="bw" style={{display: 'inline-block'}}>
         {part}
       </span>
     )
@@ -134,17 +170,7 @@ function FloatingSidebar({ hidden }) {
   return (
     <aside
       className="fixed left-[24px] md:left-[32px] z-[100] flex flex-col items-center gap-[20px] rounded-[999px] py-[20px] px-[12px] backdrop-blur-[32px] pointer-events-auto"
-      style={{
-        top: '50%',
-        transform: 'translateY(-50%)',
-        background: 'rgba(255, 255, 255, 0.76)',
-        border: '1px solid #EBEBEB',
-        boxShadow: '0 0 72px rgba(213, 213, 213, 0.24)',
-        transition: 'opacity 0.5s ease, visibility 0.5s ease',
-        opacity: hidden ? 0 : 1,
-        visibility: hidden ? 'hidden' : 'visible',
-        pointerEvents: hidden ? 'none' : 'auto',
-      }}
+      style={{top: '50%', transform: 'translateY(-50%)', background: 'rgba(255, 255, 255, 0.76)', border: '1px solid #EBEBEB', boxShadow: '0 0 72px rgba(213, 213, 213, 0.24)', transition: 'opacity 0.5s ease, visibility 0.5s ease', opacity: hidden ? 0 : 1, visibility: hidden ? 'hidden' : 'visible', pointerEvents: hidden ? 'none' : 'auto'}}
     >
       <a href="#" className="w-[36px] h-[36px] flex items-center justify-center rounded-full transition-opacity duration-200 hover:opacity-80" aria-label="Home">
         <img
@@ -178,7 +204,7 @@ function Background() {
   return (
     <>
       <div className="aura-background-component fixed top-0 w-full h-screen z-10"
-        style={{ maskImage: 'linear-gradient(transparent, black 0%, black 100%, transparent)' }}>
+        style={{maskImage: 'linear-gradient(transparent, black 0%, black 100%, transparent)'}}>
         <UnicornScene projectId="SrJYfPcDUR4StI3maLL6" className="w-full h-full" />
       </div>
       <div className="aura-background-component absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
@@ -194,14 +220,14 @@ function Background() {
 function HeroBottomRight() {
   return (
     <div className="flex gap-[60px] absolute right-[60px] bottom-[40px] items-end z-20">
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-        <div style={{ width: '1px', height: '48px', background: 'rgba(17,17,17,0.2)', flexShrink: 0, marginTop: '2px' }} />
+      <div style={{display: 'flex', alignItems: 'flex-start', gap: '14px'}}>
+        <div style={{width: '1px', height: '48px', background: 'rgba(17,17,17,0.2)', flexShrink: 0, marginTop: '2px'}} />
         <BlurText
           as="p"
           animateOnMount
           initialDelay={0.5}
           className="text-[13px] leading-[1.6] font-[300] text-left opacity-[0.85] max-w-[280px] pb-1"
-          style={{ fontFamily: INTER, color: '#111111' }}
+          style={{fontFamily: INTER, color: '#111111'}}
         >
           портфолио UX/UI дизайнера проектирую интерфейсы, которые понятны с первого взгляда
         </BlurText>
@@ -209,7 +235,7 @@ function HeroBottomRight() {
       <div className="cursor-pointer whitespace-nowrap pb-1 flex items-center">
         <button className="group relative inline-flex gap-2 min-w-[120px] cursor-pointer transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] shadow-[0_2.8px_2.2px_rgba(0,0,0,0.3),_0_6.7px_5.3px_rgba(0,0,0,0.35),_0_12.5px_10px_rgba(0,0,0,0.4)] overflow-hidden font-semibold text-white tracking-tight bg-neutral-800 border-neutral-600 border rounded-full pt-[12px] pr-[20px] pb-[12px] pl-[20px] items-center justify-center">
           <span className="relative z-10 font-medium transition-all duration-500 ease-out group-hover:translate-y-8 group-hover:opacity-0 group-hover:blur-md flex items-center gap-[7px]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-flex', verticalAlign: 'middle' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display: 'inline-flex', verticalAlign: 'middle'}}>
               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
               <path d="M17 7l-10 10" />
               <path d="M8 7l9 0l0 9" />
@@ -217,7 +243,7 @@ function HeroBottomRight() {
             Связаться
           </span>
           <span className="absolute inset-0 z-10 flex items-center justify-center gap-[7px] transition-all duration-300 ease-in-out transform -translate-y-8 group-hover:translate-y-0 group-hover:opacity-100 group-hover:blur-none font-medium opacity-0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-flex', verticalAlign: 'middle' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display: 'inline-flex', verticalAlign: 'middle'}}>
               <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
               <path d="M17 7l-10 10" />
               <path d="M8 7l9 0l0 9" />
@@ -238,19 +264,19 @@ function HeroBottomRight() {
 function Hero() {
   return (
     <div className="flex flex-col overflow-hidden text-center bg-[#0a0a0f] w-full h-screen relative items-center justify-center"
-      style={{ fontFamily: INTER }}>
+      style={{fontFamily: INTER}}>
       <Background />
       <nav className="flex bg-transparent w-full z-50 pt-8 pr-12 pb-8 pl-12 absolute top-0 left-0 items-center justify-between"></nav>
       <div className="flex flex-col z-50 w-auto text-center max-w-max"
-        style={{ fontSize: 'clamp(60px, 7vw, 108px)', lineHeight: 1.1, fontWeight: 200, color: '#111111' }}>
+        style={{fontSize: 'clamp(60px, 7vw, 108px)', lineHeight: 1.1, fontWeight: 200, color: '#111111'}}>
         <div className="w-full relative space-y-1">
           <BlurText as="div" animateOnMount initialDelay={0.1}
-            style={{ fontSize: '4.5rem', fontFamily: INTER, fontWeight: 300, color: 'rgba(17,17,17,0.9)' }}>
+            style={{fontSize: '4.5rem', fontFamily: INTER, fontWeight: 300, color: 'rgba(17,17,17,0.9)'}}>
             дизайн, где всё на месте
           </BlurText>
           <div className="flex gap-x-4 gap-y-4 items-center justify-center">
             <BlurText as="div" animateOnMount initialDelay={0.25}
-              style={{ fontSize: '4.5rem', fontFamily: INTER, fontWeight: 300, color: 'rgba(17,17,17,0.9)' }}>
+              style={{fontSize: '4.5rem', fontFamily: INTER, fontWeight: 300, color: 'rgba(17,17,17,0.9)'}}>
               логично и просто
             </BlurText>
             <div className="opacity-30 w-[100px] h-[1px] mt-2 mr-4 ml-4 bg-black/50"></div>
@@ -258,7 +284,7 @@ function Hero() {
           <div className="flex gap-x-8 items-center justify-center">
             <div className="opacity-30 w-[100px] h-[1px] mt-2 bg-black/50"></div>
             <BlurText as="div" animateOnMount initialDelay={0.4}
-              style={{ fontSize: '4.5rem', fontFamily: INTER, fontWeight: 300, color: 'rgba(17,17,17,0.9)' }}>
+              style={{fontSize: '4.5rem', fontFamily: INTER, fontWeight: 300, color: 'rgba(17,17,17,0.9)'}}>
               с первого взгляда
             </BlurText>
           </div>
@@ -350,48 +376,39 @@ function SlideTextOverlay({ card, displayNum, totalNum, skipAnimation = false })
   return (
     <div ref={ref} className="absolute inset-0 w-full h-full pointer-events-none">
       {/* Counter */}
-      <div className="absolute flex items-baseline" style={{ top: '48px', left: '48px', gap: '6px', fontFamily: INTER }}>
-        <span style={{ fontSize: '32px', fontWeight: 600, lineHeight: 1, color: '#fff' }}>
+      <div className="absolute flex items-baseline" style={{top: '48px', left: '48px', gap: '6px', fontFamily: INTER}}>
+        <span style={{fontSize: '32px', fontWeight: 600, lineHeight: 1, color: '#fff'}}>
           {splitWords(displayNum)}
         </span>
-        <span style={{ fontSize: '20px', fontWeight: 300, lineHeight: 1, color: 'rgba(255,255,255,0.45)' }}>
+        <span style={{fontSize: '20px', fontWeight: 300, lineHeight: 1, color: 'rgba(255,255,255,0.45)'}}>
           {splitWords(`/ ${totalNum}`)}
         </span>
       </div>
 
       {/* Bottom bar */}
-      <div className="absolute bottom-0 left-0 w-full" style={{ padding: '0 48px 48px 48px' }}>
+      <div className="absolute bottom-0 left-0 w-full" style={{padding: '0 48px 48px 48px'}}>
         <div className="flex items-end justify-between w-full">
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{display: 'flex', flexDirection: 'column'}}>
             {/* Tags */}
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '18px' }}>
+            <div style={{display: 'flex', gap: '10px', marginBottom: '18px'}}>
               {card.tags.map((tag) => (
-                <span key={tag} style={{
-                  fontFamily: INTER, fontSize: '12px', fontWeight: 400, letterSpacing: '0.10em',
-                  textTransform: 'uppercase', color: 'rgba(255,255,255,0.90)',
-                  background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.18)',
-                  borderRadius: '9999px', padding: '7px 16px', display: 'inline-block',
-                }}>
+                <span key={tag} style={{fontFamily: INTER, fontSize: '12px', fontWeight: 400, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.90)', background: 'rgba(255, 255, 255, 0.12)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '9999px', padding: '7px 16px', display: 'inline-block'}}>
                   {splitWords(tag)}
                 </span>
               ))}
             </div>
 
             {/* Title */}
-            <h3 style={{
-              fontFamily: CORMORANT, fontSize: 'clamp(40px, 5vw, 72px)', fontWeight: 300,
-              lineHeight: 1, letterSpacing: '-0.01em', color: '#ffffff', marginBottom: '16px',
-            }}>
+            <h3 style={{fontFamily: CORMORANT, fontSize: 'clamp(40px, 5vw, 72px)', fontWeight: 300, lineHeight: 1, letterSpacing: '-0.01em', color: '#ffffff', marginBottom: '16px'}}>
               {splitWords(card.title)}
             </h3>
 
             {/* Subtitle */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <svg width="60" height="2" viewBox="0 0 60 2" style={{ flexShrink: 0, overflow: 'visible' }}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+              <svg width="60" height="2" viewBox="0 0 60 2" style={{flexShrink: 0, overflow: 'visible'}}>
                 <rect x="0" y="0" width="60" height="1.5" fill="white" fillOpacity="0.75" />
               </svg>
-              <p style={{ fontFamily: INTER, fontSize: '15px', fontWeight: 300, color: 'rgba(255,255,255,0.65)', margin: 0 }}>
+              <p style={{fontFamily: INTER, fontSize: '15px', fontWeight: 300, color: 'rgba(255,255,255,0.65)', margin: 0}}>
                 {splitWords(card.subtitle)}
               </p>
             </div>
@@ -399,11 +416,11 @@ function SlideTextOverlay({ card, displayNum, totalNum, skipAnimation = false })
 
           {/* Behance link */}
           <a href={card.behanceUrl} target="_blank" rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0, marginLeft: '40px', pointerEvents: 'auto', textDecoration: 'none', opacity: 1, transition: 'opacity 0.2s ease' }}
+            style={{display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0, marginLeft: '40px', pointerEvents: 'auto', textDecoration: 'none', opacity: 1, transition: 'opacity 0.2s ease'}}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
             onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
             <BehanceIcon size={38} />
-            <span style={{ fontFamily: INTER, fontSize: '18px', fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>
+            <span style={{fontFamily: INTER, fontSize: '18px', fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap'}}>
               {splitWords('Смотреть полностью')}
             </span>
           </a>
@@ -574,7 +591,7 @@ function ScatteredCards({ onSlideshowEnter, onSlideshowLeave }) {
             return (
               <div key={card.id}
                 className={`sc-card sc-card-${i} ${card.isMain ? 'is-main' : ''} absolute overflow-hidden bg-[#12121a] shadow-[0_20px_80px_rgba(0,0,0,0.35)]`}
-                style={{ zIndex: card.isMain ? 50 : i, width: `${baseWidth}px`, height: `${initHeight}px`, top: '50%', left: '50%', borderRadius: '16px' }}>
+                style={{zIndex: card.isMain ? 50 : i, width: `${baseWidth}px`, height: `${initHeight}px`, top: '50%', left: '50%', borderRadius: '16px'}}>
                 <img src={card.src} className="w-full h-full object-cover block absolute inset-0" alt={card.title} loading="lazy" />
               </div>
             );
@@ -584,12 +601,12 @@ function ScatteredCards({ onSlideshowEnter, onSlideshowLeave }) {
         <div id="fs-slideshow" className="absolute inset-0 w-full h-full z-50">
           <div className="fs-progress-bar absolute top-0 left-0 w-full z-[60] pointer-events-none">
             <div className="relative w-full h-[2px] bg-white/10">
-              <div className="fs-progress-fill absolute top-0 left-0 w-full h-full bg-white/60 origin-left" style={{ transform: 'scaleX(0)' }} />
+              <div className="fs-progress-fill absolute top-0 left-0 w-full h-full bg-white/60 origin-left" style={{transform: 'scaleX(0)'}} />
             </div>
           </div>
 
           {/* Navigation buttons */}
-          <div style={{ position: 'absolute', top: '48px', right: '48px', display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 200, pointerEvents: 'auto' }}>
+          <div style={{position: 'absolute', top: '48px', right: '48px', display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 200, pointerEvents: 'auto'}}>
             <button onClick={() => navigateSlide(-1)} disabled={currentSlide === 0} style={currentSlide === 0 ? navBtnDisabled : navBtnActive} title={currentSlide === 0 ? 'Первый слайд' : 'Предыдущий'}>
               <svg width="16" height="10" fill="none" viewBox="0 0 16 10"><path d="M1 9L8 1L15 9" stroke="white" strokeLinecap="round" strokeWidth="1.5" /></svg>
             </button>
@@ -607,11 +624,11 @@ function ScatteredCards({ onSlideshowEnter, onSlideshowLeave }) {
             return (
               <div key={card.id}
                 className={`fs-slide fs-slide-${cardIndex} absolute inset-0 w-full h-full`}
-                style={{ zIndex: slideIndex + 1, visibility: 'visible' }}>
+                style={{zIndex: slideIndex + 1, visibility: 'visible'}}>
 
                 <img src={card.src} className="absolute inset-0 w-full h-full object-cover" alt={card.title} loading="lazy" />
-                <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 100%)' }} />
-                <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)' }} />
+                <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 100%)'}} />
+                <div className="absolute inset-0 pointer-events-none" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)'}} />
 
                 {/* Text overlay re-mounts for each active slide → fresh blur animation */}
                 {/* For slideIndex 0: wait until slideshow is actually visible on screen */}
@@ -666,34 +683,22 @@ function ContactSection() {
       id="contact"
       ref={sectionRef}
       className="relative z-20 flex flex-col"
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(140deg, #d9e8f5 0%, #e4ecf7 25%, #f2eae4 65%, #edd9c8 100%)',
-      }}
+      style={{minHeight: '100vh', background: 'linear-gradient(140deg, #d9e8f5 0%, #e4ecf7 25%, #f2eae4 65%, #edd9c8 100%)'}}
     >
       {/* Main content — two-column grid */}
       <div
         className="flex-1 flex items-center"
-        style={{ padding: 'clamp(100px, 12vw, 180px) clamp(24px, 5vw, 64px)' }}
+        style={{padding: 'clamp(100px, 12vw, 180px) clamp(24px, 5vw, 64px)'}}
       >
         <div className="max-w-[1200px] mx-auto w-full">
 
           {/* Row 1: descriptor (bottom-aligned) | heading */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '0 64px', alignItems: 'end', marginBottom: '40px' }}>
+          <div style={{display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '0 64px', alignItems: 'end', marginBottom: '40px'}}>
 
             {/* Left — descriptor, right-aligned, bottom of heading */}
-            <div className="cs-anim" style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '10px' }}>
+            <div className="cs-anim" style={{display: 'flex', justifyContent: 'flex-end', paddingBottom: '10px'}}>
               <p
-                style={{
-                  fontFamily: INTER,
-                  fontSize: 'clamp(13px, 1.1vw, 15px)',
-                  fontWeight: 300,
-                  lineHeight: 1.8,
-                  color: 'rgba(17,17,17,0.45)',
-                  textAlign: 'right',
-                  maxWidth: '300px',
-                  margin: 0,
-                }}
+                style={{fontFamily: INTER, fontSize: 'clamp(13px, 1.1vw, 15px)', fontWeight: 300, lineHeight: 1.8, color: 'rgba(17,17,17,0.45)', textAlign: 'right', maxWidth: '300px', margin: 0}}
               >
                 Опыт, проекты, подход к работе,<br />
                 инструменты и ключевые кейсы —<br />
@@ -704,38 +709,16 @@ function ContactSection() {
             {/* Right — heading only */}
             <h2
               className="cs-anim"
-              style={{
-                fontFamily: INTER,
-                fontSize: 'clamp(34px, 3.6vw, 52px)',
-                fontWeight: 300,
-                lineHeight: 1.2,
-                letterSpacing: '-0.02em',
-                color: 'rgba(17,17,17,0.88)',
-                margin: 0,
-              }}
+              style={{fontFamily: INTER, fontSize: 'clamp(34px, 3.6vw, 52px)', fontWeight: 300, lineHeight: 1.2, letterSpacing: '-0.02em', color: 'rgba(17,17,17,0.88)', margin: 0}}
             >
               Всё самое{' '}
               <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 'clamp(52px, 5vw, 64px)',
-                  height: 'clamp(34px, 3vw, 42px)',
-                  background: 'rgba(255,255,255,0.80)',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  borderRadius: '9999px',
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                  verticalAlign: 'middle',
-                  margin: '0 6px -4px 6px',
-                  overflow: 'hidden',
-                }}
+                style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 'clamp(52px, 5vw, 64px)', height: 'clamp(34px, 3vw, 42px)', background: 'rgba(255, 255, 255, 0.80)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', borderRadius: '9999px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', verticalAlign: 'middle', margin: '0 6px -4px 6px', overflow: 'hidden'}}
               >
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/391px-PDF_file_icon.svg.png"
                   alt="PDF"
-                  style={{ width: '22px', height: '26px', objectFit: 'contain', display: 'block' }}
+                  style={{width: '22px', height: '26px', objectFit: 'contain', display: 'block'}}
                 />
               </span>
               {' '}важное
@@ -745,7 +728,7 @@ function ContactSection() {
           </div>
 
           {/* Row 2: empty | button */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '0 64px' }}>
+          <div style={{display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '0 64px'}}>
             <div />
             <div className="cs-anim cursor-pointer whitespace-nowrap pb-1 flex items-center">
               <button
@@ -753,14 +736,14 @@ function ContactSection() {
                 onClick={() => window.location.href = 'mailto:hello@oevra.design'}
               >
                 <span className="relative z-10 font-medium transition-all duration-500 ease-out group-hover:translate-y-8 group-hover:opacity-0 group-hover:blur-md flex items-center gap-[7px]">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-flex', verticalAlign: 'middle' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display: 'inline-flex', verticalAlign: 'middle'}}>
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" />
                   </svg>
                   Связаться
                 </span>
                 <span className="absolute inset-0 z-10 flex items-center justify-center gap-[7px] transition-all duration-300 ease-in-out transform -translate-y-8 group-hover:translate-y-0 group-hover:opacity-100 group-hover:blur-none font-medium opacity-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-flex', verticalAlign: 'middle' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display: 'inline-flex', verticalAlign: 'middle'}}>
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" />
                   </svg>
@@ -777,29 +760,22 @@ function ContactSection() {
 
       {/* Footer bar */}
       <div
-        style={{
-          borderTop: '1px solid rgba(17,17,17,0.07)',
-          padding: '18px clamp(24px, 5vw, 64px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '24px',
-        }}
+        style={{borderTop: '1px solid rgba(17, 17, 17, 0.07)', padding: '18px clamp(24px, 5vw, 64px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px'}}
       >
         <img
           src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/user-files/31473890-25f2-4535-a847-766fca01a65e/c4999910-b9e8-4b00-8aab-7cf48de65395-logo.svg?v=1776309701358"
           alt="Oevra Logo"
-          style={{ width: '34px', height: '34px', objectFit: 'contain', flexShrink: 0 }}
+          style={{width: '34px', height: '34px', objectFit: 'contain', flexShrink: 0}}
         />
 
-        <nav style={{ display: 'flex', gap: '36px', alignItems: 'center' }}>
+        <nav style={{display: 'flex', gap: '36px', alignItems: 'center'}}>
           {[
             { label: 'Обо мне', href: '#about' },
             { label: 'Портфолио', href: '#portfolio' },
             { label: 'Резюме', href: '#' },
           ].map(({ label, href }) => (
             <a key={label} href={href}
-              style={{ fontFamily: INTER, fontSize: '13px', fontWeight: 400, color: 'rgba(17,17,17,0.5)', textDecoration: 'none', transition: 'color 0.2s ease' }}
+              style={{fontFamily: INTER, fontSize: '13px', fontWeight: 400, color: 'rgba(17,17,17,0.5)', textDecoration: 'none', transition: 'color 0.2s ease'}}
               onMouseEnter={e => e.currentTarget.style.color = '#111111'}
               onMouseLeave={e => e.currentTarget.style.color = 'rgba(17,17,17,0.5)'}
             >
@@ -809,20 +785,20 @@ function ContactSection() {
         </nav>
 
         {/* Footer CTA — identical to Hero button */}
-        <div className="cursor-pointer whitespace-nowrap pb-1 flex items-center" style={{ flexShrink: 0 }}>
+        <div className="cursor-pointer whitespace-nowrap pb-1 flex items-center" style={{flexShrink: 0}}>
           <button
             className="group relative inline-flex gap-2 min-w-[120px] cursor-pointer transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] shadow-[0_2.8px_2.2px_rgba(0,0,0,0.3),_0_6.7px_5.3px_rgba(0,0,0,0.35),_0_12.5px_10px_rgba(0,0,0,0.4)] overflow-hidden font-semibold text-white tracking-tight bg-neutral-800 border-neutral-600 border rounded-full pt-[12px] pr-[20px] pb-[12px] pl-[20px] items-center justify-center"
             onClick={() => window.location.href = 'mailto:hello@oevra.design'}
           >
             <span className="relative z-10 font-medium transition-all duration-500 ease-out group-hover:translate-y-8 group-hover:opacity-0 group-hover:blur-md flex items-center gap-[7px]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-flex', verticalAlign: 'middle' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display: 'inline-flex', verticalAlign: 'middle'}}>
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" />
               </svg>
               Связаться
             </span>
             <span className="absolute inset-0 z-10 flex items-center justify-center gap-[7px] transition-all duration-300 ease-in-out transform -translate-y-8 group-hover:translate-y-0 group-hover:opacity-100 group-hover:blur-none font-medium opacity-0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-flex', verticalAlign: 'middle' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display: 'inline-flex', verticalAlign: 'middle'}}>
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" />
               </svg>
@@ -835,12 +811,12 @@ function ContactSection() {
       </div>
 
       {/* Copyright — mirrors footer flex so it's always under Портфолио */}
-      <div style={{ padding: '10px clamp(24px, 5vw, 64px) 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ width: '34px', flexShrink: 0 }} />
-        <span style={{ fontFamily: INTER, fontSize: '11px', color: 'rgba(17,17,17,0.22)', letterSpacing: '0.04em', textAlign: 'center' }}>
+      <div style={{padding: '10px clamp(24px, 5vw, 64px) 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        <div style={{width: '34px', flexShrink: 0}} />
+        <span style={{fontFamily: INTER, fontSize: '11px', color: 'rgba(17,17,17,0.22)', letterSpacing: '0.04em', textAlign: 'center'}}>
           © 2026 Denis Design. Все права защищены.
         </span>
-        <div style={{ minWidth: '120px', flexShrink: 0 }} />
+        <div style={{minWidth: '120px', flexShrink: 0}} />
       </div>
     </section>
   );
@@ -908,7 +884,7 @@ function CustomCursor({ onDark }) {
   return (
     <>
       {/* Grain filter definition */}
-      <svg style={{ position: 'fixed', width: 0, height: 0, overflow: 'hidden' }}>
+      <svg style={{position: 'fixed', width: 0, height: 0, overflow: 'hidden'}}>
         <defs>
           <filter id="cursor-grain" x="-20%" y="-20%" width="140%" height="140%">
             <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" result="noise" />
@@ -922,21 +898,7 @@ function CustomCursor({ onDark }) {
       {/* The blob itself */}
       <div
         ref={blobRef}
-        style={{
-          position: 'fixed',
-          top: 0, left: 0,
-          width:  `${SIZE}px`,
-          height: `${SIZE}px`,
-          transform: 'translate(-50%, -50%)',
-          borderRadius: '50%',
-          background: glow,
-          filter: 'url(#cursor-grain) blur(10px)',
-          pointerEvents: 'none',
-          zIndex: 9998,
-          willChange: 'transform',
-          opacity: 0,
-          transition: 'background 0.8s ease',
-        }}
+        style={{position: 'fixed', top: 0, left: 0, width: `${SIZE}px`, height: `${SIZE}px`, transform: 'translate(-50%, -50%)', borderRadius: '50%', background: glow, filter: 'url(#cursor-grain) blur(10px)', pointerEvents: 'none', zIndex: 9998, willChange: 'transform', opacity: 0, transition: 'background 0.8s ease'}}
       />
     </>
   );
@@ -980,42 +942,23 @@ function AboutIntroSection() {
   return (
     <section
       className="relative z-20"
-      style={{
-        padding: 'clamp(140px, 16vw, 220px) clamp(24px, 5vw, 64px)',
-      }}
+      style={{padding: 'clamp(140px, 16vw, 220px) clamp(24px, 5vw, 64px)'}}
     >
       <div className="max-w-[1200px] mx-auto flex justify-center">
 
         <h2
           ref={headRef}
-          style={{
-            maxWidth: '1248px', // немного шире = больше места справа
-            margin: '0 auto',
-
-            fontFamily: INTER,
-            fontSize: 'clamp(34px, 3.4vw, 46px)',
-            fontWeight: 300,
-            lineHeight: 1.25,
-            letterSpacing: '-0.01em',
-            color: 'rgba(17,17,17,0.85)',
-          }}
+          style={{maxWidth: '1248px', // немного шире = больше места справа
+            margin: '0 auto', fontFamily: INTER, fontSize: 'clamp(34px, 3.4vw, 46px)', fontWeight: 300, lineHeight: 1.25, letterSpacing: '-0.01em', color: 'rgba(17,17,17,0.85)'}}
         >
           Я{' '}
           <img
             src={avatarUrl}
             alt=""
-            style={{
-              width: 'clamp(60px, 6vw, 76px)',
-              height: 'clamp(30px, 3vw, 38px)',
-              borderRadius: '9999px',
-              objectFit: 'cover',
-              display: 'inline-block',
-              verticalAlign: 'middle',
-              margin: '0 8px -6px 8px',
-            }}
+            style={{width: 'clamp(60px, 6vw, 76px)', height: 'clamp(30px, 3vw, 38px)', borderRadius: '9999px', objectFit: 'cover', display: 'inline-block', verticalAlign: 'middle', margin: '0 8px -6px 8px'}}
           />
          в дизайне уже 5 лет{' '}
-<span style={{ opacity: 0.5 }}>
+<span style={{opacity: 0.5}}>
   — от <br />
   первых попыток разобраться, как <br />
   всё устроено, до осознанного <br />
@@ -1025,19 +968,9 @@ function AboutIntroSection() {
 
           {/* INLINE БЛОК */}
           <span
-            style={{
-              display: 'inline-block',
-              verticalAlign: 'top',
+            style={{display: 'inline-block', verticalAlign: 'top', width: 'min(480px, 32vw)', // ← КЛЮЧ: чтобы ВЛЕЗАЛ в строку
 
-              width: 'min(480px, 32vw)', // ← КЛЮЧ: чтобы ВЛЕЗАЛ в строку
-
-              marginLeft: '24px',
-              marginTop: '24px',
-
-              fontSize: 'clamp(14px, 1.2vw, 16px)',
-              lineHeight: 1.85,
-              color: 'rgba(17,17,17,0.65)',
-            }}
+              marginLeft: '24px', marginTop: '24px', fontSize: 'clamp(14px, 1.2vw, 16px)', lineHeight: 1.85, color: 'rgba(17,17,17,0.65)'}}
           >
             Занимаюсь дизайном с 2021 года, когда мне было ещё 15 лет. Начинал с простых макетов и постепенно перешёл к более осознанному подходу через практику и реальные проекты.
 

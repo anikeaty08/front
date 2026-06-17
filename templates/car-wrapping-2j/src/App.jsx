@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -232,6 +268,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -432,7 +474,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{-Mx: '0px', -My: '0px'}}>
+<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{'--mx': '0px', '--my': '0px'}}>
 <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
 <iconify-icon className="" icon="solar:pallete-2-linear" width="120"></iconify-icon>
 </div>
@@ -445,7 +487,7 @@ gtag('config', 'G-2M6V79H761');
               More info <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
 </a>
 </div>
-<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{-RevealDelay: '100ms', -Mx: '0px', -My: '0px'}}>
+<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{'--reveal-delay': '100ms', '--mx': '0px', '--my': '0px'}}>
 <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
 <iconify-icon icon="solar:shield-check-linear" width="120"></iconify-icon>
 </div>
@@ -458,7 +500,7 @@ gtag('config', 'G-2M6V79H761');
               More info <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
 </a>
 </div>
-<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{-Mx: '0px', -My: '0px'}}>
+<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{'--mx': '0px', '--my': '0px'}}>
 <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
 <iconify-icon icon="solar:eye-scan-linear" width="120"></iconify-icon>
 </div>
@@ -471,7 +513,7 @@ gtag('config', 'G-2M6V79H761');
               More info <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
 </a>
 </div>
-<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{-RevealDelay: '100ms'}}>
+<div className="group relative bg-[#111111] border border-[#222222] p-8 md:p-12 overflow-hidden transition-colors hover:border-[#bbcf1d]/50 reveal-on-scroll magnetic-card" style={{'--reveal-delay': '100ms'}}>
 <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
 <iconify-icon icon="solar:magic-stick-3-linear" width="120"></iconify-icon>
 </div>
@@ -524,7 +566,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 </ul>
 </div>
-<div className="relative reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="relative reveal-on-scroll" style={{'--reveal-delay': '200ms'}}>
 <div className="absolute inset-0 border border-[#bbcf1d]/30 translate-x-4 translate-y-4 z-0"></div>
 <div className="absolute bottom-6 left-6 z-20 bg-[#0a0a0a]/90 backdrop-blur border border-[#222222] px-6 py-4">
 <span className="font-orbitron text-xs uppercase tracking-[0.2em] text-[#bbcf1d]">Precise installation</span>
@@ -555,13 +597,13 @@ gtag('config', 'G-2M6V79H761');
 <h3 className="text-lg font-semibold tracking-tight font-orbitron">Audi R8</h3>
 </div>
 </div>
-<div className="group relative overflow-hidden bg-[#111111] border border-[#222222] aspect-[4/5] reveal-on-scroll" style={{-RevealDelay: '100ms'}}>
+<div className="group relative overflow-hidden bg-[#111111] border border-[#222222] aspect-[4/5] reveal-on-scroll" style={{'--reveal-delay': '100ms'}}>
 <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
 <span className="text-[#bbcf1d] text-[10px] font-orbitron uppercase tracking-[0.2em] mb-2 block">Satin Khaki</span>
 <h3 className="font-orbitron font-semibold text-lg tracking-tight">Porsche 911</h3>
 </div>
 </div>
-<div className="group relative overflow-hidden bg-[#111111] border border-[#222222] aspect-[4/5] reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="group relative overflow-hidden bg-[#111111] border border-[#222222] aspect-[4/5] reveal-on-scroll" style={{'--reveal-delay': '200ms'}}>
 <img alt="Car wrap gallery" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100" src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&amp;fit=crop&amp;q=80&amp;w=800"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent opacity-60"></div>
 <div className="group-hover:translate-y-0 transition-transform duration-500 w-full pt-8 pr-8 pb-8 pl-8 absolute bottom-0 left-0 translate-y-4">
@@ -648,7 +690,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="reveal-on-scroll" style={{'--reveal-delay': '200ms'}}>
 <form className="bg-[#111111] border border-[#222222] p-8 md:p-10 space-y-6">
 <h3 className="font-orbitron font-semibold text-2xl uppercase tracking-tight mb-8">Free Quote</h3>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

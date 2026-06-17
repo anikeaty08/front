@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -714,6 +750,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -937,7 +979,7 @@ addUtilities({
 </div>
 
 <div className="draggable-card cursor-grab active:cursor-grabbing select-none sm:max-w-sm sm:p-5 bg-slate-700/50 w-full max-w-xs border-emerald-500/30 border rounded-3xl pt-4 pr-4 pb-4 pl-4 absolute top-2/3 right-4 shadow-lg backdrop-blur-md [--fx-filter:blur(10px)_liquid-glass(5,10)_saturate(1.25)_noise(0.5,1,0)]" id="info-card">
-<div className="sm:h-40 overflow-hidden flex bg-neutral-950/80 w-full h-32 rounded-2xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(0deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="sm:h-40 overflow-hidden flex bg-neutral-950/80 w-full h-32 rounded-2xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(0deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 
 <div className="relative z-10 flex items-center justify-center px-6 py-3 rounded-2xl bg-gradient-to-b from-neutral-800 via-neutral-900 to-black shadow-emerald-500/40 shadow-md border border-neutral-700/80">
 <span className="text-base sm:text-lg tracking-tight font-medium text-neutral-100">Loading</span>
@@ -1152,14 +1194,14 @@ addUtilities({
         </p>
 <div className="grid grid-cols-2 gap-6">
 
-<div className="stat-card bg-white/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-md backdrop-blur-xl" style={{opacity: '1', transform: 'translateY(0px)', transition: 'opacity 0.4s, transform 0.4s', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="stat-card bg-white/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-md backdrop-blur-xl" style={{opacity: '1', transform: 'translateY(0px)', transition: 'opacity 0.4s, transform 0.4s', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="stat-number text-4xl font-bold" data-animated="false" data-suffix="K+" data-target="480">0K+</p>
 <p className="mt-2 text-neutral-400 text-sm">
               Businesses empowered
             </p>
 </div>
 
-<div className="stat-card bg-white/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-md backdrop-blur-xl" style={{opacity: '1', transform: 'translateY(0px)', transition: 'opacity 0.4s, transform 0.4s', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="stat-card bg-white/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-md backdrop-blur-xl" style={{opacity: '1', transform: 'translateY(0px)', transition: 'opacity 0.4s, transform 0.4s', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="stat-number text-4xl font-bold" data-animated="false" data-suffix="+" data-target="47">0+</p>
 <p className="mt-2 text-neutral-400 text-sm">
               Global recognitions
@@ -1198,7 +1240,7 @@ addUtilities({
 
 <div className="grid md:grid-cols-2 lg:grid-cols-3 auto-rows-[minmax(230px,auto)] gap-x-6 gap-y-6">
 
-<article className="group flex flex-col shadow-black/40 bg-neutral-900/80 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="group flex flex-col shadow-black/40 bg-neutral-900/80 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="space-y-3">
 <div className="flex items-center gap-2">
@@ -1338,7 +1380,7 @@ addUtilities({
 <div className="h-px bg-emerald-100/20 w-full mt-4"></div>
 </header>
 
-<div className="tags-field flex-1 overflow-hidden bg-gradient-to-b from-black/95 to-black rounded-3xl mt-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px', maskImage: 'linear-gradient(180deg, transparent, black 45%, black 50%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 45%, black 50%, transparent)'}}>
+<div className="tags-field flex-1 overflow-hidden bg-gradient-to-b from-black/95 to-black rounded-3xl mt-6 relative" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '24px', maskImage: 'linear-gradient(180deg, transparent, black 45%, black 50%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 45%, black 50%, transparent)'}}>
 <span className="tag-chip inline-flex items-center justify-center rounded-full backdrop-blur-xl border border-emerald-200/80 bg-emerald-400/25 px-6 py-2 text-sm font-medium text-emerald-50 absolute" data-rotation="-18" style={{left: '12px', top: '32px'}}>
                     AI product teams
                   </span>
@@ -1362,9 +1404,9 @@ addUtilities({
 
 
 
-<article className="group flex flex-col shadow-black/40 bg-neutral-900/90 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="group flex flex-col shadow-black/40 bg-neutral-900/90 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
-<div className="bg-neutral-950 rounded-2xl mb-6 pt-7 pr-4 pb-4 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-neutral-950 rounded-2xl mb-6 pt-7 pr-4 pb-4 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '16px'}}>
 
 <div className="pointer-events-none">
 <div className="absolute inset-x-6 top-1 h-9 rounded-2xl bg-neutral-900/50"></div>
@@ -1372,7 +1414,7 @@ addUtilities({
 <div className="absolute inset-x-4 top-5 h-9 rounded-2xl bg-neutral-900/80"></div>
 </div>
 
-<div className="flex bg-neutral-900 z-10 rounded-2xl mb-4 pt-3 pr-4 pb-3 pl-4 relative items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex bg-neutral-900 z-10 rounded-2xl mb-4 pt-3 pr-4 pb-3 pl-4 relative items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center gap-3">
 <div className="h-8 w-8 rounded-full bg-[url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&amp;w=200')] bg-cover bg-center"></div>
 <div className="">
@@ -1409,7 +1451,7 @@ addUtilities({
 </div>
 </article>
 
-<article className="ai-chart-card group flex flex-col shadow-black/40 bg-neutral-900/80 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="ai-chart-card group flex flex-col shadow-black/40 bg-neutral-900/80 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="ai-chart-panel mb-4 h-32 rounded-2xl relative overflow-hidden bg-neutral-950">
 
@@ -1640,7 +1682,7 @@ addUtilities({
 
 <div className="grid gap-6 md:grid-cols-3">
 
-<article className="pricing-card flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-8 pr-7 pb-8 pl-7 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="pricing-card flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-8 pr-7 pb-8 pl-7 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="">
 <p className="text-sm font-semibold text-emerald-300 mb-2">
                     Starter
@@ -1750,7 +1792,7 @@ addUtilities({
 </article>
 </div>
 
-<article className="pricing-card flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-8 pr-7 pb-8 pl-7 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="pricing-card flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-8 pr-7 pb-8 pl-7 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="">
 <p className="text-sm font-semibold text-emerald-300 mb-2">
                     Enterprise
@@ -1940,7 +1982,7 @@ addUtilities({
 </div>
 </section>
 
-<footer className="relative mt-24 border-t border-transparent pt-16 pb-12" id="footer" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(16, 185, 129, 0), rgba(16, 185, 129, 0.6), rgba(16, 185, 129, 0))', -BorderRadiusBefore: '0px'}}>
+<footer className="relative mt-24 border-t border-transparent pt-16 pb-12" id="footer" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(16, 185, 129, 0), rgba(16, 185, 129, 0.6), rgba(16, 185, 129, 0))', '--border-radius-before': '0px'}}>
 <div className="pointer-events-none absolute -top-24 left-0 right-0 h-24 bg-gradient-to-b from-transparent via-emerald-500/10 to-emerald-500/20 blur-2xl"></div>
 <div className="max-w-7xl mx-auto px-6 lg:px-8">
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">

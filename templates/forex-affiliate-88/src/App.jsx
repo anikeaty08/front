@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -39,6 +75,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -89,7 +131,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <main className="flex-grow w-full" id="home-view">
 
-<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-28 p-[1px]" style={{-MouseX: '1326px', -MouseY: '1145px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-28 p-[1px]" style={{'--mouse-x': '1326px', '--mouse-y': '1145px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col min-h-[85vh] rounded-[40px] justify-center relative">
 <div className="absolute inset-0 z-0 pointer-events-none opacity-20" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', backgroundSize: '50px 50px'}}></div>
 <div className="z-10 container lg:px-12 grid lg:grid-cols-2 gap-16 mx-auto py-20 px-6 relative items-center">
@@ -185,7 +227,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="about" style={{-MouseX: '1326px', -MouseY: '354.25px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="about" style={{'--mouse-x': '1326px', '--mouse-y': '354.25px'}}>
 <div className="spotlight-inner sm:p-12 flex flex-col lg:flex-row lg:items-center gap-8 rounded-[40px] p-8 justify-between">
 <div className="max-w-xl">
 <h2 className="text-2xl sm:text-3xl mb-3 tracking-tight font-semibold text-white">Transforming the Landscape</h2>
@@ -212,7 +254,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="sm:mx-6 grid grid-cols-1 lg:grid-cols-12 xl:ml-auto xl:mr-auto max-w-7xl z-10 mt-4 gap-4 px-4 sm:px-0" id="commission">
 
-<div className="lg:col-span-5 p-[1px] spotlight-card rounded-[40px] group" style={{-MouseX: '1326px', -MouseY: '140.25px'}}>
+<div className="lg:col-span-5 p-[1px] spotlight-card rounded-[40px] group" style={{'--mouse-x': '1326px', '--mouse-y': '140.25px'}}>
 <div className="spotlight-inner rounded-[40px] p-6 sm:p-8 flex flex-col h-full bg-[#0A0A0A] overflow-hidden">
 <div className="flex justify-between items-center mb-6">
 <div className="flex items-center gap-2">
@@ -268,7 +310,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:col-span-3 p-[1px] spotlight-card rounded-[40px] group h-full" style={{-MouseX: '786px', -MouseY: '140.25px'}}>
+<div className="lg:col-span-3 p-[1px] spotlight-card rounded-[40px] group h-full" style={{'--mouse-x': '786px', '--mouse-y': '140.25px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col min-h-[300px] rounded-[40px] p-6 relative">
 <div className="flex items-center justify-between mb-6">
 <h3 className="text-lg font-medium text-white">Recent FTDs</h3>
@@ -314,7 +356,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:col-span-4 p-[1px] spotlight-card rounded-[40px] group h-full" style={{-MouseX: '462px', -MouseY: '140.25px'}}>
+<div className="lg:col-span-4 p-[1px] spotlight-card rounded-[40px] group h-full" style={{'--mouse-x': '462px', '--mouse-y': '140.25px'}}>
 <div className="spotlight-inner rounded-[40px] p-6 sm:p-8 flex flex-col bg-[#0A0A0A]">
 <div className="flex justify-between items-center mb-6">
 <h3 className="text-xl font-medium text-white">Payment History</h3>
@@ -378,7 +420,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="steps" style={{-MouseX: '1326px', -MouseY: '-284.75px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="steps" style={{'--mouse-x': '1326px', '--mouse-y': '-284.75px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col bg-[#0A0A0A] rounded-[40px] p-8 sm:p-12">
 <div className="text-center max-w-2xl mx-auto mb-16">
 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold uppercase tracking-widest mb-4">
@@ -421,7 +463,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="testimonials" style={{-MouseX: '1326px', -MouseY: '-798.25px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="testimonials" style={{'--mouse-x': '1326px', '--mouse-y': '-798.25px'}}>
 <div className="spotlight-inner sm:p-16 overflow-hidden bg-[#0A0A0A] rounded-[40px] p-8 relative items-center">
 <div className="text-center max-w-3xl mx-auto mb-16">
 <h2 className="text-3xl sm:text-5xl tracking-tight font-semibold text-white mb-6">
@@ -473,7 +515,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="faq" style={{-MouseX: '1326px', -MouseY: '-1430.25px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 p-[1px]" id="faq" style={{'--mouse-x': '1326px', '--mouse-y': '-1430.25px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col bg-[#0A0A0A] rounded-[40px] p-8 sm:p-16">
 <div className="grid lg:grid-cols-2 gap-16">
 <div className="">
@@ -667,7 +709,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mb-4 p-[1px]" style={{-MouseX: '1326px', -MouseY: '-2393.25px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mb-4 p-[1px]" style={{'--mouse-x': '1326px', '--mouse-y': '-2393.25px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col bg-[#0A0A0A] rounded-[40px] relative">
 <div className="grid lg:grid-cols-2">
 <div className="p-8 sm:p-16">

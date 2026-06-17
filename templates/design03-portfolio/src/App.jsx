@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -37,6 +73,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -98,23 +140,23 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <button className="button cursor-pointer mt-1" onclick="window.location.href='/start';window.location.href='/start';window.location.href='/start'" role="button" style={{cursor: 'pointer', border: 'none', background: 'rgb(0, 0, 0)', color: 'rgb(255, 255, 255)', width: '100px', height: '100px', borderRadius: '50%', overflow: 'hidden', position: 'absolute', display: 'grid', placeContent: 'center', fontWeight: '600', top: '-50px', right: '-50px', zIndex: '20'}}>
 <p className="button__text" style={{position: 'absolute', inset: '0', animation: 'text-rotation 8s linear infinite'}}>
-<span style={{-Index: '0', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>C</span>
-<span style={{-Index: '1', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>O</span>
-<span style={{-Index: '2', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>M</span>
-<span style={{-Index: '3', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>E</span>
-<span className="" style={{-Index: '4', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>Ç</span>
-<span className="" style={{-Index: '5', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>E</span>
-<span style={{-Index: '6', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}> </span>
-<span style={{-Index: '7', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '78', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>•</span>
-<span className="" style={{-Index: '9', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>J</span>
-<span className="" style={{-Index: '10', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>O</span>
-<span style={{-Index: '11', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>R</span>
-<span style={{-Index: '12', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>N</span>
-<span className="" style={{-Index: '13', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>A</span>
-<span className="" style={{-Index: '14', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>D</span>
-<span className="" style={{-Index: '15', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>A</span>
-<span className="" style={{-Index: '16', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}> </span>
-<span className="" style={{-Index: '17', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>•</span>
+<span style={{'--index': '0', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>C</span>
+<span style={{'--index': '1', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>O</span>
+<span style={{'--index': '2', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>M</span>
+<span style={{'--index': '3', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>E</span>
+<span className="" style={{'--index': '4', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>Ç</span>
+<span className="" style={{'--index': '5', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>E</span>
+<span style={{'--index': '6', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}> </span>
+<span style={{'--index': '7', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '78', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>•</span>
+<span className="" style={{'--index': '9', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>J</span>
+<span className="" style={{'--index': '10', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>O</span>
+<span style={{'--index': '11', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>R</span>
+<span style={{'--index': '12', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>N</span>
+<span className="" style={{'--index': '13', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>A</span>
+<span className="" style={{'--index': '14', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>D</span>
+<span className="" style={{'--index': '15', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>A</span>
+<span className="" style={{'--index': '16', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}> </span>
+<span className="" style={{'--index': '17', position: 'absolute', transform: 'rotate(calc(19deg * var(--index)))', inset: '7px'}}>•</span>
 </p>
 <div className="button__circle" style={{position: 'relative', width: '40px', height: '40px', overflow: 'hidden', background: '#fff', color: '#000', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 <svg className="button__icon" fill="none" style={{}} viewbox="0 0 14 15" width="14" xmlns="http://www.w3.org/2000/svg">

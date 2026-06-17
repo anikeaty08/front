@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -87,6 +123,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -730,7 +772,7 @@ Strategická kyberbezpečnost pro horní 1 % trhu. Stavíme neprůstřelné digi
 </div>
 </section>
 
-<section className="relative z-10 max-w-7xl mx-auto px-6 pb-20 quoteRevealSection animate-on-scroll" style={{-Reveal: '100%'}}>
+<section className="relative z-10 max-w-7xl mx-auto px-6 pb-20 quoteRevealSection animate-on-scroll" style={{'--reveal': '100%'}}>
 <div className="relative overflow-hidden p-8 sm:p-12 ring-white/10 ring-1 bg-neutral-900 rounded-[2.5rem]">
 <div className="flex justify-center">
 <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-bold tracking-wider uppercase border-green-500/20 bg-green-500/10 text-green-500" style={{}}>
@@ -852,7 +894,7 @@ Strategická kyberbezpečnost pro horní 1 % trhu. Stavíme neprůstřelné digi
 </span>
 <span className="pointer-events-none absolute bottom-0 left-1/2 right-1/2 h-px bg-gradient-to-r from-transparent to-transparent opacity-80 transition-[left,right] duration-500 ease-out group-hover:left-0 group-hover:right-0 via-green-400"></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 h-8 w-40 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(34,197,94,0.6), rgba(34,197,94,0.3) 35%, transparent 70%)', filter: 'blur(12px)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 h-8 w-40 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(34, 197, 94, 0.6), rgba(34, 197, 94, 0.3) 35%, transparent 70%)', filter: 'blur(12px)'}}></span>
 </div>
 
 <div className="mt-8 flex items-center justify-center gap-6 text-neutral-400">

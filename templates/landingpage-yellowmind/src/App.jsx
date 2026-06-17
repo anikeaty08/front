@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -57,6 +93,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -202,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 @keyframes shimmer { to { transform: translate(-50%, -50%) rotate(360deg);} }
 @keyframes breathe { 0%, 100% { transform: translate(-50%, -50%) scale(1);} 50% { transform: translate(-50%, -50%) scale(1.20);} }
 </style>
-<button className="liquid-glass-button relative inline-flex items-center justify-center h-10 px-6 rounded-xl text-white/90 font-medium text-sm cursor-pointer outline-none overflow-hidden bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-xl border border-white/15 shadow-lg hover:scale-105 hover:shadow-xl hover:-translate-y-0.5 active:scale-98 active:translate-y-px transition-all duration-300 ease-out" style={{boxShadow: '0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.2), inset -3px -3px 0.5px -3px rgba(255,255,255,0.1), inset 1px 1px 1px -0.5px rgba(255,255,255,0.3), inset -1px -1px 1px -0.5px rgba(255,255,255,0.15), inset 0 0 6px 6px rgba(255,255,255,0.05), inset 0 0 2px 2px rgba(255,255,255,0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
+<button className="liquid-glass-button relative inline-flex items-center justify-center h-10 px-6 rounded-xl text-white/90 font-medium text-sm cursor-pointer outline-none overflow-hidden bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-xl border border-white/15 shadow-lg hover:scale-105 hover:shadow-xl hover:-translate-y-0.5 active:scale-98 active:translate-y-px transition-all duration-300 ease-out" style={{boxShadow: '0 0 6px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.08), inset 3px 3px 0.5px -3px rgba(255, 255, 255, 0.2), inset -3px -3px 0.5px -3px rgba(255, 255, 255, 0.1), inset 1px 1px 1px -0.5px rgba(255, 255, 255, 0.3), inset -1px -1px 1px -0.5px rgba(255, 255, 255, 0.15), inset 0 0 6px 6px rgba(255, 255, 255, 0.05), inset 0 0 2px 2px rgba(255, 255, 255, 0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
 <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
 <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-white/3"></div>
 </div>
@@ -296,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </style>
 </button>
 
-<button className="liquid-glass-button inline-flex cursor-pointer outline-none overflow-hidden hover:scale-105 hover:shadow-xl hover:-translate-y-0.5 active:scale-98 active:translate-y-px transition-all duration-300 ease-out text-sm font-medium text-white/90 bg-gradient-to-r from-white/10 to-white/5 h-12 border-white/15 border rounded-xl pr-8 pl-8 relative shadow-lg backdrop-blur-xl items-center justify-center" style={{boxShadow: '0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.2), inset -3px -3px 0.5px -3px rgba(255,255,255,0.1), inset 1px 1px 1px -0.5px rgba(255,255,255,0.3), inset -1px -1px 1px -0.5px rgba(255,255,255,0.15), inset 0 0 6px 6px rgba(255,255,255,0.05), inset 0 0 2px 2px rgba(255,255,255,0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
+<button className="liquid-glass-button inline-flex cursor-pointer outline-none overflow-hidden hover:scale-105 hover:shadow-xl hover:-translate-y-0.5 active:scale-98 active:translate-y-px transition-all duration-300 ease-out text-sm font-medium text-white/90 bg-gradient-to-r from-white/10 to-white/5 h-12 border-white/15 border rounded-xl pr-8 pl-8 relative shadow-lg backdrop-blur-xl items-center justify-center" style={{boxShadow: '0 0 6px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.08), inset 3px 3px 0.5px -3px rgba(255, 255, 255, 0.2), inset -3px -3px 0.5px -3px rgba(255, 255, 255, 0.1), inset 1px 1px 1px -0.5px rgba(255, 255, 255, 0.3), inset -1px -1px 1px -0.5px rgba(255, 255, 255, 0.15), inset 0 0 6px 6px rgba(255, 255, 255, 0.05), inset 0 0 2px 2px rgba(255, 255, 255, 0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
 <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
 <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-white/3"></div>
 </div>

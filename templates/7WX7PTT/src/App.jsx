@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -75,6 +111,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -129,9 +171,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     </p>
 <div className="flex flex-col sm:flex-row gap-3 mt-8 justify-center">
 <button aria-label="Primary action" className="group relative inline-flex items-center gap-2 rounded-3xl px-6 py-3 bg-gradient-to-b from-blue-500/20 to-blue-600/40 text-sky-50 font-medium tracking-tight cursor-pointer outline-none transition-all duration-300 ease-out ring-1 ring-sky-400/10 hover:ring-sky-400/30 hover:shadow-[0_0_0_3px_rgba(56,189,248,0.08)] focus-visible:ring-2 focus-visible:ring-sky-400/50 shadow-[inset_0_0_12px_rgba(151,200,255,0.44)] hover:shadow-[inset_0_0_14px_rgba(151,200,255,0.60)] hover:bg-gradient-to-b hover:from-blue-500/25 hover:to-blue-600/50" type="button">
-<span className="absolute inset-0 rounded-3xl z-0" style={{background: 'linear-gradient(180deg, rgba(8,77,126,0) 0%, rgba(8,77,126,0.42) 100%), rgba(59,130,246,0.22)', boxShadow: 'inset 0 0 12px rgba(151,200,255,0.44)'}}></span>
-<span className="absolute inset-0 rounded-3xl z-0 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'linear-gradient(180deg, rgba(8,77,126,0) 0%, rgba(8,77,126,0.54) 100%), rgba(59,130,246,0.30)', boxShadow: 'inset 0 0 14px rgba(151,200,255,0.60)'}}></span>
-<span className="pointer-events-none absolute inset-0 rounded-3xl z-10" style={{padding: '1px', background: 'linear-gradient(180deg, rgba(184,238,255,0.24) 0%, rgba(184,238,255,0) 100%), linear-gradient(0deg, rgba(184,238,255,0.32), rgba(184,238,255,0.32))', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', borderRadius: '1.5rem'}}></span>
+<span className="absolute inset-0 rounded-3xl z-0" style={{background: 'linear-gradient(180deg, rgba(8, 77, 126, 0) 0%, rgba(8, 77, 126, 0.42) 100%), rgba(59, 130, 246, 0.22)', boxShadow: 'inset 0 0 12px rgba(151,200,255,0.44)'}}></span>
+<span className="absolute inset-0 rounded-3xl z-0 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'linear-gradient(180deg, rgba(8, 77, 126, 0) 0%, rgba(8, 77, 126, 0.54) 100%), rgba(59, 130, 246, 0.30)', boxShadow: 'inset 0 0 14px rgba(151,200,255,0.60)'}}></span>
+<span className="pointer-events-none absolute inset-0 rounded-3xl z-10" style={{padding: '1px', background: 'linear-gradient(180deg, rgba(184, 238, 255, 0.24) 0%, rgba(184, 238, 255, 0) 100%), linear-gradient(0deg, rgba(184, 238, 255, 0.32), rgba(184, 238, 255, 0.32))', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', borderRadius: '1.5rem'}}></span>
 <span className="relative z-20 flex items-center gap-2">
 <span className="text-[15px] leading-none">Book Charter</span>
 <svg className="w-4 h-4 text-sky-100/90 transition-transform duration-300 ease-out group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

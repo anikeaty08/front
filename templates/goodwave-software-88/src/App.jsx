@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -42,6 +78,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -84,7 +126,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="relative w-full border-t border-neutral-200 bg-white overflow-hidden py-32 md:py-40" id="scale-section">
 
-<div className="absolute inset-0 pointer-events-none z-0 opacity-60" style={{backgroundImage: 'url(&quot', data: 'image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M20 16v8m-4-4h8\' stroke=\'%23d4d4d4\' strokeWidth=\'1\' fill=\'none\' fill-rule=\'evenodd\'/%3E%3C/svg%3E&quot'}}></div>
+<div className="absolute inset-0 pointer-events-none z-0 opacity-60" style={{backgroundImage: 'url(&quot', data: 'image/svg+xml, %3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http: //www.w3.org/2000/svg\'%3E%3Cpath d=\'M20 16v8m-4-4h8\' stroke=\'%23d4d4d4\' strokeWidth=\'1\' fill=\'none\' fill-rule=\'evenodd\'/%3E%3C/svg%3E&quot'}}></div>
 
 <div className="pointer-events-none absolute w-72 h-72 md:w-96 md:h-96 rounded-full" id="glow-effect" style={{backgroundColor: '#E4FF00', filter: 'blur(80px)', opacity: '0', transition: 'opacity 0.5s ease', left: '0', top: '0', zIndex: '1', mixBlendMode: 'multiply'}}></div>
 

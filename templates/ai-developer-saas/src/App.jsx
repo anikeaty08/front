@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -602,6 +638,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -664,7 +706,7 @@ gtag('config', 'G-2M6V79H761');
                 </p>
 <div className="flex flex-wrap mt-8 gap-x-4 gap-y-4">
 <button className="inline-flex hover:-translate-y-0.5 transition will-change-transform bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 rounded-full px-[2px] py-[2px] relative shadow-[0_0_48px_rgba(59,130,246,0.45)] items-center">
-<span className="z-0 inline-flex items-center justify-between gap-4 leading-[1] text-lg font-semibold text-white tracking-tight rounded-full pt-3.5 pr-6 pb-3.5 pl-6 relative" style={{background: 'linear-gradient(90deg,#1d4ed8 0%, #3b82f6 50%, #06b6d4 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.25)'}}>
+<span className="z-0 inline-flex items-center justify-between gap-4 leading-[1] text-lg font-semibold text-white tracking-tight rounded-full pt-3.5 pr-6 pb-3.5 pl-6 relative" style={{background: 'linear-gradient(90deg, #1d4ed8 0%, #3b82f6 50%, #06b6d4 100%)', boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0,0,0,0.25)'}}>
 <span className="pointer-events-none absolute inset-0 rounded-full" style={{background: 'radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0) 60%)'}}></span>
 <span className="z-10 relative">Start Generating</span>
 <span className="relative z-10 inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white/10 ring-1 ring-white/10">

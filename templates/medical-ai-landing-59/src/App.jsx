@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -142,6 +178,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -395,11 +437,11 @@ addUtilities({
 <div className="h-40 rounded-lg border relative overflow-hidden mb-4 bg-slate-950 border-white/5" style={{}}>
 <div className="absolute inset-0 flex items-center justify-center">
 
-<div className="particle-sort" style={{-RLeft: '10%', -RTop: '20%', -FLeft: '80%', -FTop: '50%', animationDelay: '0s'}}></div>
-<div className="particle-sort" style={{-RLeft: '15%', -RTop: '80%', -FLeft: '82%', -FTop: '50%', animationDelay: '0.5s'}}></div>
-<div className="particle-sort" style={{-RLeft: '20%', -RTop: '40%', -FLeft: '84%', -FTop: '50%', animationDelay: '1s'}}></div>
-<div className="particle-sort" style={{-RLeft: '5%', -RTop: '60%', -FLeft: '86%', -FTop: '50%', animationDelay: '1.5s'}}></div>
-<div className="particle-sort" style={{-RLeft: '25%', -RTop: '10%', -FLeft: '88%', -FTop: '50%', animationDelay: '2s'}}></div>
+<div className="particle-sort" style={{'--r-left': '10%', '--r-top': '20%', '--f-left': '80%', '--f-top': '50%', animationDelay: '0s'}}></div>
+<div className="particle-sort" style={{'--r-left': '15%', '--r-top': '80%', '--f-left': '82%', '--f-top': '50%', animationDelay: '0.5s'}}></div>
+<div className="particle-sort" style={{'--r-left': '20%', '--r-top': '40%', '--f-left': '84%', '--f-top': '50%', animationDelay: '1s'}}></div>
+<div className="particle-sort" style={{'--r-left': '5%', '--r-top': '60%', '--f-left': '86%', '--f-top': '50%', animationDelay: '1.5s'}}></div>
+<div className="particle-sort" style={{'--r-left': '25%', '--r-top': '10%', '--f-left': '88%', '--f-top': '50%', animationDelay: '2s'}}></div>
 
 <div className="absolute left-1/2 top-10 bottom-10 w-[1px] bg-gradient-to-b from-transparent via-blue-500 to-transparent"></div>
 </div>

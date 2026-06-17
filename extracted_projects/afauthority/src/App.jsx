@@ -17,7 +17,7 @@ function App() {
           <div className="h-14 flex glass-effect bg-white/5 border-white/10 border rounded-full pr-3 pl-3 items-center justify-between">
             <div className="flex gap-2 items-center">
               <div className="w-8 h-8 flex bg-gradient-to-b from-blue-400 to-blue-600 rounded-full items-center justify-center">
-                <iconify-icon icon="solar:box-linear" width="16" height="16" style={{ color: "white" }}></iconify-icon>
+                <iconify-icon icon="solar:box-linear" width="16" height="16" style={{color: "white"}}></iconify-icon>
               </div>
               <span className="text-lg font-medium sf-pro-display">Nexus Studio</span>
             </div>
@@ -223,7 +223,7 @@ function App() {
                         <span className="text-xs text-cyan-400">98/100</span>
                       </div>
                       <div className="w-full bg-white/10 rounded-full h-1">
-                        <div className="h-1 rounded-full bg-cyan-400" style={{ width: '98%' }}></div>
+                        <div className="h-1 rounded-full bg-cyan-400" style={{width: '98%'}}></div>
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -248,10 +248,10 @@ function App() {
             {/* Floating action buttons */}
             <div className="absolute bottom-4 right-4 flex gap-2">
               <button className="hover:bg-white/20 transition-all bg-white/10 rounded-full pt-3 pr-3 pb-3 pl-3 flex">
-                <iconify-icon icon="solar:play-circle-linear" width="20" height="20" style={{ color: "white" }}></iconify-icon>
+                <iconify-icon icon="solar:play-circle-linear" width="20" height="20" style={{color: "white"}}></iconify-icon>
               </button>
               <button className="hover:bg-white/20 transition-all bg-white/10 rounded-full pt-3 pr-3 pb-3 pl-3 flex">
-                <iconify-icon icon="solar:share-linear" width="20" height="20" style={{ color: "white" }}></iconify-icon>
+                <iconify-icon icon="solar:share-linear" width="20" height="20" style={{color: "white"}}></iconify-icon>
               </button>
             </div>
           </div>
@@ -514,7 +514,7 @@ function App() {
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-8 h-8 flex bg-gradient-to-b from-blue-400 to-blue-600 rounded-full items-center justify-center">
-                  <iconify-icon icon="solar:box-linear" width="16" height="16" style={{ color: "white" }}></iconify-icon>
+                  <iconify-icon icon="solar:box-linear" width="16" height="16" style={{color: "white"}}></iconify-icon>
                 </div>
                 <span className="text-xl font-semibold sf-pro-display">Nexus Studio</span>
               </div>

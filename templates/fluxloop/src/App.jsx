@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -141,6 +177,12 @@ animation: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -216,7 +258,7 @@ animation: {
 
 <div className="animate-fade-up delay-400 flex flex-col sm:flex-row gap-4 w-full mb-12 gap-x-4 gap-y-4 justify-center">
 
-<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white overflow-hidden text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" onclick="window.open('https://marketplace.visualstudio.com/items?itemName=fluxloop.fluxloop', '_blank')" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white overflow-hidden text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" onclick="window.open('https://marketplace.visualstudio.com/items?itemName=fluxloop.fluxloop', '_blank')" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 
 <span className="absolute inset-0 w-full h-full -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out z-0 pointer-events-none">
 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/2 -skew-x-12 transform origin-left"></span>
@@ -571,7 +613,7 @@ animation: {
 
 <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 auto-rows-[minmax(300px,auto)] gap-x-6 gap-y-6">
 
-<div className="md:col-span-3 lg:col-span-4 glass overflow-hidden group card-shine flex flex-col rounded-3xl pt-8 pr-8 pb-8 pl-8 relative justify-between" data-installed="true" onmouseenter="handleInstallHover(this)" style={{-MouseX: '384px', -MouseY: '244.21875px'}}>
+<div className="md:col-span-3 lg:col-span-4 glass overflow-hidden group card-shine flex flex-col rounded-3xl pt-8 pr-8 pb-8 pl-8 relative justify-between" data-installed="true" onmouseenter="handleInstallHover(this)" style={{'--mouse-x': '384px', '--mouse-y': '244.21875px'}}>
 
 <div className="z-10 flex flex-col h-full relative justify-between">
 <div className="">
@@ -644,7 +686,7 @@ animation: {
 </div>
 </div>
 
-<div className="md:col-span-3 lg:col-span-8 glass rounded-3xl p-0 relative overflow-hidden group card-shine min-h-[300px]" style={{-MouseX: '129.671875px', -MouseY: '284.34375px'}}>
+<div className="md:col-span-3 lg:col-span-8 glass rounded-3xl p-0 relative overflow-hidden group card-shine min-h-[300px]" style={{'--mouse-x': '129.671875px', '--mouse-y': '284.34375px'}}>
 <div className="absolute inset-0 bg-grid opacity-20"></div>
 <div className="absolute inset-0 flex items-center justify-center z-0">
 
@@ -748,7 +790,7 @@ animation: {
 </div>
 </div>
 
-<div className="md:col-span-6 lg:col-span-6 glass overflow-hidden group card-shine flex flex-col h-[320px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative justify-between" style={{-MouseX: '330px', -MouseY: '190.34375px'}}>
+<div className="md:col-span-6 lg:col-span-6 glass overflow-hidden group card-shine flex flex-col h-[320px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative justify-between" style={{'--mouse-x': '330px', '--mouse-y': '190.34375px'}}>
 <div className="z-20 relative">
 <div className="flex mb-6 items-center justify-between">
 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:bg-indigo-500/20 transition-colors duration-300">
@@ -797,7 +839,7 @@ animation: {
 </div>
 </div>
 
-<div className="md:col-span-6 lg:col-span-6 glass overflow-hidden group card-shine h-[320px] rounded-3xl relative" style={{-MouseX: '39.0078125px', -MouseY: '249.34375px'}}>
+<div className="md:col-span-6 lg:col-span-6 glass overflow-hidden group card-shine h-[320px] rounded-3xl relative" style={{'--mouse-x': '39.0078125px', '--mouse-y': '249.34375px'}}>
 <div className="absolute top-0 left-0 w-full h-8 bg-white/5 border-b border-white/5 flex items-center px-4 gap-2">
 <div className="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500/50"></div>
 <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
@@ -1119,7 +1161,7 @@ animation: {
             <span className="italic font-serif opacity-80">simulate?</span>
 </h2>
 <div className="flex flex-col sm:flex-row gap-4 gap-x-4 gap-y-4 items-center">
-<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white overflow-hidden text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" onclick="window.open('https://marketplace.visualstudio.com/items?itemName=fluxloop.fluxloop', '_blank')" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white overflow-hidden text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" onclick="window.open('https://marketplace.visualstudio.com/items?itemName=fluxloop.fluxloop', '_blank')" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 
 <span className="absolute inset-0 w-full h-full -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out z-0 pointer-events-none">
 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/2 -skew-x-12 transform origin-left"></span>
@@ -1134,7 +1176,7 @@ animation: {
 <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2 z-10" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
 </div>
-<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white overflow-hidden text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" onclick="window.open('https://github.com/chuckgu/fluxloop', '_blank')" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white overflow-hidden text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" onclick="window.open('https://github.com/chuckgu/fluxloop', '_blank')" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 
 <span className="absolute inset-0 w-full h-full -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out z-0 pointer-events-none">
 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-1/2 -skew-x-12 transform origin-left"></span>

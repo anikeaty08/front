@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -142,6 +178,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -220,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
             </p>
 <div className="flex flex-wrap */ mt-8 gap-x-3 gap-y-3 items-center justify-center">
 
-<a className="inline-flex items-center justify-center text-[15px] transition-all duration-500 hover:scale-105 hover:shadow-2xl [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] font-medium text-white h-11 rounded-full pr-6 pl-6" href="#" onmouseout="this.style.background=`radial-gradient(circle at 50% 50%, rgba(58, 17, 124, 0.95) 0%, rgba(58, 17, 124, 0) 65%), url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 120%22 preserveAspectRatio=%22none%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%220%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%235B21B6%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%235B21B6;%236B21A8;%234C1D95;%234B3FF6;%235B21B6%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%2250%25%22 stop-color=%22%234C1D95%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%234C1D95;%234B3FF6;%235B21B6;%236B21A8;%234C1D95%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%22100%25%22 stop-color=%22%234B3FF6%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%234B3FF6;%235B21B6;%236B21A8;%234C1D95;%234B3FF6%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22400%22 height=%22120%22 fill=%22url(%23g)%22/%3E%3C/svg%3E')`; this.style.boxShadow=`inset 0 -18px 28px rgba(0, 0, 0, 0.35), inset 0 3px 6px rgba(255, 255, 255, 0.25), 0 10px 25px rgba(0, 0, 0, 0.6)`; this.style.textShadow=`0 1px 3px rgba(0, 0, 0, 0.75)`; this.style.filter=`brightness(0.85) saturate(1.25)`;" onmouseover="this.style.background=`radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.95) 0%, rgba(76, 29, 149, 0) 65%), url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 120%22 preserveAspectRatio=%22none%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%220%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%237C3AED%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%237C3AED;%238B5CF6;%236366F1;%2360A5FA;%237C3AED%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%2250%25%22 stop-color=%22%236366F1%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%236366F1;%2360A5FA;%237C3AED;%238B5CF6;%236366F1%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%22100%25%22 stop-color=%22%2360A5FA%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%2360A5FA;%237C3AED;%238B5CF6;%236366F1;%2360A5FA%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22400%22 height=%22120%22 fill=%22url(%23g)%22/%3E%3C/svg%3E')`; this.style.boxShadow=`inset 0 -18px 28px rgba(255, 255, 255, 0.95), inset 0 3px 6px rgba(255, 255, 255, 0.5), 0 10px 25px rgba(0, 0, 0, 0.5)`; this.style.textShadow=`0 1px 2px rgba(0, 0, 0, 0.6)`; this.style.filter=`brightness(0.85) saturate(1.2)`;" style={{background: 'radial-gradient(circle, rgba(58, 17, 124, 0.95) 0%, rgba(58, 17, 124, 0) 65%), url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 120%22 preserveAspectRatio=%22none%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%220%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%235B21B6%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%235B21B6', boxShadow: 'rgba(0, 0, 0, 0.35) 0px -18px 28px inset, rgba(255, 255, 255, 0.25) 0px 3px 6px inset, rgba(0, 0, 0, 0.6) 0px 10px 25px', textShadow: 'rgba(0, 0, 0, 0.75) 0px 1px 3px', filter: 'brightness(0.85) saturate(1.25)'}}>
+<a className="inline-flex items-center justify-center text-[15px] transition-all duration-500 hover:scale-105 hover:shadow-2xl [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] font-medium text-white h-11 rounded-full pr-6 pl-6" href="#" onmouseout="this.style.background=`radial-gradient(circle at 50% 50%, rgba(58, 17, 124, 0.95) 0%, rgba(58, 17, 124, 0) 65%), url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 120%22 preserveAspectRatio=%22none%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%220%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%235B21B6%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%235B21B6;%236B21A8;%234C1D95;%234B3FF6;%235B21B6%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%2250%25%22 stop-color=%22%234C1D95%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%234C1D95;%234B3FF6;%235B21B6;%236B21A8;%234C1D95%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%22100%25%22 stop-color=%22%234B3FF6%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%234B3FF6;%235B21B6;%236B21A8;%234C1D95;%234B3FF6%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22400%22 height=%22120%22 fill=%22url(%23g)%22/%3E%3C/svg%3E')`; this.style.boxShadow=`inset 0 -18px 28px rgba(0, 0, 0, 0.35), inset 0 3px 6px rgba(255, 255, 255, 0.25), 0 10px 25px rgba(0, 0, 0, 0.6)`; this.style.textShadow=`0 1px 3px rgba(0, 0, 0, 0.75)`; this.style.filter=`brightness(0.85) saturate(1.25)`;" onmouseover="this.style.background=`radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.95) 0%, rgba(76, 29, 149, 0) 65%), url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 120%22 preserveAspectRatio=%22none%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%220%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%237C3AED%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%237C3AED;%238B5CF6;%236366F1;%2360A5FA;%237C3AED%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%2250%25%22 stop-color=%22%236366F1%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%236366F1;%2360A5FA;%237C3AED;%238B5CF6;%236366F1%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3Cstop offset=%22100%25%22 stop-color=%22%2360A5FA%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%2360A5FA;%237C3AED;%238B5CF6;%236366F1;%2360A5FA%22 dur=%224s%22 repeatCount=%22indefinite%22/%3E%3C/stop%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22400%22 height=%22120%22 fill=%22url(%23g)%22/%3E%3C/svg%3E')`; this.style.boxShadow=`inset 0 -18px 28px rgba(255, 255, 255, 0.95), inset 0 3px 6px rgba(255, 255, 255, 0.5), 0 10px 25px rgba(0, 0, 0, 0.5)`; this.style.textShadow=`0 1px 2px rgba(0, 0, 0, 0.6)`; this.style.filter=`brightness(0.85) saturate(1.2)`;" style={{background: 'radial-gradient(circle, rgba(58, 17, 124, 0.95) 0%, rgba(58, 17, 124, 0) 65%), url("data: image/svg+xml, %3Csvg xmlns=%22http: //www.w3.org/2000/svg%22 viewBox=%220 0 400 120%22 preserveAspectRatio=%22none%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%220%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%235B21B6%22%3E%3Canimate attributeName=%22stop-color%22 values=%22%235B21B6', boxShadow: 'rgba(0, 0, 0, 0.35) 0px -18px 28px inset, rgba(255, 255, 255, 0.25) 0px 3px 6px inset, rgba(0, 0, 0, 0.6) 0px 10px 25px', textShadow: 'rgba(0, 0, 0, 0.75) 0px 1px 3px', filter: 'brightness(0.85) saturate(1.25)'}}>
   Let's get started
 </a>
 

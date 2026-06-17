@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -236,6 +272,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -432,7 +474,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="scanner-card relative overflow-hidden border border-cyan-500/15 bg-slate-900/40 backdrop-blur-xl p-8 min-h-[360px] flex flex-col group transition-all duration-500 hover:-translate-y-1 hover:border-cyan-400/45 hover:shadow-[0_0_30px_rgba(34,211,238,0.12)]" style={{-MouseX: '618px', -MouseY: '-1266.203125px'}}>
+<div className="scanner-card relative overflow-hidden border border-cyan-500/15 bg-slate-900/40 backdrop-blur-xl p-8 min-h-[360px] flex flex-col group transition-all duration-500 hover:-translate-y-1 hover:border-cyan-400/45 hover:shadow-[0_0_30px_rgba(34,211,238,0.12)]" style={{'--mouse-x': '618px', '--mouse-y': '-1266.203125px'}}>
 <div className="absolute inset-0 z-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 scanner-bg">
 </div>
 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-60">
@@ -469,7 +511,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="scanner-card relative overflow-hidden border border-cyan-400/35 bg-[linear-gradient(180deg,rgba(8,24,33,0.92),rgba(6,18,26,0.82))] backdrop-blur-xl p-8 min-h-[360px] flex flex-col group transition-all duration-500 hover:-translate-y-1 hover:border-cyan-300/80 hover:shadow-[0_0_40px_rgba(34,211,238,0.22)] shadow-[0_0_24px_rgba(34,211,238,0.10)]" style={{-MouseX: '183.3359375px', -MouseY: '-1266.203125px'}}>
+<div className="scanner-card relative overflow-hidden border border-cyan-400/35 bg-[linear-gradient(180deg,rgba(8,24,33,0.92),rgba(6,18,26,0.82))] backdrop-blur-xl p-8 min-h-[360px] flex flex-col group transition-all duration-500 hover:-translate-y-1 hover:border-cyan-300/80 hover:shadow-[0_0_40px_rgba(34,211,238,0.22)] shadow-[0_0_24px_rgba(34,211,238,0.10)]" style={{'--mouse-x': '183.3359375px', '--mouse-y': '-1266.203125px'}}>
 <div className="absolute inset-0 z-0 pointer-events-none opacity-100 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_55%)]">
 </div>
 <div className="absolute inset-0 z-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 scanner-bg">
@@ -506,7 +548,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="scanner-card relative overflow-hidden border border-cyan-500/15 bg-slate-900/40 backdrop-blur-xl p-8 min-h-[360px] flex flex-col group transition-all duration-500 hover:-translate-y-1 hover:border-cyan-400/45 hover:shadow-[0_0_30px_rgba(34,211,238,0.12)]" style={{-MouseX: '-251.328125px', -MouseY: '-1266.203125px'}}>
+<div className="scanner-card relative overflow-hidden border border-cyan-500/15 bg-slate-900/40 backdrop-blur-xl p-8 min-h-[360px] flex flex-col group transition-all duration-500 hover:-translate-y-1 hover:border-cyan-400/45 hover:shadow-[0_0_30px_rgba(34,211,238,0.12)]" style={{'--mouse-x': '-251.328125px', '--mouse-y': '-1266.203125px'}}>
 <div className="absolute inset-0 z-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 scanner-bg">
 </div>
 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-60">

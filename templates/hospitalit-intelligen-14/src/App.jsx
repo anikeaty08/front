@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -37,7 +79,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <header className="relative z-10 px-6 md:px-10 xl:px-12 pt-6 md:pt-10 xl:pt-12 flex items-center justify-between gap-6">
 
 <a className="group flex items-center gap-2 text-slate-900" href="#top">
-<div className="w-8 h-8 rounded-lg text-white flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:rotate-[360deg]" style={{backgroundImage: 'linear-gradient(180deg, rgba(15,23,42,1), rgba(30,41,59,1))', boxShadow: '0 16px 50px rgba(34,211,238,.18), 0 14px 40px rgba(99,102,241,.10)'}}>
+<div className="w-8 h-8 rounded-lg text-white flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:rotate-[360deg]" style={{backgroundImage: 'linear-gradient(180deg, rgba(15, 23, 42, 1), rgba(30, 41, 59, 1))', boxShadow: '0 16px 50px rgba(34, 211, 238, .18), 0 14px 40px rgba(99,102,241,.10)'}}>
 <svg aria-hidden="true" className="iconify iconify--lucide" data-height="16" data-icon="lucide:sparkles" data-inline="false" data-strokeWidth="1.5" data-width="16" height="16" role="img" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594zM20 2v4m2-2h-4"></path><circle cx="4" cy="20" r="2"></circle></g></svg>
 </div>
 <div className="leading-none">
@@ -83,7 +125,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-7 flex flex-col justify-center scroll-mt-32" id="about">
 
-<div className="inline-flex w-max items-center gap-2 border rounded-full shadow-sm px-3 py-1.5 mb-8" style={{backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', background: 'rgba(255,255,255,.72)', borderColor: 'rgba(148,163,184,.28)', boxShadow: '0 16px 50px rgba(34,211,238,.08), 0 10px 30px rgba(99,102,241,.06)'}}>
+<div className="inline-flex w-max items-center gap-2 border rounded-full shadow-sm px-3 py-1.5 mb-8" style={{backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', background: 'rgba(255, 255, 255, .72)', borderColor: 'rgba(148, 163, 184, .28)', boxShadow: '0 16px 50px rgba(34, 211, 238, .08), 0 10px 30px rgba(99,102,241,.06)'}}>
 <svg aria-hidden="true" className="iconify text-slate-600 iconify--lucide" data-height="14" data-icon="lucide:calendar" data-strokeWidth="1.5" data-width="14" height="14" role="img" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M8 2v4m8-4v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></g></svg>
 <span className="text-xs font-medium text-slate-600 tracking-wide font-sans">
               Website Info · <span className="text-slate-900 font-semibold font-sans">January 18, 2026</span>
@@ -99,7 +141,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           </p>
 
 <div className="flex flex-col sm:flex-row gap-3 mb-10">
-<a className="group flex items-center justify-center gap-3 text-white rounded-full px-6 py-3.5 hover:-translate-y-1 active:translate-y-0 transition-all text-sm font-medium min-w-[12rem]" href="#contact" style={{backgroundImage: 'linear-gradient(90deg, rgba(15,23,42,1), rgba(79,70,229,.95), rgba(34,211,238,.85))', boxShadow: '0 22px 70px rgba(79,70,229,.22), 0 18px 60px rgba(34,211,238,.14)'}}>
+<a className="group flex items-center justify-center gap-3 text-white rounded-full px-6 py-3.5 hover:-translate-y-1 active:translate-y-0 transition-all text-sm font-medium min-w-[12rem]" href="#contact" style={{backgroundImage: 'linear-gradient(90deg, rgba(15, 23, 42, 1), rgba(79, 70, 229, .95), rgba(34, 211, 238, .85))', boxShadow: '0 22px 70px rgba(79, 70, 229, .22), 0 18px 60px rgba(34,211,238,.14)'}}>
 <span className="tracking-tight font-sans">Request a demo</span>
 <svg aria-hidden="true" className="iconify iconify--lucide" data-height="16" data-icon="lucide:arrow-right" data-strokeWidth="1.5" data-width="16" height="16" role="img" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
 </a>
@@ -152,16 +194,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 p-8 flex flex-col justify-between">
 
 <div className="flex items-start justify-end">
-<div className="flex items-center gap-2 rounded-full px-3 py-1.5 border shadow-lg" style={{backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', background: 'rgba(0,0,0,.28)', borderColor: 'rgba(255,255,255,.14)', boxShadow: '0 20px 60px rgba(34,211,238,.12)'}}>
+<div className="flex items-center gap-2 rounded-full px-3 py-1.5 border shadow-lg" style={{backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', background: 'rgba(0, 0, 0, .28)', borderColor: 'rgba(255, 255, 255, .14)', boxShadow: '0 20px 60px rgba(34,211,238,.12)'}}>
 <svg aria-hidden="true" className="iconify text-white iconify--lucide" data-height="12" data-icon="lucide:zap" data-strokeWidth="1.5" data-width="12" height="12" role="img" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
 <span className="text-[10px] uppercase font-semibold text-white tracking-wide font-sans">Real-time optimization</span>
 </div>
 </div>
 
-<div className="w-full max-w-xs rounded-xl border shadow-lg p-4" style={{backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', background: 'rgba(255,255,255,.10)', borderColor: 'rgba(255,255,255,.18)', boxShadow: '0 30px 90px rgba(99,102,241,.16), 0 20px 70px rgba(34,211,238,.10)'}}>
+<div className="w-full max-w-xs rounded-xl border shadow-lg p-4" style={{backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', background: 'rgba(255, 255, 255, .10)', borderColor: 'rgba(255, 255, 255, .18)', boxShadow: '0 30px 90px rgba(99, 102, 241, .16), 0 20px 70px rgba(34,211,238,.10)'}}>
 <div className="flex items-center justify-between mb-3">
 <div className="flex items-center gap-2">
-<div className="w-7 h-7 rounded-full text-white flex items-center justify-center shadow-lg" style={{backgroundImage: 'linear-gradient(180deg, rgba(34,197,94,1), rgba(34,211,238,.95))', boxShadow: '0 16px 50px rgba(34,211,238,.18)'}}>
+<div className="w-7 h-7 rounded-full text-white flex items-center justify-center shadow-lg" style={{backgroundImage: 'linear-gradient(180deg, rgba(34, 197, 94, 1), rgba(34, 211, 238, .95))', boxShadow: '0 16px 50px rgba(34,211,238,.18)'}}>
 <svg aria-hidden="true" className="iconify iconify--lucide" data-height="14" data-icon="lucide:line-chart" data-strokeWidth="1.5" data-width="14" height="14" role="img" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M3 3v18h18"></path><path d="m19 9l-5 5l-4-4l-3 3"></path></g></svg>
 </div>
 <span className="text-xs text-white font-medium font-sans">Intelligence Dashboard</span>
@@ -169,15 +211,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-[10px] text-cyan-200 font-mono font-sans" style={{textShadow: '0 18px 40px rgba(34,211,238,.22)'}}>Continuous</span>
 </div>
 <div className="grid grid-cols-3 gap-2">
-<div className="rounded-lg border p-3" style={{background: 'rgba(255,255,255,.08)', borderColor: 'rgba(255,255,255,.12)'}}>
+<div className="rounded-lg border p-3" style={{background: 'rgba(255, 255, 255, .08)', borderColor: 'rgba(255,255,255,.12)'}}>
 <p className="text-[10px] text-white/60 uppercase tracking-wider font-sans">Demand</p>
 <p className="text-sm text-white font-medium tracking-tight mt-1 font-sans">Forecast</p>
 </div>
-<div className="rounded-lg border p-3" style={{background: 'rgba(255,255,255,.08)', borderColor: 'rgba(255,255,255,.12)'}}>
+<div className="rounded-lg border p-3" style={{background: 'rgba(255, 255, 255, .08)', borderColor: 'rgba(255,255,255,.12)'}}>
 <p className="text-[10px] text-white/60 uppercase tracking-wider font-sans">Labor</p>
 <p className="text-sm text-white font-medium tracking-tight mt-1 font-sans">Schedule</p>
 </div>
-<div className="rounded-lg border p-3" style={{background: 'rgba(255,255,255,.08)', borderColor: 'rgba(255,255,255,.12)'}}>
+<div className="rounded-lg border p-3" style={{background: 'rgba(255, 255, 255, .08)', borderColor: 'rgba(255,255,255,.12)'}}>
 <p className="text-[10px] text-white/60 uppercase tracking-wider font-sans">Guests</p>
 <p className="text-sm text-white font-medium tracking-tight mt-1 font-sans">Sentiment</p>
 </div>
@@ -187,15 +229,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-xs text-white/80 font-sans">Operational signal</span>
 <span className="text-[10px] text-white/60 font-mono font-sans">Live</span>
 </div>
-<div className="h-2 rounded-full overflow-hidden border" style={{background: 'rgba(255,255,255,.08)', borderColor: 'rgba(255,255,255,.12)'}}>
-<div className="h-full rounded-full" id="signalBar" style={{width: '78%', backgroundImage: 'linear-gradient(90deg, rgba(34,197,94,1), rgba(34,211,238,1), rgba(99,102,241,1))', boxShadow: '0 18px 40px rgba(34,211,238,.18)'}}></div>
+<div className="h-2 rounded-full overflow-hidden border" style={{background: 'rgba(255, 255, 255, .08)', borderColor: 'rgba(255,255,255,.12)'}}>
+<div className="h-full rounded-full" id="signalBar" style={{width: '78%', backgroundImage: 'linear-gradient(90deg, rgba(34, 197, 94, 1), rgba(34, 211, 238, 1), rgba(99, 102, 241, 1))', boxShadow: '0 18px 40px rgba(34,211,238,.18)'}}></div>
 </div>
 </div>
 </div>
 
-<a className="group flex items-center justify-between rounded-xl border px-4 py-3 transition-colors" href="#services" style={{background: 'rgba(255,255,255,.06)', borderColor: 'rgba(255,255,255,.12)'}}>
+<a className="group flex items-center justify-between rounded-xl border px-4 py-3 transition-colors" href="#services" style={{background: 'rgba(255, 255, 255, .06)', borderColor: 'rgba(255,255,255,.12)'}}>
 <div className="flex items-center gap-3">
-<div className="w-9 h-9 rounded-full border flex items-center justify-center text-white" style={{background: 'rgba(255,255,255,.08)', borderColor: 'rgba(255,255,255,.12)'}}>
+<div className="w-9 h-9 rounded-full border flex items-center justify-center text-white" style={{background: 'rgba(255, 255, 255, .08)', borderColor: 'rgba(255,255,255,.12)'}}>
 <svg aria-hidden="true" className="iconify iconify--lucide" data-height="18" data-icon="lucide:layers" data-strokeWidth="1.5" data-width="18" height="18" role="img" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></g></svg>
 </div>
 <div className="leading-tight">
@@ -461,7 +503,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="p-8">
 <div className="space-y-6">
 <div className="flex gap-4">
-<div className="flex-shrink-0 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-sm" style={{backgroundImage: 'linear-gradient(180deg, rgba(15,23,42,1), rgba(79,70,229,.95))', boxShadow: '0 18px 60px rgba(99,102,241,.18)'}}>
+<div className="flex-shrink-0 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-sm" style={{backgroundImage: 'linear-gradient(180deg, rgba(15, 23, 42, 1), rgba(79, 70, 229, .95))', boxShadow: '0 18px 60px rgba(99,102,241,.18)'}}>
 <span className="text-xs font-semibold tracking-tight font-sans">01</span>
 </div>
 <div>
@@ -484,7 +526,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="h-px bg-slate-100"></div>
 <div className="flex gap-4">
-<div className="flex-shrink-0 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-sm" style={{backgroundImage: 'linear-gradient(180deg, rgba(15,23,42,1), rgba(34,211,238,.88))', boxShadow: '0 18px 60px rgba(34,211,238,.16)'}}>
+<div className="flex-shrink-0 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-sm" style={{backgroundImage: 'linear-gradient(180deg, rgba(15, 23, 42, 1), rgba(34, 211, 238, .88))', boxShadow: '0 18px 60px rgba(34,211,238,.16)'}}>
 <span className="text-xs font-semibold tracking-tight font-sans">02</span>
 </div>
 <div>
@@ -507,7 +549,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="h-px bg-slate-100"></div>
 <div className="flex gap-4">
-<div className="flex-shrink-0 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-sm" style={{backgroundImage: 'linear-gradient(180deg, rgba(15,23,42,1), rgba(217,70,239,.86))', boxShadow: '0 18px 60px rgba(217,70,239,.14)'}}>
+<div className="flex-shrink-0 w-10 h-10 rounded-xl text-white flex items-center justify-center shadow-sm" style={{backgroundImage: 'linear-gradient(180deg, rgba(15, 23, 42, 1), rgba(217, 70, 239, .86))', boxShadow: '0 18px 60px rgba(217,70,239,.14)'}}>
 <span className="text-xs font-semibold tracking-tight font-sans">03</span>
 </div>
 <div>
@@ -544,7 +586,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="lg:col-span-5 rounded-[2rem] border overflow-hidden shadow-2xl shadow-slate-900/15 relative" style={{background: 'radial-gradient(120% 140% at 10% 0%, rgba(34,211,238,.22) 0%, rgba(15,23,42,1) 40%), radial-gradient(120% 140% at 100% 20%, rgba(217,70,239,.20) 0%, rgba(15,23,42,0) 55%), linear-gradient(180deg, rgba(15,23,42,1), rgba(2,6,23,1))', borderColor: 'rgba(255,255,255,.12)'}}>
+<div className="lg:col-span-5 rounded-[2rem] border overflow-hidden shadow-2xl shadow-slate-900/15 relative" style={{background: 'radial-gradient(120% 140% at 10% 0%, rgba(34, 211, 238, .22) 0%, rgba(15, 23, 42, 1) 40%), radial-gradient(120% 140% at 100% 20%, rgba(217, 70, 239, .20) 0%, rgba(15, 23, 42, 0) 55%), linear-gradient(180deg, rgba(15, 23, 42, 1), rgba(2, 6, 23, 1))', borderColor: 'rgba(255,255,255,.12)'}}>
 <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px)', backgroundSize: '2.5rem 2.5rem'}}></div>
 <div className="absolute inset-0 opacity-[0.08]" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,.7) 1px, transparent 1px)', backgroundSize: '1.25rem 1.25rem'}}></div>
 <div className="relative p-8">

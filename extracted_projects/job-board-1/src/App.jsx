@@ -4,6 +4,42 @@ function App() {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observerOptions = {
       root: null,
       rootMargin: '0px',
@@ -83,7 +119,7 @@ function App() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
-          <button className="animate-on-scroll hidden uppercase hover:bg-neutral-800 transition-colors md:flex text-xs font-semibold tracking-widest bg-gradient-to-br from-white/10 to-white/0 rounded-full px-6 py-3" data-animation="right" data-delay="100" style={{ position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px' }}>
+          <button className="animate-on-scroll hidden uppercase hover:bg-neutral-800 transition-colors md:flex text-xs font-semibold tracking-widest bg-gradient-to-br from-white/10 to-white/0 rounded-full px-6 py-3" data-animation="right" data-delay="100" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
             Log In
           </button>
           <button className="md:hidden p-3 rounded-full bg-white text-neutral-950">
@@ -152,14 +188,14 @@ function App() {
             <button className="animate-on-scroll group flex overflow-hidden uppercase transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] focus:outline-none text-sm font-medium text-white tracking-widest font-space rounded-full pt-5 pr-12 pb-5 pl-12 relative items-center justify-center" data-animation="up" data-delay="900">
               {/* Full Border Beam (Single Beam) */}
               <div className="absolute inset-0 -z-20 rounded-full overflow-hidden p-[1px]">
-                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#3b82f6_360deg)]" style={{ animation: 'beam-spin 3s linear infinite' }}></div>
+                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#3b82f6_360deg)]" style={{animation: 'beam-spin 3s linear infinite'}}></div>
                 <div className="absolute inset-[1px] rounded-full bg-neutral-950"></div>
               </div>
 
               {/* Inner Background & Effects */}
               <div className="-z-10 overflow-hidden bg-neutral-950 rounded-full absolute top-[2px] right-[2px] bottom-[2px] left-[2px]">
                 <div className="absolute inset-0 bg-gradient-to-b from-neutral-800/60 to-transparent"></div>
-                <div className="opacity-30 mix-blend-overlay absolute top-0 right-0 bottom-0 left-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '12px 12px', animation: 'dots-move 8s linear infinite' }}></div>
+                <div className="opacity-30 mix-blend-overlay absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '12px 12px', animation: 'dots-move 8s linear infinite'}}></div>
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-1/2 bg-blue-500/10 blur-2xl rounded-full pointer-events-none transition-colors duration-500 group-hover:bg-blue-500/30"></div>
               </div>
 
@@ -177,8 +213,8 @@ function App() {
         <div className="lg:w-auto flex flex-col md:flex-row gap-4 w-full gap-x-4 gap-y-4">
           
           {/* Feature 1 with Marquee */}
-          <div className="animate-on-scroll group flex-1 lg:flex-none lg:w-48 hover:bg-white hover:text-neutral-950 hover:border-white transition-all duration-300 cursor-pointer overflow-hidden bg-neutral-800/50 rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-lg" data-animation="up" data-delay="1100" style={{ position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px' }}>
-            <div className="relative h-28 mb-4 overflow-hidden" style={{ maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)' }}>
+          <div className="animate-on-scroll group flex-1 lg:flex-none lg:w-48 hover:bg-white hover:text-neutral-950 hover:border-white transition-all duration-300 cursor-pointer overflow-hidden bg-neutral-800/50 rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-lg" data-animation="up" data-delay="1100" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
+            <div className="relative h-28 mb-4 overflow-hidden" style={{maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)'}}>
               <div className="marquee-content">
                 <div className="flex flex-col gap-3 pb-3">
                   <div className="flex items-center gap-2">
@@ -231,9 +267,9 @@ function App() {
           </div>
 
           {/* Feature 2 with Marquee */}
-          <div className="animate-on-scroll group flex-1 lg:flex-none lg:w-48 hover:bg-white hover:text-neutral-950 hover:border-white transition-all duration-300 cursor-pointer overflow-hidden bg-neutral-800/50 rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-lg" data-animation="up" data-delay="1200" style={{ position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px' }}>
-            <div className="relative h-28 mb-4 overflow-hidden" style={{ maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)' }}>
-              <div className="marquee-content" style={{ animationDuration: '25s' }}>
+          <div className="animate-on-scroll group flex-1 lg:flex-none lg:w-48 hover:bg-white hover:text-neutral-950 hover:border-white transition-all duration-300 cursor-pointer overflow-hidden bg-neutral-800/50 rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-lg" data-animation="up" data-delay="1200" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
+            <div className="relative h-28 mb-4 overflow-hidden" style={{maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)'}}>
+              <div className="marquee-content" style={{animationDuration: '25s'}}>
                 <div className="flex flex-col gap-3 pb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-5 h-5 rounded bg-white/10 flex items-center justify-center text-[0.5rem] font-bold">G</div>
@@ -285,9 +321,9 @@ function App() {
           </div>
 
           {/* Feature 3 with Marquee */}
-          <div className="animate-on-scroll group flex-1 lg:flex-none lg:w-48 hover:bg-white hover:text-neutral-950 hover:border-white transition-all duration-300 cursor-pointer overflow-hidden bg-neutral-800/50 rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-lg" data-animation="up" data-delay="1300" style={{ position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px' }}>
-            <div className="relative h-28 mb-4 overflow-hidden" style={{ maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)' }}>
-              <div className="marquee-content" style={{ animationDuration: '18s' }}>
+          <div className="animate-on-scroll group flex-1 lg:flex-none lg:w-48 hover:bg-white hover:text-neutral-950 hover:border-white transition-all duration-300 cursor-pointer overflow-hidden bg-neutral-800/50 rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-lg" data-animation="up" data-delay="1300" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
+            <div className="relative h-28 mb-4 overflow-hidden" style={{maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)'}}>
+              <div className="marquee-content" style={{animationDuration: '18s'}}>
                 <div className="flex flex-col gap-3 pb-3">
                   <div className="flex items-center gap-2">
                     <iconify-icon icon="solar:check-circle-bold-duotone" class="w-5 h-5 text-emerald-400"></iconify-icon>
@@ -385,13 +421,13 @@ function App() {
               <div className="transform flex absolute top-0 right-0 bottom-0 left-0 scale-100 rotate-x-12 items-center justify-center">
 
                 {/* Connecting Noodles (SVG) */}
-                <svg className="pointer-events-none z-0 w-full h-full absolute top-0 right-0 bottom-0 left-0" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style={{ overflow: 'visible' }}>
+                <svg className="pointer-events-none z-0 w-full h-full absolute top-0 right-0 bottom-0 left-0" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style={{overflow: 'visible'}}>
                   <path d="M 200 150 L 200 80 Q 200 60 180 60 L 40 60" stroke="#262626" strokeWidth="1" fill="none"></path>
-                  <path d="M 200 150 L 200 80 Q 200 60 180 60 L 40 60" stroke="#10b981" strokeWidth="1.5" fill="none" strokeDasharray="6 6" strokeLinecap="round" style={{ animation: 'flow-noodle 3s linear infinite' }}></path>
+                  <path d="M 200 150 L 200 80 Q 200 60 180 60 L 40 60" stroke="#10b981" strokeWidth="1.5" fill="none" strokeDasharray="6 6" strokeLinecap="round" style={{animation: 'flow-noodle 3s linear infinite'}}></path>
                   <path d="M 200 150 L 340 150 Q 360 150 360 130 L 360 80" stroke="#262626" strokeWidth="1" fill="none"></path>
-                  <path d="M 200 150 L 340 150 Q 360 150 360 130 L 360 80" stroke="#10b981" strokeWidth="1.5" fill="none" strokeDasharray="6 6" strokeLinecap="round" style={{ animation: 'flow-noodle 4s linear infinite reverse' }}></path>
+                  <path d="M 200 150 L 340 150 Q 360 150 360 130 L 360 80" stroke="#10b981" strokeWidth="1.5" fill="none" strokeDasharray="6 6" strokeLinecap="round" style={{animation: 'flow-noodle 4s linear infinite reverse'}}></path>
                   <path d="M 200 150 L 200 220 Q 200 240 180 240 L 60 240" stroke="#262626" strokeWidth="1" fill="none"></path>
-                  <path d="M 200 150 L 200 220 Q 200 240 180 240 L 60 240" stroke="#10b981" strokeWidth="1.5" fill="none" strokeDasharray="6 6" strokeLinecap="round" style={{ animation: 'flow-noodle 3.5s linear infinite' }}></path>
+                  <path d="M 200 150 L 200 220 Q 200 240 180 240 L 60 240" stroke="#10b981" strokeWidth="1.5" fill="none" strokeDasharray="6 6" strokeLinecap="round" style={{animation: 'flow-noodle 3.5s linear infinite'}}></path>
                 </svg>
 
                 {/* Central Node */}
@@ -408,7 +444,7 @@ function App() {
                 </div>
 
                 {/* Tag 1 (React) */}
-                <div className="transition-transform duration-700 hover:-translate-y-2 absolute top-[20%] left-[10%]" style={{ transform: 'translate(-50%, -250%)' }}>
+                <div className="transition-transform duration-700 hover:-translate-y-2 absolute top-[20%] left-[10%]" style={{transform: 'translate(-50%, -250%)'}}>
                   <div className="flex items-center gap-2 bg-neutral-800/90 backdrop-blur-md border border-neutral-700 pr-4 pl-3 py-2 rounded-full shadow-xl hover:border-blue-500/50 hover:shadow-blue-500/20 transition-all cursor-pointer group">
                     <iconify-icon icon="simple-icons:react" class="text-blue-400 group-hover:rotate-180 transition-transform duration-700"></iconify-icon>
                     <span className="text-xs font-medium text-white">React Native</span>
@@ -416,7 +452,7 @@ function App() {
                 </div>
 
                 {/* Tag 2 (Figma) */}
-                <div className="transition-transform duration-700 delay-100 hover:-translate-y-2 z-10 absolute top-[27%] right-[10%]" style={{ transform: 'translate(50%, -200%)' }}>
+                <div className="transition-transform duration-700 delay-100 hover:-translate-y-2 z-10 absolute top-[27%] right-[10%]" style={{transform: 'translate(50%, -200%)'}}>
                   <div className="flex items-center gap-2 bg-neutral-800/90 backdrop-blur-md border border-neutral-700 pr-4 pl-3 py-2 rounded-full shadow-xl hover:border-purple-500/50 hover:shadow-purple-500/20 transition-all cursor-pointer">
                     <iconify-icon icon="simple-icons:figma" class="text-purple-400"></iconify-icon>
                     <span className="text-xs font-medium text-white">Product Design</span>
@@ -424,7 +460,7 @@ function App() {
                 </div>
 
                 {/* Tag 3 (Lead) */}
-                <div className="absolute bottom-[20%] left-[15%] transition-transform duration-700 delay-200 hover:-translate-y-2 z-10" style={{ transform: 'translate(-50%, 250%)' }}>
+                <div className="absolute bottom-[20%] left-[15%] transition-transform duration-700 delay-200 hover:-translate-y-2 z-10" style={{transform: 'translate(-50%, 250%)'}}>
                   <div className="flex items-center gap-2 bg-neutral-800/90 backdrop-blur-md border border-neutral-700 pr-4 pl-3 py-2 rounded-full shadow-xl hover:border-red-500/50 hover:shadow-red-500/20 transition-all cursor-pointer">
                     <iconify-icon icon="simple-icons:google" class="text-white"></iconify-icon>
                     <span className="text-xs font-medium text-white">Senior Lead</span>
@@ -631,7 +667,7 @@ function App() {
       <div className="flex flex-col md:px-0 z-20 w-full max-w-[90rem] border-white/5 border-t mt-32 mr-auto ml-auto pt-12 pr-4 pb-12 pl-4 relative gap-x-16 gap-y-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
           <div className="lg:col-span-5 relative flex flex-col justify-center p-6 lg:p-12 overflow-hidden rounded-[2.5rem] bg-neutral-900/50 border border-white/5">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#10b981 1.5px, transparent 1.5px)', backgroundSize: '32px 32px' }}></div>
+            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{backgroundImage: 'radial-gradient(#10b981 1.5px, transparent 1.5px)', backgroundSize: '32px 32px'}}></div>
             <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-transparent to-transparent"></div>
             
             <div className="relative z-10 flex flex-col gap-8">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -20,6 +56,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -86,11 +128,11 @@ gtag('config', 'G-2M6V79H761');
             Original paintings and curated print collections designed to bring color, movement, and meaning into your everyday spaces.
           </p>
 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-<a className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" href="#collection" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(47,27,90,0.35)'}}>
+<a className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" href="#collection" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(47,27,90,0.35)'}}>
               Explore the Collection
               <iconify-icon height="18" icon="solar:arrow-right-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
 </a>
-<a className="inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2" href="#studio" style={{borderColor: '#008080', color: '#008080', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(0,128,128,0.30)'}}>
+<a className="inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2" href="#studio" style={{borderColor: '#008080', color: '#008080', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(0,128,128,0.30)'}}>
               Meet the Artist
               <iconify-icon height="18" icon="solar:user-heart-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
 </a>
@@ -250,7 +292,7 @@ gtag('config', 'G-2M6V79H761');
             Each piece begins as a conversation between color and instinct. Through layered brushwork and thoughtful composition, Doodle Art explores emotion in visual form.
           </p>
 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-<a className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" href="#" style={{background: '#008080', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(0,128,128,0.35)'}}>
+<a className="inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" href="#" style={{background: '#008080', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(0,128,128,0.35)'}}>
               Discover the Process
               <iconify-icon height="18" icon="solar:play-circle-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
 </a>
@@ -313,7 +355,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <p className="text-sm font-semibold text-slate-900" style={{fontFamily: 'Inter, ui-sans-serif, system-ui'}}>$120</p>
 </div>
-<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(47,27,90,0.30)'}}>
+<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(47,27,90,0.30)'}}>
 <iconify-icon height="18" icon="solar:cart-plus-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
               Add to Cart
             </button>
@@ -331,7 +373,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <p className="text-sm font-semibold text-slate-900" style={{fontFamily: 'Inter, ui-sans-serif, system-ui'}}>$240</p>
 </div>
-<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(47,27,90,0.30)'}}>
+<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(47,27,90,0.30)'}}>
 <iconify-icon height="18" icon="solar:cart-plus-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
               Add to Cart
             </button>
@@ -349,7 +391,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <p className="text-sm font-semibold text-slate-900" style={{fontFamily: 'Inter, ui-sans-serif, system-ui'}}>$980</p>
 </div>
-<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(47,27,90,0.30)'}}>
+<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(47,27,90,0.30)'}}>
 <iconify-icon height="18" icon="solar:cart-plus-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
               Add to Cart
             </button>
@@ -367,7 +409,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <p className="text-sm font-semibold text-slate-900" style={{fontFamily: 'Inter, ui-sans-serif, system-ui'}}>$140</p>
 </div>
-<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(47,27,90,0.30)'}}>
+<button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(47,27,90,0.30)'}}>
 <iconify-icon height="18" icon="solar:cart-plus-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
               Add to Cart
             </button>
@@ -399,8 +441,8 @@ gtag('config', 'G-2M6V79H761');
 <div className="lg:col-span-5">
 <form action="#" className="flex flex-col gap-3 sm:flex-row sm:items-center" method="post">
 <label className="sr-only" htmlFor="email">Email</label>
-<input autocomplete="email" className="w-full rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-normal text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:ring-2 focus:ring-offset-2" id="email" name="email" placeholder="Email address" required="" style={{fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(0,128,128,0.30)'}} type="email"/>
-<button className="inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', -TwRingColor: 'rgba(47,27,90,0.30)'}} type="submit">
+<input autocomplete="email" className="w-full rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-normal text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:ring-2 focus:ring-offset-2" id="email" name="email" placeholder="Email address" required="" style={{fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(0,128,128,0.30)'}} type="email"/>
+<button className="inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto" style={{background: '#2F1B5A', fontFamily: 'Inter, ui-sans-serif, system-ui', '--tw-ring-color': 'rgba(47,27,90,0.30)'}} type="submit">
               Subscribe
               <iconify-icon height="18" icon="solar:letter-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
 </button>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -197,6 +233,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -297,9 +339,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="absolute inset-0 z-0 pointer-events-none" id="sparkles-container">
-<div className="sparkle text-emerald-500 w-1.5 h-1.5 bg-current" style={{-Radius: '35px', -Duration: '4s', -Delay: '0s'}}></div>
-<div className="sparkle text-[#C4453A] w-1 h-1 bg-current" style={{-Radius: '42px', -Duration: '5.5s', -Delay: '-2s'}}></div>
-<div className="sparkle text-[#C57510] w-1 h-1 bg-current opacity-0 transition-opacity" id="sparkle-3" style={{-Radius: '30px', -Duration: '3s', -Delay: '-1s'}}></div>
+<div className="sparkle text-emerald-500 w-1.5 h-1.5 bg-current" style={{'--radius': '35px', '--duration': '4s', '--delay': '0s'}}></div>
+<div className="sparkle text-[#C4453A] w-1 h-1 bg-current" style={{'--radius': '42px', '--duration': '5.5s', '--delay': '-2s'}}></div>
+<div className="sparkle text-[#C57510] w-1 h-1 bg-current opacity-0 transition-opacity" id="sparkle-3" style={{'--radius': '30px', '--duration': '3s', '--delay': '-1s'}}></div>
 </div>
 </div>
 </div>
@@ -397,9 +439,9 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-4xl text-emerald-400" icon="solar:magnifer-zoom-in-linear"></iconify-icon>
 </div>
 <div className="absolute inset-0 z-0">
-<div className="sparkle text-emerald-500 w-2 h-2 bg-current" style={{-Radius: '55px', -Duration: '3.5s', -Delay: '0s'}}></div>
-<div className="sparkle text-[#C4453A] w-1.5 h-1.5 bg-current" style={{-Radius: '65px', -Duration: '5s', -Delay: '-1.5s'}}></div>
-<div className="sparkle text-[#C57510] w-2 h-2 bg-current" style={{-Radius: '48px', -Duration: '4s', -Delay: '-3s'}}></div>
+<div className="sparkle text-emerald-500 w-2 h-2 bg-current" style={{'--radius': '55px', '--duration': '3.5s', '--delay': '0s'}}></div>
+<div className="sparkle text-[#C4453A] w-1.5 h-1.5 bg-current" style={{'--radius': '65px', '--duration': '5s', '--delay': '-1.5s'}}></div>
+<div className="sparkle text-[#C57510] w-2 h-2 bg-current" style={{'--radius': '48px', '--duration': '4s', '--delay': '-3s'}}></div>
 </div>
 </div>
 <div className="text-sm font-medium tracking-tight text-gray-900 mb-2">Sia is studying this piece</div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -151,6 +187,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -934,7 +976,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-0 items-stretch w-full max-w-7xl mx-auto border-l border-white/10">
 
-<div className="spotlight-card group relative p-10 bg-zinc-950 border-y border-r border-white/10 flex flex-col min-h-[420px] overflow-hidden transition-colors hover:border-white/20 [animation:fadeSlideIn_1s_ease-out_0.3s_both] animate-on-scroll" style={{-MouseX: '1085px', -MouseY: '-2638px'}}>
+<div className="spotlight-card group relative p-10 bg-zinc-950 border-y border-r border-white/10 flex flex-col min-h-[420px] overflow-hidden transition-colors hover:border-white/20 [animation:fadeSlideIn_1s_ease-out_0.3s_both] animate-on-scroll" style={{'--mouse-x': '1085px', '--mouse-y': '-2638px'}}>
 
 <div className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)'}}></div>
 
@@ -1000,7 +1042,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group relative p-10 bg-zinc-950 border-y border-r border-white/10 flex flex-col min-h-[420px] overflow-hidden [animation:fadeSlideIn_1s_ease-out_0.4s_both] animate-on-scroll" style={{-MouseX: '690.671875px', -MouseY: '-2638px'}}>
+<div className="spotlight-card group relative p-10 bg-zinc-950 border-y border-r border-white/10 flex flex-col min-h-[420px] overflow-hidden [animation:fadeSlideIn_1s_ease-out_0.4s_both] animate-on-scroll" style={{'--mouse-x': '690.671875px', '--mouse-y': '-2638px'}}>
 
 <div className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(6,182,212,0.08), transparent 40%)'}}></div>
 
@@ -1074,7 +1116,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group relative p-10 bg-zinc-950 border-y border-r border-white/10 flex flex-col min-h-[420px] overflow-hidden transition-colors hover:border-white/20 [animation:fadeSlideIn_1s_ease-out_0.5s_both] animate-on-scroll" style={{-MouseX: '296.3359375px', -MouseY: '-2638px'}}>
+<div className="spotlight-card group relative p-10 bg-zinc-950 border-y border-r border-white/10 flex flex-col min-h-[420px] overflow-hidden transition-colors hover:border-white/20 [animation:fadeSlideIn_1s_ease-out_0.5s_both] animate-on-scroll" style={{'--mouse-x': '296.3359375px', '--mouse-y': '-2638px'}}>
 
 <div className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)'}}></div>
 

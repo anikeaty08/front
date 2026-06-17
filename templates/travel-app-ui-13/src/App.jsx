@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,6 +48,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -56,7 +98,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="flex gap-2 text-sm font-medium text-[#FFFFFF] bg-[#0CAF60] h-10 rounded-[12px] pr-4 pl-4 shadow-[0_4px_12px_rgba(12,175,96,0.2)] gap-x-2 gap-y-2 items-center justify-center">
                         All
                     </button>
-<button className="flex gap-2 text-sm font-medium text-white h-10 border-transparent border rounded-[12px] pr-4 pl-4 gap-x-2 gap-y-2 items-center justify-center relative overflow-hidden shadow-sm" style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(\'https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&amp', q=80'), url('https: '//images.unsplash.com/photo-1629946832022-c327f74956e0?w=2160&amp', backgroundSize: 'cover, cover, cover', backgroundPosition: 'center, center, center', backgroundBlendMode: 'normal, overlay, normal'}}>
+<button className="flex gap-2 text-sm font-medium text-white h-10 border-transparent border rounded-[12px] pr-4 pl-4 gap-x-2 gap-y-2 items-center justify-center relative overflow-hidden shadow-sm" style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(\'https: //images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&amp', q=80'), url('https: '//images.unsplash.com/photo-1629946832022-c327f74956e0?w=2160&amp', backgroundSize: 'cover, cover, cover', backgroundPosition: 'center, center, center', backgroundBlendMode: 'normal, overlay, normal'}}>
                         Beaches
                     </button>
 <button className="flex gap-2 text-sm font-medium text-[#4F4F4F] bg-[#FFFFFF] h-10 border-[#E0E0E0] border rounded-[12px] pr-4 pl-4 gap-x-2 gap-y-2 items-center justify-center">

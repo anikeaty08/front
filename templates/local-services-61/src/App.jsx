@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -135,6 +171,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -227,7 +269,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-rose-400 font-medium">3 Hodiny</span>
 </div>
 <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-<div className="h-full bg-gradient-to-r from-rose-500/50 to-rose-500 w-[80%] rounded-full animate-fill" style={{-TargetWidth: '80%'}}></div>
+<div className="h-full bg-gradient-to-r from-rose-500/50 to-rose-500 w-[80%] rounded-full animate-fill" style={{'--target-width': '80%'}}></div>
 </div>
 </div>
 
@@ -240,7 +282,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-cyan-400 font-bold text-glow">3 Sekundy</span>
 </div>
 <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden shadow-[0_0_10px_rgba(6,182,212,0.2)]">
-<div className="h-full bg-cyan-400 w-[2%] rounded-full animate-fill shadow-[0_0_15px_#22d3ee]" style={{-TargetWidth: '5%'}}></div>
+<div className="h-full bg-cyan-400 w-[2%] rounded-full animate-fill shadow-[0_0_15px_#22d3ee]" style={{'--target-width': '5%'}}></div>
 </div>
 </div>
 </div>

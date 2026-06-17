@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -103,6 +139,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -204,7 +246,7 @@ gtag('config', 'G-2M6V79H761');
 <i data-lucide="play-circle" style={{width: '18px', height: '18px', strokeWidth: '1.5'}}></i>
 <span className="font-geist" data-en="Watch in English" data-es="Watch in English">Watch in English</span>
 </button>
-<button className="btn-outline px-8 py-4 rounded-full text-xs flex items-center justify-center gap-2.5" style={{borderColor: 'rgba(250,247,242,0.5)', color: '#faf7f2', background: 'rgba(250,247,242,0.12)'}}>
+<button className="btn-outline px-8 py-4 rounded-full text-xs flex items-center justify-center gap-2.5" style={{borderColor: 'rgba(250, 247, 242, 0.5)', color: '#faf7f2', background: 'rgba(250,247,242,0.12)'}}>
 <i data-lucide="play-circle" style={{width: '18px', height: '18px', strokeWidth: '1.5'}}></i>
 <span className="font-geist" data-en="Ver en Español" data-es="Ver en Español">Ver en Español</span>
 </button>
@@ -322,10 +364,10 @@ gtag('config', 'G-2M6V79H761');
 </a>
 </div>
 
-<div className="service-card fade-up rounded-3xl p-8 flex flex-col relative overflow-hidden" style={{background: 'linear-gradient(145deg,#2c1a08 0%,#3d2410 50%,#2c1a08 100%)', border: '1px solid rgba(201,169,110,0.3)'}}>
+<div className="service-card fade-up rounded-3xl p-8 flex flex-col relative overflow-hidden" style={{background: 'linear-gradient(145deg, #2c1a08 0%, #3d2410 50%, #2c1a08 100%)', border: '1px solid rgba(201,169,110,0.3)'}}>
 <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(circle at 70% 20%,#c9a96e 0%,transparent 60%)'}}></div>
 <div className="relative z-10 flex flex-col h-full">
-<div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style={{background: 'rgba(201,169,110,0.18)', border: '1px solid rgba(201,169,110,0.35)'}}>
+<div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style={{background: 'rgba(201, 169, 110, 0.18)', border: '1px solid rgba(201,169,110,0.35)'}}>
 <i data-lucide="building-2" style={{width: '22px', height: '22px', strokeWidth: '1.5', color: '#c9a96e'}}></i>
 </div>
 <div className="font-playfair text-xl mb-2 tracking-tight font-medium" data-en="Real Estate" data-es="Bienes Raíces" style={{color: '#faf7f2'}}>Real Estate</div>
@@ -433,9 +475,9 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid md:grid-cols-3 gap-6">
 
 <div className="test-card fade-up border rounded-3xl overflow-hidden" style={{background: '#faf7f2', borderColor: 'rgba(160,114,42,0.15)'}}>
-<div className="relative h-48 overflow-hidden" style={{backgroundImage: 'linear-gradient(135deg,rgba(201,169,110,0.2) 0%,rgba(61,44,30,0.7) 100%),url(\'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="relative h-48 overflow-hidden" style={{backgroundImage: 'linear-gradient(135deg,rgba(201,169,110,0.2) 0%,rgba(61,44,30,0.7) 100%), url(\'https: //images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="absolute inset-0 flex items-center justify-center">
-<button className="w-14 h-14 rounded-full border backdrop-blur-sm flex items-center justify-center transition-colors duration-300" style={{borderColor: 'rgba(201,169,110,0.5)', background: 'rgba(250,247,242,0.25)'}}>
+<button className="w-14 h-14 rounded-full border backdrop-blur-sm flex items-center justify-center transition-colors duration-300" style={{borderColor: 'rgba(201, 169, 110, 0.5)', background: 'rgba(250,247,242,0.25)'}}>
 <i data-lucide="play" style={{width: '20px', height: '20px', strokeWidth: '1.5', color: '#faf7f2'}}></i>
 </button>
 </div>
@@ -460,9 +502,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="test-card fade-up border rounded-3xl overflow-hidden" style={{background: '#faf7f2', borderColor: 'rgba(160,114,42,0.15)'}}>
-<div className="relative h-48 overflow-hidden" style={{backgroundImage: 'linear-gradient(135deg,rgba(201,169,110,0.15) 0%,rgba(61,44,30,0.7) 100%),url(\'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="relative h-48 overflow-hidden" style={{backgroundImage: 'linear-gradient(135deg,rgba(201,169,110,0.15) 0%,rgba(61,44,30,0.7) 100%), url(\'https: //images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="absolute inset-0 flex items-center justify-center">
-<button className="w-14 h-14 rounded-full border backdrop-blur-sm flex items-center justify-center transition-colors duration-300" style={{borderColor: 'rgba(201,169,110,0.5)', background: 'rgba(250,247,242,0.25)'}}>
+<button className="w-14 h-14 rounded-full border backdrop-blur-sm flex items-center justify-center transition-colors duration-300" style={{borderColor: 'rgba(201, 169, 110, 0.5)', background: 'rgba(250,247,242,0.25)'}}>
 <i data-lucide="play" style={{width: '20px', height: '20px', strokeWidth: '1.5', color: '#faf7f2'}}></i>
 </button>
 </div>
@@ -487,9 +529,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="test-card fade-up border rounded-3xl overflow-hidden" style={{background: '#faf7f2', borderColor: 'rgba(160,114,42,0.15)'}}>
-<div className="relative h-48 overflow-hidden" style={{backgroundImage: 'linear-gradient(135deg,rgba(201,169,110,0.15) 0%,rgba(61,44,30,0.7) 100%),url(\'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="relative h-48 overflow-hidden" style={{backgroundImage: 'linear-gradient(135deg,rgba(201,169,110,0.15) 0%,rgba(61,44,30,0.7) 100%), url(\'https: //images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="absolute inset-0 flex items-center justify-center">
-<button className="w-14 h-14 rounded-full border backdrop-blur-sm flex items-center justify-center transition-colors duration-300" style={{borderColor: 'rgba(201,169,110,0.5)', background: 'rgba(250,247,242,0.25)'}}>
+<button className="w-14 h-14 rounded-full border backdrop-blur-sm flex items-center justify-center transition-colors duration-300" style={{borderColor: 'rgba(201, 169, 110, 0.5)', background: 'rgba(250,247,242,0.25)'}}>
 <i data-lucide="play" style={{width: '20px', height: '20px', strokeWidth: '1.5', color: '#faf7f2'}}></i>
 </button>
 </div>

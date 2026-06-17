@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -339,6 +375,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -491,7 +533,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="bg-white pt-16 pb-16 relative overflow-hidden">
 
-<div className="absolute inset-0 z-0 pointer-events-none" style={{backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)', backgroundSize: '32px 32px', maskImage: 'radial-gradient(ellipse 70% 60% at center, black, transparent)', WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at center, black, transparent)'}}></div>
+<div className="absolute inset-0 z-0 pointer-events-none" style={{backgroundImage: 'linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px)', backgroundSize: '32px 32px', maskImage: 'radial-gradient(ellipse 70% 60% at center, black, transparent)', WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at center, black, transparent)'}}></div>
 <div className="max-w-7xl mx-auto px-6 relative z-10">
 
 <div className="grid grid-cols-2 md:grid-cols-4 border-l border-t border-slate-200/80 rounded-2xl overflow-hidden bg-white shadow-sm">
@@ -803,7 +845,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-full rounded-3xl p-8 relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #fff7ed 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.12), 80px 120px 160px rgba(249, 115, 22, 0.15), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-full rounded-3xl p-8 relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #fff7ed 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.12), 80px 120px 160px rgba(249, 115, 22, 0.15), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <div className="relative z-10 flex flex-col h-full">
 <div className="flex items-start justify-between mb-4">
 <h3 className="text-2xl tracking-tight text-gray-900 font-normal">SaaS</h3>
@@ -828,7 +870,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-full rounded-3xl p-8 relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f5f3ff 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.12), 80px 120px 160px rgba(168, 85, 247, 0.15), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-full rounded-3xl p-8 relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f5f3ff 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.12), 80px 120px 160px rgba(168, 85, 247, 0.15), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <div className="relative z-10 flex flex-col h-full">
 <div className="flex items-start justify-between mb-4">
 <h3 className="text-2xl tracking-tight text-gray-900 font-normal">Marketplaces</h3>
@@ -853,7 +895,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-full rounded-3xl p-8 relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #ecfdf5 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.12), 80px 120px 160px rgba(16, 185, 129, 0.15), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-full rounded-3xl p-8 relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #ecfdf5 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.12), 80px 120px 160px rgba(16, 185, 129, 0.15), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <div className="relative z-10 flex flex-col h-full">
 <div className="flex items-start justify-between mb-4">
 <h3 className="text-2xl tracking-tight text-gray-900 font-normal">Crypto</h3>
@@ -912,7 +954,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 gap-x-6 gap-y-6">
 
-<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-[600px] rounded-3xl relative overflow-hidden" style={{background: 'linear-gradient(145deg, #ffffff 0%, #eef2ff 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.12), 80px 120px 160px rgba(99, 102, 241, 0.15), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-[600px] rounded-3xl relative overflow-hidden" style={{background: 'linear-gradient(145deg, #ffffff 0%, #eef2ff 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.12), 80px 120px 160px rgba(99, 102, 241, 0.15), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <canvas className="absolute inset-0 z-0 pointer-events-none opacity-60" height="33554432" id="canvas-card1" width="33554432"></canvas>
 <div className="p-8 pb-0 relative z-10 flex justify-between items-start">
 <h2 className="text-2xl tracking-tight font-medium max-w-[200px] leading-tight text-slate-800">Maximize revenue with machine learning</h2>
@@ -920,7 +962,7 @@ gtag('config', 'G-2M6V79H761');
 <svg className="lucide lucide-cpu" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="16" rx="2" ry="2" width="16" x="4" y="4"></rect><rect height="6" width="6" x="9" y="9"></rect><line x1="9" x2="9" y1="1" y2="4"></line><line x1="15" x2="15" y1="1" y2="4"></line><line x1="9" x2="9" y1="20" y2="23"></line><line x1="15" x2="15" y1="20" y2="23"></line><line x1="20" x2="23" y1="9" y2="9"></line><line x1="20" x2="23" y1="14" y2="14"></line><line x1="1" x2="4" y1="9" y2="9"></line><line x1="1" x2="4" y1="14" y2="14"></line></svg>
 </button>
 </div>
-<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-[32rem] rounded-3xl p-8 relative z-10 bg-white" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f0f9ff 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.12), 80px 120px 160px rgba(6, 182, 212, 0.15), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-[32rem] rounded-3xl p-8 relative z-10 bg-white" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f0f9ff 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.12), 80px 120px 160px rgba(6, 182, 212, 0.15), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <div className="flex flex-col gap-3 flex-grow justify-end pb-6 relative z-10">
 <div className="self-end bg-white border border-black/5 rounded-2xl rounded-tr-sm p-4 shadow-sm max-w-[85%]">
 <p className="text-xs text-gray-500 leading-relaxed font-light">How can we reduce false declines for cross-border transactions?</p>
@@ -965,7 +1007,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-[600px] rounded-3xl relative overflow-hidden" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f0fdfa 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.12), 80px 120px 160px rgba(20, 184, 166, 0.15), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 w-full h-[600px] rounded-3xl relative overflow-hidden" style={{background: 'linear-gradient(145deg, #ffffff 0%, #f0fdfa 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.12), 80px 120px 160px rgba(20, 184, 166, 0.15), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <div className="p-8 pb-0 relative z-20 flex justify-between items-start">
 <h2 className="text-2xl tracking-tight font-medium max-w-[220px] leading-tight text-slate-800">Bank-level security and compliance</h2>
 <button className="bg-teal-50 hover:bg-teal-100 p-2.5 rounded-xl text-teal-600 transition-colors flex items-center justify-center">
@@ -990,7 +1032,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 overflow-hidden w-full h-[600px] rounded-3xl relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #eff6ff 100%)', boxShadow: '2px 4px 8px rgba(0,0,0,0.02), 8px 16px 24px rgba(0,0,0,0.03), 64px 96px 128px rgba(0,0,0,0.12), 80px 120px 160px rgba(59, 130, 246, 0.15), inset 0 1px 1px rgba(255,255,255,1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="flex flex-col group transition-all duration-700 ease-out hover:-translate-y-4 overflow-hidden w-full h-[600px] rounded-3xl relative" style={{background: 'linear-gradient(145deg, #ffffff 0%, #eff6ff 100%)', boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.02), 8px 16px 24px rgba(0, 0, 0, 0.03), 64px 96px 128px rgba(0, 0, 0, 0.12), 80px 120px 160px rgba(59, 130, 246, 0.15), inset 0 1px 1px rgba(255, 255, 255, 1), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 
 <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-3xl z-0">
 <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-blue-400/20 rounded-full blur-[80px] animate-pulse" style={{animationDuration: '8s'}}></div>

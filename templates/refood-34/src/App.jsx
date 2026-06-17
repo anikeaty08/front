@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -41,63 +77,122 @@ gtag('js', new Date());
 gtag('config', 'G-2M6V79H761');
 
 
-
-    window.addEventListener('load', () => { document.body.classList.add('is-loaded'); });
-    document.addEventListener("DOMContentLoaded", () => {
-      // Mobile Menu Toggle
-      const mobileToggle = document.getElementById('mobile-menu-toggle');
-      const mobileMenu = document.getElementById('mobile-menu');
-
-      if (mobileToggle && mobileMenu) {
-        mobileToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-      }
-
-      // GSAP Animations
-      gsap.registerPlugin(ScrollTrigger);
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const ease = "power3.out"; const dur = 1.3;
-        const scrollConfig = (el) => ({ trigger: el, start: "top 85%" });
-        
-        // Header animation
-        gsap.from("#main-nav-inner", { y: -20, opacity: 0, duration: 1, ease, delay: 0.1 });
-
-        // Hero animation
-        const heroTl = gsap.timeline({ delay: 0.2, defaults: { ease, duration: dur } });
-        heroTl.from(".hero-label", { opacity: 0, y: 15 }, 0)
-              .from(".hero-headline", { opacity: 0, y: 25 }, 0.1)
-              .from(".hero-copy", { opacity: 0, y: 20 }, 0.3)
-              .from(".hero-btn-group", { opacity: 0, y: 15 }, 0.5)
-              .from(".hero-img-wrap", { scale: 1.05, opacity: 0, duration: 1.8 }, 0.2)
-              .from(".hero-plaque", { opacity: 0, y: 20 }, 0.8);
-
-        // Scroll animations
-        gsap.utils.toArray('[data-anim="up"]').forEach(el => {
-          gsap.from(el, { 
-            scrollTrigger: scrollConfig(el), 
-            y: 40, 
-            opacity: 0, 
-            duration: dur, 
-            ease, 
-            delay: el.dataset.delay ? parseFloat(el.dataset.delay) : 0 
-          });
-        });
-
-        gsap.utils.toArray('[data-anim="scale"]').forEach(el => {
-          gsap.from(el, { 
-            scrollTrigger: scrollConfig(el), 
-            scale: 1.05, 
-            opacity: 0, 
-            duration: 1.6, 
-            ease: "power2.out" 
-          });
-        });
-      });
-    });
+
+
+    window.addEventListener('load', () => { document.body.classList.add('is-loaded'); });
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+      // Mobile Menu Toggle
+
+      const mobileToggle = document.getElementById('mobile-menu-toggle');
+
+      const mobileMenu = document.getElementById('mobile-menu');
+
+
+
+      if (mobileToggle && mobileMenu) {
+
+        mobileToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+      }
+
+
+
+      // GSAP Animations
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+
+        const ease = "power3.out"; const dur = 1.3;
+
+        const scrollConfig = (el) => ({ trigger: el, start: "top 85%" });
+
+        
+
+        // Header animation
+
+        gsap.from("#main-nav-inner", { y: -20, opacity: 0, duration: 1, ease, delay: 0.1 });
+
+
+
+        // Hero animation
+
+        const heroTl = gsap.timeline({ delay: 0.2, defaults: { ease, duration: dur } });
+
+        heroTl.from(".hero-label", { opacity: 0, y: 15 }, 0)
+
+              .from(".hero-headline", { opacity: 0, y: 25 }, 0.1)
+
+              .from(".hero-copy", { opacity: 0, y: 20 }, 0.3)
+
+              .from(".hero-btn-group", { opacity: 0, y: 15 }, 0.5)
+
+              .from(".hero-img-wrap", { scale: 1.05, opacity: 0, duration: 1.8 }, 0.2)
+
+              .from(".hero-plaque", { opacity: 0, y: 20 }, 0.8);
+
+
+
+        // Scroll animations
+
+        gsap.utils.toArray('[data-anim="up"]').forEach(el => {
+
+          gsap.from(el, { 
+
+            scrollTrigger: scrollConfig(el), 
+
+            y: 40, 
+
+            opacity: 0, 
+
+            duration: dur, 
+
+            ease, 
+
+            delay: el.dataset.delay ? parseFloat(el.dataset.delay) : 0 
+
+          });
+
+        });
+
+
+
+        gsap.utils.toArray('[data-anim="scale"]').forEach(el => {
+
+          gsap.from(el, { 
+
+            scrollTrigger: scrollConfig(el), 
+
+            scale: 1.05, 
+
+            opacity: 0, 
+
+            duration: 1.6, 
+
+            ease: "power2.out" 
+
+          });
+
+        });
+
+      });
+
+    });
+
   
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -109,7 +204,8 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative flex items-center justify-between h-14 sm:h-[72px] px-3 sm:px-4 rounded-full border border-brand-border/75 backdrop-blur-xl shadow-sm py-1 bg-brand-bg/90" id="main-nav-inner">
 
 <a className="flex items-center gap-3 shrink-0 group relative z-20 pl-1" href="#">
-<div className="h-10 w-10 flex uppercase text-xs font-bold text-brand-green tracking-widest bg-white border-brand-border border rounded-full items-center justify-center">
+<div className="h-10 w-10 flex uppercase text-xs font-bold text-brand-green tracking-widest bg-white border-brand-border border rounded-full items-center justify-center">
+
             RL</div>
 <div className="flex flex-col leading-none pt-0.5">
 <span className="text-[10px] uppercase tracking-widest font-semibold text-brand-muted mb-1">Food Tech</span>
@@ -126,8 +222,10 @@ gtag('config', 'G-2M6V79H761');
 </nav>
 
 <div className="hidden md:flex items-center gap-4 shrink-0 relative z-20">
-<a className="inline-flex items-center justify-center h-11 px-6 rounded-full bg-brand-dark text-white hover:bg-brand-green transition-colors text-sm font-bold shadow-md" href="#plans">
-            한정수량 예약하기
+<a className="inline-flex items-center justify-center h-11 px-6 rounded-full bg-brand-dark text-white hover:bg-brand-green transition-colors text-sm font-bold shadow-md" href="#plans">
+
+            한정수량 예약하기
+
           </a>
 </div>
 
@@ -154,21 +252,29 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col px-6 sm:px-8 lg:px-14 pt-32 sm:pt-40 lg:pt-48 pb-12 lg:border-r border-brand-border relative justify-center z-10">
 <div className="mb-8 hero-label">
 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-green/30 bg-brand-green/5 text-brand-green text-xs font-bold tracking-widest uppercase">
-<span className="h-1.5 w-1.5 rounded-full bg-brand-green"></span> 신제품 출시
+<span className="h-1.5 w-1.5 rounded-full bg-brand-green"></span> 신제품 출시
+
           </span>
 </div>
 <div className="max-w-2xl">
-<h1 className="text-4xl sm:text-6xl lg:text-[68px] leading-[1.2] break-keep hero-headline font-serif font-semibold text-brand-dark text-balance">
+<h1 className="text-4xl sm:text-6xl lg:text-[68px] leading-[1.2] break-keep hero-headline font-serif font-semibold text-brand-dark text-balance">
+
             달콤함은 온전히 남기고 <br/>
-<span className="text-brand-green">당 걱정만 덜어낸</span><br/>
-            완벽한 디저트의 시작
+<span className="text-brand-green">당 걱정만 덜어낸</span><br/>
+
+            완벽한 디저트의 시작
+
           </h1>
-<p className="mt-6 sm:mt-8 leading-[1.6] break-keep hero-copy text-base sm:text-lg text-brand-text max-w-md">
-            설탕 대신 알룰로스로 당은 낮추고, 콩가루(비지)로 단백질과 식이섬유는 꽉 채웠습니다.<br/>건강한 원료로 다시 빚어낸 '과일 저당 약과'를 만나보세요.
+<p className="mt-6 sm:mt-8 leading-[1.6] break-keep hero-copy text-base sm:text-lg text-brand-text max-w-md">
+
+            설탕 대신 알룰로스로 당은 낮추고, 콩가루(비지)로 단백질과 식이섬유는 꽉 채웠습니다.<br/>건강한 원료로 다시 빚어낸 '과일 저당 약과'를 만나보세요.
+
           </p>
 <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row sm:items-center hero-btn-group gap-4">
-<a className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-brand-dark text-white hover:bg-brand-green duration-300 text-sm font-bold shadow-lg transition-colors" href="#plans">
-              한정수량 예약하러 가기
+<a className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-brand-dark text-white hover:bg-brand-green duration-300 text-sm font-bold shadow-lg transition-colors" href="#plans">
+
+              한정수량 예약하러 가기
+
               <iconify-icon className="text-lg" icon="solar:arrow-right-up-linear"></iconify-icon>
 </a>
 </div>
@@ -197,13 +303,18 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
 <div className="lg:w-1/2" data-anim="up">
 <span className="text-brand-green font-bold text-sm tracking-widest uppercase mb-4 block">For Whom</span>
-<h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-semibold text-brand-dark leading-[1.3] break-keep text-balance mb-6 md:mb-8">
-            우리가 디저트를 <br/>주저했던 순간들
+<h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-semibold text-brand-dark leading-[1.3] break-keep text-balance mb-6 md:mb-8">
+
+            우리가 디저트를 <br/>주저했던 순간들
+
           </h2>
-<p className="text-base md:text-lg text-brand-text font-medium leading-[1.6] break-keep mb-8 md:mb-10">
-            다이어트 중이라서, 아이에게 나쁠까 봐, 먹고 난 뒤의 찌뿌둥함이 싫어서. 이제 더 이상 참지 마세요.
+<p className="text-base md:text-lg text-brand-text font-medium leading-[1.6] break-keep mb-8 md:mb-10">
+
+            다이어트 중이라서, 아이에게 나쁠까 봐, 먹고 난 뒤의 찌뿌둥함이 싫어서. 이제 더 이상 참지 마세요.
+
           </p>
-<a className="inline-flex font-bold text-brand-dark border-b-2 border-brand-dark pb-1 hover:text-brand-green hover:border-brand-green transition-colors text-base md:text-lg items-center gap-2" href="#plans">
+<a className="inline-flex font-bold text-brand-dark border-b-2 border-brand-dark pb-1 hover:text-brand-green hover:border-brand-green transition-colors text-base md:text-lg items-center gap-2" href="#plans">
+
             Re:Food Lab과 함께하기 <iconify-icon icon="solar:arrow-right-line-duotone"></iconify-icon>
 </a>
 </div>
@@ -245,12 +356,17 @@ gtag('config', 'G-2M6V79H761');
 <span className="bg-brand-green text-white text-xs font-bold rounded-full px-4 py-1.5 shadow-lg">혈당 부담 ZERO</span>
 <span className="bg-white text-brand-dark text-xs font-bold rounded-full px-4 py-1.5 shadow-lg">ESG 콩단백질 함유</span>
 </div>
-<h2 className="text-white font-serif font-semibold leading-[1.2] text-4xl sm:text-6xl lg:text-7xl break-keep text-balance mb-6" data-anim="up" data-delay="0.1">
-        당분은 비우고,<br/>
-        내 리듬은 채우고.
+<h2 className="text-white font-serif font-semibold leading-[1.2] text-4xl sm:text-6xl lg:text-7xl break-keep text-balance mb-6" data-anim="up" data-delay="0.1">
+
+        당분은 비우고,<br/>
+
+        내 리듬은 채우고.
+
       </h2>
-<p className="text-base sm:text-xl text-white/90 break-keep leading-[1.6] max-w-2xl mb-10" data-anim="up" data-delay="0.2">
-        설탕 없이도 완성되는 극강의 쫀득함. 과하게 올라간 텐션을 다독이고 남은 하루의 리듬을 가장 편안하게 이어가세요.
+<p className="text-base sm:text-xl text-white/90 break-keep leading-[1.6] max-w-2xl mb-10" data-anim="up" data-delay="0.2">
+
+        설탕 없이도 완성되는 극강의 쫀득함. 과하게 올라간 텐션을 다독이고 남은 하루의 리듬을 가장 편안하게 이어가세요.
+
       </p>
 <div data-anim="up" data-delay="0.3">
 <a className="inline-flex items-center justify-center gap-3 w-full sm:w-auto min-w-[300px] h-16 px-8 rounded-full bg-white text-brand-dark hover:bg-brand-green hover:text-white transition-all duration-300 shadow-2xl group text-base font-bold" href="#plans">
@@ -277,8 +393,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <span className="bg-brand-dark text-white text-xs font-bold px-4 py-1.5 rounded-full w-max mb-4 md:mb-6">단백질·식이섬유 UP</span>
 <h4 className="text-2xl md:text-3xl font-bold text-brand-dark mb-3 md:mb-4 tracking-tight">밀가루 대신 국산 콩비지</h4>
-<p className="text-sm md:text-base text-brand-text leading-[1.6] max-w-md break-keep font-medium relative z-10">
-            탄수화물 덩어리인 밀가루를 덜어내고, 고단백 식이섬유의 보고인 '콩비지'를 듬뿍 담아 포만감과 영양을 잡았습니다.
+<p className="text-sm md:text-base text-brand-text leading-[1.6] max-w-md break-keep font-medium relative z-10">
+
+            탄수화물 덩어리인 밀가루를 덜어내고, 고단백 식이섬유의 보고인 '콩비지'를 듬뿍 담아 포만감과 영양을 잡았습니다.
+
           </p>
 </div>
 
@@ -288,8 +406,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <span className="bg-white text-brand-green text-xs font-bold px-4 py-1.5 rounded-full w-max mb-4 md:mb-6">당류 걱정 DOWN</span>
 <h4 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight relative z-10">100% 알룰로스</h4>
-<p className="text-sm md:text-base leading-[1.6] break-keep font-medium text-white/90 relative z-10">
-            설탕 대신 체내 흡수가 거의 없는 알룰로스만을 사용하여 쫀득하고 기분 좋은 단맛을 구현했습니다.
+<p className="text-sm md:text-base leading-[1.6] break-keep font-medium text-white/90 relative z-10">
+
+            설탕 대신 체내 흡수가 거의 없는 알룰로스만을 사용하여 쫀득하고 기분 좋은 단맛을 구현했습니다.
+
           </p>
 </div>
 
@@ -309,8 +429,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative z-10">
 <span className="bg-white/20 backdrop-blur-md text-white border border-white/20 text-xs font-bold px-4 py-1.5 rounded-full w-max mb-4 md:mb-6 inline-block">프리미엄 블렌딩</span>
 <h4 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight">기름진 맛을 잡는<br/>상큼한 과일 풍미</h4>
-<p className="text-sm md:text-base text-white/80 leading-[1.6] max-w-sm break-keep font-medium">
-              약과 특유의 느끼함을 잡기 위해 자연 과일에서 추출한 상큼함을 반죽에 입혔습니다. 질리지 않는 깔끔함.
+<p className="text-sm md:text-base text-white/80 leading-[1.6] max-w-sm break-keep font-medium">
+
+              약과 특유의 느끼함을 잡기 위해 자연 과일에서 추출한 상큼함을 반죽에 입혔습니다. 질리지 않는 깔끔함.
+
             </p>
 </div>
 </div>
@@ -322,11 +444,15 @@ gtag('config', 'G-2M6V79H761');
 <div className="px-6 sm:px-8 lg:px-14 max-w-[1380px] mx-auto relative">
 <div className="mb-16 text-center" data-anim="up">
 <span className="text-brand-green font-bold text-sm tracking-widest uppercase mb-4 block">Line Up</span>
-<h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-semibold text-brand-dark leading-[1.3] break-keep mb-6">
-          당신의 취향을 저격할 3가지 맛
+<h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-semibold text-brand-dark leading-[1.3] break-keep mb-6">
+
+          당신의 취향을 저격할 3가지 맛
+
         </h2>
-<p className="text-base sm:text-lg text-brand-text font-medium leading-[1.6] max-w-2xl mx-auto break-keep">
-          다양한 취향을 고려하여 엄선된 재료로 빚어냈습니다. 프리미엄 약과 라인업을 만나보세요.
+<p className="text-base sm:text-lg text-brand-text font-medium leading-[1.6] max-w-2xl mx-auto break-keep">
+
+          다양한 취향을 고려하여 엄선된 재료로 빚어냈습니다. 프리미엄 약과 라인업을 만나보세요.
+
         </p>
 </div>
 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
@@ -338,8 +464,10 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[10px] font-black text-white bg-brand-green px-3 py-1 rounded-full mb-3 md:mb-4 tracking-widest uppercase shadow-md">Signature</span>
 <h4 className="text-xl md:text-2xl font-bold text-brand-dark tracking-tight mb-2">오리지널 과일 저당</h4>
 <p className="text-xs md:text-sm font-bold text-brand-muted mb-3 md:mb-4">35g / 170 kcal</p>
-<p className="text-sm md:text-base text-brand-text leading-[1.6] break-keep font-medium">
-            상큼한 과일향이 입안 가득 퍼지는 깔끔한 단맛의 시그니처 메뉴.
+<p className="text-sm md:text-base text-brand-text leading-[1.6] break-keep font-medium">
+
+            상큼한 과일향이 입안 가득 퍼지는 깔끔한 단맛의 시그니처 메뉴.
+
           </p>
 </div>
 
@@ -350,8 +478,10 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[10px] font-black text-brand-dark border-2 border-brand-dark px-3 py-0.5 rounded-full mb-3 md:mb-4 tracking-widest uppercase bg-white">Nutty</span>
 <h4 className="text-xl md:text-2xl font-bold text-brand-dark tracking-tight mb-2">블랙 세서미 (흑임자)</h4>
 <p className="text-xs md:text-sm font-bold text-brand-muted mb-3 md:mb-4">35g / 185 kcal</p>
-<p className="text-sm md:text-base text-brand-text leading-[1.6] break-keep font-medium">
-            국산 흑임자를 듬뿍 넣어 씹을수록 깊어지는 진한 할매니얼의 맛.
+<p className="text-sm md:text-base text-brand-text leading-[1.6] break-keep font-medium">
+
+            국산 흑임자를 듬뿍 넣어 씹을수록 깊어지는 진한 할매니얼의 맛.
+
           </p>
 </div>
 
@@ -362,8 +492,10 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[10px] font-black text-brand-dark border-2 border-brand-dark px-3 py-0.5 rounded-full mb-3 md:mb-4 tracking-widest uppercase bg-white">Protein</span>
 <h4 className="text-xl md:text-2xl font-bold text-brand-dark tracking-tight mb-2">너트 프로틴 (견과)</h4>
 <p className="text-xs md:text-sm font-bold text-brand-muted mb-3 md:mb-4">35g / 190 kcal</p>
-<p className="text-sm md:text-base text-brand-text leading-[1.6] break-keep font-medium">
-            견과류의 씹는 맛과 포만감을 동시에. 운동 전후 완벽한 에너지 보충제.
+<p className="text-sm md:text-base text-brand-text leading-[1.6] break-keep font-medium">
+
+            견과류의 씹는 맛과 포만감을 동시에. 운동 전후 완벽한 에너지 보충제.
+
           </p>
 </div>
 </div>
@@ -380,9 +512,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="px-6 sm:px-8 lg:px-14 max-w-[1380px] mx-auto relative z-10">
 <div className="mb-12 md:mb-16 text-center" data-anim="up">
 <div className="inline-flex items-center gap-2 sm:gap-3 text-xs uppercase tracking-widest text-brand-green font-bold mb-4 sm:mb-6">
-<span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-green"></span>Pre-Order
+<span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-green"></span>Pre-Order
+
         </div>
-<h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-semibold text-brand-dark tracking-tighter break-keep mb-6">
+<h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-semibold text-brand-dark tracking-tighter break-keep mb-6">
+
           지금 가장 신선하게 만나는<br className="hidden sm:block"/><span className="text-brand-green">사전 예약 혜택</span>
 </h2>
 </div>
@@ -442,8 +576,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-center mb-12 md:mb-16" data-anim="up">
 <span className="text-brand-green font-bold tracking-widest uppercase text-xs md:text-sm mb-3 block">Business Portfolio</span>
 <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-semibold text-brand-dark tracking-tighter break-keep mb-4 md:mb-6">Re:Food Lab이 하는 일</h2>
-<p className="text-base md:text-lg text-brand-text font-medium max-w-2xl mx-auto break-keep">
-          ESG 콩비지 원료를 기반으로 B2B 파트너십부터 B2C 유통까지, Re:Food Lab이 확장해 나가는 푸드테크 비즈니스 생태계를 소개합니다.
+<p className="text-base md:text-lg text-brand-text font-medium max-w-2xl mx-auto break-keep">
+
+          ESG 콩비지 원료를 기반으로 B2B 파트너십부터 B2C 유통까지, Re:Food Lab이 확장해 나가는 푸드테크 비즈니스 생태계를 소개합니다.
+
         </p>
 </div>
 <div className="max-w-5xl mx-auto">
@@ -489,16 +625,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="bg-white/60 backdrop-blur-sm rounded-[32px] p-6 md:p-8 shadow-sm border border-brand-border hover:bg-white hover:border-brand-green/50 hover:-translate-y-1 transition-all duration-300 group" data-anim="up" data-delay="0.2">
 <span className="inline-block bg-brand-bg text-brand-dark text-[10px] md:text-xs font-bold px-3 py-1 rounded-full mb-4">원료 납품</span>
 <h5 className="text-xl md:text-2xl font-bold text-brand-dark mb-3 tracking-tight">프리미엄 대체육 원료</h5>
-<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-0">
-                고단백 식물성 기반의 미래형 대체육 원료를 공급합니다. ESG 경영 지표 부합 및 기업의 안정적인 친환경 공급망 구축을 돕습니다.
+<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-0">
+
+                고단백 식물성 기반의 미래형 대체육 원료를 공급합니다. ESG 경영 지표 부합 및 기업의 안정적인 친환경 공급망 구축을 돕습니다.
+
               </p>
 </div>
 
 <div className="bg-white/60 backdrop-blur-sm rounded-[32px] p-6 md:p-8 shadow-sm border border-brand-border hover:bg-white hover:border-brand-green/50 hover:-translate-y-1 transition-all duration-300 group" data-anim="up" data-delay="0.3">
 <span className="inline-block bg-brand-bg text-brand-dark text-[10px] md:text-xs font-bold px-3 py-1 rounded-full mb-4">양산 라인 최적화</span>
 <h5 className="text-xl md:text-2xl font-bold text-brand-dark mb-3 tracking-tight">고단백 전용 프리믹스</h5>
-<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-5">
-                밀가루를 대체하는 베이커리, 호두과자, 핫도그 등 대형 양산 라인 전용 프리믹스를 대기업 및 프랜차이즈에 공급합니다.
+<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-5">
+
+                밀가루를 대체하는 베이커리, 호두과자, 핫도그 등 대형 양산 라인 전용 프리믹스를 대기업 및 프랜차이즈에 공급합니다.
+
               </p>
 <div className="bg-brand-bg rounded-2xl px-5 py-4 flex items-center justify-between">
 <span className="text-xs md:text-sm font-bold text-brand-text">원가 절감 효과</span>
@@ -516,16 +656,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="bg-white/60 backdrop-blur-sm rounded-[32px] p-6 md:p-8 shadow-sm border border-brand-border hover:bg-white hover:border-brand-green/50 hover:-translate-y-1 transition-all duration-300 group" data-anim="up" data-delay="0.2">
 <span className="inline-block bg-brand-bg text-brand-dark text-[10px] md:text-xs font-bold px-3 py-1 rounded-full mb-4">고객 직판</span>
 <h5 className="text-xl md:text-2xl font-bold text-brand-dark mb-3 tracking-tight">프리미엄 디저트 라인</h5>
-<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-0">
-                한국적인 오브제 디자인과 12지신 스토리를 결합한 선물용 약과 세트입니다. 국내 소비자는 물론, 외국인 VIP 선물 시장을 공략합니다.
+<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-0">
+
+                한국적인 오브제 디자인과 12지신 스토리를 결합한 선물용 약과 세트입니다. 국내 소비자는 물론, 외국인 VIP 선물 시장을 공략합니다.
+
               </p>
 </div>
 
 <div className="bg-white/60 backdrop-blur-sm rounded-[32px] p-6 md:p-8 shadow-sm border border-brand-border hover:bg-white hover:border-brand-green/50 hover:-translate-y-1 transition-all duration-300 group" data-anim="up" data-delay="0.3">
 <span className="inline-block bg-brand-bg text-brand-dark text-[10px] md:text-xs font-bold px-3 py-1 rounded-full mb-4">대량 납품</span>
 <h5 className="text-xl md:text-2xl font-bold text-brand-dark mb-3 tracking-tight">안심 키즈 / 단체 급식망</h5>
-<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-5">
-                아이들도 안심하고 먹을 수 있는 클린 라벨(Clean Label) 디저트. 기존의 탄탄한 공급처 네트워크를 활용해 어린이집, 학교 등 단체 급식 시장에 대량 납품합니다.
+<p className="text-sm md:text-base text-brand-text font-medium leading-[1.6] break-keep mb-5">
+
+                아이들도 안심하고 먹을 수 있는 클린 라벨(Clean Label) 디저트. 기존의 탄탄한 공급처 네트워크를 활용해 어린이집, 학교 등 단체 급식 시장에 대량 납품합니다.
+
               </p>
 <div className="bg-brand-bg rounded-2xl px-5 py-4 flex items-center gap-3">
 <iconify-icon className="text-xl text-brand-green" icon="solar:routing-2-bold-duotone"></iconify-icon>
@@ -542,8 +686,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-[1380px] mx-auto px-6 sm:px-8 lg:px-14 text-center">
 <iconify-icon className="text-4xl text-brand-green mb-6" icon="solar:stars-linear"></iconify-icon>
 <p className="text-2xl sm:text-3xl font-serif font-semibold text-brand-dark mb-6">"디저트가 삶의 위로가 되도록"</p>
-<p className="text-base text-brand-text mb-12 max-w-2xl mx-auto break-keep leading-[1.6]">
-        맛있는 것을 먹을 때의 행복이 건강에 대한 불안으로 돌아오지 않기를 바랍니다.<br/>Re:Food Lab의 첫 번째 한정 수량을 가장 먼저 경험해 보세요.
+<p className="text-base text-brand-text mb-12 max-w-2xl mx-auto break-keep leading-[1.6]">
+
+        맛있는 것을 먹을 때의 행복이 건강에 대한 불안으로 돌아오지 않기를 바랍니다.<br/>Re:Food Lab의 첫 번째 한정 수량을 가장 먼저 경험해 보세요.
+
       </p>
 <div className="border-t border-brand-border pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
 <div className="text-left">

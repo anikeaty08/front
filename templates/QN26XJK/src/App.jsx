@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -195,6 +231,12 @@ window.addEventListener('load', disableHashLinks);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -305,7 +347,7 @@ window.addEventListener('load', disableHashLinks);
 </div>
 <div className="relative" data-animate="" style={{transition: 'opacity 400ms, transform 400ms', opacity: '1', transform: 'translateY(0px)'}}>
 <div className="relative rounded-3xl border border-[var(--cura-line)] p-4 md:p-5 shadow-[var(--cura-sh)] backdrop-blur-2xl" style={{background: 'var(--cura-glass-strong)'}}>
-<div className="absolute -inset-0.5 rounded-3xl pointer-events-none opacity-40" style={{background: 'conic-gradient(from 180deg at 50% 50%, rgba(67,177,255,0.15), rgba(79,103,255,0.15), rgba(76,211,243,0.15), rgba(67,177,255,0.15))', filter: 'blur(20px)'}}></div>
+<div className="absolute -inset-0.5 rounded-3xl pointer-events-none opacity-40" style={{background: 'conic-gradient(from 180deg at 50% 50%, rgba(67, 177, 255, 0.15), rgba(79, 103, 255, 0.15), rgba(76, 211, 243, 0.15), rgba(67, 177, 255, 0.15))', filter: 'blur(20px)'}}></div>
 <div className="relative z-10 flex items-center justify-between p-3 rounded-2xl border border-[var(--cura-line)] shadow-[var(--cura-sh)] backdrop-blur-xl" style={{background: 'var(--cura-glass)'}}>
 <div className="flex items-center gap-2">
 <div className="h-2 w-2 rounded-full bg-sky-500"></div>
@@ -829,7 +871,7 @@ window.addEventListener('load', disableHashLinks);
 <div aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-60" style={{background: 'radial-gradient(800px 220px at 20% 0%, rgba(67,177,255,.18), transparent 60%), radial-gradient(800px 220px at 80% 100%, rgba(79,103,255,.16), transparent 60%)'}}></div>
 <div className="max-w-7xl mx-auto px-6 md:px-8">
 <div className="rounded-3xl border border-[var(--cura-line)] p-6 md:p-8 shadow-[var(--cura-sh)] backdrop-blur-2xl relative overflow-hidden" style={{background: 'var(--cura-glass-strong)'}}>
-<div className="absolute -inset-12 opacity-50 pointer-events-none" style={{background: 'conic-gradient(from 180deg at 50% 50%, rgba(67,177,255,.12), rgba(79,103,255,.12), rgba(76,211,243,.12), rgba(67,177,255,.12))', filter: 'blur(40px)'}}></div>
+<div className="absolute -inset-12 opacity-50 pointer-events-none" style={{background: 'conic-gradient(from 180deg at 50% 50%, rgba(67, 177, 255, .12), rgba(79, 103, 255, .12), rgba(76, 211, 243, .12), rgba(67, 177, 255, .12))', filter: 'blur(40px)'}}></div>
 <div className="relative z-10 grid md:grid-cols-[1.2fr,1fr] gap-8 items-center">
 <div data-animate="" style={{transition: 'opacity 400ms, transform 400ms', opacity: '0', transform: 'translateY(12px)'}}>
 <h2 className="text-3xl md:text-4xl tracking-tight text-slate-900" style={{fontFamily: 'Manrope, Inter', fontWeight: '800'}}>Stop missing calls. Start delighting clients.</h2>

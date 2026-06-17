@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -172,6 +208,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -228,7 +270,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="relative mx-auto max-w-[1200px] px-5 h-[70vh] md:h-[78vh] flex items-end">
 <div className="max-w-[72ch] pb-12 sm:pb-16 md:pb-20 space-y-6">
-<h1 className="text-white tracking-tight leading-tight font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif', fontWeight: '700', fontSize: 'clamp(44px,4vw,56px)'}}>
+<h1 className="text-white tracking-tight leading-tight font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif', fontWeight: '700', fontSize: 'clamp(44px,4vw,56px)'}}>
             Secure your UK pension. Enjoy life in Asia.
           </h1>
 <p className="text-white/90 text-[18px] md:text-[18px] font-medium">
@@ -252,7 +294,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-[1200px] px-5" id="services" style={{paddingBlock: 'clamp(48px,5vw,80px)'}}>
 <div className="grid grid-cols-12 gap-5 items-end">
 <div className="col-span-12 md:col-span-8">
-<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>What we do</h2>
+<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>What we do</h2>
 <p className="mt-2 text-[17px] md:text-[18px] max-w-[72ch]">
             Independent advice built around your life in Asia — from UK pension transfers to efficient, global investing and family protection.
           </p>
@@ -266,7 +308,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-6 h-6 text-[#0F2B46]" data-lucide="wallet"></i>
 </div>
 <div>
-<h3 className="text-[#0F2B46] tracking-tight text-[24px] md:text-[26px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>UK Pension Transfers and Consolidation</h3>
+<h3 className="text-[#0F2B46] tracking-tight text-[24px] md:text-[26px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>UK Pension Transfers and Consolidation</h3>
 <p className="mt-2 text-[17px]">
                 Merge frozen plans into a modern SIPP or QROPS, cut fees, and invest properly for your life in Asia.
               </p>
@@ -283,7 +325,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-6 h-6 text-[#0F2B46]" data-lucide="line-chart"></i>
 </div>
 <div>
-<h3 className="text-[#0F2B46] tracking-tight text-[24px] md:text-[26px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>Tax‑Efficient Investing</h3>
+<h3 className="text-[#0F2B46] tracking-tight text-[24px] md:text-[26px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>Tax‑Efficient Investing</h3>
 <p className="mt-2 text-[17px]">
                 Global ETF portfolios and gross roll‑up structures designed to keep more growth working for you.
               </p>
@@ -300,7 +342,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-6 h-6 text-[#0F2B46]" data-lucide="shield-check"></i>
 </div>
 <div>
-<h3 className="text-[#0F2B46] tracking-tight text-[24px] md:text-[26px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>Life‑Stage Protection and Estate Planning</h3>
+<h3 className="text-[#0F2B46] tracking-tight text-[24px] md:text-[26px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>Life‑Stage Protection and Estate Planning</h3>
 <p className="mt-2 text-[17px]">
                 Life assurance, critical‑illness, and beneficiary trusts so family access is fast and probate delays are avoided.
               </p>
@@ -316,7 +358,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-[1200px] px-5" id="why" style={{paddingBlock: 'clamp(48px,5vw,80px)'}}>
 <div className="grid grid-cols-12 gap-5 md:gap-7">
 <div className="col-span-12 md:col-span-7">
-<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>
+<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>
             Your empathetic guide through cross‑border finance
           </h2>
 <p className="mt-4 text-[17px] md:text-[18px] max-w-[72ch]">
@@ -351,7 +393,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-[1200px] px-5" style={{paddingBlock: 'clamp(48px,5vw,80px)'}}>
 <div className="grid grid-cols-12 gap-5">
 <div className="col-span-12">
-<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>Challenges we solve</h2>
+<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>Challenges we solve</h2>
 </div>
 <div className="col-span-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style={{gap: '14px'}}>
 
@@ -390,14 +432,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-[1200px] px-5" id="process" style={{paddingBlock: 'clamp(48px,5vw,80px)'}}>
 <div className="grid grid-cols-12 gap-5 md:gap-7 items-start">
 <div className="col-span-12">
-<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>How it works</h2>
+<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>How it works</h2>
 </div>
 <div className="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-5">
 
 <div className="rounded-[16px] bg-white border border-[#E8E3DA] p-6" style={{boxShadow: '0 10px 30px rgba(15,43,70,.08)'}}>
 <div className="flex items-center gap-3">
 <div className="h-9 w-9 rounded-full grid place-items-center text-[#0F2B46] text-sm font-semibold" style={{backgroundColor: '#C5A989'}}>1</div>
-<h3 className="text-[22px] font-semibold tracking-tight" style={{fontFamily: 'Merriweather,Georgia,serif', color: '#0F2B46'}}>Discovery Call</h3>
+<h3 className="text-[22px] font-semibold tracking-tight" style={{fontFamily: 'Merriweather, Georgia, serif', color: '#0F2B46'}}>Discovery Call</h3>
 </div>
 <p className="mt-3 text-[17px]">Map goals, pensions, passports, timeline. <span className="text-[#1D2733]/70">(15–20 min)</span></p>
 </div>
@@ -405,7 +447,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-[16px] bg-white border border-[#E8E3DA] p-6" style={{boxShadow: '0 10px 30px rgba(15,43,70,.08)'}}>
 <div className="flex items-center gap-3">
 <div className="h-9 w-9 rounded-full grid place-items-center text-[#0F2B46] text-sm font-semibold" style={{backgroundColor: '#C5A989'}}>2</div>
-<h3 className="text-[22px] font-semibold tracking-tight" style={{fontFamily: 'Merriweather,Georgia,serif', color: '#0F2B46'}}>Your Personal Blueprint</h3>
+<h3 className="text-[22px] font-semibold tracking-tight" style={{fontFamily: 'Merriweather, Georgia, serif', color: '#0F2B46'}}>Your Personal Blueprint</h3>
 </div>
 <p className="mt-3 text-[17px]">The right mix of transfers, lump‑sum investing and protection. <span className="text-[#1D2733]/70">(delivered in 5–7 days)</span></p>
 </div>
@@ -413,7 +455,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-[16px] bg-white border border-[#E8E3DA] p-6" style={{boxShadow: '0 10px 30px rgba(15,43,70,.08)'}}>
 <div className="flex items-center gap-3">
 <div className="h-9 w-9 rounded-full grid place-items-center text-[#0F2B46] text-sm font-semibold" style={{backgroundColor: '#C5A989'}}>3</div>
-<h3 className="text-[22px] font-semibold tracking-tight" style={{fontFamily: 'Merriweather,Georgia,serif', color: '#0F2B46'}}>Ongoing Stewardship</h3>
+<h3 className="text-[22px] font-semibold tracking-tight" style={{fontFamily: 'Merriweather, Georgia, serif', color: '#0F2B46'}}>Ongoing Stewardship</h3>
 </div>
 <p className="mt-3 text-[17px]">Reviews, rebalancing, currency hedging, next‑gen planning. <span className="text-[#1D2733]/70">(quarterly or as needed)</span></p>
 </div>
@@ -425,25 +467,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-[16px] bg-white/70 border border-[#E8E3DA] p-6 md:p-8" style={{boxShadow: '0 10px 30px rgba(15,43,70,.08)'}}>
 <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-7 items-center">
 <div className="text-center">
-<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather,Georgia,serif'}}>
+<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather, Georgia, serif'}}>
 <span className="counter" data-suffix="+" data-target="2000">0</span>
 </div>
 <div className="text-[14.5px] mt-1">expat plans optimised</div>
 </div>
 <div className="text-center">
-<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather,Georgia,serif'}}>
+<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather, Georgia, serif'}}>
 <span className="counter" data-suffix="M+" data-target="420">0</span>
 </div>
 <div className="text-[14.5px] mt-1">USD guided across borders</div>
 </div>
 <div className="text-center">
-<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather,Georgia,serif'}}>
+<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather, Georgia, serif'}}>
 <span className="counter" data-suffix=" yrs" data-target="27">0</span>
 </div>
 <div className="text-[14.5px] mt-1">advisory experience</div>
 </div>
 <div className="text-center">
-<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather,Georgia,serif'}}>
+<div className="text-[32px] md:text-[36px] font-semibold tracking-tight" style={{color: '#0F2B46', fontFamily: 'Merriweather, Georgia, serif'}}>
 <span className="counter" data-suffix="" data-target="15">0</span>
 </div>
 <div className="text-[14.5px] mt-1">jurisdictions covered</div>
@@ -456,7 +498,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-[1200px] px-5" style={{paddingBlock: 'clamp(48px,5vw,80px)'}}>
 <div className="grid grid-cols-12 gap-5">
 <div className="col-span-12">
-<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>What clients say</h2>
+<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>What clients say</h2>
 </div>
 <div className="col-span-12">
 <div className="rounded-[16px] bg-white border border-[#E8E3DA] p-6 md:p-8 relative overflow-hidden" style={{boxShadow: '0 10px 30px rgba(15,43,70,.08)'}}>
@@ -504,7 +546,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-[1200px] px-5" id="guide" style={{paddingBlock: 'clamp(48px,5vw,80px)'}}>
 <div className="rounded-[16px] border border-[#E8E3DA] bg-white p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-7 items-center" style={{boxShadow: '0 10px 30px rgba(15,43,70,.08)'}}>
 <div className="md:col-span-7">
-<h3 className="text-[28px] md:text-[32px] tracking-tight font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif', color: '#0F2B46'}}>
+<h3 className="text-[28px] md:text-[32px] tracking-tight font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif', color: '#0F2B46'}}>
             Download the British Expat’s 2025 Retirement Checklist
           </h3>
 <p className="mt-3 text-[17px] md:text-[18px] max-w-[65ch]">
@@ -541,7 +583,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="mx-auto max-w-[1200px] px-5" id="insights" style={{paddingBlock: 'clamp(48px,5vw,80px)'}}>
 <div className="flex items-end justify-between gap-4">
-<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>Insights</h2>
+<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>Insights</h2>
 <a className="underline decoration-[#1F7A8C]/30 underline-offset-2 hover:no-underline text-[15.5px]" href="#">All articles</a>
 </div>
 <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -551,7 +593,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="ETF chart and documents on a desk" className="w-full h-full object-cover" height="750" loading="lazy" src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&amp;auto=format&amp;fit=crop&amp;w=1200&amp;h=750" width="1200"/>
 </div>
 <div className="p-5">
-<h3 className="text-[22px] tracking-tight font-semibold text-[#0F2B46]" style={{fontFamily: 'Merriweather,Georgia,serif'}}>QROPS vs SIPP in 2025: Which Wins for Thailand‑Based Brits?</h3>
+<h3 className="text-[22px] tracking-tight font-semibold text-[#0F2B46]" style={{fontFamily: 'Merriweather, Georgia, serif'}}>QROPS vs SIPP in 2025: Which Wins for Thailand‑Based Brits?</h3>
 <p className="mt-2 text-[15.5px]">A concise overview to help you make better cross‑border decisions as a UK or Western expat in Asia.</p>
 <div className="mt-3 flex items-center justify-between text-[13.5px] text-[#1D2733]/70">
 <span>6 min read</span>
@@ -567,7 +609,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Tax forms and calculator on a table" className="w-full h-full object-cover" height="750" loading="lazy" src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&amp;auto=format&amp;fit=crop&amp;w=1200&amp;h=750" width="1200"/>
 </div>
 <div className="p-5">
-<h3 className="text-[22px] tracking-tight font-semibold text-[#0F2B46]" style={{fontFamily: 'Merriweather,Georgia,serif'}}>How the UK Overseas Transfer Charge Could Affect You</h3>
+<h3 className="text-[22px] tracking-tight font-semibold text-[#0F2B46]" style={{fontFamily: 'Merriweather, Georgia, serif'}}>How the UK Overseas Transfer Charge Could Affect You</h3>
 <p className="mt-2 text-[15.5px]">Understand when it applies and the practical steps to avoid a nasty surprise later.</p>
 <div className="mt-3 flex items-center justify-between text-[13.5px] text-[#1D2733]/70">
 <span>5 min read</span>
@@ -583,7 +625,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Currency notes and a simple hedging notebook" className="w-full h-full object-cover" height="750" loading="lazy" src="https://images.unsplash.com/photo-1554224154-22dec7ec8818?q=80&amp;auto=format&amp;fit=crop&amp;w=1200&amp;h=750" width="1200"/>
 </div>
 <div className="p-5">
-<h3 className="text-[22px] tracking-tight font-semibold text-[#0F2B46]" style={{fontFamily: 'Merriweather,Georgia,serif'}}>Currency Hedging 101 for Long‑Term Expats</h3>
+<h3 className="text-[22px] tracking-tight font-semibold text-[#0F2B46]" style={{fontFamily: 'Merriweather, Georgia, serif'}}>Currency Hedging 101 for Long‑Term Expats</h3>
 <p className="mt-2 text-[15.5px]">Simple ways to reduce FX drag and keep more of your returns compounding over decades.</p>
 <div className="mt-3 flex items-center justify-between text-[13.5px] text-[#1D2733]/70">
 <span>7 min read</span>
@@ -601,7 +643,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-[1200px] px-5" id="contact" style={{paddingBlock: 'clamp(64px,6vw,96px)'}}>
 <div className="grid grid-cols-12 gap-5 md:gap-7 items-start">
 <div className="col-span-12 md:col-span-5">
-<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather,Georgia,serif'}}>
+<h2 className="text-[#0F2B46] tracking-tight text-[32px] md:text-[36px] font-semibold" style={{fontFamily: 'Merriweather, Georgia, serif'}}>
             Ready to bridge the gap to a worry‑free retirement?
           </h2>
 <p className="mt-3 text-[17px] md:text-[18px] max-w-[65ch]">

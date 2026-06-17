@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1049,6 +1085,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1062,7 +1104,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight" id="spotlight" style={{-X: '1009px', -Y: '5px'}}></div>
+<div className="spotlight" id="spotlight" style={{'--x': '1009px', '--y': '5px'}}></div>
 <div className="ambient-glow"></div>
 
 <div className="" id="fixed-layer">
@@ -1234,12 +1276,12 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="h-20 w-full relative overflow-hidden rounded-lg bg-white/[0.02] border border-white/5 flex items-end px-2 gap-1 pb-2">
-<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{-HMin: '20%', -HMax: '40%', -OpMin: '0.2', -OpMax: '0.3', animation: 'graph-equalizer 2s ease-in-out infinite'}}></div>
-<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{-HMin: '40%', -HMax: '60%', -OpMin: '0.3', -OpMax: '0.4', animation: 'graph-equalizer 1.5s ease-in-out infinite 0.2s'}}></div>
-<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{-HMin: '30%', -HMax: '50%', -OpMin: '0.4', -OpMax: '0.5', animation: 'graph-equalizer 2.2s ease-in-out infinite 0.1s'}}></div>
-<div className="w-1/6 bg-blue-500 rounded-t-[1px] shadow-[0_0_15px_rgba(59,130,246,0.4)]" style={{-HMin: '60%', -HMax: '85%', -OpMin: '0.6', -OpMax: '0.8', animation: 'graph-equalizer 1.8s ease-in-out infinite 0.4s'}}></div>
-<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{-HMin: '35%', -HMax: '55%', -OpMin: '0.4', -OpMax: '0.5', animation: 'graph-equalizer 2s ease-in-out infinite 0.3s'}}></div>
-<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{-HMin: '25%', -HMax: '45%', -OpMin: '0.2', -OpMax: '0.3', animation: 'graph-equalizer 2.4s ease-in-out infinite 0.5s'}}></div>
+<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{'--h-min': '20%', '--h-max': '40%', '--op-min': '0.2', '--op-max': '0.3', animation: 'graph-equalizer 2s ease-in-out infinite'}}></div>
+<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{'--h-min': '40%', '--h-max': '60%', '--op-min': '0.3', '--op-max': '0.4', animation: 'graph-equalizer 1.5s ease-in-out infinite 0.2s'}}></div>
+<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{'--h-min': '30%', '--h-max': '50%', '--op-min': '0.4', '--op-max': '0.5', animation: 'graph-equalizer 2.2s ease-in-out infinite 0.1s'}}></div>
+<div className="w-1/6 bg-blue-500 rounded-t-[1px] shadow-[0_0_15px_rgba(59,130,246,0.4)]" style={{'--h-min': '60%', '--h-max': '85%', '--op-min': '0.6', '--op-max': '0.8', animation: 'graph-equalizer 1.8s ease-in-out infinite 0.4s'}}></div>
+<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{'--h-min': '35%', '--h-max': '55%', '--op-min': '0.4', '--op-max': '0.5', animation: 'graph-equalizer 2s ease-in-out infinite 0.3s'}}></div>
+<div className="w-1/6 bg-blue-500 rounded-t-[1px]" style={{'--h-min': '25%', '--h-max': '45%', '--op-min': '0.2', '--op-max': '0.3', animation: 'graph-equalizer 2.4s ease-in-out infinite 0.5s'}}></div>
 </div>
 </div>
 </div>

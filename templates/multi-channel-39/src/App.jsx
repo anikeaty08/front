@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -124,6 +160,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -132,7 +174,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" id="canvas">
 
-<div className="floating-card absolute top-[10%] left-[-5%] md:left-[5%] w-48 h-56 md:w-64 md:h-72 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{-Rot: '-6deg'}}>
+<div className="floating-card absolute top-[10%] left-[-5%] md:left-[5%] w-48 h-56 md:w-64 md:h-72 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{'--rot': '-6deg'}}>
 <img alt="T-Shirt" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
 <i className="w-3 h-3 text-white stroke-[1.5]" data-lucide="video"></i>
@@ -140,7 +182,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="floating-card absolute top-[5%] right-[-10%] md:right-[5%] w-56 h-48 md:w-72 md:h-60 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{-Rot: '4deg'}}>
+<div className="floating-card absolute top-[5%] right-[-10%] md:right-[5%] w-56 h-48 md:w-72 md:h-60 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{'--rot': '4deg'}}>
 <img alt="Furniture" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
 <i className="w-3 h-3 text-white stroke-[1.5]" data-lucide="shopping-bag"></i>
@@ -148,7 +190,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="floating-card absolute top-[45%] left-[-8%] md:left-[10%] w-52 h-40 md:w-64 md:h-48 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{-Rot: '3deg'}}>
+<div className="floating-card absolute top-[45%] left-[-8%] md:left-[10%] w-52 h-40 md:w-64 md:h-48 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{'--rot': '3deg'}}>
 <img alt="Shoes" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
 <i className="w-3 h-3 text-white stroke-[1.5]" data-lucide="package"></i>
@@ -156,7 +198,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="floating-card absolute top-[35%] right-[-5%] md:right-[2%] w-64 h-48 md:w-80 md:h-64 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{-Rot: '-2deg'}}>
+<div className="floating-card absolute top-[35%] right-[-5%] md:right-[2%] w-64 h-48 md:w-80 md:h-64 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{'--rot': '-2deg'}}>
 <img alt="Laptop" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
 <i className="w-3 h-3 text-white stroke-[1.5]" data-lucide="target"></i>
@@ -164,7 +206,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="floating-card absolute bottom-[10%] left-[5%] md:left-[20%] w-60 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{-Rot: '-3deg'}}>
+<div className="floating-card absolute bottom-[10%] left-[5%] md:left-[20%] w-60 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{'--rot': '-3deg'}}>
 <img alt="TV" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1593784991095-a205069470b6?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
 <i className="w-3 h-3 text-white stroke-[1.5]" data-lucide="store"></i>
@@ -172,7 +214,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="floating-card absolute bottom-[-5%] right-[5%] md:right-[15%] w-48 h-72 md:w-56 md:h-80 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{-Rot: '5deg'}}>
+<div className="floating-card absolute bottom-[-5%] right-[5%] md:right-[15%] w-48 h-72 md:w-56 md:h-80 rounded-xl overflow-hidden shadow-2xl bg-gray-100" style={{'--rot': '5deg'}}>
 <img alt="Fitness" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
 <i className="w-3 h-3 text-white stroke-[1.5]" data-lucide="camera"></i>

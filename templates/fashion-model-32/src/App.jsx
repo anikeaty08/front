@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -45,13 +81,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<section className="spotlight-group overflow-hidden group reveal-item bg-gray-900 w-full h-[800px] max-w-[1500px] ring-white/5 ring-1 rounded-[32px] relative shadow-2xl is-visible" style={{-MouseX: '838px', -MouseY: '4px'}}>
+<section className="spotlight-group overflow-hidden group reveal-item bg-gray-900 w-full h-[800px] max-w-[1500px] ring-white/5 ring-1 rounded-[32px] relative shadow-2xl is-visible" style={{'--mouse-x': '838px', '--mouse-y': '4px'}}>
 <div className="z-0 absolute top-0 right-0 bottom-0 left-0">
 <div className="bg-gradient-to-br from-indigo-500/10 via-purple-500/5 opacity-30 absolute top-0 right-0 bottom-0 left-0 to-blue-500/10"></div>
 <img alt="Background" className="transition-transform duration-[2000ms] group-hover:scale-105 opacity-60 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6cc57394-5081-450f-b228-64acb9eb7536_3840w.png" style={{maskImage: 'linear-gradient(transparent, black 25%, black 100%, transparent)'}}/>
@@ -67,7 +109,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="hover:text-white transition-colors" href="#expertise">Services</a>
 </div>
 </div>
-<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
 <style>
             @keyframes beam-spin { to { transform: rotate(360deg); } }
             @keyframes lines-slide {

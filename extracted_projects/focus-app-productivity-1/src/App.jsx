@@ -63,6 +63,42 @@ export default function App() {
   const toastTimeoutRef = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     localStorage.setItem('focus_tasks', JSON.stringify(tasks));
   }, [tasks]);
 
@@ -247,7 +283,7 @@ export default function App() {
           onClick={() => setIsModalOpen(true)}
           className="w-[70px] h-[70px] bg-zinc-900 hover:bg-zinc-800 text-white rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 z-40 group border border-zinc-800 relative -top-6 mx-2 flex-shrink-0"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-90 transition-transform duration-300 w-[30px] h-[30px]" style={{ color: "rgb(255, 255, 255)", width: "30px", height: "30px" }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-90 transition-transform duration-300 w-[30px] h-[30px]" style={{color: "rgb(255, 255, 255)", width: "30px", height: "30px"}}>
             <path d="M5 12h14" />
             <path d="M12 5v14" />
           </svg>

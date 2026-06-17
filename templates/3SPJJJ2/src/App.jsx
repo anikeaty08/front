@@ -2,11 +2,53 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -188,11 +230,11 @@ export default function App() {
 <div>
 <p className="text-sm font-medium text-neutral-400 mb-3">Success</p>
 <div className="flex flex-wrap items-center gap-3">
-<button className="inline-flex h-9 items-center justify-center gap-[6px] rounded-md px-3.5 text-[14px] leading-[22px] font-medium text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400" style={{backgroundColor: '#16a34a', border: '1px solid #15803d', boxShadow: 'rgba(14,63,126,.04) 0px 0px 0px 1px, rgba(42,51,69,.04) 0px 1px 1px -.5px, rgba(42,51,70,.04) 0px 3px 3px -1.5px, rgba(42,51,70,.04) 0px 6px 6px -3px, rgba(14,63,126,.04) 0px 12px 12px -6px, rgba(14,63,126,.04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
+<button className="inline-flex h-9 items-center justify-center gap-[6px] rounded-md px-3.5 text-[14px] leading-[22px] font-medium text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400" style={{backgroundColor: '#16a34a', border: '1px solid #15803d', boxShadow: 'rgba(14, 63, 126, .04) 0px 0px 0px 1px, rgba(42, 51, 69, .04) 0px 1px 1px -.5px, rgba(42, 51, 70, .04) 0px 3px 3px -1.5px, rgba(42, 51, 70, .04) 0px 6px 6px -3px, rgba(14, 63, 126, .04) 0px 12px 12px -6px, rgba(14, 63, 126, .04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
 <svg className="h-[16px] w-[16px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m20 6-11 11-5-5"></path></svg>
 <span>Confirm</span>
 </button>
-<button className="inline-flex h-7 items-center justify-center gap-[6px] rounded-md px-2 text-[13px] leading-[20px] font-medium text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400" style={{backgroundColor: '#16a34a', border: '1px solid #15803d', boxShadow: 'rgba(14,63,126,.04) 0px 0px 0px 1px, rgba(42,51,69,.04) 0px 1px 1px -.5px, rgba(42,51,70,.04) 0px 3px 3px -1.5px, rgba(42,51,70,.04) 0px 6px 6px -3px, rgba(14,63,126,.04) 0px 12px 12px -6px, rgba(14,63,126,.04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
+<button className="inline-flex h-7 items-center justify-center gap-[6px] rounded-md px-2 text-[13px] leading-[20px] font-medium text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400" style={{backgroundColor: '#16a34a', border: '1px solid #15803d', boxShadow: 'rgba(14, 63, 126, .04) 0px 0px 0px 1px, rgba(42, 51, 69, .04) 0px 1px 1px -.5px, rgba(42, 51, 70, .04) 0px 3px 3px -1.5px, rgba(42, 51, 70, .04) 0px 6px 6px -3px, rgba(14, 63, 126, .04) 0px 12px 12px -6px, rgba(14, 63, 126, .04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
 <span>Small</span>
 </button>
 </div>
@@ -200,11 +242,11 @@ export default function App() {
 <div>
 <p className="text-sm font-medium text-neutral-400 mb-3">Danger</p>
 <div className="flex flex-wrap items-center gap-3">
-<button className="inline-flex h-9 items-center justify-center gap-[6px] rounded-md px-3.5 text-[14px] leading-[22px] font-medium text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400" style={{backgroundColor: '#dc2626', border: '1px solid #b91c1c', boxShadow: 'rgba(14,63,126,.04) 0px 0px 0px 1px, rgba(42,51,69,.04) 0px 1px 1px -.5px, rgba(42,51,70,.04) 0px 3px 3px -1.5px, rgba(42,51,70,.04) 0px 6px 6px -3px, rgba(14,63,126,.04) 0px 12px 12px -6px, rgba(14,63,126,.04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
+<button className="inline-flex h-9 items-center justify-center gap-[6px] rounded-md px-3.5 text-[14px] leading-[22px] font-medium text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400" style={{backgroundColor: '#dc2626', border: '1px solid #b91c1c', boxShadow: 'rgba(14, 63, 126, .04) 0px 0px 0px 1px, rgba(42, 51, 69, .04) 0px 1px 1px -.5px, rgba(42, 51, 70, .04) 0px 3px 3px -1.5px, rgba(42, 51, 70, .04) 0px 6px 6px -3px, rgba(14, 63, 126, .04) 0px 12px 12px -6px, rgba(14, 63, 126, .04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
 <svg className="h-[16px] w-[16px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>
 <span>Delete</span>
 </button>
-<button aria-label="Remove" className="inline-flex h-7 w-7 items-center justify-center rounded-md text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400" style={{backgroundColor: '#dc2626', border: '1px solid #b91c1c', boxShadow: 'rgba(14,63,126,.04) 0px 0px 0px 1px, rgba(42,51,69,.04) 0px 1px 1px -.5px, rgba(42,51,70,.04) 0px 3px 3px -1.5px, rgba(42,51,70,.04) 0px 6px 6px -3px, rgba(14,63,126,.04) 0px 12px 12px -6px, rgba(14,63,126,.04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
+<button aria-label="Remove" className="inline-flex h-7 w-7 items-center justify-center rounded-md text-white transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400" style={{backgroundColor: '#dc2626', border: '1px solid #b91c1c', boxShadow: 'rgba(14, 63, 126, .04) 0px 0px 0px 1px, rgba(42, 51, 69, .04) 0px 1px 1px -.5px, rgba(42, 51, 70, .04) 0px 3px 3px -1.5px, rgba(42, 51, 70, .04) 0px 6px 6px -3px, rgba(14, 63, 126, .04) 0px 12px 12px -6px, rgba(14, 63, 126, .04) 0px 24px 24px -12px, inset 0 1px 0 rgba(255,255,255,.2)'}} type="button">
 <svg className="h-[15px] w-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m18 6-12 12"></path><path d="m6 6 12 12"></path></svg>
 </button>
 </div>
@@ -218,11 +260,11 @@ export default function App() {
 <div>
 <p className="text-sm font-medium text-neutral-400 mb-3">Outline</p>
 <div className="flex flex-wrap items-center gap-3">
-<button className="inline-flex h-9 items-center justify-center gap-[6px] rounded-md px-3.5 text-[14px] leading-[22px] font-medium text-white/90 bg-transparent transition-all duration-200 hover:bg-white/[0.04] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.14), inset 0 0.75px 0 rgba(255,255,255,0.08)'}} type="button">
+<button className="inline-flex h-9 items-center justify-center gap-[6px] rounded-md px-3.5 text-[14px] leading-[22px] font-medium text-white/90 bg-transparent transition-all duration-200 hover:bg-white/[0.04] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 0.75px 0 rgba(255,255,255,0.08)'}} type="button">
 <svg className="h-[16px] w-[16px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.07 0l1.83-1.83a5 5 0 0 0-7.07-7.07L10 5"></path><path d="M14 11a5 5 0 0 0-7.07 0L5.1 12.83a5 5 0 1 0 7.07 7.07L14 19"></path></svg>
 <span>Copy link</span>
 </button>
-<button className="inline-flex h-7 items-center justify-center gap-[6px] rounded-md px-2 text-[13px] leading-[20px] font-medium text-white/90 bg-transparent transition-all duration-200 hover:bg-white/[0.04] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.14), inset 0 0.75px 0 rgba(255,255,255,0.08)'}} type="button">
+<button className="inline-flex h-7 items-center justify-center gap-[6px] rounded-md px-2 text-[13px] leading-[20px] font-medium text-white/90 bg-transparent transition-all duration-200 hover:bg-white/[0.04] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 0.75px 0 rgba(255,255,255,0.08)'}} type="button">
 <span>Small</span>
 </button>
 </div>
@@ -248,7 +290,7 @@ export default function App() {
 <button className="button-primary-dark inline-flex w-full h-11 items-center justify-center gap-2 px-4 text-[15px] leading-[24px] font-medium transition-all duration-200 hover:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" type="button">
 <span>Continue with Email</span>
 </button>
-<button className="inline-flex w-full h-11 items-center justify-center gap-2 rounded-md px-4 text-[15px] leading-[24px] font-medium text-white/90 bg-transparent transition-all duration-200 hover:bg-white/[0.04] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.14), inset 0 0.75px 0 rgba(255,255,255,0.08)'}} type="button">
+<button className="inline-flex w-full h-11 items-center justify-center gap-2 rounded-md px-4 text-[15px] leading-[24px] font-medium text-white/90 bg-transparent transition-all duration-200 hover:bg-white/[0.04] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/30" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 0.75px 0 rgba(255,255,255,0.08)'}} type="button">
 <span>Learn more</span>
 </button>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -184,6 +220,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -197,7 +239,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-50" id="pillMenu" style={{backdropFilter: 'blur(40px) saturate(180%)', WebkitBackdropFilter: 'blur(40px) saturate(180%)'}}>
-<div className="flex flex-col rounded-full pt-1 pr-1 pb-1 pl-1" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))', border: '1px solid rgba(255,255,255,0.18)', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255,255,255,0.15)'}}>
+<div className="flex flex-col rounded-full pt-1 pr-1 pb-1 pl-1" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', border: '1px solid rgba(255, 255, 255, 0.18)', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255,255,255,0.15)'}}>
 <button aria-selected="true" className="pill-btn active group relative w-12 h-12 flex items-center justify-center rounded-full transition-all duration-200" data-tab="profile" role="tab" style={{background: 'rgba(0, 212, 255, 0.2)'}}>
 <svg className="lucide lucide-user w-5 h-5 text-cyan-400 transition-colors" data-lucide="user" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 <div className="absolute left-16 bg-slate-900/95 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">Profile Hub</div>
@@ -225,7 +267,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="fixed left-20 top-1/2 transform -translate-y-1/2 w-64 z-50 opacity-0 scale-95 pointer-events-none transition-all duration-400" id="sidebar" style={{height: '80vh', maxHeight: '600px'}}>
 
-<div className="h-full rounded-3xl overflow-hidden" style={{background: 'rgba(30, 35, 55, 0.6)', backdropFilter: 'blur(40px) saturate(180%)', WebkitBackdropFilter: 'blur(40px) saturate(180%)', border: '1px solid rgba(255,255,255,0.18)', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255,255,255,0.15)'}}>
+<div className="h-full rounded-3xl overflow-hidden" style={{background: 'rgba(30, 35, 55, 0.6)', backdropFilter: 'blur(40px) saturate(180%)', WebkitBackdropFilter: 'blur(40px) saturate(180%)', border: '1px solid rgba(255, 255, 255, 0.18)', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255,255,255,0.15)'}}>
 
 <div className="h-full p-5 overflow-y-auto">
 
@@ -246,19 +288,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="grid grid-cols-2 gap-2">
-<div className="rounded-xl p-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="rounded-xl p-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="text-xl font-semibold text-white mb-1">47</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Goals</div>
 </div>
-<div className="rounded-xl p-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="rounded-xl p-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="text-xl font-semibold text-cyan-400 mb-1">12</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Streak</div>
 </div>
-<div className="rounded-xl p-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="rounded-xl p-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="text-xl font-semibold text-purple-400 mb-1">89%</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Success</div>
 </div>
-<div className="rounded-xl p-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="rounded-xl p-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="text-xl font-semibold mb-1" style={{color: '#FF006E'}}>4.8</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Rating</div>
 </div>
@@ -277,15 +319,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="space-y-3">
-<div className="rounded-xl p-3" style={{background: 'linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,212,255,0.05))', border: '1px solid rgba(0,212,255,0.2)'}}>
+<div className="rounded-xl p-3" style={{background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.05))', border: '1px solid rgba(0,212,255,0.2)'}}>
 <div className="font-medium text-cyan-300 text-sm mb-1">Analytical</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Strong logical reasoning</div>
 </div>
-<div className="rounded-xl p-3" style={{background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.05))', border: '1px solid rgba(139,92,246,0.2)'}}>
+<div className="rounded-xl p-3" style={{background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05))', border: '1px solid rgba(139,92,246,0.2)'}}>
 <div className="font-medium text-purple-300 text-sm mb-1">Creative</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Innovative solutions</div>
 </div>
-<div className="rounded-xl p-3" style={{background: 'linear-gradient(135deg, rgba(255,0,110,0.2), rgba(255,0,110,0.05))', border: '1px solid rgba(255,0,110,0.2)'}}>
+<div className="rounded-xl p-3" style={{background: 'linear-gradient(135deg, rgba(255, 0, 110, 0.2), rgba(255, 0, 110, 0.05))', border: '1px solid rgba(255,0,110,0.2)'}}>
 <div className="font-medium text-sm mb-1" style={{color: '#FF006E'}}>Collaborative</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Team leadership</div>
 </div>
@@ -301,7 +343,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-500 flex items-center justify-center ring-4 ring-cyan-400/20">
 <svg className="lucide lucide-check w-4 h-4 text-white" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
 </div>
-<div className="flex-1 rounded-xl p-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex-1 rounded-xl p-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="font-medium text-sm mb-1" style={{color: 'rgba(255, 255, 255, 0.95)'}}>Frontend Cert</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Complete</div>
 </div>
@@ -310,7 +352,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-purple-500 flex items-center justify-center ring-4 ring-purple-400/20 animate-pulse">
 <div className="w-2 h-2 rounded-full bg-white"></div>
 </div>
-<div className="flex-1 rounded-xl p-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex-1 rounded-xl p-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="font-medium text-sm mb-1" style={{color: 'rgba(255, 255, 255, 0.95)'}}>Personal Project</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>70% complete</div>
 </div>
@@ -319,7 +361,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center ring-4 ring-slate-600/20">
 <div className="w-2 h-2 rounded-full bg-slate-400"></div>
 </div>
-<div className="flex-1 rounded-xl p-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex-1 rounded-xl p-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="font-medium text-sm mb-1" style={{color: 'rgba(255, 255, 255, 0.6)'}}>Senior Role</div>
 <div className="text-xs" style={{color: 'rgba(255, 255, 255, 0.6)'}}>6 months</div>
 </div>
@@ -330,19 +372,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="tab-content hidden" id="pathway-content">
 <h3 className="text-lg font-semibold mb-4 tracking-tight" style={{color: 'rgba(255, 255, 255, 0.95)'}}>Trajectory</h3>
-<div className="rounded-xl p-3 mb-4" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="rounded-xl p-3 mb-4" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div style={{height: '150px'}}>
 <canvas height="0" id="pathwayChart" style={{display: 'block', boxSizing: 'border-box', height: '0px', width: '0px'}} width="0"></canvas>
 </div>
 </div>
 <div className="space-y-2">
-<div className="text-center p-2 rounded-xl" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="text-center p-2 rounded-xl" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="text-xs font-medium text-cyan-400">Career ↗</div>
 </div>
-<div className="text-center p-2 rounded-xl" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="text-center p-2 rounded-xl" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="text-xs font-medium text-purple-400">Skills ↗</div>
 </div>
-<div className="text-center p-2 rounded-xl" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="text-center p-2 rounded-xl" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="text-xs font-medium" style={{color: '#FF006E'}}>Wellness →</div>
 </div>
 </div>
@@ -350,7 +392,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="tab-content hidden" id="performance-content">
 <h3 className="text-lg font-semibold mb-4 tracking-tight" style={{color: 'rgba(255, 255, 255, 0.95)'}}>Analytics</h3>
-<div className="rounded-xl p-3 mb-4" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="rounded-xl p-3 mb-4" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div style={{height: '120px'}}>
 <canvas height="0" id="performanceChart" style={{display: 'block', boxSizing: 'border-box', height: '0px', width: '0px'}} width="0"></canvas>
 </div>

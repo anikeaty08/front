@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -49,6 +85,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -143,12 +185,12 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex-1 flex items-end gap-3 px-2">
 
-<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-200 rounded-t-md bar-animate" style={{-TargetH: '30%'}}></div></div>
-<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-200 rounded-t-md bar-animate" style={{-TargetH: '45%'}}></div></div>
-<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-200 rounded-t-md bar-animate" style={{-TargetH: '60%'}}></div></div>
-<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-brand-100 rounded-t-md bar-animate" style={{-TargetH: '55%'}}></div></div>
-<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-brand-500 rounded-t-md bar-animate shadow-[0_0_15px_rgba(249,58,47,0.3)]" style={{-TargetH: '85%'}}></div></div>
-<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-800 rounded-t-md bar-animate" style={{-TargetH: '95%'}}></div></div>
+<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-200 rounded-t-md bar-animate" style={{'--target-h': '30%'}}></div></div>
+<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-200 rounded-t-md bar-animate" style={{'--target-h': '45%'}}></div></div>
+<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-200 rounded-t-md bar-animate" style={{'--target-h': '60%'}}></div></div>
+<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-brand-100 rounded-t-md bar-animate" style={{'--target-h': '55%'}}></div></div>
+<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-brand-500 rounded-t-md bar-animate shadow-[0_0_15px_rgba(249,58,47,0.3)]" style={{'--target-h': '85%'}}></div></div>
+<div className="w-full bg-slate-50 rounded-t-md relative h-full flex items-end"><div className="w-full bg-slate-800 rounded-t-md bar-animate" style={{'--target-h': '95%'}}></div></div>
 </div>
 
 <div className="absolute -bottom-8 -left-8 bg-white rounded-xl border border-slate-200 shadow-card p-5 max-w-[240px] flex items-start gap-4 transform transition-transform hover:-translate-y-1 duration-300">

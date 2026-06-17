@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -109,6 +145,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -116,7 +158,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       
 
 <header className="fixed inset-x-0 top-0 z-50">
-<div className="backdrop-blur-sm" style={{backgroundColor: 'rgba(247,247,245,0.90)', borderBottom: '1px solid rgba(198,200,202,0.18)'}}>
+<div className="backdrop-blur-sm" style={{backgroundColor: 'rgba(247, 247, 245, 0.90)', borderBottom: '1px solid rgba(198,200,202,0.18)'}}>
 <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
 <div className="flex items-center justify-between">
 
@@ -216,7 +258,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-2xl overflow-hidden shadow-xl">
 <img alt="charter bus" className="w-full h-[420px] object-cover" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
 
-<div className="absolute top-5 left-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
+<div className="absolute top-5 left-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
 <div className="flex items-center gap-3">
 <svg className="w-4 h-4" fill="none" height="18" stroke="#0F2F55" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18">
 <path d="M12 20V10"></path><path d="M5 12l7-7 7 7"></path>
@@ -227,7 +269,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="absolute bottom-5 right-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
+<div className="absolute bottom-5 right-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
 <div className="flex items-center gap-3">
 <svg className="w-4 h-4" fill="none" height="18" stroke="#0F2F55" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18">
 <path d="M3 13h18"></path><path d="M6 21h.01"></path><path d="M18 21h.01"></path><rect height="7" rx="2" width="20" x="2" y="6"></rect>
@@ -498,7 +540,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
 </svg>
 </button>
-<div className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Or call <span className="font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui'}}>1 (800) 555-0199</span></div>
+<div className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Or call <span className="font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui'}}>1 (800) 555-0199</span></div>
 </div>
 </form>
 </div>
@@ -517,12 +559,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="M7 16v3"></path><path d="M17 16v3"></path>
 </svg>
 </div>
-<span className="text-lg" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Texas Bus Services</span>
+<span className="text-lg" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Texas Bus Services</span>
 </div>
 <p className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Safe, punctual group travel. Insured, licensed, and experienced drivers serving events, schools, and organizations nationwide.</p>
 </div>
 <div>
-<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Services</h4>
+<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Services</h4>
 <ul className="space-y-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>
 <li><a className="hover:text-[#0F2F55]" href="#services">Hourly Charters</a></li>
 <li><a className="hover:text-[#0F2F55]" href="#fleet">Fleet Options</a></li>
@@ -531,7 +573,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </ul>
 </div>
 <div>
-<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Contact</h4>
+<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Contact</h4>
 <p className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>1 (800) 555-0199<br/>hello@texasbusservices.example</p>
 <div className="mt-4 flex items-center gap-3">
 <a className="text-slate-600 hover:text-[#0F2F55]" href="#">

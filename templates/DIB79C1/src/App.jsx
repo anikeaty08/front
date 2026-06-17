@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -372,6 +408,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -385,49 +427,49 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-3">
 
 <div className="flex items-center justify-center rounded-md border border-neutral-200 bg-white shadow-sm px-2.5 py-1.5">
-<span className="text-[18px] tracking-tight text-[#A28139]" style={{fontFamily: '\'Cinzel\',serif'}}>MNV</span>
+<span className="text-[18px] tracking-tight text-[#A28139]" style={{fontFamily: '\'Cinzel\', serif'}}>MNV</span>
 </div>
 <div>
-<h1 className="text-[20px] sm:text-[22px] tracking-tight font-medium text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Matias Nature Village</h1>
+<h1 className="text-[20px] sm:text-[22px] tracking-tight font-medium text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Matias Nature Village</h1>
 <p className="text-sm text-neutral-500" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif, system-ui'}}>Guest Loyalty &amp; Rentals</p>
 </div>
 </div>
 <div className="hidden sm:flex items-center gap-3">
 <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2">
 <i className="w-4 h-4 text-[#A28139]" data-lucide="badge-percent"></i>
-<span className="text-sm text-neutral-700" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Member</span>
+<span className="text-sm text-neutral-700" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Member</span>
 </div>
 <button className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" id="to-points">
 <i className="w-4 h-4 text-[#A28139]" data-lucide="wallet"></i>
-<span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>My Points</span>
+<span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>My Points</span>
 </button>
 </div>
 </div>
 
 <nav className="hidden md:flex items-center gap-1 pb-2">
 <button aria-current="page" className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="home">
-<i className="w-4 h-4" data-lucide="home"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Home</span>
+<i className="w-4 h-4" data-lucide="home"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Home</span>
 </button>
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="lodgings">
-<i className="w-4 h-4" data-lucide="bed-double"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Lodgings</span>
+<i className="w-4 h-4" data-lucide="bed-double"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Lodgings</span>
 </button>
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="news">
-<i className="w-4 h-4" data-lucide="newspaper"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>News &amp; Offers</span>
+<i className="w-4 h-4" data-lucide="newspaper"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>News &amp; Offers</span>
 </button>
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="points">
-<i className="w-4 h-4" data-lucide="wallet"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>My Points</span>
+<i className="w-4 h-4" data-lucide="wallet"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>My Points</span>
 </button>
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="store">
-<i className="w-4 h-4" data-lucide="shopping-bag"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Store</span>
+<i className="w-4 h-4" data-lucide="shopping-bag"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Store</span>
 </button>
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="help">
-<i className="w-4 h-4" data-lucide="help-circle"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Help</span>
+<i className="w-4 h-4" data-lucide="help-circle"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Help</span>
 </button>
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="account">
-<i className="w-4 h-4" data-lucide="user"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Account</span>
+<i className="w-4 h-4" data-lucide="user"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Account</span>
 </button>
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="admin">
-<i className="w-4 h-4" data-lucide="wrench"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Admin</span>
+<i className="w-4 h-4" data-lucide="wrench"></i><span className="tracking-tight" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Admin</span>
 </button>
 </nav>
 </header>
@@ -439,8 +481,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Nature Lodging" className="h-64 w-full object-cover sm:h-80" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
 <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
-<h2 className="text-white text-[24px] sm:text-[28px] tracking-tight font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>Welcome to Matias Nature Village</h2>
-<p className="mt-1.5 text-white/90 text-sm sm:text-base" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Nature escapes, curated stays, and a loyalty program built for you.</p>
+<h2 className="text-white text-[24px] sm:text-[28px] tracking-tight font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>Welcome to Matias Nature Village</h2>
+<p className="mt-1.5 text-white/90 text-sm sm:text-base" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Nature escapes, curated stays, and a loyalty program built for you.</p>
 <div className="mt-4 flex items-center gap-2">
 <button className="tab-btn inline-flex items-center gap-2 rounded-lg bg-[#A28139] text-white px-4 py-2 text-sm font-medium hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/40 transition" data-tab="lodgings">
 <i className="w-4 h-4" data-lucide="bed-double"></i> Explore Lodgings
@@ -456,8 +498,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="trees"></i></div>
 <div>
-<p className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Nature First</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Sustainable stays amid serene landscapes.</p>
+<p className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Nature First</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Sustainable stays amid serene landscapes.</p>
 </div>
 </div>
 </div>
@@ -465,8 +507,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="sparkles"></i></div>
 <div>
-<p className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Curated Comfort</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Thoughtful amenities and design details.</p>
+<p className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Curated Comfort</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Thoughtful amenities and design details.</p>
 </div>
 </div>
 </div>
@@ -474,8 +516,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="badge-percent"></i></div>
 <div>
-<p className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Loyalty Perks</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Earn and redeem for exclusive experiences.</p>
+<p className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Loyalty Perks</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Earn and redeem for exclusive experiences.</p>
 </div>
 </div>
 </div>
@@ -484,7 +526,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="app-view hidden" id="view-lodgings">
 <div className="mb-4 flex items-center justify-between">
-<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>Lodgings</h2>
+<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>Lodgings</h2>
 <div className="flex items-center gap-2">
 <div className="hidden sm:flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm text-neutral-600">
 <i className="w-4 h-4 text-[#A28139]" data-lucide="filter"></i> Browse our collection
@@ -505,68 +547,68 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="app-view hidden" id="view-news">
 <div className="mb-4 flex items-center justify-between">
-<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>News &amp; Offers</h2>
-<span className="text-sm text-neutral-500" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Latest updates from Matias Nature Village</span>
+<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>News &amp; Offers</h2>
+<span className="text-sm text-neutral-500" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Latest updates from Matias Nature Village</span>
 </div>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="news-feed"></div>
 </section>
 
 <section className="app-view hidden space-y-5" id="view-store">
 <div className="flex items-center justify-between">
-<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>Store</h2>
+<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>Store</h2>
 <div className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-1.5">
 <i className="w-4 h-4 text-[#A28139]" data-lucide="wallet"></i>
-<span className="text-sm text-neutral-700" id="store-balance" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>0</span>
+<span className="text-sm text-neutral-700" id="store-balance" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>0</span>
 </div>
 </div>
-<div className="hidden rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-800" id="store-alert" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}></div>
+<div className="hidden rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-800" id="store-alert" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}></div>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="store-grid"></div>
 </section>
 
 <section className="app-view hidden space-y-5" id="view-help">
 <div>
-<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>How to Earn Points</h2>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Ways to grow your balance</p>
+<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>How to Earn Points</h2>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Ways to grow your balance</p>
 </div>
 <div className="rounded-2xl border border-neutral-200 bg-white p-5 space-y-4">
 <div className="flex items-start gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="calendar-days"></i></div>
 <div>
-<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Bookings</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Earn 10 points for every €1 spent on eligible stays (pre‑tax).</p>
+<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Bookings</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Earn 10 points for every €1 spent on eligible stays (pre‑tax).</p>
 </div>
 </div>
 <div className="flex items-start gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="star"></i></div>
 <div>
-<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Stay Reviews</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Leave a verified review after checkout: +300 points per review.</p>
+<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Stay Reviews</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Leave a verified review after checkout: +300 points per review.</p>
 </div>
 </div>
 <div className="flex items-start gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="users"></i></div>
 <div>
-<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Referrals</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Invite friends who complete a stay: +1000 points per referral.</p>
+<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Referrals</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Invite friends who complete a stay: +1000 points per referral.</p>
 </div>
 </div>
 <div className="flex items-start gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="gift"></i></div>
 <div>
-<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Seasonal Bonuses</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Look out for limited‑time promos on longer stays or weekdays.</p>
+<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Seasonal Bonuses</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Look out for limited‑time promos on longer stays or weekdays.</p>
 </div>
 </div>
 <div className="flex items-start gap-3">
 <div className="rounded-lg bg-neutral-100 p-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="award"></i></div>
 <div>
-<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Badges</p>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Unlock badges through bookings, reviews, referrals, and nights stayed. Badges showcase your milestones.</p>
+<p className="text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Badges</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Unlock badges through bookings, reviews, referrals, and nights stayed. Badges showcase your milestones.</p>
 </div>
 </div>
 </div>
 <div className="rounded-2xl border border-neutral-200 bg-white p-5">
-<p className="text-sm text-neutral-700" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Redeem your points in the Store for perks like breakfast, spa access, and late checkout. Some rewards are subject to availability.</p>
+<p className="text-sm text-neutral-700" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Redeem your points in the Store for perks like breakfast, spa access, and late checkout. Some rewards are subject to availability.</p>
 </div>
 </section>
 
@@ -579,32 +621,32 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-3">
 <div className="rounded-lg bg-white/15 p-2"><i className="w-5 h-5 text-white" data-lucide="wallet"></i></div>
 <div>
-<p className="text-[18px] tracking-tight font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>My Points</p>
-<p className="text-white/90 text-sm" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Current Balance</p>
+<p className="text-[18px] tracking-tight font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>My Points</p>
+<p className="text-white/90 text-sm" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Current Balance</p>
 </div>
 </div>
 <div className="text-right">
-<p className="text-[28px] tracking-tight font-medium" id="points-balance" style={{fontFamily: '\'Cinzel\',serif'}}>0</p>
-<p className="text-xs text-white/80" id="points-last-updated" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}></p>
+<p className="text-[28px] tracking-tight font-medium" id="points-balance" style={{fontFamily: '\'Cinzel\', serif'}}>0</p>
+<p className="text-xs text-white/80" id="points-last-updated" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}></p>
 </div>
 </div>
 </div>
 <div className="bg-white px-6 py-4">
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Earn points on bookings and redeem for exclusive perks and stays.</p>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Earn points on bookings and redeem for exclusive perks and stays.</p>
 </div>
 </div>
 
 <div className="w-full sm:w-[360px] space-y-3">
 <button className="tab-btn w-full inline-flex items-center justify-between gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-neutral-700 hover:text-neutral-900 hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="lodgings">
-<div className="flex items-center gap-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="bed-double"></i><span className="text-sm" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Book &amp; Earn</span></div>
+<div className="flex items-center gap-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="bed-double"></i><span className="text-sm" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Book &amp; Earn</span></div>
 <i className="w-4 h-4" data-lucide="chevron-right"></i>
 </button>
 <button className="tab-btn w-full inline-flex items-center justify-between gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-neutral-700 hover:text-neutral-900 hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="store">
-<div className="flex items-center gap-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="shopping-bag"></i><span className="text-sm" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Redeem in Store</span></div>
+<div className="flex items-center gap-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="shopping-bag"></i><span className="text-sm" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Redeem in Store</span></div>
 <i className="w-4 h-4" data-lucide="chevron-right"></i>
 </button>
 <button className="tab-btn w-full inline-flex items-center justify-between gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-neutral-700 hover:text-neutral-900 hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" data-tab="help">
-<div className="flex items-center gap-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="help-circle"></i><span className="text-sm" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>How to Earn</span></div>
+<div className="flex items-center gap-2"><i className="w-5 h-5 text-[#A28139]" data-lucide="help-circle"></i><span className="text-sm" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>How to Earn</span></div>
 <i className="w-4 h-4" data-lucide="chevron-right"></i>
 </button>
 </div>
@@ -612,8 +654,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-neutral-200 bg-white">
 <div className="px-5 py-4 border-b border-neutral-200">
-<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Recent Activity</h3>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Last 10 transactions</p>
+<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Recent Activity</h3>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Last 10 transactions</p>
 </div>
 <div className="divide-y divide-neutral-200" id="ledger-list"></div>
 </div>
@@ -621,17 +663,17 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="app-view hidden space-y-5" id="view-account">
 <div className="mb-1">
-<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>Account</h2>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Manage your profile and preferences</p>
+<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>Account</h2>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Manage your profile and preferences</p>
 </div>
 <div className="rounded-2xl border border-neutral-200 bg-white p-5 flex items-start gap-4" id="account-card">
 <img alt="User" className="h-16 w-16 rounded-xl object-cover" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <div className="flex-1">
-<p className="text-[18px] tracking-tight text-neutral-900" id="acc-name" style={{fontFamily: '\'Cinzel\',serif'}}>Guest</p>
-<p className="text-sm text-neutral-600" id="acc-email" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>guest@example.com</p>
+<p className="text-[18px] tracking-tight text-neutral-900" id="acc-name" style={{fontFamily: '\'Cinzel\', serif'}}>Guest</p>
+<p className="text-sm text-neutral-600" id="acc-email" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>guest@example.com</p>
 <div className="mt-3 flex items-center gap-2">
-<div className="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs text-neutral-700" id="acc-tier" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Tier: Member</div>
-<div className="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs text-neutral-700" id="acc-id" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>ID: —</div>
+<div className="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs text-neutral-700" id="acc-tier" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Tier: Member</div>
+<div className="rounded-lg bg-neutral-100 px-2.5 py-1 text-xs text-neutral-700" id="acc-id" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>ID: —</div>
 </div>
 </div>
 <button className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-700 hover:text-neutral-900 hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition">
@@ -641,8 +683,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-neutral-200 bg-white">
 <div className="px-5 py-4 border-b border-neutral-200">
-<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Badges</h3>
-<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Milestones you’ve unlocked</p>
+<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Badges</h3>
+<p className="text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Milestones you’ve unlocked</p>
 </div>
 <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="badges-grid"></div>
 </div>
@@ -650,16 +692,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="app-view hidden space-y-6" id="view-admin">
 <div className="flex items-center justify-between">
-<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\',serif'}}>Admin</h2>
-<div className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm text-neutral-600" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>
+<h2 className="text-[22px] tracking-tight text-neutral-900 font-medium" style={{fontFamily: '\'Cinzel\', serif'}}>Admin</h2>
+<div className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm text-neutral-600" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>
 <i className="w-4 h-4 text-[#A28139]" data-lucide="shield"></i> Admin Tools
             </div>
 </div>
 
 <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden">
 <div className="px-5 py-4 border-b border-neutral-200 flex items-center justify-between">
-<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Manage News</h3>
-<span className="text-xs text-neutral-500" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Add or edit articles</span>
+<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Manage News</h3>
+<span className="text-xs text-neutral-500" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Add or edit articles</span>
 </div>
 <div className="p-5 space-y-4">
 <form className="grid grid-cols-1 sm:grid-cols-2 gap-3" id="admin-news-form">
@@ -680,8 +722,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden">
 <div className="px-5 py-4 border-b border-neutral-200 flex items-center justify-between">
-<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\',serif'}}>Manage Lodgings</h3>
-<span className="text-xs text-neutral-500" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Add or edit units</span>
+<h3 className="text-[18px] tracking-tight text-neutral-900" style={{fontFamily: '\'Cinzel\', serif'}}>Manage Lodgings</h3>
+<span className="text-xs text-neutral-500" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Add or edit units</span>
 </div>
 <div className="p-5 space-y-4">
 <form className="grid grid-cols-1 sm:grid-cols-2 gap-3" id="admin-lodging-form">
@@ -707,28 +749,28 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-6xl px-3">
 <div className="grid grid-cols-8">
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="home">
-<i className="w-5 h-5" data-lucide="home"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Home</span>
+<i className="w-5 h-5" data-lucide="home"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Home</span>
 </button>
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="lodgings">
-<i className="w-5 h-5" data-lucide="bed-double"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Stay</span>
+<i className="w-5 h-5" data-lucide="bed-double"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Stay</span>
 </button>
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="news">
-<i className="w-5 h-5" data-lucide="newspaper"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>News</span>
+<i className="w-5 h-5" data-lucide="newspaper"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>News</span>
 </button>
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="points">
-<i className="w-5 h-5" data-lucide="wallet"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Points</span>
+<i className="w-5 h-5" data-lucide="wallet"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Points</span>
 </button>
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="store">
-<i className="w-5 h-5" data-lucide="shopping-bag"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Store</span>
+<i className="w-5 h-5" data-lucide="shopping-bag"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Store</span>
 </button>
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="help">
-<i className="w-5 h-5" data-lucide="help-circle"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Help</span>
+<i className="w-5 h-5" data-lucide="help-circle"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Help</span>
 </button>
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="account">
-<i className="w-5 h-5" data-lucide="user"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Account</span>
+<i className="w-5 h-5" data-lucide="user"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Account</span>
 </button>
 <button className="tab-btn flex flex-col items-center py-2 text-[11px] text-neutral-600" data-tab="admin">
-<i className="w-5 h-5" data-lucide="wrench"></i><span className="mt-1" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}>Admin</span>
+<i className="w-5 h-5" data-lucide="wrench"></i><span className="mt-1" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}>Admin</span>
 </button>
 </div>
 </div>
@@ -740,7 +782,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative mx-auto max-w-2xl mt-16 sm:mt-24">
 <div className="mx-4 rounded-2xl border border-neutral-200 bg-white overflow-hidden">
 <div className="flex items-center justify-between px-5 py-3 border-b border-neutral-200">
-<h4 className="text-[18px] tracking-tight text-neutral-900" id="news-modal-title" style={{fontFamily: '\'Cinzel\',serif'}}>Article</h4>
+<h4 className="text-[18px] tracking-tight text-neutral-900" id="news-modal-title" style={{fontFamily: '\'Cinzel\', serif'}}>Article</h4>
 <button className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm text-neutral-700 hover:text-neutral-900 hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A28139]/30 transition" id="news-modal-close">
 <i className="w-4 h-4" data-lucide="x"></i> Close
             </button>
@@ -748,8 +790,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="p-0">
 <img alt="News" className="w-full h-56 object-cover" id="news-modal-image" src=""/>
 <div className="p-5">
-<p className="text-xs text-neutral-500" id="news-modal-date" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}></p>
-<p className="mt-2 text-neutral-700 text-sm leading-6" id="news-modal-content" style={{fontFamily: '\'Lato\',\'Montserrat\',ui-sans-serif'}}></p>
+<p className="text-xs text-neutral-500" id="news-modal-date" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}></p>
+<p className="mt-2 text-neutral-700 text-sm leading-6" id="news-modal-content" style={{fontFamily: '\'Lato\', \'Montserrat\', ui-sans-serif'}}></p>
 </div>
 </div>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,6 +48,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -109,7 +151,7 @@ gtag('config', 'G-2M6V79H761');
       </h2>
 <div className="grid md:grid-cols-3 gap-6 md:gap-8">
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 bg-gradient-to-br from-[#1f253f] to-[#15192b] rounded-[1.5rem] p-6 shadow-lg shadow-black/20 border border-white/5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.02))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 bg-gradient-to-br from-[#1f253f] to-[#15192b] rounded-[1.5rem] p-6 shadow-lg shadow-black/20 border border-white/5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.02))', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-[#1a1f36] text-[#c9a84c] border border-[#c9a84c]/20">
 <iconify-icon className="text-xl md:text-2xl" icon="solar:user-cross-linear" strokeWidth="1.5"></iconify-icon>
 </div>
@@ -121,7 +163,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 bg-gradient-to-br from-[#1f253f] to-[#15192b] rounded-[1.5rem] p-6 shadow-lg shadow-black/20 border border-white/5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.02))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 bg-gradient-to-br from-[#1f253f] to-[#15192b] rounded-[1.5rem] p-6 shadow-lg shadow-black/20 border border-white/5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.02))', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-[#1a1f36] text-[#c9a84c] border border-[#c9a84c]/20">
 <iconify-icon className="text-xl md:text-2xl" icon="solar:buildings-linear" strokeWidth="1.5"></iconify-icon>
 </div>
@@ -133,7 +175,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 bg-gradient-to-br from-[#1f253f] to-[#15192b] rounded-[1.5rem] p-6 shadow-lg shadow-black/20 border border-white/5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.02))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 bg-gradient-to-br from-[#1f253f] to-[#15192b] rounded-[1.5rem] p-6 shadow-lg shadow-black/20 border border-white/5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.02))', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-[#1a1f36] text-[#c9a84c] border border-[#c9a84c]/20">
 <iconify-icon className="text-xl md:text-2xl" icon="solar:bill-cross-linear" strokeWidth="1.5"></iconify-icon>
 </div>

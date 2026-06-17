@@ -10,7 +10,7 @@ import 'iconify-icon' // Register Web Component globally
 gsap.registerPlugin(ScrollTrigger)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <App />
-  </React.StrictMode>,
+  ,
 )

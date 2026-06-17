@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -184,6 +220,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -393,7 +435,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4">
 <div className="rounded-2xl relative [--fx-filter:blur(10px)_liquid-glass(5,10)_saturate(1.25)_noise(0.5,1,0)]">
 <div className="shadow-indigo-500/30 [--fx-filter:blur(10px)_liquid-glass(5,10)_saturate(1.25)_noise(0.5,1,0)_contrast(0.6)] rounded-2xl pt-[1px] pr-[1px] pb-[1px] pl-[1px] shadow-sm">
-<div className="bg-gradient-to-br from-white/0 via-white/10 to-white/0 rounded-2xl pt-4 pr-4 pb-4 pl-4 shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/0 via-white/10 to-white/0 rounded-2xl pt-4 pr-4 pb-4 pl-4 shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex gap-3 gap-x-3 gap-y-3 items-start">
 <div className="mt-0.5">
 <svg className="w-5 h-5 text-white" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path></svg>
@@ -649,13 +691,13 @@ companies worldwide</p>
 Whether you’re chatting on a call, in-app, or through your calendar, it automatically finds the best times, manages reschedules, and keeps everything synced without lifting a finger.</p>
 
 <div className="mt-6 flex flex-col gap-4">
-<div className="inline-flex sm:w-[540px] text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-sm gap-x-3 gap-y-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex sm:w-[540px] text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-sm gap-x-3 gap-y-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-white/10 ring-1 rounded-xl">
 <svg className="lucide lucide-globe h-4.5 w-4.5 text-white/90" data-lucide="globe" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Instant meeting setup — automatically detects context and books at the right time.</span>
 </div>
-<div className="inline-flex sm:w-[540px] text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-sm gap-x-3 gap-y-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex sm:w-[540px] text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-sm gap-x-3 gap-y-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-white/10 ring-1 rounded-xl">
 <svg className="lucide lucide-smile" data-icon-replaced="true" data-icon-set="lucide" data-lucide="smile" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(255, 255, 255)'}} viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" x2="9.01" y1="9" y2="9"></line><line x1="15" x2="15.01" y1="9" y2="9"></line></svg>
 </span>
@@ -718,13 +760,13 @@ Whether you’re chatting on a call, in-app, or through your calendar, it automa
 <p className="sm:text-lg text-base text-slate-300 mt-4">Simply type your question, request, or idea — no complicated syntax or commands needed.
 Whether it’s “Draft a follow-up email,” “Summarize my meeting notes,” or “Plan this week’s tasks,” the assistant understands your intent instantly.</p>
 <div className="mt-6 flex flex-col gap-4">
-<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-white/10 ring-1 rounded-xl">
 <svg className="h-4.5 w-4.5 text-white/90" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Type naturally — it understands plain language like a real teammate.</span>
 </div>
-<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-white/10 ring-1 rounded-xl">
 <svg className="h-4.5 w-4.5 text-white/90" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"></path><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"></path></svg>
 </span>
@@ -800,13 +842,13 @@ Whether it’s “Draft a follow-up email,” “Summarize my meeting notes,” 
                 Our AI analyzes your request, understands context, and generates intelligent responses in seconds—pulling from knowledge bases and workflows.
               </p>
 <div className="mt-6 flex flex-col gap-4">
-<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-xl ring-white/10 ring-1">
 <svg className="h-4.5 w-4.5 text-white/90" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Context-aware responses every time.</span>
 </div>
-<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 w-full max-w-full border-white/10 border rounded-2xl px-4 py-3 shadow-sm gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-white/10 ring-1 rounded-xl">
 <svg className="h-4.5 w-4.5 text-white/90" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
 </span>
@@ -869,13 +911,13 @@ Whether it’s “Draft a follow-up email,” “Summarize my meeting notes,” 
                 Receive polished outputs, actionable insights, or automated tasks—ready to use, share, or refine. One-click integrations make execution seamless.
               </p>
 <div className="mt-4 sm:mt-6 flex flex-col gap-3 sm:gap-4">
-<div className="inline-flex text-xs sm:text-sm text-slate-200 w-full border-white/10 border rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm gap-2 sm:gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-xs sm:text-sm text-slate-200 w-full border-white/10 border rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm gap-2 sm:gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl ring-white/10 ring-1">
 <svg className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-white/90" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Production instantly.</span>
 </div>
-<div className="inline-flex text-xs sm:text-sm text-slate-200 w-full border-white/10 border rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm gap-2 sm:gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-xs sm:text-sm text-slate-200 w-full border-white/10 border rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm gap-2 sm:gap-3 items-center" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 sm:w-10 sm:h-10 ring-white/10 ring-1 rounded-xl">
 <svg className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-white/90" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
 </span>
@@ -1109,7 +1151,7 @@ Whether it’s “Draft a follow-up email,” “Summarize my meeting notes,” 
 <footer className="pb-10">
 <div className="sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pr-4 pl-4">
 
-<div className="overflow-hidden sm:p-10 sm:mb-10 bg-white/5 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/0bcb241d-7f62-4899-8da0-434927914200_1600w.webp)] bg-cover bg-center rounded-3xl mb-10 px-6 py-6 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="overflow-hidden sm:p-10 sm:mb-10 bg-white/5 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/0bcb241d-7f62-4899-8da0-434927914200_1600w.webp)] bg-cover bg-center rounded-3xl mb-10 px-6 py-6 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-70" style={{background: 'radial-gradient(120% 80% at 10% 10%, rgba(99,102,241,0.25) 0%, rgba(99,102,241,0.08) 35%, rgba(217,70,239,0.12) 60%, rgba(10,11,16,0) 85%)'}}></div>
 <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6 sm:gap-10 relative">
 <div className="">

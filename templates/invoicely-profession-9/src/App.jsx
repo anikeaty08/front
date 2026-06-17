@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -116,6 +152,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -158,7 +200,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         payments—without the busywork.
       </p>
 <div className="flex flex-col gap-4 sm:flex-row sm:justify-center [animation:fadeSlideIn_1s_ease-out_0.1s_both] mt-10 gap-x-4 gap-y-4 items-center">
-<a className="tracking-tight font-geist" href="#" id="get-started" onmousedown="this.style.boxShadow='0 0 0.6em .25em var(--glow-color), 0 0 2.5em 2em var(--glow-spread-color), inset 0 0 .5em .25em var(--glow-color)'" onmouseout="this.style.color='var(--glow-color)'; this.style.backgroundColor='var(--btn-color)'; this.style.boxShadow='0 0 1em .25em var(--glow-color), 0 0 4em 1em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)'" onmouseover="this.style.color='var(--btn-color)'; this.style.backgroundColor='var(--glow-color)'; this.style.boxShadow='0 0 1em .25em var(--glow-color), 0 0 4em 2em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)'" onmouseup="this.style.boxShadow='0 0 1em .25em var(--glow-color), 0 0 4em 2em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)'" style={{-GlowColor: 'rgb(217, 176, 255)', -GlowSpreadColor: 'rgba(191, 123, 255, 0.781)', -EnhancedGlowColor: 'rgb(231, 206, 255)', -BtnColor: 'rgb(100, 61, 136)', border: '.25em solid var(--glow-color)', padding: '1em 3em', color: 'var(--glow-color)', fontSize: '15px', fontWeight: 'bold', backgroundColor: 'var(--btn-color)', borderRadius: '1em', boxShadow: '0 0 1em .25em var(--glow-color), 0 0 4em 1em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)', textShadow: '0 0 .5em var(--glow-color)', position: 'relative', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem'}}>
+<a className="tracking-tight font-geist" href="#" id="get-started" onmousedown="this.style.boxShadow='0 0 0.6em .25em var(--glow-color), 0 0 2.5em 2em var(--glow-spread-color), inset 0 0 .5em .25em var(--glow-color)'" onmouseout="this.style.color='var(--glow-color)'; this.style.backgroundColor='var(--btn-color)'; this.style.boxShadow='0 0 1em .25em var(--glow-color), 0 0 4em 1em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)'" onmouseover="this.style.color='var(--btn-color)'; this.style.backgroundColor='var(--glow-color)'; this.style.boxShadow='0 0 1em .25em var(--glow-color), 0 0 4em 2em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)'" onmouseup="this.style.boxShadow='0 0 1em .25em var(--glow-color), 0 0 4em 2em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)'" style={{'--glow-color': 'rgb(217, 176, 255)', '--glow-spread-color': 'rgba(191, 123, 255, 0.781)', '--enhanced-glow-color': 'rgb(231, 206, 255)', '--btn-color': 'rgb(100, 61, 136)', border: '.25em solid var(--glow-color)', padding: '1em 3em', color: 'var(--glow-color)', fontSize: '15px', fontWeight: 'bold', backgroundColor: 'var(--btn-color)', borderRadius: '1em', boxShadow: '0 0 1em .25em var(--glow-color), 0 0 4em 1em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color)', textShadow: '0 0 .5em var(--glow-color)', position: 'relative', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem'}}>
     Start free trial
   </a>
 </div>

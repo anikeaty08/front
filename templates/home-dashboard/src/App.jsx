@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -206,7 +248,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-6 relative flex flex-col items-center justify-center min-h-[700px] border-r border-neutral-800/30">
 
-<button className="absolute top-10 group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-lg z-30 outline-none" style={{boxShadow: '0 15px 33px -12px rgba(255,162,42,0.9), inset 0 4px 6.3px rgba(252,220,134,1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
+<button className="absolute top-10 group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-lg z-30 outline-none" style={{boxShadow: '0 15px 33px -12px rgba(255, 162, 42, 0.9), inset 0 4px 6.3px rgba(252, 220, 134, 1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute top-0 right-0 bottom-0 left-0 translate-y-full"></div>
 <span className="relative flex items-center gap-2 text-[13px]">
                         Run Scene
@@ -270,7 +312,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="flex gap-1.5 z-20 bg-neutral-900/90 border-neutral-800/60 border rounded-full mb-10 pt-1.5 pr-1.5 pb-1.5 pl-1.5 shadow-2xl backdrop-blur-md items-center absolute bottom-0">
-<button className="group flex transition-all hover:bg-white/10 active:scale-95 text-sm font-medium text-neutral-200 bg-gradient-to-b from-white/20 via-white/5 to-white/10 rounded-full pt-2.5 pr-5 pb-2.5 pl-4 relative gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<button className="group flex transition-all hover:bg-white/10 active:scale-95 text-sm font-medium text-neutral-200 bg-gradient-to-b from-white/20 via-white/5 to-white/10 rounded-full pt-2.5 pr-5 pb-2.5 pl-4 relative gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <svg className="lucide lucide-layout-grid w-4 h-4 text-neutral-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><rect height="7" rx="1" width="7" x="3" y="3"></rect><rect height="7" rx="1" width="7" x="14" y="3"></rect><rect className="" height="7" rx="1" width="7" x="14" y="14"></rect><rect height="7" rx="1" width="7" x="3" y="14"></rect></svg>
 <span className="tracking-tight text-neutral-100">Dashboard</span>
 </button>

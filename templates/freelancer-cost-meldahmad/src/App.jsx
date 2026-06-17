@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -34,6 +70,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -55,7 +97,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="bg-strip bg-neutral-900 h-full w-px mx-auto" style={{animationDelay: '0.6s'}}></div>
 </div>
 
-<div className="flashlight-card aspect-[3/4] md:max-w-md md:p-8 flex flex-col animate-enter bg-neutral-950 w-full bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9aba7e5b-6f16-4d9d-8ad5-63a77f18acee_1600w.webp)] max-w-sm bg-cover bg-center z-10 border-neutral-800 border rounded-3xl pt-6 pr-6 pb-6 pl-6 shadow-2xl justify-between" style={{-MouseX: '412.5572814941406px', -MouseY: '341.0520782470703px'}}>
+<div className="flashlight-card aspect-[3/4] md:max-w-md md:p-8 flex flex-col animate-enter bg-neutral-950 w-full bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9aba7e5b-6f16-4d9d-8ad5-63a77f18acee_1600w.webp)] max-w-sm bg-cover bg-center z-10 border-neutral-800 border rounded-3xl pt-6 pr-6 pb-6 pl-6 shadow-2xl justify-between" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '341.0520782470703px'}}>
 <div className="flex justify-between items-center text-xs font-mono text-neutral-500 tracking-wider">
 <span className="animate-enter delay-200">01 / 10</span>
 <span className="animate-enter delay-200">@meldahmad</span>
@@ -98,7 +140,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{-MouseX: '412.5572814941406px', -MouseY: '-456.170166015625px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-456.170166015625px'}}>
 <div className="flex justify-between items-center text-xs font-mono text-neutral-500 mb-6">
 <span>02 / 10</span>
 <span>HARDWARE</span>
@@ -159,7 +201,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950 overflow-hidden" style={{-MouseX: '412.5572814941406px', -MouseY: '-1253.3924560546875px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950 overflow-hidden" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-1253.3924560546875px'}}>
 
 <div className="absolute top-0 left-0 right-0 h-16 flex items-center justify-center border-b border-neutral-800/50 bg-neutral-900/20 backdrop-blur-sm marquee-container">
 <div className="flex gap-8 marquee-content items-center opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
@@ -210,7 +252,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{-MouseX: '412.5572814941406px', -MouseY: '-2050.61474609375px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-2050.61474609375px'}}>
 <div className="flex justify-between items-center text-xs font-mono text-neutral-500 mb-6">
 <span>04 / 10</span>
 <span>OPEX</span>
@@ -257,7 +299,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{-MouseX: '412.5572814941406px', -MouseY: '-2847.8369140625px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-2847.8369140625px'}}>
 <div className="flex justify-between items-center text-xs font-mono text-neutral-500 mb-6">
 <span>05 / 10</span>
 <span>RISK</span>
@@ -291,7 +333,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col justify-center shadow-2xl bg-neutral-950 text-center" style={{-MouseX: '412.5572814941406px', -MouseY: '-3645.059326171875px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col justify-center shadow-2xl bg-neutral-950 text-center" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-3645.059326171875px'}}>
 <h3 className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-500 mb-4">Total Kos Wajib</h3>
 <div className="relative inline-block mx-auto">
 <h1 className="text-5xl md:text-6xl font-semibold tracking-tighter text-white mb-2">
@@ -323,7 +365,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{-MouseX: '412.5572814941406px', -MouseY: '-4442.28125px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-4442.28125px'}}>
 <div className="flex justify-between items-center text-xs font-mono text-neutral-500 mb-6">
 <span>07 / 10</span>
 <span>FORMULA</span>
@@ -360,7 +402,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{-MouseX: '412.5572814941406px', -MouseY: '-5239.50390625px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-5239.50390625px'}}>
 <div className="flex justify-between items-center text-xs font-mono text-neutral-500 mb-6">
 <span>08 / 10</span>
 <span>REALITY</span>
@@ -387,7 +429,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="h-screen w-full snap-start flex items-center justify-center bg-neutral-950 relative">
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{-MouseX: '412.5572814941406px', -MouseY: '-6016.72607421875px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col shadow-2xl bg-neutral-950" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-6016.72607421875px'}}>
 <div className="flex justify-between items-center text-xs font-mono text-neutral-500 mb-6">
 <span>09 / 10</span>
 <span>MINDSET</span>
@@ -424,7 +466,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
 <div className="w-[500px] h-[500px] bg-gradient-to-r from-neutral-800 to-neutral-900 rounded-full blur-3xl animate-pulse"></div>
 </div>
-<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col justify-center items-center text-center shadow-2xl bg-neutral-950 z-10" style={{-MouseX: '412.5572814941406px', -MouseY: '-6833.9482421875px'}}>
+<div className="flashlight-card aspect-[3/4] w-full max-w-sm md:max-w-md border border-neutral-800 rounded-3xl p-6 md:p-8 flex flex-col justify-center items-center text-center shadow-2xl bg-neutral-950 z-10" style={{'--mouse-x': '412.5572814941406px', '--mouse-y': '-6833.9482421875px'}}>
 <div className="w-24 h-24 rounded-full bg-neutral-800 border-2 border-neutral-700 overflow-hidden mb-6 relative group cursor-pointer">
 
 <div className="w-full h-full bg-gradient-to-tr from-neutral-700 to-neutral-600 flex items-center justify-center text-2xl font-bold text-neutral-400">MA</div>

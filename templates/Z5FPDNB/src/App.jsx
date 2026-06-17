@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     particlesJS.load('particles-js','https://cdn.jsdelivr.net/gh/VincentGarreau/particles.js/particles.json');
@@ -10,6 +46,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -86,7 +128,7 @@ export default function App() {
 
 </div>
 </div>
-<div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(rgba(74,107,138,.05)1.2px,transparent 1.2px),radial-gradient(rgba(74,107,138,.03).8px,transparent .8px)', backgroundSize: '28px 28px,16px 16px'}}></div>
+<div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(rgba(74,107,138,.05)1.2px,transparent 1.2px),radial-gradient(rgba(74,107,138,.03).8px,transparent .8px)', backgroundSize: '28px 28px, 16px 16px'}}></div>
 </section>
 
 <section className="py-14 md:py-20 bg-white mt-[36px]">

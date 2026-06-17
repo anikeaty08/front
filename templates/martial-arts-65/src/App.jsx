@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -109,6 +145,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -135,7 +177,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="text-sm text-zinc-300 hover:text-white transition-colors font-geist tracking-tight" data-anim="fade" data-delay="300" href="#testimonial" style={{opacity: '.15', transform: 'translateY(10px)', transition: 'all .5s cubic-bezier(.25,1,.5,1)', animationFillMode: 'both'}}>Testimonial</a>
 </nav>
 <div className="flex items-center gap-3">
-<a aria-label="Book a Free Demo" className="inline-flex items-center gap-2 tracking-tight font-geist" data-anim="fade" data-delay="400" href="https://calendly.com/arthur-auffray/clubware-demo" style={{-Green: '#1BFD9C', fontSize: '14px', padding: '.55rem .8rem', letterSpacing: '.04em', borderRadius: '.55rem', border: '2px solid var(--green)', background: 'linear-gradient(to right,rgba(27,253,156,.1) 1%,transparent 40%,transparent 60%,rgba(27,253,156,.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27,253,156,.35),0 0 9px 3px rgba(27,253,156,.08)'}}>Book a Free Demo</a>
+<a aria-label="Book a Free Demo" className="inline-flex items-center gap-2 tracking-tight font-geist" data-anim="fade" data-delay="400" href="https://calendly.com/arthur-auffray/clubware-demo" style={{'--green': '#1BFD9C', fontSize: '14px', padding: '.55rem .8rem', letterSpacing: '.04em', borderRadius: '.55rem', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, .1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, .1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, .35), 0 0 9px 3px rgba(27,253,156,.08)'}}>Book a Free Demo</a>
 <button aria-label="Open Menu" className="md:hidden p-2 text-zinc-300" onclick="toggleMobileMenu()">
 <i className="h-5 w-5" data-lucide="menu"></i>
 </button>
@@ -168,7 +210,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               Stop chasing late payments and drowning in admin. Clubware automates your member billing and onboarding so you can get back on the mat.
             </p>
 <div className="mt-6 flex flex-col gap-3 sm:flex-row" data-anim="fade" data-delay="360" style={{opacity: '.2', transform: 'translateY(8px)', transition: 'all .6s cubic-bezier(.25,1,.5,1)', animationFillMode: 'both'}}>
-<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight" href="https://calendly.com/arthur-auffray/clubware-demo" style={{-Green: '#1BFD9C', fontSize: '15px', padding: '.75em 2.1em', letterSpacing: '.06em', borderRadius: '.6em', border: '2px solid var(--green)', background: 'linear-gradient(to right,rgba(27,253,156,.1) 1%,transparent 40%,transparent 60%,rgba(27,253,156,.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27,253,156,.35),0 0 9px 3px rgba(27,253,156,.08)'}}>
+<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight" href="https://calendly.com/arthur-auffray/clubware-demo" style={{'--green': '#1BFD9C', fontSize: '15px', padding: '.75em 2.1em', letterSpacing: '.06em', borderRadius: '.6em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, .1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, .1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, .35), 0 0 9px 3px rgba(27,253,156,.08)'}}>
 <i className="h-4 w-4" data-lucide="calendar-check-2"></i>
                 Book Your Free Demo
               </a>
@@ -454,7 +496,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-zinc-400 font-geist tracking-tight">per transaction</div>
 </div>
 <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight" href="https://calendly.com/arthur-auffray/clubware-demo" style={{-Green: '#1BFD9C', fontSize: '15px', padding: '.8em 2.1em', letterSpacing: '.06em', borderRadius: '.6em', border: '2px solid var(--green)', background: 'linear-gradient(to right,rgba(27,253,156,.1) 1%,transparent 40%,transparent 60%,rgba(27,253,156,.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27,253,156,.35),0 0 9px 3px rgba(27,253,156,.08)'}}>
+<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight" href="https://calendly.com/arthur-auffray/clubware-demo" style={{'--green': '#1BFD9C', fontSize: '15px', padding: '.8em 2.1em', letterSpacing: '.06em', borderRadius: '.6em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, .1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, .1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, .35), 0 0 9px 3px rgba(27,253,156,.08)'}}>
                 Book a Free Demo
               </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/5 px-6 py-3 text-sm text-white ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-white/30 font-geist tracking-tight" href="#features">
@@ -473,7 +515,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h2 className="text-3xl md:text-4xl tracking-tight text-white font-bricolage font-light">Ready to Modernize Your Club?</h2>
 <p className="mt-3 max-w-2xl mx-auto text-zinc-400 font-geist tracking-tight">See exactly how Clubware can save you time and increase your revenue. Book a free, no‑obligation 15‑minute demo with our founder.</p>
 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
-<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight" href="https://calendly.com/arthur-auffray/clubware-demo" style={{-Green: '#1BFD9C', fontSize: '15px', padding: '.85em 2.4em', letterSpacing: '.06em', borderRadius: '.6em', border: '2px solid var(--green)', background: 'linear-gradient(to right,rgba(27,253,156,.1) 1%,transparent 40%,transparent 60%,rgba(27,253,156,.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27,253,156,.35),0 0 9px 3px rgba(27,253,156,.08)'}}>
+<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight" href="https://calendly.com/arthur-auffray/clubware-demo" style={{'--green': '#1BFD9C', fontSize: '15px', padding: '.85em 2.4em', letterSpacing: '.06em', borderRadius: '.6em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, .1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, .1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, .35), 0 0 9px 3px rgba(27,253,156,.08)'}}>
               Book Your Free Demo Now
             </a>
 <span className="self-center text-sm text-zinc-500 font-geist tracking-tight">Built for any <span className="rotate-sync text-zinc-300">Martial Arts Club.</span></span>

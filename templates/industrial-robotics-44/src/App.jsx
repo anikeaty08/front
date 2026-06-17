@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -63,6 +99,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -129,7 +171,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-xs tracking-[0.18em] uppercase text-white/60 font-medium">Фокус</div>
 <div className="mt-2 text-lg text-white/85">типовые РТК + быстрый эффект</div>
 </div>
-<iconify-icon className="text-white/70 text-2xl" icon="solar:programming-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-white/70 text-2xl" icon="solar:programming-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="mt-6 grid grid-cols-2 gap-3">
 <div className="rounded-[1.75rem] bg-white/6 border border-white/10 p-4">
@@ -163,7 +205,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs sm:text-sm text-[#2F3334]/70">factory</span>
 </div>
 <div className="hidden sm:flex items-center gap-2 text-[#2F3334]/55 text-xs sm:text-sm">
-<iconify-icon className="text-xl" icon="solar:camera-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:camera-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>placeholder</span>
 </div>
 </div>
@@ -237,7 +279,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs sm:text-sm text-white/60">география установок</span>
 </div>
 <div className="hidden sm:flex items-center gap-2 text-white/55 text-xs sm:text-sm">
-<iconify-icon className="text-xl" icon="solar:chart-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:chart-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>структура рынка</span>
 </div>
 </div>
@@ -360,7 +402,7 @@ gtag('config', 'G-2M6V79H761');
                       </h2>
 </div>
 <div className="hidden md:flex items-center gap-2 text-[#2F3334]/55">
-<iconify-icon className="text-2xl" icon="solar:bolt-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-2xl" icon="solar:bolt-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-sm">быстрый ROI</span>
 </div>
 </div>
@@ -442,7 +484,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-end justify-between gap-6 flex-wrap">
 <div className="text-sm sm:text-base text-[#2F3334]/60">Сварка → качество → повторяемость</div>
 <div className="hidden sm:flex items-center gap-2 text-[#2F3334]/55 text-xs sm:text-sm">
-<iconify-icon className="text-xl" icon="solar:settings-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:settings-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>РТК</span>
 </div>
 </div>
@@ -590,7 +632,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-end justify-between gap-6 flex-wrap">
 <div className="text-sm sm:text-base text-[#2F3334]/60">Паллетирование → стабильность → пропускная способность</div>
 <div className="hidden sm:flex items-center gap-2 text-[#2F3334]/55 text-xs sm:text-sm">
-<iconify-icon className="text-xl" icon="solar:box-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:box-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>линия</span>
 </div>
 </div>
@@ -657,7 +699,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center justify-between">
 <div className="text-xs sm:text-sm font-medium tracking-[0.18em] uppercase text-white/60">главная метрика</div>
 <div className="h-10 w-10 rounded-full border border-white/15 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-white/70 text-2xl" icon="solar:timer-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-white/70 text-2xl" icon="solar:timer-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div>
@@ -734,7 +776,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center justify-between">
 <div className="text-xs sm:text-sm font-medium tracking-[0.18em] uppercase text-[#2F3334]/55">Goal 1</div>
 <div className="h-10 w-10 rounded-full bg-[#F1F3F3] border border-[#DDE1E1] flex items-center justify-center">
-<iconify-icon className="text-[#2F3334]/70 text-2xl" icon="solar:flag-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-[#2F3334]/70 text-2xl" icon="solar:flag-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="mt-8 text-4xl sm:text-5xl font-semibold tracking-tight tabular-nums">20</div>
@@ -747,7 +789,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center justify-between">
 <div className="text-xs sm:text-sm font-medium tracking-[0.18em] uppercase text-[#2F3334]/55">Goal 2</div>
 <div className="h-10 w-10 rounded-full bg-white border border-[#DDE1E1] flex items-center justify-center">
-<iconify-icon className="text-[#2F3334]/70 text-2xl" icon="solar:layers-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-[#2F3334]/70 text-2xl" icon="solar:layers-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="mt-8 text-2xl sm:text-3xl font-semibold tracking-tight text-[#2F3334]">Типовые решения</div>
@@ -764,7 +806,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center justify-between">
 <div className="text-xs sm:text-sm font-medium tracking-[0.18em] uppercase text-[#2F3334]/55">Goal 3</div>
 <div className="h-10 w-10 rounded-full bg-[#F1F3F3] border border-[#DDE1E1] flex items-center justify-center">
-<iconify-icon className="text-[#2F3334]/70 text-2xl" icon="solar:user-check-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-[#2F3334]/70 text-2xl" icon="solar:user-check-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="mt-8 text-2xl sm:text-3xl font-semibold tracking-tight text-[#2F3334]">Кадры</div>
@@ -869,7 +911,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-3 text-lg text-white/85">Прайд-Автоматикс</div>
 <div className="mt-6 h-px bg-white/10"></div>
 <div className="mt-6 flex items-center gap-3 text-white/70 text-sm">
-<iconify-icon className="text-2xl" icon="solar:letter-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-2xl" icon="solar:letter-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>demo@pride-automatics.ru</span>
 </div>
 </div>

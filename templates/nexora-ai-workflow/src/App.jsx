@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -734,6 +770,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -800,7 +842,7 @@ gtag('config', 'G-2M6V79H761');
 </header>
 
 <div className="flex flex-col sm:pt-24 text-center max-w-5xl mx-auto pt-12 items-center opacity-0" id="hero-p">
-<div className="inline-flex text-sm font-normal text-white/80 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-full mb-8 px-5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md gap-x-2 gap-y-2 items-center opacity-0" id="hero-tag" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex text-sm font-normal text-white/80 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-full mb-8 px-5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md gap-x-2 gap-y-2 items-center opacity-0" id="hero-tag" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <i className="h-4 w-4 text-cyan-300" data-lucide="sparkles"></i>
               Early Access opens this Fall
             </div>
@@ -832,7 +874,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex min-h-[520px] flex-col sm:px-6 lg:mt-24 lg:flex-row lg:px-8 lg:mb-0 w-full z-30 mt-32 mb-12 px-4 relative">
 <div className="overflow-hidden bg-[#050914] w-full max-w-7xl border-blue-500/20 border rounded-xl mr-auto ml-auto pt-1.5 pr-1.5 pb-1.5 pl-1.5 relative opacity-0" id="hero-dashboard">
-<div className="flex min-h-[520px] overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex min-h-[520px] overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 
 <aside className="hidden w-[210px] shrink-0 flex-col justify-between border-r border-white/10 bg-[#06111f]/60 p-4 lg:flex">
 
@@ -910,7 +952,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="">
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-3 pb-3 pl-3 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-3 pb-3 pl-3 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="relative">
 <div className="mb-3 flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.05] text-cyan-200">
 <svg className="h-3.5 w-3.5" fill="none" viewbox="0 0 24 24">
@@ -929,7 +971,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<button className="flex transition hover:bg-white/[0.04] text-left bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-4 pt-2 pr-2 pb-2 pl-2 gap-x-2.5 gap-y-2.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<button className="flex transition hover:bg-white/[0.04] text-left bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-4 pt-2 pr-2 pb-2 pl-2 gap-x-2.5 gap-y-2.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="min-w-0 flex-1">
 <p className="truncate text-[11px] font-medium text-white/80">
                           Nexora Studio
@@ -978,7 +1020,7 @@ gtag('config', 'G-2M6V79H761');
 </header>
 
 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Workflow Runs</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">
@@ -995,7 +1037,7 @@ gtag('config', 'G-2M6V79H761');
 <path className="" d="M2 34 L15 22 L26 27 L39 15 L52 20 L65 9 L78 17 L91 6 L104 12 L117 3 L138 22" fill="none" stroke="#2dd4bf" strokeWidth="2"></path>
 </svg>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Tasks Automated</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">
@@ -1010,7 +1052,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="h-11 w-11 rounded-full border-[5px] border-cyan-300/80 border-l-white/10"></div>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Time Saved</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">320h</span>
@@ -1030,7 +1072,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="h-6 w-1.5 rounded-full bg-indigo-400/80"></span>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Cost Savings</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">
@@ -1047,7 +1089,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-3">
-<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', '--border-radius-before': '8px'}}>
 <style>
                         @keyframes drawLoop {
                           0% {
@@ -1292,7 +1334,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <style>
                         @property --fill {
                           syntax: '<angle>';
@@ -1544,7 +1586,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="grid grid-cols-1 gap-3 xl:grid-cols-5 mt-3">
-<div className="xl:col-span-3 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-3 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <div className="mb-3 flex items-center justify-between">
 <h3 className="text-sm font-normal tracking-[-0.02em] text-white">
                           Active Workflows
@@ -1586,7 +1628,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="xl:col-span-2 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-2 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <div className="mb-3 flex items-center justify-between">
 <h3 className="text-sm font-normal tracking-[-0.02em] text-white">
                           Recent Activity
@@ -1682,7 +1724,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid gap-3">
 
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-300/20 bg-cyan-400/10 text-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.08)]">
 <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1703,7 +1745,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-violet-300/20 bg-violet-400/10 text-violet-300 shadow-[0_0_18px_rgba(168,85,247,0.08)]">
 <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1755,7 +1797,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-emerald-300/20 bg-emerald-400/10 text-emerald-300 shadow-[0_0_18px_rgba(16,185,129,0.08)]">
 <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1794,7 +1836,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="grid gap-3">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-sky-300/20 bg-sky-400/10 text-sky-300 shadow-[0_0_18px_rgba(14,165,233,0.08)]">
 <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1842,7 +1884,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
                     Active Workflows
                   </h3>
@@ -1888,7 +1930,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="grid gap-3">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="mb-4 flex items-center justify-between">
 <div className="flex items-center gap-2.5">
 <div className="relative h-6 w-6">
@@ -1945,7 +1987,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid gap-3 md:grid-cols-[0.9fr_1.4fr]">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
                       Performance
                     </h3>
@@ -1961,7 +2003,7 @@ gtag('config', 'G-2M6V79H761');
                       </p>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
                       Recent Activity
                     </h3>
@@ -2805,7 +2847,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-x-0 top-0 flex flex-col gap-6 hover:[animation-play-state:paused]" style={{animation: 'marquee-vertical-down 40s linear infinite'}}>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2844,7 +2886,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2884,7 +2926,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2923,7 +2965,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2963,7 +3005,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3002,7 +3044,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3042,7 +3084,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3081,7 +3123,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3160,7 +3202,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-x-0 top-0 flex flex-col gap-6 hover:[animation-play-state:paused]" style={{animation: 'marquee-vertical-down 40s linear infinite'}}>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3198,7 +3240,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3238,7 +3280,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3276,7 +3318,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3316,7 +3358,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3354,7 +3396,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3394,7 +3436,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3432,7 +3474,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3513,7 +3555,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr] mt-12 gap-x-5 gap-y-5">
 
-<div className="flex flex-col overflow-hidden lg:p-7 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col overflow-hidden lg:p-7 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="relative flex flex-1 flex-col">
 <div className="flex items-start justify-between gap-6">
 <div>
@@ -3541,7 +3583,7 @@ gtag('config', 'G-2M6V79H761');
                   collaborate at scale.
                 </p>
 <div className="mt-7 grid gap-3 sm:grid-cols-3">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <p className="text-lg font-light tracking-tight text-white">
                       Unlimited
                     </p>
@@ -3549,7 +3591,7 @@ gtag('config', 'G-2M6V79H761');
                       Workflows
                     </p>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <p className="text-lg font-light tracking-tight text-white">
                       Advanced
                     </p>
@@ -3557,7 +3599,7 @@ gtag('config', 'G-2M6V79H761');
                       AI Models
                     </p>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', '--border-radius-before': '12px'}}>
 <p className="text-lg font-light tracking-tight text-white">
                       24/7
                     </p>
@@ -3595,7 +3637,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid gap-5">
 <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
 
-<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="">
 <div className="flex items-center justify-between">
 <h3 className="text-xl font-light tracking-tight text-white">
@@ -3633,12 +3675,12 @@ gtag('config', 'G-2M6V79H761');
                       </li>
 </ul>
 </div>
-<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
                     Get Started
                   </button>
 </div>
 
-<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="">
 <div className="flex items-center justify-between">
 <h3 className="text-xl font-light tracking-tight text-white">
@@ -3673,13 +3715,13 @@ gtag('config', 'G-2M6V79H761');
                       </li>
 </ul>
 </div>
-<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
                     Contact Sales
                   </button>
 </div>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 <div className="">
 <p className="text-sm font-light text-white/50">Trusted by</p>
@@ -3735,7 +3777,7 @@ gtag('config', 'G-2M6V79H761');
                 Everything you need to know about Nexora, billing, security, and
                 team support.
               </p>
-<div className="mt-10 overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-blue-500/0 p-6 shadow-[0_0_40px_rgba(34,211,238,0.03),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="mt-10 overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-blue-500/0 p-6 shadow-[0_0_40px_rgba(34,211,238,0.03),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <h3 className="text-xl font-normal tracking-tight text-white">
                   Still need help?
                 </h3>
@@ -3757,11 +3799,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[2rem] pt-3 pr-3 pb-3 pl-3 relative shadow-[0_0_60px_rgba(34,211,238,0.045),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2rem'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[2rem] pt-3 pr-3 pb-3 pl-3 relative shadow-[0_0_60px_rgba(34,211,238,0.045),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2rem'}}>
 <details className="group relative border-b border-white/10 px-5 py-6 transition-colors duration-300 sm:px-6" open="">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span className="">Is there a free trial available?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3779,7 +3821,7 @@ gtag('config', 'G-2M6V79H761');
 <details className="group relative border-b border-white/10 px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none gap-6 [&amp;::-webkit-details-marker]:hidden sm:text-lg text-base font-normal text-white gap-x-6 gap-y-6 items-center justify-between">
 <span className="">Can I change my plan later?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="w-[16px] h-[16px]" data-icon-replaced="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(103, 232, 249)', width: '16px', height: '16px'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3796,7 +3838,7 @@ gtag('config', 'G-2M6V79H761');
 <details className="group relative border-b border-white/10 px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span className="">What is your cancellation policy?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3813,7 +3855,7 @@ gtag('config', 'G-2M6V79H761');
 <details className="group relative border-b border-white/10 px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span>Do you offer custom enterprise plans?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3830,7 +3872,7 @@ gtag('config', 'G-2M6V79H761');
 <details className="group relative px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span className="">How secure is my data?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>

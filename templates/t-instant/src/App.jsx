@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -171,6 +207,12 @@ document.getElementById('addToCartBtn').addEventListener('click', () => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -221,21 +263,21 @@ document.getElementById('addToCartBtn').addEventListener('click', () => {
 </svg>
 </div>
 <div>
-<h1 className="text-4xl sm:text-5xl font-bold tracking-tight" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<h1 className="text-4xl sm:text-5xl font-bold tracking-tight" style={{fontFamily: '\'Geist\', sans-serif'}}>
 <span style={{color: '#D52B1E'}}>T</span>-Instant
                 </h1>
-<p className="text-neutral-300 text-lg mt-1" style={{fontFamily: '\'Geist\',sans-serif'}}>Fabrication Suisse · Breveté · Testé EPFL</p>
+<p className="text-neutral-300 text-lg mt-1" style={{fontFamily: '\'Geist\', sans-serif'}}>Fabrication Suisse · Breveté · Testé EPFL</p>
 </div>
 </div>
-<p className="text-xl text-neutral-200 leading-relaxed mb-4" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<p className="text-xl text-neutral-200 leading-relaxed mb-4" style={{fontFamily: '\'Geist\', sans-serif'}}>
               Collier de raccordement INSTANT-T – Fabrication Suisse, Breveté
             </p>
-<p className="text-base text-neutral-300 leading-relaxed mb-5" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<p className="text-base text-neutral-300 leading-relaxed mb-5" style={{fontFamily: '\'Geist\', sans-serif'}}>
               Système unique de raccordement pour eau sanitaire, chauffage, air comprimé et plus encore. Fabriqué en Suisse et breveté, l'INSTANT-T permet une dérivation rapide et fiable sans soudure ni outillage spécial.
             </p>
 <div className="bg-white/10 rounded-xl p-5 mb-8 border border-white/20">
-<h3 className="text-sm font-semibold text-white mb-3 uppercase tracking-wide" style={{fontFamily: '\'Geist\',sans-serif'}}>Caractéristiques techniques</h3>
-<ul className="space-y-2 text-sm text-neutral-200" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<h3 className="text-sm font-semibold text-white mb-3 uppercase tracking-wide" style={{fontFamily: '\'Geist\', sans-serif'}}>Caractéristiques techniques</h3>
+<ul className="space-y-2 text-sm text-neutral-200" style={{fontFamily: '\'Geist\', sans-serif'}}>
 <li className="flex items-center gap-2">
 <iconify-icon className="text-white/70 flex-shrink-0" height="16" icon="solar:check-square-linear" style={{strokeWidth: '1.5'}} width="16"></iconify-icon>
                   Pression de service : <span className="text-white font-medium">50 bar</span>
@@ -259,11 +301,11 @@ document.getElementById('addToCartBtn').addEventListener('click', () => {
 </ul>
 </div>
 <div className="flex flex-wrap gap-4">
-<button className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-neutral-100 transition-all duration-300 hover:scale-105" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<button className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-neutral-100 transition-all duration-300 hover:scale-105" style={{fontFamily: '\'Geist\', sans-serif'}}>
                 Voir les produits
                 <iconify-icon height="20" icon="solar:arrow-right-linear" style={{strokeWidth: '1.5'}} width="20"></iconify-icon>
 </button>
-<button className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-300 hover:scale-105" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<button className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-300 hover:scale-105" style={{fontFamily: '\'Geist\', sans-serif'}}>
 <iconify-icon height="20" icon="solar:document-linear" style={{strokeWidth: '1.5'}} width="20"></iconify-icon>
                 Fiche technique
               </button>
@@ -343,16 +385,16 @@ document.getElementById('addToCartBtn').addEventListener('click', () => {
 <span className="inline-flex items-center rounded-md bg-blue-100 text-blue-800 text-sm px-2.5 py-1 font-medium">Swiss Made</span>
 <span className="inline-flex items-center rounded-md bg-amber-100 text-amber-800 text-sm px-2.5 py-1 font-medium">Breveté</span>
 </div>
-<h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 mb-2" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 mb-2" style={{fontFamily: '\'Geist\', sans-serif'}}>
             Collier <span style={{color: '#D52B1E'}}>T</span>-Instant
           </h1>
-<p className="text-neutral-500 text-base mb-4" style={{fontFamily: '\'Geist\',sans-serif'}}>Collier de raccordement instantané — dérivation sans soudure</p>
+<p className="text-neutral-500 text-base mb-4" style={{fontFamily: '\'Geist\', sans-serif'}}>Collier de raccordement instantané — dérivation sans soudure</p>
 <div className="flex items-baseline gap-4 mb-8">
-<span className="text-3xl font-bold text-neutral-900" style={{fontFamily: '\'Geist\',sans-serif'}}>À partir de CHF 43.–</span>
+<span className="text-3xl font-bold text-neutral-900" style={{fontFamily: '\'Geist\', sans-serif'}}>À partir de CHF 43.–</span>
 </div>
 
 <div className="mb-2">
-<p className="text-sm font-semibold text-neutral-900 mb-3" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<p className="text-sm font-semibold text-neutral-900 mb-3" style={{fontFamily: '\'Geist\', sans-serif'}}>
               Sélectionnez le diamètre du tuyau
             </p>
 <div className="flex flex-wrap gap-2 mb-6" id="dimPills">
@@ -442,11 +484,11 @@ document.getElementById('addToCartBtn').addEventListener('click', () => {
 </div>
 
 <div className="mt-6 flex flex-col sm:flex-row gap-3">
-<button className="flex-1 inline-flex items-center justify-center gap-2 bg-neutral-900 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-neutral-800 transition-all duration-300 hover:scale-[1.02] ripple" id="addToCartBtn" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<button className="flex-1 inline-flex items-center justify-center gap-2 bg-neutral-900 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-neutral-800 transition-all duration-300 hover:scale-[1.02] ripple" id="addToCartBtn" style={{fontFamily: '\'Geist\', sans-serif'}}>
 <iconify-icon height="20" icon="solar:cart-large-2-linear" style={{strokeWidth: '1.5'}} width="20"></iconify-icon>
               Ajouter au panier
             </button>
-<button className="inline-flex items-center justify-center gap-2 border border-neutral-200 px-5 py-3.5 rounded-xl font-medium hover:bg-neutral-50 transition-all duration-300 ripple" style={{fontFamily: '\'Geist\',sans-serif'}}>
+<button className="inline-flex items-center justify-center gap-2 border border-neutral-200 px-5 py-3.5 rounded-xl font-medium hover:bg-neutral-50 transition-all duration-300 ripple" style={{fontFamily: '\'Geist\', sans-serif'}}>
 <iconify-icon height="20" icon="solar:heart-linear" style={{strokeWidth: '1.5'}} width="20"></iconify-icon>
               Favoris
             </button>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -350,13 +386,19 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<header className="sticky top-0 sm:top-[-44px] z-50 w-full bg-white shadow-none transition-shadow duration-300" id="main-header" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<header className="sticky top-0 sm:top-[-44px] z-50 w-full bg-white shadow-none transition-shadow duration-300" id="main-header" style={{fontFamily: '\'Inter\', sans-serif'}}>
 
 <div className="hidden sm:flex h-11 w-full max-w-[1700px] mx-auto items-center justify-between px-6 lg:px-12 text-sm font-medium text-[#1B2535]">
 <div className="flex items-center gap-4 md:gap-6">
@@ -414,7 +456,7 @@ gtag('config', 'G-2M6V79H761');
 
 </header>
 
-<section className="overflow-hidden bg-white w-full relative" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<section className="overflow-hidden bg-white w-full relative" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="mx-auto grid max-w-[1700px] grid-cols-1 px-6 lg:grid-cols-2 lg:px-12">
 
 <div className="order-2 flex flex-col justify-center py-10 lg:order-1 lg:py-20 lg:pr-12">
@@ -571,7 +613,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="relative w-full overflow-hidden bg-white" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<section className="relative w-full overflow-hidden bg-white" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="lg:pb-0 lg:pl-12 lg:pr-12 lg:pt-0 text-left max-w-[1700px] mx-auto pt-20 pr-12 pb-0 pl-12">
 
 <div className="grid grid-cols-1 gap-12 xl:grid-cols-2 xl:gap-16 relative">
@@ -624,7 +666,7 @@ gtag('config', 'G-2M6V79H761');
 </a></div>
 </div>
 
-<div className="lg:mt-16 mt-16 relative" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<div className="lg:mt-16 mt-16 relative" style={{fontFamily: '\'Inter\', sans-serif'}}>
 
 <button aria-label="Önceki" className="absolute -left-3 top-[45%] z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-[#1B2535] shadow-md transition hover:shadow-lg md:flex lg:-left-6" onclick="const s=document.getElementById('med-slider');s.scrollBy({left:-s.clientWidth*0.9,behavior:'smooth'});" type="button">
 <svg className="h-5 w-5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
@@ -734,7 +776,7 @@ gtag('config', 'G-2M6V79H761');
 </section><section className="overflow-hidden bg-white w-full relative">
 <div className="mx-auto max-w-[1700px]">
 
-<div className="lg:pt-0 lg:pl-12 lg:pr-12 lg:pb-0 bg-white pt-0 pr-12 pb-16 pl-12" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<div className="lg:pt-0 lg:pl-12 lg:pr-12 lg:pb-0 bg-white pt-0 pr-12 pb-16 pl-12" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <h2 className="leading-[1.15] sm:text-5xl xl:text-5xl text-4xl font-semibold text-[#13202e] tracking-tight mt-8">Doğal Taş Çeşitleri</h2><div className="group/cards mt-8 flex flex-col gap-4 md:h-[560px] md:flex-row lg:h-[640px]">
 
 <a className="group relative block h-72 w-full overflow-hidden rounded-2xl transition-all duration-700 ease-in-out sm:h-80 md:h-full md:flex-[3] md:group-hover/cards:flex-[1] md:hover:!flex-[3]" href="#">
@@ -775,7 +817,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="mx-6 my-12 bg-white lg:mx-12 lg:my-16" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<div className="mx-6 my-12 bg-white lg:mx-12 lg:my-16" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <style>
     @keyframes aura-marquee-emqbeda4 { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .aura-marquee-track-emqbeda4 { animation: aura-marquee-emqbeda4 32s linear infinite; }
@@ -822,7 +864,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-</div><div className="mx-6 my-12 bg-white lg:mx-12 lg:my-16" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><div className="mx-6 my-12 bg-white lg:mx-12 lg:my-16" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <style>
     @keyframes aura-kenburns-emqbeibi { from { transform: scale(1); } to { transform: scale(1.1); } }
     .aura-slide-emqbeibi { opacity: 0; transition: opacity 1.2s ease-in-out; pointer-events: none; }
@@ -889,8 +931,8 @@ gtag('config', 'G-2M6V79H761');
 
 
 </div>
-</div><div className="lg:mx-12 lg:my-16 bg-white mt-16 mr-12 mb-16 ml-12" style={{fontFamily: '\'Inter\',sans-serif'}}>
-<section className="overflow-hidden bg-white w-full relative" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><div className="lg:mx-12 lg:my-16 bg-white mt-16 mr-12 mb-16 ml-12" style={{fontFamily: '\'Inter\', sans-serif'}}>
+<section className="overflow-hidden bg-white w-full relative" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-12 lg:pt-0 lg:pl-12 lg:pr-12 lg:pb-0 max-w-[1700px] mx-auto pt-0 pr-12 pb-20 pl-12 gap-x-10 gap-y-8" data-med-quote-root="" data-quote-init="1">
 
 <div className="relative overflow-hidden rounded-2xl">
@@ -982,7 +1024,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 </div>
-</section><div className="w-full bg-white" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</section><div className="w-full bg-white" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="mx-auto max-w-[1700px] px-6 sm:px-8 lg:px-12">
 <div className="flex flex-wrap sm:gap-3 text-[#1B2535] bg-slate-50 rounded-2xl px-6 py-5 gap-x-2 gap-y-2 items-center justify-center">
 <p className="mr-1 text-base font-normal leading-7 text-[#1B2535] sm:text-lg">Tekliften sonra süreç:</p>
@@ -993,7 +1035,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center rounded-full border border-[#1B2535]/15 bg-white/55 px-4 py-2 text-sm font-light leading-5 text-[#1B2535] shadow-sm shadow-[#1B2535]/[0.03] sm:px-5 sm:text-base">Ölçü &amp; Uygulama</span>
 </div>
 </div>
-</div><div className="w-full bg-white" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><div className="w-full bg-white" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="mx-auto max-w-[1700px] px-6 py-8 sm:px-8 lg:px-12 lg:py-10">
 <div className="grid w-full grid-cols-1 gap-8 text-[#1B2535] md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-14">
 <div className="min-w-0 md:border-r md:border-slate-200 md:pr-8 lg:pr-10">
@@ -1073,7 +1115,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-</div><div className="sm:px-8 lg:px-12 lg:py-14 bg-slate-50 w-full max-w-[1700px] mr-auto ml-auto px-6 py-12" data-med-quote-root="" data-quote-init="1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><div className="sm:px-8 lg:px-12 lg:py-14 bg-slate-50 w-full max-w-[1700px] mr-auto ml-auto px-6 py-12" data-med-quote-root="" data-quote-init="1" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="rounded-3xl bg-[#FAF7F2] text-[#1B2535]">
 <div className="grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[22rem_minmax(0,1fr)] bg-slate-50 gap-x-8 gap-y-8 items-center">
 <div className="min-w-0 lg:pr-4">
@@ -1156,7 +1198,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-</div><div className="bg-white w-full max-w-[1700px] mr-auto ml-auto pt-16 pr-6 pb-16 pl-6 sm:px-8 lg:px-12 lg:py-20" data-med-quote-root="" data-quote-init="1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><div className="bg-white w-full max-w-[1700px] mr-auto ml-auto pt-16 pr-6 pb-16 pl-6 sm:px-8 lg:px-12 lg:py-20" data-med-quote-root="" data-quote-init="1" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="flex flex-col gap-6 sm:mb-12 lg:flex-row lg:items-end lg:justify-between mb-10 gap-x-6 gap-y-6">
 <div className="min-w-0">
 <h2 className="text-4xl font-semibold leading-tight tracking-tight text-[#1B2535] sm:text-5xl lg:text-6xl">Doğal Taş Rehberi</h2>
@@ -1271,9 +1313,9 @@ gtag('config', 'G-2M6V79H761');
 </a>
 </article>
 </div>
-</div><div className="sm:px-8 lg:pl-12 lg:pr-12 lg:pb-14 w-full max-w-[1700px] mx-auto pr-12 pb-14 pl-12" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><div className="sm:px-8 lg:pl-12 lg:pr-12 lg:pb-14 w-full max-w-[1700px] mx-auto pr-12 pb-14 pl-12" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="overflow-hidden rounded-3xl bg-[#1B2535] shadow-2xl">
-<div className="mx-auto w-full max-w-[1700px] px-6 sm:px-8 lg:px-12" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<div className="mx-auto w-full max-w-[1700px] px-6 sm:px-8 lg:px-12" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="overflow-hidden rounded-3xl bg-[#1B2535] shadow-2xl">
 <div className="grid grid-cols-1 gap-12 px-6 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-0 lg:px-16 lg:py-20 xl:px-24">
 
@@ -1318,7 +1360,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-</div><div className="w-full bg-[#1B2535] py-16 sm:py-24" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><div className="w-full bg-[#1B2535] py-16 sm:py-24" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="mx-auto w-full max-w-[1700px] px-6 sm:px-8 lg:px-12 flex flex-col items-center text-center">
 
 <div className="mb-12 flex flex-col items-center">
@@ -1359,7 +1401,7 @@ gtag('config', 'G-2M6V79H761');
           Ajans</a></p>
 </div>
 </div>
-</div><section className="overflow-hidden bg-white w-full relative" style={{fontFamily: '\'Inter\',sans-serif'}}>
+</div><section className="overflow-hidden bg-white w-full relative" style={{fontFamily: '\'Inter\', sans-serif'}}>
 
 </section>
 

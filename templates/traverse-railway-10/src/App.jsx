@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -143,6 +179,12 @@ if (heroBg) {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -398,7 +440,7 @@ if (heroBg) {
 <p className="">Heather honey, baked apple, and gentle woodsmoke. A current of vanilla cream beneath.</p>
 <div className="tasting-flavor-bar">
 <div className="bar-label"><span className="">Intensity</span><span>Rich</span></div>
-<div className="bar-track"><div className="bar-fill" style={{-Fill: '72%'}}></div></div>
+<div className="bar-track"><div className="bar-fill" style={{'--fill': '72%'}}></div></div>
 </div>
 </div>
 <div className="tasting-card reveal-child !col-span-1 lg:!col-span-2" style={{transitionDelay: '0.2s'}}>
@@ -409,7 +451,7 @@ if (heroBg) {
 <p className="">Silky mouthfeel. Toffee, dried apricot, and toasted almond, balanced by a gentle spice.</p>
 <div className="tasting-flavor-bar">
 <div className="bar-label"><span>Sweetness</span><span>Balanced</span></div>
-<div className="bar-track"><div className="bar-fill" style={{-Fill: '65%'}}></div></div>
+<div className="bar-track"><div className="bar-fill" style={{'--fill': '65%'}}></div></div>
 </div>
 </div>
 <div className="tasting-card reveal-child !col-span-1 lg:!col-span-3" style={{transitionDelay: '0.3s'}}>
@@ -420,7 +462,7 @@ if (heroBg) {
 <p>Long and warming. Cinnamon bark, dark honey, and a final note of toasted oak.</p>
 <div className="tasting-flavor-bar">
 <div className="bar-label"><span>Length</span><span>Lingering</span></div>
-<div className="bar-track"><div className="bar-fill" style={{-Fill: '82%'}}></div></div>
+<div className="bar-track"><div className="bar-fill" style={{'--fill': '82%'}}></div></div>
 </div>
 </div>
 <div className="tasting-card reveal-child !col-span-1 lg:!col-span-3" style={{transitionDelay: '0.4s'}}>
@@ -431,7 +473,7 @@ if (heroBg) {
 <p className="">Highland terroir — clean spring water, peat-kissed barley, and the breath of the Cairngorms running through every sip.</p>
 <div className="tasting-flavor-bar">
 <div className="bar-label"><span>Smokiness</span><span>Subtle</span></div>
-<div className="bar-track"><div className="bar-fill" style={{-Fill: '38%'}}></div></div>
+<div className="bar-track"><div className="bar-fill" style={{'--fill': '38%'}}></div></div>
 </div>
 </div>
 </div>

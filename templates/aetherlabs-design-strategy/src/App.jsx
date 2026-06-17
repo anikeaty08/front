@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -29,6 +65,12 @@ backgroundImage: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -64,7 +106,7 @@ backgroundImage: {
 <a className="px-5 py-2 text-sm font-medium text-neutral-400 hover:text-white transition-colors" href="#">Insights</a>
 </div>
 <div className="">
-<a className="glass-button group inline-flex items-center gap-2 no-underline transition-all duration-300 hover:scale-[0.98] active:scale-95 rounded-full pt-2.5 pr-6 pb-2.5 pl-6 relative" href="#" style={{-Angle-1: '-75deg', -Angle-2: '-45deg'}}>
+<a className="glass-button group inline-flex items-center gap-2 no-underline transition-all duration-300 hover:scale-[0.98] active:scale-95 rounded-full pt-2.5 pr-6 pb-2.5 pl-6 relative" href="#" style={{'--angle-1': '-75deg', '--angle-2': '-45deg'}}>
 <span className="button-text relative z-20 text-sm font-medium text-white tracking-wide transition-all duration-300">Start Project</span>
 <iconify-icon className="relative z-20 text-lg text-white transition-transform duration-300 group-hover:rotate-45 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" icon="solar:arrow-right-up-linear"></iconify-icon>
 <div className="button-shine pointer-events-none absolute inset-0 rounded-full z-10"></div>

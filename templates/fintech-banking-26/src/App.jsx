@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -218,6 +254,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -408,7 +450,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6 auto-rows-[300px] md:auto-rows-[380px]">
 
-<div className="spotlight-card group md:col-span-6 lg:col-span-8 rounded-3xl border transition-colors border-white/10 hover:border-white/20" style={{-X: '362px', -Y: '56px'}}>
+<div className="spotlight-card group md:col-span-6 lg:col-span-8 rounded-3xl border transition-colors border-white/10 hover:border-white/20" style={{'--x': '362px', '--y': '56px'}}>
 <div className="relative z-10 p-8 h-full flex flex-col justify-between pointer-events-none">
 <div>
 <div className="w-10 h-10 rounded-full border flex items-center justify-center mb-4 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-colors border-white/10 bg-white/5 text-zinc-400">
@@ -427,7 +469,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card group md:col-span-6 lg:col-span-4 transition-colors hover:border-white/20 border-white/10 border rounded-3xl" style={{-X: '122.3359375px', -Y: '81px'}}>
+<div className="spotlight-card group md:col-span-6 lg:col-span-4 transition-colors hover:border-white/20 border-white/10 border rounded-3xl" style={{'--x': '122.3359375px', '--y': '81px'}}>
 <div className="relative z-10 p-8 h-full flex flex-col pointer-events-none">
 <div className="w-10 h-10 rounded-full border flex items-center justify-center mb-4 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-colors border-white/10 bg-white/5 text-zinc-400">
 <svg className="w-5 h-5" data-lucide="shield-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
@@ -465,7 +507,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card group md:col-span-6 lg:col-span-8 rounded-3xl border transition-colors border-white/10 hover:border-white/20" style={{-X: '525.671875px', -Y: '67px'}}>
+<div className="spotlight-card group md:col-span-6 lg:col-span-8 rounded-3xl border transition-colors border-white/10 hover:border-white/20" style={{'--x': '525.671875px', '--y': '67px'}}>
 <div className="p-8 h-full flex flex-col md:flex-row gap-8 relative z-10 pointer-events-none">
 <div className="flex flex-col justify-between max-w-sm">
 <div>

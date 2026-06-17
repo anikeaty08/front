@@ -13,6 +13,42 @@ function App() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleMouseMove = (e) => {
       setMousePos({ x: e.clientX, y: e.clientY });
     };
@@ -31,11 +67,7 @@ function App() {
       <main className="flex-grow">
         <div 
           className="pointer-events-none fixed z-[9999] transition-transform duration-75 ease-out"
-          style={{ 
-            left: `${mousePos.x}px`, 
-            top: `${mousePos.y}px`,
-            transform: isHovered ? 'scale(1.5) rotate(45deg)' : 'scale(1)'
-          }}
+          style={{left: `${mousePos.x}px`, top: `${mousePos.y}px`, transform: isHovered ? 'scale(1.5) rotate(45deg)' : 'scale(1)'}}
         >
           <iconify-icon icon="solar:star-shine-bold" className="text-purple-500 text-2xl"></iconify-icon>
         </div>
@@ -43,7 +75,7 @@ function App() {
         <Hero />
         <LogoStrip />
         
-        <section className="py-24 px-page-margin max-w-[1200px] mx-auto opacity-0 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <section className="py-24 px-page-margin max-w-[1200px] mx-auto opacity-0 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
           <div className="flex flex-col md:flex-row gap-12 items-start">
             <div className="md:w-1/2">
               <h2 className="text-[#0a2540] text-3xl md:text-4xl font-medium tracking-tight mb-6">

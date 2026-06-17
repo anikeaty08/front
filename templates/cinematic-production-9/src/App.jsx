@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -34,10 +76,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex items-center gap-2">
 <div className="flex h-9 w-9 items-center justify-center rounded-full border border-yellow-500/50 bg-gradient-to-br from-neutral-950 to-neutral-900 shadow-[0_0_40px_rgba(234,179,8,0.25)]">
-<span className="text-xs font-semibold tracking-[0.18em] text-yellow-400" style={{fontFamily: '\'Cinzel Display\',serif'}}>SE</span>
+<span className="text-xs font-semibold tracking-[0.18em] text-yellow-400" style={{fontFamily: '\'Cinzel Display\', serif'}}>SE</span>
 </div>
 <div className="leading-tight">
-<div className="text-xs font-medium uppercase tracking-[0.28em] text-neutral-300" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<div className="text-xs font-medium uppercase tracking-[0.28em] text-neutral-300" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                 SHARPEYE
               </div>
 <div className="text-[10px] font-normal uppercase tracking-[0.32em] text-yellow-400/80">
@@ -96,7 +138,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>Scroll to Direct the Film</span>
 </p>
 <div className="space-y-1">
-<h1 className="text-3xl leading-[1.1] tracking-tight text-neutral-50 sm:text-4xl md:text-5xl lg:text-6xl" data-hero-title="" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<h1 className="text-3xl leading-[1.1] tracking-tight text-neutral-50 sm:text-4xl md:text-5xl lg:text-6xl" data-hero-title="" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                     SharpEye Films
                   </h1>
 <p className="max-w-xl text-sm font-medium uppercase tracking-[0.25em] text-neutral-300/80 md:text-[11px]">
@@ -186,7 +228,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-yellow-300">
                   Scene 02 · Selected Frames
                 </p>
-<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                   A montage of stories
                 </h2>
 <p className="max-w-xl text-[13px] leading-relaxed text-neutral-300/90 md:text-sm">
@@ -328,7 +370,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-yellow-300">
                   Scene 03 · Services
                 </p>
-<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                   Production crafted frame by frame
                 </h2>
 <p className="max-w-xl text-[13px] leading-relaxed text-neutral-300/90 md:text-sm">
@@ -348,7 +390,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex-1 space-y-1.5">
 <div className="inline-flex items-center gap-2">
-<h3 className="text-sm font-medium tracking-tight text-neutral-50 md:text-base" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-sm font-medium tracking-tight text-neutral-50 md:text-base" style={{fontFamily: '\'Playfair Display\', serif'}}>
                           Concept &amp; Direction
                         </h3>
 <div className="h-px w-12 bg-gradient-to-r from-yellow-500/70 to-transparent" data-heading-underline=""></div>
@@ -380,7 +422,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex-1 space-y-1.5">
 <div className="inline-flex items-center gap-2">
-<h3 className="text-sm font-medium tracking-tight text-neutral-50 md:text-base" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-sm font-medium tracking-tight text-neutral-50 md:text-base" style={{fontFamily: '\'Playfair Display\', serif'}}>
                           Cinematography &amp; Production
                         </h3>
 <div className="h-px w-12 bg-gradient-to-r from-yellow-500/70 to-transparent" data-heading-underline=""></div>
@@ -412,7 +454,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex-1 space-y-1.5">
 <div className="inline-flex items-center gap-2">
-<h3 className="text-sm font-medium tracking-tight text-neutral-50 md:text-base" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-sm font-medium tracking-tight text-neutral-50 md:text-base" style={{fontFamily: '\'Playfair Display\', serif'}}>
                           Post, Sound &amp; Finishing
                         </h3>
 <div className="h-px w-12 bg-gradient-to-r from-yellow-500/70 to-transparent" data-heading-underline=""></div>
@@ -452,7 +494,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-yellow-300">
                   Scene 04 · Studio
                 </p>
-<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                   A director’s eye, a producer’s discipline
                 </h2>
 <p className="text-[13px] leading-relaxed text-neutral-300/90 md:text-sm">
@@ -532,7 +574,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-yellow-300">
                   Scene 05 · Voices
                 </p>
-<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<h2 className="text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                   Trusted by teams who live on screen
                 </h2>
 </div>
@@ -636,7 +678,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-yellow-300">
                 Scene 06 · FAQ
               </p>
-<h2 className="mt-1 text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<h2 className="mt-1 text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                 Answers in focus
               </h2>
 <p className="mx-auto mt-3 max-w-xl text-[13px] leading-relaxed text-neutral-300/90 md:text-sm">
@@ -725,7 +767,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[11px] font-medium uppercase tracking-[0.26em] text-yellow-300">
                   Scene 07 · Outro
                 </p>
-<h2 className="mt-1 text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\',serif'}}>
+<h2 className="mt-1 text-2xl leading-tight tracking-tight text-neutral-50 sm:text-3xl md:text-4xl" style={{fontFamily: '\'Cinzel Display\', serif'}}>
                   Roll camera on your next story
                 </h2>
 <p className="mt-3 max-w-xl text-[13px] leading-relaxed text-neutral-300/90 md:text-sm">

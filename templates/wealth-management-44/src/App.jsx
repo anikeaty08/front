@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -183,6 +219,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -214,15 +256,15 @@ gtag('config', 'G-2M6V79H761');
 <canvas className="absolute inset-0 w-full h-full -z-10 opacity-40" id="hero-canvas"></canvas>
 <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent -z-10"></div>
 <div className="relative z-10 w-full max-w-[120rem] mx-auto stagger-container">
-<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 reveal flex items-center gap-4" style={{-StaggerIdx: '0'}}>
+<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 reveal flex items-center gap-4" style={{'--stagger-idx': '0'}}>
 <span>[01] // INITIALIZATION</span>
 <div className="h-px w-12 bg-white/20"></div>
 </div>
-<h1 className="text-h1 font-display font-semibold leading-[0.85] tracking-tighter uppercase mb-[clamp(2rem,4vw,4rem)] reveal" style={{-StaggerIdx: '1'}}>
+<h1 className="text-h1 font-display font-semibold leading-[0.85] tracking-tighter uppercase mb-[clamp(2rem,4vw,4rem)] reveal" style={{'--stagger-idx': '1'}}>
                 Algorithms <br className="hidden md:block"/>do not hesitate.<br/>
 <span className="text-[#333333] italic">Your legacy shouldn't either.</span>
 </h1>
-<div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end reveal" style={{-StaggerIdx: '2'}}>
+<div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end reveal" style={{'--stagger-idx': '2'}}>
 <div className="md:col-span-5 lg:col-span-4">
 <p className="text-body text-[#888888] leading-[1.6] mb-8">
                         AXIOM is an autonomous family office architecture. We replace human bottleneck and emotional bias with sub-millisecond quantitative execution and predictive tax routing.
@@ -294,18 +336,18 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-section">
 <div className="lg:col-span-5 relative">
 <div className="lg:sticky lg:top-[clamp(8rem,15vh,10rem)] stagger-container">
-<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 reveal flex items-center gap-4" style={{-StaggerIdx: '0'}}>
+<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 reveal flex items-center gap-4" style={{'--stagger-idx': '0'}}>
 <span>[02] // THE PROBLEM</span>
 <div className="h-px w-12 bg-white/20"></div>
 </div>
-<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter mb-8 reveal" style={{-StaggerIdx: '1'}}>
+<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter mb-8 reveal" style={{'--stagger-idx': '1'}}>
                         Biology is a liability in capital markets.
                     </h2>
-<div className="w-full h-px bg-[#1F1F1F] mb-8 reveal" style={{-StaggerIdx: '1.5'}}></div>
-<p className="text-body text-[#888888] leading-[1.6] mb-8 reveal" style={{-StaggerIdx: '2'}}>
+<div className="w-full h-px bg-[#1F1F1F] mb-8 reveal" style={{'--stagger-idx': '1.5'}}></div>
+<p className="text-body text-[#888888] leading-[1.6] mb-8 reveal" style={{'--stagger-idx': '2'}}>
                         Traditional wealth managers sleep, panic during drawdowns, and miss fleeting cross-border tax arbitrage opportunities. The old model of fragmented CPAs and subjective advisors is mathematically inferior.
                     </p>
-<p className="text-body text-white font-medium leading-[1.6] reveal" style={{-StaggerIdx: '3'}}>
+<p className="text-body text-white font-medium leading-[1.6] reveal" style={{'--stagger-idx': '3'}}>
                         AXIOM operates outside the bounds of human limitation. Unemotional. Tireless. Precise.
                     </p>
 </div>
@@ -355,15 +397,15 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="py-section relative overflow-hidden flex flex-col items-center terminal-perspective bg-[#030303] border-b border-[#1F1F1F]" id="terminal">
 <div className="text-center max-w-3xl px-container z-10 mb-[clamp(4rem,8vw,8rem)] stagger-container">
-<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 flex items-center justify-center gap-4 reveal" style={{-StaggerIdx: '0'}}>
+<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 flex items-center justify-center gap-4 reveal" style={{'--stagger-idx': '0'}}>
 <div className="h-px w-8 bg-white/20"></div>
 <span>[03] // VISIBILITY</span>
 <div className="h-px w-8 bg-white/20"></div>
 </div>
-<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter mb-6 reveal" style={{-StaggerIdx: '1'}}>
+<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter mb-6 reveal" style={{'--stagger-idx': '1'}}>
                 Absolute truth about your capital.
             </h2>
-<p className="text-body text-[#888888] leading-[1.6] max-w-2xl mx-auto reveal" style={{-StaggerIdx: '2'}}>
+<p className="text-body text-[#888888] leading-[1.6] max-w-2xl mx-auto reveal" style={{'--stagger-idx': '2'}}>
                 Command your empire through a bespoke, military-grade terminal. Every asset, liability, and tax vector mapped in real-time.
             </p>
 </div>
@@ -467,17 +509,17 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="py-section px-container max-w-[120rem] mx-auto border-b border-[#1F1F1F]" id="architecture">
 <div className="mb-[clamp(4rem,8vw,8rem)] stagger-container max-w-3xl">
-<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 flex items-center gap-4 reveal" style={{-StaggerIdx: '0'}}>
+<div className="font-mono text-xs text-[#888888] uppercase tracking-[0.15em] mb-8 flex items-center gap-4 reveal" style={{'--stagger-idx': '0'}}>
 <span>[04] // MODULAR LOGIC</span>
 <div className="h-px w-12 bg-white/20"></div>
 </div>
-<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter reveal" style={{-StaggerIdx: '1'}}>
+<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter reveal" style={{'--stagger-idx': '1'}}>
                 Systems engineered for absolute preservation.
             </h2>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-l border-[#1F1F1F]">
 
-<div className="bg-[#030303] border-r border-b border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{-StaggerIdx: '0'}}>
+<div className="bg-[#030303] border-r border-b border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{'--stagger-idx': '0'}}>
 <div>
 <div className="text-xs font-mono text-[#555555] mb-12 tracking-widest uppercase flex justify-between">
 <span>SYS_01</span>
@@ -488,7 +530,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-body text-[#888888] leading-[1.6]">High-frequency hedging and algorithmic alpha generation adjusting to macroeconomic turbulence in real-time.</p>
 </div>
 
-<div className="bg-[#030303] border-r border-b border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{-StaggerIdx: '1'}}>
+<div className="bg-[#030303] border-r border-b border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{'--stagger-idx': '1'}}>
 <div>
 <div className="text-xs font-mono text-[#555555] mb-12 tracking-widest uppercase flex justify-between">
 <span>SYS_02</span>
@@ -499,7 +541,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-body text-[#888888] leading-[1.6]">Continuous, predictive loss harvesting across global entities. We view tax codes as programmable routing tables.</p>
 </div>
 
-<div className="bg-[#030303] border-r border-b md:border-b-0 lg:border-b border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{-StaggerIdx: '2'}}>
+<div className="bg-[#030303] border-r border-b md:border-b-0 lg:border-b border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{'--stagger-idx': '2'}}>
 <div>
 <div className="text-xs font-mono text-[#555555] mb-12 tracking-widest uppercase flex justify-between">
 <span>SYS_03</span>
@@ -510,7 +552,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-body text-[#888888] leading-[1.6]">Algorithmic trust execution and seamless generational capital transfer. Bypassing probate delays mathematically.</p>
 </div>
 
-<div className="bg-[#030303] border-r border-b md:border-b-0 border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{-StaggerIdx: '3'}}>
+<div className="bg-[#030303] border-r border-b md:border-b-0 border-[#1F1F1F] p-card hover:bg-[#0A0A0A] transition-colors duration-500 group reveal interactive flex flex-col justify-between min-h-[24rem]" style={{'--stagger-idx': '3'}}>
 <div>
 <div className="text-xs font-mono text-[#555555] mb-12 tracking-widest uppercase flex justify-between">
 <span>SYS_04</span>
@@ -526,15 +568,15 @@ gtag('config', 'G-2M6V79H761');
 <section className="bg-[#050505] py-[clamp(8rem,20vw,20rem)] px-container relative overflow-hidden flex items-center justify-center text-center border-b border-[#1F1F1F]">
 <div className="absolute inset-0 bg-grid opacity-20"></div>
 <div className="relative z-10 max-w-5xl mx-auto stagger-container">
-<div className="font-mono text-xs text-[#555555] uppercase tracking-widest mb-12 flex items-center justify-center gap-4 reveal" style={{-StaggerIdx: '0'}}>
+<div className="font-mono text-xs text-[#555555] uppercase tracking-widest mb-12 flex items-center justify-center gap-4 reveal" style={{'--stagger-idx': '0'}}>
 <div className="h-px w-8 bg-[#333333]"></div>
 <span>EXECUTION_LOG // PROTOCOL_77</span>
 <div className="h-px w-8 bg-[#333333]"></div>
 </div>
-<p className="text-[clamp(1.5rem,3vw,3.5rem)] font-display leading-[1.1] tracking-tighter reveal text-[#888888]" style={{-StaggerIdx: '1'}}>
+<p className="text-[clamp(1.5rem,3vw,3.5rem)] font-display leading-[1.1] tracking-tighter reveal text-[#888888]" style={{'--stagger-idx': '1'}}>
                 "Upon ingestion of a <span className="text-white"> $420M </span> estate portfolio, AXIOM algorithms mapped a multi-jurisdictional reorganization that mitigated <span className="text-white border-b-2 border-white pb-1"> $18.4M </span> in impending tax leakage within <span className="text-white"> 14 seconds</span>."
             </p>
-<div className="mt-16 font-mono text-xs text-[#555555] tracking-widest uppercase reveal" style={{-StaggerIdx: '2'}}>
+<div className="mt-16 font-mono text-xs text-[#555555] tracking-widest uppercase reveal" style={{'--stagger-idx': '2'}}>
                 EXECUTED WITHOUT A SINGLE HUMAN MEETING.
             </div>
 </div>
@@ -542,13 +584,13 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="py-section px-container flex justify-center items-center w-full border-b border-[#1F1F1F] bg-[#030303]" id="clearance">
 <div className="max-w-4xl w-full text-center relative z-10 stagger-container">
-<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter mb-8 reveal" style={{-StaggerIdx: '0'}}>
+<h2 className="text-h2 font-display font-semibold leading-[1.0] tracking-tighter mb-8 reveal" style={{'--stagger-idx': '0'}}>
                 REQUEST CRYPTOGRAPHIC CLEARANCE.
             </h2>
-<p className="text-body text-[#888888] leading-[1.6] mb-16 max-w-2xl mx-auto reveal" style={{-StaggerIdx: '1'}}>
+<p className="text-body text-[#888888] leading-[1.6] mb-16 max-w-2xl mx-auto reveal" style={{'--stagger-idx': '1'}}>
                 Infrastructure is currently at 94% capacity. Minimum AUM requirement: $20M USD. Submit credentials for algorithmic review.
             </p>
-<form className="flex flex-col items-center w-full max-w-lg mx-auto reveal" onsubmit="event.preventDefault();" style={{-StaggerIdx: '2'}}>
+<form className="flex flex-col items-center w-full max-w-lg mx-auto reveal" onsubmit="event.preventDefault();" style={{'--stagger-idx': '2'}}>
 <div className="w-full relative group mb-12 interactive">
 <input className="w-full bg-transparent border-b border-[#333333] py-4 text-center font-mono text-sm text-white placeholder:text-[#555555] focus:outline-none transition-colors tracking-widest uppercase" placeholder="ENTER PORTFOLIO SIZE (USD)" required="" type="text"/>
 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-white group-focus-within:w-full transition-all duration-700 ease-out"></div>

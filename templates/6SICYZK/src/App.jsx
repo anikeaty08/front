@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -33,6 +69,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -59,7 +101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-gradient-to-br from-[#1e2d4c] to-[#283558] border border-[#323b54]">
-<svg data-darkreader-inline-color="" height="20" style={{color: 'rgb(126, 180, 255)', -DarkreaderInlineColor: 'var(--darkreader-text-7eb4ff, #72bbff)'}} width="20"><use href="#calendar"></use></svg>
+<svg data-darkreader-inline-color="" height="20" style={{color: 'rgb(126, 180, 255)', '--darkreader-inline-color': 'var(--darkreader-text-7eb4ff, #72bbff)'}} width="20"><use href="#calendar"></use></svg>
 <span className="font-medium text-sm tracking-tight text-blue-100">2024-06-20 11:00</span>
 <span className="mx-1 text-blue-400 text-xs">→</span>
 <span className="font-medium text-sm tracking-tight text-blue-100">2024-06-20 15:00</span>
@@ -76,7 +118,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <aside className="sidebar-left glass gradient-outline flex flex-col py-4 px-3 min-w-[260px] max-w-[350px] mr-2 slide-in-left" style={{zIndex: '2'}}>
 <h2 className="text-lg font-semibold tracking-tight mb-2 flex items-center gap-2">
-<svg data-darkreader-inline-color="" height="20" style={{color: 'rgb(126, 180, 255)', -DarkreaderInlineColor: 'var(--darkreader-text-7eb4ff, #72bbff)'}} width="20"><use href="#settings"></use></svg>
+<svg data-darkreader-inline-color="" height="20" style={{color: 'rgb(126, 180, 255)', '--darkreader-inline-color': 'var(--darkreader-text-7eb4ff, #72bbff)'}} width="20"><use href="#settings"></use></svg>
         Intervention Toolkit
       </h2>
 <div className="divider"></div>
@@ -125,7 +167,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg height="18" width="18"><use href="#play"></use></svg>
           Run Simulation
         </button>
-<button className="custom-btn flex-1 flex items-center gap-1 justify-center" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', -DarkreaderInlineBgcolor: 'initial'}}>
+<button className="custom-btn flex-1 flex items-center gap-1 justify-center" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', '--darkreader-inline-bgcolor': 'initial'}}>
 <svg height="17" width="17"><use href="#refresh-ccw"></use></svg>
           Reset
         </button>
@@ -165,7 +207,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="glass gradient-outline flex-1 flex flex-col px-4 py-4 slide-in-up" style={{minWidth: '320px', minHeight: '390px'}}>
 <div className="flex items-center gap-2 mb-2">
 <span className="font-semibold text-base tracking-tight text-blue-200">Outcome Forecast</span>
-<button className="ml-auto custom-btn py-1 px-2 text-xs flex items-center gap-1" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', fontSize: '12px', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', -DarkreaderInlineBgcolor: 'initial'}}>
+<button className="ml-auto custom-btn py-1 px-2 text-xs flex items-center gap-1" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', fontSize: '12px', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', '--darkreader-inline-bgcolor': 'initial'}}>
 <svg height="16" width="16"><use href="#sparkles"></use></svg>
               AI Explain
             </button>
@@ -188,7 +230,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="flex items-center gap-3 mt-2">
-<svg data-darkreader-inline-color="" height="19" style={{color: 'rgb(56, 189, 248)', -DarkreaderInlineColor: 'var(--darkreader-text-38bdf8, #42c0f8)'}} width="19"><use href="#shuffle"></use></svg>
+<svg data-darkreader-inline-color="" height="19" style={{color: 'rgb(56, 189, 248)', '--darkreader-inline-color': 'var(--darkreader-text-38bdf8, #42c0f8)'}} width="19"><use href="#shuffle"></use></svg>
 <span className="text-xs text-sky-100 font-medium">Root cause rank shift after intervention</span>
 </div>
 </div>
@@ -221,11 +263,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg height="15" width="15"><use href="#file-text"></use></svg>
             Export to PDF
           </button>
-<button className="custom-btn flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-green-500 to-teal-400 text-blue-900 font-semibold" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="" data-darkreader-inline-border-right="" data-darkreader-inline-border-top="" style={{border: '1.5px solid rgb(28, 238, 193)', -DarkreaderInlineBorderTop: 'var(--darkreader-border-1ceec1, #0ca383)', -DarkreaderInlineBorderRight: 'var(--darkreader-border-1ceec1, #0ca383)', -DarkreaderInlineBorderBottom: 'var(--darkreader-border-1ceec1, #0ca383)', -DarkreaderInlineBorderLeft: 'var(--darkreader-border-1ceec1, #0ca383)'}}>
+<button className="custom-btn flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-green-500 to-teal-400 text-blue-900 font-semibold" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="" data-darkreader-inline-border-right="" data-darkreader-inline-border-top="" style={{border: '1.5px solid rgb(28, 238, 193)', '--darkreader-inline-border-top': 'var(--darkreader-border-1ceec1, #0ca383)', '--darkreader-inline-border-right': 'var(--darkreader-border-1ceec1, #0ca383)', '--darkreader-inline-border-bottom': 'var(--darkreader-border-1ceec1, #0ca383)', '--darkreader-inline-border-left': 'var(--darkreader-border-1ceec1, #0ca383)'}}>
 <svg height="15" width="15"><use href="#fast-forward"></use></svg>
             Forward for Implementation
           </button>
-<button className="custom-btn flex items-center gap-1 px-3 py-1" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', -DarkreaderInlineBgcolor: 'initial'}}>
+<button className="custom-btn flex items-center gap-1 px-3 py-1" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', '--darkreader-inline-bgcolor': 'initial'}}>
 <svg height="15" width="15"><use href="#book-open"></use></svg>
             Log in EvidenceBook
           </button>
@@ -235,7 +277,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <aside className="sidebar-right glass gradient-outline flex flex-col py-5 px-4 min-w-[260px] max-w-[370px] ml-2 slide-in-up" style={{zIndex: '2'}}>
 <h2 className="text-lg font-semibold tracking-tight mb-2 flex items-center gap-2">
-<svg data-darkreader-inline-color="" height="20" style={{color: 'rgb(251, 191, 36)', -DarkreaderInlineColor: 'var(--darkreader-text-fbbf24, #fbc434)'}} width="20"><use href="#history"></use></svg>
+<svg data-darkreader-inline-color="" height="20" style={{color: 'rgb(251, 191, 36)', '--darkreader-inline-color': 'var(--darkreader-text-fbbf24, #fbc434)'}} width="20"><use href="#history"></use></svg>
         Historical Validator
       </h2>
 <div className="divider"></div>
@@ -244,7 +286,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="font-medium text-xs text-orange-200 block mb-1">Pattern Matcher</span>
 <div className="flex items-center gap-2">
 <input className="bg-[#19234a] focus:border-cyan-400 focus:ring-1 focus:ring-blue-300 transition-all outline-none w-28 font-semibold text-blue-200 border-[#31467c] border rounded pt-1 pr-2 pb-1 pl-2" type="text" value="R-0021A"/>
-<button className="custom-btn py-1 px-2 text-xs flex items-center gap-1" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', fontSize: '12px', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', -DarkreaderInlineBgcolor: 'initial'}}>
+<button className="custom-btn py-1 px-2 text-xs flex items-center gap-1" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'linear-gradient(90deg, rgb(30, 41, 59) 0%, rgb(41, 54, 84) 100%)', fontSize: '12px', -DarkreaderInlineBgimage: 'linear-gradient(90deg, var(--darkreader-background-1e293b, #18212f) 0%, var(--darkreader-background-293654, #212b43) 100%)', '--darkreader-inline-bgcolor': 'initial'}}>
 <svg height="16" width="16"><use href="#search"></use></svg>
             Match
           </button>
@@ -274,24 +316,24 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </main>
 
 <svg style={{display: 'none'}}>
-<symbol id="chevron-down" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="calendar" viewbox="0 0 24 24"><rect data-darkreader-inline-stroke="" fill="none" height="18" rx="2" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18" data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="plus-circle" viewbox="0 0 24 24"><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="10" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></circle><path d="M12 8v8M8 12h8" data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="settings" viewbox="0 0 24 24"><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="3" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></circle><path d="M19.4 15A1.65 1.65 0 0 0 21 13.6l0-3.2A1.65 1.65 0 0 0 19.4 9M4.6 9A1.65 1.65 0 0 0 3 10.4l0 3.2A1.65 1.65 0 0 0 4.6 15" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M16.24 7.76l2.12-2.12M7.76 16.24l-2.12 2.12M16.24 16.24l2.12 2.12M7.76 7.76l-2.12-2.12" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="play" viewbox="0 0 24 24"><polygon data-darkreader-inline-stroke="" fill="none" points="5 3 19 12 5 21 5 3" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></polygon></symbol>
-<symbol id="refresh-ccw" viewbox="0 0 24 24"><path d="M1 4v6h6" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M23 20v-6h-6" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M3.51 9a9 9 0 0 1 14.13-3.36L21 10M3 14l1.36 1.36A9 9 0 0 0 20.49 15" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="play-circle" viewbox="0 0 24 24"><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="10" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></circle><polygon data-darkreader-inline-stroke="" fill="none" points="10 8 16 12 10 16 10 8" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></polygon></symbol>
-<symbol id="camera" viewbox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3.17a2 2 0 0 0 1.41-.59l1.83-1.83a2 2 0 0 1 1.41-.59h2.17a2 2 0 0 1 1.41.59l1.83 1.83A2 2 0 0 0 17.83 5H21a2 2 0 0 1 2 2z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><circle cx="12" cy="13" data-darkreader-inline-stroke="" fill="none" r="4" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></circle></symbol>
-<symbol id="sparkles" viewbox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="5" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></circle></symbol>
-<symbol id="shuffle" viewbox="0 0 24 24"><polyline data-darkreader-inline-stroke="" fill="none" points="16 3 21 3 21 8" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></polyline><line data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} x1="4" x2="21" y1="20" y2="3"></line><polyline data-darkreader-inline-stroke="" fill="none" points="21 16 21 21 16 21" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></polyline><line data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} x1="15" x2="21" y1="15" y2="21"></line></symbol>
-<symbol id="shield-check" viewbox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M9 12l2 2 4-4" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="file-text" viewbox="0 0 24 24"><path d="M4 4h16v16H4z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M8 8h8M8 12h8M8 16h4" data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="fast-forward" viewbox="0 0 24 24"><polygon data-darkreader-inline-stroke="" fill="none" points="13 19 22 12 13 5 13 19" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></polygon><polygon data-darkreader-inline-stroke="" fill="none" points="2 19 11 12 2 5 2 19" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></polygon></symbol>
-<symbol id="book-open" viewbox="0 0 24 24"><path d="M2 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M16 3a4 4 0 0 1 4 4v13a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h12z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="history" viewbox="0 0 24 24"><path d="M3 3v5h5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M3.05 13A9 9 0 1 0 12 3v9z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
-<symbol id="search" viewbox="0 0 24 24"><circle cx="11" cy="11" data-darkreader-inline-stroke="" fill="none" r="8" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></circle><line data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} x1="21" x2="16.65" y1="21" y2="16.65"></line></symbol>
-<symbol id="activity" viewbox="0 0 24 24"><polyline data-darkreader-inline-stroke="" fill="none" points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></polyline></symbol>
-<symbol id="repeat" viewbox="0 0 24 24"><path d="M17 1l4 4-4 4" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M3 11V9a4 4 0 0 1 4-4h14" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M7 23l-4-4 4-4" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path><path d="M21 13v2a4 4 0 0 1-4 4H3" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></symbol>
+<symbol id="chevron-down" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="calendar" viewbox="0 0 24 24"><rect data-darkreader-inline-stroke="" fill="none" height="18" rx="2" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18" data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="plus-circle" viewbox="0 0 24 24"><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="10" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></circle><path d="M12 8v8M8 12h8" data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="settings" viewbox="0 0 24 24"><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="3" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></circle><path d="M19.4 15A1.65 1.65 0 0 0 21 13.6l0-3.2A1.65 1.65 0 0 0 19.4 9M4.6 9A1.65 1.65 0 0 0 3 10.4l0 3.2A1.65 1.65 0 0 0 4.6 15" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M16.24 7.76l2.12-2.12M7.76 16.24l-2.12 2.12M16.24 16.24l2.12 2.12M7.76 7.76l-2.12-2.12" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="play" viewbox="0 0 24 24"><polygon data-darkreader-inline-stroke="" fill="none" points="5 3 19 12 5 21 5 3" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></polygon></symbol>
+<symbol id="refresh-ccw" viewbox="0 0 24 24"><path d="M1 4v6h6" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M23 20v-6h-6" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M3.51 9a9 9 0 0 1 14.13-3.36L21 10M3 14l1.36 1.36A9 9 0 0 0 20.49 15" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="play-circle" viewbox="0 0 24 24"><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="10" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></circle><polygon data-darkreader-inline-stroke="" fill="none" points="10 8 16 12 10 16 10 8" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></polygon></symbol>
+<symbol id="camera" viewbox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3.17a2 2 0 0 0 1.41-.59l1.83-1.83a2 2 0 0 1 1.41-.59h2.17a2 2 0 0 1 1.41.59l1.83 1.83A2 2 0 0 0 17.83 5H21a2 2 0 0 1 2 2z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><circle cx="12" cy="13" data-darkreader-inline-stroke="" fill="none" r="4" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></circle></symbol>
+<symbol id="sparkles" viewbox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><circle cx="12" cy="12" data-darkreader-inline-stroke="" fill="none" r="5" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></circle></symbol>
+<symbol id="shuffle" viewbox="0 0 24 24"><polyline data-darkreader-inline-stroke="" fill="none" points="16 3 21 3 21 8" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></polyline><line data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} x1="4" x2="21" y1="20" y2="3"></line><polyline data-darkreader-inline-stroke="" fill="none" points="21 16 21 21 16 21" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></polyline><line data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} x1="15" x2="21" y1="15" y2="21"></line></symbol>
+<symbol id="shield-check" viewbox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M9 12l2 2 4-4" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="file-text" viewbox="0 0 24 24"><path d="M4 4h16v16H4z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M8 8h8M8 12h8M8 16h4" data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="fast-forward" viewbox="0 0 24 24"><polygon data-darkreader-inline-stroke="" fill="none" points="13 19 22 12 13 5 13 19" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></polygon><polygon data-darkreader-inline-stroke="" fill="none" points="2 19 11 12 2 5 2 19" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></polygon></symbol>
+<symbol id="book-open" viewbox="0 0 24 24"><path d="M2 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M16 3a4 4 0 0 1 4 4v13a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h12z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="history" viewbox="0 0 24 24"><path d="M3 3v5h5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M3.05 13A9 9 0 1 0 12 3v9z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
+<symbol id="search" viewbox="0 0 24 24"><circle cx="11" cy="11" data-darkreader-inline-stroke="" fill="none" r="8" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></circle><line data-darkreader-inline-stroke="" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} x1="21" x2="16.65" y1="21" y2="16.65"></line></symbol>
+<symbol id="activity" viewbox="0 0 24 24"><polyline data-darkreader-inline-stroke="" fill="none" points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></polyline></symbol>
+<symbol id="repeat" viewbox="0 0 24 24"><path d="M17 1l4 4-4 4" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M3 11V9a4 4 0 0 1 4-4h14" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M7 23l-4-4 4-4" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path><path d="M21 13v2a4 4 0 0 1-4 4H3" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></symbol>
 </svg>
 
     </>

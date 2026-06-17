@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Initialize lucide icons with 1.5 stroke width
@@ -23,6 +59,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -143,9 +185,9 @@ export default function App() {
 <section className="relative">
 
 <div className="absolute inset-0 overflow-hidden">
-<div className="absolute inset-0 opacity-90" style={{background: 'radial-gradient(1200px 600px at 10% 10%, rgba(59,130,246,0.28), transparent 60%), radial-gradient(1000px 500px at 90% 20%, rgba(56,189,248,0.22), transparent 60%), radial-gradient(900px 500px at 50% 90%, rgba(168,85,247,0.22), transparent 60%)', filter: 'blur(20px)', animation: 'fadeInBlur 1.2s ease-out both'}}></div>
-<div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] rounded-full opacity-50" style={{background: 'conic-gradient(from 180deg at 50% 50%, rgba(59,130,246,0.25), rgba(168,85,247,0.15), rgba(56,189,248,0.25), rgba(59,130,246,0.25))', filter: 'blur(32px)', animation: 'gradientShift 20s ease-in-out infinite'}}></div>
-<div className="absolute inset-0 opacity-30" style={{backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 26px), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 26px)', maskImage: 'radial-gradient(70% 60% at 50% 30%, black, transparent)'}}></div>
+<div className="absolute inset-0 opacity-90" style={{background: 'radial-gradient(1200px 600px at 10% 10%, rgba(59, 130, 246, 0.28), transparent 60%), radial-gradient(1000px 500px at 90% 20%, rgba(56, 189, 248, 0.22), transparent 60%), radial-gradient(900px 500px at 50% 90%, rgba(168, 85, 247, 0.22), transparent 60%)', filter: 'blur(20px)', animation: 'fadeInBlur 1.2s ease-out both'}}></div>
+<div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] rounded-full opacity-50" style={{background: 'conic-gradient(from 180deg at 50% 50%, rgba(59, 130, 246, 0.25), rgba(168, 85, 247, 0.15), rgba(56, 189, 248, 0.25), rgba(59, 130, 246, 0.25))', filter: 'blur(32px)', animation: 'gradientShift 20s ease-in-out infinite'}}></div>
+<div className="absolute inset-0 opacity-30" style={{backgroundImage: 'repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 26px), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 26px)', maskImage: 'radial-gradient(70% 60% at 50% 30%, black, transparent)'}}></div>
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-950/40 to-neutral-950"></div>
 <div className="absolute inset-0 [mask-image:radial-gradient(60%_60%_at_50%_30%,black,transparent)]"></div>
 </div>
@@ -266,7 +308,7 @@ export default function App() {
 <section className="relative py-12 sm:py-16 border-t border-white/10">
 
 <div className="pointer-events-none absolute inset-0">
-<div className="absolute inset-0 opacity-20" style={{backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 28px)', maskImage: 'radial-gradient(80% 60% at 50% 40%, black, transparent)'}}></div>
+<div className="absolute inset-0 opacity-20" style={{backgroundImage: 'repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0px, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 28px)', maskImage: 'radial-gradient(80% 60% at 50% 40%, black, transparent)'}}></div>
 <div className="absolute -top-24 right-[-10%] w-[600px] h-[600px] rounded-full opacity-30 blur-3xl" style={{background: 'radial-gradient(closest-side, rgba(59,130,246,0.25), transparent 70%)'}}></div>
 </div>
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -337,7 +379,7 @@ export default function App() {
 <section className="relative py-12 sm:py-16 border-t border-white/10">
 
 <div className="pointer-events-none absolute inset-0">
-<div className="absolute inset-0 opacity-18" style={{backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 28px)', maskImage: 'radial-gradient(80% 60% at 50% 40%, black, transparent)'}}></div>
+<div className="absolute inset-0 opacity-18" style={{backgroundImage: 'repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0px, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 28px)', maskImage: 'radial-gradient(80% 60% at 50% 40%, black, transparent)'}}></div>
 <div className="absolute -bottom-32 left-[-10%] w-[640px] h-[640px] rounded-full opacity-25 blur-3xl" style={{background: 'radial-gradient(closest-side, rgba(168,85,247,0.28), transparent 70%)'}}></div>
 </div>
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

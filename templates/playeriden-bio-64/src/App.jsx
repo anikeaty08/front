@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -171,26 +207,26 @@ backgroundImage: {
                           <span className="font-mono text-neon text-xs">CHARACTER_SHEET_V1.0</span>
                       </div>
                       <div className="flex flex-col md:flex-row gap-8 items-stretch">
-                          <div className="flex-1 glass-panel rounded-xl p-8 relative overflow-hidden" style={{ borderColor: `rgba(255, 230, 0, ${mix/100})` }}>
+                          <div className="flex-1 glass-panel rounded-xl p-8 relative overflow-hidden" style={{borderColor: `rgba(255, 230, 0, ${mix/100})`}}>
                               <div className="absolute top-0 right-0 p-4 font-mono text-4xl font-bold text-neon opacity-20">{mix}%</div>
                               <div className="mb-8 p-4 bg-neon/10 w-fit rounded-lg text-neon border border-neon/20"><Icons.Crown /></div>
                               <Editable tag="h3" className="text-2xl font-display font-bold text-white mb-2 uppercase">O GOVERNANTE</Editable>
                               <p className="text-xs font-mono text-gray-400 mb-6">PRIMARY_DRIVE</p>
                               <Editable tag="p" className="text-sm text-gray-300 border-t border-white/10 pt-4">Liderança Inquestionável. Ordem, Controle, Poder.</Editable>
-                              <div className="absolute bottom-0 left-0 h-1 bg-neon shadow-[0_0_15px_#FFE600]" style={{ width: `${mix}%` }}></div>
+                              <div className="absolute bottom-0 left-0 h-1 bg-neon shadow-[0_0_15px_#FFE600]" style={{width: `${mix}%`}}></div>
                           </div>
                           <div className="w-full md:w-16 flex md:flex-col items-center justify-center gap-4">
                               <div className="h-full w-[1px] bg-white/10 hidden md:block"></div>
                               <input type="range" min="0" max="100" value={mix} onChange={(e) => setMix(e.target.value)} className="w-full md:w-48 md:-rotate-90" />
                               <div className="h-full w-[1px] bg-white/10 hidden md:block"></div>
                           </div>
-                          <div className="flex-1 glass-panel rounded-xl p-8 relative overflow-hidden opacity-80" style={{ borderColor: `rgba(255, 255, 255, ${(100-mix)/100 * 0.5})` }}>
+                          <div className="flex-1 glass-panel rounded-xl p-8 relative overflow-hidden opacity-80" style={{borderColor: `rgba(255, 255, 255, ${(100-mix)/100 * 0.5})`}}>
                               <div className="absolute top-0 right-0 p-4 font-mono text-4xl font-bold text-white opacity-20">{100 - mix}%</div>
                               <div className="mb-8 p-4 bg-white/5 w-fit rounded-lg text-white border border-white/10"><Icons.Lightbulb /></div>
                               <Editable tag="h3" className="text-2xl font-display font-bold text-white mb-2 uppercase">O CRIADOR</Editable>
                               <p className="text-xs font-mono text-gray-400 mb-6">SECONDARY_DRIVE</p>
                               <Editable tag="p" className="text-sm text-gray-300 border-t border-white/10 pt-4">Metodologia Única. Inovação, Visão.</Editable>
-                              <div className="absolute bottom-0 left-0 h-1 bg-white" style={{ width: `${100 - mix}%` }}></div>
+                              <div className="absolute bottom-0 left-0 h-1 bg-white" style={{width: `${100 - mix}%`}}></div>
                           </div>
                       </div>
                   </div>
@@ -218,7 +254,7 @@ backgroundImage: {
                           </div>
                           <div className="flex items-center justify-center relative">
                               <div className="h-32 flex items-center gap-1">
-                                  {[...Array(20)].map((_, i) => <div key={i} className="w-2 bg-gradient-to-t from-neon/20 to-neon rounded-full shadow-[0_0_10px_#FFE600]" style={{ height: `${20 + (i % 5) * 15}%` }}></div>)}
+                                  {[...Array(20)].map((_, i) => <div key={i} className="w-2 bg-gradient-to-t from-neon/20 to-neon rounded-full shadow-[0_0_10px_#FFE600]" style={{height: `${20 + (i % 5) * 15}%`}}></div>)}
                               </div>
                           </div>
                           <div className="glass-panel rounded-lg p-6 border-t-2 border-t-gray-600">
@@ -369,7 +405,7 @@ backgroundImage: {
 
                               <div className="mt-8">
                                   <div className="w-full h-1 bg-gray-800 rounded overflow-hidden">
-                                      <div className="h-full bg-neon" style={{ width: '100%' }}></div>
+                                      <div className="h-full bg-neon" style={{width: '100%'}}></div>
                                   </div>
                                   <div className="flex justify-between text-[10px] text-gray-500 mt-2">
                                       <span>COMPILING_ASSETS</span>
@@ -447,6 +483,12 @@ backgroundImage: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

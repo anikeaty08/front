@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -45,6 +81,12 @@ block: 'start',
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -85,10 +127,10 @@ block: 'start',
               emotion.
             </p>
 <div className="flex flex-col sm:flex-row gap-4 mt-8">
-<button className="text-sm sm:text-base font-semibold" onclick="document.querySelector('#work')?.scrollIntoView({behavior:'smooth'})" onmousedown="this.style.transform='translateY(6px)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" onmouseup="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" style={{border: '1px solid black', padding: '0.75rem 1.875rem', borderRadius: '999px', backgroundColor: 'rgb(250,112,250)', boxShadow: '0 0 1px rgba(0,0,0,1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'translateY(0)', letterSpacing: '-0.02em'}} type="button">
+<button className="text-sm sm:text-base font-semibold" onclick="document.querySelector('#work')?.scrollIntoView({behavior:'smooth'})" onmousedown="this.style.transform='translateY(6px)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" onmouseup="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" style={{border: '1px solid black', padding: '0.75rem 1.875rem', borderRadius: '999px', backgroundColor: 'rgb(250, 112, 250)', boxShadow: '0 0 1px rgba(0, 0, 0, 1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'translateY(0)', letterSpacing: '-0.02em'}} type="button">
                 View Portfolio
               </button>
-<button className="text-sm sm:text-base font-semibold" onclick="document.querySelector('#contact')?.scrollIntoView({behavior:'smooth'})" onmousedown="this.style.transform='translateY(6px)'; this.style.boxShadow='0 0 1px rgba(0,0,0,0.8)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 1px rgba(0,0,0,0.8)'" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(102,102,102)'" onmouseup="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(102,102,102)'" style={{border: '1px solid rgb(102,102,102)', padding: '0.75rem 1.875rem', borderRadius: '999px', backgroundColor: 'rgb(248,248,248)', boxShadow: '0 0 1px rgba(0,0,0,0.8)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'translateY(0)', color: 'rgb(68,68,68)', letterSpacing: '-0.02em'}} type="button">
+<button className="text-sm sm:text-base font-semibold" onclick="document.querySelector('#contact')?.scrollIntoView({behavior:'smooth'})" onmousedown="this.style.transform='translateY(6px)'; this.style.boxShadow='0 0 1px rgba(0,0,0,0.8)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 1px rgba(0,0,0,0.8)'" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(102,102,102)'" onmouseup="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(102,102,102)'" style={{border: '1px solid rgb(102, 102, 102)', padding: '0.75rem 1.875rem', borderRadius: '999px', backgroundColor: 'rgb(248, 248, 248)', boxShadow: '0 0 1px rgba(0, 0, 0, 0.8)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'translateY(0)', color: 'rgb(68,68,68)', letterSpacing: '-0.02em'}} type="button">
                 Book a Session
               </button>
 </div>
@@ -797,7 +839,7 @@ block: 'start',
               availability and a detailed pricing guide.
             </p>
 <div className="mt-6">
-<button className="text-sm sm:text-base font-semibold" onclick="window.location.href='mailto:hello@example.com?subject=Photography%20Inquiry'" onmousedown="this.style.transform='translateY(6px)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" onmouseup="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" style={{border: '1px solid black', padding: '0.75rem 1.875rem', borderRadius: '999px', backgroundColor: 'rgb(250,112,250)', boxShadow: '0 0 1px rgba(0,0,0,1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'translateY(0)', letterSpacing: '-0.02em'}} type="button">
+<button className="text-sm sm:text-base font-semibold" onclick="window.location.href='mailto:hello@example.com?subject=Photography%20Inquiry'" onmousedown="this.style.transform='translateY(6px)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 1px rgba(0,0,0,1)'" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" onmouseup="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 7px 1px rgb(0,0,0)'" style={{border: '1px solid black', padding: '0.75rem 1.875rem', borderRadius: '999px', backgroundColor: 'rgb(250, 112, 250)', boxShadow: '0 0 1px rgba(0, 0, 0, 1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transform: 'translateY(0)', letterSpacing: '-0.02em'}} type="button">
                 Contact Now
               </button>
 </div>

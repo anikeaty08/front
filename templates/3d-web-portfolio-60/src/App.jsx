@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,13 +139,19 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<div id="video-upload-control" style={{position: 'fixed', top: '16px', right: '16px', zIndex: '9999', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', border: '1px solid rgba(212,175,55,0.45)', padding: '8px 12px', borderRadius: '9999px', boxShadow: '0 0 20px rgba(212,175,55,0.25)'}}>
-<label htmlFor="bg-video-upload" style={{cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#e7d391', fontSize: '12px', fontWeight: '600', fontFamily: 'Inter,sans-serif'}}>
+<div id="video-upload-control" style={{position: 'fixed', top: '16px', right: '16px', zIndex: '9999', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(8px)', border: '1px solid rgba(212, 175, 55, 0.45)', padding: '8px 12px', borderRadius: '9999px', boxShadow: '0 0 20px rgba(212,175,55,0.25)'}}>
+<label htmlFor="bg-video-upload" style={{cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#e7d391', fontSize: '12px', fontWeight: '600', fontFamily: 'Inter, sans-serif'}}>
 <iconify-icon icon="solar:upload-linear" style={{fontSize: '16px'}}></iconify-icon>
         Upload background video
       </label>

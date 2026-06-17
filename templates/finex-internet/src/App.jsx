@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -243,6 +279,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -297,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
           packet loss prevention for gaming and streaming.
         </p>
 
-<a className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_8px_rgba(34,211,238,0.35)] aura-reveal is-visible rounded-full relative shadow-[0_8px_40px_rgba(34,211,238,0.25)]" href="#" style={{-Spread: '90deg', -ShimmerColor: 'rgba(255,255,255,0.6)', -Radius: '9999px', -Speed: '4s', -Cut: '1px', -Bg: 'rgba(255, 255, 255, 0.05)', animationDelay: '200ms'}}>
+<a className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_8px_rgba(34,211,238,0.35)] aura-reveal is-visible rounded-full relative shadow-[0_8px_40px_rgba(34,211,238,0.25)]" href="#" style={{'--spread': '90deg', '--shimmer-color': 'rgba(255, 255, 255, 0.6)', '--radius': '9999px', '--speed': '4s', '--cut': '1px', '--bg': 'rgba(255, 255, 255, 0.05)', animationDelay: '200ms'}}>
 <div className="absolute inset-0">
 <div className="absolute inset-[-200%] w-[400%] h-[400%] [animation:rotate-gradient_var(--speed)_linear_infinite]">
 <div className="absolute inset-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]"></div>
@@ -306,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="absolute rounded-full [background:var(--bg)] [inset:var(--cut)] backdrop-blur"></div>
 <div className="z-10 flex gap-3 sm:w-auto overflow-hidden text-base font-medium text-white w-full pt-3 pr-4 pb-3 pl-4 relative items-center" style={{borderRadius: '9999px'}}>
 <div className="" style={{position: 'absolute', content: '\' \'', display: 'block', width: '200%', height: '200%', background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2), transparent)', animation: 'borderBeamRotation 4s infinite linear', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}></div>
-<div className="" style={{position: 'absolute', inset: '1px', background: 'rgba(10,11,20,0.8)', borderRadius: '9999px', backdropFilter: 'blur(8px)'}}></div>
+<div className="" style={{position: 'absolute', inset: '1px', background: 'rgba(10, 11, 20, 0.8)', borderRadius: '9999px', backdropFilter: 'blur(8px)'}}></div>
 <span className="relative z-10 whitespace-nowrap font-sans">
               Boost Connection
             </span>
@@ -628,7 +670,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="grid grid-cols-1 lg:grid-cols-12 overflow-hidden divide-y lg:divide-y-0 lg:divide-x divide-white/10 [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-black/40 border-white/10 border rounded-none backdrop-blur-sm">
-<div className="lg:col-span-7 flex flex-col flashlight-card aura-reveal is-visible" style={{-MouseX: '660px', -MouseY: '443px'}}>
+<div className="lg:col-span-7 flex flex-col flashlight-card aura-reveal is-visible" style={{'--mouse-x': '660px', '--mouse-y': '443px'}}>
 <div className="md:p-12 group bg-gradient-to-br from-white/[0.02] to-transparent border-white/10 border-b pt-8 pr-8 pb-8 pl-8 relative">
 <div className="flex flex-col md:flex-row items-center gap-12 h-full">
 <div className="relative w-full max-w-xs shrink-0">
@@ -690,7 +732,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="lg:col-span-5 md:p-12 flex flex-col flashlight-card aura-reveal is-visible bg-zinc-900/20 pt-8 pr-8 pb-8 pl-8 justify-between" style={{animationDelay: '100ms', -MouseX: '18.671875px', -MouseY: '321px'}}>
+<div className="lg:col-span-5 md:p-12 flex flex-col flashlight-card aura-reveal is-visible bg-zinc-900/20 pt-8 pr-8 pb-8 pl-8 justify-between" style={{animationDelay: '100ms', '--mouse-x': '18.671875px', '--mouse-y': '321px'}}>
 <div className="">
 <h3 className="text-3xl font-semibold tracking-tight text-white mb-4">
                 Competitive Edge In Every Game
@@ -1093,7 +1135,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="container border-x [animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll max-w-7xl border-white/10 border border-b mr-auto ml-auto pt-0 pr-6 pb-0 pl-6">
 <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/10 border-white/10 border-b bg-black/20">
 
-<div className="group relative flex flex-col md:p-12 p-8 h-full flashlight-card aura-reveal transition-all duration-300 ease-out hover:z-20 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:bg-zinc-900/80 bg-[#020202]" style={{-MouseX: '558px', -MouseY: '307.609375px'}}>
+<div className="group relative flex flex-col md:p-12 p-8 h-full flashlight-card aura-reveal transition-all duration-300 ease-out hover:z-20 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:bg-zinc-900/80 bg-[#020202]" style={{'--mouse-x': '558px', '--mouse-y': '307.609375px'}}>
 
 <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
 </div>
@@ -1160,7 +1202,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="group relative flex flex-col p-8 md:p-12 h-full flashlight-card aura-reveal transition-all duration-300 ease-out hover:z-20 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] hover:bg-zinc-900/80 bg-[#020202]" style={{animationDelay: '100ms', -MouseX: '554px', -MouseY: '498.609375px'}}>
+<div className="group relative flex flex-col p-8 md:p-12 h-full flashlight-card aura-reveal transition-all duration-300 ease-out hover:z-20 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(6,182,212,0.15)] hover:bg-zinc-900/80 bg-[#020202]" style={{animationDelay: '100ms', '--mouse-x': '554px', '--mouse-y': '498.609375px'}}>
 
 <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -186,6 +222,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -256,7 +298,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex-grow flex items-center justify-center relative z-20">
 
-<img alt="Aero Sneaker" className="w-[110%] max-w-none h-auto object-cover rounded-xl animate-float mix-blend-lighten opacity-90" src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" style={{filter: 'grayscale(1) contrast(1.5) brightness(0.8) drop-shadow(0 30px 40px rgba(0,0,0,0.8))', transform: 'translateZ(80px) rotate(-10deg)'}}/>
+<img alt="Aero Sneaker" className="w-[110%] max-w-none h-auto object-cover rounded-xl animate-float mix-blend-lighten opacity-90" src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" style={{filter: 'grayscale(1) contrast(1.5) brightness(0.8) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.8))', transform: 'translateZ(80px) rotate(-10deg)'}}/>
 </div>
 
 <div className="mt-auto grid grid-cols-3 gap-4 border-t border-white/5 pt-6 z-10" style={{transform: 'translateZ(40px)'}}>

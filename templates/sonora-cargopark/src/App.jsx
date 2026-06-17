@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -124,6 +160,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -833,10 +875,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex flex-col gap-4">
 
-<div className="relative overflow-hidden p-5 flex flex-col" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71,85,105,0.35)', borderTop: '3px solid #b45309', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px -4px rgba(0,0,0,0.3)'}}>
+<div className="relative overflow-hidden p-5 flex flex-col" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71, 85, 105, 0.35)', borderTop: '3px solid #b45309', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px -4px rgba(0,0,0,0.3)'}}>
 
 <div className="flex justify-end mb-3">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center relative" style={{background: 'rgba(180,83,9,0.12)', border: '1px solid rgba(180,83,9,0.25)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center relative" style={{background: 'rgba(180, 83, 9, 0.12)', border: '1px solid rgba(180,83,9,0.25)'}}>
 <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <path className="" d="M2 8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8z"></path>
 <path className="" d="M16 10l4-2v8l-4-2"></path>
@@ -857,7 +899,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative overflow-hidden p-5 flex flex-col" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71,85,105,0.35)', borderLeft: '3px solid #10b981', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px -4px rgba(0,0,0,0.3)'}}>
+<div className="relative overflow-hidden p-5 flex flex-col" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71, 85, 105, 0.35)', borderLeft: '3px solid #10b981', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px -4px rgba(0,0,0,0.3)'}}>
 <div className="mb-4">
 <h4 className="leading-tight text-lg font-semibold text-white mb-2">
                 Klimata kontrole visu gadu
@@ -870,7 +912,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.25)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16,185,129,0.25)'}}>
 <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 1 1 4 0Z"></path>
 <circle cx="12" cy="18" fill="currentColor" r="1.5"></circle>
@@ -883,9 +925,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-2 gap-4">
 
-<div className="relative overflow-hidden p-4 flex flex-col justify-between" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71,85,105,0.35)', borderLeft: '4px solid #f59e0b', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px -4px rgba(0,0,0,0.3)', minHeight: '200px'}}>
+<div className="relative overflow-hidden p-4 flex flex-col justify-between" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71, 85, 105, 0.35)', borderLeft: '4px solid #f59e0b', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px -4px rgba(0,0,0,0.3)', minHeight: '200px'}}>
 
-<div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.25)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{background: 'rgba(245, 158, 11, 0.12)', border: '1px solid rgba(245,158,11,0.25)'}}>
 <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
 <line x1="8" x2="8" y1="8" y2="14"></line>
@@ -908,7 +950,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative overflow-hidden p-4 flex flex-col justify-between" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71,85,105,0.35)', borderRight: '3px solid #8b5cf6', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px -4px rgba(0,0,0,0.3)', minHeight: '200px'}}>
+<div className="relative overflow-hidden p-4 flex flex-col justify-between" style={{borderRadius: '20px', background: '#1e293b', border: '1px solid rgba(71, 85, 105, 0.35)', borderRight: '3px solid #8b5cf6', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px -4px rgba(0,0,0,0.3)', minHeight: '200px'}}>
 <div className="">
 <h4 className="leading-tight text-base font-semibold text-white mb-1.5">
                   Ērta iekraušana un izkraušana
@@ -921,7 +963,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="flex justify-end mt-3">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'rgba(139, 92, 246, 0.12)', border: '1px solid rgba(139,92,246,0.25)'}}>
 <svg className="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <rect height="8" rx="1" width="12" x="1" y="8"></rect>
 <path d="M13 10h4l2 3v3h-6"></path>

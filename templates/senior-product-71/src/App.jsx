@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -348,6 +384,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -487,7 +529,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 rounded-xl pointer-events-none shadow-[inset_0_1px_0_0_rgba(255,255,255,0.7),inset_0_0_20px_0_rgba(255,255,255,0.1)]"></div>
 <div className="grid grid-cols-1 md:grid-cols-3 z-10 relative gap-x-6 gap-y-6 group/work-grid">
 
-<div className="tilt-card group/card flex flex-col h-full cursor-pointer bg-white border border-neutral-100 rounded-2xl relative shadow-sm hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden p-2" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', -MouseX: '95.38963710170265%', -MouseY: '35.2399335937902%'}}>
+<div className="tilt-card group/card flex flex-col h-full cursor-pointer bg-white border border-neutral-100 rounded-2xl relative shadow-sm hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden p-2" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', '--mouse-x': '95.38963710170265%', '--mouse-y': '35.2399335937902%'}}>
 <div className="card-glare rounded-2xl"></div>
 <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg bg-neutral-100 z-0 tilt-content" style={{transform: 'translateZ(10px)'}}>
 <img alt="Fintech" className="object-top img-sharp object-auto bg-center w-full h-full" decoding="async" loading="lazy" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7d78cd06-deb6-4386-a607-97cbaf76e5c1_3840w.png"/>
@@ -547,7 +589,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="tilt-card group/card flex flex-col h-full cursor-pointer bg-white border border-neutral-100 rounded-2xl relative shadow-sm hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden p-2" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', -MouseX: '16.521068269037194%', -MouseY: '1.9244203008192036%'}}>
+<div className="tilt-card group/card flex flex-col h-full cursor-pointer bg-white border border-neutral-100 rounded-2xl relative shadow-sm hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden p-2" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', '--mouse-x': '16.521068269037194%', '--mouse-y': '1.9244203008192036%'}}>
 <div className="card-glare rounded-2xl"></div>
 <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg bg-neutral-100 z-0 tilt-content" style={{transform: 'translateZ(10px)'}}>
 <img alt="Security" className="object-top img-sharp object-auto w-full h-full" decoding="async" loading="lazy" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/be55e275-9acc-4b8c-8a2d-89a03a42cd68_3840w.png"/>
@@ -608,7 +650,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="tilt-card group/card flex flex-col h-full cursor-pointer bg-white border border-neutral-100 rounded-2xl relative shadow-sm hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden p-2" style={{transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', -MouseX: '34.98398653299523%', -MouseY: '34.05665565873073%'}}>
+<div className="tilt-card group/card flex flex-col h-full cursor-pointer bg-white border border-neutral-100 rounded-2xl relative shadow-sm hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden p-2" style={{transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', '--mouse-x': '34.98398653299523%', '--mouse-y': '34.05665565873073%'}}>
 <div className="card-glare rounded-2xl"></div>
 <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg bg-neutral-100 z-0 tilt-content" style={{transform: 'translateZ(10px)'}}>
 <img alt="IoT" className="object-top img-sharp w-full h-full object-cover" decoding="async" loading="lazy" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0ac21dcb-2480-48d1-ae5e-1623660448b3_1600w.png"/>
@@ -669,7 +711,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="tilt-card group/card flex flex-col cursor-pointer hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden bg-white h-full border-neutral-100 border rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-sm" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', -MouseX: '87.23358521184788%', -MouseY: '61.75240351862463%'}}>
+<div className="tilt-card group/card flex flex-col cursor-pointer hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden bg-white h-full border-neutral-100 border rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-sm" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', '--mouse-x': '87.23358521184788%', '--mouse-y': '61.75240351862463%'}}>
 <div className="card-glare rounded-2xl"></div>
 <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg bg-neutral-100 z-0 tilt-content" style={{transform: 'translateZ(10px)'}}>
 <img alt="AI Interface" className="object-top img-sharp object-auto bg-center w-full h-full" decoding="async" loading="lazy" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6a34c687-2297-4695-a642-ec57594eb982_3840w.png"/>
@@ -729,7 +771,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="tilt-card group/card flex flex-col cursor-pointer hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden bg-white h-full border-neutral-100 border rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-sm" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', -MouseX: '96.10688487038044%', -MouseY: '55.72665552589394%'}}>
+<div className="tilt-card group/card flex flex-col cursor-pointer hover:shadow-2xl hover:shadow-neutral-900/5 transition-all duration-500 overflow-hidden bg-white h-full border-neutral-100 border rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-sm" style={{transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)', '--mouse-x': '96.10688487038044%', '--mouse-y': '55.72665552589394%'}}>
 <div className="card-glare rounded-2xl"></div>
 <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg bg-neutral-100 z-0 tilt-content" style={{transform: 'translateZ(10px)'}}>
 <img alt="EcoPulse" className="object-top w-full h-full object-cover img-sharp" decoding="async" loading="lazy" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=100&amp;w=3200&amp;auto=format&amp;fit=crop"/>

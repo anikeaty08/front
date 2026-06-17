@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -310,6 +346,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -343,7 +385,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-24 px-6 z-10 perspective-container">
 
 <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0 opacity-40">
-<div className="w-[150vw] h-[150vh] border border-white/[0.02] absolute" id="hero-3d-grid" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '50px 50px', transform: 'rotateX(60deg) translateY(-100px) translateZ(-200px)', transformOrigin: 'top center'}}></div>
+<div className="w-[150vw] h-[150vh] border border-white/[0.02] absolute" id="hero-3d-grid" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', backgroundSize: '50px 50px', transform: 'rotateX(60deg) translateY(-100px) translateZ(-200px)', transformOrigin: 'top center'}}></div>
 </div>
 <div className="text-center relative z-10 max-w-4xl mx-auto transform-gpu" id="hero-content">
 <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-medium text-white/70 mb-8 backdrop-blur-md">
@@ -497,7 +539,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative h-[500px] w-full rounded-3xl border border-white/10 bg-[#050505] overflow-hidden flex items-center justify-center perspective-container" style={{boxShadow: 'inset 0 0 100px rgba(0,0,0,0.8)'}}>
 
-<div className="absolute inset-0 z-0 opacity-20" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '40px 40px', transform: 'rotateX(70deg) translateY(100px) scale(2)'}}></div>
+<div className="absolute inset-0 z-0 opacity-20" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', backgroundSize: '40px 40px', transform: 'rotateX(70deg) translateY(100px) scale(2)'}}></div>
 
 <svg className="absolute z-10 w-full h-full" preserveaspectratio="xMidYMid slice" viewbox="0 0 400 500">
 <path d="M 100 100 Q 200 250 300 400" fill="none" id="journey-path" stroke="rgba(255,255,255,0.1)" stroke-dasharray="8 8" strokeWidth="2"></path>

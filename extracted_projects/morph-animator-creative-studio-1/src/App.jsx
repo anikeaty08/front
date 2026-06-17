@@ -202,6 +202,42 @@ export default function App() {
 
   // Handle keyboard deletion
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleKeyDown = (e) => {
       if ((e.key === 'Backspace' || e.key === 'Delete') && selectedIdx !== null && activeTool === 'select' && !isPlaying) {
         setFrames(prev => {
@@ -810,7 +846,7 @@ export default function App() {
                   "w-6 h-6 rounded-md transition-all duration-200 cursor-pointer hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed",
                   brushColor === c ? "ring-2 ring-white ring-offset-2 ring-offset-zinc-900 scale-110" : ""
                 )}
-                style={{ backgroundColor: c }}
+                style={{backgroundColor: c}}
                 title={`Color ${c}`}
               />
             ))}
@@ -930,7 +966,7 @@ export default function App() {
 
       {/* Main Canvas Area */}
       <main className="flex-1 relative flex flex-col items-center justify-center p-8 bg-zinc-950/50 pattern-dots">
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+        <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '24px 24px'}}></div>
         
         {/* Helper Hint */}
         {activeTool === 'select' && !isPlaying && (
@@ -943,7 +979,7 @@ export default function App() {
         <div 
           ref={containerRef}
           className="relative w-full max-w-5xl h-full max-h-[70vh] bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden shadow-black/50"
-          style={{ cursor: (isPlaying || isExporting) ? 'default' : activeTool === 'select' ? 'default' : 'crosshair' }}
+          style={{cursor: (isPlaying || isExporting) ? 'default' : activeTool === 'select' ? 'default' : 'crosshair'}}
         >
           <canvas
             ref={canvasRef}

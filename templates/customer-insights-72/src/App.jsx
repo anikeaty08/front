@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -168,6 +204,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -364,16 +406,16 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="animate-pulse" height="1.875em" icon="solar:heart-bold" width="1.875em"></iconify-icon>
 </div>
 </div>
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-1.5 w-32 z-20" style={{-Tx: '-180px', -Ty: '-180px', -Rot: '15deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '0.2s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-1.5 w-32 z-20" style={{'--tx': '-180px', '--ty': '-180px', '--rot': '15deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '0.2s'}}>
 <div className="h-1.5 w-1/2 bg-white/20 rounded"></div>
 <div className="h-1.5 w-3/4 bg-brand/60 rounded"></div>
 <div className="h-1.5 w-2/3 bg-white/20 rounded"></div>
 </div>
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center gap-2 z-20" style={{-Tx: '180px', -Ty: '180px', -Rot: '-10deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.4s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center gap-2 z-20" style={{'--tx': '180px', '--ty': '180px', '--rot': '-10deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '1.4s'}}>
 <div className="w-2 h-2 rounded-full bg-brand shadow-[0_0_10px_rgba(255,90,0,0.5)]"></div>
 <span className="text-xs font-mono text-white">Metrics</span>
 </div>
-<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] w-24 z-20" style={{-Tx: '-80px', -Ty: '220px', -Rot: '20deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.4s'}}>
+<div className="absolute top-1/2 left-1/2 p-3 bg-white/[0.02] border border-white/10 rounded-xl backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] w-24 z-20" style={{'--tx': '-80px', '--ty': '220px', '--rot': '20deg', animation: 'gravity-well-anim 4.8s cubic-bezier(0.5, 0, 0.8, 1) infinite both', animationDelay: '3.4s'}}>
 <div className="w-full h-1 bg-white/10 rounded-full relative">
 <div className="absolute left-1/3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-brand rounded-full shadow-[0_0_8px_rgba(255,90,0,0.6)]"></div>
 </div>
@@ -511,10 +553,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="h-32 w-full flex items-center justify-center relative z-10 mb-6 scale-90 border-b border-white/[0.05]">
 <div className="relative w-24 h-24 flex items-center justify-center">
 <div className="w-3 h-3 bg-brand rounded-full relative z-10 shadow-[0_0_15px_rgba(255,90,0,0.8)]"></div>
-<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{-Tx: '-50px', -Ty: '-50px', animationDelay: '0s'}}></div>
-<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{-Tx: '50px', -Ty: '-50px', animationDelay: '0.6s'}}></div>
-<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{-Tx: '-50px', -Ty: '50px', animationDelay: '1.2s'}}></div>
-<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{-Tx: '50px', -Ty: '50px', animationDelay: '1.8s'}}></div>
+<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{'--tx': '-50px', '--ty': '-50px', animationDelay: '0s'}}></div>
+<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{'--tx': '50px', '--ty': '-50px', animationDelay: '0.6s'}}></div>
+<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{'--tx': '-50px', '--ty': '50px', animationDelay: '1.2s'}}></div>
+<div className="absolute w-2 h-2 bg-white/50 rounded-full anim-converge" style={{'--tx': '50px', '--ty': '50px', animationDelay: '1.8s'}}></div>
 </div>
 </div>
 <div className="relative z-10 mt-auto">
@@ -556,9 +598,9 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="h-32 w-full flex items-center justify-center relative z-10 mb-6 scale-90 border-b border-white/[0.05]">
 <div className="relative w-24 h-24 flex items-end justify-between gap-2.5 pb-4">
-<div className="w-full bg-white/20 rounded-t-sm anim-bar-pulse" style={{-H: '40%', animationDelay: '0s'}}></div>
-<div className="w-full bg-brand/80 rounded-t-sm anim-bar-pulse shadow-[0_0_15px_rgba(255,90,0,0.6)]" style={{-H: '90%', animationDelay: '-1s'}}></div>
-<div className="w-full bg-white/20 rounded-t-sm anim-bar-pulse" style={{-H: '60%', animationDelay: '-0.5s'}}></div>
+<div className="w-full bg-white/20 rounded-t-sm anim-bar-pulse" style={{'--h': '40%', animationDelay: '0s'}}></div>
+<div className="w-full bg-brand/80 rounded-t-sm anim-bar-pulse shadow-[0_0_15px_rgba(255,90,0,0.6)]" style={{'--h': '90%', animationDelay: '-1s'}}></div>
+<div className="w-full bg-white/20 rounded-t-sm anim-bar-pulse" style={{'--h': '60%', animationDelay: '-0.5s'}}></div>
 </div>
 </div>
 <div className="relative z-10 mt-auto">
@@ -627,11 +669,11 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-neutral-500 group-hover:text-brand transition-colors" height="2em" icon="solar:document-add-linear" strokeWidth="1.5" width="2em"></iconify-icon>
 
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[280px] h-36 flex items-end justify-between gap-1.5 opacity-60 mix-blend-screen group-hover:opacity-100 transition-opacity">
-<div className="w-full bg-white/10 border border-white/20 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{-H: '70%', animationDelay: '0s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-emerald-400"></div></div>
-<div className="w-full bg-white/5 border border-white/10 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{-H: '95%', animationDelay: '-0.5s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-white"></div></div>
-<div className="w-full bg-brand/20 border border-brand/30 relative overflow-hidden anim-bar-pulse rounded-t-sm shadow-[0_0_20px_rgba(255,90,0,0.2)]" style={{-H: '80%', animationDelay: '-1s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-brand"></div></div>
-<div className="w-full bg-white/10 border border-white/20 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{-H: '45%', animationDelay: '-1.5s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-white"></div></div>
-<div className="w-full bg-white/5 border border-white/10 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{-H: '85%', animationDelay: '-2s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-blue-400"></div></div>
+<div className="w-full bg-white/10 border border-white/20 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{'--h': '70%', animationDelay: '0s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-emerald-400"></div></div>
+<div className="w-full bg-white/5 border border-white/10 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{'--h': '95%', animationDelay: '-0.5s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-white"></div></div>
+<div className="w-full bg-brand/20 border border-brand/30 relative overflow-hidden anim-bar-pulse rounded-t-sm shadow-[0_0_20px_rgba(255,90,0,0.2)]" style={{'--h': '80%', animationDelay: '-1s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-brand"></div></div>
+<div className="w-full bg-white/10 border border-white/20 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{'--h': '45%', animationDelay: '-1.5s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-white"></div></div>
+<div className="w-full bg-white/5 border border-white/10 relative overflow-hidden anim-bar-pulse rounded-t-sm" style={{'--h': '85%', animationDelay: '-2s'}}><div className="absolute top-0 inset-x-0 h-[2px] bg-blue-400"></div></div>
 </div>
 <div className="mt-auto">
 <h3 className="text-3xl md:text-4xl font-medium tracking-tight text-white leading-snug">

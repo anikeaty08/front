@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -410,6 +446,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -470,17 +512,17 @@ gtag('config', 'G-2M6V79H761');
 <div className="fixed inset-0 z-0 opacity-0 transition-opacity duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none" id="canvas-container"></div>
 
 <div className="fixed inset-0 z-15 pointer-events-none" id="story-popovers">
-<div className="absolute z-20 bg-white/60 dark:bg-[#141414]/40 backdrop-blur-[20px] border border-white/40 dark:border-white/10 p-[14px_20px] rounded-[18px] flex flex-col gap-1 opacity-0 min-w-[200px] top-[35%] left-[15%] md:left-[15%] md:top-[35%] max-md:top-auto max-md:bottom-[25%] max-md:left-1/2 max-md:-translate-x-1/2 max-md:text-center max-md:items-center" id="popover-1" style={{boxShadow: '0 20px 40px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5)', transform: 'translateY(20px) scale(0.95)'}}>
+<div className="absolute z-20 bg-white/60 dark:bg-[#141414]/40 backdrop-blur-[20px] border border-white/40 dark:border-white/10 p-[14px_20px] rounded-[18px] flex flex-col gap-1 opacity-0 min-w-[200px] top-[35%] left-[15%] md:left-[15%] md:top-[35%] max-md:top-auto max-md:bottom-[25%] max-md:left-1/2 max-md:-translate-x-1/2 max-md:text-center max-md:items-center" id="popover-1" style={{boxShadow: '0 20px 40px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.5)', transform: 'translateY(20px) scale(0.95)'}}>
 <div className="text-xs font-semibold uppercase tracking-wider text-emerald-500 mb-[2px]">Quality</div>
 <div className="text-sm font-medium text-gray-900 dark:text-white tracking-tight">Lab Tested</div>
 <div className="text-xs text-gray-500 dark:text-gray-400 font-normal">Pesticide-free cultivation.</div>
 </div>
-<div className="absolute z-20 bg-white/60 dark:bg-[#141414]/40 backdrop-blur-[20px] border border-white/40 dark:border-white/10 p-[14px_20px] rounded-[18px] flex flex-col gap-1 opacity-0 min-w-[200px] top-[45%] right-[15%] text-right items-end md:right-[15%] md:top-[45%] max-md:top-auto max-md:bottom-[25%] max-md:left-1/2 max-md:right-auto max-md:-translate-x-1/2 max-md:text-center max-md:items-center" id="popover-2" style={{boxShadow: '0 20px 40px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5)', transform: 'translateY(20px) scale(0.95)'}}>
+<div className="absolute z-20 bg-white/60 dark:bg-[#141414]/40 backdrop-blur-[20px] border border-white/40 dark:border-white/10 p-[14px_20px] rounded-[18px] flex flex-col gap-1 opacity-0 min-w-[200px] top-[45%] right-[15%] text-right items-end md:right-[15%] md:top-[45%] max-md:top-auto max-md:bottom-[25%] max-md:left-1/2 max-md:right-auto max-md:-translate-x-1/2 max-md:text-center max-md:items-center" id="popover-2" style={{boxShadow: '0 20px 40px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.5)', transform: 'translateY(20px) scale(0.95)'}}>
 <div className="text-xs font-semibold uppercase tracking-wider text-emerald-500 mb-[2px]">Potency</div>
 <div className="text-sm font-medium text-gray-900 dark:text-white tracking-tight">High Yield</div>
 <div className="text-xs text-gray-500 dark:text-gray-400 font-normal">Maximized terpene profiles.</div>
 </div>
-<div className="absolute z-20 bg-white/60 dark:bg-[#141414]/40 backdrop-blur-[20px] border border-white/40 dark:border-white/10 p-[14px_20px] rounded-[18px] flex flex-col gap-1 opacity-0 min-w-[200px] bottom-[15%] left-1/2 -translate-x-1/2 text-center items-center max-md:bottom-[25%]" id="popover-3" style={{boxShadow: '0 20px 40px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5)', transform: 'translateY(20px) scale(0.95)'}}>
+<div className="absolute z-20 bg-white/60 dark:bg-[#141414]/40 backdrop-blur-[20px] border border-white/40 dark:border-white/10 p-[14px_20px] rounded-[18px] flex flex-col gap-1 opacity-0 min-w-[200px] bottom-[15%] left-1/2 -translate-x-1/2 text-center items-center max-md:bottom-[25%]" id="popover-3" style={{boxShadow: '0 20px 40px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.5)', transform: 'translateY(20px) scale(0.95)'}}>
 <div className="text-xs font-semibold uppercase tracking-wider text-emerald-500 mb-[2px]">Purity</div>
 <div className="text-sm font-medium text-gray-900 dark:text-white tracking-tight">Organic Grown</div>
 <div className="text-xs text-gray-500 dark:text-gray-400 font-normal">Sustainable farming practices.</div>
@@ -506,7 +548,7 @@ gtag('config', 'G-2M6V79H761');
                 The convergence of nature and science. Bridging the gap between expert cultivation and the true connoisseur.
             </p>
 <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pointer-events-auto">
-<button className="relative overflow-hidden h-11 px-7 bg-emerald-500 text-white text-sm font-medium rounded-full transition-all duration-300 flex items-center justify-center gap-2 hover:bg-emerald-400 group" style={{boxShadow: '0 0 30px rgba(16,185,129,0.25), 0 1px 3px rgba(0,0,0,0.2)'}}>
+<button className="relative overflow-hidden h-11 px-7 bg-emerald-500 text-white text-sm font-medium rounded-full transition-all duration-300 flex items-center justify-center gap-2 hover:bg-emerald-400 group" style={{boxShadow: '0 0 30px rgba(16, 185, 129, 0.25), 0 1px 3px rgba(0,0,0,0.2)'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     Shop Menu
                     <iconify-icon height="18" icon="solar:cart-large-2-linear" strokeWidth="1.5" width="18"></iconify-icon>
@@ -997,21 +1039,21 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse 600px 800px at 50% 55%,rgba(255,255,255,0.04),transparent 60%)'}}></div>
 </div>
 <div className="absolute top-0 left-0 w-1/2 h-full z-20 pointer-events-none" id="cta-door-left" style={{willChange: 'transform'}}>
-<div className="h-full w-full relative overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/door:-translate-x-[18%]" style={{background: 'linear-gradient(135deg,rgba(255,255,255,0.06),rgba(0,0,0,0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderRight: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="h-full w-full relative overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/door:-translate-x-[18%]" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderRight: '1px solid rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 opacity-[0.04]" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%270 0 200 200%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.65%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E\')'}}></div>
 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[2px] h-24 bg-white/20 rounded-l-full"></div>
 <div className="absolute inset-0 opacity-0" id="cta-sweep-left" style={{background: 'linear-gradient(105deg,transparent 30%,rgba(255,255,255,0.08) 50%,transparent 70%)'}}></div>
 </div>
 </div>
 <div className="absolute top-0 right-0 w-1/2 h-full z-20 pointer-events-none" id="cta-door-right" style={{willChange: 'transform'}}>
-<div className="h-full w-full relative overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/door:translate-x-[18%]" style={{background: 'linear-gradient(225deg,rgba(16,185,129,0.08),rgba(0,0,0,0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderLeft: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="h-full w-full relative overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/door:translate-x-[18%]" style={{background: 'linear-gradient(225deg, rgba(16, 185, 129, 0.08), rgba(0, 0, 0, 0.7))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderLeft: '1px solid rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 opacity-[0.04]" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%270 0 200 200%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.65%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E\')'}}></div>
 <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-24 bg-white/20 rounded-r-full"></div>
 <div className="absolute inset-0 opacity-0" id="cta-sweep-right" style={{background: 'linear-gradient(255deg,transparent 30%,rgba(255,255,255,0.08) 50%,transparent 70%)'}}></div>
 </div>
 </div>
 <div className="absolute inset-0 z-10 pointer-events-none opacity-0" id="cta-canvas-container" style={{willChange: 'opacity'}}></div>
-<div className="relative z-30 flex flex-col items-center text-center px-6 opacity-0" id="cta-content" style={{willChange: 'transform,opacity', pointerEvents: 'none'}}>
+<div className="relative z-30 flex flex-col items-center text-center px-6 opacity-0" id="cta-content" style={{willChange: 'transform, opacity', pointerEvents: 'none'}}>
 <div className="mb-8 inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-950/30 backdrop-blur-sm shadow-[0_0_15px_-3px_rgba(16,185,129,0.3)]">
 <span className="relative flex h-2 w-2">
 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

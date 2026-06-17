@@ -12,6 +12,42 @@ function App() {
 
   // Close mobile menu when route changes
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     setIsMobileMenuOpen(false);
   }, [location]);
 
@@ -80,7 +116,7 @@ function App() {
               width="24" 
               height="24" 
               class={`transition-transform duration-300 group-hover:text-[#F4E7C4] ${isMobileMenuOpen ? 'rotate-90' : 'rotate-0'}`} 
-              style={{ color: 'rgb(244, 231, 196)' }}
+              style={{color: 'rgb(244, 231, 196)'}}
             ></iconify-icon>
           </button>
         </div>

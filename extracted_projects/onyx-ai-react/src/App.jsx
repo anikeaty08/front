@@ -14,6 +14,42 @@ export default function App() {
   };
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     checkScroll();
     window.addEventListener('resize', checkScroll);
     return () => window.removeEventListener('resize', checkScroll);
@@ -31,10 +67,7 @@ export default function App() {
       <div 
         className="aura-background-component top-0 w-full h-screen -z-10 absolute" 
         data-alpha-mask="80" 
-        style={{ 
-          maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', 
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)' 
-        }}
+        style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}
       >
         <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
           <iframe 
@@ -74,7 +107,7 @@ export default function App() {
         {/* Hero */}
         <section className="md:pl-6 md:pr-6 md:pt-20 text-center max-w-3xl mt-20 mr-auto mb-20 ml-auto pt-20 pr-6 pl-6">
           <div className="inline-flex gap-2 text-xs text-white/80 bg-white/5 border-white/10 border rounded-full mr-auto ml-auto pt-1.5 pr-3 pb-1.5 pl-3 items-center backdrop-blur-sm">
-            <iconify-icon icon="solar:stars-linear" class="h-3.5 w-3.5 text-white/80" style={{ strokeWidth: '1.5' }}></iconify-icon>
+            <iconify-icon icon="solar:stars-linear" class="h-3.5 w-3.5 text-white/80" style={{strokeWidth: '1.5'}}></iconify-icon>
             <span className="font-geist">AI-Powered Browsing</span>
             <span className="mx-1 h-1 w-1 rounded-full bg-white/40"></span>
             <span className="text-white/60 font-geist">New in v3.0</span>
@@ -82,10 +115,7 @@ export default function App() {
 
           <h1 
             className="md:text-7xl lg:text-8xl text-5xl font-medium tracking-tighter font-jakarta mt-6 pt-2 pb-2 drop-shadow-lg" 
-            style={{ 
-              maskImage: 'linear-gradient(150deg, transparent, black 30%, black 50%, transparent)', 
-              WebkitMaskImage: 'linear-gradient(150deg, transparent, black 30%, black 50%, transparent)' 
-            }}
+            style={{maskImage: 'linear-gradient(150deg, transparent, black 30%, black 50%, transparent)', WebkitMaskImage: 'linear-gradient(150deg, transparent, black 30%, black 50%, transparent)'}}
           >
             Browse with AI at your side
           </h1>
@@ -103,22 +133,22 @@ export default function App() {
               </a>
             </div>
             <a href="#" className="border-gradient inline-flex items-center gap-2 hover:bg-white/10 transition-colors text-sm font-medium text-white font-geist bg-white/5 rounded-full pt-3 pr-5 pb-3 pl-5 backdrop-blur-sm">
-              <iconify-icon icon="solar:play-circle-linear" class="h-4 w-4" style={{ strokeWidth: '1.5' }}></iconify-icon>
+              <iconify-icon icon="solar:play-circle-linear" class="h-4 w-4" style={{strokeWidth: '1.5'}}></iconify-icon>
               Watch Demo
             </a>
           </div>
 
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-5 text-white/70">
             <div className="inline-flex items-center gap-2">
-              <iconify-icon icon="solar:shield-check-linear" class="h-4 w-4" style={{ strokeWidth: '1.5' }}></iconify-icon>
+              <iconify-icon icon="solar:shield-check-linear" class="h-4 w-4" style={{strokeWidth: '1.5'}}></iconify-icon>
               <span className="text-sm font-geist">Privacy First</span>
             </div>
             <div className="inline-flex items-center gap-2">
-              <iconify-icon icon="solar:bolt-linear" class="h-4 w-4" style={{ strokeWidth: '1.5' }}></iconify-icon>
+              <iconify-icon icon="solar:bolt-linear" class="h-4 w-4" style={{strokeWidth: '1.5'}}></iconify-icon>
               <span className="text-sm font-geist">Lightning Fast</span>
             </div>
             <div className="inline-flex items-center gap-2">
-              <iconify-icon icon="solar:star-linear" class="h-4 w-4" style={{ strokeWidth: '1.5' }}></iconify-icon>
+              <iconify-icon icon="solar:star-linear" class="h-4 w-4" style={{strokeWidth: '1.5'}}></iconify-icon>
               <span className="text-sm font-geist">4.8/5 Rating</span>
             </div>
           </div>
@@ -133,10 +163,7 @@ export default function App() {
           </div>
           <div className="overflow-hidden mt-6 relative">
             <div 
-              style={{ 
-                maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)', 
-                WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)' 
-              }}
+              style={{maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'}}
             >
               <div className="flex gap-6 will-change-transform animate-marquee-left">
                 <div className="flex gap-6 shrink-0 gap-x-20">
@@ -167,10 +194,7 @@ export default function App() {
               {/* Diagram */}
               <div 
                 className="bg-[url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5aa83035-c72b-4cb5-9937-66ce103b64ef_1600w.webp')] bg-cover rounded-[36px] pt-5 pr-5 pb-5 pl-5 relative" 
-                style={{ 
-                  maskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)', 
-                  WebkitMaskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)' 
-                }}
+                style={{maskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)', WebkitMaskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)'}}
               >
                 <article className="group relative overflow-hidden transition-shadow hover:shadow-md bg-black/70 border-white/10 border rounded-3xl shadow-xl backdrop-blur-xl">
                   <div className="sm:p-10 pt-6 pr-6 pb-6 pl-6">
@@ -421,10 +445,7 @@ export default function App() {
               {/* Diagram */}
               <div 
                 className="bg-[url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5aa83035-c72b-4cb5-9937-66ce103b64ef_1600w.webp')] bg-cover rounded-[36px] pt-5 pr-5 pb-5 pl-5 relative" 
-                style={{ 
-                  maskImage: 'linear-gradient(230deg, transparent, black 10%, black 70%, transparent)', 
-                  WebkitMaskImage: 'linear-gradient(230deg, transparent, black 10%, black 70%, transparent)' 
-                }}
+                style={{maskImage: 'linear-gradient(230deg, transparent, black 10%, black 70%, transparent)', WebkitMaskImage: 'linear-gradient(230deg, transparent, black 10%, black 70%, transparent)'}}
               >
                 <article className="group relative overflow-hidden transition-shadow hover:shadow-md bg-black/70 border-white/10 border rounded-3xl shadow-xl backdrop-blur-xl">
                   <div className="sm:p-10 pt-6 pr-6 pb-6 pl-6">
@@ -534,7 +555,7 @@ export default function App() {
                   <div className="transition-opacity duration-300 group-hover:opacity-90 bg-gradient-to-b from-black/0 via-black/15 to-black/60 absolute top-0 right-0 bottom-0 left-0"></div>
                   <div className="absolute top-3 left-3 transition-transform duration-300 group-hover:scale-110">
                     <span className="inline-flex items-center gap-2 text-xs text-white/90 bg-white/10 border-white/15 border rounded-full py-1.5 px-1.5 backdrop-blur">
-                      <iconify-icon icon="solar:brain-linear" class="h-3.5 w-3.5" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                      <iconify-icon icon="solar:brain-linear" class="h-3.5 w-3.5" style={{strokeWidth: '1.5'}}></iconify-icon>
                     </span>
                   </div>
                   <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:translate-x-1">
@@ -550,7 +571,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/60 transition-opacity duration-300 group-hover:opacity-90"></div>
                   <div className="absolute top-3 left-3 transition-transform duration-300 group-hover:scale-110">
                     <span className="inline-flex items-center gap-2 text-xs text-white/90 bg-white/10 border-white/15 border rounded-full py-1.5 px-1.5 backdrop-blur">
-                      <iconify-icon icon="solar:shield-linear" class="w-3.5 h-3.5" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                      <iconify-icon icon="solar:shield-linear" class="w-3.5 h-3.5" style={{strokeWidth: '1.5'}}></iconify-icon>
                     </span>
                   </div>
                   <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:translate-x-1">
@@ -566,7 +587,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/60 transition-opacity duration-300 group-hover:opacity-90"></div>
                   <div className="absolute top-3 left-3 transition-transform duration-300 group-hover:scale-110">
                     <span className="inline-flex items-center gap-2 text-xs text-white/90 bg-white/10 border-white/15 border rounded-full py-1.5 px-1.5 backdrop-blur">
-                      <iconify-icon icon="solar:chart-square-linear" class="w-3.5 h-3.5" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                      <iconify-icon icon="solar:chart-square-linear" class="w-3.5 h-3.5" style={{strokeWidth: '1.5'}}></iconify-icon>
                     </span>
                   </div>
                   <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:translate-x-1">
@@ -582,7 +603,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/60 transition-opacity duration-300 group-hover:opacity-90"></div>
                   <div className="absolute top-3 left-3 transition-transform duration-300 group-hover:scale-110">
                     <span className="inline-flex items-center gap-2 text-xs text-white/90 bg-white/10 border-white/15 border rounded-full py-1.5 px-1.5 backdrop-blur">
-                      <iconify-icon icon="solar:bolt-linear" class="h-3.5 w-3.5" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                      <iconify-icon icon="solar:bolt-linear" class="h-3.5 w-3.5" style={{strokeWidth: '1.5'}}></iconify-icon>
                     </span>
                   </div>
                   <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:translate-x-1">
@@ -670,15 +691,12 @@ export default function App() {
             <div className="relative mt-6 sm:mt-8">
               <div 
                 className="overflow-hidden h-[320px] sm:h-[380px] md:h-[420px] rounded-2xl sm:rounded-3xl relative" 
-                style={{ 
-                  maskImage: 'linear-gradient(90deg, transparent, black 5%, black 95%, transparent)', 
-                  WebkitMaskImage: 'linear-gradient(90deg, transparent, black 5%, black 95%, transparent)' 
-                }}
+                style={{maskImage: 'linear-gradient(90deg, transparent, black 5%, black 95%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 5%, black 95%, transparent)'}}
               >
                 
                 <div 
                   className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth px-4 sm:px-6 absolute top-0 right-0 bottom-0 left-0 gap-x-4 sm:gap-x-6 gap-y-4 sm:gap-y-6 items-center" 
-                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} 
+                  style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}} 
                   id="testimonial-rail"
                   ref={railRef}
                   onScroll={checkScroll}
@@ -754,17 +772,17 @@ export default function App() {
                     aria-label="Previous" 
                     className="hover:bg-white/20 transition-colors inline-flex text-white bg-white/10 w-9 h-9 sm:w-10 sm:h-10 border-white/20 border rounded-full items-center justify-center backdrop-blur-sm"
                     onClick={() => scroll(-1)}
-                    style={{ opacity: canScrollLeft ? 1 : 0.5, pointerEvents: canScrollLeft ? 'auto' : 'none' }}
+                    style={{opacity: canScrollLeft ? 1 : 0.5, pointerEvents: canScrollLeft ? 'auto' : 'none'}}
                   >
-                    <iconify-icon icon="solar:arrow-left-linear" class="w-4 h-4 sm:w-5 sm:h-5" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                    <iconify-icon icon="solar:arrow-left-linear" class="w-4 h-4 sm:w-5 sm:h-5" style={{strokeWidth: '1.5'}}></iconify-icon>
                   </button>
                   <button 
                     aria-label="Next" 
                     className="w-9 h-9 sm:w-10 sm:h-10 rounded-full text-black bg-white hover:bg-white/90 transition-colors inline-flex items-center justify-center"
                     onClick={() => scroll(1)}
-                    style={{ opacity: canScrollRight ? 1 : 0.5, pointerEvents: canScrollRight ? 'auto' : 'none' }}
+                    style={{opacity: canScrollRight ? 1 : 0.5, pointerEvents: canScrollRight ? 'auto' : 'none'}}
                   >
-                    <iconify-icon icon="solar:arrow-right-linear" class="w-4 h-4 sm:w-5 sm:h-5" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                    <iconify-icon icon="solar:arrow-right-linear" class="w-4 h-4 sm:w-5 sm:h-5" style={{strokeWidth: '1.5'}}></iconify-icon>
                   </button>
                 </div>
               </div>
@@ -778,7 +796,7 @@ export default function App() {
             <div className="opacity-50 bg-[url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/06254d74-b37f-4eaf-bc55-f9e0758e1c14_1600w.webp')] bg-cover bg-center absolute top-0 right-0 bottom-0 left-0"></div>
             <div className="relative z-10 text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/80 mb-6 backdrop-blur-sm">
-                <iconify-icon icon="solar:rocket-linear" class="h-3.5 w-3.5" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                <iconify-icon icon="solar:rocket-linear" class="h-3.5 w-3.5" style={{strokeWidth: '1.5'}}></iconify-icon>
                 <span className="font-geist">Get Started Today</span>
               </div>
               
@@ -792,10 +810,10 @@ export default function App() {
               <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
                 <a href="#" className="inline-flex items-center rounded-full bg-white text-black px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors font-geist">
                   Download for Free
-                  <iconify-icon icon="solar:download-linear" class="ml-2 h-4 w-4" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                  <iconify-icon icon="solar:download-linear" class="ml-2 h-4 w-4" style={{strokeWidth: '1.5'}}></iconify-icon>
                 </a>
                 <a href="#" className="border-gradient inline-flex items-center gap-2 rounded-full bg-white/5 px-6 py-3 text-sm text-white hover:bg-white/10 transition-colors font-medium backdrop-blur-sm font-geist">
-                  <iconify-icon icon="solar:info-circle-linear" class="h-4 w-4" style={{ strokeWidth: '1.5' }}></iconify-icon>
+                  <iconify-icon icon="solar:info-circle-linear" class="h-4 w-4" style={{strokeWidth: '1.5'}}></iconify-icon>
                   Learn more
                 </a>
               </div>

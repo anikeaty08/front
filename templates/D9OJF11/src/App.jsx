@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       lucide.createIcons();
@@ -105,6 +141,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -114,7 +156,7 @@ export default function App() {
 
 <div aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none" id="particles-bg"></div>
 
-<div aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'radial-gradient(at 80% 10%, rgba(30, 180, 255, 0.14) 0px, transparent 70%)', -DarkreaderInlineBgimage: 'radial-gradient(at 80% 10%, var(--darkreader-background-1eb4ff24, rgba(0, 124, 186, 0.14)) 0px, var(--darkreader-background-00000000, rgba(0, 0, 0, 0)) 70%)', -DarkreaderInlineBgcolor: 'initial'}}></div>
+<div aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'radial-gradient(at 80% 10%, rgba(30, 180, 255, 0.14) 0px, transparent 70%)', -DarkreaderInlineBgimage: 'radial-gradient(at 80% 10%, var(--darkreader-background-1eb4ff24, rgba(0, 124, 186, 0.14)) 0px, var(--darkreader-background-00000000, rgba(0, 0, 0, 0)) 70%)', '--darkreader-inline-bgcolor': 'initial'}}></div>
 
 <header aria-label="Main Navigation" className="relative z-10 fade-in fade-in-stagger-1">
 <nav aria-label="Primary" className="flex items-center justify-between px-8 py-3 glass glass-outline mx-4 mt-4" role="navigation">
@@ -222,11 +264,11 @@ export default function App() {
 </div>
 
 <div className="relative flex-1 flex items-center justify-center min-h-[400px] z-1">
-<div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'radial-gradient(at 44% 60%, rgba(31, 200, 255, 0.1) 0px, transparent 85%)', -DarkreaderInlineBgimage: 'radial-gradient(at 44% 60%, var(--darkreader-background-1fc8ff1a, rgba(0, 140, 185, 0.1)) 0px, var(--darkreader-background-00000000, rgba(0, 0, 0, 0)) 85%)', -DarkreaderInlineBgcolor: 'initial'}}></div>
+<div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{background: 'radial-gradient(at 44% 60%, rgba(31, 200, 255, 0.1) 0px, transparent 85%)', -DarkreaderInlineBgimage: 'radial-gradient(at 44% 60%, var(--darkreader-background-1fc8ff1a, rgba(0, 140, 185, 0.1)) 0px, var(--darkreader-background-00000000, rgba(0, 0, 0, 0)) 85%)', '--darkreader-inline-bgcolor': 'initial'}}></div>
 <div className="w-full h-full flex items-center justify-center" id="dag-3d-visualization">
 <img alt="A stylized 3D DAG example" className="rounded-2xl shadow-xl opacity-80" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&amp;fit=crop&amp;w=800&amp;q=80" style={{width: '82%', height: '70%', objectFit: 'cover', filter: 'blur(0.5px) brightness(1.1)'}}/>
 
-<div aria-live="polite" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[190px] glass glass-outline px-5 py-4 rounded-xl shadow-lg fade-in fade-in-stagger-5" data-darkreader-inline-border-left="" style={{minWidth: '280px', borderLeft: '5px solid rgb(31, 200, 255)', -DarkreaderInlineBorderLeft: 'var(--darkreader-border-1fc8ff, #0080a9)'}}>
+<div aria-live="polite" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[190px] glass glass-outline px-5 py-4 rounded-xl shadow-lg fade-in fade-in-stagger-5" data-darkreader-inline-border-left="" style={{minWidth: '280px', borderLeft: '5px solid rgb(31, 200, 255)', '--darkreader-inline-border-left': 'var(--darkreader-border-1fc8ff, #0080a9)'}}>
 <div className="flex items-center gap-2 mb-1">
 </div>
 <div className="text-sm text-[#a4c8e7] mb-2">HSIC Score: <span className="text-[#1fc8ff] font-semibold">0.81</span></div>

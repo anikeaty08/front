@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -322,6 +358,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -951,16 +993,16 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center opacity-0" id="arch-walls-workspace">
 <div className="w-full max-w-[90rem] h-full relative">
-<div className="absolute top-[35%] left-[5%] w-[15%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[35%] left-[20%] w-[6px] h-[15%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[50%] left-0 w-[20%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[75%] left-[10%] w-[25%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[70%] left-[10%] w-[6px] h-[5%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[25%] right-[5%] w-[20%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[25%] right-[25%] w-[6px] h-[20%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[55%] right-0 w-[15%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[85%] right-[5%] w-[15%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
-<div className="absolute top-[75%] right-[20%] w-[6px] h-[10%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0,0,0,0.06), -2px -2px 8px rgba(255,255,255,1), inset 0px 2px 2px rgba(255,255,255,1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[35%] left-[5%] w-[15%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[35%] left-[20%] w-[6px] h-[15%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[50%] left-0 w-[20%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[75%] left-[10%] w-[25%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[70%] left-[10%] w-[6px] h-[5%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[25%] right-[5%] w-[20%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[25%] right-[25%] w-[6px] h-[20%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[55%] right-0 w-[15%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[85%] right-[5%] w-[15%] h-[6px] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
+<div className="absolute top-[75%] right-[20%] w-[6px] h-[10%] bg-white rounded-full" style={{boxShadow: '2px 4px 12px rgba(0, 0, 0, 0.06), -2px -2px 8px rgba(255, 255, 255, 1), inset 0px 2px 2px rgba(255, 255, 255, 1), inset 0px -1px 2px rgba(0,0,0,0.03)'}}></div>
 </div>
 </div>
 
@@ -1012,7 +1054,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="relative w-full max-w-5xl px-4 md:px-12 z-30 perspective-1000" id="main-card-workspace">
-<div className="w-full aspect-[16/9] md:aspect-[21/10] bg-[#FFFFFF] rounded-[2rem] p-3 relative" style={{boxShadow: '0 30px 60px -15px rgba(234,76,137,0.15), 0 0 0 1px rgba(255,255,255,0.8), inset 0 2px 10px rgba(255,255,255,1), inset 0 -4px 10px rgba(0,0,0,0.02)'}}>
+<div className="w-full aspect-[16/9] md:aspect-[21/10] bg-[#FFFFFF] rounded-[2rem] p-3 relative" style={{boxShadow: '0 30px 60px -15px rgba(234, 76, 137, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.8), inset 0 2px 10px rgba(255, 255, 255, 1), inset 0 -4px 10px rgba(0,0,0,0.02)'}}>
 <div className="overflow-hidden bg-black/5 w-full h-full rounded-[1.5rem] relative" style={{boxShadow: 'rgba(0, 0, 0, 0.08) 0px 4px 12px inset'}}>
 <video autoplay="" className="object-[center_30%] w-full h-full object-cover scale-105" loop="" muted="" playsinline="" src="https://cdn.midjourney.com/video/d0d0021a-fa38-46d2-8128-460e22929764/1.mp4"></video>
 <div className="pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/40 absolute top-0 right-0 bottom-0 left-0"></div>
@@ -1024,7 +1066,7 @@ gtag('config', 'G-2M6V79H761');
                     </div>
 </div>
 <div className="absolute right-4 top-4 bottom-4 w-1/4 max-w-[200px] flex flex-col gap-3">
-<div className="relative flex-1 rounded-xl overflow-hidden bg-gray-900 border border-white/20" style={{boxShadow: '0 8px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="relative flex-1 rounded-xl overflow-hidden bg-gray-900 border border-white/20" style={{boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <img alt="Craig" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/eca707cc-a5b7-439a-b4fd-247f6106c2e1_1600w.jpg"/>
 <div className="absolute bottom-2 left-2 text-xs text-white bg-black/40 px-2 py-1 rounded backdrop-blur-md flex items-center gap-1">
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Craig "Clutch" Press
@@ -1033,7 +1075,7 @@ gtag('config', 'G-2M6V79H761');
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>
 </div>
 </div>
-<div className="relative flex-1 rounded-xl overflow-hidden bg-gray-900 border border-white/20" style={{boxShadow: '0 8px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="relative flex-1 rounded-xl overflow-hidden bg-gray-900 border border-white/20" style={{boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <img alt="Makenna" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4f5668c5-fc4a-44e0-bc5e-a664189d3c31_1600w.jpg"/>
 <div className="absolute bottom-2 left-2 text-xs text-white bg-black/40 px-2 py-1 rounded backdrop-blur-md flex items-center gap-1">
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Makenna "Snipe" Bergson
@@ -1042,7 +1084,7 @@ gtag('config', 'G-2M6V79H761');
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><line x1="2" x2="22" y1="2" y2="22"></line><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"></path><path d="M5 10v2a7 7 0 0 0 12 5"></path><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>
 </div>
 </div>
-<div className="relative flex-1 rounded-xl overflow-hidden bg-gray-900 border border-white/20" style={{boxShadow: '0 8px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="relative flex-1 rounded-xl overflow-hidden bg-gray-900 border border-white/20" style={{boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <img alt="Allison" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/77415a2e-dcbc-4748-a29d-fced4821881a_1600w.jpg"/>
 <div className="absolute bottom-2 left-2 text-xs text-white bg-black/40 px-2 py-1 rounded backdrop-blur-md flex items-center gap-1">
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Allison "Healz" Septimus
@@ -1052,14 +1094,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-900/40 backdrop-blur-xl px-2 py-2 rounded-full border border-white/10" style={{boxShadow: '0 20px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-900/40 backdrop-blur-xl px-2 py-2 rounded-full border border-white/10" style={{boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <button className="w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors border border-white/5">
 <svg fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"></path><path d="M10 19v-3.96 3.15"></path><path d="M7 19h5"></path><rect height="10" rx="2" width="6" x="16" y="12"></rect></svg>
 </button>
 <button className="w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors border border-white/5">
 <svg fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>
 </button>
-<button className="w-12 h-12 mx-1 rounded-full bg-[#FF4D4D] text-white flex items-center justify-center hover:bg-red-500 transition-colors border border-red-400" style={{boxShadow: '0 4px 15px rgba(255,77,77,0.4), inset 0 2px 4px rgba(255,255,255,0.3)'}}>
+<button className="w-12 h-12 mx-1 rounded-full bg-[#FF4D4D] text-white flex items-center justify-center hover:bg-red-500 transition-colors border border-red-400" style={{boxShadow: '0 4px 15px rgba(255, 77, 77, 0.4), inset 0 2px 4px rgba(255,255,255,0.3)'}}>
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path><line x1="22" x2="2" y1="2" y2="22"></line></svg>
 </button>
 <button className="w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors border border-white/5">
@@ -1078,13 +1120,13 @@ gtag('config', 'G-2M6V79H761');
             Coordinating with your squad is seamless in your dedicated voice channels. Enjoy high-fidelity communication without leaving the game.
         </p>
 <div className="flex items-center justify-center gap-16 md:gap-24 text-[#EA4C89]">
-<div className="w-14 h-14 rounded-2xl bg-[#FAFBFC] flex items-center justify-center relative text-[#EA4C89]" style={{boxShadow: '4px 6px 12px rgba(234,76,137,0.12), -4px -4px 10px rgba(255,255,255,1), inset 1px 1px 0px rgba(255,255,255,1)'}}>
+<div className="w-14 h-14 rounded-2xl bg-[#FAFBFC] flex items-center justify-center relative text-[#EA4C89]" style={{boxShadow: '4px 6px 12px rgba(234, 76, 137, 0.12), -4px -4px 10px rgba(255, 255, 255, 1), inset 1px 1px 0px rgba(255,255,255,1)'}}>
 <svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
 </div>
-<div className="w-14 h-14 rounded-2xl bg-[#FAFBFC] flex items-center justify-center relative text-[#EA4C89]" style={{boxShadow: '4px 6px 12px rgba(234,76,137,0.12), -4px -4px 10px rgba(255,255,255,1), inset 1px 1px 0px rgba(255,255,255,1)'}}>
+<div className="w-14 h-14 rounded-2xl bg-[#FAFBFC] flex items-center justify-center relative text-[#EA4C89]" style={{boxShadow: '4px 6px 12px rgba(234, 76, 137, 0.12), -4px -4px 10px rgba(255, 255, 255, 1), inset 1px 1px 0px rgba(255,255,255,1)'}}>
 <svg fill="none" height="26" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="26" xmlns="http://www.w3.org/2000/svg"><path d="m22 8-6 4 6 4V8Z"></path><rect height="12" rx="2" ry="2" width="14" x="2" y="6"></rect></svg>
 </div>
-<div className="w-14 h-14 rounded-2xl bg-[#FAFBFC] flex items-center justify-center relative text-[#EA4C89]" style={{boxShadow: '4px 6px 12px rgba(234,76,137,0.12), -4px -4px 10px rgba(255,255,255,1), inset 1px 1px 0px rgba(255,255,255,1)'}}>
+<div className="w-14 h-14 rounded-2xl bg-[#FAFBFC] flex items-center justify-center relative text-[#EA4C89]" style={{boxShadow: '4px 6px 12px rgba(234, 76, 137, 0.12), -4px -4px 10px rgba(255, 255, 255, 1), inset 1px 1px 0px rgba(255,255,255,1)'}}>
 <svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="14"></line><line x1="22" x2="16" y1="11" y2="11"></line></svg>
 </div>
 </div>

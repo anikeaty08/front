@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -149,6 +185,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -181,7 +223,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex items-center gap-5 mt-2">
-<button className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#121214] text-sm text-zinc-200 font-medium overflow-hidden rounded-md transition-all hover:text-white" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), 0 4px 15px rgba(0,0,0,0.5)', border: '1px solid #27272a'}}>
+<button className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#121214] text-sm text-zinc-200 font-medium overflow-hidden rounded-md transition-all hover:text-white" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 4px 15px rgba(0,0,0,0.5)', border: '1px solid #27272a'}}>
 <div className="group-hover:opacity-100 transition-opacity bg-gradient-to-br from-zinc-800/20 to-transparent opacity-0 w-full h-full absolute top-0 right-0 bottom-0 left-0"></div>
                     Initialize Sequence
                     <iconify-icon className="text-lg transition-transform group-hover:translate-x-1" icon="solar:arrow-right-linear"></iconify-icon>
@@ -217,7 +259,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex justify-between items-start gap-8 z-10">
 
-<div className="flex-1 bg-[#050505] rounded-xl p-4 flex flex-col justify-between h-28 relative" style={{boxShadow: 'inset 0 5px 15px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.08)', border: '1px solid #18181b'}}>
+<div className="flex-1 bg-[#050505] rounded-xl p-4 flex flex-col justify-between h-28 relative" style={{boxShadow: 'inset 0 5px 15px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.08)', border: '1px solid #18181b'}}>
 
 <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/[0.03] to-transparent rounded-t-xl pointer-events-none"></div>
 <div className="flex justify-between items-center text-xs text-zinc-600 font-medium uppercase tracking-widest">
@@ -268,8 +310,8 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col items-center gap-3">
 <span className="text-xs text-zinc-500 uppercase tracking-widest font-medium" style={{textShadow: '0 1px 0 rgba(255,255,255,0.08)'}}>Threshold</span>
-<div className="relative w-16 h-16 rounded-full bg-[#0a0a0c] flex items-center justify-center" style={{boxShadow: 'inset 0 3px 6px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)'}}>
-<div className="w-12 h-12 rounded-full relative cursor-pointer group" style={{background: 'conic-gradient(from 180deg at 50% 50%, #27272a 0deg, #18181b 90deg, #3f3f46 180deg, #18181b 270deg, #27272a 360deg)', boxShadow: '0 5px 10px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.5)', transform: 'rotate(-45deg)'}}>
+<div className="relative w-16 h-16 rounded-full bg-[#0a0a0c] flex items-center justify-center" style={{boxShadow: 'inset 0 3px 6px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="w-12 h-12 rounded-full relative cursor-pointer group" style={{background: 'conic-gradient(from 180deg at 50% 50%, #27272a 0deg, #18181b 90deg, #3f3f46 180deg, #18181b 270deg, #27272a 360deg)', boxShadow: '0 5px 10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.5)', transform: 'rotate(-45deg)'}}>
 <div className="absolute inset-0 rounded-full border border-zinc-700/50 mix-blend-overlay"></div>
 <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1 h-2.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.5),inset_0_1px_1px_rgba(0,0,0,0.5)]"></div>
 </div>
@@ -280,8 +322,8 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col items-center gap-3">
 <span className="text-xs text-zinc-500 uppercase tracking-widest font-medium" style={{textShadow: '0 1px 0 rgba(255,255,255,0.08)'}}>Ratio</span>
-<div className="relative w-16 h-16 rounded-full bg-[#0a0a0c] flex items-center justify-center" style={{boxShadow: 'inset 0 3px 6px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)'}}>
-<div className="w-12 h-12 rounded-full relative cursor-pointer" style={{background: 'conic-gradient(from 0deg at 50% 50%, #27272a 0deg, #18181b 90deg, #3f3f46 180deg, #18181b 270deg, #27272a 360deg)', boxShadow: '0 5px 10px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.5)', transform: 'rotate(120deg)'}}>
+<div className="relative w-16 h-16 rounded-full bg-[#0a0a0c] flex items-center justify-center" style={{boxShadow: 'inset 0 3px 6px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="w-12 h-12 rounded-full relative cursor-pointer" style={{background: 'conic-gradient(from 0deg at 50% 50%, #27272a 0deg, #18181b 90deg, #3f3f46 180deg, #18181b 270deg, #27272a 360deg)', boxShadow: '0 5px 10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.5)', transform: 'rotate(120deg)'}}>
 <div className="absolute inset-0 rounded-full border border-zinc-700/50 mix-blend-overlay"></div>
 <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1 h-2.5 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.5),inset_0_1px_1px_rgba(0,0,0,0.5)]"></div>
 </div>
@@ -291,7 +333,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col items-center gap-6">
 <span className="text-xs text-zinc-400 uppercase tracking-[0.3em] font-semibold" style={{textShadow: '0 1px 0 rgba(255,255,255,0.1)'}}>Master Allocation</span>
-<div className="relative w-48 h-48 rounded-full flex items-center justify-center bg-[#050505]" style={{boxShadow: 'inset 0 5px 15px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="relative w-48 h-48 rounded-full flex items-center justify-center bg-[#050505]" style={{boxShadow: 'inset 0 5px 15px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)'}}>
 
 <svg className="absolute inset-2 w-44 h-44 opacity-20 pointer-events-none" viewbox="0 0 100 100">
 <circle cx="50" cy="50" fill="none" r="48" stroke="white" stroke-dasharray="2 6" strokeWidth="1"></circle>
@@ -305,9 +347,9 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute inset-1 rounded-full opacity-50 pointer-events-none" style={{background: 'conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.05) 45deg, transparent 90deg, rgba(255,255,255,0.05) 135deg, transparent 180deg, rgba(255,255,255,0.05) 225deg, transparent 270deg, rgba(255,255,255,0.05) 315deg, transparent 360deg)'}}></div>
 
-<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#0a0a0c]" style={{boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05)'}}></div>
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#0a0a0c]" style={{boxShadow: 'inset 0 4px 10px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255,255,255,0.05)'}}></div>
 
-<div className="absolute top-3 left-1/2 -translate-x-1/2 w-1.5 h-6 rounded-full bg-blue-500" style={{boxShadow: '0 0 12px rgba(59,130,246,0.8), inset 0 1px 2px rgba(255,255,255,0.5)'}}></div>
+<div className="absolute top-3 left-1/2 -translate-x-1/2 w-1.5 h-6 rounded-full bg-blue-500" style={{boxShadow: '0 0 12px rgba(59, 130, 246, 0.8), inset 0 1px 2px rgba(255,255,255,0.5)'}}></div>
 </div>
 </div>
 </div>
@@ -316,18 +358,18 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col items-center gap-3">
 <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8),inset_0_1px_2px_rgba(255,255,255,0.6)]"></div>
-<button className="w-8 h-14 rounded bg-[#0a0a0c] relative flex items-center justify-center cursor-pointer" style={{boxShadow: 'inset 0 2px 5px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
+<button className="w-8 h-14 rounded bg-[#0a0a0c] relative flex items-center justify-center cursor-pointer" style={{boxShadow: 'inset 0 2px 5px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
 
-<div className="absolute top-1 w-5 h-6 rounded-sm bg-gradient-to-b from-zinc-400 to-zinc-600" style={{boxShadow: '0 4px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.8), inset 0 -1px 2px rgba(0,0,0,0.5)', border: '1px solid #3f3f46'}}></div>
+<div className="absolute top-1 w-5 h-6 rounded-sm bg-gradient-to-b from-zinc-400 to-zinc-600" style={{boxShadow: '0 4px 6px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.8), inset 0 -1px 2px rgba(0,0,0,0.5)', border: '1px solid #3f3f46'}}></div>
 </button>
 <span className="text-xs text-zinc-500 uppercase tracking-widest font-medium" style={{textShadow: '0 1px 0 rgba(255,255,255,0.08)'}}>Auto Sync</span>
 </div>
 
 <div className="flex flex-col items-center gap-3">
 <div className="w-2 h-2 rounded-full bg-[#18181b] shadow-[inset_0_1px_2px_rgba(0,0,0,0.8),0_1px_0_rgba(255,255,255,0.1)]"></div>
-<button className="w-8 h-14 rounded bg-[#0a0a0c] relative flex items-center justify-center cursor-pointer" style={{boxShadow: 'inset 0 2px 5px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
+<button className="w-8 h-14 rounded bg-[#0a0a0c] relative flex items-center justify-center cursor-pointer" style={{boxShadow: 'inset 0 2px 5px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
 
-<div className="absolute bottom-1 w-5 h-6 rounded-sm bg-gradient-to-t from-zinc-700 to-zinc-800" style={{boxShadow: '0 -2px 4px rgba(0,0,0,0.5), inset 0 -1px 1px rgba(255,255,255,0.1), inset 0 1px 2px rgba(0,0,0,0.8)', border: '1px solid #27272a'}}></div>
+<div className="absolute bottom-1 w-5 h-6 rounded-sm bg-gradient-to-t from-zinc-700 to-zinc-800" style={{boxShadow: '0 -2px 4px rgba(0, 0, 0, 0.5), inset 0 -1px 1px rgba(255, 255, 255, 0.1), inset 0 1px 2px rgba(0,0,0,0.8)', border: '1px solid #27272a'}}></div>
 </button>
 <span className="text-xs text-zinc-500 uppercase tracking-widest font-medium" style={{textShadow: '0 1px 0 rgba(255,255,255,0.08)'}}>Bypass</span>
 </div>
@@ -337,7 +379,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex justify-between gap-4 mt-4 pt-8 border-t border-zinc-800/50 relative z-10" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)'}}>
 
 <div className="flex flex-col items-center gap-4 flex-1">
-<div className="h-40 w-10 bg-[#050505] rounded flex justify-center py-2 relative" style={{boxShadow: 'inset 0 3px 10px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
+<div className="h-40 w-10 bg-[#050505] rounded flex justify-center py-2 relative" style={{boxShadow: 'inset 0 3px 10px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
 
 <div className="w-1.5 h-full bg-black rounded-full shadow-[inset_0_0_5px_rgba(0,0,0,1)]"></div>
 
@@ -345,7 +387,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div>
 </div>
 
-<div className="absolute bottom-16 w-12 h-14 rounded bg-gradient-to-b from-zinc-300 to-zinc-500 cursor-ns-resize flex flex-col items-center justify-between py-1.5" style={{boxShadow: '0 10px 20px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -2px 2px rgba(0,0,0,0.4)', border: '1px solid #27272a'}}>
+<div className="absolute bottom-16 w-12 h-14 rounded bg-gradient-to-b from-zinc-300 to-zinc-500 cursor-ns-resize flex flex-col items-center justify-between py-1.5" style={{boxShadow: '0 10px 20px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.9), inset 0 -2px 2px rgba(0,0,0,0.4)', border: '1px solid #27272a'}}>
 <div className="w-8 h-px bg-zinc-600 shadow-[0_1px_0_rgba(255,255,255,0.5)]"></div>
 <div className="w-10 h-1.5 bg-gradient-to-r from-blue-600 to-blue-400 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_1px_2px_rgba(0,0,0,0.5)]"></div>
 <div className="w-8 h-px bg-zinc-600 shadow-[0_1px_0_rgba(255,255,255,0.5)]"></div>
@@ -355,14 +397,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex flex-col items-center gap-4 flex-1">
-<div className="h-40 w-10 bg-[#050505] rounded flex justify-center py-2 relative" style={{boxShadow: 'inset 0 3px 10px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
+<div className="h-40 w-10 bg-[#050505] rounded flex justify-center py-2 relative" style={{boxShadow: 'inset 0 3px 10px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
 
 <div className="w-1.5 h-full bg-black rounded-full shadow-[inset_0_0_5px_rgba(0,0,0,1)]"></div>
 <div className="absolute right-1 top-2 bottom-2 w-1 flex flex-col justify-between opacity-20 pointer-events-none">
 <div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div>
 </div>
 
-<div className="absolute bottom-6 w-12 h-14 rounded bg-gradient-to-b from-zinc-300 to-zinc-500 cursor-ns-resize flex flex-col items-center justify-between py-1.5" style={{boxShadow: '0 10px 20px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -2px 2px rgba(0,0,0,0.4)', border: '1px solid #27272a'}}>
+<div className="absolute bottom-6 w-12 h-14 rounded bg-gradient-to-b from-zinc-300 to-zinc-500 cursor-ns-resize flex flex-col items-center justify-between py-1.5" style={{boxShadow: '0 10px 20px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.9), inset 0 -2px 2px rgba(0,0,0,0.4)', border: '1px solid #27272a'}}>
 <div className="w-8 h-px bg-zinc-600 shadow-[0_1px_0_rgba(255,255,255,0.5)]"></div>
 <div className="w-10 h-1.5 bg-gradient-to-r from-zinc-800 to-zinc-700 shadow-[inset_0_1px_1px_rgba(0,0,0,0.8),0_1px_2px_rgba(255,255,255,0.5)]"></div>
 <div className="w-8 h-px bg-zinc-600 shadow-[0_1px_0_rgba(255,255,255,0.5)]"></div>
@@ -372,14 +414,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex flex-col items-center gap-4 flex-1">
-<div className="h-40 w-10 bg-[#050505] rounded flex justify-center py-2 relative" style={{boxShadow: 'inset 0 3px 10px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
+<div className="h-40 w-10 bg-[#050505] rounded flex justify-center py-2 relative" style={{boxShadow: 'inset 0 3px 10px rgba(0, 0, 0, 1), 0 1px 0 rgba(255,255,255,0.05)', border: '1px solid #18181b'}}>
 
 <div className="w-1.5 h-full bg-black rounded-full shadow-[inset_0_0_5px_rgba(0,0,0,1)]"></div>
 <div className="absolute right-1 top-2 bottom-2 w-1 flex flex-col justify-between opacity-20 pointer-events-none">
 <div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div><div className="w-full h-px bg-white"></div>
 </div>
 
-<div className="absolute top-8 w-12 h-14 rounded bg-gradient-to-b from-zinc-300 to-zinc-500 cursor-ns-resize flex flex-col items-center justify-between py-1.5" style={{boxShadow: '0 10px 20px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -2px 2px rgba(0,0,0,0.4)', border: '1px solid #27272a'}}>
+<div className="absolute top-8 w-12 h-14 rounded bg-gradient-to-b from-zinc-300 to-zinc-500 cursor-ns-resize flex flex-col items-center justify-between py-1.5" style={{boxShadow: '0 10px 20px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.9), inset 0 -2px 2px rgba(0,0,0,0.4)', border: '1px solid #27272a'}}>
 <div className="w-8 h-px bg-zinc-600 shadow-[0_1px_0_rgba(255,255,255,0.5)]"></div>
 <div className="w-10 h-1.5 bg-gradient-to-r from-red-600 to-red-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_1px_2px_rgba(0,0,0,0.5)]"></div>
 <div className="w-8 h-px bg-zinc-600 shadow-[0_1px_0_rgba(255,255,255,0.5)]"></div>

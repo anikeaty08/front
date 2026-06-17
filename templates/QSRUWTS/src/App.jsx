@@ -2,11 +2,53 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -23,18 +65,18 @@ export default function App() {
 <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50 bg-slate-900/80 backdrop-blur-sm" style={{}}>
 <div className="max-w-7xl mx-auto px-6">
 <div className="h-16 flex items-center justify-between">
-<a className="inline-flex items-center gap-3" data-animate="" href="#" style={{opacity: '1', transform: 'none', -D: '0ms'}}>
+<a className="inline-flex items-center gap-3" data-animate="" href="#" style={{opacity: '1', transform: 'none', '--d': '0ms'}}>
 
 <div className="tracking-tight" style={{fontWeight: '600', letterSpacing: '-0.06em', fontSize: '20px', background: 'linear-gradient(92.52deg, var(--main-red) 29.95%, var(--main-yellow) 48.66%, var(--roxo-vibrante) 86.58%)', backgroundSize: '200% 200%', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'moveGradient 4s infinite linear'}}>aisa</div>
 <div className="text-slate-400 text-xs font-sans font-light" style={{}}>by Escale</div>
 </a>
 <nav className="hidden md:flex items-center gap-8">
-<a className="hover:text-[var(--roxo-vibrante)] transition-colors font-medium font-sans text-slate-100" data-animate="" href="#produto" style={{opacity: '1', transform: 'none', -D: '80ms'}}>Produto</a>
-<a className="hover:text-[var(--roxo-vibrante)] transition-colors font-medium font-sans text-slate-100" data-animate="" href="#cases" style={{opacity: '1', transform: 'none', -D: '160ms'}}>Cases</a>
-<a className="hover:text-[var(--roxo-vibrante)] transition-colors font-medium font-sans text-slate-100" data-animate="" href="#quem-somos" style={{opacity: '1', transform: 'none', -D: '240ms'}}>Quem somos</a>
+<a className="hover:text-[var(--roxo-vibrante)] transition-colors font-medium font-sans text-slate-100" data-animate="" href="#produto" style={{opacity: '1', transform: 'none', '--d': '80ms'}}>Produto</a>
+<a className="hover:text-[var(--roxo-vibrante)] transition-colors font-medium font-sans text-slate-100" data-animate="" href="#cases" style={{opacity: '1', transform: 'none', '--d': '160ms'}}>Cases</a>
+<a className="hover:text-[var(--roxo-vibrante)] transition-colors font-medium font-sans text-slate-100" data-animate="" href="#quem-somos" style={{opacity: '1', transform: 'none', '--d': '240ms'}}>Quem somos</a>
 </nav>
 <div className="flex items-center gap-3">
-<button className="hidden md:inline-flex items-center px-5 py-2 rounded-lg text-sm text-white transition-shadow font-sans font-light" data-animate="" style={{boxShadow: 'rgba(255, 140, 50, 0.12) 0px 6px 18px', opacity: '1', transform: 'none', -D: '320ms', backgroundImage: '', backgroundPositionX: '', backgroundPositionY: '', backgroundRepeat: '', backgroundAttachment: '', backgroundOrigin: '', backgroundClip: '', backgroundColor: '', backgroundSize: '200% 200%'}}>Solicite uma demo</button>
+<button className="hidden md:inline-flex items-center px-5 py-2 rounded-lg text-sm text-white transition-shadow font-sans font-light" data-animate="" style={{boxShadow: 'rgba(255, 140, 50, 0.12) 0px 6px 18px', opacity: '1', transform: 'none', '--d': '320ms', backgroundImage: '', backgroundPositionX: '', backgroundPositionY: '', backgroundRepeat: '', backgroundAttachment: '', backgroundOrigin: '', backgroundClip: '', backgroundColor: '', backgroundSize: '200% 200%'}}>Solicite uma demo</button>
 <button aria-label="menu" className="md:hidden p-2 rounded-md bg-slate-800 hover:bg-slate-700" style={{}}>
 
 <svg className="text-slate-200" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{}} viewbox="0 0 18 12" width="18"><path d="M0.75 1.5h16.5M0.75 6h16.5M0.75 10.5h16.5"></path></svg>
@@ -47,12 +89,12 @@ export default function App() {
 <main className="pt-24">
 <section className="pt-16 pr-6 pb-16 pl-6">
 <div className="max-w-4xl text-center mr-auto ml-auto">
-<div className="w-[min(92vw,720px)] relative mr-auto mb-6 ml-auto" data-animate="" style={{opacity: '1', transform: 'none', -D: '400ms'}}>
+<div className="w-[min(92vw,720px)] relative mr-auto mb-6 ml-auto" data-animate="" style={{opacity: '1', transform: 'none', '--d': '400ms'}}>
 <div aria-hidden="true" style={{position: 'absolute', inset: '0', pointerEvents: 'none', background: 'linear-gradient(120deg,rgba(255,255,255,0) 30%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 70%)', mixBlendMode: 'screen', animation: 'none'}}></div><img alt="aisa" className="w-full h-auto select-none object-cover" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Varia%C3%A7%C3%B5es%20logo-02-oouKSPKdTjwiYsXS7oVsgHNFB4urwK.png?w=800&amp;q=80" style={{filter: 'brightness(1.05) saturate(1.05)', width: 'min(92vw, 980px)', display: 'block', margin: '0px auto'}}/>
 </div>
-<h1 className="text-5xl md:text-6xl text-white leading-tight mb-4 font-sans tracking-tight font-light" data-animate="" style={{letterSpacing: '-0.01em', opacity: '1', transform: 'none', -D: '480ms'}}>a agente de IA da Escale para transformar conversas em vendas</h1>
-<p className="max-w-3xl mr-auto mb-8 ml-auto font-light text-slate-100" data-animate="" style={{fontWeight: '500', opacity: '1', transform: 'none', -D: '560ms'}}>Multicanal, especializada e pensada para escalar. Muito além de um chatbot — inteligência aplicada, performance e integração real com seu stack.</p>
-<div className="" data-animate="" style={{opacity: '1', transform: 'none', -D: '640ms'}}>
+<h1 className="text-5xl md:text-6xl text-white leading-tight mb-4 font-sans tracking-tight font-light" data-animate="" style={{letterSpacing: '-0.01em', opacity: '1', transform: 'none', '--d': '480ms'}}>a agente de IA da Escale para transformar conversas em vendas</h1>
+<p className="max-w-3xl mr-auto mb-8 ml-auto font-light text-slate-100" data-animate="" style={{fontWeight: '500', opacity: '1', transform: 'none', '--d': '560ms'}}>Multicanal, especializada e pensada para escalar. Muito além de um chatbot — inteligência aplicada, performance e integração real com seu stack.</p>
+<div className="" data-animate="" style={{opacity: '1', transform: 'none', '--d': '640ms'}}>
 <button className="px-8 py-3 rounded-full text-lg text-white font-semibold transition-transform transform hover:-translate-y-0.5 font-sans" style={{background: 'linear-gradient(90deg, var(--roxo-vibrante), var(--roxo-claro))'}}>Quero uma demonstração</button>
 </div>
 </div>
@@ -167,7 +209,7 @@ export default function App() {
 </section>
 
 <section className="pr-6 pb-12 pl-6" id="agentes">
-<div className="max-w-4xl mx-auto text-center mb-8" data-animate="" style={{opacity: '1', transform: 'none', -D: '1120ms'}}>
+<div className="max-w-4xl mx-auto text-center mb-8" data-animate="" style={{opacity: '1', transform: 'none', '--d': '1120ms'}}>
 <h2 className="text-2xl md:text-3xl font-sans font-semibold tracking-tight" style={{}}>
 <span className="font-sans font-semibold tracking-tight" style={{color: 'var(--roxo-vibrante)'}}>Agentes especializados</span><br/>para cada etapa da jornada comercial
     </h2>
@@ -249,31 +291,31 @@ export default function App() {
 </section>
 
 <section className="px-6 pb-12" id="integracoes">
-<div className="max-w-6xl mx-auto text-center mb-6" data-animate="" style={{opacity: '1', transform: 'none', -D: '1200ms'}}>
+<div className="max-w-6xl mx-auto text-center mb-6" data-animate="" style={{opacity: '1', transform: 'none', '--d': '1200ms'}}>
 <h2 className="md:text-3xl text-2xl font-bold tracking-tight" style={{}}>Conectada ao seu stack.<br/><span className="font-sans font-bold tracking-tight" style={{color: 'var(--roxo-vibrante)'}}>Pronta para operar em produção.</span></h2>
 <p className="mt-3 font-medium font-sans text-slate-100" style={{}}>Integrada a CRMs, gateways, scoring e mais — segurança e rastreabilidade.</p>
 </div>
 <div className="max-w-4xl mx-auto">
 <div className="grid grid-cols-4 gap-4">
-<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', -D: '1280ms'}}>
+<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', '--d': '1280ms'}}>
 <div className="w-8 h-8 mx-auto rounded-md bg-slate-700 flex items-center justify-center mb-2" style={{}}>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path></svg>
 </div>
 <div className="text-xs font-semibold text-slate-200 font-sans" style={{}}>Salesforce</div>
 </div>
-<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', -D: '1360ms'}}>
+<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', '--d': '1360ms'}}>
 <div className="w-8 h-8 mx-auto rounded-md bg-slate-700 flex items-center justify-center mb-2" style={{}}>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle></svg>
 </div>
 <div className="text-xs font-semibold text-slate-200 font-sans" style={{}}>HubSpot</div>
 </div>
-<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', -D: '1440ms'}}>
+<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', '--d': '1440ms'}}>
 <div className="w-8 h-8 mx-auto rounded-md bg-slate-700 flex items-center justify-center mb-2" style={{}}>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16"><path d="M12 2a10 10 0 1 0 0 20"></path></svg>
 </div>
 <div className="text-xs font-semibold text-slate-200 font-sans" style={{}}>Gateways</div>
 </div>
-<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', -D: '1520ms'}}>
+<div className="rounded-lg p-4 bg-slate-800/60 border border-slate-700/40 text-center hover:border-[var(--roxo-claro)] transition" data-animate="" style={{opacity: '1', transform: 'none', '--d': '1520ms'}}>
 <div className="w-8 h-8 mx-auto rounded-md bg-slate-700 flex items-center justify-center mb-2" style={{}}>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16"><path d="M12 2v20"></path></svg>
 </div>

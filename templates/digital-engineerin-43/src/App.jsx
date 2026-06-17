@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -107,6 +143,12 @@ document.querySelectorAll('details').forEach(d => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -252,7 +294,7 @@ document.querySelectorAll('details').forEach(d => {
 <iconify-icon icon="lucide:check" style={{color: 'var(--cyan)'}} width="12"></iconify-icon>
 <span className="text-[10px] text-white/80">Campagne Meta livrée</span>
 </div>
-<div className="flex items-center gap-2 rounded-lg px-3 py-2 border" style={{background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.1)'}}>
+<div className="flex items-center gap-2 rounded-lg px-3 py-2 border" style={{background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255,255,255,0.1)'}}>
 <iconify-icon icon="lucide:loader" style={{color: 'rgba(114,205,216,0.7)'}} width="12"></iconify-icon>
 <span className="text-[10px] text-white/40">Site vitrine en cours…</span>
 </div>
@@ -331,19 +373,19 @@ document.querySelectorAll('details').forEach(d => {
 <div className="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px)', backgroundSize: '40px 40px'}}></div>
 <div className="absolute -right-40 top-0 w-[500px] h-[500px] rounded-full pointer-events-none" style={{background: 'radial-gradient(circle, rgba(114,205,216,0.1) 0%, transparent 60%)'}}></div>
 <div className="relative z-10 max-w-7xl mx-auto px-5 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-<div className="reveal stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
+<div className="reveal stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
 <p className="font-montserrat font-bold text-white mb-1" style={{fontSize: 'clamp(2rem,4vw,3rem)'}}><span data-count="40">0</span>+</p>
 <p className="text-xs leading-relaxed" style={{color: 'rgba(114,205,216,0.8)'}}>Agences &amp; freelances partenaires</p>
 </div>
-<div className="reveal d1 stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
+<div className="reveal d1 stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
 <p className="font-montserrat font-bold text-white mb-1" style={{fontSize: 'clamp(2rem,4vw,3rem)'}}>+<span data-count="60">0</span>%</p>
 <p className="text-xs leading-relaxed" style={{color: 'rgba(114,205,216,0.8)'}}>De capacité gagnée sans recrutement</p>
 </div>
-<div className="reveal d2 stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
+<div className="reveal d2 stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
 <p className="font-montserrat font-bold text-white mb-1" style={{fontSize: 'clamp(2rem,4vw,3rem)'}}>-<span data-count="35">0</span>%</p>
 <p className="text-xs leading-relaxed" style={{color: 'rgba(114,205,216,0.8)'}}>Sur les coûts fixes en moyenne</p>
 </div>
-<div className="reveal d3 stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
+<div className="reveal d3 stat-card text-center p-6 rounded-2xl border" style={{background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255,255,255,0.07)'}}>
 <p className="font-montserrat font-bold text-white mb-1" style={{fontSize: 'clamp(2rem,4vw,3rem)'}}><span data-count="100">0</span>%</p>
 <p className="text-xs leading-relaxed" style={{color: 'rgba(114,205,216,0.8)'}}>White label, zéro visibilité externe</p>
 </div>
@@ -408,7 +450,7 @@ document.querySelectorAll('details').forEach(d => {
 <div className="service-tag sm:col-span-2 flex items-center gap-3 p-4 rounded-xl border cursor-default" style={{background: 'var(--navy)', borderColor: 'var(--navy)'}}>
 <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{background: 'rgba(114,205,216,0.2)'}}><iconify-icon icon="lucide:headphones" style={{color: 'var(--cyan)'}} width="17"></iconify-icon></div>
 <span className="text-sm font-medium text-white">Support client</span>
-<span className="ml-auto text-[10px] px-2.5 py-1 rounded-full font-semibold" style={{background: 'rgba(114,205,216,0.18)', color: 'var(--cyan)'}}>+ bien d'autres</span>
+<span className="ml-auto text-[10px] px-2.5 py-1 rounded-full font-semibold" style={{background: 'rgba(114, 205, 216, 0.18)', color: 'var(--cyan)'}}>+ bien d'autres</span>
 </div>
 </div>
 </div>
@@ -489,7 +531,7 @@ document.querySelectorAll('details').forEach(d => {
 </div>
 </div>
 
-<div className="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 p-6 lg:p-7 rounded-2xl border" style={{background: 'rgba(114,205,216,0.05)', borderColor: 'rgba(114,205,216,0.18)'}}>
+<div className="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 p-6 lg:p-7 rounded-2xl border" style={{background: 'rgba(114, 205, 216, 0.05)', borderColor: 'rgba(114,205,216,0.18)'}}>
 <div className="flex items-start gap-3">
 <iconify-icon className="shrink-0 mt-0.5" icon="lucide:eye-off" style={{color: 'var(--cyan)'}} width="17"></iconify-icon>
 <div><p className="text-sm font-semibold text-stone-900 mb-0.5">100% White Label</p><p className="text-xs text-stone-500">Tes clients ne sauront jamais qu'on est là.</p></div>
@@ -533,7 +575,7 @@ document.querySelectorAll('details').forEach(d => {
 </a>
 </div>
 <div className="reveal-r">
-<div className="rounded-2xl p-6 lg:p-7 border" style={{background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.07)', fontFamily: '\'Geist Mono\',monospace'}}>
+<div className="rounded-2xl p-6 lg:p-7 border" style={{background: 'rgba(255, 255, 255, 0.03)', borderColor: 'rgba(255,255,255,0.07)', fontFamily: '\'Geist Mono\', monospace'}}>
 <div className="flex items-center justify-between border-b pb-4 mb-5" style={{borderColor: 'rgba(255,255,255,0.07)'}}>
 <span className="text-xs text-stone-400">performance_report.json</span>
 <div className="flex gap-1.5">
@@ -543,12 +585,12 @@ document.querySelectorAll('details').forEach(d => {
 </div>
 </div>
 <div className="grid grid-cols-2 gap-3 mb-4">
-<div className="p-4 rounded-xl border" style={{background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.06)'}}>
+<div className="p-4 rounded-xl border" style={{background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255,255,255,0.06)'}}>
 <p className="text-[11px] mb-2" style={{color: 'rgba(255,255,255,0.35)'}}>Coûts fixes</p>
 <p className="text-3xl font-bold text-white mb-1">-35%</p>
 <p className="text-[10px]" style={{color: 'var(--cyan)'}}>Agence partenaire / Scale</p>
 </div>
-<div className="p-4 rounded-xl border" style={{background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.06)'}}>
+<div className="p-4 rounded-xl border" style={{background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255,255,255,0.06)'}}>
 <p className="text-[11px] mb-2" style={{color: 'rgba(255,255,255,0.35)'}}>Capacité livrée</p>
 <p className="text-3xl font-bold text-white mb-1">+60%</p>
 <p className="text-[10px]" style={{color: 'var(--cyan)'}}>Freelance / 0 recrutement</p>

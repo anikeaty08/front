@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -277,6 +313,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -284,7 +326,7 @@ gtag('config', 'G-2M6V79H761');
       
 <div className="hidden md:block fixed pointer-events-none z-[5] w-[520px] h-[520px] rounded-full opacity-0" id="cursor-glow" style={{left: '-260px', top: '-260px', background: 'radial-gradient(circle, rgba(255,189,118,0.07), transparent 70%)'}}></div><div className="fixed top-0 left-0 right-0 h-[2px] z-[60] origin-left bg-[#FFBD76]" id="scroll-progress" style={{transform: 'scaleX(0)'}}></div>
 
-<nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style={{background: 'rgba(10,23,29,0.7)', borderBottom: '1px solid rgba(255,246,233,0.08)'}}>
+<nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style={{background: 'rgba(10, 23, 29, 0.7)', borderBottom: '1px solid rgba(255,246,233,0.08)'}}>
 <div className="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
 <a className="text-lg font-semibold" href="#" style={{letterSpacing: '-0.04em'}}>
           Promptless
@@ -343,7 +385,7 @@ gtag('config', 'G-2M6V79H761');
           buduje důvěru — a reklamami, které tu důvěru rozšíří do objemu. Bez
           slev, bez urgency, bez „kupte teď".
         </p>
-<p className="hero-fade mt-5 text-xl md:text-2xl text-[#FFBD76]/90 rotate-[-1.5deg] inline-block" style={{fontFamily: '\'Caveat\',cursive'}}>
+<p className="hero-fade mt-5 text-xl md:text-2xl text-[#FFBD76]/90 rotate-[-1.5deg] inline-block" style={{fontFamily: '\'Caveat\', cursive'}}>
           ↳ pro D2C značky, kouče a tvůrce, co chtějí růst — ne tlačit
         </p>
 <div className="hero-fade mt-10 flex flex-col sm:flex-row gap-4">
@@ -361,11 +403,11 @@ gtag('config', 'G-2M6V79H761');
 <span className="w-1.5 h-1.5 rounded-full bg-[#FFBD76]"></span>
         MARKETING, KTERÝ NEMUSÍ TLAČIT
       </div>
-<img alt="Filmová kamera" className="hero-img float-slow hidden lg:block absolute top-28 right-8 w-44 h-56 object-cover rounded-2xl opacity-80 pointer-events-none" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&amp;fit=crop&amp;w=600&amp;q=80" style={{-R: '6deg', border: '1px solid rgba(255,246,233,0.15)'}}/>
-<img alt="Tým při práci" className="hero-img float-slow hidden lg:block absolute bottom-36 right-52 w-36 h-44 object-cover rounded-2xl opacity-70 pointer-events-none" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&amp;fit=crop&amp;w=600&amp;q=80" style={{-R: '-5deg', animationDelay: '-3s', border: '1px solid rgba(255,246,233,0.15)'}}/>
+<img alt="Filmová kamera" className="hero-img float-slow hidden lg:block absolute top-28 right-8 w-44 h-56 object-cover rounded-2xl opacity-80 pointer-events-none" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&amp;fit=crop&amp;w=600&amp;q=80" style={{'--r': '6deg', border: '1px solid rgba(255,246,233,0.15)'}}/>
+<img alt="Tým při práci" className="hero-img float-slow hidden lg:block absolute bottom-36 right-52 w-36 h-44 object-cover rounded-2xl opacity-70 pointer-events-none" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&amp;fit=crop&amp;w=600&amp;q=80" style={{'--r': '-5deg', animationDelay: '-3s', border: '1px solid rgba(255,246,233,0.15)'}}/>
 </header>
 
-<section className="py-10" style={{borderTop: '1px solid rgba(255,246,233,0.08)', borderBottom: '1px solid rgba(255,246,233,0.08)'}}>
+<section className="py-10" style={{borderTop: '1px solid rgba(255, 246, 233, 0.08)', borderBottom: '1px solid rgba(255,246,233,0.08)'}}>
 <div className="overflow-hidden whitespace-nowrap relative">
 <div className="marquee-track inline-flex items-center gap-10 will-change-transform">
 <span className="inline-flex items-center gap-10 text-2xl md:text-4xl font-semibold tracking-tight text-[#FFF6E9]/80" style={{letterSpacing: '-0.04em'}}>
@@ -558,7 +600,7 @@ gtag('config', 'G-2M6V79H761');
         </p>
 <div className="grid md:grid-cols-2 gap-5 mt-14">
 
-<div className="reveal group p-8 md:p-10 rounded-3xl transition-colors duration-300 hover:bg-[#FFF6E9]/[0.04] hover-lift md:-rotate-1" style={{border: '1px solid rgba(255,246,233,0.12)', background: 'rgba(255,246,233,0.02)'}}>
+<div className="reveal group p-8 md:p-10 rounded-3xl transition-colors duration-300 hover:bg-[#FFF6E9]/[0.04] hover-lift md:-rotate-1" style={{border: '1px solid rgba(255, 246, 233, 0.12)', background: 'rgba(255,246,233,0.02)'}}>
 <div className="flex items-start justify-between">
 <span className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{background: 'rgba(255,189,118,0.12)'}}>
 <iconify-icon className="text-2xl text-[#FFBD76]" icon="solar:magnet-linear" strokeWidth="1.5"></iconify-icon>
@@ -599,7 +641,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 
-<div className="reveal group p-8 md:p-10 rounded-3xl transition-colors duration-300 hover:bg-[#FFF6E9]/[0.04] hover-lift md:rotate-1 md:mt-12" style={{border: '1px solid rgba(255,246,233,0.12)', background: 'rgba(255,246,233,0.02)'}}>
+<div className="reveal group p-8 md:p-10 rounded-3xl transition-colors duration-300 hover:bg-[#FFF6E9]/[0.04] hover-lift md:rotate-1 md:mt-12" style={{border: '1px solid rgba(255, 246, 233, 0.12)', background: 'rgba(255,246,233,0.02)'}}>
 <div className="flex items-start justify-between">
 <span className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{background: 'rgba(255,189,118,0.12)'}}>
 <iconify-icon className="text-2xl text-[#FFBD76]" icon="solar:cpu-bolt-linear" strokeWidth="1.5"></iconify-icon>
@@ -641,7 +683,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 </div>
-<div className="reveal mt-8 p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4" style={{border: '1px solid rgba(255,246,233,0.1)', background: 'rgba(255,246,233,0.02)'}}>
+<div className="reveal mt-8 p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4" style={{border: '1px solid rgba(255, 246, 233, 0.1)', background: 'rgba(255,246,233,0.02)'}}>
 <iconify-icon className="text-2xl text-[#FFBD76] shrink-0" icon="solar:monitor-smartphone-linear" strokeWidth="1.5"></iconify-icon>
 <p className="text-sm text-[#FFF6E9]/60 leading-relaxed font-light">
             A všechno na jednom místě — ve vlastním klientském portálu, kde
@@ -715,7 +757,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="mt-16 py-8 overflow-hidden whitespace-nowrap" style={{borderTop: '1px solid rgba(255,246,233,0.08)', borderBottom: '1px solid rgba(255,246,233,0.08)'}}>
+<div className="mt-16 py-8 overflow-hidden whitespace-nowrap" style={{borderTop: '1px solid rgba(255, 246, 233, 0.08)', borderBottom: '1px solid rgba(255,246,233,0.08)'}}>
 <div className="marquee-track-2 inline-flex items-center gap-8 will-change-transform">
 <span className="inline-flex items-center gap-8 text-lg md:text-2xl font-medium text-[#FFF6E9]/45">
             Tary
@@ -764,10 +806,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-7xl mx-auto mt-12 grid md:grid-cols-12 gap-10">
 <div className="md:col-span-3"></div>
 <div className="md:col-span-9">
-<div className="reveal max-w-3xl p-7 md:p-8 rounded-2xl rotate-[0.5deg]" style={{border: '1px solid rgba(255,189,118,0.25)', background: 'rgba(255,189,118,0.05)'}}>
+<div className="reveal max-w-3xl p-7 md:p-8 rounded-2xl rotate-[0.5deg]" style={{border: '1px solid rgba(255, 189, 118, 0.25)', background: 'rgba(255,189,118,0.05)'}}>
 <div className="flex items-center gap-3 mb-4">
 <iconify-icon className="text-xl text-[#FFBD76]" icon="solar:shield-check-linear" strokeWidth="1.5"></iconify-icon>
-<span className="text-2xl text-[#FFBD76]" style={{fontFamily: '\'Caveat\',cursive'}}>
+<span className="text-2xl text-[#FFBD76]" style={{fontFamily: '\'Caveat\', cursive'}}>
                 ↘ na rovinu
               </span>
 </div>
@@ -813,7 +855,7 @@ gtag('config', 'G-2M6V79H761');
 <video autoplay="" className="w-full h-full object-cover" loop="" muted="" playsinline="" src="https://assets.mixkit.co/videos/preview/mixkit-man-under-multicolored-lights-1237-large.mp4"></video>
 </div>
 </div>
-<p className="reveal mt-10 text-xl md:text-2xl text-[#FFBD76]/90 rotate-[-1deg] inline-block" style={{fontFamily: '\'Caveat\',cursive'}}>
+<p className="reveal mt-10 text-xl md:text-2xl text-[#FFBD76]/90 rotate-[-1deg] inline-block" style={{fontFamily: '\'Caveat\', cursive'}}>
           ↳ ukázkové vizuály — příště tu může být vaše značka
         </p>
 </div>
@@ -865,7 +907,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 </div>
-<div className="reveal mt-10 p-7 md:p-9 rounded-2xl" style={{border: '1.5px dashed rgba(184,92,58,0.4)', background: 'rgba(184,92,58,0.04)'}}>
+<div className="reveal mt-10 p-7 md:p-9 rounded-2xl" style={{border: '1.5px dashed rgba(184, 92, 58, 0.4)', background: 'rgba(184,92,58,0.04)'}}>
 <h3 className="text-xl md:text-2xl font-semibold tracking-tight mb-6 text-[#B85C3A]" style={{letterSpacing: '-0.04em'}}>
             ↳ Nejspíš si nesedneme, pokud:
           </h3>
@@ -904,7 +946,7 @@ gtag('config', 'G-2M6V79H761');
           </span>
 </h2>
 <div className="grid md:grid-cols-3 gap-5 mt-14">
-<div className="reveal p-8 rounded-3xl flex flex-col" style={{border: '1px solid rgba(255,246,233,0.12)', background: 'rgba(255,246,233,0.02)'}}>
+<div className="reveal p-8 rounded-3xl flex flex-col" style={{border: '1px solid rgba(255, 246, 233, 0.12)', background: 'rgba(255,246,233,0.02)'}}>
 <div className="flex items-center justify-between mb-8">
 <span className="text-5xl font-light text-[#FFF6E9]/20 tracking-tight" style={{letterSpacing: '-0.05em'}}>
                 01
@@ -922,7 +964,7 @@ gtag('config', 'G-2M6V79H761');
               sedneme.
             </p>
 </div>
-<div className="reveal p-8 rounded-3xl flex flex-col md:mt-10" style={{border: '1px solid rgba(255,246,233,0.12)', background: 'rgba(255,246,233,0.02)'}}>
+<div className="reveal p-8 rounded-3xl flex flex-col md:mt-10" style={{border: '1px solid rgba(255, 246, 233, 0.12)', background: 'rgba(255,246,233,0.02)'}}>
 <div className="flex items-center justify-between mb-8">
 <span className="text-5xl font-light text-[#FFF6E9]/20 tracking-tight" style={{letterSpacing: '-0.05em'}}>
                 02
@@ -939,7 +981,7 @@ gtag('config', 'G-2M6V79H761');
               testovat, čím se odlišit. Jeden dokument, oba systémy.
             </p>
 </div>
-<div className="reveal p-8 rounded-3xl flex flex-col md:rotate-1" style={{border: '1px solid rgba(255,246,233,0.12)', background: 'rgba(255,246,233,0.02)'}}>
+<div className="reveal p-8 rounded-3xl flex flex-col md:rotate-1" style={{border: '1px solid rgba(255, 246, 233, 0.12)', background: 'rgba(255,246,233,0.02)'}}>
 <div className="flex items-center justify-between mb-8">
 <span className="text-5xl font-light text-[#FFF6E9]/20 tracking-tight" style={{letterSpacing: '-0.05em'}}>
                 03
@@ -963,7 +1005,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="relative py-28 md:py-44 px-5 md:px-8 overflow-hidden" id="cta" style={{borderTop: '1px solid rgba(255,246,233,0.08)'}}>
 <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(ellipse 70% 60% at 50% 110%, rgba(255,189,118,0.1), transparent 60%)'}}></div>
 <div className="max-w-4xl mx-auto text-center relative">
-<p className="reveal text-2xl md:text-3xl text-[#FFBD76]/90 mb-6 rotate-[-1deg]" style={{fontFamily: '\'Caveat\',cursive'}}>
+<p className="reveal text-2xl md:text-3xl text-[#FFBD76]/90 mb-6 rotate-[-1deg]" style={{fontFamily: '\'Caveat\', cursive'}}>
           — epilog: tady začíná váš příběh
         </p>
 <h2 className="reveal text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] rotate-[-1deg]" style={{letterSpacing: '-0.055em'}}>

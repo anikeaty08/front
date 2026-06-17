@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -41,6 +77,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -64,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <a className="hover:text-white transition-colors cursor-pointer">Docs</a>
 <a className="hover:text-white transition-colors cursor-pointer">Pricing</a>
 </div>
-<a className="btn-wrapper-nav" href="#" style={{-DotSize: '6px', -LineWeight: '1px', -LineDistance: '0.6rem 0.8rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
+<a className="btn-wrapper-nav" href="#" style={{'--dot-size': '6px', '--line-weight': '1px', '--line-distance': '0.6rem 0.8rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
 <div className="line horizontal top"></div>
 <div className="line vertical right"></div>
 <div className="line horizontal bottom"></div>
@@ -203,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </span>
 </button>
 
-<a className="btn-wrapper" href="#" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
+<a className="btn-wrapper" href="#" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
 <div className="line horizontal top"></div>
 <div className="line vertical right"></div>
 <div className="line horizontal bottom"></div>
@@ -323,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
           We turn noisy signals into clear decisions. Compose what you need, ship faster, and prove security outcomes anytime.
         </p>
 <div className="mt-3">
-<a className="btn-wrapper" href="#" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
+<a className="btn-wrapper" href="#" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
 <div className="line horizontal top"></div>
 <div className="line vertical right"></div>
 <div className="line horizontal bottom"></div>
@@ -492,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
         Data, rigor, and outcomes — the fuel behind every release.
       </p>
 <div className="mt-3">
-<a className="btn-wrapper" href="#" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
+<a className="btn-wrapper" href="#" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
 <div className="line horizontal top"></div>
 <div className="line vertical right"></div>
 <div className="line horizontal bottom"></div>
@@ -574,7 +616,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </svg>
 </span>
 </button>
-<a className="btn-wrapper" href="#" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
+<a className="btn-wrapper" href="#" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
 <div className="line horizontal top"></div>
 <div className="line vertical right"></div>
 <div className="line horizontal bottom"></div>

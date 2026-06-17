@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -109,6 +145,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -125,7 +167,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/10 rounded-full blur-[120px] -z-10"></div>
 <main className="z-10 card-grid grid-cols-1 md:grid-cols-12 auto-rows-min w-full max-w-5xl" id="gridContainer">
 
-<header className="spotlight-card col-span-1 md:col-span-12 rounded-3xl p-6 flex justify-between items-center mb-4 reveal" style={{animationDelay: '0.1s', -MouseX: '2.5px', -MouseY: '118.25px'}}>
+<header className="spotlight-card col-span-1 md:col-span-12 rounded-3xl p-6 flex justify-between items-center mb-4 reveal" style={{animationDelay: '0.1s', '--mouse-x': '2.5px', '--mouse-y': '118.25px'}}>
 <div className="relative z-10 flex items-center gap-4">
 <div className="flex overflow-hidden group hoverable bg-center text-white w-10 h-10 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9a73a7df-fe87-40e4-b8ed-204ccdcba468_320w.jpg)] bg-cover border-white/10 border rounded-full relative items-center justify-center">
 <span className="group-hover:opacity-0 transition-opacity duration-300 text-xs font-bold tracking-tighter bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4f10afa8-518d-4b67-a08d-c1badd1418c0_320w.jpg)] bg-cover bg-center"></span>
@@ -142,7 +184,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </header>
 
-<div className="spotlight-card col-span-1 md:col-span-8 row-span-2 md:p-10 flex flex-col group hoverable reveal rounded-3xl pt-8 pr-8 pb-8 pl-8 justify-between" style={{animationDelay: '0.2s', -MouseX: '2.5px', -MouseY: '-3.75px'}}>
+<div className="spotlight-card col-span-1 md:col-span-8 row-span-2 md:p-10 flex flex-col group hoverable reveal rounded-3xl pt-8 pr-8 pb-8 pl-8 justify-between" style={{animationDelay: '0.2s', '--mouse-x': '2.5px', '--mouse-y': '-3.75px'}}>
 <div className="relative z-10">
 <div className="inline-flex gap-1.5 bg-red-600/5 border-red-600/20 border rounded-full mb-6 pt-1 pr-2.5 pb-1 pl-2.5 gap-x-1.5 gap-y-1.5 items-center">
 <span className="w-1.5 h-1.5 animate-pulse text-red-600 bg-red-600 rounded-full"></span>
@@ -159,7 +201,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal cursor-pointer rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between" onclick="window.location.href='https://youtube.com/@nexafyrez1011?si=_rCiA_xQAorAgg3l'" role="button" style={{animationDelay: '0.3s', -MouseX: '-690.828125px', -MouseY: '-3.75px'}}>
+<div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal cursor-pointer rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between" onclick="window.location.href='https://youtube.com/@nexafyrez1011?si=_rCiA_xQAorAgg3l'" role="button" style={{animationDelay: '0.3s', '--mouse-x': '-690.828125px', '--mouse-y': '-3.75px'}}>
 <div className="relative z-10">
 <div className="flex items-center gap-2 mb-1 text-red-400">
 <iconify-icon className="" icon="solar:play-circle-linear" width="18"></iconify-icon>
@@ -172,7 +214,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between" style={{animationDelay: '0.4s', -MouseX: '-690.828125px', -MouseY: '-182.5px'}}>
+<div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between" style={{animationDelay: '0.4s', '--mouse-x': '-690.828125px', '--mouse-y': '-182.5px'}}>
 <div className="relative z-10">
 <div className="flex items-center gap-2 mb-1 text-indigo-400">
 <iconify-icon className="" icon="solar:server-square-linear" width="18"></iconify-icon>
@@ -185,7 +227,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card col-span-1 md:col-span-6 overflow-hidden group reveal cursor-pointer rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" onclick="window.location.href='https://open.spotify.com/playlist/1u6n1OX31XuQ4qs1Sx2jTM?si=c6bd559cdf9d4a15'" role="button" style={{animationDelay: '0.5s', -MouseX: '2.5px', -MouseY: '-361.25px'}}>
+<div className="spotlight-card col-span-1 md:col-span-6 overflow-hidden group reveal cursor-pointer rounded-3xl pt-6 pr-6 pb-6 pl-6 relative" onclick="window.location.href='https://open.spotify.com/playlist/1u6n1OX31XuQ4qs1Sx2jTM?si=c6bd559cdf9d4a15'" role="button" style={{animationDelay: '0.5s', '--mouse-x': '2.5px', '--mouse-y': '-361.25px'}}>
 <div className="relative z-10 flex items-center gap-5">
 
 <div className="flex-1 min-w-0">
@@ -208,7 +250,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card col-span-1 md:col-span-6 rounded-3xl p-6 relative z-10 reveal" style={{animationDelay: '0.6s', -MouseX: '-517.484375px', -MouseY: '-361.25px'}}>
+<div className="spotlight-card col-span-1 md:col-span-6 rounded-3xl p-6 relative z-10 reveal" style={{animationDelay: '0.6s', '--mouse-x': '-517.484375px', '--mouse-y': '-361.25px'}}>
 <div className="flex items-center justify-between mb-4">
 <h3 className="uppercase text-xs font-medium text-neutral-300 tracking-widest">My Fav Games</h3>
 <iconify-icon className="text-neutral-500" icon="solar:gamepad-linear"></iconify-icon>
@@ -234,7 +276,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between cursor-pointer" onclick="window.location.href='https://www.reddit.com/u/_kennedy86/s/iYBtr8XKjm'" role="button" style={{animationDelay: '0.4s', -MouseX: '2.5px', -MouseY: '-583.25px'}}>
+<div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between cursor-pointer" onclick="window.location.href='https://www.reddit.com/u/_kennedy86/s/iYBtr8XKjm'" role="button" style={{animationDelay: '0.4s', '--mouse-x': '2.5px', '--mouse-y': '-583.25px'}}>
 <div className="relative z-10">
 <div className="flex items-center gap-2 mb-1 text-indigo-400">
 </div>
@@ -243,7 +285,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex group-hover:bg-white group-hover:text-black transition-all cursor-pointer z-10 text-white w-8 h-8 border-white/10 border rounded-full relative items-center justify-center" onclick="window.location.href='https://www.reddit.com/u/_kennedy86/s/iYBtr8XKjm'" role="button">
 <iconify-icon className="" height="14" icon="solar:arrow-right-up-linear" style={{color: 'rgb(0, 0, 0)'}} width="14"></iconify-icon>
 </div>
-</div><div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between cursor-pointer" onclick="window.location.href='https://steamcommunity.com/profiles/76561199576311919/'" role="button" style={{animationDelay: '0.4s', -MouseX: '-344.15625px', -MouseY: '-583.25px'}}>
+</div><div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between cursor-pointer" onclick="window.location.href='https://steamcommunity.com/profiles/76561199576311919/'" role="button" style={{animationDelay: '0.4s', '--mouse-x': '-344.15625px', '--mouse-y': '-583.25px'}}>
 <div className="relative z-10">
 <div className="flex items-center gap-2 mb-1 text-indigo-400">
 </div>
@@ -252,7 +294,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex group-hover:bg-white group-hover:text-black transition-all cursor-pointer z-10 text-white w-8 h-8 border-white/10 border rounded-full relative items-center justify-center" onclick="window.location.href='https://steamcommunity.com/profiles/76561199576311919/'" role="button">
 <iconify-icon className="" height="14" icon="solar:arrow-right-up-linear" style={{color: 'rgb(0, 0, 0)'}} width="14"></iconify-icon>
 </div>
-</div><div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between cursor-pointer" onclick="window.location.href='https://socialclub.rockstargames.com/member/NexafyreZ1011/games'" role="button" style={{animationDelay: '0.4s', -MouseX: '-690.828125px', -MouseY: '-583.25px'}}>
+</div><div className="spotlight-card col-span-1 md:col-span-4 flex hoverable group reveal rounded-3xl pt-6 pr-6 pb-6 pl-6 items-center justify-between cursor-pointer" onclick="window.location.href='https://socialclub.rockstargames.com/member/NexafyreZ1011/games'" role="button" style={{animationDelay: '0.4s', '--mouse-x': '-690.828125px', '--mouse-y': '-583.25px'}}>
 <div className="relative z-10">
 <div className="flex items-center gap-2 mb-1 text-indigo-400">
 </div>

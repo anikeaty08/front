@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       // Lucide
@@ -44,6 +80,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -158,7 +200,7 @@ export default function App() {
 </div>
 <div className="row-span-2 grid grid-cols-2 gap-4">
 <div className="surface rounded-2xl p-5 flex items-center gap-4">
-<div className="h-10 w-10 rounded-lg grid place-items-center" style={{background: 'rgba(57,255,20,0.1)', border: '1px solid rgba(57,255,20,0.25)'}}>
+<div className="h-10 w-10 rounded-lg grid place-items-center" style={{background: 'rgba(57, 255, 20, 0.1)', border: '1px solid rgba(57,255,20,0.25)'}}>
 <i className="h-5 w-5" data-lucide="factory" style={{color: 'var(--accent)'}}></i>
 </div>
 <div>
@@ -167,7 +209,7 @@ export default function App() {
 </div>
 </div>
 <div className="surface rounded-2xl p-5 flex items-center gap-4">
-<div className="h-10 w-10 rounded-lg grid place-items-center" style={{background: 'rgba(57,255,20,0.1)', border: '1px solid rgba(57,255,20,0.25)'}}>
+<div className="h-10 w-10 rounded-lg grid place-items-center" style={{background: 'rgba(57, 255, 20, 0.1)', border: '1px solid rgba(57,255,20,0.25)'}}>
 <i className="h-5 w-5" data-lucide="users" style={{color: 'var(--accent)'}}></i>
 </div>
 <div>

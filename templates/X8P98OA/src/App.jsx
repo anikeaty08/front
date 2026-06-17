@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -128,6 +164,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -157,7 +199,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="flex items-center gap-3 stagger-entrance">
 <a className="hidden ring-1 ring-white/10 transition hover:text-white hover:ring-white/30 md:inline-flex animate-fade-in-up delay-700 text-sm text-zinc-300 tracking-tight font-geist rounded-lg pt-2 pr-3 pb-2 pl-3" href="#">Sign in</a>
-<a className="inline-flex items-center gap-2 animate-scale-in delay-800 tracking-tight font-geist" href="#cta" style={{-Green: '#1BFD9C', fontSize: '14px', padding: '0.5rem 0.75rem', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.5rem', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>Get started</a>
+<a className="inline-flex items-center gap-2 animate-scale-in delay-800 tracking-tight font-geist" href="#cta" style={{'--green': '#1BFD9C', fontSize: '14px', padding: '0.5rem 0.75rem', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.5rem', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>Get started</a>
 <button className="md:hidden p-2 text-zinc-300 animate-fade-in delay-900" onclick="toggleMobileMenu()">
 <svg className="lucide lucide-menu h-5 w-5" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M4 6h16"></path></svg>
 </button>
@@ -191,11 +233,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               Start a timer, log tasks, send polished invoices, and get paid faster—without spreadsheets. Designed for solo pros and nimble teams.
             </p>
 <div className="flex flex-col gap-3 sm:flex-row animate-fade-in-up delay-800" id="cta">
-<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight animate-float" href="#" style={{-Green: '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
+<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight animate-float" href="#" style={{'--green': '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
 <svg className="lucide lucide-timer h-4 w-4" data-lucide="timer" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"></line><circle cx="12" cy="14" r="8"></circle></svg>
                 Start free — no card
               </a>
-<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight animate-float" href="#demo" style={{-White: '#FFFFFF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--white)', background: 'linear-gradient(to right, rgba(255, 255, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.1) 100%)', color: 'var(--white)', boxShadow: 'inset 0 0 10px rgba(255, 255, 255, 0.4), 0 0 9px 3px rgba(255, 255, 255, 0.1)'}}>
+<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight animate-float" href="#demo" style={{'--white': '#FFFFFF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--white)', background: 'linear-gradient(to right, rgba(255, 255, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.1) 100%)', color: 'var(--white)', boxShadow: 'inset 0 0 10px rgba(255, 255, 255, 0.4), 0 0 9px 3px rgba(255, 255, 255, 0.1)'}}>
 <svg className="lucide lucide-play-circle h-4 w-4" data-lucide="play-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path><circle cx="12" cy="12" r="10"></circle></svg>
                 Watch demo
               </a>
@@ -592,7 +634,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="mt-6">
-<a className="inline-flex items-center gap-2 tracking-tight font-geist" href="#" style={{-Green: '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
+<a className="inline-flex items-center gap-2 tracking-tight font-geist" href="#" style={{'--green': '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
                 View integration guides
                 <svg className="lucide lucide-arrow-right h-4 w-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </a>
@@ -725,7 +767,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-zinc-300 font-geist tracking-tight">Mobile apps</span>
 </li>
 </ul>
-<button className="w-full py-3 px-4 text-sm font-geist tracking-tight transition-all duration-300 group-hover:scale-105 animate-float text-zinc-900 rounded-xl" style={{-White: '#FFFFFF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--white)', background: 'linear-gradient(to right, rgba(255, 255, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.1) 100%)', color: 'var(--white)', boxShadow: 'inset 0 0 10px rgba(255, 255, 255, 0.4), 0 0 9px 3px rgba(255, 255, 255, 0.1)'}}>
+<button className="w-full py-3 px-4 text-sm font-geist tracking-tight transition-all duration-300 group-hover:scale-105 animate-float text-zinc-900 rounded-xl" style={{'--white': '#FFFFFF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--white)', background: 'linear-gradient(to right, rgba(255, 255, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.1) 100%)', color: 'var(--white)', boxShadow: 'inset 0 0 10px rgba(255, 255, 255, 0.4), 0 0 9px 3px rgba(255, 255, 255, 0.1)'}}>
                 Get started free
               </button>
 </div>
@@ -804,7 +846,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-white font-geist tracking-tight">Priority support</span>
 </li>
 </ul>
-<button className="w-full py-3 px-4 text-sm font-geist tracking-tight transition-all duration-300 group-hover:scale-105 animate-float text-white rounded-xl" style={{-Green: '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
+<button className="w-full py-3 px-4 text-sm font-geist tracking-tight transition-all duration-300 group-hover:scale-105 animate-float text-white rounded-xl" style={{'--green': '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
                 Start Pro trial
               </button>
 <p className="text-xs text-center text-zinc-400 mt-3 font-geist tracking-tight">14-day free trial</p>
@@ -882,7 +924,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-white font-geist tracking-tight">Dedicated account manager</span>
 </li>
 </ul>
-<button className="w-full py-3 px-4 text-sm font-geist tracking-tight transition-all duration-300 group-hover:scale-105 animate-float text-zinc-900 rounded-xl" style={{-White: '#FFFFFF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--white)', background: 'linear-gradient(to right, rgba(255, 255, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.1) 100%)', color: 'var(--white)', boxShadow: 'inset 0 0 10px rgba(255, 255, 255, 0.4), 0 0 9px 3px rgba(255, 255, 255, 0.1)'}}>
+<button className="w-full py-3 px-4 text-sm font-geist tracking-tight transition-all duration-300 group-hover:scale-105 animate-float text-zinc-900 rounded-xl" style={{'--white': '#FFFFFF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--white)', background: 'linear-gradient(to right, rgba(255, 255, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.1) 100%)', color: 'var(--white)', boxShadow: 'inset 0 0 10px rgba(255, 255, 255, 0.4), 0 0 9px 3px rgba(255, 255, 255, 0.1)'}}>
                 Start Team trial
               </button>
 <p className="text-xs text-center text-zinc-400 mt-3 font-geist tracking-tight">14-day free trial</p>
@@ -970,7 +1012,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h2 className="text-3xl md:text-4xl tracking-tight text-white font-bricolage font-light">Ready to get started?</h2>
 <p className="max-w-2xl mx-auto text-zinc-400 font-geist tracking-tight">Join thousands of freelancers and teams who use TempoBill to track time, send invoices, and get paid faster.</p>
 <div className="flex flex-col gap-4 sm:flex-row sm:justify-center animate-fade-in-up delay-400">
-<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight animate-float" href="#" style={{-Green: '#1BFD9C', fontSize: '16px', padding: '0.8em 2.5em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
+<a className="inline-flex items-center justify-center gap-2 font-geist tracking-tight animate-float" href="#" style={{'--green': '#1BFD9C', fontSize: '16px', padding: '0.8em 2.5em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'}}>
 <svg className="lucide lucide-timer h-4 w-4" data-lucide="timer" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"></line><circle cx="12" cy="14" r="8"></circle></svg>
               Start your free trial
             </a>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -127,7 +163,7 @@ sans: ['Satoshi', 'sans-serif'],
             return (
                 <section className="relative h-[100vh] w-full flex flex-col items-center justify-center overflow-hidden bg-background">
                     <motion.div 
-                        style={{ y, opacity, scale }}
+                        style={{y, opacity, scale}}
                         className="relative z-10 flex flex-col items-center justify-center h-full w-full px-4"
                     >
                         <motion.h1 
@@ -154,7 +190,7 @@ sans: ['Satoshi', 'sans-serif'],
                             <HlsVideo 
                                 src="https://customer-cbeadsgr09pnsezs.cloudflarestream.com/697945ca6b876878dba3b23fbd2f1561/manifest/stream_tb27e0f52a8048b64740551b3fac7e393_r1344284253.m3u8"
                                 className="w-full h-full object-cover scale-105"
-                                style={{ opacity: 1 }}
+                                style={{opacity: 1}}
                             />
                          </div>
                          
@@ -255,7 +291,7 @@ sans: ['Satoshi', 'sans-serif'],
         const OrbitingIcon = ({ radius, duration, icon: Icon, delay = 0, reverse = false, color = "text-white" }) => {
             return (
                 <div className="absolute flex items-center justify-center aspect-square rounded-full" 
-                     style={{ width: radius * 2 }}>
+                     style={{width: radius * 2}}>
                     <motion.div
                         className="w-full h-full absolute inset-0"
                         initial={{ rotate: 0 }}
@@ -516,6 +552,12 @@ sans: ['Satoshi', 'sans-serif'],
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

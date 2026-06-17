@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -115,7 +157,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </h2>
 <div className="grid md:grid-cols-3 gap-6 md:gap-8">
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-blue-50 to-white rounded-[1.5rem] p-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #60a5fa, #0213f5)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-blue-50 to-white rounded-[1.5rem] p-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #60a5fa, #0213f5)', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-[#0213f5]/5 text-[#0213f5]">
 <i className="w-5 h-5 md:w-6 md:h-6" data-lucide="trending-down"></i>
 </div>
@@ -131,7 +173,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="leading-relaxed text-sm font-light text-gray-500 text-center">You've got the skills, experience, and results to prove it. But your ideal clients don't know you exist.</p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-blue-50 to-white rounded-[1.5rem] p-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #60a5fa, #0213f5)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-blue-50 to-white rounded-[1.5rem] p-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #60a5fa, #0213f5)', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-[#0213f5]/5 text-[#0213f5]">
 <i className="w-5 h-5 md:w-6 md:h-6" data-lucide="clock"></i>
 </div>

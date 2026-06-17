@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Data
@@ -652,6 +688,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -767,7 +809,7 @@ export default function App() {
 </div>
 
 <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 rounded-[24px] bg-white/5 border border-white/10">
-<div className="flex items-center gap-2 rounded-full px-3 py-1 text-sm" id="openBadge" style={{background: 'rgba(34,214,140,0.12)', color: 'var(--green)'}}>
+<div className="flex items-center gap-2 rounded-full px-3 py-1 text-sm" id="openBadge" style={{background: 'rgba(34, 214, 140, 0.12)', color: 'var(--green)'}}>
 <span className="h-2 w-2 rounded-full" style={{background: 'var(--green)'}}></span>
                     Open now
                   </div>
@@ -834,9 +876,9 @@ export default function App() {
 <h3 className="text-[24px] md:text-[28px] tracking-tight" style={{fontFamily: '\'Fraunces\', serif', fontWeight: '600', color: 'var(--hotPink)'}}>Choose your mood</h3>
 <p className="mt-3 text-white/80">Pick a bowl by how you want to feel.</p>
 <div className="mt-4 flex flex-wrap gap-2">
-<span className="px-3 py-1 rounded-full text-sm" style={{background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)'}}>Calm</span>
-<span className="px-3 py-1 rounded-full text-sm" style={{background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)'}}>Uplift</span>
-<span className="px-3 py-1 rounded-full text-sm" style={{background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)'}}>Focus</span>
+<span className="px-3 py-1 rounded-full text-sm" style={{background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.12)'}}>Calm</span>
+<span className="px-3 py-1 rounded-full text-sm" style={{background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.12)'}}>Uplift</span>
+<span className="px-3 py-1 rounded-full text-sm" style={{background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.12)'}}>Focus</span>
 </div>
 <p className="mt-3 text-white/70">Add a flavor twist if you like it creamy, citrusy, or a little wild. Your bartender will guide you like a friend who knows your order by heart.</p>
 <div className="mt-6">
@@ -879,7 +921,7 @@ export default function App() {
 <button className="px-3 py-1 rounded-full text-sm bg-white/10 hover:bg-white/20">spice</button>
 </div>
 <div className="mt-4">
-<div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs" style={{background: 'rgba(255,138,77,0.18)', color: 'var(--peach)'}}>
+<div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs" style={{background: 'rgba(255, 138, 77, 0.18)', color: 'var(--peach)'}}>
 <i className="h-4 w-4" data-lucide="leaf"></i>
                         vegan, caffeine-free
                       </div>
@@ -903,8 +945,8 @@ export default function App() {
 <div className="mt-6 grid md:grid-cols-3 gap-6">
 <div className="relative p-5 rounded-[28px] border border-white/10 bg-white/5" style={{maskImage: 'radial-gradient(130% 140% at 50% -20%, black 70%, transparent 100%)'}}>
 <div className="flex items-center gap-2 text-xs text-white/70">
-<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(255,138,77,0.15)', color: 'var(--peach)'}}>Live Music</span>
-<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(255,45,154,0.15)', color: 'var(--hotPink)'}}>Save to Calendar</span>
+<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(255, 138, 77, 0.15)', color: 'var(--peach)'}}>Live Music</span>
+<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(255, 45, 154, 0.15)', color: 'var(--hotPink)'}}>Save to Calendar</span>
 </div>
 <h4 className="mt-3 text-[20px] tracking-tight" style={{fontFamily: '\'Fraunces\', serif', fontWeight: '600'}}>Open-Mic Poetry</h4>
 <p className="text-sm text-white/70">8–10 • San Marco • Bring a piece or just your ears</p>
@@ -917,7 +959,7 @@ export default function App() {
 </div>
 <div className="relative p-5 rounded-[28px] border border-white/10 bg-white/5" style={{maskImage: 'radial-gradient(130% 140% at 50% -20%, black 70%, transparent 100%)'}}>
 <div className="flex items-center gap-2 text-xs text-white/70">
-<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(255,45,154,0.15)', color: 'var(--hotPink)'}}>Tournament</span>
+<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(255, 45, 154, 0.15)', color: 'var(--hotPink)'}}>Tournament</span>
 </div>
 <h4 className="mt-3 text-[20px] tracking-tight" style={{fontFamily: '\'Fraunces\', serif', fontWeight: '600'}}>Game Night Tournament</h4>
 <p className="text-sm text-white/70">Winner gets a free bowl + bragging rights</p>
@@ -928,7 +970,7 @@ export default function App() {
 </div>
 <div className="relative p-5 rounded-[28px] border border-white/10 bg-white/5" style={{maskImage: 'radial-gradient(130% 140% at 50% -20%, black 70%, transparent 100%)'}}>
 <div className="flex items-center gap-2 text-xs text-white/70">
-<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(34,214,140,0.18)', color: 'var(--green)'}}>Yoga</span>
+<span className="px-2 py-0.5 rounded-full" style={{background: 'rgba(34, 214, 140, 0.18)', color: 'var(--green)'}}>Yoga</span>
 </div>
 <h4 className="mt-3 text-[20px] tracking-tight" style={{fontFamily: '\'Fraunces\', serif', fontWeight: '600'}}>Sunset Yoga</h4>
 <p className="text-sm text-white/70">Mat, water, open heart • All levels welcome</p>

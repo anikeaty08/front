@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -99,6 +135,12 @@ document.querySelectorAll("#hero .animate-on-scroll").forEach(el => el.classList
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -160,7 +202,7 @@ document.querySelectorAll("#hero .animate-on-scroll").forEach(el => el.classList
 
 <section className="flex flex-col z-10 md:mt-32 min-h-[80vh] w-full max-w-7xl mt-32 mr-auto ml-auto pr-6 pl-6 relative justify-center" id="hero">
 
-<div className="flex spotlight-group animate-on-scroll animate w-full mb-10 relative justify-start" style={{-MouseXRel: '1557px', -MouseYRel: '3586.5px'}}>
+<div className="flex spotlight-group animate-on-scroll animate w-full mb-10 relative justify-start" style={{'--mouse-x-rel': '1557px', '--mouse-y-rel': '3586.5px'}}>
 <a className="z-10 group flex items-center gap-3 hover:border-white/20 transition-all overflow-hidden bg-zinc-900/50 border-white/10 border rounded-full pt-1.5 pr-4 pb-1.5 pl-1.5 relative" href="https://performance.network/" rel="noopener noreferrer" target="_blank">
 <span className="text-[10px] uppercase font-bold text-white tracking-wide bg-zinc-800 border-white/5 border rounded-full pt-0.5 pr-2.5 pb-0.5 pl-2.5 font-jakarta" style={{}}>Beta</span>
 <span className="group-hover:text-zinc-300 cursor-pointer text-sm font-medium text-zinc-400 font-jakarta" style={{}}>Performance Network</span>
@@ -181,7 +223,7 @@ document.querySelectorAll("#hero .animate-on-scroll").forEach(el => el.classList
 
 <div className="md:mt-32 grid grid-cols-1 lg:grid-cols-2 gap-12 animate-on-scroll animate w-full mt-32 gap-x-4 gap-y-4 items-end">
 
-<div className="group md:p-8 spotlight-group overflow-hidden hover:bg-zinc-900/50 transition-all duration-500 bg-zinc-900/30 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-sm gap-x-4 gap-y-4" style={{-MouseXRel: '1557px', -MouseYRel: '3143.5px'}}>
+<div className="group md:p-8 spotlight-group overflow-hidden hover:bg-zinc-900/50 transition-all duration-500 bg-zinc-900/30 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-sm gap-x-4 gap-y-4" style={{'--mouse-x-rel': '1557px', '--mouse-y-rel': '3143.5px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 spotlight-border transition-opacity duration-300" style={{background: 'radial-gradient(400px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(255, 255, 255, 0.05), transparent 40%)'}}></div>
 <div className="absolute left-0 top-8 w-0.5 h-12 bg-white rounded-r-full"></div>
 <p className="leading-relaxed z-10 md:text-2xl text-lg italic text-zinc-300 font-playfair max-w-lg relative">How we work is being rewritten right now. The changes are massive and are happening at tremendous speed. Work is being restructured at its core. Capabilities that defined success in the past are no longer relevant, while new competitive advantages are emerging, under conditions that are not yet fully visible.</p>
@@ -200,7 +242,7 @@ document.querySelectorAll("#hero .animate-on-scroll").forEach(el => el.classList
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
 
-<div className="group spotlight-group overflow-hidden hover:bg-zinc-900/60 transition-all duration-300 flex flex-col animate-on-scroll bg-zinc-900/20 h-full border-white/5 border rounded-2xl p-8 relative" style={{-MouseXRel: '1557px', -MouseYRel: '2254px'}}>
+<div className="group spotlight-group overflow-hidden hover:bg-zinc-900/60 transition-all duration-300 flex flex-col animate-on-scroll bg-zinc-900/20 h-full border-white/5 border rounded-2xl p-8 relative" style={{'--mouse-x-rel': '1557px', '--mouse-y-rel': '2254px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 spotlight-border transition-opacity duration-300" style={{background: 'radial-gradient(400px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(255, 255, 255, 0.05), transparent 40%)'}}></div>
 <div className="z-10 flex flex-col h-full relative">
 
@@ -213,7 +255,7 @@ document.querySelectorAll("#hero .animate-on-scroll").forEach(el => el.classList
 </div>
 </div>
 
-<div className="group spotlight-group overflow-hidden hover:bg-zinc-900/60 transition-all duration-300 flex flex-col animate-on-scroll bg-zinc-900/20 h-full border-white/5 border rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{-MouseXRel: '1138.34375px', -MouseYRel: '2254px'}}>
+<div className="group spotlight-group overflow-hidden hover:bg-zinc-900/60 transition-all duration-300 flex flex-col animate-on-scroll bg-zinc-900/20 h-full border-white/5 border rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{'--mouse-x-rel': '1138.34375px', '--mouse-y-rel': '2254px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 spotlight-border transition-opacity duration-300" style={{background: 'radial-gradient(400px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(255, 255, 255, 0.05), transparent 40%)'}}></div>
 <div className="relative z-10 flex flex-col h-full">
 
@@ -226,7 +268,7 @@ document.querySelectorAll("#hero .animate-on-scroll").forEach(el => el.classList
 </div>
 </div>
 
-<div className="group spotlight-group overflow-hidden hover:bg-zinc-900/60 transition-all duration-300 flex flex-col animate-on-scroll bg-zinc-900/20 h-full border-white/5 border rounded-2xl p-8 relative" style={{-MouseXRel: '719.671875px', -MouseYRel: '2254px'}}>
+<div className="group spotlight-group overflow-hidden hover:bg-zinc-900/60 transition-all duration-300 flex flex-col animate-on-scroll bg-zinc-900/20 h-full border-white/5 border rounded-2xl p-8 relative" style={{'--mouse-x-rel': '719.671875px', '--mouse-y-rel': '2254px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 spotlight-border transition-opacity duration-300" style={{background: 'radial-gradient(400px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(255, 255, 255, 0.05), transparent 40%)'}}></div>
 <div className="relative z-10 flex flex-col h-full">
 

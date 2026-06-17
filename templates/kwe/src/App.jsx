@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -97,6 +133,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -208,7 +250,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="pb-12 relative scale-100">
 <div className="sm:px-6 lg:px-8 sm:pt-24 in-view max-w-3xl mr-auto ml-auto pt-16 pr-4 pl-4" data-scroll-animate-children="">
-<div className="flex sm:gap-3 bg-white/5 w-max rounded-full mr-auto ml-auto pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 gap-y-2 items-center justify-center in-view" data-scroll-animate="fade-up" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex sm:gap-3 bg-white/5 w-max rounded-full mr-auto ml-auto pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 gap-y-2 items-center justify-center in-view" data-scroll-animate="fade-up" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <img alt="KWE Logo" className="h-6 w-auto object-contain mr-2 hidden sm:inline-block" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/87b4aefe-176d-40c9-94c0-6bf13c1d3683_800w.png" style={{transition: 'outline 0.1s ease-in-out'}}/>
 <span className="inline-flex -space-x-2 pr-2">
 <img alt="Client 1" className="w-6 h-6 object-cover rounded-full ring-2 ring-neutral-900" src="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?q=80&amp;w=200&amp;auto=format&amp;fit=crop" style={{}}/>
@@ -299,16 +341,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </style>
 </button>
 
-<button className="inline-flex transition overflow-hidden group text-sm text-white/90 rounded-full pt-3 pr-10 pb-3 pl-10 relative gap-x-2 gap-y-2 items-center" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; const centerX = rect.width / 2; const centerY = rect.height / 2; const rotateX = ((y - centerY) / centerY) * -15; const rotateY = ((x - centerX) / centerX) * 15; this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(25px)`; this.style.setProperty('--x', ((x / rect.width) * 100) + '%'); this.style.setProperty('--y', ((y / rect.height) * 100) + '%');" onmouseout="this.style.transform='perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(15px)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1) inset'; this.querySelector('.inner-layer-1').style.opacity='0.6'; this.querySelector('.inner-layer-2').style.opacity='0.4'; this.querySelector('.light-sweep').style.transform='translate(-150%, 150%) rotate(45deg)'; this.querySelector('.depth-shadow').style.opacity='0.5';" onmouseover="this.style.transform='perspective(1000px) rotateX(-10deg) rotateY(8deg) translateZ(25px)'; this.style.boxShadow='0 20px 60px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.5), inset 0 -3px 6px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.2) inset, 0 0 60px rgba(244,63,94,0.4)'; this.querySelector('.inner-layer-1').style.opacity='1'; this.querySelector('.inner-layer-2').style.opacity='0.8'; this.querySelector('.light-sweep').style.transform='translate(150%, -150%) rotate(45deg)'; this.querySelector('.depth-shadow').style.opacity='1';" style={{-X: '29.496289644354317%', -Y: '59.32749000613724%', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 100%)', border: '1px solid rgba(255, 255, 255, 0.3)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(255, 255, 255, 0.4) 0px 2px 4px inset, rgba(0, 0, 0, 0.2) 0px -2px 4px inset, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset', backdropFilter: 'blur(20px)', transformStyle: 'preserve-3d', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(15px)'}}>
+<button className="inline-flex transition overflow-hidden group text-sm text-white/90 rounded-full pt-3 pr-10 pb-3 pl-10 relative gap-x-2 gap-y-2 items-center" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; const centerX = rect.width / 2; const centerY = rect.height / 2; const rotateX = ((y - centerY) / centerY) * -15; const rotateY = ((x - centerX) / centerX) * 15; this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(25px)`; this.style.setProperty('--x', ((x / rect.width) * 100) + '%'); this.style.setProperty('--y', ((y / rect.height) * 100) + '%');" onmouseout="this.style.transform='perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(15px)'; this.style.boxShadow='0 8px 32px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1) inset'; this.querySelector('.inner-layer-1').style.opacity='0.6'; this.querySelector('.inner-layer-2').style.opacity='0.4'; this.querySelector('.light-sweep').style.transform='translate(-150%, 150%) rotate(45deg)'; this.querySelector('.depth-shadow').style.opacity='0.5';" onmouseover="this.style.transform='perspective(1000px) rotateX(-10deg) rotateY(8deg) translateZ(25px)'; this.style.boxShadow='0 20px 60px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.5), inset 0 -3px 6px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.2) inset, 0 0 60px rgba(244,63,94,0.4)'; this.querySelector('.inner-layer-1').style.opacity='1'; this.querySelector('.inner-layer-2').style.opacity='0.8'; this.querySelector('.light-sweep').style.transform='translate(150%, -150%) rotate(45deg)'; this.querySelector('.depth-shadow').style.opacity='1';" style={{'--x': '29.496289644354317%', '--y': '59.32749000613724%', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 100%)', border: '1px solid rgba(255, 255, 255, 0.3)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(255, 255, 255, 0.4) 0px 2px 4px inset, rgba(0, 0, 0, 0.2) 0px -2px 4px inset, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset', backdropFilter: 'blur(20px)', transformStyle: 'preserve-3d', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(15px)'}}>
 <div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(135deg rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.05) 100%)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div className="inner-layer-1 absolute inset-0 rounded-full" style={{background: 'radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 40%, transparent 70%)', opacity: '0.6', pointerEvents: 'none', zIndex: '2'}}></div>
-<div className="inner-layer-2 absolute inset-0 rounded-full" style={{background: 'radial-gradient(ellipse at var(--x) var(--y), rgba(244,63,94,0.4) 0%, rgba(251,113,133,0.2) 30%, transparent 60%)', opacity: '0.4', pointerEvents: 'none', filter: 'blur(8px)', zIndex: '3'}}></div>
+<div className="inner-layer-2 absolute inset-0 rounded-full" style={{background: 'radial-gradient(ellipse at var(--x) var(--y), rgba(244, 63, 94, 0.4) 0%, rgba(251, 113, 133, 0.2) 30%, transparent 60%)', opacity: '0.4', pointerEvents: 'none', filter: 'blur(8px)', zIndex: '3'}}></div>
 <div className="light-sweep absolute inset-0 rounded-full" style={{background: 'linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%)', transform: 'translate(-150%, 150%) rotate(45deg)', pointerEvents: 'none', filter: 'blur(6px)', width: '200%', height: '200%', top: '-50%', left: '-50%', zIndex: '4'}}></div>
 <div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.3) 100%)', pointerEvents: 'none', zIndex: '5'}}></div>
-<div className="absolute top-1/4 left-1/4 right-1/4 h-px rounded-full" style={{background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)', pointerEvents: 'none', filter: 'blur(1px)', zIndex: '6'}}></div>
+<div className="absolute top-1/4 left-1/4 right-1/4 h-px rounded-full" style={{background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)', pointerEvents: 'none', filter: 'blur(1px)', zIndex: '6'}}></div>
 <div className="depth-shadow absolute inset-0 rounded-full" style={{boxShadow: 'rgba(0, 0, 0, 0.3) 0px -4px 8px inset, rgba(255, 255, 255, 0.3) 0px 4px 8px inset', opacity: '0.5', pointerEvents: 'none', zIndex: '7'}}></div>
 <span aria-hidden="true" className="iconify text-[18px] relative z-10" data-icon="solar:video-play-bold" style={{textShadow: '0 1px 3px rgba(0,0,0,0.4), 0 0 8px rgba(255,255,255,0.3)', filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.5))'}}></span>
-<span className="z-10 relative" style={{textShadow: '0 1px 3px rgba(0,0,0,0.4), 0 0 8px rgba(255,255,255,0.2)'}}>
+<span className="z-10 relative" style={{textShadow: '0 1px 3px rgba(0, 0, 0, 0.4), 0 0 8px rgba(255,255,255,0.2)'}}>
               Watch client success walkthrough
             </span>
 <div className="absolute -inset-2 rounded-full" style={{background: 'radial-gradient(circle, rgba(244, 63, 94, 0.4) 0%, rgba(251, 113, 133, 0.2) 40%, transparent 70%)', opacity: '0', filter: 'blur(20px)', pointerEvents: 'none', zIndex: '-1'}}></div>
@@ -317,7 +359,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="sm:px-6 lg:px-8 sm:mt-16 max-w-6xl mt-12 mr-auto ml-auto pr-4 pl-4">
-<div className="rounded-2xl shadow-2xl backdrop-blur bg-neutral-900/60 in-view" data-scroll-animate="blur-up" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 113, 133, 0), rgba(255, 133, 133, 0.6), rgba(225, 29, 72, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="rounded-2xl shadow-2xl backdrop-blur bg-neutral-900/60 in-view" data-scroll-animate="blur-up" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 113, 133, 0), rgba(255, 133, 133, 0.6), rgba(225, 29, 72, 0))', '--border-radius-before': '16px'}}>
 
 <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10">
 <div className="flex items-center gap-3">
@@ -365,7 +407,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:p-6 pt-4 pr-4 pb-4 pl-4 gap-x-4 gap-y-4">
 
-<aside className="lg:col-span-1 relative" style={{-MainColor: '#f43f5e', -MainColorOpacity: 'rgba(244, 63, 94, 0.11)', -TotalRadio: '4'}}>
+<aside className="lg:col-span-1 relative" style={{'--main-color': '#f43f5e', '--main-color-opacity': 'rgba(244, 63, 94, 0.11)', '--total-radio': '4'}}>
 <style>
                 .radio-nav-container {
                   display: flex;

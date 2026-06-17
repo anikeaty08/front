@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -148,6 +184,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -360,7 +402,7 @@ gtag('config', 'G-2M6V79H761');
                 Google Recenze
               </span>
 </div>
-<div className="flex flex-col items-center justify-center text-center reveal-on-scroll py-6 md:py-0" style={{-RevealDelay: '100ms'}}>
+<div className="flex flex-col items-center justify-center text-center reveal-on-scroll py-6 md:py-0" style={{'--reveal-delay': '100ms'}}>
 <h4 className="font-orbitron font-medium text-2xl text-white tracking-tight mb-2">
                 500+ Projektů
               </h4>
@@ -368,7 +410,7 @@ gtag('config', 'G-2M6V79H761');
                 Pro osobní i firemní vozy
               </span>
 </div>
-<div className="flex flex-col items-center justify-center text-center reveal-on-scroll py-6 md:py-0" style={{-RevealDelay: '200ms'}}>
+<div className="flex flex-col items-center justify-center text-center reveal-on-scroll py-6 md:py-0" style={{'--reveal-delay': '200ms'}}>
 <h4 className="font-orbitron font-medium text-2xl text-white tracking-tight mb-2">
                 Prémiové Materiály
               </h4>
@@ -423,7 +465,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 
-<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/ochranne-folie" style={{-RevealDelay: '100ms'}}>
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/ochranne-folie" style={{'--reveal-delay': '100ms'}}>
 <img alt="Ochranné PPF" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&amp;w=1000"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
 <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
@@ -442,7 +484,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 
-<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/tonovani-skel" style={{-RevealDelay: '200ms'}}>
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/tonovani-skel" style={{'--reveal-delay': '200ms'}}>
 <img alt="Tónování" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&amp;w=1000"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
 <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
@@ -480,7 +522,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 
-<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/interierove-folie" style={{-RevealDelay: '100ms'}}>
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/interierove-folie" style={{'--reveal-delay': '100ms'}}>
 <img alt="Interiér" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
 <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
@@ -499,7 +541,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 
-<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/dechroming" style={{-RevealDelay: '200ms'}}>
+<a className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] lg:aspect-[5/4] reveal-on-scroll block" href="/dechroming" style={{'--reveal-delay': '200ms'}}>
 <img alt="Dechroming" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&amp;w=1000"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-80"></div>
 <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
@@ -526,7 +568,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 cinematic-vignette opacity-80 pointer-events-none"></div>
 <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
 <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-<div className="relative reveal-on-scroll group order-2 lg:order-1" style={{-RevealDelay: '100ms'}}>
+<div className="relative reveal-on-scroll group order-2 lg:order-1" style={{'--reveal-delay': '100ms'}}>
 <div className="w-full aspect-square md:aspect-[4/3] lg:aspect-[4/5] rounded-[2rem] overflow-hidden relative shadow-[0_0_40px_rgba(187,207,29,0.15)] ring-1 ring-white/10 hover:-translate-y-2 transition-transform duration-1000">
 <div className="absolute inset-0 bg-gradient-to-tr from-[#bbcf1d]/10 to-transparent z-10 pointer-events-none mix-blend-overlay"></div>
 <img alt="Detail polepu" className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg"/>
@@ -534,7 +576,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="order-1 lg:order-2">
-<div className="reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="reveal-on-scroll" style={{'--reveal-delay': '200ms'}}>
 <div className="flex items-center gap-4 mb-6">
 <span className="w-12 h-[1px] bg-[#bbcf1d]"></span>
 <span className="text-xs font-orbitron tracking-widest text-[#bbcf1d] uppercase font-semibold">
@@ -548,7 +590,7 @@ gtag('config', 'G-2M6V79H761');
                 </h2>
 </div>
 <ul className="space-y-10">
-<li className="flex items-start gap-6 group reveal-on-scroll" style={{-RevealDelay: '300ms'}}>
+<li className="flex items-start gap-6 group reveal-on-scroll" style={{'--reveal-delay': '300ms'}}>
 <div className="w-14 h-14 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/5 shadow-[0_0_15px_rgba(187,207,29,0.15)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
 <iconify-icon icon="solar:verified-check-linear" width="28"></iconify-icon>
 </div>
@@ -562,7 +604,7 @@ gtag('config', 'G-2M6V79H761');
                     </p>
 </div>
 </li>
-<li className="flex items-start gap-6 group reveal-on-scroll" style={{-RevealDelay: '400ms'}}>
+<li className="flex items-start gap-6 group reveal-on-scroll" style={{'--reveal-delay': '400ms'}}>
 <div className="w-14 h-14 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/5 shadow-[0_0_15px_rgba(187,207,29,0.15)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
 <iconify-icon className="" icon="solar:user-hand-up-linear" width="28"></iconify-icon>
 </div>
@@ -576,7 +618,7 @@ gtag('config', 'G-2M6V79H761');
                     </p>
 </div>
 </li>
-<li className="flex items-start gap-6 group reveal-on-scroll" style={{-RevealDelay: '500ms'}}>
+<li className="flex items-start gap-6 group reveal-on-scroll" style={{'--reveal-delay': '500ms'}}>
 <div className="w-14 h-14 rounded-full border border-[#bbcf1d]/30 bg-[#bbcf1d]/5 shadow-[0_0_15px_rgba(187,207,29,0.15)] flex items-center justify-center shrink-0 text-[#bbcf1d] group-hover:bg-[#bbcf1d] group-hover:text-black transition-all duration-500">
 <iconify-icon icon="solar:medal-star-linear" width="28"></iconify-icon>
 </div>
@@ -666,7 +708,7 @@ gtag('config', 'G-2M6V79H761');
                 <iconify-icon className="transform group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear" width="16"></iconify-icon>
 </a>
 </div>
-<div className="relative reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="relative reveal-on-scroll" style={{'--reveal-delay': '200ms'}}>
 <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden group shadow-[0_25px_50px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
 <img alt="PPF Instalation" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" src="https://res.cloudinary.com/detrjtngk/image/upload/v1773993851/IMG_3762_lhvj9v.jpg?w=1000&amp;q=85"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
@@ -717,7 +759,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 
-<div className="relative z-10 reveal-on-scroll text-center group" style={{-RevealDelay: '100ms'}}>
+<div className="relative z-10 reveal-on-scroll text-center group" style={{'--reveal-delay': '100ms'}}>
 <div className="w-20 h-20 mx-auto rounded-full bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-6 group-hover:border-[#bbcf1d] transition-colors duration-500">
 <span className="font-orbitron font-medium text-2xl text-white group-hover:text-[#bbcf1d] transition-colors">
                   02
@@ -732,7 +774,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 
-<div className="relative z-10 reveal-on-scroll text-center group" style={{-RevealDelay: '200ms'}}>
+<div className="relative z-10 reveal-on-scroll text-center group" style={{'--reveal-delay': '200ms'}}>
 <div className="w-20 h-20 mx-auto rounded-full bg-[#0a0a0a] border border-[#bbcf1d]/30 flex items-center justify-center mb-6 neon-glow">
 <span className="font-orbitron font-medium text-2xl text-[#bbcf1d]">
                   03
@@ -747,7 +789,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 
-<div className="relative z-10 reveal-on-scroll text-center group" style={{-RevealDelay: '300ms'}}>
+<div className="relative z-10 reveal-on-scroll text-center group" style={{'--reveal-delay': '300ms'}}>
 <div className="w-20 h-20 mx-auto rounded-full bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-6 group-hover:border-[#bbcf1d] transition-colors duration-500">
 <span className="font-orbitron font-medium text-2xl text-white group-hover:text-[#bbcf1d] transition-colors">
                   04
@@ -801,7 +843,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="relative group overflow-hidden rounded-[2rem] cursor-pointer reveal-on-scroll w-full" style={{-RevealDelay: '100ms'}}>
+<div className="relative group overflow-hidden rounded-[2rem] cursor-pointer reveal-on-scroll w-full" style={{'--reveal-delay': '100ms'}}>
 <div className="relative w-full aspect-[4/5] bg-black">
 <img alt="Wrap Mercedes" className="w-full h-full object-cover opacity-80 transition-all duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1774016549/IMG_8867_nfg4ri.jpg?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
@@ -815,7 +857,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="relative group overflow-hidden rounded-[2rem] cursor-pointer reveal-on-scroll w-full" style={{-RevealDelay: '200ms'}}>
+<div className="relative group overflow-hidden rounded-[2rem] cursor-pointer reveal-on-scroll w-full" style={{'--reveal-delay': '200ms'}}>
 <div className="relative w-full aspect-[4/5] bg-black">
 <img alt="Tónování Tesla" className="w-full h-full object-cover opacity-80 transition-all duration-[1.5s] ease-out group-hover:scale-105 group-hover:opacity-100" src="https://res.cloudinary.com/detrjtngk/image/upload/v1774016848/IMG_3826_qyezxn.jpg?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
@@ -1034,7 +1076,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="lg:col-span-3 bg-[#0a0a0a] border border-white/5 p-8 md:p-12 rounded-[2rem] reveal-on-scroll" style={{-RevealDelay: '200ms'}}>
+<div className="lg:col-span-3 bg-[#0a0a0a] border border-white/5 p-8 md:p-12 rounded-[2rem] reveal-on-scroll" style={{'--reveal-delay': '200ms'}}>
 <form action="#" className="space-y-8" method="POST">
 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div className="space-y-3">

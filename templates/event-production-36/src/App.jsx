@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -17,9 +59,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <header className="relative isolate overflow-hidden">
 <div className="relative h-screen min-h-[600px] w-full overflow-hidden" id="hero">
-<div aria-hidden="false" className="hero-slide absolute inset-0 bg-center bg-cover transition-all duration-1000 ease-out opacity-100" data-index="0" style={{backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(\'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&amp', transform: 'scale(1)'}}></div>
-<div aria-hidden="true" className="hero-slide absolute inset-0 bg-center bg-cover transition-all duration-1000 ease-out opacity-0" data-index="1" style={{backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(\'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&amp', transform: 'scale(1.05)'}}></div>
-<div aria-hidden="true" className="hero-slide absolute inset-0 bg-center bg-cover transition-all duration-1000 ease-out opacity-0" data-index="2" style={{backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(\'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&amp', transform: 'scale(1.05)'}}></div>
+<div aria-hidden="false" className="hero-slide absolute inset-0 bg-center bg-cover transition-all duration-1000 ease-out opacity-100" data-index="0" style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(\'https: //images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&amp', transform: 'scale(1)'}}></div>
+<div aria-hidden="true" className="hero-slide absolute inset-0 bg-center bg-cover transition-all duration-1000 ease-out opacity-0" data-index="1" style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(\'https: //images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&amp', transform: 'scale(1.05)'}}></div>
+<div aria-hidden="true" className="hero-slide absolute inset-0 bg-center bg-cover transition-all duration-1000 ease-out opacity-0" data-index="2" style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(\'https: //images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&amp', transform: 'scale(1.05)'}}></div>
 <div className="pointer-events-none absolute inset-0 bg-gradient-to-b via-transparent from-black/40 to-black/80"></div>
 <nav className="absolute top-0 left-0 right-0 z-50 px-4 py-6">
 <div className="mx-auto max-w-7xl">

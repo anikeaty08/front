@@ -67,6 +67,42 @@ export default function App() {
 
   // Sync Form to JSON
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     if (!isEditingJson) {
       const obj = {};
       formData[activeTab].forEach(field => {
@@ -220,7 +256,7 @@ export default function App() {
             <div className="w-[55%] h-full flex flex-col border-r border-stone-200/80 bg-white/50">
               <header className="shrink-0 bg-white/60 border-stone-200/80 border-b pt-6 pr-8 pb-5 pl-8 backdrop-blur-md">
                 <h1 className="flex items-center gap-2 text-xl font-medium text-stone-800 tracking-tight">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="text-yellow-600" style={{ color: 'rgb(202, 138, 4)' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="text-yellow-600" style={{color: 'rgb(202, 138, 4)'}}>
                     <g fill="none" stroke="currentColor" strokeWidth="1.5">
                       <circle cx="12" cy="12" r="3"></circle>
                       <path d="M13.765 2.152C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.484-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.579-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7s-.7 1.21-.751 1.605a2 2 0 0 0 .396 1.479c.148.192.355.353.676.555c.473.297.777.803.777 1.361s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.579.276.819.308a2 2 0 0 0 1.479-.396c.315-.242.548-.646 1.014-1.453s.7-1.21.751-1.605a2 2 0 0 0-.396-1.479c-.148-.192-.355-.353-.676-.555A1.62 1.62 0 0 1 19.562 12c0-.558.304-1.064.777-1.36c.321-.203.529-.364.676-.556a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083Z"></path>
@@ -236,7 +272,7 @@ export default function App() {
                 {/* SECTION: Agent Identity */}
                 <div className="mb-10">
                   <div className="flex items-center gap-2 mb-4">
-                    <iconify-icon icon="solar:user-id-linear" className="text-yellow-600" stroke-width="1.5" width="24" height="24" style={{ color: 'rgb(202, 138, 4)' }}></iconify-icon>
+                    <iconify-icon icon="solar:user-id-linear" className="text-yellow-600" stroke-width="1.5" width="24" height="24" style={{color: 'rgb(202, 138, 4)'}}></iconify-icon>
                     <h2 className="text-xs font-semibold text-stone-800 uppercase tracking-widest">Agent Identity</h2>
                     <div className="h-px bg-stone-200 flex-1 ml-2"></div>
                   </div>
@@ -292,7 +328,7 @@ export default function App() {
                 {/* SECTION: Commands */}
                 <div className="mb-10">
                   <div className="flex items-center gap-2 mb-4">
-                    <iconify-icon icon="solar:checklist-minimalistic-linear" className="text-yellow-600" stroke-width="1.5" width="22" height="22" style={{ color: 'rgb(202, 138, 4)' }}></iconify-icon>
+                    <iconify-icon icon="solar:checklist-minimalistic-linear" className="text-yellow-600" stroke-width="1.5" width="22" height="22" style={{color: 'rgb(202, 138, 4)'}}></iconify-icon>
                     <h2 className="text-xs font-semibold text-stone-800 uppercase tracking-widest">Commands</h2>
                     <div className="h-px bg-stone-200 flex-1 ml-2"></div>
                   </div>
@@ -348,7 +384,7 @@ export default function App() {
                 {/* SECTION: Guardrails */}
                 <div className="mb-10">
                   <div className="flex items-center gap-2 mb-4">
-                    <iconify-icon icon="solar:shield-warning-linear" className="text-yellow-600" stroke-width="1.5" width="22" height="22" style={{ color: 'rgb(202, 138, 4)' }}></iconify-icon>
+                    <iconify-icon icon="solar:shield-warning-linear" className="text-yellow-600" stroke-width="1.5" width="22" height="22" style={{color: 'rgb(202, 138, 4)'}}></iconify-icon>
                     <h2 className="text-xs font-semibold text-stone-800 uppercase tracking-widest">Constraints</h2>
                     <div className="h-px bg-stone-200 flex-1 ml-2"></div>
                   </div>
@@ -511,7 +547,7 @@ export default function App() {
             </header>
 
             <div className="flex-1 overflow-y-auto bg-transparent p-6 space-y-6 relative z-0">
-              <div className="flex max-w-[85%] gap-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+              <div className="flex max-w-[85%] gap-4 animate-fade-in-up" style={{animationDelay: '0.1s'}}>
                 <div className="flex shrink-0 bg-gradient-to-br from-yellow-500 to-amber-600 w-10 h-10 rounded-lg items-center justify-center shadow-sm">
                   <iconify-icon icon="solar:cpu-linear" className="text-lg text-white" stroke-width="1.5"></iconify-icon>
                 </div>
@@ -523,7 +559,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex max-w-[85%] gap-4 flex-row-reverse ml-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="flex max-w-[85%] gap-4 flex-row-reverse ml-auto animate-fade-in-up" style={{animationDelay: '0.2s'}}>
                 <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/variants/3c569156-7c44-4e1f-926c-0bfb85c32f81/320w.png" alt="User" className="shrink-0 w-10 h-10 object-cover border border-stone-200 rounded-lg shadow-sm" />
                 <div className="flex flex-col gap-1.5 items-end">
                   <span className="text-xs font-medium text-stone-500 mr-1">You</span>
@@ -533,18 +569,18 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex max-w-[85%] gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <div className="flex max-w-[85%] gap-4 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
                 <div className="flex shrink-0 bg-gradient-to-br from-yellow-500 to-amber-600 w-10 h-10 rounded-lg items-center justify-center shadow-sm">
                   <iconify-icon icon="solar:cpu-linear" className="text-lg text-white" stroke-width="1.5"></iconify-icon>
                 </div>
                 <div className="flex gap-1.5 bg-white border border-stone-200 h-11 rounded-2xl rounded-tl-sm px-4 shadow-sm items-center">
-                  <div className="w-1.5 h-1.5 animate-bounce bg-yellow-500 rounded-full" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-1.5 h-1.5 animate-bounce bg-yellow-500 rounded-full" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-1.5 h-1.5 animate-bounce bg-yellow-500 rounded-full" style={{ animationDelay: '300ms' }}></div>
+                  <div className="w-1.5 h-1.5 animate-bounce bg-yellow-500 rounded-full" style={{animationDelay: '0ms'}}></div>
+                  <div className="w-1.5 h-1.5 animate-bounce bg-yellow-500 rounded-full" style={{animationDelay: '150ms'}}></div>
+                  <div className="w-1.5 h-1.5 animate-bounce bg-yellow-500 rounded-full" style={{animationDelay: '300ms'}}></div>
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-3 max-w-2xl mx-auto mt-10 w-full animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+              <div className="grid grid-cols-2 gap-3 max-w-2xl mx-auto mt-10 w-full animate-fade-in-up" style={{animationDelay: '0.5s'}}>
                 <button className="bg-white border border-stone-200 rounded-xl p-4 text-left hover:bg-stone-50 hover:border-stone-300 transition-all shadow-sm flex flex-col gap-1 group">
                   <span className="flex items-center gap-2 text-sm font-medium text-stone-800 group-hover:text-amber-700 transition-colors">
                     <iconify-icon icon="solar:chart-square-linear" className="text-lg text-yellow-600" stroke-width="1.5"></iconify-icon>

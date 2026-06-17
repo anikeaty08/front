@@ -49,6 +49,42 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -114,7 +150,7 @@ function App() {
 
           {/* Highlighted Hero CTA Box */}
           <div className="bg-[#E8400A] relative overflow-hidden w-full max-w-4xl p-6 md:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border-l-4 border-white shadow-[0_0_40px_rgba(232,64,10,0.3)] mt-8 group">
-            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
+            <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px'}}></div>
             
             <div className="relative z-10 w-full lg:w-auto overflow-hidden">
               <h2 className="font-display text-3xl md:text-4xl font-black text-white leading-[0.95] tracking-tight mb-3">
@@ -417,7 +453,7 @@ function App() {
       {/* FINAL CTA */}
       <section className="py-32 bg-[#E8400A] relative overflow-hidden">
         {/* Subtle dot pattern over red */}
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
+        <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px'}}></div>
         <div className="container mx-auto px-6 text-center relative z-10">
           <h2 className="font-display text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tight mb-8">
             A DECISÃO JÁ FOI TOMADA.<br />

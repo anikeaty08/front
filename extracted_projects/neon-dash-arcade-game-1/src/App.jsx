@@ -274,6 +274,42 @@ export default function App() {
   }, [gameState]);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleKeyDown = (e) => {
       if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
         e.preventDefault();
@@ -327,7 +363,7 @@ export default function App() {
       {gameState === 'playing' && (
         <div 
           className="absolute inset-0 z-0 bg-grid-pattern-moving opacity-40 pointer-events-none"
-          style={{ animationDuration: gridAnimationDuration }}
+          style={{animationDuration: gridAnimationDuration}}
         ></div>
       )}
 
@@ -493,7 +529,7 @@ function Track({ runnerY, obstacles, color, isDead, isRobot = false }) {
           isDead ? 'opacity-0 scale-150 transition-all duration-300' : 'opacity-100',
           isRobot && !isDead && 'rounded-tr-xl' // give robot a slightly different shape
         )}
-        style={{ bottom: `${runnerY}px` }}
+        style={{bottom: `${runnerY}px`}}
       >
         {/* Inner detail for runner */}
         <div className="w-1/2 h-1/2 bg-white/30 rounded-sm"></div>
@@ -504,7 +540,7 @@ function Track({ runnerY, obstacles, color, isDead, isRobot = false }) {
       {isDead && (
         <div 
           className={`absolute left-[120px] w-[32px] h-[32px] flex items-center justify-center`}
-          style={{ bottom: `${runnerY}px` }}
+          style={{bottom: `${runnerY}px`}}
         >
           <div className={clsx("w-full h-full rounded-full animate-ping opacity-75", colorClass)}></div>
         </div>
@@ -518,11 +554,7 @@ function Track({ runnerY, obstacles, color, isDead, isRobot = false }) {
             "absolute bottom-0 clip-triangle",
             obsColorClass
           )}
-          style={{ 
-            left: `${obs.x}px`, 
-            width: `${obs.w}px`, 
-            height: `${obs.h}px` 
-          }}
+          style={{left: `${obs.x}px`, width: `${obs.w}px`, height: `${obs.h}px`}}
         />
       ))}
     </div>

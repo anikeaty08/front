@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -19,6 +55,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -67,7 +109,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="md:col-span-4 lg:col-span-3 flex flex-col gap-4 gap-x-4 gap-y-4">
 
-<section className="flex flex-col shadow-neutral-900/50 min-h-[130px] sm:p-5 bg-gradient-to-br from-white/10 to-white/0 h-1/2 rounded-3xl pt-4 pr-4 pb-4 pl-4 shadow-lg backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="flex flex-col shadow-neutral-900/50 min-h-[130px] sm:p-5 bg-gradient-to-br from-white/10 to-white/0 h-1/2 rounded-3xl pt-4 pr-4 pb-4 pl-4 shadow-lg backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between mb-3">
 <div className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-sky-500 border border-sky-300/70">
 <svg aria-hidden="true" className="iconify h-4.5 w-4.5 text-white iconify--solar" data-icon="solar:wind-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M6.25 5.5A3.25 3.25 0 1 1 9.5 8.75H3a.75.75 0 0 1 0-1.5h6.5A1.75 1.75 0 1 0 7.75 5.5v.357a.75.75 0 1 1-1.5 0z" fill="currentColor" fill-rule="evenodd"></path><path d="M3.25 14a.75.75 0 0 1 .75-.75h14.5a4.25 4.25 0 1 1-4.25 4.25V17a.75.75 0 0 1 1.5 0v.5a2.75 2.75 0 1 0 2.75-2.75H4a.75.75 0 0 1-.75-.75" fill="currentColor" opacity=".4"></path><path d="M14.25 7.5a4.25 4.25 0 1 1 4.25 4.25H2a.75.75 0 0 1 0-1.5h16.5a2.75 2.75 0 1 0-2.75-2.75V8a.75.75 0 0 1-1.5 0z" fill="currentColor" opacity=".7"></path></svg>
@@ -102,7 +144,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 </div>
 
-<section className="flex flex-col shadow-black/60 min-h-[280px] md:col-span-8 lg:col-span-4 sm:p-6 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-lg backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="flex flex-col shadow-black/60 min-h-[280px] md:col-span-8 lg:col-span-4 sm:p-6 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-lg backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between mb-4">
 <div className="">
 <p className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">Usage history</p>
@@ -270,7 +312,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="overflow-hidden flex flex-col shadow-black/60 min-h-[300px] md:col-span-4 lg:col-span-3 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl shadow-lg backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="overflow-hidden flex flex-col shadow-black/60 min-h-[300px] md:col-span-4 lg:col-span-3 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl shadow-lg backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="relative h-44">
 <img alt="Garden path" className="h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
@@ -299,7 +341,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="flex flex-col shadow-black/60 min-h-[300px] md:col-span-4 lg:col-span-3 sm:p-6 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-lg backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="flex flex-col shadow-black/60 min-h-[300px] md:col-span-4 lg:col-span-3 sm:p-6 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-lg backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-3 mb-4">
 <div className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-purple-500/80 border border-purple-300/70">
 <svg aria-hidden="true" className="iconify h-4.5 w-4.5 text-white iconify--solar" data-icon="solar:bell-bing-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M18.75 9v.704c0 .845.24 1.671.692 2.374l1.108 1.723c1.011 1.574.239 3.713-1.52 4.21a25.8 25.8 0 0 1-14.06 0c-1.759-.497-2.531-2.636-1.52-4.21l1.108-1.723a4.4 4.4 0 0 0 .693-2.374V9c0-3.866 3.022-7 6.749-7s6.75 3.134 6.75 7" fill="currentColor" opacity=".5"></path><path d="M12.75 6a.75.75 0 0 0-1.5 0v4a.75.75 0 0 0 1.5 0zM7.243 18.545a5.002 5.002 0 0 0 9.513 0c-3.145.59-6.367.59-9.513 0" fill="currentColor"></path></svg>
@@ -325,7 +367,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 
-<section className="md:col-span-8 lg:col-span-6 sm:p-5 flex flex-col shadow-black/60 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-4 pb-4 pl-4 shadow-lg backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="md:col-span-8 lg:col-span-6 sm:p-5 flex flex-col shadow-black/60 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-4 pb-4 pl-4 shadow-lg backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between mb-3">
 <div className="">
 <p className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">5-day outlook</p>
@@ -337,7 +379,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </button>
 </div>
 <div className="mt-2 grid grid-cols-5 gap-2">
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-xs text-neutral-300 mb-1">Tue</p>
 <div className="flex items-center justify-center mb-1">
 <svg aria-hidden="true" className="iconify h-4.5 w-4.5 text-amber-300 iconify--solar" data-icon="solar:sun-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M18 12a6 6 0 1 1-12 0a6 6 0 0 1 12 0" fill="currentColor"></path><path clip-rule="evenodd" d="M12 1.25a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0V2a.75.75 0 0 1 .75-.75M1.25 12a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1-.75-.75m19 0a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1-.75-.75M12 20.25a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0v-1a.75.75 0 0 1 .75-.75" fill="currentColor" fill-rule="evenodd"></path><path d="M4.398 4.398a.75.75 0 0 1 1.061 0l.393.393a.75.75 0 0 1-1.06 1.06l-.394-.392a.75.75 0 0 1 0-1.06m15.202 0a.75.75 0 0 1 0 1.06l-.392.393a.75.75 0 0 1-1.06-1.06l.392-.393a.75.75 0 0 1 1.06 0m-1.453 13.748a.75.75 0 0 1 1.061 0l.393.393a.75.75 0 0 1-1.06 1.06l-.394-.392a.75.75 0 0 1 0-1.06m-12.295 0a.75.75 0 0 1 0 1.06l-.393.393a.75.75 0 1 1-1.06-1.06l.392-.393a.75.75 0 0 1 1.06 0" fill="currentColor" opacity=".5"></path></svg>
@@ -345,7 +387,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs font-medium text-neutral-100 mb-1">23°C</p>
 <span className="text-[10px] text-emerald-300">Normal</span>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-xs text-neutral-300 mb-1">Wed</p>
 <div className="flex items-center justify-center mb-1">
 <span className="iconify h-4.5 w-4.5 text-amber-200" data-icon="solar:sun-cloud-bold-duotone"></span>
@@ -353,7 +395,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs font-medium text-neutral-100 mb-1">21°C</p>
 <span className="text-[10px] text-emerald-300">Slight</span>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-xs text-neutral-300 mb-1">Thu</p>
 <div className="flex items-center justify-center mb-1">
 <svg aria-hidden="true" className="iconify h-4.5 w-4.5 text-neutral-100 iconify--solar" data-icon="solar:cloud-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22 14.353C22 17.472 19.442 20 16.286 20h-5.787a7.5 7.5 0 0 1 7.487-11.853q.119.422.17.868C20.392 9.78 22 11.881 22 14.353" fill="currentColor" fill-rule="evenodd" opacity=".5"></path><path className="" d="M12.476 4C9.32 4 6.762 6.528 6.762 9.647c0 .69.125 1.35.354 1.962a4.4 4.4 0 0 0-.83-.08C3.919 11.53 2 13.426 2 15.765S3.919 20 6.286 20H10.5a7.5 7.5 0 0 1 7.487-11.853l-.047-.158C17.224 5.68 15.048 4 12.476 4" fill="currentColor"></path></svg>
@@ -361,7 +403,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs font-medium text-neutral-100 mb-1">19°C</p>
 <span className="text-[10px] text-emerald-300">Reduced</span>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-xs text-neutral-300 mb-1">Fri</p>
 <div className="flex items-center justify-center mb-1">
 <svg aria-hidden="true" className="iconify h-4.5 w-4.5 text-sky-300 iconify--solar" data-icon="solar:cloud-rain-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.03 14.97a.75.75 0 0 1 0 1.06l-2 2a.75.75 0 1 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0m4.5 0a.75.75 0 0 1 0 1.06l-2 2a.75.75 0 1 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0m-8.5 3.5a.75.75 0 0 1 0 1.06l-2 2a.75.75 0 0 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0m9.5 0a.75.75 0 0 1 0 1.06l-2 2a.75.75 0 1 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0m-5 1a.75.75 0 0 1 0 1.06l-2 2a.75.75 0 1 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0" fill="currentColor" fill-rule="evenodd"></path><path d="M12.03 14.97a.75.75 0 0 1 0 1.06l-2 2a.746.746 0 0 1-1.06 0a.746.746 0 0 1 0-1.06l2-2a.75.75 0 0 1 1.06 0m3.44 0l-2 2a.75.75 0 1 0 1.06 1.06l2-2a.75.75 0 1 0-1.06-1.06" fill="currentColor"></path><path d="M16.286 19C19.442 19 22 16.472 22 13.353c0-2.472-1.607-4.573-3.845-5.338C17.837 5.194 15.415 3 12.476 3C9.32 3 6.762 5.528 6.762 8.647c0 .69.125 1.35.354 1.962a4.4 4.4 0 0 0-.83-.08C3.919 10.53 2 12.426 2 14.765S3.919 19 6.286 19z" fill="currentColor" opacity=".5"></path></svg>
@@ -369,7 +411,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs font-medium text-neutral-100 mb-1">18°C</p>
 <span className="text-[10px] text-emerald-300">Paused</span>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-2 pb-3 pl-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-xs text-neutral-300 mb-1">Sat</p>
 <div className="flex items-center justify-center mb-1">
 <svg aria-hidden="true" className="iconify h-4.5 w-4.5 text-amber-300 iconify--solar" data-icon="solar:sun-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M18 12a6 6 0 1 1-12 0a6 6 0 0 1 12 0" fill="currentColor"></path><path clip-rule="evenodd" d="M12 1.25a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0V2a.75.75 0 0 1 .75-.75M1.25 12a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1-.75-.75m19 0a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1-.75-.75M12 20.25a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0v-1a.75.75 0 0 1 .75-.75" fill="currentColor" fill-rule="evenodd"></path><path d="M4.398 4.398a.75.75 0 0 1 1.061 0l.393.393a.75.75 0 0 1-1.06 1.06l-.394-.392a.75.75 0 0 1 0-1.06m15.202 0a.75.75 0 0 1 0 1.06l-.392.393a.75.75 0 0 1-1.06-1.06l.392-.393a.75.75 0 0 1 1.06 0m-1.453 13.748a.75.75 0 0 1 1.061 0l.393.393a.75.75 0 0 1-1.06 1.06l-.394-.392a.75.75 0 0 1 0-1.06m-12.295 0a.75.75 0 0 1 0 1.06l-.393.393a.75.75 0 1 1-1.06-1.06l.392-.393a.75.75 0 0 1 1.06 0" fill="currentColor" opacity=".5"></path></svg>

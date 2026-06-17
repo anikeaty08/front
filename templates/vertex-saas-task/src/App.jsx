@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -232,6 +268,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -249,13 +291,13 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute -top-[20%] left-1/2 -translate-x-1/2 w-[40vw] h-[70vh] bg-gradient-to-b from-white/5 via-white/[0.02] to-transparent blur-[80px] origin-top" style={{animation: 'center-beam 6s ease-in-out infinite'}}></div>
 </div>
 
-<div className="fixed top-[-10%] right-[10%] w-[60vw] h-[120vh] pointer-events-none z-[-1]" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(80px)', transformOrigin: 'top center'}}></div>
+<div className="fixed top-[-10%] right-[10%] w-[60vw] h-[120vh] pointer-events-none z-[-1]" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(80px)', transformOrigin: 'top center'}}></div>
 
-<header className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[90%] max-w-5xl z-50 rounded-full p-[1px]" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.02) 100%)', boxShadow: '0 16px 32px -8px rgba(0,0,0,0.8)'}}>
-<div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] backdrop-blur-2xl relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.15), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<header className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[90%] max-w-5xl z-50 rounded-full p-[1px]" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.02) 100%)', boxShadow: '0 16px 32px -8px rgba(0,0,0,0.8)'}}>
+<div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] backdrop-blur-2xl relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.15), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="flex items-center gap-3 relative z-10">
-<div className="w-8 h-8 rounded-full bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center border border-black" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 2px rgba(0,0,0,0.8), 0 2px 6px rgba(0,0,0,0.6)'}}>
+<div className="w-8 h-8 rounded-full bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center border border-black" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -1px 2px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0,0,0,0.6)'}}>
 <iconify-icon className="text-white/90" icon="solar:layers-linear" style={{filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))'}} width="16"></iconify-icon>
 </div>
 <span className="text-sm font-normal text-white tracking-tighter" style={{textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
@@ -279,7 +321,7 @@ gtag('config', 'G-2M6V79H761');
           </a>
 <div className="relative inline-flex group">
 <div className="absolute inset-0 rounded-full p-[1px] bg-gradient-to-b from-white/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
-<button className="relative px-5 py-1.5 rounded-full text-xs font-normal text-white bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -1px 3px rgba(0,0,0,0.6), 0 4px 8px -2px rgba(0,0,0,0.6)', textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
+<button className="relative px-5 py-1.5 rounded-full text-xs font-normal text-white bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 3px rgba(0, 0, 0, 0.6), 0 4px 8px -2px rgba(0, 0, 0, 0.6)', textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
               Start Free
             </button>
 </div>
@@ -289,7 +331,7 @@ gtag('config', 'G-2M6V79H761');
 
 <main className="container sm:px-12 lg:px-24 h-screen min-h-[800px] max-h-[1000px] xl:max-h-[950px] flex flex-col lg:flex-row lg:gap-0 overflow-hidden z-10 mr-auto ml-auto pt-40 pr-6 pb-20 pl-6 relative gap-x-12 gap-y-12 items-center justify-between">
 <div className="w-full lg:w-5/12 flex flex-col items-start pt-12 lg:pt-0 z-20">
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 2px rgba(0,0,0,0.8), 0 8px 16px -4px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.8), 0 8px 16px -4px rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="absolute inset-0 rounded-full opacity-20 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '3px 3px'}}></div>
 <iconify-icon className="text-white/80 relative z-10" icon="solar:folder-with-files-linear" style={{filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.8))'}} width="16"></iconify-icon>
 <span className="text-xs font-normal text-white/90 tracking-wide uppercase relative z-10" style={{textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
@@ -309,7 +351,7 @@ gtag('config', 'G-2M6V79H761');
         </p>
 <div className="mt-10 relative inline-flex group">
 <div className="absolute inset-0 rounded-full p-[1px] bg-gradient-to-b from-white/40 via-white/10 to-transparent opacity-90 group-hover:opacity-100 transition-opacity"></div>
-<button className="relative flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-gradient-to-b from-[#2e2e2e] to-[#141414] text-white overflow-hidden" style={{boxShadow: 'inset 0 2px 2px rgba(255,255,255,0.15), inset 0 -2px 8px rgba(0,0,0,0.8), 0 12px 24px -6px rgba(0,0,0,0.9)'}}>
+<button className="relative flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-gradient-to-b from-[#2e2e2e] to-[#141414] text-white overflow-hidden" style={{boxShadow: 'inset 0 2px 2px rgba(255, 255, 255, 0.15), inset 0 -2px 8px rgba(0, 0, 0, 0.8), 0 12px 24px -6px rgba(0,0,0,0.9)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <span className="text-sm font-normal tracking-wide relative z-10" style={{textShadow: '0 1px 2px rgba(0,0,0,0.9)'}}>
               Initialize Workspace
@@ -320,7 +362,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="w-full lg:w-7/12 relative h-[500px] sm:h-[600px] lg:h-[650px] xl:h-[750px] flex items-center justify-center pointer-events-none" style={{perspective: '1200px'}}>
 <div className="relative w-full max-w-[600px] aspect-square" id="scene-container" style={{transformStyle: 'preserve-3d', transform: 'rotateY(-18deg) rotateX(12deg) rotateZ(4deg)'}}>
-<div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#181818] to-[#0a0a0a] overflow-hidden relative" style={{transform: 'translateZ(-100px) scale(1.1)', boxShadow: 'inset 0 2px 2px rgba(255,255,255,0.08), inset 0 -2px 12px rgba(0,0,0,0.9), 0 24px 48px -12px rgba(0,0,0,0.9)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#181818] to-[#0a0a0a] overflow-hidden relative" style={{transform: 'translateZ(-100px) scale(1.1)', boxShadow: 'inset 0 2px 2px rgba(255, 255, 255, 0.08), inset 0 -2px 12px rgba(0, 0, 0, 0.9), 0 24px 48px -12px rgba(0, 0, 0, 0.9)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '6px 6px'}}></div>
 <div className="h-16 border-b border-white/[0.04] flex items-center px-6 gap-4 opacity-50 relative z-10">
 <span className="text-xs text-white/60 tracking-wide font-light">
@@ -356,9 +398,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="absolute inset-0 flex flex-col items-center justify-center gap-6" style={{transform: 'translateZ(50px)'}}>
-<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-1" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)', transform: 'translateX(20px) translateY(-30px)'}}>
+<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-1" style={{boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.9)', transform: 'translateX(20px) translateY(-30px)'}}>
 <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.04] relative z-10" style={{boxShadow: '0 1px 2px rgba(0,0,0,0.2)'}}>
 <span className="text-xs font-normal text-white/80" style={{textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
@@ -371,10 +413,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-5 flex flex-col gap-4 relative z-10">
 <div className="flex items-center gap-3">
-<div className="px-2.5 py-1 rounded bg-gradient-to-b from-[#3a1d1d] to-[#241010] text-[#ff8a8a] text-xs font-normal tracking-wide border border-[#522525]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="px-2.5 py-1 rounded bg-gradient-to-b from-[#3a1d1d] to-[#241010] text-[#ff8a8a] text-xs font-normal tracking-wide border border-[#522525]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
                       Critical
                     </div>
-<div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-white/[0.05] bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] text-xs text-white/70" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 2px 4px rgba(0,0,0,0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-white/[0.05] bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] text-xs text-white/70" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
 <iconify-icon icon="solar:calendar-linear" width="14"></iconify-icon>
                       Dec 12, 2024
                     </div>
@@ -396,13 +438,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center justify-between mt-1 pt-4 border-t border-white/[0.04]">
 <div className="flex items-center -space-x-2">
-<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#555] to-[#333] flex items-center justify-center text-xs text-white/90" style={{boxShadow: '0 2px 4px rgba(0,0,0,0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#555] to-[#333] flex items-center justify-center text-xs text-white/90" style={{boxShadow: '0 2px 4px rgba(0, 0, 0, 0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
                         JD
                       </div>
-<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#444] to-[#222] flex items-center justify-center text-xs text-white/90" style={{boxShadow: '0 2px 4px rgba(0,0,0,0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#444] to-[#222] flex items-center justify-center text-xs text-white/90" style={{boxShadow: '0 2px 4px rgba(0, 0, 0, 0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
                         AL
                       </div>
-<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#2a2a2a] to-[#111] flex items-center justify-center text-xs text-white/60" style={{boxShadow: '0 2px 4px rgba(0,0,0,0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#2a2a2a] to-[#111] flex items-center justify-center text-xs text-white/60" style={{boxShadow: '0 2px 4px rgba(0, 0, 0, 0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
                         +3
                       </div>
 </div>
@@ -420,19 +462,19 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-2" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)', transform: 'translateX(-30px) translateY(10px)'}}>
+<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-2" style={{boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.9)', transform: 'translateX(-30px) translateY(10px)'}}>
 <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="p-5 flex flex-col gap-4 relative z-10">
 <div className="absolute top-4 right-4 text-white/40">
 <iconify-icon icon="solar:menu-dots-linear" style={{filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.8))'}} width="16"></iconify-icon>
 </div>
 <div className="flex items-center gap-3">
-<div className="px-2.5 py-1 rounded bg-gradient-to-b from-[#1d3a24] to-[#102415] text-[#8affb1] text-xs font-normal tracking-wide border border-[#2b5936]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="px-2.5 py-1 rounded bg-gradient-to-b from-[#1d3a24] to-[#102415] text-[#8affb1] text-xs font-normal tracking-wide border border-[#2b5936]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
                       Standard
                     </div>
-<div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-white/[0.05] bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] text-xs text-white/70" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 2px 4px rgba(0,0,0,0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-white/[0.05] bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] text-xs text-white/70" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.4)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
 <iconify-icon icon="solar:calendar-linear" width="14"></iconify-icon>
                       Jan 05, 2025
                     </div>
@@ -456,7 +498,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center justify-between mt-1 pt-4 border-t border-white/[0.04]">
 <div className="flex items-center -space-x-2">
-<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#444] to-[#222] flex items-center justify-center text-xs text-white/90" style={{boxShadow: '0 2px 4px rgba(0,0,0,0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
+<div className="w-7 h-7 rounded-full border-2 border-[#1a1a1a] bg-gradient-to-b from-[#444] to-[#222] flex items-center justify-center text-xs text-white/90" style={{boxShadow: '0 2px 4px rgba(0, 0, 0, 0.5)', textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
                         MK
                       </div>
 </div>
@@ -498,7 +540,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="group transition-transform duration-700 hover:-translate-y-2 bg-gradient-to-b from-[#1e1e1e] to-[#121212] w-full max-w-[1400px] rounded-[2rem] mr-auto ml-auto pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="overflow-hidden flex flex-col bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] w-full rounded-[2rem] relative" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="overflow-hidden flex flex-col bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] w-full rounded-[2rem] relative" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="border-white/[0.04] flex z-20 bg-[#0a0a0a]/50 h-12 border-b pr-4 pl-4 relative backdrop-blur-md items-center">
 <div className="flex gap-1.5 w-20">
@@ -523,7 +565,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex h-[800px] relative z-10">
 <div className="hidden md:flex border-white/[0.04] flex-col gap-6 z-20 bg-[#0a0a0a]/30 backdrop-blur-md w-64 border-r pt-5 pr-5 pb-5 pl-5 relative">
 <div className="flex items-center gap-3 px-2">
-<div className="w-8 h-8 rounded-lg bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center text-white border border-[#333]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.5)'}}>
+<div className="w-8 h-8 rounded-lg bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center text-white border border-[#333]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0,0,0,0.5)'}}>
 <svg className="lucide lucide-layers w-4 h-4" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
 <polyline points="2 17 12 22 22 17"></polyline>
@@ -643,7 +685,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
                     Filter
                   </button>
-<button className="px-4 py-2 text-xs text-white bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a] hover:from-[#444] hover:to-[#222] rounded-lg border border-white/[0.1] transition-colors font-light shadow-lg flex items-center gap-2" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.5)'}}>
+<button className="px-4 py-2 text-xs text-white bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a] hover:from-[#444] hover:to-[#222] rounded-lg border border-white/[0.1] transition-colors font-light shadow-lg flex items-center gap-2" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0,0,0,0.5)'}}>
 <svg className="lucide lucide-plus w-3.5 h-3.5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
 <path d="M12 5v14"></path>
@@ -653,7 +695,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 relative z-10">
-<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-white/50 text-[11px] font-normal tracking-wide uppercase mb-2">
                     Completion
                   </div>
@@ -666,7 +708,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="h-full bg-white/70 w-[64%]"></div>
 </div>
 </div>
-<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-white/50 text-[11px] font-normal tracking-wide uppercase mb-2">
                     Completed
                   </div>
@@ -679,7 +721,7 @@ gtag('config', 'G-2M6V79H761');
                     </div>
 </div>
 </div>
-<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-white/50 text-[11px] font-normal tracking-wide uppercase mb-2">
                     Blocked
                   </div>
@@ -692,7 +734,7 @@ gtag('config', 'G-2M6V79H761');
                     </div>
 </div>
 </div>
-<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-2xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-white/50 text-[11px] font-normal tracking-wide uppercase mb-2">
                     Velocity
                   </div>
@@ -722,7 +764,7 @@ gtag('config', 'G-2M6V79H761');
                     </span>
 </div>
 <div className="flex flex-col gap-3">
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#1d3a24] to-[#102415] text-[#8affb1] text-[10px] font-normal tracking-wide border border-[#2b5936]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'}}>
                           Feature
@@ -752,7 +794,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#3a3a3a] to-[#2a2a2a] text-white/70 text-[10px] font-normal tracking-wide border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)'}}>
                           Design
@@ -772,7 +814,7 @@ gtag('config', 'G-2M6V79H761');
                         </div>
 </div>
 </div>
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#1d3a24] to-[#102415] text-[#8affb1] text-[10px] font-normal tracking-wide border border-[#2b5936]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'}}>
                           Feature
@@ -800,7 +842,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#3a1d1d] to-[#241010] text-[#ff8a8a] text-[10px] font-normal tracking-wide border border-[#522525]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'}}>
                           Media
@@ -835,7 +877,7 @@ gtag('config', 'G-2M6V79H761');
                     </span>
 </div>
 <div className="flex flex-col gap-3">
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-[#f59e0b]/30 group cursor-pointer hover:border-[#f59e0b]/50 transition-colors relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-[#f59e0b]/30 group cursor-pointer hover:border-[#f59e0b]/50 transition-colors relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#f59e0b] to-transparent"></div>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#3a1d1d] to-[#241010] text-[#ff8a8a] text-[10px] font-normal tracking-wide border border-[#522525]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'}}>
@@ -877,7 +919,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-[#f59e0b]/30 group cursor-pointer hover:border-[#f59e0b]/50 transition-colors relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-[#f59e0b]/30 group cursor-pointer hover:border-[#f59e0b]/50 transition-colors relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#f59e0b] to-transparent"></div>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#1d3a24] to-[#102415] text-[#8affb1] text-[10px] font-normal tracking-wide border border-[#2b5936]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'}}>
@@ -913,7 +955,7 @@ gtag('config', 'G-2M6V79H761');
                     </span>
 </div>
 <div className="flex flex-col gap-3">
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#1d3a24] to-[#102415] text-[#8affb1] text-[10px] font-normal tracking-wide border border-[#2b5936]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'}}>
                           Feature
@@ -942,7 +984,7 @@ gtag('config', 'G-2M6V79H761');
                         </div>
 </div>
 </div>
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer hover:border-white/10 transition-colors" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#3a3a3a] to-[#2a2a2a] text-white/70 text-[10px] font-normal tracking-wide border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)'}}>
                           Design
@@ -984,7 +1026,7 @@ gtag('config', 'G-2M6V79H761');
                     </span>
 </div>
 <div className="flex flex-col gap-3">
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer opacity-70 hover:opacity-100 hover:border-white/10 transition-all" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer opacity-70 hover:opacity-100 hover:border-white/10 transition-all" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#3a3a3a] to-[#2a2a2a] text-white/70 text-[10px] font-normal tracking-wide border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)'}}>
                           Design
@@ -1010,7 +1052,7 @@ gtag('config', 'G-2M6V79H761');
                         </div>
 </div>
 </div>
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer opacity-70 hover:opacity-100 hover:border-white/10 transition-all" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] group cursor-pointer opacity-70 hover:opacity-100 hover:border-white/10 transition-all" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-3">
 <span className="px-2 py-0.5 rounded bg-gradient-to-b from-[#1d3a24] to-[#102415] text-[#8affb1] text-[10px] font-normal tracking-wide border border-[#2b5936]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'}}>
                           Feature
@@ -1069,7 +1111,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="md:col-span-1 md:row-span-2 rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col gap-8" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col gap-8" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="relative z-10 flex flex-col h-full gap-8">
 <div className="">
@@ -1086,7 +1128,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-x-0.5 top-3.5 bottom-2 bg-[#fafafa] rounded-t-lg" style={{boxShadow: '0 -1px 3px rgba(0,0,0,0.1)'}}></div>
 <div className="absolute inset-0 top-6 z-10 flex flex-col">
 <div className="w-[55%] h-[18px] bg-[#4f46e5] rounded-tl-lg rounded-tr-md relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'}}></div>
-<div className="flex-1 bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
+<div className="flex-1 bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
 <span className="text-white text-xs font-normal tracking-tight">
                         Active Sprint
                       </span>
@@ -1101,7 +1143,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-x-0.5 top-3.5 bottom-2 bg-[#fafafa] rounded-t-lg" style={{boxShadow: '0 -1px 3px rgba(0,0,0,0.1)'}}></div>
 <div className="absolute inset-0 top-6 z-10 flex flex-col">
 <div className="w-[55%] h-[18px] bg-[#06b6d4] rounded-tl-lg rounded-tr-md relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'}}></div>
-<div className="flex-1 bg-gradient-to-br from-[#06b6d4] to-[#3b82f6] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
+<div className="flex-1 bg-gradient-to-br from-[#06b6d4] to-[#3b82f6] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
 <span className="text-white text-xs font-normal tracking-tight">
                         Backlog
                       </span>
@@ -1116,7 +1158,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-x-0.5 top-3.5 bottom-2 bg-[#fafafa] rounded-t-lg" style={{boxShadow: '0 -1px 3px rgba(0,0,0,0.1)'}}></div>
 <div className="absolute inset-0 top-6 z-10 flex flex-col">
 <div className="w-[55%] h-[18px] bg-[#ec4899] rounded-tl-lg rounded-tr-md relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'}}></div>
-<div className="flex-1 bg-gradient-to-br from-[#ec4899] to-[#f43f5e] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
+<div className="flex-1 bg-gradient-to-br from-[#ec4899] to-[#f43f5e] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
 <span className="text-white text-xs font-normal tracking-tight">
                         QA Review
                       </span>
@@ -1131,7 +1173,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-x-0.5 top-3.5 bottom-2 bg-[#fafafa] rounded-t-lg" style={{boxShadow: '0 -1px 3px rgba(0,0,0,0.1)'}}></div>
 <div className="absolute inset-0 top-6 z-10 flex flex-col">
 <div className="w-[55%] h-[18px] bg-[#a855f7] rounded-tl-lg rounded-tr-md relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'}}></div>
-<div className="flex-1 bg-gradient-to-br from-[#a855f7] to-[#d946ef] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
+<div className="flex-1 bg-gradient-to-br from-[#a855f7] to-[#d946ef] rounded-b-xl rounded-tr-xl p-3 flex flex-col justify-end" style={{boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 -1px 10px rgba(0,0,0,0.3)', marginTop: '-1px'}}>
 <span className="text-white text-xs font-normal tracking-tight">
                         Completed
                       </span>
@@ -1148,14 +1190,14 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="md:col-span-1 rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="relative z-10 flex flex-col justify-between h-full">
 <div className="relative h-[140px] flex items-start justify-center pt-2">
 <div className="absolute top-[68px] w-[80%] h-14 rounded-3xl opacity-40 blur-[2px]" style={{background: '#111', boxShadow: 'inset 0 -4px 10px rgba(0,0,0,0.8)'}}></div>
-<div className="absolute top-[48px] w-[90%] h-[68px] rounded-[1.5rem]" style={{background: '#2a2a2a', boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.08), inset 0 -10px 20px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.05)'}}></div>
-<div className="absolute top-2 w-[100%] bg-[#fcfcfc] rounded-[1.5rem] p-3.5 flex items-center gap-3.5 z-10 transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: '0 15px 30px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,1), inset 0 -2px 6px rgba(0,0,0,0.05)', border: '1px solid rgba(255,255,255,0.5)'}}>
-<div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{background: 'linear-gradient(180deg, #f43f5e 0%, #e11d48 100%)', boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.4), 0 4px 10px rgba(225, 29, 72, 0.3)'}}>
+<div className="absolute top-[48px] w-[90%] h-[68px] rounded-[1.5rem]" style={{background: '#2a2a2a', boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 0.08), inset 0 -10px 20px rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255,255,255,0.05)'}}></div>
+<div className="absolute top-2 w-[100%] bg-[#fcfcfc] rounded-[1.5rem] p-3.5 flex items-center gap-3.5 z-10 transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: '0 15px 30px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -2px 6px rgba(0, 0, 0, 0.05)', border: '1px solid rgba(255,255,255,0.5)'}}>
+<div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{background: 'linear-gradient(180deg, #f43f5e 0%, #e11d48 100%)', boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 4px 10px rgba(225, 29, 72, 0.3)'}}>
 <iconify-icon className="text-white text-lg drop-shadow-md" icon="solar:bell-linear"></iconify-icon>
 </div>
 <div className="flex-1 min-w-0 pr-1">
@@ -1187,7 +1229,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="md:col-span-1 rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="relative z-10 flex flex-col justify-between h-full">
 <div className="flex items-center mb-12 mt-2 ml-2">
@@ -1209,7 +1251,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="md:col-span-2 rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col md:flex-row gap-8" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col md:flex-row gap-8" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="relative z-10 flex flex-col md:flex-row gap-8 w-full h-full">
 <div className="md:w-5/12 flex flex-col justify-center">
@@ -1221,7 +1263,7 @@ gtag('config', 'G-2M6V79H761');
                   without friction.
                 </p>
 </div>
-<div className="md:w-7/12 relative h-[200px] md:h-auto rounded-[1.25rem] overflow-hidden" style={{background: '#111', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="md:w-7/12 relative h-[200px] md:h-auto rounded-[1.25rem] overflow-hidden" style={{background: '#111', boxShadow: 'inset 0 2px 10px rgba(0, 0, 0, 0.5)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="h-10 px-4 flex items-center justify-between" style={{background: '#1a1a1a', borderBottom: '1px solid rgba(255,255,255,0.03)'}}>
 <div className="flex gap-1.5">
 <div className="w-2.5 h-2.5 rounded-full bg-[#ef4444]" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3)'}}></div>
@@ -1240,7 +1282,7 @@ gtag('config', 'G-2M6V79H761');
 <svg className="text-[#3b82f6] -rotate-[15deg] drop-shadow-md z-10" fill="none" height="20" style={{filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))'}} viewbox="0 0 24 24" width="20">
 <path d="M4.5 3L19.5 9.5L12 12L9.5 19.5L4.5 3Z" fill="currentColor" stroke="white" strokeLinejoin="round" strokeWidth="1.5"></path>
 </svg>
-<div className="mt-1 ml-4 px-3 py-1.5 rounded-full text-xs font-normal text-white shadow-lg whitespace-nowrap z-0 relative tracking-wide" style={{background: 'linear-gradient(180deg, #3b82f6 0%, #2563eb 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.4)'}}>
+<div className="mt-1 ml-4 px-3 py-1.5 rounded-full text-xs font-normal text-white shadow-lg whitespace-nowrap z-0 relative tracking-wide" style={{background: 'linear-gradient(180deg, #3b82f6 0%, #2563eb 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 4px 10px rgba(0,0,0,0.4)'}}>
                       Marcus
                     </div>
 </div>
@@ -1248,7 +1290,7 @@ gtag('config', 'G-2M6V79H761');
 <svg className="text-[#8b5cf6] -rotate-[15deg] drop-shadow-md z-10" fill="none" height="20" style={{filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))'}} viewbox="0 0 24 24" width="20">
 <path d="M4.5 3L19.5 9.5L12 12L9.5 19.5L4.5 3Z" fill="currentColor" stroke="white" strokeLinejoin="round" strokeWidth="1.5"></path>
 </svg>
-<div className="mt-1 ml-4 px-3 py-1.5 rounded-full text-xs font-normal text-white shadow-lg whitespace-nowrap z-0 relative tracking-wide" style={{background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.4)'}}>
+<div className="mt-1 ml-4 px-3 py-1.5 rounded-full text-xs font-normal text-white shadow-lg whitespace-nowrap z-0 relative tracking-wide" style={{background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 4px 10px rgba(0,0,0,0.4)'}}>
                       Elena UI
                     </div>
 </div>
@@ -1267,7 +1309,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="sm:px-6 sm:pb-32 sm:pt-32 w-full z-10 pt-16 pr-4 pb-16 pl-4 relative">
 <div className="max-w-3xl mx-auto flex flex-col items-center text-center mb-16">
 
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 2px rgba(0,0,0,0.8), 0 8px 16px -4px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.8), 0 8px 16px -4px rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="absolute inset-0 rounded-full opacity-20 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '3px 3px'}}></div>
 <iconify-icon className="text-white/80 relative z-10 animate-pulse" icon="solar:widget-linear" style={{animationDuration: '3s', filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.8))'}} width="16"></iconify-icon>
 <span className="text-xs font-normal text-white/90 tracking-wide uppercase relative z-10" style={{textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
@@ -1293,7 +1335,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 
 <div className="h-[280px] w-full relative z-10 flex items-center justify-center p-6 border-b border-white/[0.03]">
@@ -1347,7 +1389,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="h-[280px] w-full relative z-10 flex items-center justify-center p-6 border-b border-white/[0.03]">
 <svg className="w-full h-full opacity-80 mix-blend-screen" fill="none" viewbox="0 0 300 240" xmlns="http://www.w3.org/2000/svg">
@@ -1389,7 +1431,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="h-[280px] w-full relative z-10 flex items-center justify-center p-6 border-b border-white/[0.03]">
 <svg className="w-full h-full opacity-80 mix-blend-screen" fill="none" viewbox="0 0 300 240" xmlns="http://www.w3.org/2000/svg">
@@ -1432,7 +1474,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="sm:px-6 sm:pt-32 sm:pb-32 z-10 w-full pt-16 pr-4 pb-16 pl-4 relative">
 <div className="max-w-3xl mx-auto flex flex-col items-center text-center mb-16">
 
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 2px rgba(0,0,0,0.8), 0 8px 16px -4px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.8), 0 8px 16px -4px rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="absolute inset-0 rounded-full opacity-20 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '3px 3px'}}></div>
 <iconify-icon className="text-white/80 relative z-10 animate-pulse" icon="solar:users-group-rounded-linear" style={{animationDuration: '3s', filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.8))'}} width="16"></iconify-icon>
 <span className="text-xs font-normal text-white/90 tracking-wide uppercase relative z-10" style={{textShadow: '0 1px 1px rgba(0,0,0,0.8)'}}>
@@ -1456,7 +1498,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-[1080px] mr-auto ml-auto gap-x-5 gap-y-5" locator="html &gt; body:nth-of-type(1) &gt; section:nth-of-type(4) &gt; div:nth-of-type(2)">
 <div className="md:col-span-2 md:row-span-2 rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-8 md:p-12 justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-8 md:p-12 justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="">
 <svg className="lucide lucide-quote text-[#3b82f6] mb-8 relative z-10" fill="none" height="32" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
@@ -1485,7 +1527,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-6 lg:p-8 justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-6 lg:p-8 justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="">
 <div className="flex gap-1 mb-6 relative z-10">
@@ -1524,7 +1566,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-6 lg:p-8 justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-6 lg:p-8 justify-between" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="">
 <div className="flex gap-1 mb-6 relative z-10">
@@ -1566,7 +1608,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="sm:px-6 sm:pt-32 sm:pb-32 z-10 w-full pt-16 pr-4 pb-16 pl-4 relative">
 <div className="max-w-3xl mx-auto flex flex-col items-center text-center mb-16">
 
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -1px 2px rgba(0,0,0,0.8), 0 8px 16px -4px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 relative" style={{background: 'linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.8), 0 8px 16px -4px rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="absolute inset-0 rounded-full opacity-20 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '3px 3px'}}></div>
 <svg className="lucide lucide-help-circle text-white/80 relative z-10 animate-pulse" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{animationDuration: '3s', filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.8))'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10"></circle>
@@ -1652,12 +1694,12 @@ gtag('config', 'G-2M6V79H761');
 <div className="sticky top-32 w-full hidden md:block">
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-6 lg:p-8" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden flex flex-col p-6 lg:p-8" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 
 <div className="flex items-center justify-between mb-8 relative z-10">
 <div className="flex items-center gap-3.5">
-<div className="w-10 h-10 rounded-xl bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center border border-white/10" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 6px rgba(0,0,0,0.5)'}}>
+<div className="w-10 h-10 rounded-xl bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center border border-white/10" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 6px rgba(0,0,0,0.5)'}}>
 <svg className="lucide lucide-check-square text-white/80" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <polyline points="9 11 12 14 22 4"></polyline>
 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
@@ -1778,7 +1820,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="absolute right-4 bottom-24 w-52 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 p-1.5 shadow-2xl z-20" style={{boxShadow: '0 16px 40px -8px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.1)'}}>
+<div className="absolute right-4 bottom-24 w-52 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/10 p-1.5 shadow-2xl z-20" style={{boxShadow: '0 16px 40px -8px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255,255,255,0.1)'}}>
 <div className="px-3 py-2 flex items-center gap-3 text-xs text-white/80 hover:bg-white/5 rounded-lg cursor-pointer transition-colors font-light">
 <svg className="lucide lucide-edit-2 text-white/50" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -1812,7 +1854,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="sm:pb-0 sm:pl-0 sm:pr-0 sm:pt-0 w-full z-10 pt-16 pr-4 pb-32 pl-4 relative">
 <div className="w-full mr-auto ml-auto">
 
-<div className="flex flex-col gap-[1px] overflow-hidden w-full rounded-[2.5rem] gap-x-[1px] gap-y-[1px]" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)'}}>
+<div className="flex flex-col gap-[1px] overflow-hidden w-full rounded-[2.5rem] gap-x-[1px] gap-y-[1px]" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)'}}>
 
 <header className="overflow-hidden group min-h-[300px] md:min-h-[400px] flex bg-[#0a0a0a] relative items-center justify-center">
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '8px 8px'}}></div>
@@ -1944,7 +1986,7 @@ gtag('config', 'G-2M6V79H761');
                   </a>
                   .
                 </p>
-<button className="relative text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shrink-0 bg-gradient-to-b from-[#2e2e2e] to-[#141414] overflow-hidden" style={{boxShadow: 'inset 0 2px 2px rgba(255,255,255,0.15), inset 0 -2px 8px rgba(0,0,0,0.8), 0 8px 16px -4px rgba(0,0,0,0.9)'}} type="submit">
+<button className="relative text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shrink-0 bg-gradient-to-b from-[#2e2e2e] to-[#141414] overflow-hidden" style={{boxShadow: 'inset 0 2px 2px rgba(255, 255, 255, 0.15), inset 0 -2px 8px rgba(0, 0, 0, 0.8), 0 8px 16px -4px rgba(0,0,0,0.9)'}} type="submit">
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <iconify-icon className="text-xl md:text-2xl relative z-10" icon="solar:arrow-right-linear" style={{filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.9))'}}></iconify-icon>
 </button>

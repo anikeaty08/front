@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1159,6 +1195,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1853,7 +1895,7 @@ gtag('config', 'G-2M6V79H761');
       </style>
 
 <div className="absolute inset-0 pointer-events-none">
-<div className="absolute inset-0 opacity-70" style={{backgroundImage: 'url(\'data:image/svg+xml', maskImage: 'linear-gradient(to bottom,white,transparent)', WebkitMaskImage: 'linear-gradient(to bottom,white,transparent)'}}></div>
+<div className="absolute inset-0 opacity-70" style={{backgroundImage: 'url(\'data:image/svg+xml', maskImage: 'linear-gradient(to bottom, white, transparent)', WebkitMaskImage: 'linear-gradient(to bottom,white,transparent)'}}></div>
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full blur-[120px] animate-[subtleDrift_15s_ease-in-out_infinite]" style={{background: 'radial-gradient(circle, rgba(34,211,238,0.12) 0%, rgba(59,130,246,0.08) 35%, transparent 72%)'}}></div>
 <div className="absolute top-[20%] right-[12%] w-[380px] h-[380px] rounded-full blur-[100px]" style={{background: 'radial-gradient(circle, rgba(34,211,238,0.10) 0%, transparent 70%)'}}></div>
 </div>

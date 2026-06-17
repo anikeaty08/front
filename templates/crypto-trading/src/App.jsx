@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -277,6 +313,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -392,7 +434,7 @@ addUtilities({
 
 <div className="spotlight-group grid-cols-1 md:grid-cols-3 animate-in delay-500">
 
-<div className="spotlight-card rounded-xl p-6 flex flex-col justify-between h-[320px] group" style={{-MouseX: '639px', -MouseY: '-576.5px'}}>
+<div className="spotlight-card rounded-xl p-6 flex flex-col justify-between h-[320px] group" style={{'--mouse-x': '639px', '--mouse-y': '-576.5px'}}>
 <div className="spotlight-border"></div>
 <div className="relative z-10 h-full flex flex-col">
 <div className="flex items-center justify-between mb-6">
@@ -446,7 +488,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="spotlight-card rounded-xl p-6 h-[320px] md:col-span-1" style={{-MouseX: '289.671875px', -MouseY: '-576.5px'}}>
+<div className="spotlight-card rounded-xl p-6 h-[320px] md:col-span-1" style={{'--mouse-x': '289.671875px', '--mouse-y': '-576.5px'}}>
 <div className="spotlight-border"></div>
 <div className="relative z-10 h-full flex flex-col">
 <div className="flex items-center justify-between mb-2">
@@ -464,7 +506,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="spotlight-card rounded-xl p-6 h-[320px]" style={{-MouseX: '-59.6640625px', -MouseY: '-576.5px'}}>
+<div className="spotlight-card rounded-xl p-6 h-[320px]" style={{'--mouse-x': '-59.6640625px', '--mouse-y': '-576.5px'}}>
 <div className="spotlight-border"></div>
 <div className="relative z-10 h-full flex flex-col">
 <div className="flex items-center justify-between mb-6">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       // Simple year setter
@@ -22,6 +58,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -41,7 +83,7 @@ export default function App() {
 <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-400/15 ring-1 ring-emerald-300/20">
 <svg className="text-emerald-300" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M4 16c4.5-4 11.5-4 16 0"></path><path d="M8 20c2.5-2.5 5.5-2.5 8 0"></path><path d="M2 12c6-6 14-6 20 0"></path></svg>
 </div>
-<span className="text-sm text-white tracking-tight" style={{fontFamily: '\'Inter\',sans-serif'}}>StemGen</span>
+<span className="text-sm text-white tracking-tight" style={{fontFamily: '\'Inter\', sans-serif'}}>StemGen</span>
 </a>
 <nav className="hidden items-center gap-7 md:flex">
 <a className="text-sm text-zinc-300 hover:text-white transition-colors tracking-tight" href="#product">Product</a>
@@ -50,7 +92,7 @@ export default function App() {
 <a className="text-sm text-zinc-300 hover:text-white transition-colors tracking-tight" href="#faq">FAQ</a>
 </nav>
 <div className="flex items-center gap-3">
-<a className="inline-flex items-center gap-2 tracking-tight text-emerald-300" href="#final-cta" style={{fontSize: '14px', padding: '0.5rem 0.75rem', letterSpacing: '0.02em', position: 'relative', borderRadius: '0.5rem', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.3em', border: '2px solid rgba(16,185,129,0.9)', background: 'linear-gradient(to right, rgba(16,185,129,0.12) 1%, transparent 40%, transparent 60%, rgba(16,185,129,0.12) 100%)', boxShadow: 'inset 0 0 10px rgba(16,185,129,0.35), 0 0 9px 3px rgba(16,185,129,0.08)'}}>
+<a className="inline-flex items-center gap-2 tracking-tight text-emerald-300" href="#final-cta" style={{fontSize: '14px', padding: '0.5rem 0.75rem', letterSpacing: '0.02em', position: 'relative', borderRadius: '0.5rem', overflow: 'hidden', transition: 'all 0.3s', lineHeight: '1.3em', border: '2px solid rgba(16, 185, 129, 0.9)', background: 'linear-gradient(to right, rgba(16, 185, 129, 0.12) 1%, transparent 40%, transparent 60%, rgba(16, 185, 129, 0.12) 100%)', boxShadow: 'inset 0 0 10px rgba(16, 185, 129, 0.35), 0 0 9px 3px rgba(16,185,129,0.08)'}}>
 <svg className="text-emerald-300" fill="none" height="18" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
               Start generating
             </a>
@@ -77,14 +119,14 @@ export default function App() {
 <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-zinc-900/40 px-3 py-1 text-[11px] text-zinc-300">
 <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span> AI Music, For Producers
             </p>
-<h1 className="text-4xl md:text-5xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>
+<h1 className="text-4xl md:text-5xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>
               Ultra‑optimized stems for every genre
             </h1>
 <p className="max-w-xl text-base text-zinc-400 tracking-tight">
               Stop fighting generic music AI. StemGen uses genre‑specific prompt intelligence to create clean, loop‑perfect stems that drop straight into your workflow.
             </p>
 <div className="flex flex-col gap-3 sm:flex-row">
-<a className="inline-flex items-center justify-center gap-2 tracking-tight text-emerald-300" href="#final-cta" style={{fontSize: '15px', padding: '0.7em 2.2em', borderRadius: '0.6em', letterSpacing: '0.02em', border: '2px solid rgba(16,185,129,0.9)', background: 'linear-gradient(to right, rgba(16,185,129,0.12) 1%, transparent 40%, transparent 60%, rgba(16,185,129,0.12) 100%)', boxShadow: 'inset 0 0 10px rgba(16,185,129,0.35), 0 0 9px 3px rgba(16,185,129,0.08)'}}>
+<a className="inline-flex items-center justify-center gap-2 tracking-tight text-emerald-300" href="#final-cta" style={{fontSize: '15px', padding: '0.7em 2.2em', borderRadius: '0.6em', letterSpacing: '0.02em', border: '2px solid rgba(16, 185, 129, 0.9)', background: 'linear-gradient(to right, rgba(16, 185, 129, 0.12) 1%, transparent 40%, transparent 60%, rgba(16, 185, 129, 0.12) 100%)', boxShadow: 'inset 0 0 10px rgba(16, 185, 129, 0.35), 0 0 9px 3px rgba(16,185,129,0.08)'}}>
 <svg className="h-4 w-4" fill="none" height="20" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v4"></path><path d="m4.93 10.93 2.83 2.83"></path><path d="M2 12h4"></path><path d="M12 18v4"></path><path d="m16.24 7.76 2.83-2.83"></path><path d="M18 12h4"></path><path d="m7.76 16.24-2.83 2.83"></path></svg>
                 Generate my first stems
               </a>
@@ -326,7 +368,7 @@ export default function App() {
 
 <section className="relative border-t border-white/10" id="product">
 <div className="mx-auto max-w-7xl px-5 py-14 md:py-20">
-<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>Built for creators</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>Built for creators</h2>
 <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 <div className="rounded-xl border border-white/10 bg-zinc-900/40 p-5">
 <div className="flex items-start gap-3">
@@ -379,7 +421,7 @@ export default function App() {
 <section className="relative border-t border-white/10" id="why">
 <div className="mx-auto max-w-7xl px-5 py-14 md:py-20">
 <div className="mb-8">
-<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>Why StemGen</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>Why StemGen</h2>
 </div>
 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 
@@ -437,7 +479,7 @@ export default function App() {
 <section className="relative border-t border-white/10" id="how-it-works">
 <div className="mx-auto max-w-7xl px-5 py-14 md:py-20">
 <div className="text-center mb-10">
-<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>Three steps to a usable loop</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>Three steps to a usable loop</h2>
 <p className="mt-3 text-zinc-400 max-w-2xl mx-auto tracking-tight">Pick a genre, set the scaffold, then generate stems that just work together.</p>
 </div>
 <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -470,7 +512,7 @@ export default function App() {
 <section className="relative border-t border-white/10" id="genres">
 <div className="mx-auto max-w-7xl px-5 py-14 md:py-20">
 <div className="mb-8">
-<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>Genre‑specific kits</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>Genre‑specific kits</h2>
 <p className="mt-2 max-w-2xl text-zinc-400 tracking-tight">Each genre includes tuned defaults for timing, tone, and role separation—so parts cooperate instead of colliding.</p>
 </div>
 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -515,7 +557,7 @@ export default function App() {
 <section className="relative border-t border-white/10">
 <div className="mx-auto max-w-7xl px-5 py-14 md:py-20">
 <div className="mb-8">
-<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>What makes it “ultra‑optimized”?</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>What makes it “ultra‑optimized”?</h2>
 </div>
 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
@@ -626,7 +668,7 @@ export default function App() {
 <section className="relative border-t border-white/10" id="faq">
 <div className="mx-auto max-w-7xl px-5 py-14 md:py-20">
 <div className="mb-8 text-center">
-<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>Frequently asked</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>Frequently asked</h2>
 <p className="mt-2 text-zinc-400 tracking-tight">Everything you need to know about StemGen.</p>
 </div>
 <div className="mx-auto max-w-3xl space-y-3">
@@ -675,10 +717,10 @@ export default function App() {
 <div className="pointer-events-none absolute -inset-1 opacity-50 blur-2xl" style={{background: 'radial-gradient(600px 300px at 85% 30%, rgba(16,185,129,0.16), transparent 55%), radial-gradient(420px 220px at 20% 80%, rgba(99,102,241,0.16), transparent 60%)'}}></div>
 <div className="relative grid grid-cols-1 gap-8 md:grid-cols-3">
 <div className="md:col-span-2">
-<h3 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',ui-sans-serif', fontWeight: '300'}}>Generate your first genre‑tuned loop</h3>
+<h3 className="text-3xl md:text-4xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', ui-sans-serif', fontWeight: '300'}}>Generate your first genre‑tuned loop</h3>
 <p className="mt-3 text-zinc-300 tracking-tight max-w-xl">Pick a style, set your scaffold, and print stems that line up and sound intentional—right in the browser.</p>
 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-<a className="inline-flex items-center justify-center gap-2 tracking-tight text-emerald-300" href="#" style={{fontSize: '15px', padding: '0.8em 2.2em', borderRadius: '0.6em', letterSpacing: '0.02em', border: '2px solid rgba(16,185,129,0.9)', background: 'linear-gradient(to right, rgba(16,185,129,0.12) 1%, transparent 40%, transparent 60%, rgba(16,185,129,0.12) 100%)', boxShadow: 'inset 0 0 10px rgba(16,185,129,0.35), 0 0 9px 3px rgba(16,185,129,0.08)'}}>
+<a className="inline-flex items-center justify-center gap-2 tracking-tight text-emerald-300" href="#" style={{fontSize: '15px', padding: '0.8em 2.2em', borderRadius: '0.6em', letterSpacing: '0.02em', border: '2px solid rgba(16, 185, 129, 0.9)', background: 'linear-gradient(to right, rgba(16, 185, 129, 0.12) 1%, transparent 40%, transparent 60%, rgba(16, 185, 129, 0.12) 100%)', boxShadow: 'inset 0 0 10px rgba(16, 185, 129, 0.35), 0 0 9px 3px rgba(16,185,129,0.08)'}}>
 <svg fill="none" height="18" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                   Start generating
                 </a>

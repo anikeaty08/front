@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -30,6 +66,12 @@ sans: ['Inter', 'sans-serif'],
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -76,7 +118,7 @@ sans: ['Inter', 'sans-serif'],
 <section className="relative pt-24 h-screen min-h-[700px] flex items-center hero-bg">
 <div className="absolute inset-0 bg-brand-navy/80 mix-blend-multiply"></div>
 <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/90 via-brand-navy/50 to-transparent"></div>
-<div className="sm:px-6 lg:px-8 overflow-hidden w-full max-w-7xl rounded-3xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4 relative shadow-2xl" style={{backgroundImage: 'linear-gradient(to right, rgba(26, 54, 93, 0.9) 0%, rgba(26, 54, 93, 0.75) 40%, rgba(26, 54, 93, 0.2) 100%), url(\'https://storage.googleapis.com/msgsndr/KALcb59FRo6Yq0Wy7qaZ/media/697b9295ff9d323db9a5fb08.jpg\')', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="sm:px-6 lg:px-8 overflow-hidden w-full max-w-7xl rounded-3xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4 relative shadow-2xl" style={{backgroundImage: 'linear-gradient(to right, rgba(26, 54, 93, 0.9) 0%, rgba(26, 54, 93, 0.75) 40%, rgba(26, 54, 93, 0.2) 100%), url(\'https: //storage.googleapis.com/msgsndr/KALcb59FRo6Yq0Wy7qaZ/media/697b9295ff9d323db9a5fb08.jpg\')', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="max-w-3xl relative z-10">
 <div className="inline-flex items-center px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-brand-orange mb-6 backdrop-blur-md">
 <span className="flex h-2 w-2 rounded-full bg-brand-orange mr-2 animate-pulse"></span>
@@ -486,7 +528,7 @@ sans: ['Inter', 'sans-serif'],
 
 <div className="h-64 w-full bg-slate-200 rounded-xl overflow-hidden relative border border-slate-300 shadow-sm">
 <img alt="Technician talking to customer" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&amp;w=2664&amp;auto=format&amp;fit=crop"/>
-<div className="bg-gradient-to-t from-black/60 to-transparent absolute inset-0" style={{backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent), url(\'https://storage.googleapis.com/msgsndr/KALcb59FRo6Yq0Wy7qaZ/media/697b98f3ff9d32b8b0a773f7.jpg\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+<div className="bg-gradient-to-t from-black/60 to-transparent absolute inset-0" style={{backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent), url(\'https: //storage.googleapis.com/msgsndr/KALcb59FRo6Yq0Wy7qaZ/media/697b98f3ff9d32b8b0a773f7.jpg\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
 <div className="absolute bottom-6 left-6 text-white">
 <p className="font-semibold text-lg">Real People. Real Solutions.</p>
 <p className="text-sm opacity-90">We walk you through every step.</p>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     lucide.createIcons();
@@ -86,6 +122,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -97,7 +139,7 @@ export default function App() {
       Monochrome Frames<br/>
 <span className="font-normal text-[#e0e0e0]">Portfolio</span>
 </h1>
-<p className="mt-8 max-w-2xl text-lg md:text-2xl font-normal text-[#c8c8c8] text-center fade-in fade-in-2" style={{fontFamily: '\'IBM Plex Serif\',serif'}}>
+<p className="mt-8 max-w-2xl text-lg md:text-2xl font-normal text-[#c8c8c8] text-center fade-in fade-in-2" style={{fontFamily: '\'IBM Plex Serif\', serif'}}>
       The art of <span className="font-semibold text-[#fcfcfc]">audiovisual storytelling</span>.<br/>
       Each project is a canvas—discover the story behind every frame.
     </p>
@@ -131,7 +173,7 @@ export default function App() {
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-3 text-[#fcfcfc]">
       About
     </h2>
-<p className="text-lg md:text-xl text-[#e2e2e2] font-normal mb-6" style={{fontFamily: '\'IBM Plex Serif\',serif'}}>
+<p className="text-lg md:text-xl text-[#e2e2e2] font-normal mb-6" style={{fontFamily: '\'IBM Plex Serif\', serif'}}>
       With a decade of experience in audiovisual storytelling, I craft cinematic narratives that capture emotion and detail. My work spans film, commercial, and music video, collaborating with global brands and visionary artists. I believe in the power of light, shadow, and sound to move audiences.<br/>
 <span className="mono text-[#bdbdbd] text-base">Based in Berlin · Available Worldwide</span>
 </p>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -40,6 +76,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -90,7 +132,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="container max-w-6xl mr-auto mb-32 ml-auto pr-6 pl-6" id="mentorship">
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 gap-x-6 gap-y-6">
 
-<div className="lg:col-span-7 md:p-12 flashlight-card group flex flex-col min-h-[500px] -multi bg-black/40 border-white/10 border rounded-3xl pt-8 pr-8 pb-8 pl-8 backdrop-blur-sm justify-between" style={{-MouseX: '437px', -MouseY: '27px'}}>
+<div className="lg:col-span-7 md:p-12 flashlight-card group flex flex-col min-h-[500px] -multi bg-black/40 border-white/10 border rounded-3xl pt-8 pr-8 pb-8 pl-8 backdrop-blur-sm justify-between" style={{'--mouse-x': '437px', '--mouse-y': '27px'}}>
 <div className="relative z-10">
 <div className="flex group-hover:bg-white group-hover:text-black transition-colors duration-500 bg-slate-50 w-12 h-12 border-white/10 border rounded-xl mb-8 items-center justify-center">
 <iconify-icon className="" height="24" icon="solar:notebook-minimalistic-outline" style={{color: 'rgb(0, 0, 0)'}} width="24"></iconify-icon>
@@ -127,7 +169,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-5 flex flex-col gap-6" id="circle">
 
-<div className="flex-1 border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent rounded-3xl p-8 flashlight-card relative overflow-hidden group" style={{-MouseX: '87px', -MouseY: '154px'}}>
+<div className="flex-1 border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent rounded-3xl p-8 flashlight-card relative overflow-hidden group" style={{'--mouse-x': '87px', '--mouse-y': '154px'}}>
 <div className="relative z-10">
 <div className="flex justify-between items-start mb-6">
 <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -140,7 +182,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex flex-col flashlight-card text-center bg-zinc-900/50 border-white/10 border rounded-3xl pt-8 pr-8 pb-8 pl-8 items-center justify-center" style={{-MouseX: '117px', -MouseY: '168.75px'}}>
+<div className="flex flex-col flashlight-card text-center bg-zinc-900/50 border-white/10 border rounded-3xl pt-8 pr-8 pb-8 pl-8 items-center justify-center" style={{'--mouse-x': '117px', '--mouse-y': '168.75px'}}>
 <h3 className="text-xl font-medium tracking-tight mb-2">Ready to start?</h3>
 <p className="text-zinc-500 text-xs mb-6">Slots are limited each month.</p>
 <a className="hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 text-sm font-semibold text-black bg-white w-full rounded-lg pt-3 pb-3" href="#">
@@ -164,7 +206,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 gap-x-6 gap-y-6">
 
-<div className="lg:col-span-3 relative p-8 bg-black border border-white/10 rounded-2xl flashlight-card overflow-hidden flex flex-col justify-between min-h-[300px]" style={{-MouseX: '842px', -MouseY: '282.75px'}}>
+<div className="lg:col-span-3 relative p-8 bg-black border border-white/10 rounded-2xl flashlight-card overflow-hidden flex flex-col justify-between min-h-[300px]" style={{'--mouse-x': '842px', '--mouse-y': '282.75px'}}>
 <div className="relative z-10">
 <div className="flex items-center gap-2 mb-2">
 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -188,7 +230,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" onclick="window.location.href='https://x.com/GainzFBA/status/1999228856579068295?s=20'" role="button" style={{-MouseX: '348px', -MouseY: '250.75px'}}>
+<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" onclick="window.location.href='https://x.com/GainzFBA/status/1999228856579068295?s=20'" role="button" style={{'--mouse-x': '348px', '--mouse-y': '250.75px'}}>
 <div className="flex justify-between items-start">
 <div className="flex gap-3">
 <div className="flex text-xs text-zinc-500 bg-zinc-800 w-10 h-10 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b27fc434-cb3f-4691-9ce4-91eb18e71de3_320w.jpg)] bg-cover bg-center rounded-full items-center justify-center">JP</div>
@@ -205,7 +247,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-[10px] text-zinc-600 font-mono mt-auto pt-2">9:41 AM · Oct 24, 2024</div>
 </div>
 
-<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" onclick="window.location.href='https://x.com/LB_FBA/status/2002324058306711847?s=20'" role="button" style={{-MouseX: '321px', -MouseY: '131.75px'}}>
+<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" onclick="window.location.href='https://x.com/LB_FBA/status/2002324058306711847?s=20'" role="button" style={{'--mouse-x': '321px', '--mouse-y': '131.75px'}}>
 <div className="flex justify-between items-start">
 <div className="flex gap-3">
 <div className="flex text-xs text-zinc-500 bg-zinc-800 w-10 h-10 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/461f358e-1651-4648-92a6-86d508985d28_320w.jpg)] bg-cover bg-center rounded-full items-center justify-center">JP</div>
@@ -226,7 +268,7 @@ Big shoutout to
 <div className="text-[10px] text-zinc-600 font-mono mt-auto pt-2">9:41 AM · Oct 24, 2024</div>
 </div>
 
-<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" onclick="window.location.href='https://x.com/Renz_FBA/status/1999259654678048977?s=20'" role="button" style={{-MouseX: '330px', -MouseY: '190.75px'}}>
+<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" onclick="window.location.href='https://x.com/Renz_FBA/status/1999259654678048977?s=20'" role="button" style={{'--mouse-x': '330px', '--mouse-y': '190.75px'}}>
 <div className="flex items-start justify-between">
 <div className="flex gap-3">
 <div className="flex text-xs text-zinc-500 bg-zinc-800 w-10 h-10 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/969b6afb-3f13-4ce9-99a0-d99f50e4e1f7_320w.jpg)] bg-cover bg-center rounded-full items-center justify-center">JP</div>
@@ -268,7 +310,7 @@ Big shoutout to
 <section className="container mx-auto px-6 max-w-lg mb-32">
 <h2 className="text-center text-sm font-semibold tracking-tight uppercase text-zinc-500 mb-8">Meet the Team</h2>
 
-<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-8 pr-8 pb-8 pl-8 gap-x-6 gap-y-6 justify-center" style={{-MouseX: '82px', -MouseY: '108.75px'}}>
+<div className="flashlight-card flex flex-col bg-black border-white/10 border rounded-2xl pt-8 pr-8 pb-8 pl-8 gap-x-6 gap-y-6 justify-center" style={{'--mouse-x': '82px', '--mouse-y': '108.75px'}}>
 
 <div className="flex group items-center justify-between">
 <div className="flex items-center gap-3">

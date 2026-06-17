@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -174,6 +210,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -197,7 +239,7 @@ gtag('config', 'G-2M6V79H761');
 
 <nav className="relative z-40 w-full max-w-7xl mx-auto px-6 lg:px-8 py-6 flex items-center justify-between border-b border-gray-200/60">
 <div className="flex items-center gap-1.5">
-<span className="text-sm font-medium tracking-tighter uppercase" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>A·WAY</span>
+<span className="text-sm font-medium tracking-tighter uppercase" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>A·WAY</span>
 <div className="w-1.5 h-1.5 rounded-full bg-sky-500 mb-2"></div>
 </div>
 <div className="hidden md:flex items-center gap-8 text-sm font-normal text-gray-600">
@@ -216,7 +258,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-sky-500 text-sm" icon="solar:snowflake-linear"></iconify-icon>
 <span className="text-xs font-normal text-gray-800">Nelson Mandela Bay · Eastern Cape</span>
 </div>
-<h1 className="text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight font-normal text-gray-900 mb-6" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>
+<h1 className="text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight font-normal text-gray-900 mb-6" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>
 <div className="overflow-hidden pb-1"><span className="gsap-reveal block tracking-tighter">Beat the heat.</span></div>
 <div className="overflow-hidden pb-1"><span className="gsap-reveal block tracking-tighter">Breathe easy.</span></div>
 <div className="overflow-hidden pb-2"><span className="gsap-reveal block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-sky-400 to-cyan-300 tracking-tighter">Engineered comfort.</span></div>
@@ -268,11 +310,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="glow-orb-1 absolute top-[20%] right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(var(--tw-gradient-stops))] from-sky-500 via-cyan-300 to-transparent rounded-full opacity-60 blur-[80px]"></div>
 <div className="glow-orb-2 absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-[radial-gradient(var(--tw-gradient-stops))] from-cyan-200 to-transparent rounded-full opacity-50 blur-[100px]"></div>
 <div className="absolute inset-0 flex justify-end">
-<div className="relative h-full w-[18%] border-l border-white/40 shadow-[-15px_0_30px_rgba(255,255,255,0.5)]" style={{background: 'linear-gradient(90deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.1) 100%)', backdropFilter: 'blur(2px)'}}></div>
-<div className="relative h-full w-[16%] border-l border-white/50 shadow-[-20px_0_40px_rgba(255,255,255,0.6)]" style={{background: 'linear-gradient(90deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.05) 100%)', backdropFilter: 'blur(4px)'}}></div>
-<div className="relative h-full w-[15%] border-l border-white/60 shadow-[-25px_0_50px_rgba(255,255,255,0.7)]" style={{background: 'linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%)', backdropFilter: 'blur(8px)'}}></div>
-<div className="relative h-full w-[14%] border-l border-white/70 shadow-[-30px_0_60px_rgba(255,255,255,0.8)]" style={{background: 'linear-gradient(90deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%)', backdropFilter: 'blur(12px)'}}></div>
-<div className="relative h-full w-[12%] border-l border-white/80 shadow-[-35px_0_70px_rgba(255,255,255,0.9)]" style={{background: 'linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%)', backdropFilter: 'blur(16px)'}}></div>
+<div className="relative h-full w-[18%] border-l border-white/40 shadow-[-15px_0_30px_rgba(255,255,255,0.5)]" style={{background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.1) 100%)', backdropFilter: 'blur(2px)'}}></div>
+<div className="relative h-full w-[16%] border-l border-white/50 shadow-[-20px_0_40px_rgba(255,255,255,0.6)]" style={{background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.05) 100%)', backdropFilter: 'blur(4px)'}}></div>
+<div className="relative h-full w-[15%] border-l border-white/60 shadow-[-25px_0_50px_rgba(255,255,255,0.7)]" style={{background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%)', backdropFilter: 'blur(8px)'}}></div>
+<div className="relative h-full w-[14%] border-l border-white/70 shadow-[-30px_0_60px_rgba(255,255,255,0.8)]" style={{background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 100%)', backdropFilter: 'blur(12px)'}}></div>
+<div className="relative h-full w-[12%] border-l border-white/80 shadow-[-35px_0_70px_rgba(255,255,255,0.9)]" style={{background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%)', backdropFilter: 'blur(16px)'}}></div>
 </div>
 <div className="absolute inset-0 bg-gradient-to-r from-[#FDFDFD] via-[#FDFDFD]/80 to-transparent w-[35%]"></div>
 <div className="absolute inset-0 bg-gradient-to-t from-[#FDFDFD] via-transparent to-[#FDFDFD] opacity-80 pointer-events-none"></div>
@@ -287,7 +329,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center gap-2 mb-4 text-xs uppercase tracking-widest text-sky-600" style={{fontFamily: '\'JetBrains Mono\', monospace', fontWeight: '500'}}>
 <span className="w-6 h-px bg-sky-500"></span> 01 — Services
         </div>
-<h2 className="text-4xl sm:text-5xl tracking-tight font-normal text-gray-900 max-w-2xl leading-[1.05]" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>
+<h2 className="text-4xl sm:text-5xl tracking-tight font-normal text-gray-900 max-w-2xl leading-[1.05]" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>
           Expert HVAC solutions for Nelson Mandela Bay.
         </h2>
 </div>
@@ -301,7 +343,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-11 h-11 rounded-lg bg-sky-50 flex items-center justify-center text-sky-500 mb-6 border border-sky-100">
 <iconify-icon className="text-xl" icon="solar:snowflake-linear"></iconify-icon>
 </div>
-<h3 className="text-lg tracking-tight font-medium text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Premium Aircon Installation</h3>
+<h3 className="text-lg tracking-tight font-medium text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Premium Aircon Installation</h3>
 <p className="text-sm text-gray-600 leading-relaxed mb-6">Top-notch air conditioning installation for optimal comfort and efficiency, tailored to your space.</p>
 <div className="flex items-center gap-1.5 text-xs text-sky-600 group-hover:gap-2.5 transition-all" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>
           LEARN MORE <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
@@ -312,7 +354,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-11 h-11 rounded-lg bg-sky-50 flex items-center justify-center text-sky-500 mb-6 border border-sky-100">
 <iconify-icon className="text-xl" icon="solar:settings-linear"></iconify-icon>
 </div>
-<h3 className="text-lg tracking-tight font-medium text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Efficient Maintenance</h3>
+<h3 className="text-lg tracking-tight font-medium text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Efficient Maintenance</h3>
 <p className="text-sm text-gray-600 leading-relaxed mb-6">Keep your systems running smoothly with thorough, reliable scheduled maintenance services.</p>
 <div className="flex items-center gap-1.5 text-xs text-sky-600 group-hover:gap-2.5 transition-all" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>
           LEARN MORE <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
@@ -323,7 +365,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-11 h-11 rounded-lg bg-sky-50 flex items-center justify-center text-sky-500 mb-6 border border-sky-100">
 <iconify-icon className="text-xl" icon="solar:fridge-linear"></iconify-icon>
 </div>
-<h3 className="text-lg tracking-tight font-medium text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Expert Refrigeration</h3>
+<h3 className="text-lg tracking-tight font-medium text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Expert Refrigeration</h3>
 <p className="text-sm text-gray-600 leading-relaxed mb-6">Specialized refrigeration solutions for cold storage, commercial kitchens and industrial sites.</p>
 <div className="flex items-center gap-1.5 text-xs text-sky-600 group-hover:gap-2.5 transition-all" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>
           LEARN MORE <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
@@ -361,7 +403,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center gap-2 mb-4 text-xs uppercase tracking-widest text-sky-600" style={{fontFamily: '\'JetBrains Mono\', monospace', fontWeight: '500'}}>
 <span className="w-6 h-px bg-sky-500"></span> 02 — Project Gallery
         </div>
-<h2 className="text-4xl sm:text-5xl tracking-tight font-normal text-gray-900 max-w-2xl leading-[1.05]" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>
+<h2 className="text-4xl sm:text-5xl tracking-tight font-normal text-gray-900 max-w-2xl leading-[1.05]" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>
           Recent installations &amp; service work.
         </h2>
 </div>
@@ -375,7 +417,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-3 left-3 text-xs uppercase tracking-widest px-2 py-1 rounded-full bg-white/90 text-gray-700" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>Commercial</div>
 </div>
 <div className="p-6">
-<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Commercial HVAC Installation</h3>
+<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Commercial HVAC Installation</h3>
 <p className="text-xs text-gray-600 leading-relaxed">Large-scale HVAC installation for an office building — assessed cooling and heating needs, then installed energy-efficient systems for long-term savings.</p>
 </div>
 </article>
@@ -386,7 +428,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-3 left-3 text-xs uppercase tracking-widest px-2 py-1 rounded-full bg-white/90 text-gray-700" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>Residential</div>
 </div>
 <div className="p-6">
-<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Residential AC Repair</h3>
+<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Residential AC Repair</h3>
 <p className="text-xs text-gray-600 leading-relaxed">Rapid repair for a malfunctioning home aircon — diagnosed refrigerant leaks and faulty wiring, restoring full performance and comfort.</p>
 </div>
 </article>
@@ -397,7 +439,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-3 left-3 text-xs uppercase tracking-widest px-2 py-1 rounded-full bg-white/90 text-gray-700" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>Refrigeration</div>
 </div>
 <div className="p-6">
-<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Cold Storage Maintenance</h3>
+<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Cold Storage Maintenance</h3>
 <p className="text-xs text-gray-600 leading-relaxed">Routine cold-storage maintenance — inspecting compressors, checking refrigerant, cleaning condenser coils to prevent breakdowns.</p>
 </div>
 </article>
@@ -408,7 +450,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-3 left-3 text-xs uppercase tracking-widest px-2 py-1 rounded-full bg-white/90 text-gray-700" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>Industrial</div>
 </div>
 <div className="p-6">
-<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Industrial Heat Pumps</h3>
+<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Industrial Heat Pumps</h3>
 <p className="text-xs text-gray-600 leading-relaxed">Commercial and industrial water heat pump installation engineered for high-volume hot water demand.</p>
 </div>
 </article>
@@ -419,7 +461,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-3 left-3 text-xs uppercase tracking-widest px-2 py-1 rounded-full bg-white/90 text-gray-700" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>Smart Home</div>
 </div>
 <div className="p-6">
-<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Smart Climate System</h3>
+<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Smart Climate System</h3>
 <p className="text-xs text-gray-600 leading-relaxed">Connected aircon system with app control, scheduled zones, and energy reporting for a modern villa in Summerstrand.</p>
 </div>
 </article>
@@ -430,7 +472,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-3 left-3 text-xs uppercase tracking-widest px-2 py-1 rounded-full bg-white/90 text-gray-700" style={{fontFamily: '\'JetBrains Mono\', monospace'}}>Ventilation</div>
 </div>
 <div className="p-6">
-<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Retail Ventilation Retrofit</h3>
+<h3 className="text-base font-medium tracking-tight text-gray-900 mb-2" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Retail Ventilation Retrofit</h3>
 <p className="text-xs text-gray-600 leading-relaxed">Custom ventilation retrofit for a busy retail floor — improving air quality and reducing humidity load.</p>
 </div>
 </article>
@@ -443,7 +485,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center gap-2 mb-4 text-xs uppercase tracking-widest text-sky-600" style={{fontFamily: '\'JetBrains Mono\', monospace', fontWeight: '500'}}>
 <span className="w-6 h-px bg-sky-500"></span> 03 — Trusted
         </div>
-<h2 className="text-4xl tracking-tight font-normal text-gray-900 leading-[1.05] mb-4" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>
+<h2 className="text-4xl tracking-tight font-normal text-gray-900 leading-[1.05] mb-4" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>
           The word from our clients.
         </h2>
 <p className="text-sm text-gray-600 leading-relaxed">Homeowners and businesses across the Eastern Cape rely on A WAY for dependable, efficient HVAC.</p>
@@ -493,7 +535,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute -top-32 -right-32 w-[400px] h-[400px] bg-[radial-gradient(var(--tw-gradient-stops))] from-sky-200 to-transparent rounded-full opacity-50 blur-2xl"></div>
 <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 <div>
-<h3 className="text-3xl sm:text-4xl tracking-tight font-normal text-gray-900 leading-[1.1] mb-3" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Ready for cooler days?</h3>
+<h3 className="text-3xl sm:text-4xl tracking-tight font-normal text-gray-900 leading-[1.1] mb-3" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Ready for cooler days?</h3>
 <p className="text-sm text-gray-600 leading-relaxed max-w-md">Book a free site assessment in Nelson Mandela Bay. Our team will design the most efficient system for your space.</p>
 </div>
 <form className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -513,7 +555,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-2 md:grid-cols-12 gap-10 mb-12">
 <div className="col-span-2 md:col-span-5">
 <div className="flex items-center gap-1.5 mb-4">
-<span className="text-sm font-medium tracking-tighter uppercase" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>A·WAY</span>
+<span className="text-sm font-medium tracking-tighter uppercase" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>A·WAY</span>
 <div className="w-1.5 h-1.5 rounded-full bg-sky-500 mb-2"></div>
 </div>
 <p className="text-sm text-gray-600 leading-relaxed max-w-sm mb-6">A WAY Airconditioning, Refrigeration, Heating &amp; Ventilation — serving Nelson Mandela Bay and the Eastern Cape.</p>

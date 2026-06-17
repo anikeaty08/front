@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -81,6 +117,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -718,7 +760,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       Join thousands of teams already using FlowAI to automate their content workflow and scale their reach.
     </p>
 <div className="relative mt-6">
-<a className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-geist tracking-tight text-white border border-white/10 shadow-2xl" href="#signup" style={{background: 'linear-gradient(180deg, #10b981, #059669)', boxShadow: '0 12px 30px rgba(16,185,129,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<a className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-geist tracking-tight text-white border border-white/10 shadow-2xl" href="#signup" style={{background: 'linear-gradient(180deg, #10b981, #059669)', boxShadow: '0 12px 30px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
         START FREE TRIAL
       </a>
 <div aria-hidden="true" className="pointer-events-none absolute -z-10 -bottom-2 left-0 right-0 h-10 mx-auto rounded-full" style={{filter: 'blur(18px)', background: 'radial-gradient(60% 60% at 50% 50%, rgba(16,185,129,0.35), rgba(16,185,129,0) 70%)'}}>

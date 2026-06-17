@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -82,6 +118,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -289,17 +331,17 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col gap-4 mt-auto">
 <div className="flex items-center gap-3">
 <span className="text-xs text-text3 w-16 text-right">Prop Firms</span>
-<div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-red/50 rounded-full pbar-fill" style={{-W: '25%'}}></div></div>
+<div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-red/50 rounded-full pbar-fill" style={{'--w': '25%'}}></div></div>
 <span className="text-xs font-head font-medium text-white/50 w-8">Days</span>
 </div>
 <div className="flex items-center gap-3">
 <span className="text-xs text-text3 w-16 text-right">Brokers</span>
-<div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-white/20 rounded-full pbar-fill" style={{-W: '35%'}}></div></div>
+<div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-white/20 rounded-full pbar-fill" style={{'--w': '35%'}}></div></div>
 <span className="text-xs font-head font-medium text-white/50 w-8">Slow</span>
 </div>
 <div className="flex items-center gap-3">
 <span className="text-xs text-text3 w-16 text-right text-white">BATTLE-01</span>
-<div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden relative"><div className="absolute inset-0 bg-gradient-to-r from-violet to-cyan rounded-full pbar-fill shadow-[0_0_10px_rgba(124,92,252,0.8)]" style={{-W: '98%'}}></div></div>
+<div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden relative"><div className="absolute inset-0 bg-gradient-to-r from-violet to-cyan rounded-full pbar-fill shadow-[0_0_10px_rgba(124,92,252,0.8)]" style={{'--w': '98%'}}></div></div>
 <span className="text-xs font-head font-medium text-green w-8">Now</span>
 </div>
 </div>

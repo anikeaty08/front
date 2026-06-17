@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -24,6 +60,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -44,7 +86,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 
 <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
-<div %3e%3c="" %3e%3cg="" %3e%3cpath="" 60"="" className="absolute inset-0 opacity-30" d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z" fill="%23a8a29e" fillOpacity="0.1" fill-rule="evenodd" g%3e%3c="" height="60" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg width='}} svg%3e');"="" viewbox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"></div>
+<div %3e%3c="" %3e%3cg="" %3e%3cpath="" 60"="" className="absolute inset-0 opacity-30" d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z" fill="%23a8a29e" fillOpacity="0.1" fill-rule="evenodd" g%3e%3c="" height="60" style={{backgroundImage: 'url(\'data:image/svg+xml, %3Csvg width='}} svg%3e');"="" viewbox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"></div>
 
 <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-gradient-to-br from-indigo-100 to-violet-100 rounded-full blur-3xl opacity-60 animate-pulse" style={{animationDuration: '4s'}}></div>
 <div className="absolute bottom-1/3 right-1/6 w-40 h-40 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full blur-3xl opacity-50 animate-pulse" style={{animationDuration: '5s'}}></div>

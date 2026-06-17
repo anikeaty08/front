@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -104,7 +146,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-calendar-check relative z-10 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>
 </button>
 
-<button className="hover:bg-white/5 transition-all flex text-base font-medium text-gray-300 bg-white/5 rounded-full py-4 px-8 items-center justify-center font-geist relative overflow-hidden group/btn" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.5)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '9999px'}}>
+<button className="hover:bg-white/5 transition-all flex text-base font-medium text-gray-300 bg-white/5 rounded-full py-4 px-8 items-center justify-center font-geist relative overflow-hidden group/btn" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.5)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))', '--border-radius-before': '9999px'}}>
 <span className="text-base font-medium text-gray-200 tracking-tight relative z-10 font-geist">
             View Menu
         </span>
@@ -157,7 +199,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                 </div>
 <div className="flex flex-col gap-6 mt-auto mb-auto gap-x-6 gap-y-6 items-center">
 <div className="relative w-full">
-<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-xl pt-3 pr-4 pb-3 pl-4 relative shadow-lg backdrop-blur-xl gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-xl pt-3 pr-4 pb-3 pl-4 relative shadow-lg backdrop-blur-xl gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="w-10 h-10 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400">
 <svg className="lucide lucide-utensils" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
 </div>
@@ -182,10 +224,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative z-10 w-full flex justify-center mt-auto h-24 items-end">
 <div className="relative w-full max-w-[140px] h-full flex items-center justify-center">
 <div className="absolute w-20 h-px bg-white/10 top-1/2 left-1/2 -translate-x-1/2"></div>
-<div className="flex -translate-x-12 z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex -translate-x-12 z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <svg className="lucide lucide-phone text-white" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.05 12.05 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.03 12.03 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
 </div>
-<div className="flex z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg translate-x-12 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg translate-x-12 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <svg className="lucide lucide-calendar-days text-white" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
 </div>
 <div className="absolute w-3 h-3 bg-emerald-500 rounded-full z-20 animate-[ping_2s_linear_infinite]"></div>
@@ -193,7 +235,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex flex-col overflow-hidden group hover:border-emerald-500/30 transition-all duration-500 text-center bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative shadow-xl items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="flex flex-col overflow-hidden group hover:border-emerald-500/30 transition-all duration-500 text-center bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative shadow-xl items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 <div className="absolute inset-0 bg-[url(https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&amp;w=600&amp;auto=format&amp;fit=crop)] bg-cover bg-center opacity-40"></div>
 <h3 className="relative z-10 text-base font-medium text-gray-200 mb-4 font-geist">Our Space</h3>
 <div className="z-10 flex w-full mt-auto relative justify-center">

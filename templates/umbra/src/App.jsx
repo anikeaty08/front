@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -55,7 +91,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               "hover:shadow-[0_0_0_1px_rgba(212,168,72,0.45),0_8px_24px_rgba(212,168,72,0.12)] hover:-translate-y-0.5",
               className
             )}
-            style={{ backgroundColor: COLORS.gold, color: COLORS.bgPrimary }}
+            style={{backgroundColor: COLORS.gold, color: COLORS.bgPrimary}}
             {...props}
           >
             {icon && <i data-lucide={icon} className="mr-2 h-4 w-4" />}
@@ -128,7 +164,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             <div
               ref={dialogRef}
               className="relative mx-4 w-full max-w-md rounded-xl border border-white/10 bg-[#1A1A1D] p-6 shadow-2xl"
-              style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }}
+              style={{boxShadow: "0 20px 60px rgba(0,0,0,0.5)"}}
             >
               <button
                 aria-label="Close"
@@ -138,12 +174,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 <i data-lucide="x" className="h-4 w-4" />
               </button>
               <div className="mb-2 flex items-center gap-2">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10" style={{ background: COLORS.bgSecondary }}>
-                  <span className="font-[600] tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif', color: COLORS.gold }}>UM</span>
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10" style={{background: COLORS.bgSecondary}}>
+                  <span className="font-[600] tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif', color: COLORS.gold}}>UM</span>
                 </span>
                 <span className="text-sm text-[#C0C0C8]">Umbra Wallet</span>
               </div>
-              <h3 id="waitlist-title" className="text-xl font-semibold tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+              <h3 id="waitlist-title" className="text-xl font-semibold tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                 Join the Waitlist
               </h3>
               <p className="mt-2 text-sm text-[#C0C0C8]">
@@ -172,13 +208,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       placeholder="your@email.com"
                       required
                       className="w-full rounded-md border border-white/10 bg-[#2E2E38] py-3 pl-10 pr-3 text-sm text-white placeholder-white/40 outline-none transition focus:border-[#00D9FF66] focus:ring-2 focus:ring-[#00D9FF33]"
-                      style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}
+                      style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}
                     />
                   </div>
                   <button
                     type="submit"
                     className="inline-flex items-center justify-center rounded-md px-4 py-3 text-sm font-semibold tracking-tight transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A84866] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1D]"
-                    style={{ backgroundColor: COLORS.gold, color: COLORS.bgPrimary }}
+                    style={{backgroundColor: COLORS.gold, color: COLORS.bgPrimary}}
                   >
                     Notify Me
                   </button>
@@ -199,20 +235,20 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           <Section id="hero" className="relative min-h-[100svh] flex items-center">
             {/* Background accents */}
             <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-              <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full blur-3xl opacity-40" style={{ background: 'radial-gradient(closest-side, rgba(0,217,255,0.25), transparent 70%)' }}></div>
-              <div className="absolute top-1/3 -right-20 h-96 w-96 rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(closest-side, rgba(78,78,140,0.25), transparent 70%)' }}></div>
-              <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full blur-3xl opacity-20" style={{ background: 'radial-gradient(closest-side, rgba(212,168,72,0.20), transparent 70%)' }}></div>
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(26,26,29,0) 0%, rgba(46,46,56,0.25) 100%)' }}></div>
+              <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full blur-3xl opacity-40" style={{background: 'radial-gradient(closest-side, rgba(0,217,255,0.25), transparent 70%)'}}></div>
+              <div className="absolute top-1/3 -right-20 h-96 w-96 rounded-full blur-3xl opacity-30" style={{background: 'radial-gradient(closest-side, rgba(78,78,140,0.25), transparent 70%)'}}></div>
+              <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full blur-3xl opacity-20" style={{background: 'radial-gradient(closest-side, rgba(212,168,72,0.20), transparent 70%)'}}></div>
+              <div className="absolute inset-0" style={{background: 'linear-gradient(180deg, rgba(26,26,29,0) 0%, rgba(46,46,56,0.25) 100%)'}}></div>
             </div>
 
             {/* Nav */}
             <div className="absolute inset-x-0 top-0 z-20">
               <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
                 <a href="#" className="group inline-flex items-center gap-3">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10" style={{ background: COLORS.bgSecondary }}>
-                    <span className="font-[600] tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif', color: COLORS.gold }}>UM</span>
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10" style={{background: COLORS.bgSecondary}}>
+                    <span className="font-[600] tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif', color: COLORS.gold}}>UM</span>
                   </span>
-                  <span className="text-sm font-medium tracking-tight text-white/90" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                  <span className="text-sm font-medium tracking-tight text-white/90" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                     Umbra Wallet
                   </span>
                 </a>
@@ -229,27 +265,27 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             {/* Content */}
             <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 pt-24 pb-16 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
               <div>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                   Privacy by design. Sovereignty by default.
                 </h1>
-                <p className="mt-4 max-w-xl text-base leading-relaxed text-[#C0C0C8]" style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                <p className="mt-4 max-w-xl text-base leading-relaxed text-[#C0C0C8]" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                   Self-custody ZCash wallet built for shielded transactions. No tracking. No compromises. No surveillance.
                 </p>
 
                 {/* Terminal strip */}
                 <div className="mt-6 w-full max-w-xl overflow-hidden rounded-lg border border-white/10 bg-[#0F0F12]">
                   <div className="flex items-center gap-2 border-b border-white/10 px-3 py-2 text-xs text-white/60">
-                    <span className="h-2 w-2 rounded-full" style={{ background: '#FF5F57' }}></span>
-                    <span className="h-2 w-2 rounded-full" style={{ background: '#FEBC2E' }}></span>
-                    <span className="h-2 w-2 rounded-full" style={{ background: '#28C840' }}></span>
-                    <span className="ml-2 font-medium" style={{ fontFamily: 'JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace' }}>umbra@zcash</span>
+                    <span className="h-2 w-2 rounded-full" style={{background: '#FF5F57'}}></span>
+                    <span className="h-2 w-2 rounded-full" style={{background: '#FEBC2E'}}></span>
+                    <span className="h-2 w-2 rounded-full" style={{background: '#28C840'}}></span>
+                    <span className="ml-2 font-medium" style={{fontFamily: 'JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace'}}>umbra@zcash</span>
                   </div>
                   <div className="px-4 py-3">
-                    <code className="block text-sm text-white/85" style={{ fontFamily: 'JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace' }}>
+                    <code className="block text-sm text-white/85" style={{fontFamily: 'JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace'}}>
                       $ zcash-cli send --shielded-only --to zs1...
                       <span className="ml-1 inline-block h-5 w-2 animate-pulse bg-white/80 align-middle"></span>
                     </code>
-                    <p className="mt-2 text-xs text-[#C0C0C8]" style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                    <p className="mt-2 text-xs text-[#C0C0C8]" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                       Zero-knowledge. Zero telemetry. Zero compromises.
                     </p>
                   </div>
@@ -266,18 +302,18 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
               {/* Visual */}
               <div className="relative">
-                <div className="relative mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-[#121216] p-4 shadow-2xl" style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }}>
+                <div className="relative mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-[#121216] p-4 shadow-2xl" style={{boxShadow: "0 20px 60px rgba(0,0,0,0.5)"}}>
                   <div className="rounded-xl border border-white/10 bg-[#1A1A1D] p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <i data-lucide="shield" className="h-5 w-5 text-[#00D9FF]" />
-                        <span className="text-sm text-white/80" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>Shielded Balance</span>
+                        <span className="text-sm text-white/80" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>Shielded Balance</span>
                       </div>
                       <span className="rounded-md border border-white/10 px-2 py-1 text-xs text-white/60">
                         ZEC
                       </span>
                     </div>
-                    <div className="mt-4 text-4xl font-semibold tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                    <div className="mt-4 text-4xl font-semibold tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                       12.8427 <span className="text-lg font-medium text-white/50">ZEC</span>
                     </div>
                     <div className="mt-4 grid grid-cols-3 gap-2">
@@ -320,7 +356,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       </div>
                     </div>
                   </div>
-                  <div className="pointer-events-none absolute -inset-1 -z-10 rounded-2xl opacity-40 blur-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,217,255,0.25), rgba(78,78,140,0.25))' }}></div>
+                  <div className="pointer-events-none absolute -inset-1 -z-10 rounded-2xl opacity-40 blur-2xl" style={{background: 'linear-gradient(135deg, rgba(0,217,255,0.25), rgba(78,78,140,0.25))'}}></div>
                 </div>
               </div>
             </div>
@@ -373,7 +409,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           <Section id="features" className="relative border-t border-white/10">
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
               <div className="mx-auto max-w-3xl text-center">
-                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                   Built for Privacy. Designed for Sovereignty.
                 </h2>
               </div>
@@ -381,19 +417,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 {items.map((f, i) => (
                   <div key={i} className="group relative rounded-xl border border-white/10 bg-[#151518] p-5 transition hover:border-white/20 hover:bg-[#16161A]">
                     <div className="flex items-start gap-3">
-                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/10" style={{ background: COLORS.bgSecondary }}>
-                        <i data-lucide={f.icon} className="h-5 w-5" style={{ color: f.color }} />
+                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/10" style={{background: COLORS.bgSecondary}}>
+                        <i data-lucide={f.icon} className="h-5 w-5" style={{color: f.color}} />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                        <h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                           {f.title}
                         </h3>
-                        <p className="mt-2 text-sm leading-relaxed text-[#C0C0C8]" style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                        <p className="mt-2 text-sm leading-relaxed text-[#C0C0C8]" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                           {f.desc}
                         </p>
                       </div>
                     </div>
-                    <div className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition group-hover:opacity-100" style={{ boxShadow: `inset 0 0 0 1px ${f.color}33` }}></div>
+                    <div className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition group-hover:opacity-100" style={{boxShadow: `inset 0 0 0 1px ${f.color}33`}}></div>
                   </div>
                 ))}
               </div>
@@ -405,11 +441,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       // Differentiators
       const Differentiators = () => {
         return (
-          <Section id="why" className="relative border-t border-white/10" style={{ background: '#1A1A1D' }}>
-            <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(180deg, rgba(78,78,140,0.10) 0%, rgba(26,26,29,0.0) 70%)' }}></div>
+          <Section id="why" className="relative border-t border-white/10" style={{background: '#1A1A1D'}}>
+            <div className="absolute inset-0 -z-10" style={{background: 'linear-gradient(180deg, rgba(78,78,140,0.10) 0%, rgba(26,26,29,0.0) 70%)'}}></div>
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
               <div className="mx-auto max-w-3xl text-center">
-                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                   Why Umbra?
                 </h2>
                 <p className="mt-3 text-sm text-[#C0C0C8]">Most wallets claim to prioritize privacy. We built it into the foundation.</p>
@@ -432,8 +468,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       </div>
                       <div className="rounded-lg border border-[#00D9FF33] bg-[#121217] p-4">
                         <div className="flex items-center gap-2">
-                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-[#1A1A1D]" style={{ color: COLORS.gold }}>
-                            <span className="font-[600] tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>UM</span>
+                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-[#1A1A1D]" style={{color: COLORS.gold}}>
+                            <span className="font-[600] tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>UM</span>
                           </span>
                           <span className="text-sm font-medium text-white/90">Umbra</span>
                         </div>
@@ -453,15 +489,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         return (
           <Section id="manifesto" className="relative border-t border-white/10">
             <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(10,10,12,0.8), rgba(10,10,12,0.8))' }}></div>
-              <div className="absolute -left-40 top-1/3 h-96 w-96 rounded-full blur-3xl opacity-30" style={{ background: 'radial-gradient(closest-side, rgba(0,217,255,0.20), transparent 70%)' }}></div>
-              <div className="absolute -right-40 bottom-1/3 h-96 w-96 rounded-full blur-3xl opacity-25" style={{ background: 'radial-gradient(closest-side, rgba(212,168,72,0.20), transparent 70%)' }}></div>
+              <div className="absolute inset-0" style={{background: 'linear-gradient(180deg, rgba(10,10,12,0.8), rgba(10,10,12,0.8))'}}></div>
+              <div className="absolute -left-40 top-1/3 h-96 w-96 rounded-full blur-3xl opacity-30" style={{background: 'radial-gradient(closest-side, rgba(0,217,255,0.20), transparent 70%)'}}></div>
+              <div className="absolute -right-40 bottom-1/3 h-96 w-96 rounded-full blur-3xl opacity-25" style={{background: 'radial-gradient(closest-side, rgba(212,168,72,0.20), transparent 70%)'}}></div>
             </div>
             <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8">
-              <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+              <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                 The Case for Shadows
               </h2>
-              <div className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-[#C0C0C8]" style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+              <div className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-[#C0C0C8]" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                 <p>Privacy isn't about hiding. It's about dignity.</p>
                 <p className="mt-4">
                   The right to transact without being watched. The right to save without being judged. The right to exist without being profiled, analyzed, and sold.
@@ -494,7 +530,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           <Section id="trust" className="relative border-t border-white/10">
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
               <div className="mx-auto max-w-3xl text-center">
-                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                   Security You Can Verify
                 </h2>
               </div>
@@ -503,9 +539,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   <div key={i} className="rounded-xl border border-white/10 bg-[#151518] p-5">
                     <div className="flex items-center gap-3">
                       <i data-lucide={s.icon} className="h-5 w-5 text-[#00D9FF]" />
-                      <h3 className="text-base font-semibold tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>{s.title}</h3>
+                      <h3 className="text-base font-semibold tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>{s.title}</h3>
                     </div>
-                    <p className="mt-2 text-sm text-[#C0C0C8]" style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>{s.desc}</p>
+                    <p className="mt-2 text-sm text-[#C0C0C8]" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>{s.desc}</p>
                   </div>
                 ))}
               </div>
@@ -548,7 +584,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           <Section id="faq" className="relative border-t border-white/10">
             <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
               <div className="mx-auto max-w-3xl text-center">
-                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>
+                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>
                   Frequently Asked Questions
                 </h2>
               </div>
@@ -567,7 +603,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       </button>
                       {expanded && (
                         <div className="px-5 pb-5 -mt-1">
-                          <p className="text-sm leading-relaxed text-[#C0C0C8]" style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' }}>{item.a}</p>
+                          <p className="text-sm leading-relaxed text-[#C0C0C8]" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif'}}>{item.a}</p>
                         </div>
                       )}
                       {i < qa.length - 1 && <div className="h-px w-full bg-white/10" />}
@@ -588,8 +624,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
               <div className="flex flex-col items-center text-center">
                 <div className="inline-flex items-center gap-3">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10" style={{ background: COLORS.bgSecondary }}>
-                    <span className="font-[600] tracking-tight" style={{ fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif', color: COLORS.gold }}>UM</span>
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10" style={{background: COLORS.bgSecondary}}>
+                    <span className="font-[600] tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif', color: COLORS.gold}}>UM</span>
                   </span>
                   <span className="text-sm font-medium text-white/80">Umbra Wallet</span>
                 </div>
@@ -705,6 +741,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

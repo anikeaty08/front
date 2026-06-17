@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -59,126 +95,248 @@ blob: {
 }
 
 
-
-        document.addEventListener("DOMContentLoaded", () => {
-            gsap.registerPlugin(ScrollTrigger);
-            
-            // Initial Load Animations
-            const tl = gsap.timeline();
-            tl.to(".reveal-nav", { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
-              .to(".reveal-hero", { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" }, "-=0.5")
-              .to(".reveal-visual", { opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" }, "-=0.8");
-
-            // Smooth Scroll
-            const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
-            lenis.on('scroll', ScrollTrigger.update);
-            gsap.ticker.add((time)=>{ lenis.raf(time * 1000) });
-
-            // Cursor Logic
-            const cursorDot = document.querySelector('.cursor-dot');
-            const cursorOutline = document.querySelector('.cursor-outline');
-            const cursorText = document.querySelector('.cursor-text'); 
-            let mouseX = 0, mouseY = 0;
-
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX; mouseY = e.clientY;
-                cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
-                gsap.to(cursorOutline, { x: mouseX, y: mouseY, duration: 0.15, ease: "power2.out" });
-                
-                document.querySelectorAll('.spotlight-card').forEach(card => {
-                    const rect = card.getBoundingClientRect();
-                    card.style.setProperty('--mouse-x', `${mouseX - rect.left}px`);
-                    card.style.setProperty('--mouse-y', `${mouseY - rect.top}px`);
-                });
-            });
-
-            // Particles
-            particlesJS('particles-js', {
-                particles: {
-                    number: { value: 60, density: { enable: true, value_area: 800 } }, color: { value: "#00A896" }, shape: { type: "circle" },
-                    opacity: { value: 0.2, random: false }, size: { value: 2, random: true },
-                    line_linked: { enable: true, distance: 150, color: "#00A896", opacity: 0.1, width: 1 },
-                    move: { enable: true, speed: 0.5, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
-                },
-                interactivity: {
-                    detect_on: "window",
-                    events: { onhover: { enable: true, mode: "grab" }, resize: true },
-                    modes: { grab: { distance: 200, line_linked: { opacity: 0.3 } } }
-                },
-                retina_detect: true
-            });
-
-            // Counter Animation
-            gsap.utils.toArray('.counter').forEach(counter => {
-                const target = counter.getAttribute('data-target');
-                gsap.to(counter, {
-                    innerText: target,
-                    duration: 2,
-                    snap: { innerText: 1 },
-                    ease: "power2.out",
-                    scrollTrigger: { trigger: counter, start: "top 85%" }
-                });
-            });
-
-            // General Reveals
-            gsap.utils.toArray('.reveal-fade').forEach((el) => {
-                gsap.to(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 0, x: 0, opacity: 1, duration: 1, ease: "power3.out" });
-            });
-            gsap.utils.toArray('.reveal-stat').forEach((el, i) => {
-                gsap.to(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 0, opacity: 1, duration: 0.8, delay: i * 0.1, ease: "power3.out" });
-            });
-
-            // Horizontal Scroll for Architecture
-            let mm = gsap.matchMedia();
-            mm.add("(min-width: 1024px)", () => {
-                const track = document.getElementById("cards-track");
-                const pinSection = document.getElementById("architecture-pin");
-                if (track && pinSection) {
-                    const cardGraphics = document.querySelectorAll(".card-graphic-wrapper > div");
-                    const getScrollAmount = () => -(track.scrollWidth - window.innerWidth + 100);
-
-                    gsap.to(track, { x: getScrollAmount, ease: "none", scrollTrigger: { trigger: pinSection, start: "top top", end: "+=3000", pin: true, scrub: 1, invalidateOnRefresh: true } });
-                    gsap.to(cardGraphics, { x: -50, ease: "none", scrollTrigger: { trigger: pinSection, start: "top top", end: "+=3000", scrub: 1 } });
-                }
-            });
-
-            // Preloader Complete Logic
-            setTimeout(() => {
-                document.getElementById('preloader').style.display = 'none';
-            }, 1600); // Wait for the initial animation to finish if needed, or simply hide it since it's an inner page
-
-            // 3D Perspective Card Tilt
-            const container = document.querySelector('.perspective-container');
-            if (container) {
-                const inner = container.querySelector('.transform');
-                
-                container.addEventListener('mousemove', (e) => {
-                    const rect = container.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    
-                    const rotateX = ((y - centerY) / centerY) * -5;
-                    const rotateY = ((x - centerX) / centerX) * 5;
-                    
-                    gsap.to(inner, { 
-                        rotationX: rotateX, 
-                        rotationY: rotateY, 
-                        duration: 0.5, 
-                        ease: "power2.out" 
-                    });
-                });
-
-                container.addEventListener('mouseleave', () => {
-                    gsap.to(inner, { rotationX: 0, rotationY: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
-                });
-            }
-        });
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            
+
+            // Initial Load Animations
+
+            const tl = gsap.timeline();
+
+            tl.to(".reveal-nav", { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
+
+              .to(".reveal-hero", { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" }, "-=0.5")
+
+              .to(".reveal-visual", { opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" }, "-=0.8");
+
+
+
+            // Smooth Scroll
+
+            const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
+
+            lenis.on('scroll', ScrollTrigger.update);
+
+            gsap.ticker.add((time)=>{ lenis.raf(time * 1000) });
+
+
+
+            // Cursor Logic
+
+            const cursorDot = document.querySelector('.cursor-dot');
+
+            const cursorOutline = document.querySelector('.cursor-outline');
+
+            const cursorText = document.querySelector('.cursor-text'); 
+
+            let mouseX = 0, mouseY = 0;
+
+
+
+            window.addEventListener('mousemove', (e) => {
+
+                mouseX = e.clientX; mouseY = e.clientY;
+
+                cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+
+                gsap.to(cursorOutline, { x: mouseX, y: mouseY, duration: 0.15, ease: "power2.out" });
+
+                
+
+                document.querySelectorAll('.spotlight-card').forEach(card => {
+
+                    const rect = card.getBoundingClientRect();
+
+                    card.style.setProperty('--mouse-x', `${mouseX - rect.left}px`);
+
+                    card.style.setProperty('--mouse-y', `${mouseY - rect.top}px`);
+
+                });
+
+            });
+
+
+
+            // Particles
+
+            particlesJS('particles-js', {
+
+                particles: {
+
+                    number: { value: 60, density: { enable: true, value_area: 800 } }, color: { value: "#00A896" }, shape: { type: "circle" },
+
+                    opacity: { value: 0.2, random: false }, size: { value: 2, random: true },
+
+                    line_linked: { enable: true, distance: 150, color: "#00A896", opacity: 0.1, width: 1 },
+
+                    move: { enable: true, speed: 0.5, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+
+                },
+
+                interactivity: {
+
+                    detect_on: "window",
+
+                    events: { onhover: { enable: true, mode: "grab" }, resize: true },
+
+                    modes: { grab: { distance: 200, line_linked: { opacity: 0.3 } } }
+
+                },
+
+                retina_detect: true
+
+            });
+
+
+
+            // Counter Animation
+
+            gsap.utils.toArray('.counter').forEach(counter => {
+
+                const target = counter.getAttribute('data-target');
+
+                gsap.to(counter, {
+
+                    innerText: target,
+
+                    duration: 2,
+
+                    snap: { innerText: 1 },
+
+                    ease: "power2.out",
+
+                    scrollTrigger: { trigger: counter, start: "top 85%" }
+
+                });
+
+            });
+
+
+
+            // General Reveals
+
+            gsap.utils.toArray('.reveal-fade').forEach((el) => {
+
+                gsap.to(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 0, x: 0, opacity: 1, duration: 1, ease: "power3.out" });
+
+            });
+
+            gsap.utils.toArray('.reveal-stat').forEach((el, i) => {
+
+                gsap.to(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 0, opacity: 1, duration: 0.8, delay: i * 0.1, ease: "power3.out" });
+
+            });
+
+
+
+            // Horizontal Scroll for Architecture
+
+            let mm = gsap.matchMedia();
+
+            mm.add("(min-width: 1024px)", () => {
+
+                const track = document.getElementById("cards-track");
+
+                const pinSection = document.getElementById("architecture-pin");
+
+                if (track && pinSection) {
+
+                    const cardGraphics = document.querySelectorAll(".card-graphic-wrapper > div");
+
+                    const getScrollAmount = () => -(track.scrollWidth - window.innerWidth + 100);
+
+
+
+                    gsap.to(track, { x: getScrollAmount, ease: "none", scrollTrigger: { trigger: pinSection, start: "top top", end: "+=3000", pin: true, scrub: 1, invalidateOnRefresh: true } });
+
+                    gsap.to(cardGraphics, { x: -50, ease: "none", scrollTrigger: { trigger: pinSection, start: "top top", end: "+=3000", scrub: 1 } });
+
+                }
+
+            });
+
+
+
+            // Preloader Complete Logic
+
+            setTimeout(() => {
+
+                document.getElementById('preloader').style.display = 'none';
+
+            }, 1600); // Wait for the initial animation to finish if needed, or simply hide it since it's an inner page
+
+
+
+            // 3D Perspective Card Tilt
+
+            const container = document.querySelector('.perspective-container');
+
+            if (container) {
+
+                const inner = container.querySelector('.transform');
+
+                
+
+                container.addEventListener('mousemove', (e) => {
+
+                    const rect = container.getBoundingClientRect();
+
+                    const x = e.clientX - rect.left;
+
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+
+                    const centerY = rect.height / 2;
+
+                    
+
+                    const rotateX = ((y - centerY) / centerY) * -5;
+
+                    const rotateY = ((x - centerX) / centerX) * 5;
+
+                    
+
+                    gsap.to(inner, { 
+
+                        rotationX: rotateX, 
+
+                        rotationY: rotateY, 
+
+                        duration: 0.5, 
+
+                        ease: "power2.out" 
+
+                    });
+
+                });
+
+
+
+                container.addEventListener('mouseleave', () => {
+
+                    gsap.to(inner, { rotationX: 0, rotationY: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
+
+                });
+
+            }
+
+        });
+
     
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -242,19 +400,25 @@ blob: {
 <iconify-icon className="text-luxota-accent" icon="solar:code-square-linear"></iconify-icon>
 <span className="text-[10px] uppercase tracking-widest text-white/80 font-medium">Headless Architecture</span>
 </div>
-<h1 className="text-5xl md:text-7xl font-medium tracking-tightest text-white leading-[0.95] mb-8 opacity-0 reveal-hero">
+<h1 className="text-5xl md:text-7xl font-medium tracking-tightest text-white leading-[0.95] mb-8 opacity-0 reveal-hero">
+
                         Pixel-perfect <br/>
 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-luxota-accent to-white animate-text-shimmer">booking experiences.</span>
 </h1>
-<p className="text-lg text-luxota-dim leading-relaxed mb-10 max-w-xl opacity-0 reveal-hero">
-                        A fully headless, API-first booking engine designed for agencies who refuse to look like everyone else. Build your storefront in React, Vue, or Swift — we handle the logic.
+<p className="text-lg text-luxota-dim leading-relaxed mb-10 max-w-xl opacity-0 reveal-hero">
+
+                        A fully headless, API-first booking engine designed for agencies who refuse to look like everyone else. Build your storefront in React, Vue, or Swift — we handle the logic.
+
                     </p>
 <div className="flex flex-col sm:flex-row gap-4 opacity-0 reveal-hero">
-<button className="px-8 py-4 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_40px_rgba(0,168,150,0.5)]">
+<button className="px-8 py-4 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_40px_rgba(0,168,150,0.5)]">
+
                             Read Documentation <iconify-icon className="text-lg" icon="solar:documents-minimalistic-linear"></iconify-icon>
 </button>
-<button className="px-8 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-white font-medium text-sm hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-                            View Live Demo
+<button className="px-8 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-white font-medium text-sm hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+
+                            View Live Demo
+
                         </button>
 </div>
 </div>
@@ -272,13 +436,20 @@ blob: {
 <span className="text-[10px] text-luxota-dim font-mono ml-2">api/v2/flights/search</span>
 </div>
 <div className="font-tech text-xs leading-6">
-<pre><code className="language-json"><span className="token punctuation">{</span>
-  <span className="token property">"id"</span><span className="token punctuation">:</span> <span className="token string">"flt_8x92a"</span><span className="token punctuation">,</span>
-  <span className="token property">"route"</span><span className="token punctuation">:</span> <span className="token punctuation">{</span>
-    <span className="token property">"origin"</span><span className="token punctuation">:</span> <span className="token string">"LHR"</span><span className="token punctuation">,</span>
-    <span className="token property">"dest"</span><span className="token punctuation">:</span> <span className="token string">"HND"</span>
-  <span className="token punctuation">}</span><span className="token punctuation">,</span>
-  <span className="token property">"price"</span><span className="token punctuation">:</span> <span className="token number">1420.50</span>
+<pre><code className="language-json"><span className="token punctuation">{</span>
+
+  <span className="token property">"id"</span><span className="token punctuation">:</span> <span className="token string">"flt_8x92a"</span><span className="token punctuation">,</span>
+
+  <span className="token property">"route"</span><span className="token punctuation">:</span> <span className="token punctuation">{</span>
+
+    <span className="token property">"origin"</span><span className="token punctuation">:</span> <span className="token string">"LHR"</span><span className="token punctuation">,</span>
+
+    <span className="token property">"dest"</span><span className="token punctuation">:</span> <span className="token string">"HND"</span>
+
+  <span className="token punctuation">}</span><span className="token punctuation">,</span>
+
+  <span className="token property">"price"</span><span className="token punctuation">:</span> <span className="token number">1420.50</span>
+
 <span className="token punctuation">}</span></code></pre>
 </div>
 <div className="scan-line animate-scan"></div>
@@ -338,7 +509,8 @@ blob: {
 <div className="max-w-7xl mx-auto">
 <div className="mb-20 text-center md:text-left reveal-fade opacity-0">
 <span className="text-xs text-luxota-accent font-mono mb-4 block tracking-widest">[ CAPABILITIES ]</span>
-<h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white max-w-2xl leading-tight">
+<h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white max-w-2xl leading-tight">
+
                     Built for developers,<br/>
 <span className="text-luxota-dim">designed for conversion.</span>
 </h2>
@@ -350,8 +522,10 @@ blob: {
 <iconify-icon className="text-2xl text-white group-hover:text-luxota-accent transition-colors" icon="solar:devices-linear"></iconify-icon>
 </div>
 <h3 className="text-2xl text-white font-medium mb-4">Omnichannel Ready</h3>
-<p className="text-base text-luxota-dim leading-relaxed font-light">
-                        Build once, deploy everywhere. The same API powers your web platform, iOS app, and Android application, ensuring consistent data across all customer touchpoints.
+<p className="text-base text-luxota-dim leading-relaxed font-light">
+
+                        Build once, deploy everywhere. The same API powers your web platform, iOS app, and Android application, ensuring consistent data across all customer touchpoints.
+
                     </p>
 </div>
 
@@ -360,8 +534,10 @@ blob: {
 <iconify-icon className="text-2xl text-white group-hover:text-luxota-accent transition-colors" icon="solar:pallete-2-linear"></iconify-icon>
 </div>
 <h3 className="text-2xl text-white font-medium mb-4">Infinite Theming</h3>
-<p className="text-base text-luxota-dim leading-relaxed font-light">
-                        No generic templates. You control the CSS, the layout, and the flow. Our UI Kit provides unstyled primitives that inherit your brand's design system automatically.
+<p className="text-base text-luxota-dim leading-relaxed font-light">
+
+                        No generic templates. You control the CSS, the layout, and the flow. Our UI Kit provides unstyled primitives that inherit your brand's design system automatically.
+
                     </p>
 </div>
 
@@ -370,8 +546,10 @@ blob: {
 <iconify-icon className="text-2xl text-white group-hover:text-luxota-accent transition-colors" icon="solar:rocket-2-linear"></iconify-icon>
 </div>
 <h3 className="text-2xl text-white font-medium mb-4">Smart Cache</h3>
-<p className="text-base text-luxota-dim leading-relaxed font-light">
-                        Availability caching at the edge. We reduce GDS look-to-book ratios and serve search results instantly using our proprietary distributed caching layer.
+<p className="text-base text-luxota-dim leading-relaxed font-light">
+
+                        Availability caching at the edge. We reduce GDS look-to-book ratios and serve search results instantly using our proprietary distributed caching layer.
+
                     </p>
 </div>
 </div>
@@ -384,15 +562,18 @@ blob: {
 <div className="reveal-fade opacity-0 translate-x-[-20px]">
 <span className="text-xs text-luxota-accent font-mono mb-4 block tracking-widest uppercase">[ Integration Made Simple ]</span>
 <h2 className="text-4xl md:text-5xl font-medium text-white mb-6 leading-tight">Drop-in <br/>React Components</h2>
-<p className="text-luxota-dim text-lg mb-8 font-light leading-relaxed">
-                     Don't want to build from scratch? Use <span className="text-white font-mono bg-white/5 px-2 py-1 rounded">@luxota/ui</span>. A library of pre-built, accessible, and responsive travel components that just work.
+<p className="text-luxota-dim text-lg mb-8 font-light leading-relaxed">
+
+                     Don't want to build from scratch? Use <span className="text-white font-mono bg-white/5 px-2 py-1 rounded">@luxota/ui</span>. A library of pre-built, accessible, and responsive travel components that just work.
+
                  </p>
 <ul className="space-y-4 mb-10">
 <li className="flex items-center gap-4 text-white/90 bg-white/[0.02] p-3 rounded-lg border border-white/5"><iconify-icon className="text-luxota-accent text-xl" icon="solar:check-circle-bold"></iconify-icon> Ready-to-use Search Forms</li>
 <li className="flex items-center gap-4 text-white/90 bg-white/[0.02] p-3 rounded-lg border border-white/5"><iconify-icon className="text-luxota-accent text-xl" icon="solar:check-circle-bold"></iconify-icon> Filterable Flight Result Cards</li>
 <li className="flex items-center gap-4 text-white/90 bg-white/[0.02] p-3 rounded-lg border border-white/5"><iconify-icon className="text-luxota-accent text-xl" icon="solar:check-circle-bold"></iconify-icon> Secure Passenger Detail Inputs</li>
 </ul>
-<a className="inline-flex items-center gap-2 text-luxota-accent hover:text-white transition-colors font-medium border-b border-luxota-accent/30 hover:border-white pb-1" href="#">
+<a className="inline-flex items-center gap-2 text-luxota-accent hover:text-white transition-colors font-medium border-b border-luxota-accent/30 hover:border-white pb-1" href="#">
+
                      Explore the Component Library <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
 </a>
 </div>
@@ -407,26 +588,46 @@ blob: {
 </div>
 <span className="text-xs text-luxota-accent font-mono bg-luxota-accent/10 px-2 py-1 rounded">FlightSearch.jsx</span>
 </div>
-<pre className="language-jsx text-sm overflow-x-auto leading-loose"><code>import { SearchWidget, Results } from '@luxota/ui';
-
-export default function BookingPage() {
-  return (
-    &lt;div className="luxota-container"&gt;
-      &lt;h1&gt;Find your next journey&lt;/h1&gt;
-      
-      {/* Pre-connected to Luxota API */}
-      &lt;SearchWidget 
-        theme="dark" 
-        cabins={['economy', 'business']}
-        onSearch={(data) =&gt; console.log(data)}
-      /&gt;
-
-      &lt;Results 
-        skeletonColor="#1a1a1a"
-        layout="grid"
-      /&gt;
-    &lt;/div&gt;
-  );
+<pre className="language-jsx text-sm overflow-x-auto leading-loose"><code>import { SearchWidget, Results } from '@luxota/ui';
+
+
+
+export default function BookingPage() {
+
+  return (
+
+    &lt;div className="luxota-container"&gt;
+
+      &lt;h1&gt;Find your next journey&lt;/h1&gt;
+
+      
+
+      {/* Pre-connected to Luxota API */}
+
+      &lt;SearchWidget 
+
+        theme="dark" 
+
+        cabins={['economy', 'business']}
+
+        onSearch={(data) =&gt; console.log(data)}
+
+      /&gt;
+
+
+
+      &lt;Results 
+
+        skeletonColor="#1a1a1a"
+
+        layout="grid"
+
+      /&gt;
+
+    &lt;/div&gt;
+
+  );
+
 }</code></pre>
 </div>
 </div>
@@ -455,8 +656,10 @@ export default function BookingPage() {
 <div>
 <div className="text-luxota-accent font-mono text-sm mb-6 tracking-widest">01 — Phase</div>
 <h3 className="text-5xl text-white font-medium mb-6 tracking-tight">Search</h3>
-<p className="text-lg text-luxota-dim leading-relaxed font-light">
-                                    Global inventory aggregation. Flights, hotels, and transfers are queried in real-time across the ecosystem to ensure the best possible pricing and availability.
+<p className="text-lg text-luxota-dim leading-relaxed font-light">
+
+                                    Global inventory aggregation. Flights, hotels, and transfers are queried in real-time across the ecosystem to ensure the best possible pricing and availability.
+
                                 </p>
 </div>
 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-luxota-accent border border-white/10 shadow-[0_0_20px_rgba(0,168,150,0.1)]">
@@ -486,8 +689,10 @@ export default function BookingPage() {
 <div>
 <div className="text-luxota-accent font-mono text-sm mb-6 tracking-widest">02 — Phase</div>
 <h3 className="text-5xl text-white font-medium mb-6 tracking-tight">Booking</h3>
-<p className="text-lg text-luxota-dim leading-relaxed font-light">
-                                    Seamless workflows and instant PNR generation. Captures traveler data, enforces markup rules, and holds inventory securely.
+<p className="text-lg text-luxota-dim leading-relaxed font-light">
+
+                                    Seamless workflows and instant PNR generation. Captures traveler data, enforces markup rules, and holds inventory securely.
+
                                 </p>
 </div>
 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-luxota-accent border border-white/10 shadow-[0_0_20px_rgba(0,168,150,0.1)]">
@@ -517,8 +722,10 @@ export default function BookingPage() {
 <div>
 <div className="text-luxota-accent font-mono text-sm mb-6 tracking-widest">03 — Phase</div>
 <h3 className="text-5xl text-white font-medium mb-6 tracking-tight">Transaction</h3>
-<p className="text-lg text-luxota-dim leading-relaxed font-light">
-                                    Secure order processing and payment handling. Connects to local and global gateways with built-in fraud prevention.
+<p className="text-lg text-luxota-dim leading-relaxed font-light">
+
+                                    Secure order processing and payment handling. Connects to local and global gateways with built-in fraud prevention.
+
                                 </p>
 </div>
 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-luxota-accent border border-white/10 shadow-[0_0_20px_rgba(0,168,150,0.1)]">
@@ -544,8 +751,10 @@ export default function BookingPage() {
 <div>
 <div className="text-luxota-accent font-mono text-sm mb-6 tracking-widest">04 — Phase</div>
 <h3 className="text-5xl text-white font-medium mb-6 tracking-tight">Delivery</h3>
-<p className="text-lg text-luxota-dim leading-relaxed font-light">
-                                    Automated ticket issuance and client documentation. Vouchers are generated instantly and dispatched via connected email infrastructure.
+<p className="text-lg text-luxota-dim leading-relaxed font-light">
+
+                                    Automated ticket issuance and client documentation. Vouchers are generated instantly and dispatched via connected email infrastructure.
+
                                 </p>
 </div>
 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-luxota-accent border border-white/10 shadow-[0_0_20px_rgba(0,168,150,0.1)]">
@@ -595,13 +804,16 @@ export default function BookingPage() {
 <div className="absolute inset-0 bg-gradient-to-t from-luxota-accent/10 to-transparent pointer-events-none"></div>
 <div className="relative z-10 text-center max-w-5xl">
 <span className="text-xs text-luxota-accent font-mono mb-6 block tracking-[0.3em] uppercase">The First Step in Agency Maturity</span>
-<h2 className="text-6xl md:text-8xl font-medium tracking-tightest text-white mb-16 leading-[0.85]">
+<h2 className="text-6xl md:text-8xl font-medium tracking-tightest text-white mb-16 leading-[0.85]">
+
                 Launch your<br/> portal — <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 italic font-serif">now.</span>
 </h2>
 <div className="flex flex-col items-center gap-10">
 <button className="group relative bg-white text-black px-16 py-6 rounded-full font-bold text-xl overflow-hidden transition-transform hover:scale-105 shadow-[0_0_60px_-15px_rgba(255,255,255,0.4)] hover:shadow-[0_0_80px_-15px_rgba(0,168,150,0.5)]">
-<span className="relative z-10 flex items-center gap-3">
-                        Instant Live 
+<span className="relative z-10 flex items-center gap-3">
+
+                        Instant Live 
+
                         <iconify-icon className="group-hover:scale-110 transition-transform" icon="solar:bolt-bold"></iconify-icon>
 </span>
 <div className="absolute inset-0 bg-luxota-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo"></div>

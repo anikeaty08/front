@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -24,6 +60,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -44,7 +86,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="flex space-x-4 items-center">
 <button className="hover:text-blue-600 transition-colors font-medium text-gray-700 font-geist pr-8 pl-0">Sign in</button>
-<button aria-label="Sign up" className="hover:bg-blue-700 transition-colors font-medium text-white font-geist" style={{-FancyButtonGradient-0: '#8d49fd', -FancyButtonGradient-50: '#7f56f3', -FancyButtonGradient-100: '#5691f3', -FancyButtonInnerShadowTop: 'rgba(233, 209, 255, 0.2)', -FancyButtonInnerShadowTopLg: 'rgba(9, 12, 60, 0.1)', -FancyButtonInnerShadowBottom: 'rgba(137, 222, 246, 0.3)', -FancyButtonShineTop: '#e9d1ff', -FancyButtonShineBottom: '#adfff9', fontWeight: '500', fontSize: '15px', lineHeight: '21px', textShadow: 'rgba(0, 0, 0, 0.2) 0px 0.5px 0.5px', padding: '0px', margin: '0px', appearance: 'none', border: 'none', overflow: 'hidden', position: 'relative', cursor: 'pointer', zIndex: '1', color: 'rgb(255, 255, 255)', backgroundImage: 'linear-gradient(to bottom, var(--fancy-button-gradient-0) 0%, var(--fancy-button-gradient-50) 50%, var(--fancy-button-gradient-100) 100%)', boxShadow: '0px 4px 12px rgba(9, 12, 60, 0.15), 0px 2px 8px rgba(9, 12, 60, 0.15), 0px 1px 3px var(--fancy-button-inner-shadow-top-lg), inset 0px 1px 1px var(--fancy-button-inner-shadow-top), inset 0px -1px 3px var(--fancy-button-inner-shadow-bottom)', borderRadius: '25px'}}><span className="" style={{display: 'block', padding: '12px 24px', borderRadius: '25px', overflow: 'hidden', position: 'relative', backgroundImage: 'linear-gradient(to bottom, var(--fancy-button-shine-top), transparent 8px)', backgroundPosition: '0 -6px', backgroundRepeat: 'no-repeat', zIndex: '1'}}>Sign up</span><style> #aura-emdxjk7ys::before { content: ""; position: absolute; border-radius: inherit; will-change: transform; left: 50%; transform: translateX(-50%); background-color: var(--fancy-button-shine-top); width: 96px; height: 6px; top: -3px; opacity: 0.6; filter: blur(6px); transition: opacity 0.25s; } #aura-emdxjk7ys::after { content: ""; position: absolute; border-radius: inherit; inset: 0; background-size: cover; z-index: 2; opacity: 0.3; mix-blend-mode: overlay; pointer-events: none; } #aura-emdxjk7ys span::before, #aura-emdxjk7ys span::after { content: ""; position: absolute; left: 50%; transform: translateX(-50%); border-radius: 50%; background-color: var(--fancy-button-shine-bottom); transition: opacity 0.25s, transform 0.25s; will-change: transform; } #aura-emdxjk7ys span::before { width: 92px; height: 8px; bottom: -4px; opacity: 0.75; filter: blur(6px); } #aura-emdxjk7ys span::after { width: 112px; height: 1px; bottom: 0; opacity: 0.9; filter: blur(1px); } #aura-emdxjk7ys:hover span::before { opacity: 0.8; transform: translateX(-50%) scale(1.25); } #aura-emdxjk7ys:hover span::after { opacity: 1; } </style></button>
+<button aria-label="Sign up" className="hover:bg-blue-700 transition-colors font-medium text-white font-geist" style={{'--fancy-button-gradient-0': '#8d49fd', '--fancy-button-gradient-50': '#7f56f3', '--fancy-button-gradient-100': '#5691f3', '--fancy-button-inner-shadow-top': 'rgba(233, 209, 255, 0.2)', '--fancy-button-inner-shadow-top-lg': 'rgba(9, 12, 60, 0.1)', '--fancy-button-inner-shadow-bottom': 'rgba(137, 222, 246, 0.3)', '--fancy-button-shine-top': '#e9d1ff', '--fancy-button-shine-bottom': '#adfff9', fontWeight: '500', fontSize: '15px', lineHeight: '21px', textShadow: 'rgba(0, 0, 0, 0.2) 0px 0.5px 0.5px', padding: '0px', margin: '0px', appearance: 'none', border: 'none', overflow: 'hidden', position: 'relative', cursor: 'pointer', zIndex: '1', color: 'rgb(255, 255, 255)', backgroundImage: 'linear-gradient(to bottom, var(--fancy-button-gradient-0) 0%, var(--fancy-button-gradient-50) 50%, var(--fancy-button-gradient-100) 100%)', boxShadow: '0px 4px 12px rgba(9, 12, 60, 0.15), 0px 2px 8px rgba(9, 12, 60, 0.15), 0px 1px 3px var(--fancy-button-inner-shadow-top-lg), inset 0px 1px 1px var(--fancy-button-inner-shadow-top), inset 0px -1px 3px var(--fancy-button-inner-shadow-bottom)', borderRadius: '25px'}}><span className="" style={{display: 'block', padding: '12px 24px', borderRadius: '25px', overflow: 'hidden', position: 'relative', backgroundImage: 'linear-gradient(to bottom, var(--fancy-button-shine-top), transparent 8px)', backgroundPosition: '0 -6px', backgroundRepeat: 'no-repeat', zIndex: '1'}}>Sign up</span><style> #aura-emdxjk7ys::before { content: ""; position: absolute; border-radius: inherit; will-change: transform; left: 50%; transform: translateX(-50%); background-color: var(--fancy-button-shine-top); width: 96px; height: 6px; top: -3px; opacity: 0.6; filter: blur(6px); transition: opacity 0.25s; } #aura-emdxjk7ys::after { content: ""; position: absolute; border-radius: inherit; inset: 0; background-size: cover; z-index: 2; opacity: 0.3; mix-blend-mode: overlay; pointer-events: none; } #aura-emdxjk7ys span::before, #aura-emdxjk7ys span::after { content: ""; position: absolute; left: 50%; transform: translateX(-50%); border-radius: 50%; background-color: var(--fancy-button-shine-bottom); transition: opacity 0.25s, transform 0.25s; will-change: transform; } #aura-emdxjk7ys span::before { width: 92px; height: 8px; bottom: -4px; opacity: 0.75; filter: blur(6px); } #aura-emdxjk7ys span::after { width: 112px; height: 1px; bottom: 0; opacity: 0.9; filter: blur(1px); } #aura-emdxjk7ys:hover span::before { opacity: 0.8; transform: translateX(-50%) scale(1.25); } #aura-emdxjk7ys:hover span::after { opacity: 1; } </style></button>
 </div>
 </div>
 </div>

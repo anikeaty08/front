@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -262,6 +298,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -315,11 +357,11 @@ gtag('config', 'G-2M6V79H761');
 <a className="group relative flex items-center justify-center rounded-full cursor-pointer transition-transform duration-700 ease-out hover:scale-105 active:scale-95 focus:outline-none w-full sm:w-[240px] h-[64px] shrink-0" href="/get-started/">
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150px] bg-white/10 rounded-[100%] blur-[60px] pointer-events-none z-0"></div>
 <div className="absolute inset-0 rounded-full border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.8)] pointer-events-none z-0" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 50%, rgba(255,255,255,0.08) 100%)'}}></div>
-<div className="absolute inset-[1px] rounded-full overflow-hidden bg-[#0a0a0a]/80 backdrop-blur-xl pointer-events-none z-0" style={{boxShadow: 'inset 0px 4px 20px rgba(255,255,255,0.08), inset 0px -4px 20px rgba(255,255,255,0.02), inset 20px 0px 30px rgba(0,0,0,0.5), inset -20px 0px 30px rgba(255,255,255,0.1)'}}>
-<div className="absolute w-[200%] h-[200%] top-[-50%] left-[-50%] opacity-40 transition-opacity duration-500 group-hover:opacity-60" id="smokeLayer-aura-emnkzi4b0l0o291x" style={{background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 60%)', filter: 'blur(20px)'}}></div>
+<div className="absolute inset-[1px] rounded-full overflow-hidden bg-[#0a0a0a]/80 backdrop-blur-xl pointer-events-none z-0" style={{boxShadow: 'inset 0px 4px 20px rgba(255, 255, 255, 0.08), inset 0px -4px 20px rgba(255, 255, 255, 0.02), inset 20px 0px 30px rgba(0, 0, 0, 0.5), inset -20px 0px 30px rgba(255,255,255,0.1)'}}>
+<div className="absolute w-[200%] h-[200%] top-[-50%] left-[-50%] opacity-40 transition-opacity duration-500 group-hover:opacity-60" id="smokeLayer-aura-emnkzi4b0l0o291x" style={{background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 60%)', filter: 'blur(20px)'}}></div>
 <canvas className="absolute inset-0 w-full h-full opacity-80 mix-blend-screen transition-opacity duration-500 group-hover:opacity-100" height="163" id="nebulaCanvas-aura-emnkzi4b0l0o291x" width="628"></canvas>
 </div>
-<span className="relative z-10 text-lg font-medium tracking-tight text-white/90 group-hover:text-white transition-colors duration-300 pointer-events-none" style={{textShadow: '0 0 12px rgba(255,255,255,0.5), 0 0 24px rgba(255,255,255,0.2)'}}>
+<span className="relative z-10 text-lg font-medium tracking-tight text-white/90 group-hover:text-white transition-colors duration-300 pointer-events-none" style={{textShadow: '0 0 12px rgba(255, 255, 255, 0.5), 0 0 24px rgba(255,255,255,0.2)'}}>
         Get Started
     </span>
 
@@ -327,11 +369,11 @@ gtag('config', 'G-2M6V79H761');
 <a className="group relative flex items-center justify-center rounded-full cursor-pointer transition-transform duration-700 ease-out hover:scale-105 active:scale-95 focus:outline-none w-full sm:w-[240px] h-[64px] shrink-0" href="#">
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150px] bg-white/10 rounded-[100%] blur-[60px] pointer-events-none z-0"></div>
 <div className="absolute inset-0 rounded-full border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.8)] pointer-events-none z-0" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 50%, rgba(255,255,255,0.08) 100%)'}}></div>
-<div className="absolute inset-[1px] rounded-full overflow-hidden bg-[#0a0a0a]/80 backdrop-blur-xl pointer-events-none z-0" style={{boxShadow: 'inset 0px 4px 20px rgba(255,255,255,0.08), inset 0px -4px 20px rgba(255,255,255,0.02), inset 20px 0px 30px rgba(0,0,0,0.5), inset -20px 0px 30px rgba(255,255,255,0.1)'}}>
-<div className="absolute w-[200%] h-[200%] top-[-50%] left-[-50%] opacity-40 transition-opacity duration-500 group-hover:opacity-60" id="smokeLayer-aura-emnkzn8fcmvcpjg8" style={{background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 60%)', filter: 'blur(20px)'}}></div>
+<div className="absolute inset-[1px] rounded-full overflow-hidden bg-[#0a0a0a]/80 backdrop-blur-xl pointer-events-none z-0" style={{boxShadow: 'inset 0px 4px 20px rgba(255, 255, 255, 0.08), inset 0px -4px 20px rgba(255, 255, 255, 0.02), inset 20px 0px 30px rgba(0, 0, 0, 0.5), inset -20px 0px 30px rgba(255,255,255,0.1)'}}>
+<div className="absolute w-[200%] h-[200%] top-[-50%] left-[-50%] opacity-40 transition-opacity duration-500 group-hover:opacity-60" id="smokeLayer-aura-emnkzn8fcmvcpjg8" style={{background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 60%)', filter: 'blur(20px)'}}></div>
 <canvas className="absolute inset-0 w-full h-full opacity-80 mix-blend-screen transition-opacity duration-500 group-hover:opacity-100" id="nebulaCanvas-aura-emnkzn8fcmvcpjg8"></canvas>
 </div>
-<span className="relative z-10 text-lg font-medium tracking-tight text-white/90 group-hover:text-white transition-colors duration-300 pointer-events-none" style={{textShadow: '0 0 12px rgba(255,255,255,0.5), 0 0 24px rgba(255,255,255,0.2)'}}>
+<span className="relative z-10 text-lg font-medium tracking-tight text-white/90 group-hover:text-white transition-colors duration-300 pointer-events-none" style={{textShadow: '0 0 12px rgba(255, 255, 255, 0.5), 0 0 24px rgba(255,255,255,0.2)'}}>
         Owners, List Your Space
     </span>
 

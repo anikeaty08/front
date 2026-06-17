@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -179,6 +215,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -316,7 +358,7 @@ addUtilities({
 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
 
 <div className="group flex flex-col gap-6 [animation:animationIn_1s_ease-out_0.3s_both] animate-on-scroll">
-<div className="bg-slate-900/50 border-gradient rounded-[2rem] h-[450px] relative overflow-hidden flex items-center justify-center p-8 shadow-2xl backdrop-blur-sm group-hover:border-blue-500/30 transition-colors duration-500" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="bg-slate-900/50 border-gradient rounded-[2rem] h-[450px] relative overflow-hidden flex items-center justify-center p-8 shadow-2xl backdrop-blur-sm group-hover:border-blue-500/30 transition-colors duration-500" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-blue-500/10 to-transparent opacity-50 pointer-events-none"></div>
 <div className="w-full max-w-[280px] aspect-[3/4] bg-slate-950 rounded-[24px] border border-white/10 overflow-hidden shadow-2xl relative flex flex-col">
 <div className="px-5 py-4 border-b border-white/5 flex justify-between items-center bg-slate-900">
@@ -348,7 +390,7 @@ addUtilities({
 </div>
 
 <div className="group flex flex-col gap-6 [animation:animationIn_1s_ease-out_0.5s_both] animate-on-scroll">
-<div className="bg-slate-900/50 border-gradient rounded-[2rem] h-[450px] relative overflow-hidden flex items-center justify-center p-8 shadow-2xl backdrop-blur-sm transition-colors duration-500" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="bg-slate-900/50 border-gradient rounded-[2rem] h-[450px] relative overflow-hidden flex items-center justify-center p-8 shadow-2xl backdrop-blur-sm transition-colors duration-500" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-indigo-500/10 to-transparent opacity-50 pointer-events-none"></div>
 <div className="overflow-hidden flex flex-col gap-5 bg-slate-950/95 backdrop-blur-xl w-full max-w-[280px] border border-white/10 rounded-[24px] p-6 shadow-2xl relative group hover:border-indigo-500/40 hover:shadow-indigo-500/20 transition-all duration-500 ease-out">
 <div className="flex items-center gap-4 border-b border-white/5 pb-4 relative z-10">
@@ -371,7 +413,7 @@ addUtilities({
 </div>
 
 <div className="group flex flex-col gap-6 [animation:animationIn_1s_ease-out_0.7s_both] animate-on-scroll">
-<div className="bg-slate-900/50 border-gradient rounded-[2rem] h-[450px] relative overflow-hidden flex items-center justify-center p-8 shadow-2xl backdrop-blur-sm transition-colors duration-500" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="bg-slate-900/50 border-gradient rounded-[2rem] h-[450px] relative overflow-hidden flex items-center justify-center p-8 shadow-2xl backdrop-blur-sm transition-colors duration-500" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-emerald-500/10 to-transparent opacity-50 pointer-events-none"></div>
 <div className="overflow-hidden flex flex-col gap-5 bg-slate-950/95 backdrop-blur-xl w-full max-w-[280px] border border-white/10 rounded-[24px] p-6 shadow-2xl relative group hover:border-emerald-500/40 hover:shadow-emerald-500/20 transition-all duration-500 ease-out text-left">
 <div className="flex items-center gap-4 border-b border-white/5 pb-4 relative z-10">

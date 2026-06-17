@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -147,6 +183,12 @@ revealElements.forEach(el => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -624,7 +666,7 @@ revealElements.forEach(el => {
 <h4>Newsletter</h4>
 <p style={{fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem', lineHeight: '1.6'}}>Recevez nos conseils d'entretien et actualités domotiques.</p>
 <form onsubmit="event.preventDefault()" style={{display: 'flex', gap: '0.5rem'}}>
-<input placeholder="Votre adresse email" required="" style={{width: '100%', background: 'rgba(193,127,89,0.06)', border: '0.0625rem solid rgba(193,127,89,0.2)', borderRadius: '0.375rem', padding: '0.6rem 1rem', color: 'var(--color-cream)', fontSize: '0.875rem', outline: 'none'}} type="email"/>
+<input placeholder="Votre adresse email" required="" style={{width: '100%', background: 'rgba(193, 127, 89, 0.06)', border: '0.0625rem solid rgba(193, 127, 89, 0.2)', borderRadius: '0.375rem', padding: '0.6rem 1rem', color: 'var(--color-cream)', fontSize: '0.875rem', outline: 'none'}} type="email"/>
 <button style={{background: 'var(--color-copper)', color: '#fff', borderRadius: '0.375rem', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.3s'}} type="submit"><iconify-icon icon="solar:arrow-right-linear" style={{strokeWidth: '1.5px'}}></iconify-icon></button>
 </form>
 </div>

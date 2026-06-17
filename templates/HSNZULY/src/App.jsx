@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -321,6 +357,12 @@ function toggleFAQ(num) {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -673,7 +715,7 @@ function toggleFAQ(num) {
 <div className="flex justify-center" style={{height: '32rem'}}>
 <div className="cards-section feature-1-active" style={{height: '32rem', --_offsetSteps: '4rem', --_scaleSteps: '10', --_opacitySteps: '15', --_offsetStepsTwo: 'calc(var(--_offset-steps) * -1)', --_offsetStepsThree: 'calc(var(--_offset-steps) * -2)', -ScaleStepsTwo: 'calc(1 - var(--_scale-steps) * 0.01)', -ScaleStepsThree: 'calc(1 - var(--_scale-steps) * 0.02)', -OpacityStepsTwo: 'calc(1 - var(--_opacity-steps) * 0.015)', -OpacityStepsThree: 'calc(1 - var(--_opacity-steps) * 0.03)', display: 'grid', gridTemplateAreas: '\'stack\'', width: 'min(calc(100% - 2rem), 26rem)', perspective: '1000px'}}>
 
-<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/20 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', --_order: 'var(--_1-order)', --_scale: 'var(--_1-scale)', --_opacity: 'var(--_1-opacity)', --_offset: 'var(--_1-offset)'}}>
+<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/20 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', '---_order': 'var(--_1-order)', '---_scale': 'var(--_1-scale)', '---_opacity': 'var(--_1-opacity)', '---_offset': 'var(--_1-offset)'}}>
 <div className="flex flex-col h-full">
 <div className="flex items-center gap-3 mb-6">
 <div className="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center relative">
@@ -727,7 +769,7 @@ function toggleFAQ(num) {
 </div>
 </div>
 
-<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/20 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', --_order: 'var(--_2-order)', --_scale: 'var(--_2-scale)', --_opacity: 'var(--_2-opacity)', --_offset: 'var(--_2-offset)'}}>
+<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/20 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', '---_order': 'var(--_2-order)', '---_scale': 'var(--_2-scale)', '---_opacity': 'var(--_2-opacity)', '---_offset': 'var(--_2-offset)'}}>
 <div className="flex flex-col h-full">
 <div className="flex items-center gap-3 mb-6">
 <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center relative">
@@ -781,7 +823,7 @@ function toggleFAQ(num) {
 </div>
 </div>
 
-<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/20 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', --_order: 'var(--_3-order)', --_scale: 'var(--_3-scale)', --_opacity: 'var(--_3-opacity)', --_offset: 'var(--_3-offset)'}}>
+<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/20 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', '---_order': 'var(--_3-order)', '---_scale': 'var(--_3-scale)', '---_opacity': 'var(--_3-opacity)', '---_offset': 'var(--_3-offset)'}}>
 <div className="flex flex-col h-full">
 <div className="flex items-center gap-3 mb-6">
 <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center relative">
@@ -835,7 +877,7 @@ function toggleFAQ(num) {
 </div>
 </div>
 
-<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/30 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', transition: '600ms cubic-bezier 0.2, 1)', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', --_order: 'var(--_4-order)', --_scale: 'var(--_4-scale)', --_opacity: 'var(--_4-opacity)', --_offset: 'var(--_4-offset)'}}>
+<div className="feature-card glass glow bg-gray-900/60 border-[#00fffb]/30 border rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{gridArea: 'stack', transition: '600ms cubic-bezier 0.2, 1)', translate: 'var(--_offset) 0', order: 'var(--_order)', zIndex: 'var(--_order)', scale: 'var(--_scale)', opacity: 'var(--_opacity)', cursor: 'grab', userSelect: 'none', transformStyle: 'preserve-3d', height: '32rem', '---_order': 'var(--_4-order)', '---_scale': 'var(--_4-scale)', '---_opacity': 'var(--_4-opacity)', '---_offset': 'var(--_4-offset)'}}>
 <div className="flex flex-col h-full">
 <div className="flex items-center gap-3 mb-6">
 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center relative">
@@ -1128,7 +1170,7 @@ function toggleFAQ(num) {
 </div>
 </div>
 </div></section><section className="relative lg:py-32 pt-20 pb-20">
-<div className="max-w-7xl sm:px-6 lg:px-8 mr-auto ml-auto pr-4 pl-4" style={{-Backdrop: 'hsl(0 0% 60% / 0.12)', -Radius: '14', -Border: '2', -BackupBorder: 'var(--backdrop)', -Size: '200', -X: '0', -Y: '0', -Xp: '0', -Yp: '0'}}>
+<div className="max-w-7xl sm:px-6 lg:px-8 mr-auto ml-auto pr-4 pl-4" style={{'--backdrop': 'hsl(0 0% 60% / 0.12)', '--radius': '14', '--border': '2', '--backup-border': 'var(--backdrop)', '--size': '200', '--x': '0', '--y': '0', '--xp': '0', '--yp': '0'}}>
 <style>
     .glow-card:nth-child(1) { --base: 280; --spread: 200; --outer: 1; }
     .glow-card:nth-child(2) { --base: 180; --spread: 400; --outer: 1; }

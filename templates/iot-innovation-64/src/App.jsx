@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -20,6 +56,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -172,7 +214,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-<div className="lg:col-span-2 card-flashlight p-8 pb-0 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{-MouseX: '690px', -MouseY: '429.1015625px'}}>
+<div className="lg:col-span-2 card-flashlight p-8 pb-0 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{'--mouse-x': '690px', '--mouse-y': '429.1015625px'}}>
 <div className="card-content flex flex-col h-full">
 <div className="flex justify-between items-start mb-12">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light max-w-xs">Deep-dive startup profiles &amp; diligence</h3>
@@ -187,7 +229,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-flashlight p-8 pb-0 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{-MouseX: '405.3359375px', -MouseY: '378.1015625px'}}>
+<div className="card-flashlight p-8 pb-0 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{'--mouse-x': '405.3359375px', '--mouse-y': '378.1015625px'}}>
 <div className="card-content flex flex-col h-full">
 <div className="flex justify-between items-start mb-8">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light">Data-driven pitch analysis</h3>
@@ -199,7 +241,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-flashlight p-8 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{-MouseX: '296px', -MouseY: '70.9609375px'}}>
+<div className="card-flashlight p-8 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{'--mouse-x': '296px', '--mouse-y': '70.9609375px'}}>
 <div className="card-content h-full flex flex-col">
 <div className="flex justify-between items-start mb-8">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light">Direct founder matchmaking</h3>
@@ -212,7 +254,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-flashlight p-8 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{-MouseX: '132.671875px', -MouseY: '3.9609375px'}}>
+<div className="card-flashlight p-8 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{'--mouse-x': '132.671875px', '--mouse-y': '3.9609375px'}}>
 <div className="card-content h-full flex flex-col">
 <div className="flex justify-between items-start mb-8">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light">Verified background checks</h3>
@@ -227,7 +269,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-flashlight p-8 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{-MouseX: '16.3359375px', -MouseY: '162.9609375px'}}>
+<div className="card-flashlight p-8 flex flex-col group cursor-pointer border border-black/5 bg-white/40" style={{'--mouse-x': '16.3359375px', '--mouse-y': '162.9609375px'}}>
 <div className="card-content h-full flex flex-col">
 <div className="flex justify-between items-start mb-8">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light">Community-driven validation</h3>
@@ -255,7 +297,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-<div className="lg:col-span-2 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[500px] flex flex-col" style={{-MouseX: '257px', -MouseY: '8.4609375px'}}>
+<div className="lg:col-span-2 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[500px] flex flex-col" style={{'--mouse-x': '257px', '--mouse-y': '8.4609375px'}}>
 <div className="p-8 pb-0 relative z-10">
 <div className="flex justify-between items-start">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light max-w-md leading-tight text-[#2C2824]">
@@ -376,7 +418,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="lg:col-span-1 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[400px] flex flex-col" style={{-MouseX: '255px', -MouseY: '64.4609375px'}}>
+<div className="lg:col-span-1 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[400px] flex flex-col" style={{'--mouse-x': '255px', '--mouse-y': '64.4609375px'}}>
 <div className="p-8 pb-0 relative z-10">
 <div className="flex justify-between items-start mb-6">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light max-w-[240px] text-[#2C2824]">
@@ -474,7 +516,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="lg:col-span-1 card-flashlight overflow-hidden group min-h-[400px] flex flex-col bg-white/40 border-black/5 border rounded-3xl relative" style={{-MouseX: '-0.328125px', -MouseY: '204.4609375px'}}>
+<div className="lg:col-span-1 card-flashlight overflow-hidden group min-h-[400px] flex flex-col bg-white/40 border-black/5 border rounded-3xl relative" style={{'--mouse-x': '-0.328125px', '--mouse-y': '204.4609375px'}}>
 <div className="p-8 pb-0 relative z-10">
 <div className="flex justify-between items-start mb-6">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light max-w-[200px] text-[#2C2824]">
@@ -507,7 +549,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="lg:col-span-1 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[400px] flex flex-col" style={{-MouseX: '47px', -MouseY: '5.5px'}}>
+<div className="lg:col-span-1 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[400px] flex flex-col" style={{'--mouse-x': '47px', '--mouse-y': '5.5px'}}>
 <div className="p-8 pb-0 relative z-10">
 <div className="flex justify-between items-start mb-6">
 <h3 className="text-2xl tracking-tighter font-jakarta font-light max-w-[240px] text-[#2C2824]">
@@ -537,7 +579,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="lg:col-span-3 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[400px] flex flex-col md:flex-row" style={{-MouseX: '456px', -MouseY: '5.4609375px'}}>
+<div className="lg:col-span-3 card-flashlight relative overflow-hidden rounded-3xl bg-white/40 border border-black/5 group min-h-[400px] flex flex-col md:flex-row" style={{'--mouse-x': '456px', '--mouse-y': '5.4609375px'}}>
 <div className="p-8 flex flex-col justify-between relative z-10 md:w-1/3">
 <div className="">
 <div className="flex justify-between items-start mb-6">
@@ -673,7 +715,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="overflow-hidden md:p-12 bg-[#120f0d] border-white/10 rounded-[32px] border-b mb-20 pb-20 relative" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,1), inset 0 1px 0px rgba(255,255,255,0.05)'}}>
+<div className="overflow-hidden md:p-12 bg-[#120f0d] border-white/10 rounded-[32px] border-b mb-20 pb-20 relative" style={{boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 1), inset 0 1px 0px rgba(255,255,255,0.05)'}}>
 
 <style>
         @keyframes flow-custom {

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -566,6 +602,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -575,13 +617,13 @@ gtag('config', 'G-2M6V79H761');
 <canvas className="z-0 pointer-events-none w-full h-full absolute top-0 right-0 bottom-0 left-0" height="820" id="animationCanvas" style={{background: 'transparent', filter: 'saturate(1.35)', mixBlendMode: 'screen'}} width="1790"></canvas>
 
 <header className="floating-nav">
-<a className="flex items-center gap-2 group reveal-item reveal-in" href="#top" style={{-RevealDelay: '0ms'}}>
+<a className="flex items-center gap-2 group reveal-item reveal-in" href="#top" style={{'--reveal-delay': '0ms'}}>
 <iconify-icon className="text-2xl text-blue-500 group-hover:text-blue-400 transition-colors" icon="solar:globus-linear" strokeWidth="1.5"></iconify-icon>
 <span className="text-base tracking-wide font-medium text-white group-hover:text-gray-200 transition-colors font-geist">
             AeroNet
           </span>
 </a>
-<nav className="hidden md:flex items-center gap-8 reveal-item reveal-in" style={{-RevealDelay: '95ms'}}>
+<nav className="hidden md:flex items-center gap-8 reveal-item reveal-in" style={{'--reveal-delay': '95ms'}}>
 <a className="text-sm font-light text-gray-400 hover:text-blue-400 transition-colors font-geist" href="#features">
             Core
           </a>
@@ -595,7 +637,7 @@ gtag('config', 'G-2M6V79H761');
             Docs
           </a>
 </nav>
-<div className="flex items-center gap-5 reveal-item reveal-in" style={{-RevealDelay: '190ms'}}>
+<div className="flex items-center gap-5 reveal-item reveal-in" style={{'--reveal-delay': '190ms'}}>
 <a className="text-sm font-light text-gray-300 hover:text-white transition-colors hidden sm:block font-geist" href="#">
             Log In
           </a>
@@ -611,17 +653,17 @@ gtag('config', 'G-2M6V79H761');
 <div className="hero-copy" style={{maskImage: 'linear-gradient(200deg, transparent, black 0%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(200deg, transparent, black 0%, black 100%, transparent)'}}>
 
 
-<h1 className="text-5xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-blue-500 leading-tight mb-6 reveal-item tracking-tighter font-geist font-light reveal-in" style={{-RevealDelay: '285ms'}}>
+<h1 className="text-5xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-blue-500 leading-tight mb-6 reveal-item tracking-tighter font-geist font-light reveal-in" style={{'--reveal-delay': '285ms'}}>
               Map, secure, and rebalance global traffic.
             </h1>
 
-<p className="text-base md:text-lg text-gray-400 font-light max-w-[440px] leading-relaxed reveal-item font-geist reveal-in" style={{-RevealDelay: '380ms'}}>
+<p className="text-base md:text-lg text-gray-400 font-light max-w-[440px] leading-relaxed reveal-item font-geist reveal-in" style={{'--reveal-delay': '380ms'}}>
               AeroNet Core gives infrastructure teams one relay control plane
               for route mapping, policy failover, and real-time network
               capacity.
             </p>
 
-<div className="hidden flex-wrap gap-4 pointer-events-auto md:flex reveal-item mt-10 gap-x-4 gap-y-4 reveal-in" style={{-RevealDelay: '475ms'}}>
+<div className="hidden flex-wrap gap-4 pointer-events-auto md:flex reveal-item mt-10 gap-x-4 gap-y-4 reveal-in" style={{'--reveal-delay': '475ms'}}>
 <a className="bg-white text-black text-sm font-medium px-6 py-3.5 rounded-full hover:bg-blue-50 transition-all duration-300 shadow-[0_0_20px_rgba(59,130,246,0.2)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:-translate-y-0.5 font-geist" href="#pricing">
                 Deploy AeroNet Core
               </a>
@@ -630,7 +672,7 @@ gtag('config', 'G-2M6V79H761');
               </a>
 </div>
 
-<div className="mt-8 flex flex-col sm:flex-row gap-3 pointer-events-auto md:hidden reveal-item reveal-in" style={{-RevealDelay: '570ms'}}>
+<div className="mt-8 flex flex-col sm:flex-row gap-3 pointer-events-auto md:hidden reveal-item reveal-in" style={{'--reveal-delay': '570ms'}}>
 <a className="bg-white text-black text-sm font-medium px-5 py-3 rounded-full text-center hover:bg-blue-50 transition-colors shadow-[0_0_15px_rgba(59,130,246,0.3)] font-geist" href="#features">
                 Explore AeroNet Core
               </a>
@@ -667,8 +709,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="absolute inset-0 pointer-events-none hidden md:block">
-<div className="absolute top-[21%] left-[58%] reveal-item reveal-in" data-float="" data-float-offset="0" style={{-FloatY: '-33.86094577797606px', -DriftX: '-20.384111849344485px', -Tilt: '1.518144175844078deg', -RevealDelay: '665ms'}}>
-<div className="globe-float is-wide" style={{-BreathDelay: '.1s'}}>
+<div className="absolute top-[21%] left-[58%] reveal-item reveal-in" data-float="" data-float-offset="0" style={{'--float-y': '-33.86094577797606px', '--drift-x': '-20.384111849344485px', '--tilt': '1.518144175844078deg', '--reveal-delay': '665ms'}}>
+<div className="globe-float is-wide" style={{'--breath-delay': '.1s'}}>
 <div className="globe-float-row">
 <iconify-icon icon="solar:route-linear"></iconify-icon>
 <div>
@@ -677,16 +719,16 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="globe-anchor -bottom-3 left-8" style={{-BreathDelay: '.1s'}}></div>
+<div className="globe-anchor -bottom-3 left-8" style={{'--breath-delay': '.1s'}}></div>
 </div>
-<div className="absolute top-[30%] left-[78%] reveal-item reveal-in" data-float="" data-float-offset="2.2" style={{-FloatY: '17.4436130842668px', -DriftX: '21.27147309370009px', -Tilt: '2.055183455654887deg', -RevealDelay: '760ms'}}>
-<div className="globe-float is-mini" style={{-BreathDelay: '.8s'}}>
+<div className="absolute top-[30%] left-[78%] reveal-item reveal-in" data-float="" data-float-offset="2.2" style={{'--float-y': '17.4436130842668px', '--drift-x': '21.27147309370009px', '--tilt': '2.055183455654887deg', '--reveal-delay': '760ms'}}>
+<div className="globe-float is-mini" style={{'--breath-delay': '.8s'}}>
 <iconify-icon icon="solar:shield-check-linear"></iconify-icon>
 </div>
-<div className="globe-anchor -bottom-3 left-1/2 -translate-x-1/2" style={{-BreathDelay: '.8s'}}></div>
+<div className="globe-anchor -bottom-3 left-1/2 -translate-x-1/2" style={{'--breath-delay': '.8s'}}></div>
 </div>
-<div className="absolute top-[50%] left-[84%] reveal-item reveal-in" data-float="" data-float-offset="4.1" style={{-FloatY: '21.97771882943662px', -DriftX: '-21.14002008765962px', -Tilt: '-3.076246380897216deg', -RevealDelay: '855ms'}}>
-<div className="globe-float is-wide" style={{-BreathDelay: '1.4s'}}>
+<div className="absolute top-[50%] left-[84%] reveal-item reveal-in" data-float="" data-float-offset="4.1" style={{'--float-y': '21.97771882943662px', '--drift-x': '-21.14002008765962px', '--tilt': '-3.076246380897216deg', '--reveal-delay': '855ms'}}>
+<div className="globe-float is-wide" style={{'--breath-delay': '1.4s'}}>
 <div className="globe-float-row">
 <iconify-icon icon="solar:bolt-circle-linear"></iconify-icon>
 <div>
@@ -695,10 +737,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="globe-anchor -bottom-3 left-6" style={{-BreathDelay: '1.4s'}}></div>
+<div className="globe-anchor -bottom-3 left-6" style={{'--breath-delay': '1.4s'}}></div>
 </div>
-<div className="absolute top-[66%] left-[68%] reveal-item reveal-in" data-float="" data-float-offset="5.4" style={{-FloatY: '-19.117473322830207px', -DriftX: '-1.5458114947299322px', -Tilt: '-0.21993869191476795deg', -RevealDelay: '950ms'}}>
-<div className="globe-float" style={{-BreathDelay: '.4s'}}>
+<div className="absolute top-[66%] left-[68%] reveal-item reveal-in" data-float="" data-float-offset="5.4" style={{'--float-y': '-19.117473322830207px', '--drift-x': '-1.5458114947299322px', '--tilt': '-0.21993869191476795deg', '--reveal-delay': '950ms'}}>
+<div className="globe-float" style={{'--breath-delay': '.4s'}}>
 <div className="globe-float-row">
 <iconify-icon icon="solar:graph-up-linear"></iconify-icon>
 <div>
@@ -707,16 +749,16 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="globe-anchor -top-3 right-8" style={{-BreathDelay: '.4s'}}></div>
+<div className="globe-anchor -top-3 right-8" style={{'--breath-delay': '.4s'}}></div>
 </div>
-<div className="absolute top-[75%] left-[80%] reveal-item reveal-in" data-float="" data-float-offset="7" style={{-FloatY: '-27.546017113886236px', -DriftX: '18.745394929100122px', -Tilt: '1.3748524464053506deg', -RevealDelay: '1045ms'}}>
-<div className="globe-float is-mini" style={{-BreathDelay: '1.1s'}}>
+<div className="absolute top-[75%] left-[80%] reveal-item reveal-in" data-float="" data-float-offset="7" style={{'--float-y': '-27.546017113886236px', '--drift-x': '18.745394929100122px', '--tilt': '1.3748524464053506deg', '--reveal-delay': '1045ms'}}>
+<div className="globe-float is-mini" style={{'--breath-delay': '1.1s'}}>
 <iconify-icon icon="solar:satellite-linear"></iconify-icon>
 </div>
-<div className="globe-anchor -top-3 left-1/2 -translate-x-1/2" style={{-BreathDelay: '1.1s'}}></div>
+<div className="globe-anchor -top-3 left-1/2 -translate-x-1/2" style={{'--breath-delay': '1.1s'}}></div>
 </div>
-<div className="absolute top-[58%] left-[53%] reveal-item reveal-in" data-float="" data-float-offset="8.2" style={{-FloatY: '8.594307631304428px', -DriftX: '-12.855814259024712px', -Tilt: '-4.326342349428582deg', -RevealDelay: '1140ms'}}>
-<div className="globe-float is-wide" style={{-BreathDelay: '1.8s'}}>
+<div className="absolute top-[58%] left-[53%] reveal-item reveal-in" data-float="" data-float-offset="8.2" style={{'--float-y': '8.594307631304428px', '--drift-x': '-12.855814259024712px', '--tilt': '-4.326342349428582deg', '--reveal-delay': '1140ms'}}>
+<div className="globe-float is-wide" style={{'--breath-delay': '1.8s'}}>
 <div className="globe-float-row">
 <iconify-icon icon="solar:radar-linear"></iconify-icon>
 <div>
@@ -725,10 +767,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="globe-anchor -top-3 right-7" style={{-BreathDelay: '1.8s'}}></div>
+<div className="globe-anchor -top-3 right-7" style={{'--breath-delay': '1.8s'}}></div>
 </div>
-<div className="absolute top-[73%] left-[56%] reveal-item reveal-in" data-float="" data-float-offset="9.6" style={{-FloatY: '33.877970330141544px', -DriftX: '-12.413188783484348px', -Tilt: '4.238061892895745deg', -RevealDelay: '1235ms'}}>
-<div className="globe-float" style={{-BreathDelay: '2.3s'}}>
+<div className="absolute top-[73%] left-[56%] reveal-item reveal-in" data-float="" data-float-offset="9.6" style={{'--float-y': '33.877970330141544px', '--drift-x': '-12.413188783484348px', '--tilt': '4.238061892895745deg', '--reveal-delay': '1235ms'}}>
+<div className="globe-float" style={{'--breath-delay': '2.3s'}}>
 <div className="globe-float-row">
 <iconify-icon icon="solar:lock-keyhole-linear"></iconify-icon>
 <div>
@@ -737,14 +779,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="globe-anchor -top-3 left-8" style={{-BreathDelay: '2.3s'}}></div>
+<div className="globe-anchor -top-3 left-8" style={{'--breath-delay': '2.3s'}}></div>
 </div>
 </div>
 </main>
 </section>
 <section className="md:px-8 border-t pt-24 pr-6 pb-24 pl-6 relative" id="features">
 <div className="max-w-7xl mr-auto ml-auto relative" style={{fontFamily: '\'Inter\', sans-serif'}}>
-<div className="absolute inset-0 pointer-events-none opacity-20" style={{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(circle at center, black, transparent 80%)', WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'}}></div>
+<div className="absolute inset-0 pointer-events-none opacity-20" style={{backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(circle at center, black, transparent 80%)', WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'}}></div>
 <div className="section-header flex flex-col gap-6 md:flex-row md:items-end md:justify-between z-10 reveal-item relative">
 <div className="max-w-2xl">
 <div className="section-kicker rounded-full">

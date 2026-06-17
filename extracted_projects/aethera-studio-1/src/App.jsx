@@ -7,6 +7,42 @@ export default function App() {
 
   // Custom fade-in/fade-out loop logic
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const video = videoRef.current;
     if (!video) return;
 
@@ -71,11 +107,7 @@ export default function App() {
       {/* Background Video Layer */}
       <div 
         className="absolute w-full pointer-events-none z-0"
-        style={{ 
-          top: '300px', 
-          inset: 'auto 0 0 0',
-          height: 'calc(100vh - 300px)'
-        }}
+        style={{top: '300px', inset: 'auto 0 0 0', height: 'calc(100vh - 300px)'}}
       >
         <video
           ref={videoRef}
@@ -84,7 +116,7 @@ export default function App() {
           playsInline
           onEnded={handleVideoEnded}
           className="w-full h-full object-cover transition-opacity duration-100"
-          style={{ opacity: videoOpacity }}
+          style={{opacity: videoOpacity}}
         />
         
         {/* Gradient Overlays */}
@@ -114,14 +146,11 @@ export default function App() {
       {/* Hero Section */}
       <main 
         className="relative z-10 flex flex-col items-center justify-center text-center px-6 w-full max-w-7xl mx-auto"
-        style={{ 
-          paddingTop: 'calc(8rem - 75px)',
-          paddingBottom: '10rem' // pb-40 equivalent
-        }}
+        style={{paddingTop: 'calc(8rem - 75px)', paddingBottom: '10rem' // pb-40 equivalent}}
       >
         <h1 
           className="font-instrument font-normal text-5xl sm:text-7xl md:text-8xl max-w-5xl mx-auto tracking-custom animate-fade-rise"
-          style={{ lineHeight: 0.95 }}
+          style={{lineHeight: 0.95}}
         >
           <span className="text-[#000000]">Beyond </span>
           <span className="text-[#6F6F6F] italic">silence,</span>

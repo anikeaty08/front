@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -11,6 +47,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -62,7 +104,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
 <div className="relative flex-1 w-full">
 <input className="placeholder-zinc-500 focus:ring-2 focus:ring-white/20 outline-none transition text-white bg-zinc-950/70 w-full h-12 border-green-100 border-2 ring-white/10 ring-1 rounded-md pr-4 pl-4 [--fx-filter:blur(10px)_liquid-glass(0,10)_saturate(1.25)_noise(0.5,1,0)]" placeholder="you@domain.com" required="" style={{WebkitMaskImage: 'linear-gradient(190deg, transparent, black 15%, black 80%, transparent)', maskImage: 'linear-gradient(190deg, transparent, black 15%, black 80%, transparent)'}} type="email"/>
-<div className="pointer-events-none absolute inset-0 rounded-xl" style={{-BorderGradient: 'linear-gradient(135deg, rgba(255,255,255,0.0), rgba(255,255,255,0.08), rgba(255,255,255,0.0))', -BorderRadiusBefore: '12px'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-xl" style={{'--border-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.0), rgba(255,255,255,0.08), rgba(255,255,255,0.0))', '--border-radius-before': '12px'}}></div>
 </div>
 <button aria-label="Join waitlist" className="shiny-cta inline-flex gap-2 focus:outline-none group text-sm font-medium tracking-tight h-12 pr-5 pl-5 items-center" title="Join waitlist" type="submit">
 <svg aria-hidden="true" className="lucide lucide-chart-line transition group-hover:text-white animate-pulse w-[20px] h-[20px]" data-lucide="chart-line" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>

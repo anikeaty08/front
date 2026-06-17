@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -44,6 +80,12 @@ if (window.lucide) lucide.createIcons();
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -334,7 +376,7 @@ if (window.lucide) lucide.createIcons();
 <div className="relative sm:h-96 w-full h-400 max-w-7xl max-h-full">
 <div className="container max-w-full" style={{position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
 
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.1), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 25px rgba(0, 0, 0, 0.25)', display: 'flex', justifyContent: 'center', alignItems: 'center', transition: '0.5s', borderRadius: '1rem', margin: '0 -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-10deg)', -R: '-32'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 25px rgba(0, 0, 0, 0.25)', display: 'flex', justifyContent: 'center', alignItems: 'center', transition: '0.5s', borderRadius: '1rem', margin: '0 -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-10deg)', '--r': '-32'}}>
 <div className="absolute inset-4 rounded-xl bg-white text-neutral-900 shadow-2xl ring-1 ring-black/5 overflow-hidden">
 <div className="p-6">
 
@@ -366,7 +408,7 @@ if (window.lucide) lucide.createIcons();
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.08), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 25px rgba(0, 0, 0, 0.25)', display: 'flex', justifyContent: 'center', alignItems: 'center', transition: '0.5s', borderRadius: '1rem', margin: '0 -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-6deg)', -R: '-6'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 25px rgba(0, 0, 0, 0.25)', display: 'flex', justifyContent: 'center', alignItems: 'center', transition: '0.5s', borderRadius: '1rem', margin: '0 -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-6deg)', '--r': '-6'}}>
 <div className="absolute inset-4 rounded-xl bg-white/90 text-neutral-900 shadow-xl ring-1 ring-black/5 backdrop-blur overflow-hidden">
 <div className="p-6">
 
@@ -398,7 +440,7 @@ if (window.lucide) lucide.createIcons();
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.06), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 25px rgba(0, 0, 0, 0.25)', display: 'flex', justifyContent: 'center', alignItems: 'center', transition: '0.5s', borderRadius: '1rem', margin: '0 -50px', backdropFilter: 'blur(10px)', transform: 'rotate(0deg)', -R: '0'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.06), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 25px rgba(0, 0, 0, 0.25)', display: 'flex', justifyContent: 'center', alignItems: 'center', transition: '0.5s', borderRadius: '1rem', margin: '0 -50px', backdropFilter: 'blur(10px)', transform: 'rotate(0deg)', '--r': '0'}}>
 <div className="absolute inset-4 rounded-xl bg-white/80 text-neutral-900 shadow-lg ring-1 ring-black/5 backdrop-blur overflow-hidden">
 <div className="p-6">
 

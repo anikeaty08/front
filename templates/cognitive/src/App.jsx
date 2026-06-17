@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -278,6 +314,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -320,7 +362,7 @@ addUtilities({
       transformation and automate complex workflows.
     </p>
 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 mb-16">
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: '0 18px 40px -15px rgba(234,88,12,0.85), inset 0 2px 4px rgba(255,247,237,0.9)', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', -BorderRadiusBefore: '8px'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: '0 18px 40px -15px rgba(234,88,12,0.85), inset 0 2px 4px rgba(255,247,237,0.9)', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', '--border-radius-before': '8px'}}>
 <div className="group-hover:tranneutral-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 tranneutral-y-full"></div>
 <span className="flex items-center gap-2 relative">Sign up free <svg className="lucide lucide-send group-hover:tranneutral-x-0.5 group-hover:-tranneutral-y-0.5 transition-transform duration-300 w-[16px] h-[16px]" data-icon-replaced="true" data-icon-set="solar" data-solar="arrow-right-up-outline" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.5" style={{width: '16px', height: '16px', color: 'rgb(255, 255, 255)'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M9 6.75a.75.75 0 0 1 0-1.5h9a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-1.5 0V7.81L6.53 18.53a.75.75 0 0 1-1.06-1.06L16.19 6.75z" fill="#ffffff" fill-rule="evenodd"></path></svg></span>
 </button>
@@ -538,7 +580,7 @@ addUtilities({
 <h4 className="text-base font-semibold text-neutral-900 leading-tight mt-6 mb-2">Automation Machine Learning
             </h4>
 <div className="mt-auto w-full">
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(255,162,42,0.9), inset 0 4px 6.3px rgba(252,220,134,1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(255, 162, 42, 0.9), inset 0 4px 6.3px rgba(252, 220, 134, 1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
 <div className="group-hover:tranneutral-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 tranneutral-y-full"></div>
 <span className="relative flex items-center justify-center gap-2">
                     Talk With Us
@@ -558,7 +600,7 @@ addUtilities({
 </div>
 <h4 className="text-base font-semibold text-orange-900 leading-tight mt-6 mb-2">AI-Powered Chatbots</h4>
 <div className="mt-auto w-full">
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(255,162,42,0.9), inset 0 4px 6.3px rgba(252,220,134,1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(255, 162, 42, 0.9), inset 0 4px 6.3px rgba(252, 220, 134, 1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
 <div className="group-hover:tranneutral-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 tranneutral-y-full"></div>
 <span className="relative flex items-center justify-center gap-2">
                     Talk With Us
@@ -579,7 +621,7 @@ addUtilities({
 <h4 className="text-base font-semibold text-neutral-900 leading-tight mt-6 mb-2">Data Analytics Deep Insights
             </h4>
 <div className="mt-auto w-full">
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(255,162,42,0.9), inset 0 4px 6.3px rgba(252,220,134,1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 overflow-hidden font-medium text-orange-900 bg-gradient-to-r from-[#FFEBB1] to-[#FFC438] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(255, 162, 42, 0.9), inset 0 4px 6.3px rgba(252, 220, 134, 1), inset 0 -5px 6.3px rgba(255,162,38,1)'}}>
 <div className="group-hover:tranneutral-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 tranneutral-y-full"></div>
 <span className="relative flex items-center justify-center gap-2">
                     Talk With Us
@@ -669,7 +711,7 @@ addUtilities({
 
 <div className="flex justify-between items-center mb-6">
 <div className="flex items-center gap-3">
-<div className="flex text-[10px] font-semibold text-white tracking-tight bg-gradient-to-br from-orange-500 to-rose-500 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex text-[10px] font-semibold text-white tracking-tight bg-gradient-to-br from-orange-500 to-rose-500 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
                   CG</div>
 <div>
 <div className="text-[11px] text-neutral-400 leading-none mb-1">Welcome back</div>
@@ -682,7 +724,7 @@ addUtilities({
 </svg>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-b from-white/10 to-white/5 rounded-2xl mb-6 px-4 py-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="overflow-hidden bg-gradient-to-b from-white/10 to-white/5 rounded-2xl mb-6 px-4 py-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 p-3 opacity-25 text-white">
 <svg aria-hidden="true" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12" fill="currentColor" opacity=".45"></path>
@@ -704,7 +746,7 @@ addUtilities({
 <div className="flex items-center justify-between text-xs font-medium text-neutral-300/80 mb-2 uppercase tracking-wide">
                 Recent Models</div>
 
-<div className="flex gap-3 hover:border-orange-400/50 transition-colors bg-neutral-900/70 rounded-xl pt-3 pr-3 pb-3 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex gap-3 hover:border-orange-400/50 transition-colors bg-neutral-900/70 rounded-xl pt-3 pr-3 pb-3 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-300">
 <svg aria-hidden="true" height="16" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
 <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12" fill="currentColor" opacity=".4"></path>
@@ -719,7 +761,7 @@ addUtilities({
 <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
 </div>
 
-<div className="flex gap-3 hover:border-orange-400/50 transition-colors bg-neutral-900/70 rounded-xl pt-3 pr-3 pb-3 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex gap-3 hover:border-orange-400/50 transition-colors bg-neutral-900/70 rounded-xl pt-3 pr-3 pb-3 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="w-10 h-10 rounded-lg bg-rose-500/15 flex items-center justify-center text-rose-300">
 <svg aria-hidden="true" height="16" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
 <path d="M18.512 10.077c0 .738-.625 1.337-1.396 1.337s-1.395-.599-1.395-1.337c0-.739.625-1.338 1.395-1.338s1.396.599 1.396 1.338" fill="currentColor">
@@ -741,7 +783,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="flex bg-neutral-900/80 h-14 rounded-2xl mt-auto pr-2 pl-2 items-center justify-around" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex bg-neutral-900/80 h-14 rounded-2xl mt-auto pr-2 pl-2 items-center justify-around" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <svg aria-hidden="true" className="text-white" height="17" viewbox="0 0 24 24" width="17" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M2 12.204c0-2.289 0-3.433.52-4.381c.518-.949 1.467-1.537 3.364-2.715l2-1.241C9.889 2.622 10.892 2 12 2s2.11.622 4.116 1.867l2 1.241c1.897 1.178 2.846 1.766 3.365 2.715S22 9.915 22 12.203v1.522c0 3.9 0 5.851-1.172 7.063S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.212S2 17.626 2 13.725z" fill="currentColor" opacity=".45"></path>
 <path d="M9.447 15.398a.75.75 0 0 0-.894 1.205A5.77 5.77 0 0 0 12 17.75a5.77 5.77 0 0 0 3.447-1.147a.75.75 0 0 0-.894-1.206A4.27 4.27 0 0 1 12 16.25a4.27 4.27 0 0 1-2.553-.852" fill="currentColor">
@@ -1169,7 +1211,7 @@ addUtilities({
 <div className="absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="container mx-auto px-6 lg:px-12 relative z-10">
 <div className="max-w-3xl mx-auto text-center">
-<div className="inline-flex bg-gradient-to-b from-white/10 to-white/0 rounded-full mb-6 pt-1 pr-4 pb-1 pl-4 backdrop-blur-lg gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex bg-gradient-to-b from-white/10 to-white/0 rounded-full mb-6 pt-1 pr-4 pb-1 pl-4 backdrop-blur-lg gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <span className="iconify text-neutral-300" data-icon="solar:flash-circle-bold-duotone"></span>
 <span className="text-[11px] uppercase font-medium text-gray-950 tracking-[0.18em]">
           Launch in days, not quarters
@@ -1186,7 +1228,7 @@ addUtilities({
           Start sandbox workspace
           <svg aria-hidden="true" data-icon="solar:arrow-right-up-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M17.47 15.53a.75.75 0 0 0 1.28-.53V6a.75.75 0 0 0-.75-.75H9a.75.75 0 0 0-.53 1.28z" fill="currentColor" fill-rule="evenodd"></path><path d="M5.47 17.47a.75.75 0 1 0 1.06 1.06l6.97-6.97l-1.06-1.06z" fill="currentColor" opacity=".5"></path></svg>
 </button>
-<button className="inline-flex hover:border-neutral-400 hover:text-white transition-colors xl:text-slate-50 text-sm font-medium bg-gradient-to-b from-white/10 to-white/0 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] backdrop-blur-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="inline-flex hover:border-neutral-400 hover:text-white transition-colors xl:text-slate-50 text-sm font-medium bg-gradient-to-b from-white/10 to-white/0 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] backdrop-blur-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
           Book a 20‑minute runbook review
         </button>
 </div>

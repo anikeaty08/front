@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -90,6 +126,12 @@ transitionTimingFunction: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -117,7 +159,7 @@ transitionTimingFunction: {
 <header className="border-x border-border-subtle bg-bg-main/80 backdrop-blur-md sticky top-0 z-50 animate-reveal delay-100">
 <div className="grid grid-cols-1 md:grid-cols-4 border-b border-border-subtle">
 
-<div className="p-6 md:p-8 flex items-center justify-between md:justify-start group border-r border-border-subtle relative" style={{-MouseX: '230px', -MouseY: '89px'}}>
+<div className="p-6 md:p-8 flex items-center justify-between md:justify-start group border-r border-border-subtle relative" style={{'--mouse-x': '230px', '--mouse-y': '89px'}}>
 <div className="relative w-12 h-12 rounded-sm overflow-hidden border border-border-light group-hover:border-accent transition-colors duration-500">
 <img alt="Denis Dudar" className="group-hover:grayscale-0 transition-all duration-500 w-full h-full object-cover bg-center grayscale" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b45618e2-478a-4dc9-bf47-068fc90e8c7f_320w.png?w=800&amp;q=80" style={{}}/>
 </div>
@@ -126,15 +168,15 @@ transitionTimingFunction: {
 </button>
 </div>
 
-<a className="group p-6 md:p-8 flex items-center justify-between hover:bg-white/[0.02] transition-colors border-r border-border-subtle" href="resume.pdf" style={{-MouseX: '226.5px', -MouseY: '102px'}} target="_blank">
+<a className="group p-6 md:p-8 flex items-center justify-between hover:bg-white/[0.02] transition-colors border-r border-border-subtle" href="resume.pdf" style={{'--mouse-x': '226.5px', '--mouse-y': '102px'}} target="_blank">
 <span className="text-sm font-normal text-text-muted group-hover:text-white transition-colors">Resume/CV</span>
 <svg className="lucide lucide-file-text w-4 h-4 text-border-active group-hover:text-accent transition-colors group-hover:translate-x-1 duration-200" data-lucide="file-text" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" strokewidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
 </a>
-<a className="group p-6 md:p-8 flex items-center justify-between hover:bg-white/[0.02] transition-colors border-r border-border-subtle" href="#" style={{-MouseX: '12px', -MouseY: '102px'}}>
+<a className="group p-6 md:p-8 flex items-center justify-between hover:bg-white/[0.02] transition-colors border-r border-border-subtle" href="#" style={{'--mouse-x': '12px', '--mouse-y': '102px'}}>
 <span className="text-sm font-normal text-text-muted group-hover:text-white transition-colors">Portfolio</span>
 <svg className="lucide lucide-arrow-up-right w-4 h-4 text-border-active group-hover:text-accent transition-colors group-hover:translate-x-1 duration-200" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" strokewidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
 </a>
-<a className="group p-6 md:p-8 flex items-center justify-between hover:bg-white/[0.02] transition-colors" href="#" style={{-MouseX: '157.5px', -MouseY: '102px'}}>
+<a className="group p-6 md:p-8 flex items-center justify-between hover:bg-white/[0.02] transition-colors" href="#" style={{'--mouse-x': '157.5px', '--mouse-y': '102px'}}>
 <span className="text-sm font-normal text-text-muted group-hover:text-white transition-colors">About</span>
 <svg className="lucide lucide-arrow-up-right w-4 h-4 text-border-active group-hover:text-accent transition-colors group-hover:translate-x-1 duration-200" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" strokewidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
 </a>
@@ -172,7 +214,7 @@ transitionTimingFunction: {
 
 <section className="" id="projects">
 
-<article className="grid grid-cols-1 lg:grid-cols-2 border-b border-border-subtle group relative overflow-hidden scroll-reveal is-visible" style={{-MouseX: '526px', -MouseY: '30px'}}>
+<article className="grid grid-cols-1 lg:grid-cols-2 border-b border-border-subtle group relative overflow-hidden scroll-reveal is-visible" style={{'--mouse-x': '526px', '--mouse-y': '30px'}}>
 
 <div className="flashlight-surface"></div>
 <div className="flashlight-border"></div>
@@ -191,7 +233,7 @@ transitionTimingFunction: {
 </div>
 </article>
 
-<article className="grid grid-cols-1 lg:grid-cols-2 border-b border-border-subtle group relative overflow-hidden scroll-reveal" style={{-MouseX: '250px', -MouseY: '131.625px'}}>
+<article className="grid grid-cols-1 lg:grid-cols-2 border-b border-border-subtle group relative overflow-hidden scroll-reveal" style={{'--mouse-x': '250px', '--mouse-y': '131.625px'}}>
 
 <div className="flashlight-surface"></div>
 <div className="flashlight-border"></div>
@@ -278,7 +320,7 @@ transitionTimingFunction: {
 <h4 className="text-base font-medium text-white/90 group-hover:text-white leading-snug relative z-10">Graduated from Mobile Interfaces Advanced course by Projector</h4>
 </div>
 
-<div className="relative p-8 flex-1 flex flex-col justify-center group scroll-reveal delay-300" style={{-MouseX: '136.3359375px', -MouseY: '141.09375px'}}>
+<div className="relative p-8 flex-1 flex flex-col justify-center group scroll-reveal delay-300" style={{'--mouse-x': '136.3359375px', '--mouse-y': '141.09375px'}}>
 <div className="flashlight-surface"></div>
 <div className="flashlight-border"></div>
 <span className="font-mono text-xs text-text-faint uppercase mb-3 tracking-widest relative z-10">Google</span>
@@ -303,7 +345,7 @@ transitionTimingFunction: {
                         </p>
 </div>
 <div className="w-full md:w-auto">
-<button className="group relative overflow-hidden bg-white/5 hover:bg-white/10 backdrop-blur-lg border border-white/10 px-10 py-6 rounded-sm transition-all duration-300 hover:scale-105" style={{-MouseX: '187.9388427734375px', -MouseY: '82.995361328125px'}}>
+<button className="group relative overflow-hidden bg-white/5 hover:bg-white/10 backdrop-blur-lg border border-white/10 px-10 py-6 rounded-sm transition-all duration-300 hover:scale-105" style={{'--mouse-x': '187.9388427734375px', '--mouse-y': '82.995361328125px'}}>
 <span className="z-10 uppercase group-hover:text-white flex items-center gap-3 text-xs font-bold text-white tracking-widest relative">
                                 Get In Contact
                                 <svg className="lucide lucide-arrow-right w-4 h-4 transition-transform group-hover:translate-x-1" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" strokewidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
@@ -324,7 +366,7 @@ transitionTimingFunction: {
 <span className="text-sm font-normal text-text-muted group-hover:text-white">Dribbble</span>
 <svg className="lucide lucide-arrow-up-right w-4 h-4 text-border-active group-hover:text-accent group-hover:translate-x-1 transition-all" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" strokewidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
 </a>
-<a className="p-8 flex items-center justify-between group hover:bg-white/[0.02] transition-colors" href="https://www.instagram.com/den.dudar/" rel="noopener noreferrer" style={{-MouseX: '86px', -MouseY: '33.9453125px'}} target="_blank">
+<a className="p-8 flex items-center justify-between group hover:bg-white/[0.02] transition-colors" href="https://www.instagram.com/den.dudar/" rel="noopener noreferrer" style={{'--mouse-x': '86px', '--mouse-y': '33.9453125px'}} target="_blank">
 <span className="text-sm font-normal text-text-muted group-hover:text-white">Instagram</span>
 <svg className="lucide lucide-arrow-up-right w-4 h-4 text-border-active group-hover:text-accent group-hover:translate-x-1 transition-all" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" strokewidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
 </a>

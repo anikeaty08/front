@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -26,7 +68,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 <a className="flex items-center gap-3" href="#">
 <div className="text-[#F8F6F0]">
-<div className="text-xl font-semibold uppercase leading-none tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Hamac</div>
+<div className="text-xl font-semibold uppercase leading-none tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Hamac</div>
 <div className="text-xs uppercase tracking-[0.22em] text-[#C5A55A]">Investissements &amp; Patrimoine</div>
 </div>
 </a>
@@ -55,7 +97,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mb-4 inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-[#F8F6F0] backdrop-blur">
             Agence locale spécialisée — Sainte-Foy-lès-Lyon
           </p>
-<h1 className="max-w-4xl text-5xl font-semibold leading-none tracking-tight text-white sm:text-6xl lg:text-7xl" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>
+<h1 className="max-w-4xl text-5xl font-semibold leading-none tracking-tight text-white sm:text-6xl lg:text-7xl" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>
             L'immobilier dans l'Ouest Lyonnais, en toute sérénité
           </h1>
 <p className="mt-6 max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
@@ -96,7 +138,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
 <div>
 <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C5A55A]">Sélection</p>
-<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Nos biens à la une</h2>
+<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Nos biens à la une</h2>
 </div>
 <p className="max-w-xl text-sm leading-7 text-[#2D2D2D]/75">
           Des propriétés choisies pour leur emplacement, leur qualité de vie et leur potentiel patrimonial.
@@ -111,7 +153,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-6">
 <div className="flex items-start justify-between gap-4">
 <div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>1 180 000 €</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>1 180 000 €</h3>
 <p className="mt-1 text-sm text-[#2D2D2D]/70">Sainte-Foy-lès-Lyon</p>
 </div>
 <span className="rounded-full bg-[#E8E4DF] px-3 py-1 text-xs font-medium text-[#1A1A2E]">170 m²</span>
@@ -136,7 +178,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-6">
 <div className="flex items-start justify-between gap-4">
 <div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>1 450 000 €</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>1 450 000 €</h3>
 <p className="mt-1 text-sm text-[#2D2D2D]/70">Tassin-la-Demi-Lune</p>
 </div>
 <span className="rounded-full bg-[#E8E4DF] px-3 py-1 text-xs font-medium text-[#1A1A2E]">210 m²</span>
@@ -161,7 +203,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-6">
 <div className="flex items-start justify-between gap-4">
 <div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>695 000 €</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>695 000 €</h3>
 <p className="mt-1 text-sm text-[#2D2D2D]/70">Écully</p>
 </div>
 <span className="rounded-full bg-[#E8E4DF] px-3 py-1 text-xs font-medium text-[#1A1A2E]">112 m²</span>
@@ -186,7 +228,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-6">
 <div className="flex items-start justify-between gap-4">
 <div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>890 000 €</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>890 000 €</h3>
 <p className="mt-1 text-sm text-[#2D2D2D]/70">Francheville</p>
 </div>
 <span className="rounded-full bg-[#E8E4DF] px-3 py-1 text-xs font-medium text-[#1A1A2E]">145 m²</span>
@@ -211,7 +253,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-6">
 <div className="flex items-start justify-between gap-4">
 <div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>1 020 000 €</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>1 020 000 €</h3>
 <p className="mt-1 text-sm text-[#2D2D2D]/70">Oullins</p>
 </div>
 <span className="rounded-full bg-[#E8E4DF] px-3 py-1 text-xs font-medium text-[#1A1A2E]">158 m²</span>
@@ -236,7 +278,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-6">
 <div className="flex items-start justify-between gap-4">
 <div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>760 000 €</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>760 000 €</h3>
 <p className="mt-1 text-sm text-[#2D2D2D]/70">Craponne</p>
 </div>
 <span className="rounded-full bg-[#E8E4DF] px-3 py-1 text-xs font-medium text-[#1A1A2E]">132 m²</span>
@@ -265,14 +307,14 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mb-12 max-w-3xl">
 <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C5A55A]">Pourquoi Hamac</p>
-<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Une approche locale, attentive et exigeante</h2>
+<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Une approche locale, attentive et exigeante</h2>
 </div>
 <div className="grid gap-6 lg:grid-cols-3">
 <div className="rounded-3xl border border-[#E8E4DF] bg-white p-8 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/5">
 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C5A55A]/10 text-[#C5A55A]">
 <iconify-icon height="24" icon="solar:map-point-wave-linear" style={{strokeWidth: '1.5'}} width="24"></iconify-icon>
 </div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Expertise locale</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Expertise locale</h3>
 <p className="mt-3 text-sm leading-7 text-[#2D2D2D]/75">
               Plus de 10 ans d’expérience dans l’Ouest Lyonnais, avec une lecture fine des rues, des micro-marchés et des attentes de chaque secteur.
             </p>
@@ -281,7 +323,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C5A55A]/10 text-[#C5A55A]">
 <iconify-icon height="24" icon="solar:user-check-linear" style={{strokeWidth: '1.5'}} width="24"></iconify-icon>
 </div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Accompagnement sur mesure</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Accompagnement sur mesure</h3>
 <p className="mt-3 text-sm leading-7 text-[#2D2D2D]/75">
               Un interlocuteur dédié de A à Z, pour orchestrer chaque étape avec clarté, discrétion et disponibilité.
             </p>
@@ -290,7 +332,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C5A55A]/10 text-[#C5A55A]">
 <iconify-icon height="24" icon="solar:shield-keyhole-linear" style={{strokeWidth: '1.5'}} width="24"></iconify-icon>
 </div>
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Réseau off-market</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Réseau off-market</h3>
 <p className="mt-3 text-sm leading-7 text-[#2D2D2D]/75">
               Accédez à des biens confidentiels et à des opportunités exclusives grâce à notre réseau de propriétaires et d’acquéreurs qualifiés.
             </p>
@@ -303,7 +345,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 <div>
 <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C5A55A]">Avis clients</p>
-<h2 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Ils nous confient leurs projets de vie</h2>
+<h2 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Ils nous confient leurs projets de vie</h2>
 </div>
 <div className="flex items-center gap-3">
 <button className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition hover:bg-white/5">
@@ -368,7 +410,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
 <div className="max-w-3xl">
 <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C5A55A]">L’équipe</p>
-<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Une équipe qui connaît chaque rue de l'Ouest Lyonnais</h2>
+<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Une équipe qui connaît chaque rue de l'Ouest Lyonnais</h2>
 </div>
 <a className="inline-flex items-center gap-2 text-sm font-medium text-[#1A1A2E] transition hover:text-[#C5A55A]" href="#">
             Découvrir l'agence
@@ -417,7 +459,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 opacity-0 translate-y-6 transition duration-1000 ease-out motion-safe:animate-[fadeUp_0.9s_ease-out_0.3s_forwards]" id="quartiers">
 <div className="mb-12 max-w-3xl">
 <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C5A55A]">Quartiers &amp; communes</p>
-<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Explorer l’Ouest Lyonnais</h2>
+<h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#1A1A2E] sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Explorer l’Ouest Lyonnais</h2>
 </div>
 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
 <a className="group overflow-hidden rounded-3xl border border-[#E8E4DF] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/5" href="#">
@@ -426,7 +468,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-6">
 <div className="flex items-center justify-between gap-4">
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Sainte-Foy-lès-Lyon</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Sainte-Foy-lès-Lyon</h3>
 <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#C5A55A]">6 200 €/m²</span>
 </div>
 </div>
@@ -437,7 +479,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-6">
 <div className="flex items-center justify-between gap-4">
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Tassin</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Tassin</h3>
 <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#C5A55A]">5 900 €/m²</span>
 </div>
 </div>
@@ -448,7 +490,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-6">
 <div className="flex items-center justify-between gap-4">
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Écully</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Écully</h3>
 <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#C5A55A]">6 450 €/m²</span>
 </div>
 </div>
@@ -459,7 +501,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-6">
 <div className="flex items-center justify-between gap-4">
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Oullins</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Oullins</h3>
 <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#C5A55A]">4 850 €/m²</span>
 </div>
 </div>
@@ -470,7 +512,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-6">
 <div className="flex items-center justify-between gap-4">
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Francheville</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Francheville</h3>
 <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#C5A55A]">5 350 €/m²</span>
 </div>
 </div>
@@ -481,7 +523,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-6">
 <div className="flex items-center justify-between gap-4">
-<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Craponne</h3>
+<h3 className="text-2xl font-medium tracking-tight text-[#1A1A2E]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Craponne</h3>
 <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#C5A55A]">4 980 €/m²</span>
 </div>
 </div>
@@ -493,7 +535,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col items-start justify-between gap-6 rounded-[2rem] border border-white/10 bg-white/5 px-6 py-10 backdrop-blur md:flex-row md:items-center md:px-10">
 <div className="max-w-3xl">
 <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C5A55A]">Vente</p>
-<h2 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Vous vendez ? Obtenez une estimation gratuite en 24h</h2>
+<h2 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Vous vendez ? Obtenez une estimation gratuite en 24h</h2>
 </div>
 <a className="inline-flex items-center justify-center rounded-full bg-[#C5A55A] px-6 py-4 text-sm font-medium text-[#1A1A2E] transition duration-300 hover:-translate-y-0.5 hover:bg-[#d2b673]" href="#">
             Demander mon estimation
@@ -506,7 +548,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
 <div>
 <div className="text-[#F8F6F0]">
-<div className="text-2xl font-semibold uppercase leading-none tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>Hamac</div>
+<div className="text-2xl font-semibold uppercase leading-none tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Hamac</div>
 <div className="mt-1 text-xs uppercase tracking-[0.22em] text-[#C5A55A]">Investissements &amp; Patrimoine</div>
 </div>
 <p className="mt-5 max-w-sm text-sm leading-7 text-white/70">

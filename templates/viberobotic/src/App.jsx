@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -47,6 +83,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -374,7 +416,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 z-10 mt-32 pt-0 relative gap-x-8 gap-y-6">
 
-<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 
 <style>
             @keyframes draw-chart-line {
@@ -396,7 +438,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
             }
           </style>
 
-<div className="overflow-hidden flex-1 bg-gradient-to-br from-black/10 to-black/0 w-full rounded-xl mb-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="overflow-hidden flex-1 bg-gradient-to-br from-black/10 to-black/0 w-full rounded-xl mb-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="overflow-hidden w-full h-full relative" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 80%, transparent)'}}>
 
 <div className="absolute top-4 left-4 px-3 py-1.5 bg-black/70 border border-white/10 rounded-full text-xs text-white shadow-xl backdrop-blur-sm z-20 flex items-center gap-2">
@@ -443,9 +485,9 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 
-<div className="flex-1 overflow-y-auto custom-scrollbar bg-neutral-950/40 rounded-lg pt-4 pr-4 pb-4 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex-1 overflow-y-auto custom-scrollbar bg-neutral-950/40 rounded-lg pt-4 pr-4 pb-4 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 
 <div className="relative flex flex-col items-center w-full max-w-md mx-auto">
 
@@ -538,8 +580,8 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="flex flex-col gap-6 h-[540px] [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll">
-<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
-<div className="flex-1 overflow-y-auto custom-scrollbar bg-neutral-950/40 rounded-lg pt-4 pr-4 pb-4 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/10 to-white/0 h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
+<div className="flex-1 overflow-y-auto custom-scrollbar bg-neutral-950/40 rounded-lg pt-4 pr-4 pb-4 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 
 <div className="grid grid-cols-3 z-10 border-0 rounded-none pt-0 pr-0 pb-0 pl-0 relative gap-x-2.5 gap-y-2.5">
 
@@ -753,7 +795,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="animate-marquee-up flex flex-col">
 
 <div className="flex flex-col gap-6 pb-6">
-<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <svg className="text-white mb-6 opacity-80" fill="currentColor" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
 <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
@@ -775,7 +817,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="flex flex-col gap-6 pb-6">
-<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <svg className="text-white mb-6 opacity-80" fill="currentColor" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
 <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
@@ -849,7 +891,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="relative w-full h-full overflow-hidden">
 <div className="animate-marquee-up flex flex-col">
 <div className="flex flex-col gap-6 pb-6">
-<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <svg className="text-white mb-6 opacity-80" fill="currentColor" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
 <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
@@ -871,7 +913,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="flex flex-col gap-6 pb-6">
-<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group transition-all duration-500 hover:border-white/10 shadow-black/50 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <svg className="text-white mb-6 opacity-80" fill="currentColor" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
 <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>

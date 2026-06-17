@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -113,6 +149,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -205,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <section className="flex flex-col z-10 w-full max-w-7xl mt-24 mr-auto mb-32 ml-auto pr-6 pl-6 relative">
 
-<div className="w-full flex justify-start mb-8 spotlight-group relative [animation:animationIn_0.8s_ease-out_0.1s_both] animate-on-scroll animate" style={{-MouseXRel: '1243px', -MouseYRel: '1732px'}}>
+<div className="w-full flex justify-start mb-8 spotlight-group relative [animation:animationIn_0.8s_ease-out_0.1s_both] animate-on-scroll animate" style={{'--mouse-x-rel': '1243px', '--mouse-y-rel': '1732px'}}>
 <div className="-inset-px spotlight-border transition-opacity duration-300 opacity-0 w-fit rounded-full absolute" style={{background: 'radial-gradient(120px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(124,102,255,0.4), transparent)'}}></div>
 <a className="relative z-10 group flex items-center gap-4 rounded-full border border-white/10 bg-black/40 pr-4 pl-1.5 py-1.5 hover:border-white/20 transition-all overflow-hidden" href="#">
 <span className="rounded-full bg-[#7c66ff]/10 border border-[#7c66ff]/30 px-3 py-1 text-[10px] font-semibold text-[#7c66ff] tracking-wide uppercase">
@@ -238,9 +280,9 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="mt-12 md:mt-16 w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-end [animation:animationIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate">
 
-<div className="group relative rounded-2xl bg-white/[0.02] p-6 md:p-8 spotlight-group spotlight-card overflow-hidden" style={{-MouseXRel: '1243px', -MouseYRel: '1327px'}}>
+<div className="group relative rounded-2xl bg-white/[0.02] p-6 md:p-8 spotlight-group spotlight-card overflow-hidden" style={{'--mouse-x-rel': '1243px', '--mouse-y-rel': '1327px'}}>
 <div className="absolute inset-0 pointer-events-none border border-white/5 rounded-2xl"></div>
-<div className="absolute inset-0 pointer-events-none rounded-2xl opacity-0 spotlight-border transition-opacity duration-300 border border-transparent" style={{background: 'border-box radial-gradient(300px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(124,102,255,0.2), transparent) border-box', WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
+<div className="absolute inset-0 pointer-events-none rounded-2xl opacity-0 spotlight-border transition-opacity duration-300 border border-transparent" style={{background: 'border-box radial-gradient(300px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(124, 102, 255, 0.2), transparent) border-box', WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
 <div className="absolute left-0 top-6 w-0.5 h-10 bg-gradient-to-b from-[#7c66ff] to-[#5e4ad0] rounded-r-full"></div>
 <p className="md:text-lg leading-relaxed z-10 text-base italic text-gray-300 font-serif max-w-lg relative" style={{}}>"Everything in one place. Digital twin, renders, walkthroughs, cinematic VR, all working together and available everywhere on mobile. One system that actually carries the project from first pitch to final sale."</p>
 <div className="mt-6 flex gap-3 items-center">
@@ -261,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </button>
 
-<a className="hover:bg-white/5 transition-all flex h-14 text-sm font-medium text-gray-200 bg-white/[0.03] rounded-full px-8 items-center justify-center group relative overflow-hidden" href="#comparison" style={{-BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '9999px'}}>
+<a className="hover:bg-white/5 transition-all flex h-14 text-sm font-medium text-gray-200 bg-white/[0.03] rounded-full px-8 items-center justify-center group relative overflow-hidden" href="#comparison" style={{'--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))', '--border-radius-before': '9999px'}}>
 <span className="group-hover:text-white transition-colors text-base font-medium text-gray-300 tracking-tight">Calculate Your ROI</span>
 </a>
 </div>
@@ -304,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full relative">
 
-<div className="group relative rounded-2xl bg-white/[0.02] border border-white/5 p-6 spotlight-group overflow-hidden hover:bg-white/[0.04] transition-colors duration-500 flex flex-col h-full [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style={{-MouseXRel: '1243px', -MouseYRel: '645.75px'}}>
+<div className="group relative rounded-2xl bg-white/[0.02] border border-white/5 p-6 spotlight-group overflow-hidden hover:bg-white/[0.04] transition-colors duration-500 flex flex-col h-full [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style={{'--mouse-x-rel': '1243px', '--mouse-y-rel': '645.75px'}}>
 
 <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(124,102,255,0.08), transparent 40%)'}}></div>
 
@@ -391,7 +433,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="group relative rounded-2xl bg-white/[0.02] border border-white/5 p-6 spotlight-group overflow-hidden hover:bg-white/[0.04] transition-colors duration-500 flex flex-col h-full [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll" style={{-MouseXRel: '824.3359375px', -MouseYRel: '645.75px'}}>
+<div className="group relative rounded-2xl bg-white/[0.02] border border-white/5 p-6 spotlight-group overflow-hidden hover:bg-white/[0.04] transition-colors duration-500 flex flex-col h-full [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll" style={{'--mouse-x-rel': '824.3359375px', '--mouse-y-rel': '645.75px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(124,102,255,0.08), transparent 40%)'}}></div>
 
 <div className="h-48 w-full mb-8 rounded-xl bg-black/40 border border-white/5 relative overflow-hidden flex items-center justify-center p-4 select-none">
@@ -418,7 +460,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="group spotlight-group overflow-hidden hover:bg-white/[0.04] transition-colors duration-500 flex flex-col [animation:animationIn_0.8s_ease-out_0.8s_both] animate-on-scroll h-full border-white/5 border rounded-2xl pt-6 pr-6 pb-6 pl-6 relative" style={{-MouseXRel: '405.671875px', -MouseYRel: '645.75px'}}>
+<div className="group spotlight-group overflow-hidden hover:bg-white/[0.04] transition-colors duration-500 flex flex-col [animation:animationIn_0.8s_ease-out_0.8s_both] animate-on-scroll h-full border-white/5 border rounded-2xl pt-6 pr-6 pb-6 pl-6 relative" style={{'--mouse-x-rel': '405.671875px', '--mouse-y-rel': '645.75px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(124,102,255,0.08), transparent 40%)'}}></div>
 
 <div className="overflow-hidden flex select-none bg-black/40 w-full h-48 border-white/5 border rounded-xl mb-8 pt-6 pr-6 pb-6 pl-6 relative items-center justify-center">

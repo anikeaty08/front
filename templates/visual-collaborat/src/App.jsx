@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -265,6 +301,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -3842,7 +3884,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="cpv-card-preview">
 <div className="cpv-drawn-line" style={{left: '64px', top: '28px', width: '180px', height: '116px'}}></div>
 <div className="cpv-drawn-line" style={{left: '50px', top: '84px', width: '170px', height: '98px'}}></div>
-<div style={{position: 'absolute', left: '116px', top: '26px', borderRadius: '999px', background: '#a8efcf', padding: '7px 22px', fontFamily: 'Patrick Hand,Inter,sans-serif', fontSize: '16px', fontWeight: '700'}}>
+<div style={{position: 'absolute', left: '116px', top: '26px', borderRadius: '999px', background: '#a8efcf', padding: '7px 22px', fontFamily: 'Patrick Hand, Inter, sans-serif', fontSize: '16px', fontWeight: '700'}}>
                   BIG IDEA
                 </div>
 <div style={{position: 'absolute', left: '24px', top: '62px', borderRadius: '4px', border: '1px solid #d1d5db', background: '#fff', padding: '6px 11px', fontSize: '10px', fontWeight: '700'}}>
@@ -3888,7 +3930,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="cpv-card">
 <div className="cpv-card-preview" style={{background: '#f8fbff'}}>
-<div className="" style={{position: 'absolute', left: '92px', top: '18px', color: '#148dff', fontFamily: 'Patrick Hand,Inter,sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
+<div className="" style={{position: 'absolute', left: '92px', top: '18px', color: '#148dff', fontFamily: 'Patrick Hand, Inter, sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
                   PROJECT ROADMAP
                 </div>
 <div className="" style={{position: 'absolute', left: '44px', right: '30px', top: '52px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', textAlign: 'center', fontSize: '10px', fontWeight: '700'}}>
@@ -3936,7 +3978,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="cpv-card">
 <div className="cpv-card-preview" style={{background: '#fffaf4'}}>
-<div style={{position: 'absolute', left: '76px', top: '18px', color: '#d97706', fontFamily: 'Patrick Hand,Inter,sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
+<div style={{position: 'absolute', left: '76px', top: '18px', color: '#d97706', fontFamily: 'Patrick Hand, Inter, sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
                   USER JOURNEY MAP
                 </div>
 <div style={{position: 'absolute', left: '38px', right: '24px', top: '52px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '7px', textAlign: 'center', fontSize: '9px', fontWeight: '700'}}>
@@ -4020,7 +4062,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="cpv-card-preview">
 <div className="cpv-drawn-line" style={{left: '64px', top: '28px', width: '180px', height: '116px'}}></div>
 <div className="cpv-drawn-line" style={{left: '50px', top: '84px', width: '170px', height: '98px'}}></div>
-<div className="" style={{position: 'absolute', left: '116px', top: '26px', borderRadius: '999px', background: '#a8efcf', padding: '7px 22px', fontFamily: 'Patrick Hand,Inter,sans-serif', fontSize: '16px', fontWeight: '700'}}>
+<div className="" style={{position: 'absolute', left: '116px', top: '26px', borderRadius: '999px', background: '#a8efcf', padding: '7px 22px', fontFamily: 'Patrick Hand, Inter, sans-serif', fontSize: '16px', fontWeight: '700'}}>
                   RETROSPECTIVE
                 </div>
 <div style={{position: 'absolute', left: '24px', top: '62px', borderRadius: '4px', border: '1px solid #d1d5db', background: '#fff', padding: '6px 11px', fontSize: '10px', fontWeight: '700'}}>
@@ -4066,7 +4108,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="cpv-card">
 <div className="cpv-card-preview" style={{background: '#f0fdf4'}}>
-<div className="" style={{position: 'absolute', left: '92px', top: '18px', color: '#16a34a', fontFamily: 'Patrick Hand,Inter,sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
+<div className="" style={{position: 'absolute', left: '92px', top: '18px', color: '#16a34a', fontFamily: 'Patrick Hand, Inter, sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
                   MARKETING PLAN
                 </div>
 <div className="" style={{position: 'absolute', left: '44px', right: '30px', top: '52px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', textAlign: 'center', fontSize: '10px', fontWeight: '700'}}>
@@ -4114,7 +4156,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="cpv-card">
 <div className="cpv-card-preview" style={{background: '#fef2f2'}}>
-<div style={{position: 'absolute', left: '76px', top: '18px', color: '#dc2626', fontFamily: 'Patrick Hand,Inter,sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
+<div style={{position: 'absolute', left: '76px', top: '18px', color: '#dc2626', fontFamily: 'Patrick Hand, Inter, sans-serif', fontSize: '18px', fontWeight: '600', fontStyle: 'italic'}}>
                   EMPATHY MAP
                 </div>
 <div style={{position: 'absolute', left: '38px', right: '24px', top: '52px', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '7px', textAlign: 'center', fontSize: '9px', fontWeight: '700'}}>

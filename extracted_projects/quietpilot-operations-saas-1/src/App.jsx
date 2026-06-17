@@ -64,6 +64,42 @@ export default function App() {
 
   // AI Simulation Engine
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % WORKFLOW_STEPS.length);
     }, SIMULATION_TIMING);
@@ -80,7 +116,7 @@ export default function App() {
         {/* Deep background image - moody dark restaurant/kitchen environment */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1533777324465-98edec860f47?auto=format&fit=crop&w=3840&q=80')" }}
+          style={{backgroundImage: "url('https://images.unsplash.com/photo-1533777324465-98edec860f47?auto=format&fit=crop&w=3840&q=80')"}}
         />
         {/* Vignette and overlays for text legibility and mood */}
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
@@ -153,7 +189,7 @@ export default function App() {
             {/* Ambient depth glow behind cards */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-emerald-500/10 blur-[100px] -z-10 rounded-full pointer-events-none" />
             
-            <div className="grid grid-cols-2 gap-4 auto-rows-max" style={{ perspective: '1000px' }}>
+            <div className="grid grid-cols-2 gap-4 auto-rows-max" style={{perspective: '1000px'}}>
               
               {/* Card 1: Command Center (Full Width) */}
               <GlassCard className="col-span-2 p-6" glow={activeStep === 4}>
@@ -164,7 +200,7 @@ export default function App() {
                   <div className="absolute top-5 left-6 right-6 h-[2px] bg-white/10">
                     <div 
                       className="h-full bg-emerald-500 transition-all duration-1000 ease-in-out relative"
-                      style={{ width: `${(activeStep / (WORKFLOW_STEPS.length - 1)) * 100}%` }}
+                      style={{width: `${(activeStep / (WORKFLOW_STEPS.length - 1)) * 100}%`}}
                     >
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-emerald-400 blur-sm rounded-full animate-pulse" />
                     </div>

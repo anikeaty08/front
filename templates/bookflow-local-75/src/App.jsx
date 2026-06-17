@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -131,6 +167,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -138,7 +180,7 @@ gtag('config', 'G-2M6V79H761');
       
 
 <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden border-t-[4px] border-black bg-white/95 backdrop-blur px-4 py-3" style={{}}>
-<a className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#ffe500] text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all active:translate-x-1 active:translate-y-1 active:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '20px', letterSpacing: '.02em', textTransform: 'uppercase'}}>
+<a className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#ffe500] text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all active:translate-x-1 active:translate-y-1 active:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '20px', letterSpacing: '.02em', textTransform: 'uppercase'}}>
         Book my free call
         <iconify-icon icon="solar:arrow-right-linear" width="22"></iconify-icon>
 </a>
@@ -147,14 +189,14 @@ gtag('config', 'G-2M6V79H761');
 <header className="sticky top-0 z-40 border-b-[4px] border-black bg-white/90 backdrop-blur">
 <div className="mx-auto flex max-w-6xl items-center justify-between px-5 h-[68px]">
 <a className="flex items-center gap-2.5" href="#">
-<span className="flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-black bg-[#ffe500] text-black font-playfair font-bold" style={{fontFamily: '\'Chewy\',cursive', fontSize: '24px'}}>
+<span className="flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-black bg-[#ffe500] text-black font-playfair font-bold" style={{fontFamily: '\'Chewy\', cursive', fontSize: '24px'}}>
             B
           </span>
-<span className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive', fontSize: '24px'}}>
+<span className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive', fontSize: '24px'}}>
             BookFlow
           </span>
 </a>
-<div className="hidden items-center gap-7 md:flex" style={{fontFamily: '\'Patrick Hand\',sans-serif'}}>
+<div className="hidden items-center gap-7 md:flex" style={{fontFamily: '\'Patrick Hand\', sans-serif'}}>
 <a className="text-lg hover:text-[#13a8ff] font-geist" href="#leak">
             The Leak
           </a>
@@ -166,15 +208,15 @@ gtag('config', 'G-2M6V79H761');
           </a>
 <a className="text-lg hover:text-[#13a8ff] font-geist" href="#faq">FAQ</a>
 </div>
-<a className="hidden h-11 items-center justify-center rounded-xl bg-[#ffe500] px-5 text-black sm:inline-flex font-geist border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none font-bold" href="#book" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '17px', letterSpacing: '.02em', textTransform: 'uppercase'}}>
+<a className="hidden h-11 items-center justify-center rounded-xl bg-[#ffe500] px-5 text-black sm:inline-flex font-geist border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none font-bold" href="#book" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '17px', letterSpacing: '.02em', textTransform: 'uppercase'}}>
           Book free call
         </a>
 </div>
 </header>
 
-<section className="overflow-hidden pt-6 pb-10 relative" style={{background: 'linear-gradient(to right,rgba(0,0,0,.1) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,0,0,.1) 1px,transparent 1px),#fff', backgroundSize: '44px 44px'}}>
+<section className="overflow-hidden pt-6 pb-10 relative" style={{background: 'linear-gradient(to right,rgba(0,0,0,.1) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,0,0,.1) 1px,transparent 1px), #fff', backgroundSize: '44px 44px'}}>
 
-<div className="absolute left-[4%] top-28 hidden rotate-[-8deg] bg-[#a8efcf] px-5 py-4 lg:block border-[3px] border-black shadow-[6px_6px_0_0_#000] rounded-xl" style={{fontFamily: '\'Patrick Hand\',sans-serif'}}>
+<div className="absolute left-[4%] top-28 hidden rotate-[-8deg] bg-[#a8efcf] px-5 py-4 lg:block border-[3px] border-black shadow-[6px_6px_0_0_#000] rounded-xl" style={{fontFamily: '\'Patrick Hand\', sans-serif'}}>
 <span className="absolute -top-3 left-10 h-4 w-12 rotate-6 bg-neutral-400/30"></span>
 <span className="text-lg font-geist">
           Missed call?
@@ -182,7 +224,7 @@ gtag('config', 'G-2M6V79H761');
           → Auto text back
         </span>
 </div>
-<div className="absolute right-[4%] top-40 hidden rotate-[7deg] bg-[#ffc4a6] px-5 py-4 lg:block border-[3px] border-black shadow-[6px_6px_0_0_#000] rounded-xl" style={{fontFamily: '\'Patrick Hand\',sans-serif'}}>
+<div className="absolute right-[4%] top-40 hidden rotate-[7deg] bg-[#ffc4a6] px-5 py-4 lg:block border-[3px] border-black shadow-[6px_6px_0_0_#000] rounded-xl" style={{fontFamily: '\'Patrick Hand\', sans-serif'}}>
 <span className="absolute -top-3 left-10 h-4 w-12 rotate-3 bg-neutral-400/30"></span>
 <span className="text-lg font-geist">
           Lead in 2 min,
@@ -190,7 +232,7 @@ gtag('config', 'G-2M6V79H761');
           not 2 days
         </span>
 </div>
-<div className="absolute left-[7%] bottom-24 hidden rotate-[5deg] bg-[#bcecff] px-5 py-4 xl:block border-[3px] border-black shadow-[6px_6px_0_0_#000] rounded-xl" style={{fontFamily: '\'Patrick Hand\',sans-serif'}}>
+<div className="absolute left-[7%] bottom-24 hidden rotate-[5deg] bg-[#bcecff] px-5 py-4 xl:block border-[3px] border-black shadow-[6px_6px_0_0_#000] rounded-xl" style={{fontFamily: '\'Patrick Hand\', sans-serif'}}>
 <span className="text-lg font-geist">
           ⭐ More reviews,
           <br/>
@@ -208,7 +250,7 @@ gtag('config', 'G-2M6V79H761');
             Trusted by 120+ local service businesses
           </span>
 </div>
-<h1 className="tracking-tight text-neutral-950 font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(44px,8vw,84px)', lineHeight: '.92'}}>
+<h1 className="tracking-tight text-neutral-950 font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(44px,8vw,84px)', lineHeight: '.92'}}>
           More booked jobs,
           <br/>
 <span className="inline-block -translate-y-3 -translate-y-1 font-thin tracking-tighter font-instrument-serif relative scale-110">
@@ -225,11 +267,11 @@ gtag('config', 'G-2M6V79H761');
           You don't touch the tech.
         </p>
 <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-<a className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#ffe500] px-8 text-black sm:w-auto font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '20px', letterSpacing: '.02em', textTransform: 'uppercase'}}>
+<a className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#ffe500] px-8 text-black sm:w-auto font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '20px', letterSpacing: '.02em', textTransform: 'uppercase'}}>
             Book my free call
             <iconify-icon icon="solar:arrow-right-linear" width="22"></iconify-icon>
 </a>
-<a className="flex h-14 w-full items-center justify-center gap-2 rounded-xl border-[3px] border-black bg-white px-7 sm:w-auto font-geist font-bold text-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#leak" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '18px', textTransform: 'uppercase'}}>
+<a className="flex h-14 w-full items-center justify-center gap-2 rounded-xl border-[3px] border-black bg-white px-7 sm:w-auto font-geist font-bold text-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#leak" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '18px', textTransform: 'uppercase'}}>
             See what you're leaking
           </a>
 </div>
@@ -246,7 +288,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mb-3 text-base font-black uppercase italic tracking-tight text-black font-geist">
             The leak you live with
           </p>
-<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(34px,5vw,60px)', lineHeight: '.95'}}>
+<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(34px,5vw,60px)', lineHeight: '.95'}}>
             Your leads aren't the problem.
             <br/>
 <span className="relative inline-block font-playfair font-medium">
@@ -311,7 +353,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mb-3 text-base font-semibold uppercase italic tracking-tight text-[#078fff] font-geist">
             The 60-second reality check
           </p>
-<h2 className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
+<h2 className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
             How much money is walking
             <br/>
             out your door?
@@ -342,7 +384,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-sm font-black uppercase tracking-wide text-black font-geist">
               You're leaking around
             </p>
-<p className="mt-1 text-5xl tracking-tight text-black sm:text-6xl font-playfair font-bold" id="leakAmount" style={{fontFamily: '\'Chewy\',cursive'}}>
+<p className="mt-1 text-5xl tracking-tight text-black sm:text-6xl font-playfair font-bold" id="leakAmount" style={{fontFamily: '\'Chewy\', cursive'}}>
               $3,118
             </p>
 <p className="text-sm font-bold text-black font-geist">
@@ -354,7 +396,7 @@ gtag('config', 'G-2M6V79H761');
               a year quietly slipping away.
             </p>
 </div>
-<a className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#ff90e8] text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '20px', textTransform: 'uppercase'}}>
+<a className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#ff90e8] text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '20px', textTransform: 'uppercase'}}>
             Book a call to plug the leak
             <iconify-icon icon="solar:arrow-right-linear" width="22"></iconify-icon>
 </a>
@@ -373,7 +415,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mb-3 text-base font-black uppercase italic tracking-tight text-black font-geist">
             The real fix
           </p>
-<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
+<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
             It's not more ads.
             <br/>
 <span className="relative inline-block font-playfair font-medium">
@@ -465,7 +507,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mb-3 text-base font-semibold uppercase italic tracking-tight text-[#078fff] font-geist">
             Everything done for you
           </p>
-<h2 className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
+<h2 className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
             Your complete growth system,
             <br/>
 <span className="relative inline-block font-playfair font-medium">
@@ -568,7 +610,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-sm font-black uppercase tracking-wide text-black font-geist">
             If you bought all this separately
           </p>
-<p className="mt-1 text-3xl tracking-tight text-neutral-900 line-through decoration-rose-500 decoration-4 font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive'}}>
+<p className="mt-1 text-3xl tracking-tight text-neutral-900 line-through decoration-rose-500 decoration-4 font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive'}}>
             $7,000+ in setup
           </p>
 <p className="mt-4 text-base font-medium text-neutral-800 font-geist">
@@ -576,7 +618,7 @@ gtag('config', 'G-2M6V79H761');
             <span className="font-bold font-geist">$4,000+/mo</span>
             . This system costs less than one and never calls in sick.
           </p>
-<a className="mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[#ffe500] px-8 text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '20px', textTransform: 'uppercase'}}>
+<a className="mt-6 inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[#ffe500] px-8 text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '20px', textTransform: 'uppercase'}}>
             Get my system → book the call
           </a>
 <p className="mt-3 text-xs font-bold text-black font-geist">
@@ -593,7 +635,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mb-3 text-base font-black uppercase italic tracking-tight text-black font-geist">
             Real businesses, real bookings
           </p>
-<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
+<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
             The leak gets plugged.
             <br/>
 <span className="relative inline-block font-playfair font-medium">
@@ -605,7 +647,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="mt-12 grid gap-4 sm:grid-cols-3">
 <div className="rounded-2xl border-[3px] border-black bg-white p-7 text-center shadow-[6px_6px_0_0_#000]">
-<p className="text-6xl tracking-tight text-[#ff90e8] font-playfair font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)]" style={{fontFamily: '\'Chewy\',cursive'}}>
+<p className="text-6xl tracking-tight text-[#ff90e8] font-playfair font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)]" style={{fontFamily: '\'Chewy\', cursive'}}>
               +38%
             </p>
 <p className="mt-2 text-sm font-bold text-black font-geist">
@@ -613,7 +655,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="rounded-2xl border-[3px] border-black bg-white p-7 text-center shadow-[6px_6px_0_0_#000]">
-<p className="text-6xl tracking-tight text-[#a8efcf] font-playfair font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)]" style={{fontFamily: '\'Chewy\',cursive'}}>
+<p className="text-6xl tracking-tight text-[#a8efcf] font-playfair font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)]" style={{fontFamily: '\'Chewy\', cursive'}}>
               94
             </p>
 <p className="mt-2 text-sm font-bold text-black font-geist">
@@ -621,7 +663,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="rounded-2xl border-[3px] border-black bg-white p-7 text-center shadow-[6px_6px_0_0_#000]">
-<p className="text-6xl tracking-tight text-[#ffe500] font-playfair font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)]" style={{fontFamily: '\'Chewy\',cursive'}}>
+<p className="text-6xl tracking-tight text-[#ffe500] font-playfair font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)]" style={{fontFamily: '\'Chewy\', cursive'}}>
               4.9★
             </p>
 <p className="mt-2 text-sm font-bold text-black font-geist">
@@ -713,7 +755,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="rounded-3xl border-[4px] border-black bg-[#a8efcf] p-8 shadow-[8px_8px_0_0_#000]">
 <iconify-icon className="text-[#078fff]" icon="solar:shield-check-linear" width="44"></iconify-icon>
-<h3 className="mt-4 text-3xl tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive'}}>
+<h3 className="mt-4 text-3xl tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive'}}>
               Zero-risk to say yes
             </h3>
 <ul className="mt-5 space-y-3 text-base font-medium text-neutral-800">
@@ -738,7 +780,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="rounded-3xl border-[4px] border-black bg-[#ffef9d] p-8 shadow-[8px_8px_0_0_#000]">
 <iconify-icon className="text-amber-700" icon="solar:hourglass-line-linear" width="44"></iconify-icon>
-<h3 className="mt-4 text-3xl tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive'}}>
+<h3 className="mt-4 text-3xl tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive'}}>
               Limited onboarding spots
             </h3>
 <p className="mt-4 text-base font-medium text-neutral-800 font-geist">
@@ -749,7 +791,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-sm font-semibold uppercase tracking-wide text-neutral-500 font-geist">
                 This month
               </p>
-<p className="text-4xl tracking-tight text-rose-500 font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive'}}>
+<p className="text-4xl tracking-tight text-rose-500 font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive'}}>
                 3 of 8 spots left
               </p>
 </div>
@@ -769,7 +811,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mb-3 text-base font-black uppercase italic tracking-tight text-black font-geist">
             Straight answers
           </p>
-<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
+<h2 className="tracking-tight font-playfair font-medium text-black" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(32px,5vw,56px)', lineHeight: '.95'}}>
             Before you book, this might help.
           </h2>
 </div>
@@ -841,7 +883,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="mt-10 text-center">
-<a className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[#ffe500] px-8 text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '20px', textTransform: 'uppercase'}}>
+<a className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[#ffe500] px-8 text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#book" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '20px', textTransform: 'uppercase'}}>
             Still have questions? Book the call
           </a>
 </div>
@@ -856,7 +898,7 @@ gtag('config', 'G-2M6V79H761');
             Only 3 onboarding spots left this month
           </span>
 </div>
-<h2 className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive', fontSize: 'clamp(38px,6vw,68px)', lineHeight: '.92'}}>
+<h2 className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive', fontSize: 'clamp(38px,6vw,68px)', lineHeight: '.92'}}>
           Stop losing jobs.
           <br/>
 <span className="relative inline-block font-playfair font-medium">
@@ -876,7 +918,7 @@ gtag('config', 'G-2M6V79H761');
               Pick a time that suits you
             </span>
 </div>
-<a className="mt-5 flex h-16 w-full items-center justify-center gap-2 rounded-xl bg-[#a8efcf] text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '22px', textTransform: 'uppercase'}}>
+<a className="mt-5 flex h-16 w-full items-center justify-center gap-2 rounded-xl bg-[#a8efcf] text-black font-playfair font-bold border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none" href="#" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '22px', textTransform: 'uppercase'}}>
             Book my free strategy call
             <iconify-icon icon="solar:arrow-right-linear" width="24"></iconify-icon>
 </a>
@@ -903,10 +945,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
 <div>
 <a className="flex items-center gap-2.5" href="#">
-<span className="flex h-10 w-10 items-center justify-center rounded-full border-[3px] border-black bg-[#ffe500] text-black font-playfair font-bold" style={{fontFamily: '\'Chewy\',cursive', fontSize: '26px'}}>
+<span className="flex h-10 w-10 items-center justify-center rounded-full border-[3px] border-black bg-[#ffe500] text-black font-playfair font-bold" style={{fontFamily: '\'Chewy\', cursive', fontSize: '26px'}}>
                 B
               </span>
-<span className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\',cursive', fontSize: '26px'}}>
+<span className="tracking-tight font-playfair font-medium" style={{fontFamily: '\'Chewy\', cursive', fontSize: '26px'}}>
                 BookFlow
               </span>
 </a>
@@ -916,7 +958,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="flex flex-col gap-4">
-<a className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#ff90e8] px-6 text-black font-geist border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none font-bold" href="#book" style={{fontFamily: '\'Patrick Hand\',sans-serif', fontSize: '17px', textTransform: 'uppercase'}}>
+<a className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#ff90e8] px-6 text-black font-geist border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none font-bold" href="#book" style={{fontFamily: '\'Patrick Hand\', sans-serif', fontSize: '17px', textTransform: 'uppercase'}}>
               Book free call
             </a>
 <div className="flex items-center gap-3 text-sm font-medium text-neutral-600">

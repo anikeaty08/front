@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -425,6 +461,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -541,8 +583,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       </style>
 </div>
 
-<div className="pointer-events-none absolute -top-6 left-10 w-40 h-40 rounded-full" style={{background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.55) 35%, rgba(255,255,255,0) 70%)', filter: 'blur(4px)', opacity: '.85'}}></div>
-<div className="pointer-events-none absolute bottom-10 right-14 w-24 h-24 rounded-full" style={{background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0) 70%)', filter: 'blur(6px)', opacity: '.8'}}></div>
+<div className="pointer-events-none absolute -top-6 left-10 w-40 h-40 rounded-full" style={{background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.55) 35%, rgba(255, 255, 255, 0) 70%)', filter: 'blur(4px)', opacity: '.85'}}></div>
+<div className="pointer-events-none absolute bottom-10 right-14 w-24 h-24 rounded-full" style={{background: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0) 70%)', filter: 'blur(6px)', opacity: '.8'}}></div>
 
 <div className="relative z-20 flex flex-col text-center px-6 py-8 space-y-12 items-center">
 
@@ -573,7 +615,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[70%] h-[16%] rounded-full -z-10" style={{background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.24) 0%, rgba(0,0,0,0.12) 40%, rgba(0,0,0,0) 70%)', filter: 'blur(18px)', opacity: '.25'}}></div>
+<div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[70%] h-[16%] rounded-full -z-10" style={{background: 'radial-gradient(ellipse at center, rgba(0, 0, 0, 0.24) 0%, rgba(0, 0, 0, 0.12) 40%, rgba(0, 0, 0, 0) 70%)', filter: 'blur(18px)', opacity: '.25'}}></div>
 </div>
 </div>
 <div className="relative sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pr-4 pl-4 invisible">
@@ -700,7 +742,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </p>
 <div className="mt-12 flex items-center justify-center gap-3" style={{opacity: '0', animation: 'lyricFadeIn 0.8s ease-in-out forwards', animationDelay: '7.2s'}}>
 <div className="relative">
-<div className="absolute inset-0 -z-10 blur-3xl rounded-full" style={{background: 'radial-gradient(40% 40% at 50% 50%, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.06) 45%, rgba(0,0,0,0) 70%)', transform: 'translateY(10px)'}}></div>
+<div className="absolute inset-0 -z-10 blur-3xl rounded-full" style={{background: 'radial-gradient(40% 40% at 50% 50%, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.06) 45%, rgba(0, 0, 0, 0) 70%)', transform: 'translateY(10px)'}}></div>
 <img alt="Founder avatar" className="ring-1 ring-black/5 w-12 h-12 object-cover rounded-full shadow-[0_6px_20px_rgba(0,0,0,0.18)]" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/b5fa796b-5a4e-4746-8463-8e491f896f5c_320w.jpg" style={{}}/>
 </div>
 <span className="text-base text-gray-700">Founder of ORB AI</span>
@@ -744,7 +786,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative bg-white rounded-3xl p-8 ring-1 ring-black/5 shadow-[0_6px_24px_rgba(0,0,0,0.08)]">
 <div className="mb-8 flex items-center justify-center">
-<div className="relative w-28 h-28 rounded-full bg-white ring-1 ring-black/5 flex items-center justify-center animate-pulse-soft" style={{boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.9), 0 10px 24px rgba(0,0,0,0.06)', animation: 'pulse-soft 3s ease-in-out infinite'}}>
+<div className="relative w-28 h-28 rounded-full bg-white ring-1 ring-black/5 flex items-center justify-center animate-pulse-soft" style={{boxShadow: 'inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 10px 24px rgba(0,0,0,0.06)', animation: 'pulse-soft 3s ease-in-out infinite'}}>
 <div className="absolute w-2 h-2 bg-gray-300 rounded-full top-3 right-4 animate-bounce-gentle delay-500" style={{animation: 'bounce-gentle 2s ease-in-out infinite 0.5s'}}></div>
 <div className="w-1 h-10 bg-gray-800 rounded-full transition-transform duration-1000" style={{transformOrigin: 'bottom center', transform: 'rotate(18deg)', animation: 'rotate-slow 6s ease-in-out infinite'}}></div>
 <div className="absolute w-2 h-2 bg-gray-800 rounded-full bottom-1.5"></div>
@@ -774,7 +816,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative bg-white ring-black/5 ring-1 rounded-3xl pt-8 pr-8 pb-8 pl-8 shadow-[0_6px_24px_rgba(0,0,0,0.08)]">
 <div className="flex overflow-hidden relative bg-gray-50 rounded-xl mb-8 items-center justify-center"><video autoplay="" className="absolute inset-0 w-full h-full object-cover" id="asset-video-1758251819113" loop="" muted="" playsinline="" src="https://cdn.midjourney.com/video/d9a88b9e-7ed5-464b-a036-0518cdd85eae/0.mp4"></video>
-<div className="relative flex ring-0 bg-white/0 opacity-25 w-28 h-28 rounded-full items-center justify-center" style={{boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.9), 0 10px 24px rgba(0,0,0,0.06)'}}>
+<div className="relative flex ring-0 bg-white/0 opacity-25 w-28 h-28 rounded-full items-center justify-center" style={{boxShadow: 'inset 0 2px 0 rgba(255, 255, 255, 0.9), 0 10px 24px rgba(0,0,0,0.06)'}}>
 
 </div>
 <style>
@@ -902,11 +944,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative bg-white rounded-3xl p-8 ring-1 ring-black/5 shadow-[0_1px_0_rgba(0,0,0,0.04),_0_12px_30px_rgba(0,0,0,0.06)]">
 <div className="relative mb-10">
-<div className="w-14 h-14 rounded-full bg-white ring-1 ring-black/5 flex items-center justify-center text-gray-900" style={{boxShadow: '0 10px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="w-14 h-14 rounded-full bg-white ring-1 ring-black/5 flex items-center justify-center text-gray-900" style={{boxShadow: '0 10px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-bar-chart-3 w-6 h-6" data-lucide="bar-chart-3" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
 </div>
-<span className="absolute left-16 top-1.5 w-6 h-6 rounded-full bg-white ring-1 ring-black/5" style={{boxShadow: '0 8px 18px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7)'}}></span>
-<span className="absolute left-8 top-16 w-4 h-4 rounded-full bg-white ring-1 ring-black/5" style={{boxShadow: '0 6px 14px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7)'}}></span>
+<span className="absolute left-16 top-1.5 w-6 h-6 rounded-full bg-white ring-1 ring-black/5" style={{boxShadow: '0 8px 18px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255,255,255,0.7)'}}></span>
+<span className="absolute left-8 top-16 w-4 h-4 rounded-full bg-white ring-1 ring-black/5" style={{boxShadow: '0 6px 14px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255,255,255,0.7)'}}></span>
 </div>
 <h3 className="text-2xl font-medium tracking-tight text-gray-900 mb-2">AI Strategy Consulting</h3>
 <p className="text-gray-600 leading-relaxed">Get expert guidance to implement AI solutions that drive business growth.</p>
@@ -928,7 +970,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="relative lg:row-span-2 overflow-hidden bg-white max-h-fit ring-black/5 ring-1 rounded-3xl pt-8 pr-8 pb-8 pl-8 shadow-[0_1px_0_rgba(0,0,0,0.04),_0_12px_30px_rgba(0,0,0,0.06)]">
-<div className="absolute left-6 top-6 w-9 h-9 rounded-full bg-white ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="absolute left-6 top-6 w-9 h-9 rounded-full bg-white ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-sparkles text-gray-800 w-4.5 h-4.5" data-lucide="sparkles" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
 </div>
 <div className="absolute left-16 top-12 flex gap-1.5">
@@ -943,7 +985,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="mt-28 mb-10">
-<div className="w-full h-14 bg-white rounded-full ring-1 ring-black/5 flex items-center px-5 text-gray-400" style={{boxShadow: 'inset 0 5px 14px rgba(0,0,0,0.10), inset 0 -1px 0 rgba(0,0,0,0.03)'}}>
+<div className="w-full h-14 bg-white rounded-full ring-1 ring-black/5 flex items-center px-5 text-gray-400" style={{boxShadow: 'inset 0 5px 14px rgba(0, 0, 0, 0.10), inset 0 -1px 0 rgba(0,0,0,0.03)'}}>
           Type a message
         </div>
 </div>
@@ -953,25 +995,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative bg-white rounded-3xl p-8 ring-1 ring-black/5 shadow-[0_1px_0_rgba(0,0,0,0.04),_0_12px_30px_rgba(0,0,0,0.06)]">
 <div className="grid grid-cols-4 gap-3 mb-8">
-<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-bot text-gray-900" data-lucide="bot" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
 </div>
-<div className="col-span-2 h-20 bg-white rounded-2xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 12px 26px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="col-span-2 h-20 bg-white rounded-2xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 12px 26px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-diamond text-gray-900" data-lucide="diamond" fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path></svg>
 </div>
-<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-hand-metal text-gray-900" data-lucide="hand-metal" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M18 12.5V10a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1.4"></path><path d="M14 11V9a2 2 0 1 0-4 0v2"></path><path d="M10 10.5V5a2 2 0 1 0-4 0v9"></path><path d="m7 15-1.76-1.76a2 2 0 0 0-2.83 2.82l3.6 3.6C7.5 21.14 9.2 22 12 22h2a8 8 0 0 0 8-8V7a2 2 0 1 0-4 0v5"></path></svg>
 </div>
-<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-gamepad-2 text-gray-900" data-lucide="gamepad-2" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="6" x2="10" y1="11" y2="11"></line><line x1="8" x2="8" y1="9" y2="13"></line><line x1="15" x2="15.01" y1="12" y2="12"></line><line x1="18" x2="18.01" y1="10" y2="10"></line><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"></path></svg>
 </div>
-<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-workflow text-gray-900" data-lucide="workflow" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><rect height="8" rx="2" width="8" x="3" y="3"></rect><path d="M7 11v4a2 2 0 0 0 2 2h4"></path><rect height="8" rx="2" width="8" x="13" y="13"></rect></svg>
 </div>
-<div className="col-span-2 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="col-span-2 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-shield-check text-gray-900" data-lucide="shield-check" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
 </div>
-<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
+<div className="col-span-1 h-14 bg-white rounded-xl ring-1 ring-black/5 flex items-center justify-center" style={{boxShadow: '0 10px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <svg className="lucide lucide-wand-2 text-gray-900" data-lucide="wand-2" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"></path><path d="m14 7 3 3"></path><path d="M5 6v4"></path><path d="M19 14v4"></path><path d="M10 2v2"></path><path d="M7 8H3"></path><path d="M21 16h-4"></path><path d="M11 3H9"></path></svg>
 </div>
 </div>
@@ -1210,14 +1252,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="text-center mt-12">
 <div className="relative inline-block group">
-<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] relative z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/95 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{-X: '199.6484375px', -Y: '12px', -O: '0'}}>
+<button className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] relative z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/95 border-white/20 border rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" onmouseenter="this.style.setProperty('--o','1')" onmouseleave="this.style.setProperty('--o','0')" onmousemove="btnMove(event)" style={{'--x': '199.6484375px', '--y': '12px', '--o': '0'}}>
 <span className="relative z-10 inline-flex items-center gap-2 font-semibold" style={{}}>View All Gallery<svg className="h-5 w-5 transition-transform duration-200 ease-out group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24">
 <path className="" d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg></span>
 <span className="pointer-events-none absolute bottom-0 left-1/2 right-1/2 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 transition-[left,right] duration-500 ease-out group-hover:left-0 group-hover:right-0"></span>
 <span aria-hidden="true" className="glow pointer-events-none absolute inset-0 -z-10" style={{transform: 'scale(0.95) translate(0px, -24px)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255,255,255,.55), rgba(255,255,255,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255, 255, 255, .55), rgba(255, 255, 255, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 

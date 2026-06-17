@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -39,6 +75,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -79,7 +121,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div aria-checked="true" className="relative inline-flex items-center gap-2 js-toggle" role="switch">
 <span className="js-toggle-label text-xs text-neutral-700 w-7 text-right select-none">On</span>
-<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom,#d5d5d5,#e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
+<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom, #d5d5d5, #e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
 <input aria-label="Enable dark theme" checked="" className="toggle-checkbox js-toggle-input" style={{appearance: 'none', position: 'absolute', zIndex: '1', borderRadius: '.5em', width: '100%', height: '100%', font: 'inherit', opacity: '0', cursor: 'pointer'}} type="checkbox"/>
 <div className="toggle-container js-toggle-container rounded" style={{display: 'flex', alignItems: 'center', position: 'relative', borderRadius: '.375em', width: '3em', height: '1.5em', backgroundColor: '#f3b519', boxShadow: 'inset 0 0 .0625em .125em rgb(255 255 255 / .2), inset 0 .0625em .125em rgb(0 0 0 / .4)', transition: 'background-color .4s linear'}}>
 <div className="toggle-button js-toggle-button" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', left: '1.5625em', borderRadius: '.3125em', width: '1.375em', height: '1.375em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 -.0625em .0625em .125em rgb(0 0 0 / .1), inset 0 -.125em .0625em rgb(0 0 0 / .2), inset 0 .1875em .0625em rgb(255 255 255 / .3), 0 .125em .125em rgb(0 0 0 / .5)', transition: 'left .4s'}}>
@@ -118,7 +160,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div aria-checked="false" className="relative inline-flex items-center gap-2 js-toggle" role="switch">
 <span className="js-toggle-label text-xs text-neutral-500 w-7 text-right select-none">Off</span>
-<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom,#d5d5d5,#e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
+<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom, #d5d5d5, #e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
 <input aria-label="Toggle email notifications" className="toggle-checkbox js-toggle-input" style={{appearance: 'none', position: 'absolute', zIndex: '1', borderRadius: '.5em', width: '100%', height: '100%', font: 'inherit', opacity: '0', cursor: 'pointer'}} type="checkbox"/>
 <div className="toggle-container js-toggle-container rounded" style={{display: 'flex', alignItems: 'center', position: 'relative', borderRadius: '.375em', width: '3em', height: '1.5em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 0 .0625em .125em rgb(255 255 255 / .2), inset 0 .0625em .125em rgb(0 0 0 / .4)', transition: 'background-color .4s linear'}}>
 <div className="toggle-button js-toggle-button" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', left: '.0625em', borderRadius: '.3125em', width: '1.375em', height: '1.375em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 -.0625em .0625em .125em rgb(0 0 0 / .1), inset 0 -.125em .0625em rgb(0 0 0 / .2), inset 0 .1875em .0625em rgb(255 255 255 / .3), 0 .125em .125em rgb(0 0 0 / .5)', transition: 'left .4s'}}>
@@ -149,7 +191,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div aria-checked="true" className="relative inline-flex items-center gap-2 js-toggle" role="switch">
 <span className="js-toggle-label text-xs text-neutral-700 w-7 text-right select-none">On</span>
-<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom,#d5d5d5,#e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
+<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom, #d5d5d5, #e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
 <input aria-label="Toggle auto-update" checked="" className="toggle-checkbox js-toggle-input" style={{appearance: 'none', position: 'absolute', zIndex: '1', borderRadius: '.5em', width: '100%', height: '100%', font: 'inherit', opacity: '0', cursor: 'pointer'}} type="checkbox"/>
 <div className="toggle-container js-toggle-container rounded" style={{display: 'flex', alignItems: 'center', position: 'relative', borderRadius: '.375em', width: '3em', height: '1.5em', backgroundColor: '#f3b519', boxShadow: 'inset 0 0 .0625em .125em rgb(255 255 255 / .2), inset 0 .0625em .125em rgb(0 0 0 / .4)', transition: 'background-color .4s linear'}}>
 <div className="toggle-button js-toggle-button" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', left: '1.5625em', borderRadius: '.3125em', width: '1.375em', height: '1.375em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 -.0625em .0625em .125em rgb(0 0 0 / .1), inset 0 -.125em .0625em rgb(0 0 0 / .2), inset 0 .1875em .0625em rgb(255 255 255 / .3), 0 .125em .125em rgb(0 0 0 / .5)', transition: 'left .4s'}}>
@@ -180,7 +222,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div aria-checked="false" className="relative inline-flex items-center gap-2 js-toggle" role="switch">
 <span className="js-toggle-label text-xs text-neutral-500 w-7 text-right select-none">Off</span>
-<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom,#d5d5d5,#e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
+<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom, #d5d5d5, #e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
 <input aria-label="Toggle sound effects" className="toggle-checkbox js-toggle-input" style={{appearance: 'none', position: 'absolute', zIndex: '1', borderRadius: '.5em', width: '100%', height: '100%', font: 'inherit', opacity: '0', cursor: 'pointer'}} type="checkbox"/>
 <div className="toggle-container js-toggle-container rounded" style={{display: 'flex', alignItems: 'center', position: 'relative', borderRadius: '.375em', width: '3em', height: '1.5em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 0 .0625em .125em rgb(255 255 255 / .2), inset 0 .0625em .125em rgb(0 0 0 / .4)', transition: 'background-color .4s linear'}}>
 <div className="toggle-button js-toggle-button" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', left: '.0625em', borderRadius: '.3125em', width: '1.375em', height: '1.375em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 -.0625em .0625em .125em rgb(0 0 0 / .1), inset 0 -.125em .0625em rgb(0 0 0 / .2), inset 0 .1875em .0625em rgb(255 255 255 / .3), 0 .125em .125em rgb(0 0 0 / .5)', transition: 'left .4s'}}>
@@ -211,7 +253,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div aria-checked="false" className="relative inline-flex items-center gap-2 js-toggle" role="switch">
 <span className="js-toggle-label text-xs text-neutral-500 w-7 text-right select-none">Off</span>
-<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom,#d5d5d5,#e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
+<div className="toggle-wrapper rounded-md" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', borderRadius: '.5em', padding: '.125em', backgroundImage: 'linear-gradient(to bottom, #d5d5d5, #e8e8e8)', boxShadow: '0 1px 1px rgb(255 255 255 / .6)', fontSize: '1.5em'}}>
 <input aria-label="Toggle compact mode" className="toggle-checkbox js-toggle-input" style={{appearance: 'none', position: 'absolute', zIndex: '1', borderRadius: '.5em', width: '100%', height: '100%', font: 'inherit', opacity: '0', cursor: 'pointer'}} type="checkbox"/>
 <div className="toggle-container js-toggle-container rounded" style={{display: 'flex', alignItems: 'center', position: 'relative', borderRadius: '.375em', width: '3em', height: '1.5em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 0 .0625em .125em rgb(255 255 255 / .2), inset 0 .0625em .125em rgb(0 0 0 / .4)', transition: 'background-color .4s linear'}}>
 <div className="toggle-button js-toggle-button" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', left: '.0625em', borderRadius: '.3125em', width: '1.375em', height: '1.375em', backgroundColor: '#e8e8e8', boxShadow: 'inset 0 -.0625em .0625em .125em rgb(0 0 0 / .1), inset 0 -.125em .0625em rgb(0 0 0 / .2), inset 0 .1875em .0625em rgb(255 255 255 / .3), 0 .125em .125em rgb(0 0 0 / .5)', transition: 'left .4s'}}>

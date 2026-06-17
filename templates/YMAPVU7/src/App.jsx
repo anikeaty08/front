@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Mobile menu
@@ -158,6 +194,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -214,12 +256,12 @@ export default function App() {
 <div aria-hidden="true" className="absolute -top-6 -right-6 hidden md:block">
 <div className="h-40 w-40 relative" style={{perspective: '900px'}}>
 <div className="h-full w-full relative" id="cube3d" style={{transformStyle: 'preserve-3d', willChange: 'transform'}}>
-<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255,149,64,.2), rgba(253,230,138,.2))', transform: 'translateZ(40px)'}}></span>
-<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255,149,64,.18), rgba(253,230,138,.18))', transform: 'rotateY(90deg) translateZ(40px)'}}></span>
-<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255,149,64,.16), rgba(253,230,138,.16))', transform: 'rotateY(-90deg) translateZ(40px)'}}></span>
-<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255,149,64,.14), rgba(253,230,138,.14))', transform: 'rotateX(90deg) translateZ(40px)'}}></span>
-<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255,149,64,.12), rgba(253,230,138,.12))', transform: 'rotateX(-90deg) translateZ(40px)'}}></span>
-<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255,149,64,.25), rgba(253,230,138,.25))', transform: 'translateZ(-40px)'}}></span>
+<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255, 149, 64, .2), rgba(253, 230, 138, .2))', transform: 'translateZ(40px)'}}></span>
+<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255, 149, 64, .18), rgba(253, 230, 138, .18))', transform: 'rotateY(90deg) translateZ(40px)'}}></span>
+<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255, 149, 64, .16), rgba(253, 230, 138, .16))', transform: 'rotateY(-90deg) translateZ(40px)'}}></span>
+<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255, 149, 64, .14), rgba(253, 230, 138, .14))', transform: 'rotateX(90deg) translateZ(40px)'}}></span>
+<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255, 149, 64, .12), rgba(253, 230, 138, .12))', transform: 'rotateX(-90deg) translateZ(40px)'}}></span>
+<span className="absolute inset-0 rounded-xl border border-orange-500/30" style={{background: 'linear-gradient(135deg, rgba(255, 149, 64, .25), rgba(253, 230, 138, .25))', transform: 'translateZ(-40px)'}}></span>
 </div>
 </div>
 </div>

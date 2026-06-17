@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -31,7 +73,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <nav className="flex items-center justify-between">
 <a aria-label="Home" className="inline-flex items-center gap-2" href="#">
 <div className="h-8 w-8 rounded-md grid place-items-center border border-white/10 bg-white/[0.03] backdrop-blur" style={{letterSpacing: '-0.02em'}}>
-<span className="text-xs font-medium" style={{fontFamily: '\'Inter\',system-ui,ui-sans-serif'}}>AK</span>
+<span className="text-xs font-medium" style={{fontFamily: '\'Inter\', system-ui, ui-sans-serif'}}>AK</span>
 </div>
 <span className="text-sm text-zinc-400">Alex Knight</span>
 </a>
@@ -59,7 +101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex size-1.5 rounded-full bg-emerald-400"></span>
               Available for 2025 projects
             </div>
-<h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight" style={{fontFamily: '\'Space Grotesk\',ui-sans-serif'}}>
+<h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight" style={{fontFamily: '\'Space Grotesk\', ui-sans-serif'}}>
               Crafting immersive 3D visuals and interactive experiences.
             </h1>
 <p className="mt-4 text-zinc-400 leading-relaxed">
@@ -337,7 +379,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
 <div className="flex items-center gap-2">
 <div className="h-7 w-7 rounded-md grid place-items-center border border-white/10 bg-white/[0.03] backdrop-blur" style={{letterSpacing: '-0.02em'}}>
-<span className="text-[11px] font-medium" style={{fontFamily: '\'Inter\',system-ui,ui-sans-serif'}}>AK</span>
+<span className="text-[11px] font-medium" style={{fontFamily: '\'Inter\', system-ui, ui-sans-serif'}}>AK</span>
 </div>
 <span className="text-xs text-zinc-500">© 2025 Alex Knight. All rights reserved.</span>
 </div>

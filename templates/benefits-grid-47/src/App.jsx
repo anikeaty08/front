@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -130,14 +166,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           <div className="flex min-h-screen items-center justify-center px-4 py-16">
             <div className="relative mx-auto grid w-full max-w-4xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {/* Vertical dashed divider center (2-column layout only) */}
-              <div className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 sm:block lg:hidden" style={{ borderLeft: '2px dashed rgb(229, 231, 235)' }}></div>
+              <div className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 sm:block lg:hidden" style={{borderLeft: '2px dashed rgb(229, 231, 235)'}}></div>
 
               {/* Vertical dashed dividers for 3-column layout */}
-              <div className="pointer-events-none absolute inset-y-0 left-1/3 hidden w-px -translate-x-1/2 lg:block" style={{ borderLeft: '2px dashed rgb(229, 231, 235)' }}></div>
-              <div className="pointer-events-none absolute inset-y-0 left-2/3 hidden w-px -translate-x-1/2 lg:block" style={{ borderLeft: '2px dashed rgb(229, 231, 235)' }}></div>
+              <div className="pointer-events-none absolute inset-y-0 left-1/3 hidden w-px -translate-x-1/2 lg:block" style={{borderLeft: '2px dashed rgb(229, 231, 235)'}}></div>
+              <div className="pointer-events-none absolute inset-y-0 left-2/3 hidden w-px -translate-x-1/2 lg:block" style={{borderLeft: '2px dashed rgb(229, 231, 235)'}}></div>
 
               {/* Horizontal dashed divider (2-row layout only) */}
-              <div className="pointer-events-none absolute top-1/2 left-0 hidden h-px w-full -translate-y-1/2 sm:block" style={{ borderTop: '2px dashed rgb(229, 231, 235)' }}></div>
+              <div className="pointer-events-none absolute top-1/2 left-0 hidden h-px w-full -translate-y-1/2 sm:block" style={{borderTop: '2px dashed rgb(229, 231, 235)'}}></div>
 
               {/* Render benefit cards */}
               {benefits.map((benefit, index) => (
@@ -155,6 +191,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

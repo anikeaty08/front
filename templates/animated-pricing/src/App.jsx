@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -112,7 +148,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                 className={cycle === 'monthly' ? 'animate-electricity' : 'opacity-0'}
                                 strokeDasharray="100 900"
                                 strokeLinecap="round"
-                                style={{ filter: 'drop-shadow(0 0 8px #22d3ee)' }}
+                                style={{filter: 'drop-shadow(0 0 8px #22d3ee)'}}
                             />
 
                             {/* Active Electrical Flow - Right (Yearly) */}
@@ -124,7 +160,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                 className={cycle === 'yearly' ? 'animate-electricity' : 'opacity-0'}
                                 strokeDasharray="100 900"
                                 strokeLinecap="round"
-                                style={{ filter: 'drop-shadow(0 0 8px #a78bfa)' }}
+                                style={{filter: 'drop-shadow(0 0 8px #a78bfa)'}}
                             />
                         </svg>
                         
@@ -170,61 +206,36 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                             : 'bg-transparent border-white/[0.02] scale-[0.98] hover:scale-[0.99] hover:border-white/5 hover:bg-white/[0.01] z-10 opacity-50'
                         }
                     `}
-                    style={{
-                        boxShadow: active ? `0 0 100px -30px ${data.color}30` : 'none'
-                    }}
+                    style={{boxShadow: active ? `0 0 100px -30px ${data.color}30` : 'none'}}
                 >
                     {/* --- LIGHTING ENGINE (ENHANCED) --- */}
                     
                     {/* 1. Base Volumetric Beam (Conic) - Structural Light */}
                     <div 
                         className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] pointer-events-none transition-opacity duration-1000 ease-in-out light-beam-mask mix-blend-screen"
-                        style={{
-                            background: `conic-gradient(from 180deg at 50% -5%, transparent 40%, ${data.color} 50%, transparent 60%)`,
-                            opacity: active ? 0.2 : 0,
-                            filter: 'blur(20px)',
-                            transform: 'translateY(-10%)'
-                        }}
+                        style={{background: `conic-gradient(from 180deg at 50% -5%, transparent 40%, ${data.color} 50%, transparent 60%)`, opacity: active ? 0.2 : 0, filter: 'blur(20px)', transform: 'translateY(-10%)'}}
                     ></div>
 
                     {/* 2. High-Intensity Gaussian Radial Glow - The "Atmosphere" */}
                     <div 
                         className="absolute -top-[150px] left-1/2 -translate-x-1/2 w-[180%] h-[600px] pointer-events-none transition-all duration-1000"
-                        style={{
-                            // Conceptual Intensity Curve: 100% Center -> 50% Mid -> 0% Edge
-                            background: `radial-gradient(ellipse at 50% 20%, 
-                                ${data.glowColor} 0%, 
-                                ${data.color}50 40%, 
-                                ${data.color}10 60%, 
-                                transparent 80%
-                            )`,
-                            opacity: active ? 0.5 : 0,
-                            filter: 'blur(50px)', // Softens the gradient steps for true Gaussian feel
-                            mixBlendMode: 'screen'
-                        }}
+                        style={{// Conceptual Intensity Curve: 100% Center -> 50% Mid -> 0% Edge
+                            background: `radial-gradient(ellipse at 50% 20%, ${data.glowColor} 0%, ${data.color}50 40%, ${data.color}10 60%, transparent 80%
+                            )`, opacity: active ? 0.5 : 0, filter: 'blur(50px)', // Softens the gradient steps for true Gaussian feel
+                            mixBlendMode: 'screen'}}
                     ></div>
 
                     {/* 3. Soft Volumetric Highlight - "Bloom" layer */}
                     <div 
                         className="absolute -top-10 left-1/2 -translate-x-1/2 w-[80%] h-[200px] pointer-events-none transition-all duration-700"
-                        style={{
-                            background: `radial-gradient(ellipse at 50% 0%, ${data.color}, transparent 70%)`,
-                            opacity: active ? 0.3 : 0,
-                            filter: 'blur(30px)',
-                            mixBlendMode: 'overlay'
-                        }}
+                        style={{background: `radial-gradient(ellipse at 50% 0%, ${data.color}, transparent 70%)`, opacity: active ? 0.3 : 0, filter: 'blur(30px)', mixBlendMode: 'overlay'}}
                     ></div>
 
                     {/* 4. The Physical "Tube" Light source */}
                     <div 
                         className="absolute top-0 left-1/2 -translate-x-1/2 w-[35%] h-[3px] rounded-b-full transition-all duration-700 shadow-[0_0_40px_10px_rgba(255,255,255,0.3)]"
-                        style={{
-                            backgroundColor: active ? '#fff' : 'rgba(255,255,255,0.1)',
-                            boxShadow: active 
-                                ? `0 0 20px 2px ${data.color}, 0 0 80px 20px ${data.color}80, 0 10px 100px 30px ${data.color}40` 
-                                : 'none',
-                            opacity: active ? 1 : 0
-                        }}
+                        style={{backgroundColor: active ? '#fff' : 'rgba(255,255,255,0.1)', boxShadow: active 
+                                ? `0 0 20px 2px ${data.color}, 0 0 80px 20px ${data.color}80, 0 10px 100px 30px ${data.color}40`: 'none', opacity: active ? 1 : 0}}
                     ></div>
 
                     {/* --- CARD CONTENT --- */}
@@ -242,10 +253,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                         <div className="mb-12 flex items-baseline gap-1">
                             <span 
                                 className="text-6xl font-semibold tracking-tighter transition-all duration-500"
-                                style={{
-                                    color: active ? '#fff' : 'rgba(255,255,255,0.5)',
-                                    textShadow: active ? `0 0 40px ${data.color}60` : 'none'
-                                }}
+                                style={{color: active ? '#fff' : 'rgba(255,255,255,0.5)', textShadow: active ? `0 0 40px ${data.color}60` : 'none'}}
                             >
                                 ${data.price}
                             </span>
@@ -260,10 +268,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                 <li key={i} className={`flex items-center gap-4 text-sm font-medium transition-colors duration-500 ${active ? 'text-white/80' : 'text-white/40'}`}>
                                     <div 
                                         className={`shrink-0 flex items-center justify-center w-5 h-5 rounded-full transition-all duration-500`}
-                                        style={{
-                                            backgroundColor: active ? `${data.color}20` : 'rgba(255,255,255,0.05)',
-                                            color: active ? data.color : 'rgba(255,255,255,0.2)'
-                                        }}
+                                        style={{backgroundColor: active ? `${data.color}20` : 'rgba(255, 255, 255, 0.05)', color: active ? data.color : 'rgba(255,255,255,0.2)'}}
                                     >
                                         <iconify-icon icon="solar:check-read-linear" width="14" height="14" stroke-width="2"></iconify-icon>
                                     </div>
@@ -280,18 +285,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                     : 'bg-transparent text-white/20 border border-white/10 hover:border-white/20 hover:text-white/60'
                                 }
                             `}
-                            style={{
-                                backgroundColor: active ? data.color : 'transparent',
-                                boxShadow: active ? `0 0 30px -5px ${data.color}60` : 'none'
-                            }}
+                            style={{backgroundColor: active ? data.color : 'transparent', boxShadow: active ? `0 0 30px -5px ${data.color}60` : 'none'}}
                         >
                             {/* Pulse Overlay for Active Button */}
                             {active && (
                                 <div 
                                     className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 group-hover/btn:animate-pulse transition-all duration-500"
-                                    style={{
-                                        background: `radial-gradient(circle at center, white 0%, transparent 80%)`
-                                    }}
+                                    style={{background: `radial-gradient(circle at center, white 0%, transparent 80%)`}}
                                 ></div>
                             )}
 
@@ -310,6 +310,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

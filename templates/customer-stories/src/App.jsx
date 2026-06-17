@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -190,6 +226,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -238,7 +280,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="overflow-hidden sm:px-6 lg:px-8 pt-4 pr-4 pb-4 pl-4" style={{maskImage: 'linear-gradient(90deg, transparent, black 5%, black 95%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 5%, black 95%, transparent)'}}>
 
 <div className="flex transition-transform duration-500 ease-out gap-4 sm:gap-5 md:gap-6 lg:gap-8 items-center justify-start" id="carouselTrack" style={{transform: 'translateX(0px)', transition: 'transform 500ms ease-out'}}>
-<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-amber-300/70 shadow-2xl shadow-amber-900/10" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', -BorderRadiusBefore: '1.5rem', transform: 'scale(1)', opacity: '1', filter: 'none', zIndex: '20'}}>
+<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-amber-300/70 shadow-2xl shadow-amber-900/10" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', '--border-radius-before': '1.5rem', transform: 'scale(1)', opacity: '1', filter: 'none', zIndex: '20'}}>
 <p className="text-base sm:text-lg md:text-xl leading-relaxed font-[400] text-neutral-100 tracking-tight">
         "We rely on Atlas to orchestrate every handoff. The platform doesn't just automate tasks—it learns from our
         feedback, ships improvements weekly, and keeps our team in sync."
@@ -257,7 +299,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </article>
-<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-neutral-800" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', -BorderRadiusBefore: '1.5rem', transform: 'scale(0.92)', opacity: '0.4', filter: 'grayscale(100%)', zIndex: '10'}}>
+<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-neutral-800" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', '--border-radius-before': '1.5rem', transform: 'scale(0.92)', opacity: '0.4', filter: 'grayscale(100%)', zIndex: '10'}}>
 <p className="text-base sm:text-lg md:text-xl leading-relaxed font-[400] text-neutral-100 tracking-tight">
         "Atlas has transformed how we manage inbound requests. We resolve tickets 3× faster with fewer manual steps, and
         stakeholders get real-time updates without chasing us."
@@ -276,7 +318,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </article>
-<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-neutral-800" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', -BorderRadiusBefore: '1.5rem', transform: 'scale(0.92)', opacity: '0.4', filter: 'grayscale(100%)', zIndex: '10'}}>
+<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-neutral-800" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', '--border-radius-before': '1.5rem', transform: 'scale(0.92)', opacity: '0.4', filter: 'grayscale(100%)', zIndex: '10'}}>
 <p className="text-base sm:text-lg md:text-xl leading-relaxed font-[400] text-neutral-100 tracking-tight">
         "It surfaces risks early and gives leadership a single source of truth. We've scaled from 5 to 22 projects per
         quarter without adding headcount. It's the backbone of our ops stack."
@@ -295,7 +337,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </article>
-<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-neutral-800" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', -BorderRadiusBefore: '1.5rem', transform: 'scale(0.92)', opacity: '0.4', filter: 'grayscale(100%)', zIndex: '10'}}>
+<article className="testimonial-card flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[450px] lg:w-[500px] min-h-[360px] sm:min-h-[420px] transition-all duration-500 ease-out flex flex-col bg-gradient-to-b rounded-2xl sm:rounded-3xl pt-6 sm:pt-10 pr-6 sm:pr-10 pb-6 sm:pb-10 pl-6 sm:pl-10 justify-between from-neutral-950 via-neutral-950 to-neutral-900 border border-neutral-800" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(252, 211, 77, 0))', '--border-radius-before': '1.5rem', transform: 'scale(0.92)', opacity: '0.4', filter: 'grayscale(100%)', zIndex: '10'}}>
 <p className="text-base sm:text-lg md:text-xl leading-relaxed font-[400] text-neutral-100 tracking-tight">
         "The level of clarity and control Atlas gives our operations team is unlike anything we've used before. We've
         cut status meetings by over 40% and improved response times."

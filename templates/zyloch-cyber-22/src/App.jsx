@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -39,6 +75,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -63,7 +105,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="relative pt-40 pb-24 lg:pt-56 lg:pb-32 overflow-hidden hero-bg" data-scroll-section="">
 <div className="absolute right-0 top-0 w-[800px] h-[800px] opacity-30 pointer-events-none translate-x-1/3 -translate-y-1/4" data-scroll="" data-scroll-speed="-2">
-<div className="w-full h-full rounded-full border border-[#00E5FF]/20" style={{background: 'radial-gradient(circle, rgba(0,229,255,0.1) 0%, transparent 70%)', boxShadow: '0 0 100px 20px rgba(0,229,255,0.05) inset'}}></div>
+<div className="w-full h-full rounded-full border border-[#00E5FF]/20" style={{background: 'radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%)', boxShadow: '0 0 100px 20px rgba(0,229,255,0.05) inset'}}></div>
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-white/10" style={{background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%)'}}></div>
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] bg-black rounded-full shadow-[0_0_50px_20px_rgba(0,229,255,0.2)]"></div>
 </div>

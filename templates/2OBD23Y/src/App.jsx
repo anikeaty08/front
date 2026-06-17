@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Custom 3D utilities used by provided design
@@ -494,6 +530,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -556,7 +598,7 @@ addUtilities({
 <button className="rounded-lg bg-white/5 ring-1 ring-white/10 px-3 py-2 text-xs transition font-sans hover:bg-emerald-50/10" onclick="document.getElementById('file-ref').click()" type="button">Browse</button>
 </div>
 </div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.08) inset, 0 0 24px rgba(236,72,153,0.18)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 0 24px rgba(236,72,153,0.18)'}}></div>
 <div className="pointer-events-none absolute inset-0" id="ripple-ref"></div>
 </label>
 
@@ -583,7 +625,7 @@ addUtilities({
 <button className="rounded-lg bg-white/5 ring-1 ring-white/10 px-3 py-2 text-xs transition font-sans hover:bg-emerald-50/10" onclick="document.getElementById('file-vocal').click()" type="button">Browse</button>
 </div>
 </div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.08) inset, 0 0 24px rgba(20,242,199,0.18)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 0 24px rgba(20,242,199,0.18)'}}></div>
 <div className="pointer-events-none absolute inset-0" id="ripple-vocal"></div>
 </label>
 </div>

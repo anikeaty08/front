@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -127,6 +163,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2156,10 +2198,10 @@ line-height: 1.22 !important;
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
 </button>
 <div style={{textAlign: 'center', paddingBottom: '1.5rem'}}>
-<h3 style={{fontSize: '1.75rem', fontWeight: '700', letterSpacing: '-0.025em', lineHeight: '1.3', marginBottom: '0.625rem', fontFamily: '\'Figtree\',sans-serif', color: '#0F172A'}}>
+<h3 style={{fontSize: '1.75rem', fontWeight: '700', letterSpacing: '-0.025em', lineHeight: '1.3', marginBottom: '0.625rem', fontFamily: '\'Figtree\', sans-serif', color: '#0F172A'}}>
                         Acesse a programação completa e aumente sua relevância e impacto
                     </h3>
-<p style={{fontSize: '1rem', fontWeight: '500', lineHeight: '1.75', fontFamily: '\'Figtree\',sans-serif', color: '#4B5563'}}>
+<p style={{fontSize: '1rem', fontWeight: '500', lineHeight: '1.75', fontFamily: '\'Figtree\', sans-serif', color: '#4B5563'}}>
                         Preencha o formulário abaixo para receber informações detalhadas sobre o programa no seu email.
                     </p>
 </div>

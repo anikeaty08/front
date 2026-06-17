@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -14,6 +50,12 @@ lucide.createIcons();
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -149,7 +191,7 @@ lucide.createIcons();
           Referrals built your business. But what happens when they slow down?
         </h2>
 <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #fca5a5, #ef4444)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #fca5a5, #ef4444)', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-rose-50 text-rose-600">
 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
 </div>
@@ -158,7 +200,7 @@ lucide.createIcons();
               You get 70% to 90% of your clients from word of mouth and referrals. That worked great when you were starting out. But now you're stuck. When referrals dry up, you panic. You have no backup system. No predictable way to fill your calendar when your network goes quiet.
             </p>
 </div>
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #fca5a5, #ef4444)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #fca5a5, #ef4444)', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-rose-50 text-rose-600">
 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
 </div>
@@ -167,7 +209,7 @@ lucide.createIcons();
               Toronto agencies love sending 20-page monthly reports full of colorful graphs. They talk about impressions and reach all day. But when you ask what actually turned into revenue, they get real quiet. You cannot pay your rent with impressions. You need leads that turn into paying clients.
             </p>
 </div>
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #fca5a5, #ef4444)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #fca5a5, #ef4444)', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-rose-50 text-rose-600">
 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
 </div>

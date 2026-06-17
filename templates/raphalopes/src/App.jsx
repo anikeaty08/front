@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -129,6 +165,12 @@ function setLang(lang) {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -145,7 +187,7 @@ function setLang(lang) {
 
 <header className="flex z-10 mb-12 relative gap-y-6 items-center justify-between gap-x-2 md:mb-16 md:gap-0">
 <a className="flex items-center gap-2 text-zinc-900" href="#hero">
-<div className="flex bg-center text-white w-14 h-14 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f42cad2c-9760-4938-8ba4-f7e63a1432c2_320w.webp)] bg-cover rounded-full items-center justify-center" onclick="window.location.href='https://www.instagram.com/raphafons/'" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0),rgba(0,0,0,0.1))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex bg-center text-white w-14 h-14 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f42cad2c-9760-4938-8ba4-f7e63a1432c2_320w.webp)] bg-cover rounded-full items-center justify-center" onclick="window.location.href='https://www.instagram.com/raphafons/'" role="button" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0),rgba(0,0,0,0.1))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="opacity-80" height="16" icon="solar:pen-new-round-bold-duotone" width="16"></iconify-icon>
 </div>
 <span className="text-sm font-medium tracking-tight cursor-pointer" onclick="window.location.href='https://www.instagram.com/raphafons/'" role="button">RAPHA<span className="text-zinc-400">LOPES</span></span>
@@ -161,7 +203,7 @@ function setLang(lang) {
 <button className="lang-btn active text-[11px] font-bold tracking-widest rounded-md px-2.5 py-1.5" id="btn-pt" onclick="setLang('pt')">PT</button>
 <button className="lang-btn text-[11px] font-bold tracking-widest rounded-md px-2.5 py-1.5" id="btn-en" onclick="setLang('en')">EN</button>
 </div>
-<a className="flex items-center gap-2 group hover:bg-zinc-50 font-medium text-zinc-600 tracking-wide bg-gradient-to-b from-black/10 via-black/20 to-black/10 rounded-lg pt-2.5 pr-2 pb-2.5 pl-2" href="https://form.respondi.app/qGdQCgbL" style={{boxShadow: '0 18px 35px rgba(31,41,55,0.25),0 0 0 1px rgba(209,213,219,0.3)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '8px'}}>
+<a className="flex items-center gap-2 group hover:bg-zinc-50 font-medium text-zinc-600 tracking-wide bg-gradient-to-b from-black/10 via-black/20 to-black/10 rounded-lg pt-2.5 pr-2 pb-2.5 pl-2" href="https://form.respondi.app/qGdQCgbL" style={{boxShadow: '0 18px 35px rgba(31,41,55,0.25),0 0 0 1px rgba(209,213,219,0.3)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '8px'}}>
 <span className="text-[11px] uppercase font-medium text-black/60 tracking-tight" data-i18n="btn_agendar_agora">Agendar Agora</span>
 <svg className="group-hover:translate-x-1 transition-transform" height="14" style={{color: 'rgb(82,82,91)'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M4 12h16m0 0l-6-6m6 6l-6 6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path></svg>
 </a>
@@ -170,7 +212,7 @@ function setLang(lang) {
 
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 h-full flex-grow relative z-10 pb-8 lg:pb-0" id="hero">
 <div className="lg:col-span-7 flex flex-col pt-4 relative justify-center">
-<div className="inline-flex bg-white/60 w-max rounded-full mb-8 pt-1.5 pr-5 pb-1.5 pl-1.5 shadow-sm backdrop-blur-sm items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(0,0,0,0.05),rgba(0,0,0,0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex bg-white/60 w-max rounded-full mb-8 pt-1.5 pr-5 pb-1.5 pl-1.5 shadow-sm backdrop-blur-sm items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(0,0,0,0.05),rgba(0,0,0,0))', '--border-radius-before': '9999px'}}>
 <div className="flex -space-x-2 mr-3">
 <img alt="User" className="w-6 h-6 rounded-full border-2 border-white object-cover grayscale" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2e6f8f69-ae4a-4ec4-a075-86ecb8dd741b_320w.webp"/>
 <img alt="User" className="w-6 h-6 rounded-full border-2 border-white object-cover grayscale" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e59170a0-0f02-47d0-af6a-b2901fbd80eb_320w.webp"/>
@@ -189,10 +231,10 @@ function setLang(lang) {
       Não fazemos tatuagens. Criamos obras que carregam o que você não consegue colocar em palavras. Cada marca nasce de uma conversa, de uma escuta profunda, e fica com você para sempre.
     </p>
 <div className="flex flex-col sm:flex-row gap-3 lg:mb-24 mb-16">
-<a className="hover:bg-black transition-all flex group hover:shadow-2xl hover:-translate-y-0.5 gap-x-3 items-center justify-between text-sm font-medium text-zinc-900 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-xl" href="https://form.respondi.app/qGdQCgbL" style={{background: 'radial-gradient(circle at 10% 0%,#fed7aa 0%,#fb923c 100%)', boxShadow: '0 15px 25px -10px rgba(248,113,22,0.7),inset 0 4px 8px rgba(253,230,138,0.9),inset 0 -4px 8px rgba(249,115,22,0.9)'}}>
+<a className="hover:bg-black transition-all flex group hover:shadow-2xl hover:-translate-y-0.5 gap-x-3 items-center justify-between text-sm font-medium text-zinc-900 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-xl" href="https://form.respondi.app/qGdQCgbL" style={{background: 'radial-gradient(circle at 10% 0%, #fed7aa 0%, #fb923c 100%)', boxShadow: '0 15px 25px -10px rgba(248, 113, 22, 0.7), inset 0 4px 8px rgba(253, 230, 138, 0.9), inset 0 -4px 8px rgba(249,115,22,0.9)'}}>
 <span className="text-sm font-medium tracking-tight text-zinc-900" data-i18n="btn_experiencia">Quero Viver Essa Experiência</span>
 </a>
-<a className="hover:bg-zinc-50 hover:text-zinc-900 transition-all flex gap-x-2 items-center text-sm font-medium rounded-full pt-3 pr-6 pb-3 pl-6" href="#galeria" style={{boxShadow: '0 18px 35px rgba(31,41,55,0.25),0 0 0 1px rgba(209,213,219,0.3)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.8),rgba(0,0,0,0.4),rgba(255,255,255,0.8))', -BorderRadiusBefore: '9999px'}}>
+<a className="hover:bg-zinc-50 hover:text-zinc-900 transition-all flex gap-x-2 items-center text-sm font-medium rounded-full pt-3 pr-6 pb-3 pl-6" href="#galeria" style={{boxShadow: '0 18px 35px rgba(31,41,55,0.25),0 0 0 1px rgba(209,213,219,0.3)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.8),rgba(0,0,0,0.4),rgba(255,255,255,0.8))', '--border-radius-before': '9999px'}}>
 <span className="text-sm font-medium text-black/60 tracking-tight" data-i18n="btn_portfolio">Ver portfólio</span>
 <iconify-icon className="text-zinc-500" height="16" icon="solar:arrow-right-linear" width="16"></iconify-icon>
 </a>
@@ -226,14 +268,14 @@ function setLang(lang) {
 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/90 via-zinc-900/40 to-zinc-900/20"></div>
 <div className="flex flex-col pt-8 pr-8 pb-8 pl-8 absolute inset-0 justify-between">
 <div className="flex items-start justify-between">
-<div className="flex bg-gradient-to-br from-[#a3a3a3]/75 to-[#303030]/25 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex bg-gradient-to-br from-[#a3a3a3]/75 to-[#303030]/25 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0))', '--border-radius-before': '9999px'}}>
 <span className="relative flex h-2 w-2">
 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-300 opacity-75"></span>
 <span className="inline-flex bg-lime-500 w-2 h-2 rounded-full relative"></span>
 </span>
 <span className="text-[10px] uppercase font-semibold text-white tracking-wide" data-i18n="agenda_aberta">Agenda Aberta</span>
 </div>
-<a className="flex hover:bg-white/20 transition-colors text-white bg-gradient-to-b from-white/10 to-white/0 w-10 h-10 rounded-full items-center justify-center" href="#agendar" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0))', -BorderRadiusBefore: '9999px'}}>
+<a className="flex hover:bg-white/20 transition-colors text-white bg-gradient-to-b from-white/10 to-white/0 w-10 h-10 rounded-full items-center justify-center" href="#agendar" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0))', '--border-radius-before': '9999px'}}>
 <iconify-icon height="18" icon="solar:bell-linear" width="18"></iconify-icon>
 </a>
 </div>

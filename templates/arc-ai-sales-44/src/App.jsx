@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -569,6 +605,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -577,7 +619,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="aura-background-component fixed top-0 w-full h-screen -z-10" data-alpha-mask="80" style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}>
 <div className="aura-background-component top-0 w-full -z-10 absolute h-full">
 <div className="absolute w-full h-full left-0 top-0 -z-10" data-us-project="NMlvqnkICwYYJ6lYb064">
-<div data-darkreader-inline-color="" data-us-text="id-e4g1y4ansvwqbxm34ejw" style={{width: '5px', top: '398.905px', left: '522.264px', fontSize: '10px', lineHeight: '65.1906px', letterSpacing: '0px', fontFamily: 'Inter', fontWeight: '400', textAlign: 'left', position: 'absolute', wordBreak: 'break-word', transform: 'rotateZ(0deg)', color: 'transparent', zIndex: '2', -DarkreaderInlineColor: 'transparent'}}>
+<div data-darkreader-inline-color="" data-us-text="id-e4g1y4ansvwqbxm34ejw" style={{width: '5px', top: '398.905px', left: '522.264px', fontSize: '10px', lineHeight: '65.1906px', letterSpacing: '0px', fontFamily: 'Inter', fontWeight: '400', textAlign: 'left', position: 'absolute', wordBreak: 'break-word', transform: 'rotateZ(0deg)', color: 'transparent', zIndex: '2', '--darkreader-inline-color': 'transparent'}}>
             .
           </div>
 </div>
@@ -614,7 +656,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             Get Started
           </button>
 <button className="md:hidden text-neutral-400">
-<svg className="lucide lucide-menu w-5 h-5" data-darkreader-inline-stroke="" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+<svg className="lucide lucide-menu w-5 h-5" data-darkreader-inline-stroke="" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
 </button>
 </div>
 </div>
@@ -668,7 +710,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 <div className="relative z-10">
 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300">
-<svg className="lucide lucide-heart-pulse" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="heart-pulse" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(94, 177, 250)', -DarkreaderInlineStroke: 'currentColor', -DarkreaderInlineColor: 'var(--darkreader-text-5eb1fa, #5db5fa)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path><path d="M3.22 13H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"></path></svg>
+<svg className="lucide lucide-heart-pulse" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="heart-pulse" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(94, 177, 250)', '--darkreader-inline-stroke': 'currentColor', '--darkreader-inline-color': 'var(--darkreader-text-5eb1fa, #5db5fa)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path><path d="M3.22 13H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"></path></svg>
 </div>
 <h3 className="text-lg font-medium text-white mb-2" style={{}}>
               Database Reactivation
@@ -684,7 +726,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="relative z-10">
 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-amber-400 group-hover:scale-110 transition-transform duration-300">
-<svg className="lucide lucide-phone-incoming" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="phone-incoming" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(251, 196, 52)', -DarkreaderInlineStroke: 'currentColor', -DarkreaderInlineColor: 'var(--darkreader-text-fbc434, #fbc73f)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 2v6h6"></path><path d="m22 2-6 6"></path><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
+<svg className="lucide lucide-phone-incoming" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="phone-incoming" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(251, 196, 52)', '--darkreader-inline-stroke': 'currentColor', '--darkreader-inline-color': 'var(--darkreader-text-fbc434, #fbc73f)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 2v6h6"></path><path d="m22 2-6 6"></path><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
 </div>
 <h3 className="text-lg font-medium text-white mb-2">Voice Agents</h3>
 <p className="leading-relaxed text-sm font-light text-neutral-400">
@@ -698,7 +740,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 <div className="relative z-10">
 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-emerald-400 group-hover:scale-110 transition-transform duration-300">
-<svg className="lucide lucide-dock" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="dock" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(71, 215, 163)', -DarkreaderInlineStroke: 'currentColor', -DarkreaderInlineColor: 'var(--darkreader-text-47d7a3, #54daaa)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M2 8h20"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect><path d="M6 16h12"></path></svg>
+<svg className="lucide lucide-dock" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="dock" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(71, 215, 163)', '--darkreader-inline-stroke': 'currentColor', '--darkreader-inline-color': 'var(--darkreader-text-47d7a3, #54daaa)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M2 8h20"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect><path d="M6 16h12"></path></svg>
 </div>
 <h3 className="text-lg font-medium text-white mb-2">
               Automated Proposals
@@ -783,7 +825,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="space-y-4 mb-10">
 <div className="flex items-start gap-3">
 <div className="mt-1 p-1 rounded-full bg-neutral-900 border border-white/10 text-white">
-<svg className="lucide lucide-check" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-check" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="M20 6 9 17l-5-5"></path>
 </svg>
 </div>
@@ -794,7 +836,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-start gap-3">
 <div className="mt-1 p-1 rounded-full bg-neutral-900 border border-white/10 text-white">
-<svg className="lucide lucide-check" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-check" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="M20 6 9 17l-5-5"></path>
 </svg>
 </div>
@@ -805,7 +847,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-start gap-3">
 <div className="mt-1 p-1 rounded-full bg-neutral-900 border border-white/10 text-white">
-<svg className="lucide lucide-check" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-check" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="M20 6 9 17l-5-5"></path>
 </svg>
 </div>
@@ -842,7 +884,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 flex items-center justify-center cursor-pointer z-20 group/play" onclick="this.parentElement.innerHTML = '&lt;iframe src=\'https://player.vimeo.com/video/1142575321?autoplay=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\' width=\'100%\' height=\'100%\' frameborder=\'0\' allow=\'autoplay; fullscreen; picture-in-picture\' allowfullscreen class=\'w-full h-full rounded-xl\'&gt;&lt;/iframe&gt;'">
 <div className="flex group-hover/play:scale-110 group-hover/play:bg-white/20 transition-all duration-300 bg-white/10 w-16 h-16 border-white/20 border rounded-full backdrop-blur-md items-center justify-center">
-<svg className="lucide lucide-play ml-1 text-white" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" fill="currentColor" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor', -DarkreaderInlineFill: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-play ml-1 text-white" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" fill="currentColor" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor', '--darkreader-inline-fill': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="6 3 20 12 6 21 6 3"></polygon>
 </svg>
 </div>
@@ -869,7 +911,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="text-center max-w-5xl mx-auto mb-16 md:mb-24 px-6">
 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-white/10 text-neutral-400 text-xs font-medium mb-8 hover:bg-neutral-800 transition-colors cursor-default">
-<svg className="lucide lucide-zap w-3 h-3 text-amber-400" data-darkreader-inline-stroke="" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+<svg className="lucide lucide-zap w-3 h-3 text-amber-400" data-darkreader-inline-stroke="" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
 <span>Workforce Evolution</span>
 </div>
 <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white tracking-tight mb-8 leading-[1.1]">
@@ -890,7 +932,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="">
 <div className="flex items-center gap-2 mb-2">
 <div className="p-1.5 bg-blue-500/10 rounded-lg border border-blue-500/20">
-<svg className="lucide lucide-trending-up w-4 h-4 text-blue-400" data-darkreader-inline-stroke="" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+<svg className="lucide lucide-trending-up w-4 h-4 text-blue-400" data-darkreader-inline-stroke="" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
 </div>
 <h3 className="text-sm font-semibold text-white tracking-wide uppercase">Adoption Velocity</h3>
 </div>
@@ -899,7 +941,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-right">
 <div className="text-3xl font-medium text-white tracking-tight">84%</div>
 <div className="text-xs text-emerald-500 flex items-center justify-end gap-1 font-medium mt-1">
-<svg className="lucide lucide-arrow-up-right w-3 h-3" data-darkreader-inline-stroke="" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg> Growth
+<svg className="lucide lucide-arrow-up-right w-3 h-3" data-darkreader-inline-stroke="" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg> Growth
               </div>
 </div>
 </div>
@@ -921,7 +963,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="">
 <div className="flex gap-2 mb-1 gap-x-2 gap-y-2 items-center">
 <div className="p-1 rounded bg-blue-500/10 border border-blue-500/20 group-hover:border-blue-500/40 transition-colors duration-300">
-<svg className="text-blue-400" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
+<svg className="text-blue-400" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
 </div>
 <h3 className="text-xs font-semibold text-white uppercase tracking-wide group-hover:text-blue-200 transition-colors">Time Efficiency</h3>
 </div>
@@ -930,7 +972,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-right">
 <div className="text-2xl font-semibold text-white tracking-tight">24x</div>
 <div className="text-[10px] text-emerald-500 font-medium flex items-center justify-end gap-1 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 mt-1">
-<svg className="animate-bounce" data-darkreader-inline-stroke="" fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+<svg className="animate-bounce" data-darkreader-inline-stroke="" fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
                     Faster
                 </div>
 </div>
@@ -1010,9 +1052,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           © 2024 Arc Intelligence Inc. All rights reserved.
         </p>
 <div className="flex gap-4">
-<svg className="lucide lucide-twitter w-4 h-4 text-neutral-600 hover:text-white transition-colors cursor-pointer" data-darkreader-inline-stroke="" data-lucide="twitter" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
-<svg className="lucide lucide-github w-4 h-4 text-neutral-600 hover:text-white transition-colors cursor-pointer" data-darkreader-inline-stroke="" data-lucide="github" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
-<svg className="lucide lucide-linkedin w-4 h-4 text-neutral-600 hover:text-white transition-colors cursor-pointer" data-darkreader-inline-stroke="" data-lucide="linkedin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect height="12" width="4" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+<svg className="lucide lucide-twitter w-4 h-4 text-neutral-600 hover:text-white transition-colors cursor-pointer" data-darkreader-inline-stroke="" data-lucide="twitter" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+<svg className="lucide lucide-github w-4 h-4 text-neutral-600 hover:text-white transition-colors cursor-pointer" data-darkreader-inline-stroke="" data-lucide="github" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+<svg className="lucide lucide-linkedin w-4 h-4 text-neutral-600 hover:text-white transition-colors cursor-pointer" data-darkreader-inline-stroke="" data-lucide="linkedin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect height="12" width="4" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
 </div>
 </div>
 </footer>

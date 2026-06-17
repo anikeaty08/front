@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -88,6 +124,12 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -164,7 +206,7 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
 
 <section className="flex flex-col w-full max-w-7xl mt-20 md:mt-24 mr-auto mb-24 md:mb-32 ml-auto px-6 relative" id="hero">
 
-<div className="w-full flex justify-start mb-8 spotlight-group relative animate-on-scroll animate" style={{-MouseXRel: '1034px', -MouseYRel: '1101px'}}>
+<div className="w-full flex justify-start mb-8 spotlight-group relative animate-on-scroll animate" style={{'--mouse-x-rel': '1034px', '--mouse-y-rel': '1101px'}}>
 <div className="-inset-px spotlight-border transition-opacity duration-300 opacity-0 w-fit rounded-full absolute" style={{background: 'radial-gradient(120px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(14, 165, 233, 0.3), transparent)'}}></div>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center w-full">
@@ -190,7 +232,7 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
 
 <div className="mt-12 md:mt-20 w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-end animate-on-scroll animate" style={{animationDelay: '0.3s'}}>
 
-<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 md:p-8 spotlight-group spotlight-card overflow-hidden shadow-sm hover:shadow-md transition-shadow" style={{-MouseXRel: '1034px', -MouseYRel: '665px'}}>
+<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 md:p-8 spotlight-group spotlight-card overflow-hidden shadow-sm hover:shadow-md transition-shadow" style={{'--mouse-x-rel': '1034px', '--mouse-y-rel': '665px'}}>
 <div className="absolute inset-0 pointer-events-none rounded-2xl opacity-0 spotlight-border transition-opacity duration-300 border border-transparent" style={{background: 'border-box radial-gradient(300px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(14, 165, 233, 0.2), transparent) border-box', WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
 <div className="absolute left-0 top-6 w-1 h-10 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-r-full"></div>
 <p className="md:text-lg leading-relaxed z-10 text-base italic text-slate-600 font-serif max-w-lg relative" style={{}}>Simplify your payment operations through next-generation payment technology, stablecoins.</p>
@@ -264,7 +306,7 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full relative">
 
-<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 spotlight-group overflow-hidden hover:border-blue-200 transition-colors duration-500 flex flex-col h-full shadow-sm animate-on-scroll" style={{animationDelay: '0.1s', -MouseXRel: '1034px', -MouseYRel: '44.5px'}}>
+<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 spotlight-group overflow-hidden hover:border-blue-200 transition-colors duration-500 flex flex-col h-full shadow-sm animate-on-scroll" style={{animationDelay: '0.1s', '--mouse-x-rel': '1034px', '--mouse-y-rel': '44.5px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(56, 189, 248, 0.08), transparent 40%)'}}></div>
 
 <div className="h-48 w-full mb-8 rounded-xl bg-slate-50 border border-slate-100 relative overflow-hidden flex flex-col p-4 gap-3 select-none">
@@ -298,7 +340,7 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
 </div>
 </div>
 
-<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 spotlight-group overflow-hidden hover:border-cyan-200 transition-colors duration-500 flex flex-col h-full shadow-sm animate-on-scroll" style={{animationDelay: '0.2s', -MouseXRel: '615.34375px', -MouseYRel: '44.5px'}}>
+<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 spotlight-group overflow-hidden hover:border-cyan-200 transition-colors duration-500 flex flex-col h-full shadow-sm animate-on-scroll" style={{animationDelay: '0.2s', '--mouse-x-rel': '615.34375px', '--mouse-y-rel': '44.5px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(6, 182, 212, 0.08), transparent 40%)'}}></div>
 <div className="h-48 w-full mb-8 rounded-xl bg-slate-50 border border-slate-100 relative overflow-hidden flex items-center justify-center p-4 select-none">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(6,182,212,0.05),transparent_70%)]"></div>
@@ -332,7 +374,7 @@ document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe
 </div>
 </div>
 
-<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 spotlight-group overflow-hidden hover:border-indigo-200 transition-colors duration-500 flex flex-col h-full shadow-sm animate-on-scroll" style={{animationDelay: '0.3s', -MouseXRel: '196.671875px', -MouseYRel: '44.5px'}}>
+<div className="group relative rounded-2xl bg-white border border-slate-200 p-6 spotlight-group overflow-hidden hover:border-indigo-200 transition-colors duration-500 flex flex-col h-full shadow-sm animate-on-scroll" style={{animationDelay: '0.3s', '--mouse-x-rel': '196.671875px', '--mouse-y-rel': '44.5px'}}>
 <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x-rel) var(--mouse-y-rel), rgba(99, 102, 241, 0.08), transparent 40%)'}}></div>
 <div className="h-48 w-full mb-8 rounded-xl bg-slate-50 border border-slate-100 relative overflow-hidden flex items-center justify-center p-6 select-none">
 <div className="absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px'}}></div>

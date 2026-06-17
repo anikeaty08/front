@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -389,13 +425,19 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 <main className="relative min-h-screen w-screen overflow-hidden">
-<section className="relative flex min-h-screen w-screen items-stretch overflow-hidden bg-cover bg-center bg-no-repeat" id="hero" style={{backgroundImage: 'linear-gradient(120deg, rgba(5,5,5,0.82), rgba(12,10,8,0.42) 42%, rgba(5,5,5,0.8)), url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/160a25ab-329d-4740-8101-e786bf07bc25_3840w.png\')', position: 'relative', overflow: 'hidden', isolation: 'isolate'}}>
+<section className="relative flex min-h-screen w-screen items-stretch overflow-hidden bg-cover bg-center bg-no-repeat" id="hero" style={{backgroundImage: 'linear-gradient(120deg, rgba(5, 5, 5, 0.82), rgba(12, 10, 8, 0.42) 42%, rgba(5, 5, 5, 0.8)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/160a25ab-329d-4740-8101-e786bf07bc25_3840w.png\')', position: 'relative', overflow: 'hidden', isolation: 'isolate'}}>
 <video data-aura-generated-video="true" data-aura-generated-video-bg="true" data-aura-video-preset="loop-in-view" loop="" muted="" playsinline="" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/160a25ab-329d-4740-8101-e786bf07bc25_3840w.png" preload="metadata" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/9109ecbb-cdc4-4815-981e-2ea83be13765/1779028455932-0b8373d6-972d-41c2-8036-9b7b72821522.mp4" style={{position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', zIndex: '0'}}></video>
 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.16),transparent_28%),radial-gradient(circle_at_78%_32%,rgba(244,211,166,0.18),transparent_26%),linear-gradient(to_bottom,rgba(0,0,0,0.05),rgba(0,0,0,0.66))]"></div>
 <div className="pointer-events-none absolute inset-0 opacity-[0.13]" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px)', backgroundSize: '4rem 4rem'}}></div>
@@ -671,7 +713,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </article>
 <article className="craft-card relative min-h-[36rem] lg:min-h-[46rem] w-full overflow-hidden rounded-[2.5rem] bg-white/[0.05] p-6 lg:p-10 shadow-2xl shadow-black/25 border-gradient">
-<div className="absolute inset-0 opacity-85" style={{backgroundImage: 'linear-gradient(to bottom,rgba(0,0,0,0.1),rgba(0,0,0,0.65)),url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/705309d0-2f5d-4b5b-a86e-2fd0239194ef_3840w.png\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+<div className="absolute inset-0 opacity-85" style={{backgroundImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.65)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/705309d0-2f5d-4b5b-a86e-2fd0239194ef_3840w.png\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
 <div className="relative z-10 flex h-full min-h-[31rem] lg:min-h-[41rem] flex-col items-center justify-end text-center pb-8">
 <h3 className="text-4xl tracking-tight text-white font-gloock font-normal">
                   Aurel Stay©
@@ -725,7 +767,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="h-px flex-1 bg-white/15"></span>
 </div>
 <div className="relative min-h-[20rem] overflow-hidden rounded-[1.5rem] bg-stone-900">
-<div className="absolute inset-0 opacity-80" style={{backgroundImage: 'linear-gradient(120deg,rgba(0,0,0,0.68),rgba(0,0,0,0.14)_45%,rgba(0,0,0,0.72)),url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2d8b6184-726c-474e-802a-290c3fdaeaa0_1600w.png\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+<div className="absolute inset-0 opacity-80" style={{backgroundImage: 'linear-gradient(120deg, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.14)_45%, rgba(0, 0, 0, 0.72)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2d8b6184-726c-474e-802a-290c3fdaeaa0_1600w.png\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(251,191,36,0.20),transparent_26%)]"></div>
 <div className="relative z-10 flex min-h-[20rem] flex-col justify-end p-6">
 <span className="mb-4 w-max rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[0.62rem] font-medium uppercase tracking-[0.16rem] text-white/75 backdrop-blur-xl font-manrope">
@@ -826,7 +868,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </article>
 <article className="about-card relative min-h-[36rem] lg:min-h-[46rem] w-full overflow-hidden rounded-[2.5rem] bg-white/[0.05] p-6 lg:p-10 shadow-2xl shadow-black/25 border-gradient">
-<div className="absolute inset-0 opacity-85" style={{backgroundImage: 'linear-gradient(to bottom,rgba(0,0,0,0.1),rgba(0,0,0,0.65)),url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/333e7855-97ba-4efa-afb1-7a4083a98a45_3840w.png\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+<div className="absolute inset-0 opacity-85" style={{backgroundImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.65)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/333e7855-97ba-4efa-afb1-7a4083a98a45_3840w.png\')', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
 <div className="relative z-10 flex h-full min-h-[31rem] lg:min-h-[41rem] flex-col justify-end pb-8">
 <h3 className="text-3xl lg:text-4xl tracking-tight text-white font-gloock font-normal">
                   Silence is a design choice.

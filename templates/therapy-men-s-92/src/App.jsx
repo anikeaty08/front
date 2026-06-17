@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,6 +139,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -735,7 +777,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-[1320px] mx-auto px-6 lg:px-10">
 <div className="grid lg:grid-cols-12 gap-12 items-center">
 <div className="lg:col-span-8">
-<div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full" style={{background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full" style={{background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255,255,255,0.1)'}}>
 <iconify-icon icon="solar:lock-keyhole-linear" style={{color: '#94e130'}} width="14"></iconify-icon>
 <span className="caption font-medium" style={{color: '#a1a1a1'}}>
                 Wymagane ukończenie warsztatu wstępnego

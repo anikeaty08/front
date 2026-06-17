@@ -21,18 +21,18 @@ function SenySymbol({ size = 3.5, light = false }) {
   const sw = size * 2.6;
   const lw = size * 4.4;
   return (
-    <span className="s-symbol" style={{ "--sg": `${size}px` }}>
+    <span className="s-symbol" style={{"--sg": `${size}px`}}>
       <span className="s-row">
-        <span className="s-bar" style={{ width: sw, height: size, background: main }} />
-        <span className="s-bar" style={{ width: lw, height: size, background: main }} />
+        <span className="s-bar" style={{width: sw, height: size, background: main}} />
+        <span className="s-bar" style={{width: lw, height: size, background: main}} />
       </span>
       <span className="s-row">
-        <span className="s-bar" style={{ width: sw, height: size, background: accent }} />
-        <span className="s-bar" style={{ width: lw, height: size, background: accent }} />
+        <span className="s-bar" style={{width: sw, height: size, background: accent}} />
+        <span className="s-bar" style={{width: lw, height: size, background: accent}} />
       </span>
       <span className="s-row">
-        <span className="s-bar" style={{ width: sw, height: size, background: main }} />
-        <span className="s-bar" style={{ width: lw, height: size, background: main }} />
+        <span className="s-bar" style={{width: sw, height: size, background: main}} />
+        <span className="s-bar" style={{width: lw, height: size, background: main}} />
       </span>
     </span>
   );
@@ -43,6 +43,42 @@ function SenySymbol({ size = 3.5, light = false }) {
 ───────────────────────────────────────────── */
 function useReveal() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -72,9 +108,9 @@ function Header() {
   }, []);
   return (
     <header className={`header ${scrolled ? "scrolled" : ""}`}>
-      <a href="#" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <a href="#" style={{display: "flex", alignItems: "center", gap: 10}}>
         <SenySymbol size={3.2} light={false} />
-        <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.6px" }}>Seny</span>
+        <span style={{fontSize: 18, fontWeight: 700, letterSpacing: "-0.6px"}}>Seny</span>
       </a>
       <nav className="header-nav">
         {navLinks.map((l) => (
@@ -277,7 +313,7 @@ function Mechanism() {
           </div>
 
           <div className="mech-visual">
-            <div style={{ position: "relative" }}>
+            <div style={{position: "relative"}}>
               <div className="mech-stage-label">Before · scattered inputs</div>
               <div className="mech-bars-scattered">
                 <span className="b" /><span className="b" /><span className="b" />
@@ -437,13 +473,13 @@ function UseCases() {
 
           <div className="usecase-panel">
             <div>
-              <div className="pill" style={{ marginBottom: 16 }}>
+              <div className="pill" style={{marginBottom: 16}}>
                 {current.label}
               </div>
-              <p style={{ fontSize: 17, lineHeight: 1.55, color: "var(--text-primary)", marginBottom: 16 }}>
+              <p style={{fontSize: 17, lineHeight: 1.55, color: "var(--text-primary)", marginBottom: 16}}>
                 {current.desc}
               </p>
-              <p style={{ fontSize: 13, color: "var(--text-tertiary)" }}>
+              <p style={{fontSize: 13, color: "var(--text-tertiary)"}}>
                 Operating thread · capture → respond → schedule → measure
               </p>
             </div>
@@ -505,7 +541,7 @@ function Metrics() {
               <div className="metric-bar">
                 <div
                   className="metric-bar-fill"
-                  style={{ width: animated ? `${m.fill}%` : "0%" }}
+                  style={{width: animated ? `${m.fill}%` : "0%"}}
                 />
               </div>
               <div className="metric-status">Tracked</div>
@@ -523,28 +559,28 @@ function Metrics() {
               <span className="metrics-example-cell-label">Leads received</span>
               <span className="metrics-example-cell-value">428</span>
               <div className="metrics-example-cell-bar">
-                <div className="metrics-example-cell-bar-fill" style={{ width: "82%" }} />
+                <div className="metrics-example-cell-bar-fill" style={{width: "82%"}} />
               </div>
             </div>
             <div className="metrics-example-cell">
               <span className="metrics-example-cell-label">Response time</span>
               <span className="metrics-example-cell-value">4m</span>
               <div className="metrics-example-cell-bar">
-                <div className="metrics-example-cell-bar-fill" style={{ width: "62%" }} />
+                <div className="metrics-example-cell-bar-fill" style={{width: "62%"}} />
               </div>
             </div>
             <div className="metrics-example-cell">
               <span className="metrics-example-cell-label">Appointments</span>
               <span className="metrics-example-cell-value">312</span>
               <div className="metrics-example-cell-bar">
-                <div className="metrics-example-cell-bar-fill" style={{ width: "88%" }} />
+                <div className="metrics-example-cell-bar-fill" style={{width: "88%"}} />
               </div>
             </div>
             <div className="metrics-example-cell">
               <span className="metrics-example-cell-label">Reactivated</span>
               <span className="metrics-example-cell-value">47</span>
               <div className="metrics-example-cell-bar">
-                <div className="metrics-example-cell-bar-fill" style={{ width: "44%" }} />
+                <div className="metrics-example-cell-bar-fill" style={{width: "44%"}} />
               </div>
             </div>
           </div>
@@ -563,7 +599,7 @@ function Callout() {
       <div className="section-narrow">
         <div className="callout reveal">
           <div className="callout-content">
-            <div className="pill pill-dark" style={{ marginBottom: 22 }}>
+            <div className="pill pill-dark" style={{marginBottom: 22}}>
               The distinction
             </div>
             <p className="callout-quote">
@@ -593,8 +629,8 @@ function Callout() {
                 <span className="callout-bar-bad" />
               </span>
             </div>
-            <div className="callout-row" style={{ background: "rgba(168,176,156,0.08)", borderColor: "rgba(168,176,156,0.22)" }}>
-              <span className="callout-row-label" style={{ color: "var(--brand-offwhite)" }}>
+            <div className="callout-row" style={{background: "rgba(168, 176, 156, 0.08)", borderColor: "rgba(168,176,156,0.22)"}}>
+              <span className="callout-row-label" style={{color: "var(--brand-offwhite)"}}>
                 Operating layer installed
               </span>
               <span className="callout-row-bar">
@@ -651,7 +687,7 @@ function FinalCTA() {
   return (
     <section className="final-cta" id="contact">
       <div className="final-cta-inner reveal">
-        <div className="pill pill-dark" style={{ marginBottom: 28 }}>
+        <div className="pill pill-dark" style={{marginBottom: 28}}>
           Operational review · Low risk first step
         </div>
         <h2 className="final-cta-title">
@@ -685,10 +721,10 @@ function Footer() {
       <div className="footer-inner">
         <div className="footer-left">
           <SenySymbol size={3} light={true} />
-          <span style={{ fontSize: 16, fontWeight: 700, color: "var(--brand-offwhite)", letterSpacing: "-0.4px" }}>
+          <span style={{fontSize: 16, fontWeight: 700, color: "var(--brand-offwhite)", letterSpacing: "-0.4px"}}>
             Seny
           </span>
-          <span style={{ marginLeft: 12 }}>
+          <span style={{marginLeft: 12}}>
             Operational systems for SMEs · Built in Valencia
           </span>
         </div>

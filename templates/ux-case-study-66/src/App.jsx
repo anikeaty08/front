@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -309,6 +345,12 @@ dropdown.classList.remove('opacity-100', 'visible', 'translate-y-0');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -496,8 +538,8 @@ dropdown.classList.remove('opacity-100', 'visible', 'translate-y-0');
     </style>
 
 <div className="bokeh-container" style={{}}>
-<div className="bokeh" style={{width: '50vw', height: '50vw', top: '-10%', left: '-10%', background: 'radial-gradient(circle, rgba(113, 146, 146, 0.35) 0%, transparent 65%)', -Blur: '60px', -Duration: '20s', -Delay: '0s', -MoveX: '10vw', -MoveY: '10vh'}}></div>
-<div className="bokeh" style={{width: '60vw', height: '60vw', bottom: '-20%', right: '-20%', background: 'radial-gradient(circle, rgba(69, 83, 129, 0.3) 0%, transparent 70%)', -Blur: '70px', -Duration: '25s', -Delay: '-5s', -MoveX: '-10vw', -MoveY: '-10vh'}}></div>
+<div className="bokeh" style={{width: '50vw', height: '50vw', top: '-10%', left: '-10%', background: 'radial-gradient(circle, rgba(113, 146, 146, 0.35) 0%, transparent 65%)', '--blur': '60px', '--duration': '20s', '--delay': '0s', '--move-x': '10vw', '--move-y': '10vh'}}></div>
+<div className="bokeh" style={{width: '60vw', height: '60vw', bottom: '-20%', right: '-20%', background: 'radial-gradient(circle, rgba(69, 83, 129, 0.3) 0%, transparent 70%)', '--blur': '70px', '--duration': '25s', '--delay': '-5s', '--move-x': '-10vw', '--move-y': '-10vh'}}></div>
 </div>
 <div className="bg-grid" style={{}}></div>
 <div className="bg-noise" style={{}}></div>

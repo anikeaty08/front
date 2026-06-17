@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -24,6 +60,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -93,7 +135,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-4 gap-4 sm:gap-6 md:gap-8 items-stretch">
 
-<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,194,255,0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
+<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 194, 255, 0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
 <div className="flex flex-col items-center justify-center h-full text-center" style={{fontFamily: '\'Space Grotesk\', ui-sans-serif', color: '#1A1A1A'}}>
 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl mb-4 flex items-center justify-center" style={{background: 'linear-gradient(135deg, #00C2FF 0%, #3B82F6 100%)', boxShadow: '0 8px 20px rgba(0,194,255,0.25)'}}>
 <i className="w-6 h-6 sm:w-7 sm:h-7 text-white" data-lucide="wallet" style={{strokeWidth: '1.5'}}></i>
@@ -102,7 +144,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,194,255,0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
+<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 194, 255, 0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
 <div className="flex flex-col items-center justify-center h-full text-center" style={{fontFamily: '\'Space Grotesk\', ui-sans-serif', color: '#1A1A1A'}}>
 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl mb-4 flex items-center justify-center" style={{background: 'linear-gradient(135deg, #00C2FF 0%, #3B82F6 100%)', boxShadow: '0 8px 20px rgba(0,194,255,0.25)'}}>
 <i className="w-6 h-6 sm:w-7 sm:h-7 text-white" data-lucide="database" style={{strokeWidth: '1.5'}}></i>
@@ -111,7 +153,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,194,255,0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
+<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 194, 255, 0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
 <div className="flex flex-col items-center justify-center h-full text-center" style={{fontFamily: '\'Space Grotesk\', ui-sans-serif', color: '#1A1A1A'}}>
 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl mb-4 flex items-center justify-center" style={{background: 'linear-gradient(135deg, #00C2FF 0%, #3B82F6 100%)', boxShadow: '0 8px 20px rgba(0,194,255,0.25)'}}>
 <i className="w-6 h-6 sm:w-7 sm:h-7 text-white" data-lucide="building-2" style={{strokeWidth: '1.5'}}></i>
@@ -120,7 +162,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,194,255,0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
+<div className="relative bg-white rounded-2xl px-5 py-6 sm:px-6 sm:py-7" style={{boxShadow: '0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 194, 255, 0.25), 0 0 20px rgba(0,194,255,0.10)'}}>
 <div className="flex flex-col items-center justify-center h-full text-center" style={{fontFamily: '\'Space Grotesk\', ui-sans-serif', color: '#1A1A1A'}}>
 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl mb-4 flex items-center justify-center" style={{background: 'linear-gradient(135deg, #00C2FF 0%, #3B82F6 100%)', boxShadow: '0 8px 20px rgba(0,194,255,0.25)'}}>
 <i className="w-6 h-6 sm:w-7 sm:h-7 text-white" data-lucide="briefcase" style={{strokeWidth: '1.5'}}></i>

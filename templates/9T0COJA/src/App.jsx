@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Lucide icons
@@ -159,6 +195,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -169,7 +211,7 @@ export default function App() {
 
 <nav aria-label="Main header" className="flex items-center justify-between px-5 pt-1 pb-1 fade-in delay-2">
 <span className="flex items-center">
-<span style={{fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', fontWeight: '700', fontSize: '32px', letterSpacing: '-0.03em', color: '#1A1F36', lineHeight: '1.1', userSelect: 'none'}}>
+<span style={{fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', fontWeight: '700', fontSize: '32px', letterSpacing: '-0.03em', color: '#1A1F36', lineHeight: '1.1', userSelect: 'none'}}>
           Clari<span style={{color: '#2B5CE6'}}>Fi</span>
 </span>
 </span>
@@ -181,7 +223,7 @@ export default function App() {
 <main className="flex-1 px-5 pt-1 pb-2 flex flex-col">
 
 <section className="fade-in delay-3">
-<h2 style={{fontSize: '24px', fontWeight: '600', letterSpacing: '-0.02em', color: '#1A1F36', marginBottom: '18px', lineHeight: '1.17', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>
+<h2 style={{fontSize: '24px', fontWeight: '600', letterSpacing: '-0.02em', color: '#1A1F36', marginBottom: '18px', lineHeight: '1.17', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>
           Monthly Spending
         </h2>
 <div className="relative w-full" style={{height: '186px', borderRadius: '18px', background: '#fff', boxShadow: '0 2px 10px 0 rgba(43,92,230,0.04)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0 10px 8px 10px'}}>
@@ -195,55 +237,55 @@ export default function App() {
 
 <section aria-label="Key Financial Metrics" className="flex gap-4 mt-5 fade-in delay-4">
 <div className="flex-1 bg-white rounded-2xl shadow-sm border border-[#F1F2F6] p-4 flex flex-col min-w-0 hover:border-[#2B5CE6] transition-colors" style={{minWidth: '0'}} tabindex="0">
-<span style={{fontSize: '14px', color: '#6B7280', fontWeight: '400', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', marginBottom: '3px'}}>Current Balance</span>
-<span style={{fontSize: '18px', fontWeight: '600', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', letterSpacing: '-0.01em'}}>$5,230.50</span>
+<span style={{fontSize: '14px', color: '#6B7280', fontWeight: '400', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', marginBottom: '3px'}}>Current Balance</span>
+<span style={{fontSize: '18px', fontWeight: '600', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', letterSpacing: '-0.01em'}}>$5,230.50</span>
 </div>
 <div className="flex-1 bg-white rounded-2xl shadow-sm border border-[#F1F2F6] p-4 flex flex-col min-w-0 hover:border-[#00C896] transition-colors" style={{minWidth: '0'}} tabindex="0">
-<span style={{fontSize: '14px', color: '#6B7280', fontWeight: '400', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', marginBottom: '3px'}}>Budget Remaining</span>
-<span style={{fontSize: '18px', fontWeight: '600', color: '#00C896', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', letterSpacing: '-0.01em'}}>$750.00</span>
+<span style={{fontSize: '14px', color: '#6B7280', fontWeight: '400', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', marginBottom: '3px'}}>Budget Remaining</span>
+<span style={{fontSize: '18px', fontWeight: '600', color: '#00C896', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', letterSpacing: '-0.01em'}}>$750.00</span>
 </div>
 </section>
 
 <section className="mt-7 fade-in delay-5 flex-1 flex flex-col">
 <div className="flex items-center justify-between mb-2">
-<h3 style={{fontSize: '18px', fontWeight: '600', color: '#1A1F36', letterSpacing: '-0.01em', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>Recent Activities</h3>
-<a className="hover:underline" href="#" style={{fontSize: '16px', color: '#2B5CE6', fontWeight: '400', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', textDecoration: 'none'}}>See all</a>
+<h3 style={{fontSize: '18px', fontWeight: '600', color: '#1A1F36', letterSpacing: '-0.01em', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>Recent Activities</h3>
+<a className="hover:underline" href="#" style={{fontSize: '16px', color: '#2B5CE6', fontWeight: '400', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', textDecoration: 'none'}}>See all</a>
 </div>
 <ul aria-label="Recent Transactions" className="hide-scroll flex-1 overflow-y-auto pr-1" style={{scrollBehavior: 'smooth', maxHeight: '200px'}}>
 <li className="flex items-center py-3 border-b border-[#F1F2F6] last:border-b-0 group transition-colors hover:bg-[#F7F9FC] rounded-xl px-2 cursor-pointer" tabindex="0">
 <div className="flex-1">
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', display: 'block'}}>Starbucks</span>
-<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>Jun 22</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', display: 'block'}}>Starbucks</span>
+<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>Jun 22</span>
 </div>
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>-$5.75</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>-$5.75</span>
 </li>
 <li className="flex items-center py-3 border-b border-[#F1F2F6] last:border-b-0 group transition-colors hover:bg-[#F7F9FC] rounded-xl px-2 cursor-pointer" tabindex="0">
 <div className="flex-1">
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', display: 'block'}}>Grocery Store</span>
-<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>Jun 21</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', display: 'block'}}>Grocery Store</span>
+<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>Jun 21</span>
 </div>
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>-$78.20</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>-$78.20</span>
 </li>
 <li className="flex items-center py-3 border-b border-[#F1F2F6] last:border-b-0 group transition-colors hover:bg-[#F7F9FC] rounded-xl px-2 cursor-pointer" tabindex="0">
 <div className="flex-1">
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', display: 'block'}}>Netflix</span>
-<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>Jun 20</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', display: 'block'}}>Netflix</span>
+<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>Jun 20</span>
 </div>
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>-$15.99</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>-$15.99</span>
 </li>
 <li className="flex items-center py-3 border-b border-[#F1F2F6] last:border-b-0 group transition-colors hover:bg-[#F7F9FC] rounded-xl px-2 cursor-pointer" tabindex="0">
 <div className="flex-1">
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', display: 'block'}}>Uber</span>
-<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>Jun 19</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', display: 'block'}}>Uber</span>
+<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>Jun 19</span>
 </div>
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>-$22.50</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>-$22.50</span>
 </li>
 <li className="flex items-center py-3 border-b border-[#F1F2F6] last:border-b-0 group transition-colors hover:bg-[#F7F9FC] rounded-xl px-2 cursor-pointer" tabindex="0">
 <div className="flex-1">
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', display: 'block'}}>Spotify</span>
-<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>Jun 18</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', display: 'block'}}>Spotify</span>
+<span style={{fontSize: '14px', color: '#8F9BB3', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>Jun 18</span>
 </div>
-<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif'}}>-$9.99</span>
+<span style={{fontSize: '16px', fontWeight: '400', color: '#1A1F36', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif'}}>-$9.99</span>
 </li>
 </ul>
 </section>
@@ -252,19 +294,19 @@ export default function App() {
 <nav aria-label="Bottom navigation" className="w-full bg-white border-t border-[#E2E8F0] shadow-sm rounded-b-[36px] px-2 pt-1 pb-1 flex justify-between items-center fade-in delay-6" style={{minHeight: '62px'}}>
 <button aria-label="Dashboard" className="flex flex-col items-center justify-center flex-1 py-1 group focus:outline-none" style={{minWidth: '44px'}}>
 <i data-lucide="pie-chart" style={{width: '28px', height: '28px', color: '#2B5CE6', transition: 'color 0.18s'}}></i>
-<span style={{fontSize: '16px', fontWeight: '500', color: '#2B5CE6', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Dashboard</span>
+<span style={{fontSize: '16px', fontWeight: '500', color: '#2B5CE6', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Dashboard</span>
 </button>
 <button aria-label="Transactions" className="flex flex-col items-center justify-center flex-1 py-1 group focus:outline-none" style={{minWidth: '44px'}}>
 <i className="group-hover:text-[#2B5CE6]" data-lucide="list" style={{width: '28px', height: '28px', color: '#A5B1C8', transition: 'color 0.18s'}}></i>
-<span style={{fontSize: '16px', fontWeight: '500', color: '#A5B1C8', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Transactions</span>
+<span style={{fontSize: '16px', fontWeight: '500', color: '#A5B1C8', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Transactions</span>
 </button>
 <button aria-label="Budgets" className="flex flex-col items-center justify-center flex-1 py-1 group focus:outline-none" style={{minWidth: '44px'}}>
 <i className="group-hover:text-[#2B5CE6]" data-lucide="wallet" style={{width: '28px', height: '28px', color: '#A5B1C8', transition: 'color 0.18s'}}></i>
-<span style={{fontSize: '16px', fontWeight: '500', color: '#A5B1C8', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Budgets</span>
+<span style={{fontSize: '16px', fontWeight: '500', color: '#A5B1C8', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Budgets</span>
 </button>
 <button aria-label="Profile" className="flex flex-col items-center justify-center flex-1 py-1 group focus:outline-none" style={{minWidth: '44px'}}>
 <i className="group-hover:text-[#2B5CE6]" data-lucide="user" style={{width: '28px', height: '28px', color: '#A5B1C8', transition: 'color 0.18s'}}></i>
-<span style={{fontSize: '16px', fontWeight: '500', color: '#A5B1C8', fontFamily: '\'SF Pro Text\',\'Roboto\',sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Profile</span>
+<span style={{fontSize: '16px', fontWeight: '500', color: '#A5B1C8', fontFamily: '\'SF Pro Text\', \'Roboto\', sans-serif', marginTop: '0.5em', letterSpacing: '-0.01em'}}>Profile</span>
 </button>
 </nav>
 </div>

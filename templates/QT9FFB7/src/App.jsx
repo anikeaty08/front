@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -418,6 +454,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -492,7 +534,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             Join over 2.3 million traders who trust CryptoVault with their digital assets.
           </p>
 <div className="opacity-0 animate-fadeInUp delay-300 mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" style={{animationPlayState: 'running'}}>
-<a className="relative inline-flex items-center justify-center gap-2 overflow-hidden transition-all duration-300 hover:ring-green-400/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.35),0_40px_80px_rgba(16,185,129,0.18)] cursor-pointer uppercase text-base font-semibold text-white tracking-tight rounded-full pt-3 pr-3 pb-3 pl-3 shadow-2xl blur-none backdrop-blur-2xl" href="#contact" onmousedown="this.style.filter = 'hue-rotate(250deg)'" onmouseout="this.style.backgroundSize = 'cover, 15px 15px, 15px 15px'" onmouseover="this.style.backgroundSize = 'cover, 10px 10px, 10px 10px'" onmouseup="this.style.filter = 'hue-rotate(0deg)'" style={{-MainColor: 'rgb(46, 213, 115)', -MainBgColor: 'rgba(46, 213, 116, 0.36)', -PatternColor: 'rgba(46, 213, 116, 0.073)', filter: 'hue-rotate(0deg)', letterSpacing: '0.5rem', backgroundSize: 'cover, 15px 15px, 15px 15px', backgroundPosition: 'center center, center center, center center', borderImage: 'radial-gradient(circle, var(--main-color) 0%, rgba(0, 0, 0, 0) 100%) 1', borderWidth: '1px 0px', borderStyle: 'solid', color: 'var(--main-color)', padding: '1rem 3rem', fontWeight: '700', fontSize: '1.5rem'}}>
+<a className="relative inline-flex items-center justify-center gap-2 overflow-hidden transition-all duration-300 hover:ring-green-400/60 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.35),0_40px_80px_rgba(16,185,129,0.18)] cursor-pointer uppercase text-base font-semibold text-white tracking-tight rounded-full pt-3 pr-3 pb-3 pl-3 shadow-2xl blur-none backdrop-blur-2xl" href="#contact" onmousedown="this.style.filter = 'hue-rotate(250deg)'" onmouseout="this.style.backgroundSize = 'cover, 15px 15px, 15px 15px'" onmouseover="this.style.backgroundSize = 'cover, 10px 10px, 10px 10px'" onmouseup="this.style.filter = 'hue-rotate(0deg)'" style={{'--main-color': 'rgb(46, 213, 115)', '--main-bg-color': 'rgba(46, 213, 116, 0.36)', '--pattern-color': 'rgba(46, 213, 116, 0.073)', filter: 'hue-rotate(0deg)', letterSpacing: '0.5rem', backgroundSize: 'cover, 15px 15px, 15px 15px', backgroundPosition: 'center center, center center, center center', borderImage: 'radial-gradient(circle, var(--main-color) 0%, rgba(0, 0, 0, 0) 100%) 1', borderWidth: '1px 0px', borderStyle: 'solid', color: 'var(--main-color)', padding: '1rem 3rem', fontWeight: '700', fontSize: '1.5rem'}}>
 <span className="relative z-[1] text-sm">Get started</span>
 <svg className="lucide lucide-arrow-right relative z-[1] w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" data-icon-replaced="true" data-lucide="arrow-right" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: 'var(--main-color)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 animate-fadeInUp" style={{animationPlayState: 'running'}}></span>
@@ -648,9 +690,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="animate-blurIn delay-500 relative overflow-hidden bg-gradient-to-br from-[#0e1311]/95 to-[#0b0f0d]/10 border-white/15 border rounded-2xl shadow-[0_0_80px_rgba(16,185,129,0.25)] backdrop-blur-xl">
 <div className="pointer-events-none absolute inset-x-0 -top-1 h-10 rounded-t-2xl" style={{background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16,185,129,0.8) 0%, rgba(16,185,129,0.4) 40%, rgba(16,185,129,0.1) 80%, transparent 100%)'}}></div>
 <div className="pointer-events-none absolute inset-x-4 top-1 h-[2px] rounded-full bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
-<div className="grid grid-cols-1 xl:grid-cols-12 gap-4 lg:gap-6 lg:p-6 pt-4 pr-4 pb-4 pl-4" style={{background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="grid grid-cols-1 xl:grid-cols-12 gap-4 lg:gap-6 lg:p-6 pt-4 pr-4 pb-4 pl-4" style={{background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <aside className="xl:col-span-3 2xl:col-span-2">
-<div className="lg:p-5 bg-black/40 h-full border-white/15 border rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-inner backdrop-blur-sm" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 0 20px rgba(0,0,0,0.3)'}}>
+<div className="lg:p-5 bg-black/40 h-full border-white/15 border rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-inner backdrop-blur-sm" style={{boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 20px rgba(0,0,0,0.3)'}}>
 <div className="flex items-center justify-between mb-6">
 <div className="flex items-center gap-3">
 <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/20 ring-1 ring-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.5)]">
@@ -751,7 +793,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-<div className="lg:col-span-8 rounded-xl border border-white/15 bg-black/40 p-6 backdrop-blur-sm relative overflow-hidden shadow-lg" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 0 30px rgba(16,185,129,0.1)'}}>
+<div className="lg:col-span-8 rounded-xl border border-white/15 bg-black/40 p-6 backdrop-blur-sm relative overflow-hidden shadow-lg" style={{boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 30px rgba(16,185,129,0.1)'}}>
 <div className="pointer-events-none absolute inset-1 rounded-lg" style={{background: 'radial-gradient(ellipse 70% 50% at 50% 20%, rgba(16,185,129,0.12), transparent 70%)'}}></div>
 <div className="relative flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
 <div className="">
@@ -1165,7 +1207,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="text-center py-12">
 <div className="inline-flex items-center gap-4">
-<a className="inline-flex items-center gap-2 hover:bg-emerald-400 transition-colors text-sm font-medium rounded-full pt-3 pr-6 pb-3 pl-6 relative overflow-hidden" href="#" onmouseout="this.style.color='var(--green)'; this.style.boxShadow='inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'; this.querySelector('.sweep-effect').style.transform='translateX(-4em)';" onmouseover="this.style.color='#82ffc9'; this.style.boxShadow='inset 0 0 10px rgba(27, 253, 156, 0.6), 0 0 9px 3px rgba(27, 253, 156, 0.2)'; this.querySelector('.sweep-effect').style.transform='translateX(15em)';" style={{-Green: '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '2.6em', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'rgba(27, 253, 156, 0.4) 0px 0px 10px inset, rgba(27, 253, 156, 0.1) 0px 0px 9px 3px'}}>
+<a className="inline-flex items-center gap-2 hover:bg-emerald-400 transition-colors text-sm font-medium rounded-full pt-3 pr-6 pb-3 pl-6 relative overflow-hidden" href="#" onmouseout="this.style.color='var(--green)'; this.style.boxShadow='inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1)'; this.querySelector('.sweep-effect').style.transform='translateX(-4em)';" onmouseover="this.style.color='#82ffc9'; this.style.boxShadow='inset 0 0 10px rgba(27, 253, 156, 0.6), 0 0 9px 3px rgba(27, 253, 156, 0.2)'; this.querySelector('.sweep-effect').style.transform='translateX(15em)';" style={{'--green': '#1BFD9C', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '2.6em', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'rgba(27, 253, 156, 0.4) 0px 0px 10px inset, rgba(27, 253, 156, 0.1) 0px 0px 9px 3px'}}>
 <span className="sweep-effect" style={{content: '""', position: 'absolute', left: '-4em', width: '4em', height: '100%', top: '0px', background: 'linear-gradient(to right, transparent 1%, rgba(27, 253, 156, 0.1) 40%, rgba(27, 253, 156, 0.1) 60%, transparent 100%)', pointerEvents: 'none'}}></span>
   Try Vaultic Now
   <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">

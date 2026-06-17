@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -117,6 +153,12 @@ lucide.createIcons();
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -412,11 +454,11 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 </section>
 
 <div className="w-full flex flex-col gap-8 pt-8 items-center">
-<h2 className="text-2xl font-semibold text-slate-600 text-center max-w-3xl animate-in" style={{-Delay: '1200ms', animationDelay: '1200ms'}}>Koordynacja kampanii reklamowych na czołowych serwisach Real Estate</h2>
+<h2 className="text-2xl font-semibold text-slate-600 text-center max-w-3xl animate-in" style={{'--delay': '1200ms', animationDelay: '1200ms'}}>Koordynacja kampanii reklamowych na czołowych serwisach Real Estate</h2>
 <div className="w-full logo-carousel overflow-hidden">
 <div className="flex scrolling-logos">
 
-<div className="flex-shrink-0 flex animate-in pr-6 pl-6 space-x-12 items-center justify-center" style={{-Delay: '1300ms', animationDelay: '1300ms'}}>
+<div className="flex-shrink-0 flex animate-in pr-6 pl-6 space-x-12 items-center justify-center" style={{'--delay': '1300ms', animationDelay: '1300ms'}}>
 <img alt="Otodom logo" className="h-8 md:h-10" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <img alt="Morizon logo" className="h-10 md:h-12" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
 <img alt="Nieruchomości Online logo" className="h-12 md:h-14" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
@@ -425,7 +467,7 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 <img alt="Domiporta logo" className="h-7 md:h-9" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
 <img alt="OLX logo" className="h-8 md:h-10" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 </div>
-<div className="flex-shrink-0 flex items-center justify-center space-x-12 px-6 animate-in" style={{-Delay: '1300ms', animationDelay: '1300ms'}}>
+<div className="flex-shrink-0 flex items-center justify-center space-x-12 px-6 animate-in" style={{'--delay': '1300ms', animationDelay: '1300ms'}}>
 <img alt="Otodom logo" className="h-8 md:h-10" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <img alt="Morizon logo" className="h-10 md:h-12" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
 <img alt="Nieruchomości Online logo" className="h-12 md:h-14" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
@@ -436,7 +478,7 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 </div>
 </div>
 </div>
-<div className="inline-flex items-center gap-x-2.5 rounded-full bg-green-100 px-4 py-2 animate-in" style={{-Delay: '1400ms', animationDelay: '1400ms'}}>
+<div className="inline-flex items-center gap-x-2.5 rounded-full bg-green-100 px-4 py-2 animate-in" style={{'--delay': '1400ms', animationDelay: '1400ms'}}>
 <div className="relative flex items-center justify-center">
 <div className="absolute w-3 h-3 rounded-full bg-green-600/30"></div>
 <div className="w-2 h-2 rounded-full bg-green-600"></div>
@@ -481,25 +523,25 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 <div className="mx-auto max-w-7xl px-6 lg:px-8">
 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none lg:grid lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-5">
 
-<div className="relative lg:col-span-1 xl:col-span-2 flex items-center justify-center animate-fade-in-up" style={{-Delay: '100ms'}}>
+<div className="relative lg:col-span-1 xl:col-span-2 flex items-center justify-center animate-fade-in-up" style={{'--delay': '100ms'}}>
 <div className="p-4 sm:p-6 bg-[#BDDBFF] rounded-full" style={{width: '320px', height: '320px'}}>
 <img alt="Barbara Bolimowska" className="h-full w-full object-cover rounded-full shadow-2xl" src="https://twojux.pl/wp-content/uploads/2025/07/barbara_bolimowska.png?w=800&amp;q=80"/>
 </div>
 </div>
 
 <div className="max-w-xl lg:col-span-1 xl:col-span-3 lg:pt-4 mt-12 lg:mt-0">
-<div className="animate-fade-in-up" style={{-Delay: '200ms'}}>
+<div className="animate-fade-in-up" style={{'--delay': '200ms'}}>
 <div className="inline-flex items-center gap-x-2 rounded-full bg-[#1E40AF]/10 px-4 py-2 text-sm font-medium text-[#1E40AF] ring-1 ring-inset ring-[#1E40AF]/20">
 <svg className="lucide lucide-handshake h-4 w-4" data-lucide="handshake" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m11 17 2 2a1 1 0 1 0 3-3"></path><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"></path><path d="m21 3 1 11h-2"></path><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"></path><path d="M3 4h8"></path></svg>
               Poznajmy się
             </div>
 </div>
-<h2 className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl gradient-text animate-fade-in-up" style={{-Delay: '300ms'}}>Cześć! Jestem Barbara</h2>
-<p className="mt-8 text-base leading-7 text-slate-600 animate-fade-in-up" style={{-Delay: '400ms'}}>
+<h2 className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl gradient-text animate-fade-in-up" style={{'--delay': '300ms'}}>Cześć! Jestem Barbara</h2>
+<p className="mt-8 text-base leading-7 text-slate-600 animate-fade-in-up" style={{'--delay': '400ms'}}>
             Jestem UX Designerem z pasją do branży nieruchomości. Od ponad 10 lat pomagam deweloperom i agentom
             nieruchomości zwiększać sprzedaż dzięki przemyślanym i skutecznym projektom stron internetowych.
           </p>
-<p className="mt-6 text-base leading-7 text-slate-600 animate-fade-in-up" style={{-Delay: '500ms'}}>
+<p className="mt-6 text-base leading-7 text-slate-600 animate-fade-in-up" style={{'--delay': '500ms'}}>
             Wierzę, że dobry design to nie tylko estetyka, ale przede wszystkim zrozumienie potrzeb użytkowników i celów
             biznesowych. Każdy projekt traktuję indywidualnie, koncentrując się na maksymalizacji konwersji i generowaniu
             realnych wyników dla moich klientów.
@@ -509,18 +551,18 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 
 <div className="mt-24 sm:mt-32">
 <div className="mx-auto max-w-3xl text-center">
-<h3 className="text-lg font-semibold leading-7 text-slate-600 animate-fade-in-up" style={{-Delay: '600ms'}}>
+<h3 className="text-lg font-semibold leading-7 text-slate-600 animate-fade-in-up" style={{'--delay': '600ms'}}>
             Specjalizuję się w obszarach, które bezpośrednio wpływają na sukces Twojego biznesu</h3>
 </div>
 <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-8 text-center sm:grid-cols-2 lg:max-w-none lg:grid-cols-4">
-<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{-Delay: '700ms'}}>
+<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{'--delay': '700ms'}}>
 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#1E40AF]/10">
 <svg className="lucide lucide-building-2 h-6 w-6 text-[#1E40AF]" data-lucide="building-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
 </div>
 <h4 className="mt-4 text-base font-medium text-slate-800">Branża nieruchomości</h4>
 <p className="mt-2 text-sm text-slate-500">10+ lat doświadczenia w projektach dla deweloperów i agencji.</p>
 </div>
-<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{-Delay: '800ms'}}>
+<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{'--delay': '800ms'}}>
 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#1E40AF]/10">
 <svg className="lucide lucide-target h-6 w-6 text-[#1E40AF]" data-lucide="target" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
 </div>
@@ -528,7 +570,7 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 <p className="mt-2 text-sm text-slate-500">Analiza ścieżek użytkownika i optymalizacja współczynnika konwersji.
             </p>
 </div>
-<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{-Delay: '900ms'}}>
+<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{'--delay': '900ms'}}>
 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#1E40AF]/10">
 <svg className="lucide lucide-paintbrush h-6 w-6 text-[#1E40AF]" data-lucide="paintbrush" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg>
 </div>
@@ -536,7 +578,7 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 <p className="mt-2 text-sm text-slate-500">Projektowanie intuicyjnych i estetycznych interfejsów, które sprzedają.
             </p>
 </div>
-<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{-Delay: '1000ms'}}>
+<div className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-1 animate-fade-in-up" style={{'--delay': '1000ms'}}>
 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#1E40AF]/10">
 <svg className="lucide lucide-line-chart h-6 w-6 text-[#1E40AF]" data-lucide="line-chart" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
 </div>
@@ -548,7 +590,7 @@ Od projektowania po kampanie reklamowe - wszystko w jednym miejscu
 </div>
 
 <div className="mt-24 sm:mt-32">
-<div className="relative sm:p-12 shadow-slate-900/10 animate-fade-in-up bg-[#C7CFEB]/20 rounded-2xl pt-12 pr-8 pb-8 pl-8 shadow-xl" style={{-Delay: '1100ms'}}>
+<div className="relative sm:p-12 shadow-slate-900/10 animate-fade-in-up bg-[#C7CFEB]/20 rounded-2xl pt-12 pr-8 pb-8 pl-8 shadow-xl" style={{'--delay': '1100ms'}}>
 <div className="absolute -top-6 left-1/2 -translate-x-1/2 sm:left-12 sm:-translate-x-0 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-md">
 <svg className="lucide lucide-quote h-7 w-7 text-[#1E40AF]" data-lucide="quote" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>
 </div>

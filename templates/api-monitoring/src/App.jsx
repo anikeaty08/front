@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -373,12 +409,18 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<aside className="fixed hidden lg:flex flex-col bg-[#0B0F14] w-16 z-[60] pointer-events-auto border-white/10 border-r pt-6 pb-6 top-0 bottom-0 left-0 items-center justify-between" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<aside className="fixed hidden lg:flex flex-col bg-[#0B0F14] w-16 z-[60] pointer-events-auto border-white/10 border-r pt-6 pb-6 top-0 bottom-0 left-0 items-center justify-between" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
 <div className="flex flex-col items-center gap-6">
 <div className="w-4 h-4 bg-blue-500"></div>
 <div className="w-px h-16 bg-gradient-to-b from-white/20 to-transparent"></div>
@@ -393,7 +435,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-1.5 h-1.5 bg-slate-600 rounded-full"></div>
 </div>
 </aside>
-<aside className="fixed right-0 top-0 bottom-0 w-16 border-l border-white/10 bg-[#0B0F14] z-[60] hidden lg:flex flex-col justify-between items-center py-6 pointer-events-auto" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<aside className="fixed right-0 top-0 bottom-0 w-16 border-l border-white/10 bg-[#0B0F14] z-[60] hidden lg:flex flex-col justify-between items-center py-6 pointer-events-auto" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
 <div className="flex flex-col items-center gap-6">
 <div className="w-px h-16 bg-gradient-to-b from-white/20 to-transparent"></div>
 </div>
@@ -409,7 +451,7 @@ gtag('config', 'G-2M6V79H761');
 </aside>
 
 
-<nav className="fixed z-50 top-0 right-0 left-0 backdrop-blur-md border-b border-white/10 bg-[#0B0F14]/80 lg:left-16 lg:right-16" data-reveal="nav" style={{-RevealDelay: '170ms'}}>
+<nav className="fixed z-50 top-0 right-0 left-0 backdrop-blur-md border-b border-white/10 bg-[#0B0F14]/80 lg:left-16 lg:right-16" data-reveal="nav" style={{'--reveal-delay': '170ms'}}>
 <div className="flex h-16 mr-auto ml-auto pr-6 pl-6 items-center justify-between lg:px-10 max-w-full">
 <a className="flex items-center gap-3 uppercase text-xl font-black text-white tracking-[0.2em] font-sans group" href="#">
 <span className="">Square</span>
@@ -439,7 +481,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </nav>
 
-<section className="bg-transparent w-full border border-white/10 pb-24 md:pb-32 mb-60 relative" data-reveal="hero" style={{-RevealDelay: '255ms'}}>
+<section className="bg-transparent w-full border border-white/10 pb-24 md:pb-32 mb-60 relative" data-reveal="hero" style={{'--reveal-delay': '255ms'}}>
 
 <div className="relative w-full h-[550px] lg:h-[700px] flex flex-col justify-center overflow-hidden">
 
@@ -456,7 +498,7 @@ gtag('config', 'G-2M6V79H761');
                   System online • v4.2.0
                 </span>
 </div>
-<h1 className="text-4xl md:text-6xl lg:text-7xl tracking-tighter text-white leading-[0.9] font-manrope font-medium" data-reveal="hero" style={{-RevealDelay: '255ms'}}>
+<h1 className="text-4xl md:text-6xl lg:text-7xl tracking-tighter text-white leading-[0.9] font-manrope font-medium" data-reveal="hero" style={{'--reveal-delay': '255ms'}}>
                 Monitor API endpoints
                 <br/>
 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
@@ -465,19 +507,19 @@ gtag('config', 'G-2M6V79H761');
 </h1>
 </div>
 <div className="max-w-md">
-<p className="mb-8 text-xs md:text-sm font-sans leading-relaxed text-slate-400" data-reveal="hero" style={{-RevealDelay: '340ms'}}>
+<p className="mb-8 text-xs md:text-sm font-sans leading-relaxed text-slate-400" data-reveal="hero" style={{'--reveal-delay': '340ms'}}>
                 The ultimate telemetry platform for modern APIs. Track
                 endpoints, debug complex requests, and monitor system health in
                 real time through a unified command center.
               </p>
 <div className="flex gap-4">
-<button className="group relative inline-flex items-center gap-4 bg-blue-600 px-6 py-3 text-[11px] font-bold tracking-[0.2em] text-white transition-all hover:bg-blue-500 font-sans" data-reveal="hero" style={{-RevealDelay: '0ms'}}>
+<button className="group relative inline-flex items-center gap-4 bg-blue-600 px-6 py-3 text-[11px] font-bold tracking-[0.2em] text-white transition-all hover:bg-blue-500 font-sans" data-reveal="hero" style={{'--reveal-delay': '0ms'}}>
 <span className="relative z-10">Initialize Dashboard</span>
 <svg className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14m-7-7 7 7-7 7"></path>
 </svg>
 </button>
-<button className="px-6 py-3 border border-white/20 text-white text-[11px] font-bold tracking-[0.2em] hover:bg-white/5 transition-colors font-sans" data-reveal="hero" style={{-RevealDelay: '85ms'}}>
+<button className="px-6 py-3 border border-white/20 text-white text-[11px] font-bold tracking-[0.2em] hover:bg-white/5 transition-colors font-sans" data-reveal="hero" style={{'--reveal-delay': '85ms'}}>
                   Read Docs
                 </button>
 </div>
@@ -489,15 +531,15 @@ gtag('config', 'G-2M6V79H761');
 <div className="lg:px-10 -mt-20 lg:-mt-32 max-w-[1400px] z-20 mr-auto ml-auto pr-6 pl-6 relative hero-shell">
 <div className="flex flex-col lg:flex-row overflow-hidden bg-[#0A0A0A] w-full lg:h-[850px] border border-white/10 shadow-2xl rounded-2xl relative">
 
-<aside className="hidden lg:flex flex-col flex-shrink-0 bg-[#0A0A0A] w-64 h-full border-r border-white/10" data-reveal="hero" style={{-RevealDelay: '340ms'}}>
+<aside className="hidden lg:flex flex-col flex-shrink-0 bg-[#0A0A0A] w-64 h-full border-r border-white/10" data-reveal="hero" style={{'--reveal-delay': '340ms'}}>
 <div className="flex h-16 border-b border-white/10 px-6 items-center gap-3">
 <svg className="text-white" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
 <span className="text-sm font-medium tracking-tight text-white">API Monitor</span>
 </div>
-<nav className="flex-1 overflow-y-auto py-6 px-4 space-y-6 hide-scrollbar" data-reveal="nav" style={{-RevealDelay: '425ms'}}>
+<nav className="flex-1 overflow-y-auto py-6 px-4 space-y-6 hide-scrollbar" data-reveal="nav" style={{'--reveal-delay': '425ms'}}>
 
 <div className="">
-<p className="px-3 text-xs font-medium text-gray-500 mb-2" data-reveal="nav" style={{-RevealDelay: '425ms'}}>Overview</p>
+<p className="px-3 text-xs font-medium text-gray-500 mb-2" data-reveal="nav" style={{'--reveal-delay': '425ms'}}>Overview</p>
 <div className="space-y-0.5">
 <a className="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/10 text-gray-100 transition-colors" href="#">
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
@@ -519,7 +561,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="">
-<p className="px-3 text-xs font-medium text-gray-500 mb-2" data-reveal="nav" style={{-RevealDelay: '510ms'}}>Infrastructure</p>
+<p className="px-3 text-xs font-medium text-gray-500 mb-2" data-reveal="nav" style={{'--reveal-delay': '510ms'}}>Infrastructure</p>
 <div className="space-y-0.5">
 <a className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-gray-100 hover:bg-white/5 transition-colors" href="#">
 <svg className="" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><rect height="8" rx="2" ry="2" width="20" x="2" y="2"></rect><rect height="8" rx="2" ry="2" width="20" x="2" y="14"></rect><line x1="6" x2="6.01" y1="6" y2="6"></line><line x1="6" x2="6.01" y1="18" y2="18"></line></svg>
@@ -540,8 +582,8 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-white/5 transition-colors">
 <img alt="Profile" className="w-8 h-8 rounded-full object-cover border border-white/10" src="https://images.unsplash.com/photo-1724525647065-f948fc102e68?w=2160&amp;q=80"/>
 <div className="flex-1 min-w-0">
-<p className="text-[13px] font-medium text-gray-200 truncate" data-reveal="hero" style={{-RevealDelay: '595ms'}}>Vercel Eng Team</p>
-<p className="text-[11px] text-gray-500 truncate" data-reveal="hero" style={{-RevealDelay: '680ms'}}>Production</p>
+<p className="text-[13px] font-medium text-gray-200 truncate" data-reveal="hero" style={{'--reveal-delay': '595ms'}}>Vercel Eng Team</p>
+<p className="text-[11px] text-gray-500 truncate" data-reveal="hero" style={{'--reveal-delay': '680ms'}}>Production</p>
 </div>
 <svg className="text-gray-500" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
 </div>
@@ -549,19 +591,19 @@ gtag('config', 'G-2M6V79H761');
 </aside>
 <main className="flex-1 flex flex-col min-w-0 bg-[#000000]">
 
-<header className="h-16 flex items-center justify-between px-6 lg:px-8 border-b border-white/10 bg-[#000000]/90 backdrop-blur-xl sticky top-0 z-20" data-reveal="hero" style={{-RevealDelay: '170ms'}}>
+<header className="h-16 flex items-center justify-between px-6 lg:px-8 border-b border-white/10 bg-[#000000]/90 backdrop-blur-xl sticky top-0 z-20" data-reveal="hero" style={{'--reveal-delay': '170ms'}}>
 <div className="flex items-center gap-2 text-[13px] text-gray-400">
 <span className="hover:text-gray-100 cursor-pointer transition-colors">Dashboard</span>
 <span>/</span>
 <span className="text-gray-100 font-medium">Telemetry</span>
 </div>
 <div className="flex items-center gap-4">
-<div className="hidden sm:flex items-center bg-white/[0.03] border border-white/10 rounded-md px-3 py-1.5 focus-within:border-white/20 transition-all w-64 group" data-reveal="hero" style={{-RevealDelay: '255ms'}}>
+<div className="hidden sm:flex items-center bg-white/[0.03] border border-white/10 rounded-md px-3 py-1.5 focus-within:border-white/20 transition-all w-64 group" data-reveal="hero" style={{'--reveal-delay': '255ms'}}>
 <svg className="text-gray-500 mr-2" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
 <input className="bg-transparent border-none outline-none text-[13px] text-gray-200 w-full placeholder:text-gray-600" placeholder="Search endpoints..." type="text"/>
 <span className="text-[10px] font-medium text-gray-500 border border-white/10 rounded px-1.5 py-0.5">/</span>
 </div>
-<button className="w-8 h-8 rounded-full border border-white/10 bg-white/[0.02] flex items-center justify-center hover:bg-white/[0.05] transition-colors relative" data-reveal="hero" style={{-RevealDelay: '340ms'}}>
+<button className="w-8 h-8 rounded-full border border-white/10 bg-white/[0.02] flex items-center justify-center hover:bg-white/[0.05] transition-colors relative" data-reveal="hero" style={{'--reveal-delay': '340ms'}}>
 <span className="absolute top-0 right-0 w-2 h-2 bg-blue-500 rounded-full border-2 border-[#000000]"></span>
 <svg className="text-gray-400" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
 </button>
@@ -572,7 +614,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
 <div className="">
-<h1 className="text-2xl tracking-tight text-gray-100 font-medium mb-1" data-reveal="hero" style={{-RevealDelay: '765ms'}}>Network Status</h1>
+<h1 className="text-2xl tracking-tight text-gray-100 font-medium mb-1" data-reveal="hero" style={{'--reveal-delay': '765ms'}}>Network Status</h1>
 <div className="flex items-center gap-2 text-[13px] text-gray-400">
 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               All systems operating normally
@@ -580,15 +622,15 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center gap-3">
 <div className="flex bg-white/[0.03] border border-white/10 rounded-lg p-0.5">
-<button className="px-3 py-1.5 text-[13px] font-medium rounded-md bg-white/10 text-gray-100 shadow-sm" data-reveal="hero" style={{-RevealDelay: '425ms'}}>1H</button>
-<button className="px-3 py-1.5 text-[13px] font-medium rounded-md text-gray-400 hover:text-gray-200 transition-colors" data-reveal="hero" style={{-RevealDelay: '510ms'}}>24H</button>
-<button className="px-3 py-1.5 text-[13px] font-medium rounded-md text-gray-400 hover:text-gray-200 transition-colors" data-reveal="hero" style={{-RevealDelay: '595ms'}}>7D</button>
+<button className="px-3 py-1.5 text-[13px] font-medium rounded-md bg-white/10 text-gray-100 shadow-sm" data-reveal="hero" style={{'--reveal-delay': '425ms'}}>1H</button>
+<button className="px-3 py-1.5 text-[13px] font-medium rounded-md text-gray-400 hover:text-gray-200 transition-colors" data-reveal="hero" style={{'--reveal-delay': '510ms'}}>24H</button>
+<button className="px-3 py-1.5 text-[13px] font-medium rounded-md text-gray-400 hover:text-gray-200 transition-colors" data-reveal="hero" style={{'--reveal-delay': '595ms'}}>7D</button>
 </div>
 </div>
 </div>
 
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{-RevealDelay: '680ms'}}>
+<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{'--reveal-delay': '680ms'}}>
 <div className="flex items-center justify-between text-gray-400 mb-4">
 <span className="text-[13px] font-medium">Total Requests</span>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
@@ -598,7 +640,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs font-medium text-emerald-400 flex items-center"><svg className="mr-0.5" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>12.4%</span>
 </div>
 </div>
-<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{-RevealDelay: '765ms'}}>
+<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{'--reveal-delay': '765ms'}}>
 <div className="flex items-center justify-between text-gray-400 mb-4">
 <span className="text-[13px] font-medium">P99 Latency</span>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -608,7 +650,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs font-medium text-emerald-400 flex items-center"><svg className="mr-0.5" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m19 12-7 7-7-7"></path><path d="M12 5v14"></path></svg>5ms</span>
 </div>
 </div>
-<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{-RevealDelay: '0ms'}}>
+<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{'--reveal-delay': '0ms'}}>
 <div className="flex items-center justify-between text-gray-400 mb-4">
 <span className="text-[13px] font-medium">Error Rate</span>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
@@ -618,7 +660,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs font-medium text-gray-500 flex items-center"><svg className="mr-0.5" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><line x1="5" x2="19" y1="12" y2="12"></line></svg>Flat</span>
 </div>
 </div>
-<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{-RevealDelay: '85ms'}}>
+<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:bg-white/[0.04] transition-colors" data-reveal="hero" style={{'--reveal-delay': '85ms'}}>
 <div className="flex items-center justify-between text-gray-400 mb-4">
 <span className="text-[13px] font-medium">Active Nodes</span>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
@@ -632,18 +674,18 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-<div className="lg:col-span-2 rounded-xl border border-white/10 bg-white/[0.01] p-6 flex flex-col h-[380px]" data-reveal="hero" style={{-RevealDelay: '170ms'}}>
+<div className="lg:col-span-2 rounded-xl border border-white/10 bg-white/[0.01] p-6 flex flex-col h-[380px]" data-reveal="hero" style={{'--reveal-delay': '170ms'}}>
 <div className="flex justify-between items-center mb-6">
-<h2 className="text-sm font-medium text-gray-100" data-reveal="hero" style={{-RevealDelay: '0ms'}}>Network Traffic &amp; Latency</h2>
+<h2 className="text-sm font-medium text-gray-100" data-reveal="hero" style={{'--reveal-delay': '0ms'}}>Network Traffic &amp; Latency</h2>
 </div>
 <div className="relative flex-1 w-full h-full min-h-0">
 <canvas className="" height="572" id="apiMonitorChart" style={{display: 'block', boxSizing: 'border-box', height: '286px', width: '607.3px'}} width="1214"></canvas>
 </div>
 </div>
 
-<div className="rounded-xl border border-white/10 bg-white/[0.01] p-6 flex flex-col" data-reveal="hero" style={{-RevealDelay: '255ms'}}>
+<div className="rounded-xl border border-white/10 bg-white/[0.01] p-6 flex flex-col" data-reveal="hero" style={{'--reveal-delay': '255ms'}}>
 <div className="flex justify-between items-center mb-6">
-<h2 className="text-sm font-medium text-gray-100" data-reveal="hero" style={{-RevealDelay: '85ms'}}>Highest Latency Endpoints</h2>
+<h2 className="text-sm font-medium text-gray-100" data-reveal="hero" style={{'--reveal-delay': '85ms'}}>Highest Latency Endpoints</h2>
 </div>
 <div className="flex-1 flex flex-col justify-center space-y-6">
 <div className="space-y-2">
@@ -697,8 +739,8 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="rounded-xl border border-white/10 bg-white/[0.01] overflow-hidden">
 <div className="p-6 border-b border-white/10 flex items-center justify-between">
-<h2 className="text-sm font-medium text-gray-100" data-reveal="hero" style={{-RevealDelay: '170ms'}}>Recent API Anomalies</h2>
-<button className="text-xs font-medium text-gray-400 hover:text-gray-100 transition-colors" data-reveal="hero" style={{-RevealDelay: '340ms'}}>View all logs →</button>
+<h2 className="text-sm font-medium text-gray-100" data-reveal="hero" style={{'--reveal-delay': '170ms'}}>Recent API Anomalies</h2>
+<button className="text-xs font-medium text-gray-400 hover:text-gray-100 transition-colors" data-reveal="hero" style={{'--reveal-delay': '340ms'}}>View all logs →</button>
 </div>
 <div className="overflow-x-auto">
 <table className="w-full text-left border-collapse">
@@ -753,7 +795,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 
-<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border mr-auto ml-auto shadow-2xl max-w-full" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border mr-auto ml-auto shadow-2xl max-w-full" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
 <div className="mx-auto flex flex-col">
 
 <div className="lg:p-12 xl:p-16 bg-[#0B0F14] border-white/10 border-b pt-8 pr-8 pb-8 pl-8">
@@ -763,7 +805,7 @@ gtag('config', 'G-2M6V79H761');
               CAPABILITIES_OVERVIEW
             </span>
 </div>
-<h2 className="text-3xl md:text-5xl uppercase tracking-tight text-white leading-tight font-manrope font-medium" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<h2 className="text-3xl md:text-5xl uppercase tracking-tight text-white leading-tight font-manrope font-medium" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
             System Architecture
             <br/>
 <span className="font-medium text-slate-500 font-manrope">
@@ -774,7 +816,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/10">
 
-<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
 <div className="">
 <div className="flex justify-between items-start mb-12">
 <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest group-hover:text-blue-400 transition-colors font-sans">
@@ -795,17 +837,17 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
                 Real-time Monitoring
               </h3>
-<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
                 Continuous telemetry streaming with microsecond precision and
                 latency tracking.
               </p>
 </div>
 </div>
 
-<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
 <div className="">
 <div className="flex justify-between items-start mb-12">
 <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest group-hover:text-emerald-400 transition-colors font-sans">
@@ -831,17 +873,17 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div>
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
                 Request Tracing
               </h3>
-<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
                 Map API requests and trace complex execution paths across
                 microservices.
               </p>
 </div>
 </div>
 
-<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
 <div className="">
 <div className="flex justify-between items-start mb-12">
 <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest group-hover:text-blue-400 transition-colors font-sans">
@@ -868,17 +910,17 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
                 Automated Alerts
               </h3>
-<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
                 Trigger reactive infrastructure changes and pipeline jobs based
                 on API latency and errors.
               </p>
 </div>
 </div>
 
-<div className="hover:bg-[#111827] transition-all duration-300 lg:p-10 flex flex-col min-h-[360px] group cursor-default bg-[#0B0F14] pt-8 pr-8 pb-8 pl-8 relative justify-between" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<div className="hover:bg-[#111827] transition-all duration-300 lg:p-10 flex flex-col min-h-[360px] group cursor-default bg-[#0B0F14] pt-8 pr-8 pb-8 pl-8 relative justify-between" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
 <div className="">
 <div className="flex justify-between items-start mb-12">
 <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest group-hover:text-red-400 transition-colors font-sans">
@@ -898,17 +940,17 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
                 Anomaly Detection
               </h3>
-<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
                 Algorithmic identification of edge cases, timeout limits, and
                 systemic deviations.
               </p>
 </div>
 </div>
 
-<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
 <div className="">
 <div className="flex justify-between items-start mb-12">
 <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest group-hover:text-blue-400 transition-colors font-sans">
@@ -944,17 +986,17 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
                 API Observability
               </h3>
-<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
                 Monitor endpoint health, routing latency, and overall payload
                 characteristics.
               </p>
 </div>
 </div>
 
-<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<div className="bg-[#0B0F14] hover:bg-[#111827] transition-all duration-300 p-8 lg:p-10 flex flex-col justify-between min-h-[360px] relative group cursor-default" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
 <div className="">
 <div className="flex justify-between items-start mb-12">
 <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest group-hover:text-blue-400 transition-colors font-sans">
@@ -976,10 +1018,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white mb-3 font-sans" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
                 Log Streaming
               </h3>
-<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<p className="text-xs font-mono text-slate-400 uppercase tracking-widest leading-relaxed font-sans" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
                 Centralized ingestion of unstructured logs with real-time
                 indexing capabilities.
               </p>
@@ -1121,7 +1163,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="md:col-span-2 lg:col-span-2 row-span-1 rounded-[24px] bg-gradient-to-br from-[#111] to-[#0A0A0A] border border-white/5 p-6 flex items-center justify-between relative overflow-hidden group hover:border-white/10 transition-all shadow-sm">
-<div className="absolute inset-0 opacity-30 group-hover:opacity-60 transition-opacity duration-500" style={{backgroundImage: 'radial-gradient(rgba(245,245,244,0.18) 1px, transparent 1px)', backgroundSize: '16px 16px', backgroundPosition: '-8px -8px', maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)'}}></div>
+<div className="absolute inset-0 opacity-30 group-hover:opacity-60 transition-opacity duration-500" style={{backgroundImage: 'radial-gradient(rgba(245, 245, 244, 0.18) 1px, transparent 1px)', backgroundSize: '16px 16px', backgroundPosition: '-8px -8px', maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)'}}></div>
 <div className="z-10 flex flex-col justify-center h-full">
 <h3 className="text-stone-300 text-sm font-medium mb-1">Active Edge Nodes</h3>
 <div className="text-4xl font-medium tracking-tight text-white">1,204</div>
@@ -1261,9 +1303,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 </div>
-<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border mr-auto ml-auto shadow-2xl border-t-0 max-w-full" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border mr-auto ml-auto shadow-2xl border-t-0 max-w-full" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
 <div className="mx-auto grid grid-cols-1 lg:grid-cols-4 lg:divide-x divide-white/10">
-<div className="flex flex-col" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<div className="flex flex-col" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
 <div className="hidden lg:block bg-[#0B0F14] w-full h-32"></div>
 <div className="bg-[#111827]/30 p-8 lg:p-10 border-t border-white/10 flex-1 flex flex-col justify-between min-h-[450px] hover:bg-[#111827]/80 transition-colors">
 <div className="">
@@ -1275,7 +1317,7 @@ gtag('config', 'G-2M6V79H761');
                   TELEMETRY
                 </span>
 </div>
-<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
                 Identifying high-value use cases and roadmapping your API
                 infrastructure journey.
               </p>
@@ -1292,7 +1334,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<div className="flex flex-col" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
 <div className="hidden lg:block h-80 w-full bg-[#0B0F14]"></div>
 <div className="lg:p-10 flex-1 flex flex-col min-h-[450px] bg-[#111827]/30 border-white/10 border-t pt-8 pr-8 pb-8 pl-8 justify-between hover:bg-[#111827]/80 transition-colors">
 <div className="">
@@ -1304,7 +1346,7 @@ gtag('config', 'G-2M6V79H761');
                   INFRASTRUCTURE
                 </span>
 </div>
-<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
                 Crafting adaptive interfaces that evolve with user intent and
                 context.
               </p>
@@ -1321,7 +1363,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<div className="flex flex-col" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
 <div className="p-10 pb-20 bg-[#0B0F14] relative z-20">
 <div className="flex items-center gap-3 mb-10">
 <div className="w-1.5 h-1.5 bg-blue-500 animate-pulse"></div>
@@ -1329,12 +1371,12 @@ gtag('config', 'G-2M6V79H761');
                 002 CORE PILLARS
               </span>
 </div>
-<h2 className="text-5xl lg:text-7xl tracking-tighter uppercase leading-[0.9] mb-8 text-white font-manrope font-medium whitespace-nowrap" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<h2 className="text-5xl lg:text-7xl tracking-tighter uppercase leading-[0.9] mb-8 text-white font-manrope font-medium whitespace-nowrap" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
               SYSTEM
               <br/>
               ARCHITECTURE
             </h2>
-<p className="text-xs font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<p className="text-xs font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
               Where technical feasibility meets exceptional system reliability.
             </p>
 </div>
@@ -1348,7 +1390,7 @@ gtag('config', 'G-2M6V79H761');
                   OBSERVABILITY
                 </span>
 </div>
-<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
                 Scalable frontend architectures for real-time generative
                 experiences.
               </p>
@@ -1365,7 +1407,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<div className="flex flex-col" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
 <div className="hidden lg:block h-[348px] w-full bg-[#0B0F14]"></div>
 <div className="bg-[#111827]/30 p-8 lg:p-10 border-t border-white/10 flex-1 flex flex-col justify-between min-h-[450px] hover:bg-[#111827]/80 transition-colors">
 <div className="">
@@ -1377,7 +1419,7 @@ gtag('config', 'G-2M6V79H761');
                   ORCHESTRATION
                 </span>
 </div>
-<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<p className="text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
                 Optimizing models and interfaces for production-grade
                 performance.
               </p>
@@ -1398,11 +1440,11 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 
-<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border mr-auto ml-auto relative shadow-2xl border-t-0 max-w-full" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border mr-auto ml-auto relative shadow-2xl border-t-0 max-w-full" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
 <div className="mx-auto w-full">
 <div className="grid grid-cols-1 lg:grid-cols-4">
 
-<div className="lg:border-r lg:p-10 flex flex-col min-h-[500px] bg-[#0B0F14] border-white/10 border-b pt-8 pr-8 pb-8 pl-8 justify-between" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<div className="lg:border-r lg:p-10 flex flex-col min-h-[500px] bg-[#0B0F14] border-white/10 border-b pt-8 pr-8 pb-8 pl-8 justify-between" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
 <div className="">
 <div className="flex items-center gap-3 mb-12">
 <div className="w-1.5 h-1.5 bg-blue-500"></div>
@@ -1410,20 +1452,20 @@ gtag('config', 'G-2M6V79H761');
                   004 ALLOCATION
                 </span>
 </div>
-<h2 className="text-4xl lg:text-5xl uppercase tracking-tighter text-white mb-6 font-manrope font-medium" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<h2 className="text-4xl lg:text-5xl uppercase tracking-tighter text-white mb-6 font-manrope font-medium" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
                 SYSTEM
                 <br/>
                 RESOURCES
               </h2>
-<p className="text-[11px] font-mono text-slate-400 leading-relaxed max-w-xs mb-8 uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<p className="text-[11px] font-mono text-slate-400 leading-relaxed max-w-xs mb-8 uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
                 Flexible compute and telemetry allocations designed to fit your
                 cluster's stage and needs.
               </p>
 <div className="inline-flex bg-[#0B0F14] p-1 border border-white/10">
-<button className="px-4 py-1.5 bg-blue-600/20 border border-blue-500 text-[10px] font-mono font-bold uppercase tracking-widest text-blue-400 transition-colors shadow-[0_0_15px_rgba(37,99,235,0.2)] font-sans" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<button className="px-4 py-1.5 bg-blue-600/20 border border-blue-500 text-[10px] font-mono font-bold uppercase tracking-widest text-blue-400 transition-colors shadow-[0_0_15px_rgba(37,99,235,0.2)] font-sans" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
                   Monthly
                 </button>
-<button className="px-4 py-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 hover:text-white transition-colors font-sans" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<button className="px-4 py-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 hover:text-white transition-colors font-sans" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
                   Annual
                 </button>
 </div>
@@ -1442,9 +1484,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="border-b lg:border-r border-white/10 bg-[#111827]/30 hover:bg-[#111827]/80 p-8 lg:p-10 flex flex-col relative group transition-colors" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<div className="border-b lg:border-r border-white/10 bg-[#111827]/30 hover:bg-[#111827]/80 p-8 lg:p-10 flex flex-col relative group transition-colors" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
 <div className="mb-6">
-<h3 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-500 mb-4 font-sans" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<h3 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-500 mb-4 font-sans" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
                 / DEVELOPER
               </h3>
 <div className="flex items-baseline gap-1">
@@ -1455,7 +1497,7 @@ gtag('config', 'G-2M6V79H761');
                   /mo
                 </span>
 </div>
-<p className="text-[10px] font-mono text-slate-400 mt-6 h-10 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<p className="text-[10px] font-mono text-slate-400 mt-6 h-10 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
                 Perfect for MVPs, proof of concepts, and specific feature
                 designs.
               </p>
@@ -1494,7 +1536,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 </ul>
 </div>
-<button className="w-full py-3 border border-white/20 bg-transparent text-white text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2 group/btn font-sans" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<button className="w-full py-3 border border-white/20 bg-transparent text-white text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2 group/btn font-sans" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
               Initialize
               <svg className="group-hover/btn:translate-x-1 transition-transform" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
@@ -1503,12 +1545,12 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 
-<div className="border-b lg:border-r border-white/10 bg-[#111827]/50 hover:bg-[#111827] p-8 lg:p-10 flex flex-col relative overflow-hidden group transition-colors shadow-[0_0_30px_rgba(37,99,235,0.05)]" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<div className="border-b lg:border-r border-white/10 bg-[#111827]/50 hover:bg-[#111827] p-8 lg:p-10 flex flex-col relative overflow-hidden group transition-colors shadow-[0_0_30px_rgba(37,99,235,0.05)]" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
 <div className="absolute top-0 right-0 bg-blue-600/20 border-b border-l border-blue-500 text-blue-400 text-[9px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 font-sans">
               PRODUCTION
             </div>
 <div className="mb-6">
-<h3 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-blue-400 mb-4 font-sans" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<h3 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-blue-400 mb-4 font-sans" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
                 / CLUSTER
               </h3>
 <div className="flex items-baseline gap-1">
@@ -1519,7 +1561,7 @@ gtag('config', 'G-2M6V79H761');
                   /mo
                 </span>
 </div>
-<p className="text-[10px] font-mono text-slate-400 mt-6 h-10 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<p className="text-[10px] font-mono text-slate-400 mt-6 h-10 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
                 Long-term collaboration for scaling products and continuous
                 improvement.
               </p>
@@ -1558,7 +1600,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 </ul>
 </div>
-<button className="w-full py-3 bg-blue-600/20 border border-blue-500 text-blue-400 text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.2)] hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] group/btn font-sans" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<button className="w-full py-3 bg-blue-600/20 border border-blue-500 text-blue-400 text-[10px] font-mono font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.2)] hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] group/btn font-sans" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
               Upgrade Cluster
               <svg className="group-hover/btn:translate-x-1 transition-transform" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
@@ -1567,14 +1609,14 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 
-<div className="border-b border-white/10 bg-[#111827]/30 flex flex-col justify-between p-8 lg:p-10" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<div className="border-b border-white/10 bg-[#111827]/30 flex flex-col justify-between p-8 lg:p-10" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
 <div className="space-y-8">
 <div className="">
 <h4 className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-400 mb-4 flex items-center gap-2 font-sans">
 <span className="w-1.5 h-1.5 bg-purple-500"></span>
                   Enterprise
                 </h4>
-<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
                   Need a dedicated infrastructure for large-scale
                   transformation? We offer custom enterprise agreements with SLA
                   guarantees.
@@ -1586,7 +1628,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="w-1.5 h-1.5 bg-emerald-500"></span>
                   Support
                 </h4>
-<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
                   24/7 Priority support channel and dedicated engineering
                   workspace included in Enterprise plans.
                 </p>
@@ -1616,10 +1658,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </section>
-<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border border-t-0 mr-auto ml-auto relative shadow-2xl max-w-full" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<section className="overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full shadow-black/60 text-slate-300 bg-[#0B0F14] border-white/10 border border-t-0 mr-auto ml-auto relative shadow-2xl max-w-full" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
 <div className="w-full mr-auto ml-auto">
 <div className="grid grid-cols-1 lg:grid-cols-4">
-<div className="lg:border-b-0 lg:border-r lg:p-10 flex flex-col bg-[#0B0F14] border-white/10 border-b pt-8 pr-8 pb-8 pl-8 justify-between" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<div className="lg:border-b-0 lg:border-r lg:p-10 flex flex-col bg-[#0B0F14] border-white/10 border-b pt-8 pr-8 pb-8 pl-8 justify-between" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
 <div className="">
 <div className="flex items-center gap-3 mb-12">
 <div className="w-1.5 h-1.5 bg-purple-500"></div>
@@ -1627,17 +1669,17 @@ gtag('config', 'G-2M6V79H761');
                   005 INQUIRIES
                 </span>
 </div>
-<h2 className="text-4xl lg:text-5xl uppercase tracking-tighter text-white mb-6 font-manrope font-medium" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<h2 className="text-4xl lg:text-5xl uppercase tracking-tighter text-white mb-6 font-manrope font-medium" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
                 SYSTEM
                 <br/>
                 FAQ
               </h2>
-<p className="text-[11px] font-mono text-slate-400 leading-relaxed max-w-xs uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<p className="text-[11px] font-mono text-slate-400 leading-relaxed max-w-xs uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
                 Common operational parameters and billing inquiries resolved.
               </p>
 </div>
 <div className="mt-12 lg:mt-0">
-<button className="flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 hover:text-white transition-colors group font-sans" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<button className="flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 hover:text-white transition-colors group font-sans" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
                 Read Full Docs
                 <svg className="group-hover:translate-x-1 transition-transform" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
@@ -1646,54 +1688,54 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 </div>
-<div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 bg-[#111827]/30" data-reveal="block" style={{-RevealDelay: '425ms'}}>
-<div className="p-8 lg:p-10 border-b border-white/10 md:border-r hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 bg-[#111827]/30" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
+<div className="p-8 lg:p-10 border-b border-white/10 md:border-r hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
 <h4 className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white mb-4 font-sans flex items-start gap-3">
 <span className="text-blue-500 mt-0.5 group-hover:text-blue-400 transition-colors">
                   +
                 </span>
                 How are events calculated?
               </h4>
-<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
                 An event is any single telemetry data point logged to our
                 ingress nodes. Distributed traces, spans, and metrics all count
                 as individual events toward your monthly cluster allocation.
               </p>
 </div>
-<div className="p-8 lg:p-10 border-b border-white/10 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<div className="p-8 lg:p-10 border-b border-white/10 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
 <h4 className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white mb-4 font-sans flex items-start gap-3">
 <span className="text-blue-500 mt-0.5 group-hover:text-blue-400 transition-colors">
                   +
                 </span>
                 Can I scale mid-cycle?
               </h4>
-<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
                 Yes, cluster upgrades are prorated automatically based on your
                 timestamp. Downgrades take effect at the exact start of your
                 next billing vector.
               </p>
 </div>
-<div className="p-8 lg:p-10 border-b md:border-b-0 border-white/10 md:border-r hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<div className="p-8 lg:p-10 border-b md:border-b-0 border-white/10 md:border-r hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
 <h4 className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white mb-4 font-sans flex items-start gap-3">
 <span className="text-blue-500 mt-0.5 group-hover:text-blue-400 transition-colors">
                   +
                 </span>
                 What happens on overage?
               </h4>
-<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
                 We never drop packets immediately. A 10% burst buffer is applied
                 before rate limiting initiates. Custom webhooks and alerts will
                 trigger automatically at 80% and 95% capacity.
               </p>
 </div>
-<div className="p-8 lg:p-10 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<div className="p-8 lg:p-10 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
 <h4 className="text-[11px] font-mono font-bold tracking-[0.15em] uppercase text-white mb-4 font-sans flex items-start gap-3">
 <span className="text-blue-500 mt-0.5 group-hover:text-blue-400 transition-colors">
                   +
                 </span>
                 Is on-premise available?
               </h4>
-<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<p className="text-[10px] font-mono text-slate-500 leading-relaxed uppercase tracking-widest font-sans pl-5" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
                 Self-hosted, air-gapped instances are exclusively available for
                 Enterprise clients. Contact your assigned L3 support
                 representative to begin the deployment protocol.
@@ -1703,7 +1745,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </section>
-<section className="overflow-hidden text-slate-300 bg-[#0B0F14] w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full mx-auto border border-white/10 shadow-2xl shadow-black/60 relative border-t-0 max-w-full" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<section className="overflow-hidden text-slate-300 bg-[#0B0F14] w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full mx-auto border border-white/10 shadow-2xl shadow-black/60 relative border-t-0 max-w-full" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
 <div className="flex flex-col w-full mr-auto ml-auto">
 
 <div className="lg:p-12 xl:p-16 bg-[#0B0F14] border-white/10 border-b pt-8 pr-8 pb-8 pl-8">
@@ -1715,7 +1757,7 @@ gtag('config', 'G-2M6V79H761');
                   003 THE BUILDERS
                 </span>
 </div>
-<h2 className="text-3xl md:text-5xl uppercase tracking-tight text-white leading-tight font-manrope font-medium" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<h2 className="text-3xl md:text-5xl uppercase tracking-tight text-white leading-tight font-manrope font-medium" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
                 Operators, not just
                 <br/>
 <span className="text-slate-500 font-manrope font-medium">
@@ -1723,7 +1765,7 @@ gtag('config', 'G-2M6V79H761');
                 </span>
 </h2>
 </div>
-<p className="max-w-md text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<p className="max-w-md text-sm font-mono text-slate-400 leading-relaxed uppercase tracking-widest font-sans" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
               We are a compact team of senior practitioners. No account
               managers, no layers. You work directly with the people building
               your product.
@@ -1733,14 +1775,14 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-white/10 gap-[1px]">
 
-<div className="group relative overflow-hidden bg-[#111827]/30 hover:bg-[#111827]/80 flex flex-col transition-colors cursor-default" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<div className="group relative overflow-hidden bg-[#111827]/30 hover:bg-[#111827]/80 flex flex-col transition-colors cursor-default" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
 <div className="aspect-square relative overflow-hidden border-b border-white/10">
 <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <img alt="Founder" className="w-full h-full object-cover grayscale opacity-70 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d09b944c-c71d-4c2c-9c16-e6e662b4a9d2_800w.webp"/>
 </div>
 <div className="p-6 lg:p-8 flex-grow flex flex-col">
 <div className="flex justify-between items-start mb-2">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white font-sans" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white font-sans" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
                   Alex Chen
                 </h3>
 <svg className="text-slate-500 group-hover:text-blue-400 transition-colors" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -1750,7 +1792,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center gap-2 mb-6">
 <div className="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_5px_rgba(59,130,246,0.8)]"></div>
-<p className="text-[9px] font-mono font-semibold tracking-[0.2em] text-blue-400 uppercase font-sans" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<p className="text-[9px] font-mono font-semibold tracking-[0.2em] text-blue-400 uppercase font-sans" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
                   Systems Architect
                 </p>
 </div>
@@ -1783,14 +1825,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative overflow-hidden bg-[#111827]/30 hover:bg-[#111827]/80 flex flex-col transition-colors cursor-default" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<div className="group relative overflow-hidden bg-[#111827]/30 hover:bg-[#111827]/80 flex flex-col transition-colors cursor-default" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
 <div className="aspect-square relative overflow-hidden border-b border-white/10">
 <div className="absolute inset-0 bg-purple-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <img alt="Design Lead" className="w-full h-full object-cover grayscale opacity-70 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cd72a53b-6aa7-44f6-a2f5-c1f742587382_800w.webp"/>
 </div>
 <div className="p-6 lg:p-8 flex-grow flex flex-col">
 <div className="flex justify-between items-start mb-2">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white font-sans" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white font-sans" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
                   Sarah Voss
                 </h3>
 <svg className="text-slate-500 group-hover:text-purple-400 transition-colors" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -1800,7 +1842,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center gap-2 mb-6">
 <div className="w-1 h-1 bg-purple-500 rounded-full shadow-[0_0_5px_rgba(168,85,247,0.8)]"></div>
-<p className="text-[9px] font-mono font-semibold tracking-[0.2em] text-purple-400 uppercase font-sans" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<p className="text-[9px] font-mono font-semibold tracking-[0.2em] text-purple-400 uppercase font-sans" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
                   Lead Backend Engineer
                 </p>
 </div>
@@ -1833,14 +1875,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative overflow-hidden bg-[#111827]/30 hover:bg-[#111827]/80 flex flex-col transition-colors cursor-default" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<div className="group relative overflow-hidden bg-[#111827]/30 hover:bg-[#111827]/80 flex flex-col transition-colors cursor-default" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
 <div className="aspect-square relative overflow-hidden border-b border-white/10">
 <div className="absolute inset-0 bg-emerald-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <img alt="Product Lead" className="w-full h-full object-cover grayscale opacity-70 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/35c33838-487d-4efe-8088-d2ca9b056413_800w.webp"/>
 </div>
 <div className="p-6 lg:p-8 flex-grow flex flex-col">
 <div className="flex justify-between items-start mb-2">
-<h3 className="text-lg font-semibold uppercase tracking-tight text-white font-sans" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<h3 className="text-lg font-semibold uppercase tracking-tight text-white font-sans" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
                   Marcus Ray
                 </h3>
 <svg className="text-slate-500 group-hover:text-emerald-400 transition-colors" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -1850,7 +1892,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center gap-2 mb-6">
 <div className="w-1 h-1 bg-emerald-500 rounded-full shadow-[0_0_5px_rgba(16,185,129,0.8)]"></div>
-<p className="text-[9px] font-mono font-semibold tracking-[0.2em] text-emerald-400 uppercase font-sans" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<p className="text-[9px] font-mono font-semibold tracking-[0.2em] text-emerald-400 uppercase font-sans" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
                   Infrastructure Lead
                 </p>
 </div>
@@ -1883,7 +1925,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative overflow-hidden bg-[#0B0F14] hover:bg-[#111827]/80 flex flex-col justify-center items-center text-center p-8 transition-colors cursor-pointer min-h-[400px]" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<div className="group relative overflow-hidden bg-[#0B0F14] hover:bg-[#111827]/80 flex flex-col justify-center items-center text-center p-8 transition-colors cursor-pointer min-h-[400px]" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none group-hover:opacity-[0.08] transition-opacity" style={{backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px'}}></div>
 <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-6 text-slate-500 group-hover:text-blue-400 group-hover:border-blue-500/50 transition-colors bg-[#111827]/30">
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
@@ -1891,14 +1933,14 @@ gtag('config', 'G-2M6V79H761');
 <path d="M12 5v14"></path>
 </svg>
 </div>
-<h3 className="text-xl font-semibold uppercase tracking-tight text-white mb-4 font-sans" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<h3 className="text-xl font-semibold uppercase tracking-tight text-white mb-4 font-sans" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
               Join the Studio
             </h3>
-<p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest leading-relaxed max-w-[200px] mb-8 font-sans" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest leading-relaxed max-w-[200px] mb-8 font-sans" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
               We are always looking for obsessive designers and engineers to
               join our distributed team.
             </p>
-<button className="px-6 py-3 border border-white/20 text-white text-[11px] font-semibold tracking-[0.2em] hover:bg-white/5 transition-colors font-sans flex items-center gap-2 group/btn" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<button className="px-6 py-3 border border-white/20 text-white text-[11px] font-semibold tracking-[0.2em] hover:bg-white/5 transition-colors font-sans flex items-center gap-2 group/btn" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
               View Openings
               <svg className="group-hover/btn:translate-x-1 transition-transform" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
@@ -1909,19 +1951,19 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </section>
-<section className="overflow-hidden text-slate-300 bg-[#0B0F14] w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full mx-auto border border-white/10 shadow-2xl shadow-black/60 relative border-t-0 max-w-full" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<section className="overflow-hidden text-slate-300 bg-[#0B0F14] w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full mx-auto border border-white/10 shadow-2xl shadow-black/60 relative border-t-0 max-w-full" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
 <div className="w-full mr-auto ml-auto">
 
 <div className="grid grid-cols-1 lg:grid-cols-4">
 
-<div className="lg:p-10 flex flex-col min-h-[500px] border-white/10 border-r border-b pt-8 pr-8 pb-8 pl-8 justify-between" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<div className="lg:p-10 flex flex-col min-h-[500px] border-white/10 border-r border-b pt-8 pr-8 pb-8 pl-8 justify-between" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
 <div className="flex items-center gap-3 mb-12">
 <div className="w-1.5 h-1.5 bg-blue-500 animate-pulse"></div>
 <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-[0.2em] font-sans">
                 003 REVIEWS
               </span>
 </div>
-<div className="relative w-full aspect-[4/3] group cursor-pointer overflow-hidden bg-[#111827] mt-auto border border-white/10" data-reveal="block" style={{-RevealDelay: '510ms'}}>
+<div className="relative w-full aspect-[4/3] group cursor-pointer overflow-hidden bg-[#111827] mt-auto border border-white/10" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
 <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <img alt="Client Project" className="contrast-110 group-hover:scale-105 transition-transform duration-700 ease-out w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9698e5e4-055e-43d4-a47f-32f16fa416c3_800w.webp"/>
 <div className="flex absolute bottom-6 left-6 items-center z-20">
@@ -1944,21 +1986,21 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="hidden lg:block border-b border-r border-white/10 bg-[#0B0F14]" data-reveal="block" style={{-RevealDelay: '595ms'}}></div>
+<div className="hidden lg:block border-b border-r border-white/10 bg-[#0B0F14]" data-reveal="block" style={{'--reveal-delay': '595ms'}}></div>
 
-<div className="lg:col-span-2 flex flex-col border-white/10 border-b bg-[#0B0F14]" data-reveal="block" id="testimonial-container-aura" style={{-RevealDelay: '680ms'}}>
+<div className="lg:col-span-2 flex flex-col border-white/10 border-b bg-[#0B0F14]" data-reveal="block" id="testimonial-container-aura" style={{'--reveal-delay': '680ms'}}>
 <div className="lg:p-16 lg:pb-24 flex-grow overflow-hidden pt-10 pr-10 pb-10 pl-10 relative">
 <svg className="text-white/5 absolute top-10 left-8 lg:top-14 lg:left-12 -z-10 opacity-20" fill="currentColor" height="48" viewbox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
 <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
 <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2.003-2H16c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
 </svg>
 <div className="transition-all duration-700 ease-in-out opacity-100 transform translate-y-0" id="quote-wrapper-aura">
-<p className="text-2xl lg:text-3xl font-manrope font-medium leading-[1.4] text-white max-w-2xl tracking-tight antialiased" data-reveal="block" id="testimonial-quote-aura" style={{-RevealDelay: '510ms'}}>"The precision in their design language is incredible. Frame doesn't just build UI; they build logical systems that anticipate user needs."</p>
+<p className="text-2xl lg:text-3xl font-manrope font-medium leading-[1.4] text-white max-w-2xl tracking-tight antialiased" data-reveal="block" id="testimonial-quote-aura" style={{'--reveal-delay': '510ms'}}>"The precision in their design language is incredible. Frame doesn't just build UI; they build logical systems that anticipate user needs."</p>
 </div>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-2 mt-auto border-t border-white/10">
 
-<div className="border-r border-white/10 relative bg-[#111827]/30 group hover:bg-[#111827]/80 transition-colors cursor-pointer min-h-[100px] flex items-center px-8 justify-between" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<div className="border-r border-white/10 relative bg-[#111827]/30 group hover:bg-[#111827]/80 transition-colors cursor-pointer min-h-[100px] flex items-center px-8 justify-between" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
 <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500/50 group-hover:bg-blue-500 transition-colors shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
 <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-blue-400">
                   VIEW REPORT
@@ -1966,14 +2008,14 @@ gtag('config', 'G-2M6V79H761');
 <svg aria-hidden="true" className="lucide lucide-chevron-right w-4 h-4 text-blue-400 group-hover:translate-x-1 transition-transform" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
 </div>
 
-<div className="p-8 lg:px-12 lg:py-6 flex items-center min-h-[100px] transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 bg-[#0B0F14]" data-reveal="block" id="author-wrapper-aura" style={{-RevealDelay: '0ms'}}>
+<div className="p-8 lg:px-12 lg:py-6 flex items-center min-h-[100px] transition-all duration-700 ease-in-out opacity-100 transform translate-y-0 bg-[#0B0F14]" data-reveal="block" id="author-wrapper-aura" style={{'--reveal-delay': '0ms'}}>
 <div className="flex items-center gap-4">
 <div className="w-10 h-10 border border-white/10 rounded-full overflow-hidden flex-shrink-0 bg-[#111827]">
 <img alt="Profile" className="w-full h-full object-cover grayscale opacity-80" id="testimonial-avatar-aura" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=320&amp;q=80"/>
 </div>
 <div className="">
 <h4 className="text-[10px] font-mono font-bold tracking-[0.1em] uppercase text-white" id="testimonial-author-aura">SARAH JENKINS</h4>
-<p className="text-[9px] font-mono font-medium tracking-[0.15em] uppercase text-slate-500 mt-1" data-reveal="block" id="testimonial-role-aura" style={{-RevealDelay: '595ms'}}>CTO, FLUX</p>
+<p className="text-[9px] font-mono font-medium tracking-[0.15em] uppercase text-slate-500 mt-1" data-reveal="block" id="testimonial-role-aura" style={{'--reveal-delay': '595ms'}}>CTO, FLUX</p>
 </div>
 </div>
 </div>
@@ -1981,10 +2023,10 @@ gtag('config', 'G-2M6V79H761');
 
 </div>
 
-<div className="border-r border-white/10 p-8 lg:p-10 flex flex-col justify-center min-h-[300px] bg-[#111827]/30 hover:bg-[#111827]/50 transition-colors" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<div className="border-r border-white/10 p-8 lg:p-10 flex flex-col justify-center min-h-[300px] bg-[#111827]/30 hover:bg-[#111827]/50 transition-colors" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
 <div className="space-y-8">
 
-<div className="flex gap-5 group cursor-default" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<div className="flex gap-5 group cursor-default" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
 <div className="w-8 h-8 rounded-full bg-[#0B0F14] border border-white/10 flex-shrink-0 flex items-center justify-center text-[10px] font-mono font-bold text-slate-400">
                   JD
                 </div>
@@ -2006,13 +2048,13 @@ gtag('config', 'G-2M6V79H761');
 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
 </svg>
 </div>
-<p className="text-xs font-sans text-slate-400 leading-relaxed" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<p className="text-xs font-sans text-slate-400 leading-relaxed" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
                     "Absolute clarity in execution. The team shipped 2x faster."
                   </p>
 </div>
 </div>
 
-<div className="flex gap-5 group cursor-default" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<div className="flex gap-5 group cursor-default" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
 <div className="w-8 h-8 rounded-full bg-[#0B0F14] border border-white/10 flex-shrink-0 flex items-center justify-center text-[10px] font-mono font-bold text-slate-400">
                   MK
                 </div>
@@ -2034,7 +2076,7 @@ gtag('config', 'G-2M6V79H761');
 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
 </svg>
 </div>
-<p className="text-xs font-sans text-slate-400 leading-relaxed" data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<p className="text-xs font-sans text-slate-400 leading-relaxed" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
                     "A partnership that feels like an extension of our own
                     team."
                   </p>
@@ -2043,43 +2085,43 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="hidden lg:block border-r border-white/10 bg-[#0B0F14]" data-reveal="block" style={{-RevealDelay: '340ms'}}></div>
+<div className="hidden lg:block border-r border-white/10 bg-[#0B0F14]" data-reveal="block" style={{'--reveal-delay': '340ms'}}></div>
 
-<div className="lg:col-span-2 grid grid-rows-3 divide-y divide-white/10 bg-[#0B0F14]" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<div className="lg:col-span-2 grid grid-rows-3 divide-y divide-white/10 bg-[#0B0F14]" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
 
-<div className="grid grid-cols-2 divide-x divide-white/10 h-32 lg:h-auto bg-[#111827]/30 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{-RevealDelay: '510ms'}}>
-<div className="px-10 lg:px-12 flex items-center border-l-0" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<div className="grid grid-cols-2 divide-x divide-white/10 h-32 lg:h-auto bg-[#111827]/30 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
+<div className="px-10 lg:px-12 flex items-center border-l-0" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
 <span className="text-4xl md:text-5xl lg:text-6xl font-manrope font-medium tracking-tight text-white">
                   98%
                 </span>
 </div>
-<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
 <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-500 group-hover:text-blue-400 transition-colors">
                   RETENTION RATE
                 </span>
 </div>
 </div>
 
-<div className="grid grid-cols-2 divide-x divide-white/10 h-32 lg:h-auto bg-[#111827]/30 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{-RevealDelay: '765ms'}}>
-<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{-RevealDelay: '0ms'}}>
+<div className="grid grid-cols-2 divide-x divide-white/10 h-32 lg:h-auto bg-[#111827]/30 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{'--reveal-delay': '765ms'}}>
+<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{'--reveal-delay': '0ms'}}>
 <span className="text-4xl md:text-5xl lg:text-6xl font-manrope font-medium tracking-tight text-white">
                   500+
                 </span>
 </div>
-<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{-RevealDelay: '85ms'}}>
+<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{'--reveal-delay': '85ms'}}>
 <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-500 group-hover:text-blue-400 transition-colors">
                   NPS SCORE
                 </span>
 </div>
 </div>
 
-<div className="grid grid-cols-2 divide-x divide-white/10 h-32 lg:h-auto bg-[#111827]/30 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{-RevealDelay: '170ms'}}>
-<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{-RevealDelay: '255ms'}}>
+<div className="grid grid-cols-2 divide-x divide-white/10 h-32 lg:h-auto bg-[#111827]/30 hover:bg-[#111827]/80 transition-colors group" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
+<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{'--reveal-delay': '255ms'}}>
 <span className="text-4xl md:text-5xl lg:text-6xl font-manrope font-medium tracking-tight text-white">
                   85+
                 </span>
 </div>
-<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{-RevealDelay: '340ms'}}>
+<div className="px-10 lg:px-12 flex items-center" data-reveal="block" style={{'--reveal-delay': '340ms'}}>
 <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-500 group-hover:text-blue-400 transition-colors">
                   HAPPY CLIENTS
                 </span>
@@ -2093,12 +2135,12 @@ gtag('config', 'G-2M6V79H761');
 
 
 
-<footer className="bg-[#0B0F14] border border-white/10 pt-20 pb-4 flex flex-col items-center overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full mx-auto shadow-2xl shadow-black/60 border-t-0 max-w-full" data-reveal="block" style={{-RevealDelay: '170ms'}}>
+<footer className="bg-[#0B0F14] border border-white/10 pt-20 pb-4 flex flex-col items-center overflow-hidden w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] lg:w-full mx-auto shadow-2xl shadow-black/60 border-t-0 max-w-full" data-reveal="block" style={{'--reveal-delay': '170ms'}}>
 <div className="w-full mx-auto px-6 lg:px-10">
 
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 mb-16 md:mb-24">
 
-<div className="lg:col-span-5 flex flex-col" data-reveal="block" style={{-RevealDelay: '425ms'}}>
+<div className="lg:col-span-5 flex flex-col" data-reveal="block" style={{'--reveal-delay': '425ms'}}>
 <h3 className="text-base font-semibold text-white uppercase tracking-widest mb-8 font-sans">
               Monitor Different ™
             </h3>
@@ -2130,8 +2172,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-10" data-reveal="block" style={{-RevealDelay: '510ms'}}>
-<div className="" data-reveal="block" style={{-RevealDelay: '595ms'}}>
+<div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-10" data-reveal="block" style={{'--reveal-delay': '510ms'}}>
+<div className="" data-reveal="block" style={{'--reveal-delay': '595ms'}}>
 <h4 className="text-base font-semibold text-white uppercase tracking-widest mb-8 font-sans">
                 Product
               </h4>
@@ -2153,7 +2195,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 </ul>
 </div>
-<div className="" data-reveal="block" style={{-RevealDelay: '680ms'}}>
+<div className="" data-reveal="block" style={{'--reveal-delay': '680ms'}}>
 <h4 className="text-base font-semibold text-white uppercase tracking-widest mb-8 font-sans">
                 Resources
               </h4>
@@ -2170,7 +2212,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 </ul>
 </div>
-<div data-reveal="block" style={{-RevealDelay: '765ms'}}>
+<div data-reveal="block" style={{'--reveal-delay': '765ms'}}>
 <h4 className="text-base font-semibold text-white uppercase tracking-widest mb-8 font-sans">
                 Company
               </h4>

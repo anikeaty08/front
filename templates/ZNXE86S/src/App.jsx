@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -19,6 +55,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -51,7 +93,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="hover:text-white/50 text-sm font-medium text-white" href="#">Contact</a>
 </nav>
 <div className="hidden md:flex gap-3 items-center">
-<a className="hover:text-white/50 text-sm font-medium text-white" href="#">Sign in</a><button className="group relative inline-flex cursor-pointer transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] hover:scale-[1.1] hover:text-white text-xs font-semibold text-white/70 tracking-tight rounded-full pt-[8px] pr-[16px] pb-[8px] pl-[16px] items-center justify-center" style={{boxShadow: 'inset 0 0 0 1px rgba(99,102,241,0.3)', background: 'linear-gradient(135deg,rgba(99,102,241,0.6) 0%,rgba(79,70,229,0.4) 50%,rgba(99,102,241,0.2) 100%)', backdropFilter: 'blur(12px)', border: '0.5px solid rgba(99,102,241,0.2)'}}>
+<a className="hover:text-white/50 text-sm font-medium text-white" href="#">Sign in</a><button className="group relative inline-flex cursor-pointer transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] hover:scale-[1.1] hover:text-white text-xs font-semibold text-white/70 tracking-tight rounded-full pt-[8px] pr-[16px] pb-[8px] pl-[16px] items-center justify-center" style={{boxShadow: 'inset 0 0 0 1px rgba(99, 102, 241, 0.3)', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.6) 0%, rgba(79, 70, 229, 0.4) 50%, rgba(99, 102, 241, 0.2) 100%)', backdropFilter: 'blur(12px)', border: '0.5px solid rgba(99,102,241,0.2)'}}>
 <span className="relative z-10 text-sm font-normal rounded-full">Sign Up</span>
 
 <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 opacity-20 transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] group-hover:opacity-80 text-xs rounded-full" style={{background: 'linear-gradient(90deg,rgba(99,102,241,0) 0%,rgba(99,102,241,1) 50%,rgba(99,102,241,0) 100%)'}}></span>

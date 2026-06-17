@@ -31,16 +31,16 @@ export default function App() {
 
         {/* Vertical dropping lines */}
         <div className="absolute left-1/2 top-[55%] -translate-x-1/2 w-[300px] h-[300px] pointer-events-none z-0">
-          <div className="drop-line absolute left-[35%] top-0 w-[1px] h-32" style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent)', animationDuration: '2s', animationDelay: '0s' }}></div>
-          <div className="drop-line absolute left-[50%] top-10 w-[1px] h-48" style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.6), transparent)', animationDuration: '2.5s', animationDelay: '0.5s' }}></div>
-          <div className="drop-line absolute left-[65%] top-4 w-[1px] h-24" style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.25), transparent)', animationDuration: '3s', animationDelay: '1s' }}></div>
+          <div className="drop-line absolute left-[35%] top-0 w-[1px] h-32" style={{background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent)', animationDuration: '2s', animationDelay: '0s'}}></div>
+          <div className="drop-line absolute left-[50%] top-10 w-[1px] h-48" style={{background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.6), transparent)', animationDuration: '2.5s', animationDelay: '0.5s'}}></div>
+          <div className="drop-line absolute left-[65%] top-4 w-[1px] h-24" style={{background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.25), transparent)', animationDuration: '3s', animationDelay: '1s'}}></div>
         </div>
 
         {/* Content Z-Layering */}
         <div className="relative z-10 flex flex-col h-full w-full px-5 py-8 md:px-10 md:py-10 flex-1">
             
           {/* Navigation */}
-          <nav className="flex items-center justify-between w-full reveal-fade" style={{ transitionDelay: '0.2s' }}>
+          <nav className="flex items-center justify-between w-full reveal-fade" style={{transitionDelay: '0.2s'}}>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
                 <iconify-icon icon="solar:infinity-bold-duotone" class="text-black text-xl"></iconify-icon>
@@ -109,24 +109,24 @@ export default function App() {
             </div>
 
             {/* 01 Detail Marker */}
-            <div className="text-sm font-light tracking-widest text-gray-500 mb-6 flex items-center gap-2 reveal-fade" style={{ transitionDelay: '0.35s' }}>
+            <div className="text-sm font-light tracking-widest text-gray-500 mb-6 flex items-center gap-2 reveal-fade" style={{transitionDelay: '0.35s'}}>
               <span>01</span><div className="w-6 h-px bg-gray-600"></div><span className="">CONCEPT</span>
             </div>
 
             {/* Masked Reveal Headline */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl mb-6 max-w-4xl mx-auto leading-[1.05] drop-shadow-2xl tracking-tight font-extralight text-white gsap-reveal" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              <span className="overflow-hidden inline-flex pb-2"><span className="word inline-block will-change-transform" style={{ transitionDelay: '0.2s' }}>Decentralized</span></span><br/>
-              <span className="overflow-hidden inline-flex pb-2 lg:-ml-2"><span className="word inline-block will-change-transform" style={{ transitionDelay: '0.35s' }}>Planetary</span></span>
-              <span className="overflow-hidden inline-flex pb-2"><span className="word inline-block will-change-transform" style={{ transitionDelay: '0.5s' }}>Infrastructure</span></span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl mb-6 max-w-4xl mx-auto leading-[1.05] drop-shadow-2xl tracking-tight font-extralight text-white gsap-reveal" style={{fontFamily: "'DM Sans', sans-serif"}}>
+              <span className="overflow-hidden inline-flex pb-2"><span className="word inline-block will-change-transform" style={{transitionDelay: '0.2s'}}>Decentralized</span></span><br/>
+              <span className="overflow-hidden inline-flex pb-2 lg:-ml-2"><span className="word inline-block will-change-transform" style={{transitionDelay: '0.35s'}}>Planetary</span></span>
+              <span className="overflow-hidden inline-flex pb-2"><span className="word inline-block will-change-transform" style={{transitionDelay: '0.5s'}}>Infrastructure</span></span>
             </h1>
 
             {/* Subcopy */}
-            <p className="text-base md:text-lg text-gray-400 font-extralight max-w-xl mx-auto mb-10 leading-relaxed reveal-fade" style={{ transitionDelay: '0.65s' }}>
+            <p className="text-base md:text-lg text-gray-400 font-extralight max-w-xl mx-auto mb-10 leading-relaxed reveal-fade" style={{transitionDelay: '0.65s'}}>
               Enabling forward-thinking developers to deploy, manage, and scale edge networks with sub-millisecond latency across the globe.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap justify-center items-center gap-4 reveal-fade" style={{ transitionDelay: '0.8s' }}>
+            <div className="flex flex-wrap justify-center items-center gap-4 reveal-fade" style={{transitionDelay: '0.8s'}}>
               <a href="#" className="px-6 py-3 bg-white text-black rounded-full text-base font-normal hover:bg-gray-100 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                 Deploy Clusters <span className="ml-1 opacity-60">↗</span>
               </a>
@@ -139,7 +139,7 @@ export default function App() {
           </main>
 
           {/* Bottom Footer/Indicators */}
-          <footer className="flex flex-col md:flex-row justify-between items-center md:items-end w-full gap-8 md:gap-0 mt-20 md:mt-0 reveal-fade" style={{ transitionDelay: '0.95s' }}>
+          <footer className="flex flex-col md:flex-row justify-between items-center md:items-end w-full gap-8 md:gap-0 mt-20 md:mt-0 reveal-fade" style={{transitionDelay: '0.95s'}}>
             <div className="flex flex-col items-center md:items-start gap-3">
               <div className="text-sm font-light tracking-widest text-gray-500 flex items-center gap-2">
                 <span>02</span><div className="w-6 h-px bg-gray-600"></div><span>ARCHITECTURE</span>
@@ -169,7 +169,7 @@ export default function App() {
           <div className="text-sm font-light tracking-widest text-gray-500 mb-8 flex items-center gap-2 reveal-fade">
             <span>03</span><div className="w-6 h-px bg-gray-600"></div><span className="">INTEGRATIONS</span>
           </div>
-          <div className="flex justify-center items-center gap-8 md:gap-14 opacity-50 grayscale flex-wrap px-6 reveal-fade w-full max-w-5xl" style={{ transitionDelay: '0.2s' }}>
+          <div className="flex justify-center items-center gap-8 md:gap-14 opacity-50 grayscale flex-wrap px-6 reveal-fade w-full max-w-5xl" style={{transitionDelay: '0.2s'}}>
             <iconify-icon icon="simple-icons:vercel" class="text-3xl md:text-4xl text-white hover:opacity-100 hover:grayscale-0 transition-all duration-300"></iconify-icon>
             <iconify-icon icon="simple-icons:stripe" class="text-3xl md:text-4xl text-white hover:opacity-100 hover:grayscale-0 transition-all duration-300"></iconify-icon>
             <iconify-icon icon="simple-icons:supabase" class="text-3xl md:text-4xl text-white hover:opacity-100 hover:grayscale-0 transition-all duration-300"></iconify-icon>
@@ -185,7 +185,7 @@ export default function App() {
             {/* Top Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 border-b border-white/[0.08]">
               <div className="p-8 lg:p-14 lg:border-r border-white/[0.08] flex flex-col justify-end">
-                <h2 className="text-4xl md:text-5xl font-extralight tracking-tight text-white mb-4 leading-[1.1]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <h2 className="text-4xl md:text-5xl font-extralight tracking-tight text-white mb-4 leading-[1.1]" style={{fontFamily: "'DM Sans', sans-serif"}}>
                   Infrastructure,<br/>Optimized by Intelligence.
                 </h2>
                 <p className="text-base text-gray-400 font-extralight max-w-md">NovaCore is your gateway to building resilient, distributed, high-performance applications.</p>
@@ -246,27 +246,27 @@ export default function App() {
                           <Shield className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
                         </div>
                       </div>
-                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{ transform: 'rotate(60deg) translateX(80px) rotate(-60deg)' }}>
+                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{transform: 'rotate(60deg) translateX(80px) rotate(-60deg)'}}>
                         <div className="w-10 h-10 rounded-full bg-[#080808] border border-white/10 flex items-center justify-center shadow-lg animate-reverse-spin">
                           <Zap className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
                         </div>
                       </div>
-                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{ transform: 'rotate(120deg) translateX(80px) rotate(-120deg)' }}>
+                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{transform: 'rotate(120deg) translateX(80px) rotate(-120deg)'}}>
                         <div className="w-10 h-10 rounded-full bg-[#080808] border border-white/10 flex items-center justify-center shadow-lg animate-reverse-spin">
                           <Activity className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
                         </div>
                       </div>
-                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{ transform: 'rotate(180deg) translateX(80px) rotate(-180deg)' }}>
+                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{transform: 'rotate(180deg) translateX(80px) rotate(-180deg)'}}>
                         <div className="w-10 h-10 rounded-full bg-[#080808] border border-white/10 flex items-center justify-center shadow-lg animate-reverse-spin">
                           <RefreshCw className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
                         </div>
                       </div>
-                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{ transform: 'rotate(240deg) translateX(80px) rotate(-240deg)' }}>
+                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{transform: 'rotate(240deg) translateX(80px) rotate(-240deg)'}}>
                         <div className="w-10 h-10 rounded-full bg-[#080808] border border-white/10 flex items-center justify-center shadow-lg animate-reverse-spin">
                           <Layers className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
                         </div>
                       </div>
-                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{ transform: 'rotate(300deg) translateX(80px) rotate(-300deg)' }}>
+                      <div className="absolute top-1/2 left-1/2 -mt-5 -ml-5" style={{transform: 'rotate(300deg) translateX(80px) rotate(-300deg)'}}>
                         <div className="w-10 h-10 rounded-full bg-[#080808] border border-white/10 flex items-center justify-center shadow-lg animate-reverse-spin">
                           <Network className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
                         </div>
@@ -300,8 +300,8 @@ export default function App() {
                 <div className="relative z-10 h-64 w-full flex flex-col justify-between">
                   <div className="relative w-full h-32 flex items-center justify-center mt-2">
                     <div className="absolute w-[80px] h-[80px] rounded-full border border-orange-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-sonar opacity-0 pointer-events-none"></div>
-                    <div className="absolute w-[80px] h-[80px] rounded-full border border-orange-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-sonar opacity-0 pointer-events-none" style={{ animationDelay: '1.33s' }}></div>
-                    <div className="absolute w-[80px] h-[80px] rounded-full border border-orange-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-sonar opacity-0 pointer-events-none" style={{ animationDelay: '2.66s' }}></div>
+                    <div className="absolute w-[80px] h-[80px] rounded-full border border-orange-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-sonar opacity-0 pointer-events-none" style={{animationDelay: '1.33s'}}></div>
+                    <div className="absolute w-[80px] h-[80px] rounded-full border border-orange-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-sonar opacity-0 pointer-events-none" style={{animationDelay: '2.66s'}}></div>
                   </div>
                   
                   <div className="flex flex-col gap-2 w-full px-2">
@@ -330,7 +330,7 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-12 p-8 lg:p-14 gap-12 items-end border-b border-white/[0.08]">
               <div className="lg:col-span-8 flex flex-col justify-end">
                 <p className="text-sm tracking-wide text-gray-500 font-normal mb-5">Global-scale distribution engine.</p>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-extralight tracking-tight text-white leading-[1.3] max-w-3xl" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-extralight tracking-tight text-white leading-[1.3] max-w-3xl" style={{fontFamily: "'DM Sans', sans-serif"}}>
                   Turn your application into a NovaCore global mesh with zero-config endpoints, adaptive descriptions, and hosted execution.
                 </h2>
               </div>
@@ -359,7 +359,7 @@ export default function App() {
                 <span className="text-orange-500 text-[10px] leading-none">◆</span> Why Nexus?
               </div>
               
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight text-white max-w-2xl leading-[1.1]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight text-white max-w-2xl leading-[1.1]" style={{fontFamily: "'DM Sans', sans-serif"}}>
                 Build at the<br/>speed of thought
               </h2>
             </div>
@@ -495,7 +495,7 @@ export default function App() {
 
         {/* Subscribe */}
         <section className="w-full bg-[#030303] py-24 px-6 relative z-10 flex flex-col items-center justify-center reveal-fade">
-          <h2 className="text-4xl md:text-5xl font-extralight tracking-tight text-white mb-4 text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Subscribe to our newsletter</h2>
+          <h2 className="text-4xl md:text-5xl font-extralight tracking-tight text-white mb-4 text-center" style={{fontFamily: "'DM Sans', sans-serif"}}>Subscribe to our newsletter</h2>
           <p className="text-lg text-gray-400 font-extralight text-center mb-10 max-w-md">Sign up today and get your first 5,000 compute hours free.</p>
           
           <form className="flex flex-col sm:flex-row gap-3 w-full max-w-md mb-8" onSubmit={(e) => e.preventDefault()}>
@@ -528,7 +528,7 @@ export default function App() {
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent pointer-events-none"></div>
 
               <div className="p-10 md:p-14 md:w-[55%] relative z-10 flex flex-col justify-center">
-                <h3 className="text-3xl md:text-4xl font-light tracking-tight text-white mb-4 leading-[1.1]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Experience superior<br/>planetary scaling</h3>
+                <h3 className="text-3xl md:text-4xl font-light tracking-tight text-white mb-4 leading-[1.1]" style={{fontFamily: "'DM Sans', sans-serif"}}>Experience superior<br/>planetary scaling</h3>
                 <p className="text-base text-gray-400 font-extralight mb-8">Deploy across 250+ edge locations globally.</p>
                 <div className="w-max">
                   <a href="#" className="inline-flex px-7 py-3 bg-white text-black rounded-xl text-base font-normal hover:bg-gray-200 transition-colors shadow-sm">Get started</a>
@@ -538,7 +538,7 @@ export default function App() {
               <div className="w-full md:w-[45%] h-56 md:h-auto relative overflow-hidden flex items-center justify-end right-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0c] via-[#0a0a0c]/80 to-transparent z-10 md:w-32"></div>
                 
-                <div className="absolute w-[200%] h-[200%] top-1/2 left-1/2 md:left-[20%] -translate-x-1/2 -translate-y-1/2 z-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.2) 2px, transparent 2px)', backgroundSize: '24px 24px', WebkitMaskImage: 'radial-gradient(ellipse at center, black 10%, transparent 50%)', maskImage: 'radial-gradient(ellipse at center, black 10%, transparent 50%)' }}>
+                <div className="absolute w-[200%] h-[200%] top-1/2 left-1/2 md:left-[20%] -translate-x-1/2 -translate-y-1/2 z-0" style={{backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.2) 2px, transparent 2px)', backgroundSize: '24px 24px', WebkitMaskImage: 'radial-gradient(ellipse at center, black 10%, transparent 50%)', maskImage: 'radial-gradient(ellipse at center, black 10%, transparent 50%)'}}>
                 </div>
 
                 <div className="absolute right-[20%] top-[30%] z-10 p-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm text-white"><MapPin className="w-4 h-4" strokeWidth={2} /></div>

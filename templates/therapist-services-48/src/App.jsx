@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -186,6 +222,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -582,7 +624,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </section>
-<div className="fixed inset-0 z-50 hidden items-center justify-center p-4" id="addon-modal" style={{background: 'rgba(45,42,38,0.5)', backdropFilter: 'blur(4px)'}}>
+<div className="fixed inset-0 z-50 hidden items-center justify-center p-4" id="addon-modal" style={{background: 'rgba(45, 42, 38, 0.5)', backdropFilter: 'blur(4px)'}}>
 <div className="bg-white rounded-3xl max-w-md w-full p-7 fade-in relative max-h-[90vh] overflow-y-auto">
 <button className="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center transition" onclick="closeAddon()">
 <iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>
@@ -859,7 +901,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 </section>
-<div className="fixed inset-0 z-50 hidden items-center justify-center p-4" id="question-modal" style={{background: 'rgba(45,42,38,0.5)', backdropFilter: 'blur(4px)'}}>
+<div className="fixed inset-0 z-50 hidden items-center justify-center p-4" id="question-modal" style={{background: 'rgba(45, 42, 38, 0.5)', backdropFilter: 'blur(4px)'}}>
 <div className="bg-white rounded-3xl max-w-md w-full p-8 fade-in relative max-h-[90vh] overflow-y-auto">
 <button className="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center transition" onclick="closeQuestion()">
 <iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>
@@ -998,7 +1040,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </footer>
 
-<div className="fixed inset-0 z-50 hidden items-center justify-center p-4" id="modal" style={{background: 'rgba(45,42,38,0.5)', backdropFilter: 'blur(4px)'}}>
+<div className="fixed inset-0 z-50 hidden items-center justify-center p-4" id="modal" style={{background: 'rgba(45, 42, 38, 0.5)', backdropFilter: 'blur(4px)'}}>
 <div className="bg-white rounded-3xl max-w-md w-full p-7 fade-in relative max-h-[90vh] overflow-y-auto">
 <button className="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center transition" onclick="closeModal()">
 <iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>

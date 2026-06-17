@@ -13,7 +13,7 @@ window.addEventListener('resize', appHeight)
 appHeight()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <App />
-  </React.StrictMode>,
+  ,
 )

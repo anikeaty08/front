@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -194,6 +230,12 @@ scan: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -211,18 +253,18 @@ scan: {
 <div className="spotlight-overlay"></div>
 
 <div aria-hidden="true" className="laser-beam-container fixed inset-0 z-0 pointer-events-none overflow-hidden">
-<div className="energy-streak layer-far" style={{left: '2%', animationDuration: '13s', animationDelay: '-2s', -StreakOpacity: '0.08'}}></div>
-<div className="energy-streak layer-far hidden md:block" style={{left: '15%', animationDuration: '15s', animationDelay: '-10s', -StreakOpacity: '0.1'}}></div>
-<div className="energy-streak layer-mid" style={{left: '22%', animationDuration: '8s', animationDelay: '-5s', -StreakOpacity: '0.18'}}></div>
-<div className="energy-streak layer-mid" style={{left: '35%', animationDuration: '10s', animationDelay: '-1s', -StreakOpacity: '0.2'}}></div>
-<div className="energy-streak layer-near star hidden md:block" style={{left: '42%', animationDuration: '4s', animationDelay: '-3s', -StreakOpacity: '0.5'}}></div>
-<div className="energy-streak layer-far" style={{left: '50%', animationDuration: '14s', animationDelay: '-12s', -StreakOpacity: '0.09'}}></div>
-<div className="energy-streak layer-mid" style={{left: '60%', animationDuration: '8s', animationDelay: '-8s', -StreakOpacity: '0.19'}}></div>
-<div className="energy-streak layer-near" style={{left: '68%', animationDuration: '5s', animationDelay: '-4s', -StreakOpacity: '0.4'}}></div>
-<div className="energy-streak layer-far hidden md:block" style={{left: '75%', animationDuration: '15s', animationDelay: '-6s', -StreakOpacity: '0.1'}}></div>
-<div className="energy-streak layer-mid" style={{left: '82%', animationDuration: '9s', animationDelay: '-9s', -StreakOpacity: '0.22'}}></div>
-<div className="energy-streak layer-mid" style={{left: '90%', animationDuration: '7s', animationDelay: '-2s', -StreakOpacity: '0.25'}}></div>
-<div className="energy-streak layer-far hidden md:block" style={{left: '96%', animationDuration: '17s', animationDelay: '-10s', -StreakOpacity: '0.08'}}></div>
+<div className="energy-streak layer-far" style={{left: '2%', animationDuration: '13s', animationDelay: '-2s', '--streak-opacity': '0.08'}}></div>
+<div className="energy-streak layer-far hidden md:block" style={{left: '15%', animationDuration: '15s', animationDelay: '-10s', '--streak-opacity': '0.1'}}></div>
+<div className="energy-streak layer-mid" style={{left: '22%', animationDuration: '8s', animationDelay: '-5s', '--streak-opacity': '0.18'}}></div>
+<div className="energy-streak layer-mid" style={{left: '35%', animationDuration: '10s', animationDelay: '-1s', '--streak-opacity': '0.2'}}></div>
+<div className="energy-streak layer-near star hidden md:block" style={{left: '42%', animationDuration: '4s', animationDelay: '-3s', '--streak-opacity': '0.5'}}></div>
+<div className="energy-streak layer-far" style={{left: '50%', animationDuration: '14s', animationDelay: '-12s', '--streak-opacity': '0.09'}}></div>
+<div className="energy-streak layer-mid" style={{left: '60%', animationDuration: '8s', animationDelay: '-8s', '--streak-opacity': '0.19'}}></div>
+<div className="energy-streak layer-near" style={{left: '68%', animationDuration: '5s', animationDelay: '-4s', '--streak-opacity': '0.4'}}></div>
+<div className="energy-streak layer-far hidden md:block" style={{left: '75%', animationDuration: '15s', animationDelay: '-6s', '--streak-opacity': '0.1'}}></div>
+<div className="energy-streak layer-mid" style={{left: '82%', animationDuration: '9s', animationDelay: '-9s', '--streak-opacity': '0.22'}}></div>
+<div className="energy-streak layer-mid" style={{left: '90%', animationDuration: '7s', animationDelay: '-2s', '--streak-opacity': '0.25'}}></div>
+<div className="energy-streak layer-far hidden md:block" style={{left: '96%', animationDuration: '17s', animationDelay: '-10s', '--streak-opacity': '0.08'}}></div>
 </div>
 
 <div className="tech-grid bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)]"></div>
@@ -785,7 +827,7 @@ scan: {
 <div className="absolute inset-0 bg-blue-50/10 dark:bg-[#020204]/70 -z-10 transition-colors duration-500"></div>
 <div aria-hidden="true" className="hidden md:block absolute inset-0 z-0 pointer-events-none chaos-container md:overflow-hidden" id="chaos-container">
 
-<div className="chaos-item jitter" style={{marginLeft: '-320px', marginTop: '-240px', -Mx: '-20px', -My: '-20px', animationDelay: '0s'}}>
+<div className="chaos-item jitter" style={{marginLeft: '-320px', marginTop: '-240px', '--mx': '-20px', '--my': '-20px', animationDelay: '0s'}}>
 <div className="flex items-center gap-3 px-5 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-full shadow-lg border border-white/50 dark:border-white/10">
 <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
 <iconify-icon className="text-slate-600 dark:text-slate-400" icon="lucide:mail" width="20"></iconify-icon>
@@ -794,30 +836,30 @@ scan: {
             </span>
 </div>
 </div>
-<div className="chaos-item idle" style={{marginLeft: '-380px', marginTop: '-40px', -Mx: '-40px', -My: '10px', animationDelay: '0.2s'}}>
+<div className="chaos-item idle" style={{marginLeft: '-380px', marginTop: '-40px', '--mx': '-40px', '--my': '10px', animationDelay: '0.2s'}}>
 <div className="p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-3xl shadow-xl border border-slate-200/50 dark:border-white/10">
 <iconify-icon icon="logos:whatsapp-icon" width="26"></iconify-icon>
 </div>
 </div>
-<div className="chaos-item idle" style={{marginLeft: '-300px', marginTop: '160px', -Mx: '-15px', -My: '30px', animationDelay: '0.5s'}}>
+<div className="chaos-item idle" style={{marginLeft: '-300px', marginTop: '160px', '--mx': '-15px', '--my': '30px', animationDelay: '0.5s'}}>
 <div className="flex items-center gap-3 px-5 py-2.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-xl shadow-lg border border-red-100 dark:border-red-500/20">
 <iconify-icon className="text-red-500" icon="lucide:phone-missed" width="20"></iconify-icon>
 <span className="text-xs font-mono text-slate-500">0412...</span>
 </div>
 </div>
-<div className="chaos-item jitter" style={{marginLeft: '-220px', marginTop: '300px', -Mx: '-30px', -My: '20px', animationDelay: '0.1s'}}>
+<div className="chaos-item jitter" style={{marginLeft: '-220px', marginTop: '300px', '--mx': '-30px', '--my': '20px', animationDelay: '0.1s'}}>
 <div className="flex items-center gap-3 px-4 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full shadow-lg border border-blue-100 dark:border-blue-500/20">
 <iconify-icon icon="logos:messenger" width="22"></iconify-icon>
 <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
 </div>
 </div>
-<div className="chaos-item idle" style={{marginLeft: '-120px', marginTop: '-340px', -Mx: '-10px', -My: '-30px', animationDelay: '1.2s'}}>
+<div className="chaos-item idle" style={{marginLeft: '-120px', marginTop: '-340px', '--mx': '-10px', '--my': '-30px', animationDelay: '1.2s'}}>
 <div className="w-12 h-12 flex items-center justify-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full shadow border border-slate-100 dark:border-white/10">
 <iconify-icon className="text-slate-400" icon="lucide:message-square" width="20"></iconify-icon>
 </div>
 </div>
 
-<div className="chaos-item idle" style={{marginLeft: '320px', marginTop: '-220px', -Mx: '20px', -My: '-25px', animationDelay: '0.7s'}}>
+<div className="chaos-item idle" style={{marginLeft: '320px', marginTop: '-220px', '--mx': '20px', '--my': '-25px', animationDelay: '0.7s'}}>
 <div className="flex items-center gap-3 px-5 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200 dark:border-white/10">
 <iconify-icon className="text-orange-500" icon="lucide:calendar" width="20"></iconify-icon>
 <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -825,24 +867,24 @@ scan: {
             </span>
 </div>
 </div>
-<div className="chaos-item jitter" style={{marginLeft: '380px', marginTop: '-20px', -Mx: '15px', -My: '5px', animationDelay: '0.3s'}}>
+<div className="chaos-item jitter" style={{marginLeft: '380px', marginTop: '-20px', '--mx': '15px', '--my': '5px', animationDelay: '0.3s'}}>
 <div className="p-3.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-full shadow-lg border border-pink-100 dark:border-pink-500/20">
 <iconify-icon icon="skill-icons:instagram" width="24"></iconify-icon>
 </div>
 </div>
-<div className="chaos-item idle" style={{marginLeft: '300px', marginTop: '180px', -Mx: '40px', -My: '15px', animationDelay: '0.9s'}}>
+<div className="chaos-item idle" style={{marginLeft: '300px', marginTop: '180px', '--mx': '40px', '--my': '15px', animationDelay: '0.9s'}}>
 <div className="flex flex-col gap-1.5 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-xl shadow-lg border border-slate-200 dark:border-white/10">
 <div className="h-1.5 w-16 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
 <div className="h-1.5 w-11 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
 </div>
 </div>
-<div className="chaos-item idle" style={{marginLeft: '220px', marginTop: '320px', -Mx: '25px', -My: '40px', animationDelay: '1.5s'}}>
+<div className="chaos-item idle" style={{marginLeft: '220px', marginTop: '320px', '--mx': '25px', '--my': '40px', animationDelay: '1.5s'}}>
 <div className="flex items-center gap-3 px-5 py-2.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full shadow-md border border-slate-100 dark:border-white/10">
 <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
 <span className="text-xs text-slate-500">Lead #291</span>
 </div>
 </div>
-<div className="chaos-item jitter" style={{marginLeft: '100px', marginTop: '-310px', -Mx: '50px', -My: '-10px', animationDelay: '0.4s'}}>
+<div className="chaos-item jitter" style={{marginLeft: '100px', marginTop: '-310px', '--mx': '50px', '--my': '-10px', animationDelay: '0.4s'}}>
 <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
 <iconify-icon className="text-blue-500" icon="lucide:at-sign" width="18"></iconify-icon>
 </div>
@@ -1093,12 +1135,12 @@ scan: {
 <section className="relative py-24 bg-transparent border-t border-slate-200 dark:border-white/5" id="pricing">
 <div className="absolute inset-0 bg-slate-50/10 dark:bg-[#020204]/70 -z-10 transition-colors duration-500"></div>
 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-<div className="energy-streak layer-mid" style={{left: '16.66%', animationDuration: '14s', animationDelay: '-4s', -StreakColor: 'rgba(180,140,100,0.5)', -StreakOpacity: '0.2'}}></div>
-<div className="energy-streak layer-near star hidden md:block" style={{left: '20%', animationDuration: '8s', animationDelay: '-1s', -StreakColor: 'rgba(210,180,140,0.6)', -StreakOpacity: '0.5'}}></div>
-<div className="energy-streak layer-mid" style={{left: '50%', animationDuration: '16s', animationDelay: '-8s', -StreakColor: 'rgba(148,163,184,0.5)', -StreakOpacity: '0.2'}}></div>
-<div className="energy-streak layer-far hidden md:block" style={{left: '45%', animationDuration: '25s', animationDelay: '-15s', -StreakColor: 'rgba(148,163,184,0.3)', -StreakOpacity: '0.1'}}></div>
-<div className="energy-streak layer-mid" style={{left: '83.33%', animationDuration: '15s', animationDelay: '-2s', -StreakColor: 'rgba(234,179,8,0.5)', -StreakOpacity: '0.2'}}></div>
-<div className="energy-streak layer-near hidden md:block" style={{left: '88%', animationDuration: '9s', animationDelay: '-5s', -StreakColor: 'rgba(250,204,21,0.5)', -StreakOpacity: '0.4'}}></div>
+<div className="energy-streak layer-mid" style={{left: '16.66%', animationDuration: '14s', animationDelay: '-4s', '--streak-color': 'rgba(180,140,100,0.5)', '--streak-opacity': '0.2'}}></div>
+<div className="energy-streak layer-near star hidden md:block" style={{left: '20%', animationDuration: '8s', animationDelay: '-1s', '--streak-color': 'rgba(210,180,140,0.6)', '--streak-opacity': '0.5'}}></div>
+<div className="energy-streak layer-mid" style={{left: '50%', animationDuration: '16s', animationDelay: '-8s', '--streak-color': 'rgba(148,163,184,0.5)', '--streak-opacity': '0.2'}}></div>
+<div className="energy-streak layer-far hidden md:block" style={{left: '45%', animationDuration: '25s', animationDelay: '-15s', '--streak-color': 'rgba(148,163,184,0.3)', '--streak-opacity': '0.1'}}></div>
+<div className="energy-streak layer-mid" style={{left: '83.33%', animationDuration: '15s', animationDelay: '-2s', '--streak-color': 'rgba(234,179,8,0.5)', '--streak-opacity': '0.2'}}></div>
+<div className="energy-streak layer-near hidden md:block" style={{left: '88%', animationDuration: '9s', animationDelay: '-5s', '--streak-color': 'rgba(250,204,21,0.5)', '--streak-opacity': '0.4'}}></div>
 </div>
 <div className="max-w-7xl mx-auto px-6 relative z-10">
 <div className="text-center mb-16">

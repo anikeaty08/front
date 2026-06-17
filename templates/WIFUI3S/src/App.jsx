@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 addEventListener('DOMContentLoaded', () => lucide.createIcons());
@@ -49,6 +85,12 @@ addEventListener('DOMContentLoaded',() => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -63,7 +105,7 @@ addEventListener('DOMContentLoaded',() => {
 
 <header className="fixed top-0 left-0 w-full z-30 backdrop-blur-md">
 <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-<a className="text-xl font-semibold" href="#" style={{fontFamily: '\'Lora\',serif'}}>Coffee Growth</a>
+<a className="text-xl font-semibold" href="#" style={{fontFamily: '\'Lora\', serif'}}>Coffee Growth</a>
 <nav className="hidden md:flex gap-10 text-sm items-center">
 <a className="hover:opacity-70 transition" href="#services">Szolgáltatások</a>
 <a className="hover:opacity-70 transition" href="#pricing">Csomagok</a>
@@ -77,7 +119,7 @@ addEventListener('DOMContentLoaded',() => {
 
 <section className="relative min-h-[680px] flex flex-col-reverse md:flex-row items-center justify-center pt-28 md:pt-44 lg:pt-36">
 <div className="w-full md:w-1/2 px-6 md:px-10 lg:px-16 space-y-8">
-<h1 className="text-[42px] md:text-[56px] lg:text-[68px] leading-tight font-semibold" style={{fontFamily: '\'Lora\',serif'}}>Brew your next <span className="text-[#FF7033]">growth</span></h1>
+<h1 className="text-[42px] md:text-[56px] lg:text-[68px] leading-tight font-semibold" style={{fontFamily: '\'Lora\', serif'}}>Brew your next <span className="text-[#FF7033]">growth</span></h1>
 <p className="text-base md:text-lg max-w-md">Adat-vezérelt marketing kávézóknak – forgalomnövelés, amely épp olyan friss, mint a reggeli espresso.</p>
 <div className="flex flex-col sm:flex-row gap-4">
 <button aria-label="Ingyenes konzultáció" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#FF7033] text-white font-medium hover:bg-[#e45e27] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF7033]">
@@ -96,13 +138,13 @@ addEventListener('DOMContentLoaded',() => {
 
 <section className="py-24" id="services">
 <div className="max-w-6xl mx-auto px-6">
-<h2 className="text-4xl md:text-5xl font-semibold text-center mb-20" style={{fontFamily: '\'Lora\',serif'}}>Miért velünk?</h2>
+<h2 className="text-4xl md:text-5xl font-semibold text-center mb-20" style={{fontFamily: '\'Lora\', serif'}}>Miért velünk?</h2>
 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-12">
 <div className="group relative p-10 bg-white border border-[#E7E7EA] rounded-3xl shadow-sm hover:shadow-md transition">
 <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#121212] text-white mb-6">
 <i className="w-5 h-5" data-lucide="target"></i>
 </div>
-<h3 className="text-lg font-medium mb-3" style={{fontFamily: '\'Lora\',serif'}}>Célzott stratégia</h3>
+<h3 className="text-lg font-medium mb-3" style={{fontFamily: '\'Lora\', serif'}}>Célzott stratégia</h3>
 <p className="text-sm leading-relaxed">Nem hasraütés, hanem adatalapú döntések, így a költés minden forintja megtérül.</p>
 <span className="absolute inset-0 rounded-3xl border border-transparent group-hover:border-[#121212]/10"></span>
 </div>
@@ -110,7 +152,7 @@ addEventListener('DOMContentLoaded',() => {
 <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#121212] text-white mb-6">
 <i className="w-5 h-5" data-lucide="activity"></i>
 </div>
-<h3 className="text-lg font-medium mb-3" style={{fontFamily: '\'Lora\',serif'}}>Folyamatos optimalizálás</h3>
+<h3 className="text-lg font-medium mb-3" style={{fontFamily: '\'Lora\', serif'}}>Folyamatos optimalizálás</h3>
 <p className="text-sm leading-relaxed">Heti A/B tesztek, kampányfinomhangolás és átlátható riportok.</p>
 <span className="absolute inset-0 rounded-3xl border border-transparent group-hover:border-[#121212]/10"></span>
 </div>
@@ -118,7 +160,7 @@ addEventListener('DOMContentLoaded',() => {
 <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#121212] text-white mb-6">
 <i className="w-5 h-5" data-lucide="coffee"></i>
 </div>
-<h3 className="text-lg font-medium mb-3" style={{fontFamily: '\'Lora\',serif'}}>Kávézó-szakértők</h3>
+<h3 className="text-lg font-medium mb-3" style={{fontFamily: '\'Lora\', serif'}}>Kávézó-szakértők</h3>
 <p className="text-sm leading-relaxed">Csapatunk baristákból és marketingesekből áll – tudjuk, mire van szükséged.</p>
 <span className="absolute inset-0 rounded-3xl border border-transparent group-hover:border-[#121212]/10"></span>
 </div>
@@ -128,10 +170,10 @@ addEventListener('DOMContentLoaded',() => {
 
 <section className="py-24" id="story">
 <div className="max-w-5xl mx-auto px-6 text-center space-y-10">
-<h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight" style={{fontFamily: '\'Lora\',serif'}}>
+<h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight" style={{fontFamily: '\'Lora\', serif'}}>
       A kávé mögött rejlő történet
     </h1>
-<h2 className="text-2xl md:text-3xl font-medium" style={{fontFamily: '\'Lora\',serif'}}>
+<h2 className="text-2xl md:text-3xl font-medium" style={{fontFamily: '\'Lora\', serif'}}>
       Szenvedélyből született marketing
     </h2>
 <p className="max-w-3xl mx-auto text-base md:text-lg">
@@ -146,7 +188,7 @@ addEventListener('DOMContentLoaded',() => {
 <section className="py-24" id="testimonials">
 <div className="max-w-6xl mx-auto px-6">
 <div className="flex items-center justify-between mb-12">
-<h2 className="text-4xl md:text-5xl font-semibold" style={{fontFamily: '\'Lora\',serif'}}>Vélemények</h2>
+<h2 className="text-4xl md:text-5xl font-semibold" style={{fontFamily: '\'Lora\', serif'}}>Vélemények</h2>
 <div className="flex gap-4">
 <button aria-label="Előző" className="p-3 rounded-full border border-[#D7D7DB] hover:bg-[#F0F0F3] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF7033]" id="prevTestimonial">
 <i className="w-5 h-5" data-lucide="chevron-left"></i>
@@ -166,7 +208,7 @@ addEventListener('DOMContentLoaded',() => {
 <path d="M7.17 6.17a4 4 0 1 1 5.66 5.66L8 16H4v-4l3.17-5.83ZM19.17 6.17a4 4 0 1 1 5.66 5.66L20 16h-4v-4l3.17-5.83Z" fill="currentColor"></path>
 </svg>
 <p className="mt-4 mb-6 text-sm leading-relaxed grow">quoteText</p>
-<div className="text-sm font-medium" style={{fontFamily: '\'Lora\',serif'}}>quoteAuthor</div>
+<div className="text-sm font-medium" style={{fontFamily: '\'Lora\', serif'}}>quoteAuthor</div>
 </div>
 </div>
 </template>
@@ -181,10 +223,10 @@ addEventListener('DOMContentLoaded',() => {
 
 <section className="py-24 bg-[#FBFBFD]" id="pricing">
 <div className="max-w-6xl mx-auto px-6">
-<h2 className="text-4xl md:text-5xl font-semibold text-center mb-20" style={{fontFamily: '\'Lora\',serif'}}>Csomagok</h2>
+<h2 className="text-4xl md:text-5xl font-semibold text-center mb-20" style={{fontFamily: '\'Lora\', serif'}}>Csomagok</h2>
 <div className="grid lg:grid-cols-3 gap-10">
 <div className="relative bg-white border border-[#E7E7EA] rounded-3xl p-12 flex flex-col space-y-8 shadow-sm hover:shadow-md transition">
-<h3 className="text-xl font-medium" style={{fontFamily: '\'Lora\',serif'}}>Alap</h3>
+<h3 className="text-xl font-medium" style={{fontFamily: '\'Lora\', serif'}}>Alap</h3>
 <p className="text-4xl font-semibold text-[#121212]">39 000 Ft</p>
 <ul className="space-y-3 text-sm">
 <li className="flex items-center gap-3"><i className="w-4 h-4 text-[#FF7033]" data-lucide="check"></i> Landing oldal</li>
@@ -194,7 +236,7 @@ addEventListener('DOMContentLoaded',() => {
 <span className="absolute inset-0 rounded-3xl border border-transparent hover:border-[#121212]/10"></span>
 </div>
 <div className="relative bg-[#121212] text-white rounded-3xl p-12 flex flex-col space-y-8 shadow-lg hover:shadow-xl transition">
-<h3 className="text-xl font-medium" style={{fontFamily: '\'Lora\',serif'}}>Profi</h3>
+<h3 className="text-xl font-medium" style={{fontFamily: '\'Lora\', serif'}}>Profi</h3>
 <p className="text-4xl font-semibold">79 000 Ft</p>
 <ul className="space-y-3 text-sm">
 <li className="flex items-center gap-3"><i className="w-4 h-4 text-[#FFB87A]" data-lucide="check"></i> Landing + hirdetések</li>
@@ -205,7 +247,7 @@ addEventListener('DOMContentLoaded',() => {
 <span className="absolute inset-0 rounded-3xl border border-transparent hover:border-white/10"></span>
 </div>
 <div className="relative bg-white border border-[#E7E7EA] rounded-3xl p-12 flex flex-col space-y-8 shadow-sm hover:shadow-md transition">
-<h3 className="text-xl font-medium" style={{fontFamily: '\'Lora\',serif'}}>Prémium</h3>
+<h3 className="text-xl font-medium" style={{fontFamily: '\'Lora\', serif'}}>Prémium</h3>
 <p className="text-4xl font-semibold text-[#121212]">129 000 Ft</p>
 <ul className="space-y-3 text-sm">
 <li className="flex items-center gap-3"><i className="w-4 h-4 text-[#FF7033]" data-lucide="check"></i> Teljes menedzsment</li>
@@ -227,7 +269,7 @@ addEventListener('DOMContentLoaded',() => {
 </div>
 <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-20">
 <div className="text-white space-y-6">
-<h2 className="text-4xl md:text-5xl font-semibold" style={{fontFamily: '\'Lora\',serif'}}>Lépjünk kapcsolatba</h2>
+<h2 className="text-4xl md:text-5xl font-semibold" style={{fontFamily: '\'Lora\', serif'}}>Lépjünk kapcsolatba</h2>
 <p className="max-w-sm">Töltsd ki az űrlapot, és 24 órán belül visszahívunk.</p>
 <div className="flex items-center gap-3 text-sm"><i className="w-4 h-4" data-lucide="phone"></i> +36 30 123 4567</div>
 <div className="flex items-center gap-3 text-sm"><i className="w-4 h-4" data-lucide="mail"></i> hello@coffeegrowth.hu</div>

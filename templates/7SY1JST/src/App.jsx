@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -179,6 +215,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -188,20 +230,20 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <nav className="fixed top-0 left-0 w-full z-40 bg-black/70 backdrop-blur border-b border-zinc-800">
 <div className="max-w-6xl mx-auto px-4 sm:px-8 flex h-16 items-center justify-between">
 <div className="flex items-center gap-2">
-<span className="text-2xl select-none tracking-widest text-white font-light" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>
+<span className="text-2xl select-none tracking-widest text-white font-light" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>
           Nordik
         </span>
 </div>
 <ul className="flex items-center gap-5 sm:gap-8">
-<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>Home</a></li>
-<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>Location</a></li>
-<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>Experience</a></li>
-<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>FAQ</a></li>
-<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>Contact</a></li>
-<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>About</a></li>
+<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>Home</a></li>
+<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>Location</a></li>
+<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>Experience</a></li>
+<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>FAQ</a></li>
+<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>Contact</a></li>
+<li><a className="text-zinc-200 hover:text-white hover:underline underline-offset-4 text-base font-light transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>About</a></li>
 </ul>
 <div>
-<a className="inline-block bg-white text-black font-light text-base px-5 py-2 rounded-full shadow hover:bg-zinc-100 transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>
+<a className="inline-block bg-white text-black font-light text-base px-5 py-2 rounded-full shadow hover:bg-zinc-100 transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>
           Reserve Now
         </a>
 </div>
@@ -218,31 +260,31 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="hero-overlay"></div>
 
 <div className="hero-headline-center">
-<h1 className="fade-up-init text-white text-5xl md:text-6xl font-light tracking-wide mb-6 drop-shadow-lg" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300', letterSpacing: '0.06em', textShadow: '0 8px 40px #000c,0 2px 12px #000a'}}>
+<h1 className="fade-up-init text-white text-5xl md:text-6xl font-light tracking-wide mb-6 drop-shadow-lg" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300', letterSpacing: '0.06em', textShadow: '0 8px 40px #000c, 0 2px 12px #000a'}}>
           Nordik Experience
         </h1>
 <div className="fade-up-init mb-7">
-<p className="text-zinc-200 text-lg md:text-2xl font-light leading-snug drop-shadow mb-1" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300', textShadow: '0 2px 8px #000b,0 1px 4px #0009'}}>
+<p className="text-zinc-200 text-lg md:text-2xl font-light leading-snug drop-shadow mb-1" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300', textShadow: '0 2px 8px #000b, 0 1px 4px #0009'}}>
             Escape the ordinary with our signature luxury camping options.
           </p>
-<p className="text-zinc-200 text-lg md:text-2xl font-light leading-snug drop-shadow" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300', textShadow: '0 2px 8px #000b,0 1px 4px #0009'}}>
+<p className="text-zinc-200 text-lg md:text-2xl font-light leading-snug drop-shadow" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300', textShadow: '0 2px 8px #000b, 0 1px 4px #0009'}}>
             Discover three unforgettable locations.
           </p>
 </div>
 <div className="fade-up-init flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
-<a className="bg-white text-black font-light text-base px-7 py-3 rounded-full shadow hover:bg-zinc-100 transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>
+<a className="bg-white text-black font-light text-base px-7 py-3 rounded-full shadow hover:bg-zinc-100 transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>
             Reserve Now
           </a>
-<a className="bg-zinc-900/70 border border-white/20 text-white font-light text-base px-7 py-3 rounded-full shadow hover:bg-zinc-800/80 hover:border-white/30 transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>
+<a className="bg-zinc-900/70 border border-white/20 text-white font-light text-base px-7 py-3 rounded-full shadow hover:bg-zinc-800/80 hover:border-white/30 transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>
             Explore Locations
           </a>
 </div>
 </div>
 
 <div className="carousel-text">
-<span className="carousel-headline active" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>Forest Misty</span>
-<span className="carousel-headline" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>Mountain Nordik</span>
-<span className="carousel-headline" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>Beach Heavy</span>
+<span className="carousel-headline active" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>Forest Misty</span>
+<span className="carousel-headline" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>Mountain Nordik</span>
+<span className="carousel-headline" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>Beach Heavy</span>
 </div>
 
 <div className="carousel-dots">
@@ -264,20 +306,20 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </button>
 
-<section className="relative w-full bg-zinc-950 border-t border-zinc-800 pt-24 pb-16 px-4" id="main-content" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>
+<section className="relative w-full bg-zinc-950 border-t border-zinc-800 pt-24 pb-16 px-4" id="main-content" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>
 <div className="max-w-2xl mx-auto text-center flex flex-col items-center gap-6">
-<div className="fade-up-init uppercase tracking-widest text-zinc-400 text-xs font-light mb-1" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300', letterSpacing: '0.13em'}}>
+<div className="fade-up-init uppercase tracking-widest text-zinc-400 text-xs font-light mb-1" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300', letterSpacing: '0.13em'}}>
         Nature &amp; Comfort
       </div>
-<h2 className="fade-up-init text-3xl md:text-4xl font-light tracking-wide text-white leading-tight mb-2" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300', letterSpacing: '0.06em'}}>
+<h2 className="fade-up-init text-3xl md:text-4xl font-light tracking-wide text-white leading-tight mb-2" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300', letterSpacing: '0.06em'}}>
         A Luxury Retreat In The Wild
       </h2>
-<p className="fade-up-init text-zinc-300 text-base md:text-lg font-light leading-relaxed mb-2" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>
+<p className="fade-up-init text-zinc-300 text-base md:text-lg font-light leading-relaxed mb-2" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>
         Nestled between forest trails, coastal breeze, and mountain serenity, our campsites offer a unique experience where nature and comfort meet. Whether you're waking up by a peaceful lake, watching the stars from a mountain ridge, or falling asleep to the sound of waves on the beach, each location is carefully designed for relaxation and connection with the outdoors.<br/><br/>
         Located just minutes from local gems and scenic routes, our three destinations are the perfect escape for families, couples, and solo travelers seeking adventure or tranquility.
       </p>
 <div className="fade-up-init">
-<a className="inline-block bg-white text-black font-light text-base px-6 py-3 rounded-full shadow hover:bg-zinc-100 transition" href="#" style={{fontFamily: '\'League Spartan\',sans-serif', fontWeight: '300'}}>
+<a className="inline-block bg-white text-black font-light text-base px-6 py-3 rounded-full shadow hover:bg-zinc-100 transition" href="#" style={{fontFamily: '\'League Spartan\', sans-serif', fontWeight: '300'}}>
           Reserve Now
         </a>
 </div>

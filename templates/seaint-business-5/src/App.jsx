@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -144,6 +180,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -173,7 +215,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="transition-colors hover:text-white" href="#">Company</a>
 </nav>
 <div className="flex items-center justify-center gap-3">
-<a className="group relative inline-flex items-center gap-2 rounded-md bg-gradient-to-br from-white/5 via-white/10 to-white/5 px-5 py-3 text-sm font-medium text-white/90 shadow-[0_0_15px_rgba(255,255,255,0.05)] ring-0 transition-all duration-300 hover:scale-105 hover:border-slate-400/40 hover:bg-gradient-to-br hover:from-slate-500/30 hover:to-slate-500/20 hover:text-white" href="#" style={{-BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}>
+<a className="group relative inline-flex items-center gap-2 rounded-md bg-gradient-to-br from-white/5 via-white/10 to-white/5 px-5 py-3 text-sm font-medium text-white/90 shadow-[0_0_15px_rgba(255,255,255,0.05)] ring-0 transition-all duration-300 hover:scale-105 hover:border-slate-400/40 hover:bg-gradient-to-br hover:from-slate-500/30 hover:to-slate-500/20 hover:text-white" href="#" style={{'--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}>
                             Book Demo
                             <svg className="lucide lucide-calendar h-4 w-4 stroke-[1.5] text-white" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
 </a>
@@ -224,7 +266,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
 
-<div className="btn-wrapper" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3'}}>
+<div className="btn-wrapper" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3'}}>
 <div className="line horizontal top"></div>
 <div className="line vertical right"></div>
 <div className="line horizontal bottom"></div>
@@ -241,7 +283,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </button>
 </div>
-<a className="relative inline-flex items-center gap-2 rounded-md bg-gradient-to-br from-white/5 via-white/10 to-white/5 px-5 py-3 text-base font-medium text-white/90 shadow-[0_0_15px_rgba(255,255,255,0.05)] ring-0 transition-all duration-300 hover:scale-105 hover:border-slate-400/40 hover:bg-gradient-to-br hover:from-slate-500/30 hover:to-slate-500/20 hover:text-white" href="#" style={{-BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}>
+<a className="relative inline-flex items-center gap-2 rounded-md bg-gradient-to-br from-white/5 via-white/10 to-white/5 px-5 py-3 text-base font-medium text-white/90 shadow-[0_0_15px_rgba(255,255,255,0.05)] ring-0 transition-all duration-300 hover:scale-105 hover:border-slate-400/40 hover:bg-gradient-to-br hover:from-slate-500/30 hover:to-slate-500/20 hover:text-white" href="#" style={{'--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}>
                             Talk to Sales
                             <svg className="lucide lucide-message-square h-4 w-4 fill-current stroke-[1.5]" data-lucide="message-square" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
 </a>
@@ -709,7 +751,7 @@ forecast.save("v2.1", "Board meeting prep");</pre>
 </div>
 </div>
 <div className="mt-10 space-y-3">
-<button className="plan-select-btn group flex w-full items-center justify-between rounded-2xl bg-gradient-to-br from-white/10 to-white/0 bg-white/[0.08] p-5 text-left ring-1 ring-white/20 transition hover:bg-white/[0.07]" data-plan-select="business" style={{-BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<button className="plan-select-btn group flex w-full items-center justify-between rounded-2xl bg-gradient-to-br from-white/10 to-white/0 bg-white/[0.08] p-5 text-left ring-1 ring-white/20 transition hover:bg-white/[0.07]" data-plan-select="business" style={{'--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div>
 <p className="text-lg font-semibold tracking-tight text-white">Business</p>
 <p className="mt-1 text-[12px] uppercase tracking-tight text-zinc-300">Launch fast, scale faster.</p>
@@ -718,7 +760,7 @@ forecast.save("v2.1", "Board meeting prep");</pre>
 <svg className="lucide lucide-arrow-right h-[18px] w-[18px]" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </span>
 </button>
-<button className="plan-select-btn group flex w-full items-center justify-between rounded-2xl bg-gradient-to-br from-white/10 to-white/0 p-5 text-left ring-0 transition hover:bg-white/[0.07]" data-plan-select="enterprise" style={{-BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<button className="plan-select-btn group flex w-full items-center justify-between rounded-2xl bg-gradient-to-br from-white/10 to-white/0 p-5 text-left ring-0 transition hover:bg-white/[0.07]" data-plan-select="enterprise" style={{'--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div>
 <p className="text-lg font-semibold tracking-tight text-white">Enterprise</p>
 <p className="mt-1 text-[12px] uppercase tracking-tight text-zinc-300">Global compliance &amp; security.</p>
@@ -729,7 +771,7 @@ forecast.save("v2.1", "Board meeting prep");</pre>
 </button>
 </div>
 </div>
-<div className="relative mt-8 mb-8 ml-8 mr-8 flex max-w-xl flex-col gap-6 rounded-2xl bg-gradient-to-br from-white/0 via-white/10 to-white/0 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-8" style={{-BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="relative mt-8 mb-8 ml-8 mr-8 flex max-w-xl flex-col gap-6 rounded-2xl bg-gradient-to-br from-white/0 via-white/10 to-white/0 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-8" style={{'--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-[0.05]" style={{background: 'radial-gradient(900px 360px at 20% -10%, rgba(255,255,255,0.12) 15%, transparent 60%)'}}></div>
 <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
 <h3 className="text-center text-2xl font-semibold tracking-tight text-white sm:text-left" id="planName">Business</h3>
@@ -743,7 +785,7 @@ forecast.save("v2.1", "Board meeting prep");</pre>
 <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
 <p className="text-center text-[12px] uppercase tracking-tight text-zinc-200 sm:text-left" id="planTagline">GREAT FOR TEAMS LAUNCHING THEIR FIRST WORKFLOWS.</p>
 </div>
-<div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/0 p-6" style={{-BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/0 p-6" style={{'--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <ul className="space-y-3 text-sm text-zinc-100" id="featureList"><li className="flex items-start gap-2"><svg className="lucide lucide-check mt-0.5 h-4 w-4 text-blue-400 stroke-[1.5]" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg><span>UP TO 10 USERS</span></li><li className="flex items-start gap-2"><svg className="lucide lucide-check mt-0.5 h-4 w-4 text-blue-400 stroke-[1.5]" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg><span>BASIC REPORTING</span></li><li className="flex items-start gap-2"><svg className="lucide lucide-check mt-0.5 h-4 w-4 text-blue-400 stroke-[1.5]" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg><span>30-DAY AUDIT LOG</span></li><li className="flex items-start gap-2"><svg className="lucide lucide-check mt-0.5 h-4 w-4 text-blue-400 stroke-[1.5]" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg><span>EMAIL SUPPORT</span></li></ul>
 <div className="mt-6">
 <a className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-medium text-neutral-900 shadow-[0_8px_24px_-8px_rgba(255,255,255,0.25)] ring-1 ring-white/20 transition hover:bg-zinc-100" href="#" id="ctaBtn">Get Started</a>

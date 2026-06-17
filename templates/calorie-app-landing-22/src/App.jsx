@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -142,6 +178,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -282,7 +324,7 @@ addUtilities({
 
 <div className="burger-container relative h-[500px] flex flex-col items-center justify-center perspective-[1000px] group cursor-default">
 
-<div className="burger-layer relative z-50 mb-[-10px]" style={{-HoverTranslate: '-60px', -HoverRotate: '-5deg'}}>
+<div className="burger-layer relative z-50 mb-[-10px]" style={{'--hover-translate': '-60px', '--hover-rotate': '-5deg'}}>
 <div className="w-56 h-20 bg-[#F4A261] rounded-t-[5rem] border-2 border-[#E76F51] shadow-lg relative">
 
 <div className="absolute top-4 left-10 w-2 h-1 bg-[#FFE8D6] rounded-full opacity-60 rotate-12"></div>
@@ -299,13 +341,13 @@ addUtilities({
 </div>
 </div>
 
-<div className="burger-layer relative z-40 mb-[-5px]" style={{-HoverTranslate: '-30px', -HoverRotate: '3deg'}}>
+<div className="burger-layer relative z-40 mb-[-5px]" style={{'--hover-translate': '-30px', '--hover-rotate': '3deg'}}>
 <div className="w-60 h-8 bg-[#80B918] rounded-full border border-[#55A630] shadow-md flex items-center justify-center">
 <div className="w-full h-full rounded-full border-b-4 border-white/20"></div>
 </div>
 </div>
 
-<div className="burger-layer relative z-30 mb-[-5px]" style={{-HoverTranslate: '0px', -HoverRotate: '-2deg'}}>
+<div className="burger-layer relative z-30 mb-[-5px]" style={{'--hover-translate': '0px', '--hover-rotate': '-2deg'}}>
 <div className="w-52 h-4 bg-[#E63946] rounded-2xl border border-[#D00000] shadow-sm"></div>
 
 <div className="absolute left-[110%] top-1/2 -translate-y-1/2 flex items-center ingredient-label" style={{transitionDelay: '100ms'}}>
@@ -317,11 +359,11 @@ addUtilities({
 </div>
 </div>
 
-<div className="burger-layer relative z-20 mb-[-5px]" style={{-HoverTranslate: '30px', -HoverRotate: '4deg'}}>
+<div className="burger-layer relative z-20 mb-[-5px]" style={{'--hover-translate': '30px', '--hover-rotate': '4deg'}}>
 <div className="w-54 h-3 bg-[#FFD60A] rounded-md border border-[#FFC300] shadow-sm transform -rotate-2 w-[220px]"></div>
 </div>
 
-<div className="burger-layer relative z-10 mb-[-10px]" style={{-HoverTranslate: '60px', -HoverRotate: '-1deg'}}>
+<div className="burger-layer relative z-10 mb-[-10px]" style={{'--hover-translate': '60px', '--hover-rotate': '-1deg'}}>
 <div className="w-56 h-14 bg-[#582F0E] rounded-2xl border border-[#3E1F0B] shadow-lg flex flex-col justify-center px-4">
 <div className="w-full h-1 bg-black/10 rounded-full mb-1"></div>
 <div className="w-full h-1 bg-black/10 rounded-full"></div>
@@ -336,7 +378,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="burger-layer relative z-0" style={{-HoverTranslate: '90px', -HoverRotate: '0deg'}}>
+<div className="burger-layer relative z-0" style={{'--hover-translate': '90px', '--hover-rotate': '0deg'}}>
 <div className="w-56 h-12 bg-[#F4A261] rounded-b-3xl border-2 border-[#E76F51] shadow-lg mt-1"></div>
 </div>
 </div>

@@ -54,7 +54,7 @@ function App() {
               className="md:hidden p-2 -ml-2 text-zinc-500 hover:text-zinc-900 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <iconify-icon icon="solar:hamburger-menu-linear" width="24" height="24" style={{ strokeWidth: "1.5" }}></iconify-icon>
+              <iconify-icon icon="solar:hamburger-menu-linear" width="24" height="24" style={{strokeWidth: "1.5"}}></iconify-icon>
             </button>
 
             {/* Logo */}
@@ -73,13 +73,13 @@ function App() {
             {/* Icons */}
             <div className="flex items-center gap-4">
               <button className="text-zinc-500 hover:text-zinc-900 transition-colors hidden sm:block">
-                <iconify-icon icon="solar:magnifer-linear" width="22" height="22" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:magnifer-linear" width="22" height="22" style={{strokeWidth: "1.5"}}></iconify-icon>
               </button>
               <button className="text-zinc-500 hover:text-zinc-900 transition-colors">
-                <iconify-icon icon="solar:user-linear" width="22" height="22" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:user-linear" width="22" height="22" style={{strokeWidth: "1.5"}}></iconify-icon>
               </button>
               <button className="text-zinc-500 hover:text-zinc-900 transition-colors relative">
-                <iconify-icon icon="solar:cart-large-linear" width="22" height="22" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:cart-large-linear" width="22" height="22" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-zinc-900 rounded-full"></span>
               </button>
             </div>
@@ -116,7 +116,7 @@ function App() {
                 Shop Collection
               </a>
               <a href="#" className="w-full sm:w-auto px-8 py-3.5 bg-white text-zinc-900 text-sm font-medium rounded-full hover:bg-zinc-50 transition-all border border-zinc-200 shadow-sm flex items-center justify-center gap-2">
-                <iconify-icon icon="solar:play-circle-linear" width="20" height="20" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:play-circle-linear" width="20" height="20" style={{strokeWidth: "1.5"}}></iconify-icon>
                 Watch Film
               </a>
             </div>
@@ -138,19 +138,19 @@ function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-zinc-100">
               <div className="flex flex-col items-center text-center px-4">
-                <iconify-icon icon="solar:leaf-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:leaf-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <span className="text-xs font-medium text-zinc-900 tracking-tight">Eco-Materials</span>
               </div>
               <div className="flex flex-col items-center text-center px-4">
-                <iconify-icon icon="solar:wind-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:wind-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <span className="text-xs font-medium text-zinc-900 tracking-tight">Hyper Breathable</span>
               </div>
               <div className="flex flex-col items-center text-center px-4">
-                <iconify-icon icon="solar:cloud-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:cloud-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <span className="text-xs font-medium text-zinc-900 tracking-tight">Cloud Cushioning</span>
               </div>
               <div className="flex flex-col items-center text-center px-4">
-                <iconify-icon icon="solar:shield-check-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:shield-check-linear" width="24" height="24" className="text-zinc-400 mb-3" style={{strokeWidth: "1.5"}}></iconify-icon>
                 <span className="text-xs font-medium text-zinc-900 tracking-tight">Lifetime Guarantee</span>
               </div>
             </div>
@@ -166,7 +166,7 @@ function App() {
                 <p className="text-sm text-zinc-500 font-medium">Explore our latest silhouettes.</p>
               </div>
               <a href="#" className="hidden sm:flex items-center gap-1 text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors">
-                View all <iconify-icon icon="solar:arrow-right-linear" width="16" height="16" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                View all <iconify-icon icon="solar:arrow-right-linear" width="16" height="16" style={{strokeWidth: "1.5"}}></iconify-icon>
               </a>
             </div>
 
@@ -219,20 +219,20 @@ function App() {
                 </p>
                 <ul className="space-y-4 mb-10">
                   <li className="flex items-start gap-3">
-                    <iconify-icon icon="solar:check-circle-linear" width="20" height="20" className="text-zinc-900 mt-0.5" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                    <iconify-icon icon="solar:check-circle-linear" width="20" height="20" className="text-zinc-900 mt-0.5" style={{strokeWidth: "1.5"}}></iconify-icon>
                     <span className="text-sm text-zinc-700 font-medium">100% Recycled mesh uppers</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <iconify-icon icon="solar:check-circle-linear" width="20" height="20" className="text-zinc-900 mt-0.5" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                    <iconify-icon icon="solar:check-circle-linear" width="20" height="20" className="text-zinc-900 mt-0.5" style={{strokeWidth: "1.5"}}></iconify-icon>
                     <span className="text-sm text-zinc-700 font-medium">Algae-based responsive foam midsoles</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <iconify-icon icon="solar:check-circle-linear" width="20" height="20" className="text-zinc-900 mt-0.5" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                    <iconify-icon icon="solar:check-circle-linear" width="20" height="20" className="text-zinc-900 mt-0.5" style={{strokeWidth: "1.5"}}></iconify-icon>
                     <span className="text-sm text-zinc-700 font-medium">Ethically assembled in certified facilities</span>
                   </li>
                 </ul>
                 <a href="#" className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-900 hover:text-zinc-600 transition-colors border-b border-zinc-900 pb-0.5">
-                  Discover our materials <iconify-icon icon="solar:arrow-right-up-linear" width="16" height="16" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                  Discover our materials <iconify-icon icon="solar:arrow-right-up-linear" width="16" height="16" style={{strokeWidth: "1.5"}}></iconify-icon>
                 </a>
               </div>
               <div className="order-1 lg:order-2 relative">
@@ -264,7 +264,7 @@ function App() {
               className="w-full bg-transparent border-b border-zinc-700 text-white placeholder-zinc-500 text-sm py-3 px-0 focus:outline-none focus:border-white transition-colors appearance-none"
             />
             <button type="submit" className="absolute right-0 text-zinc-400 hover:text-white transition-colors">
-              <iconify-icon icon="solar:arrow-right-linear" width="20" height="20" style={{ strokeWidth: "1.5" }}></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" width="20" height="20" style={{strokeWidth: "1.5"}}></iconify-icon>
             </button>
           </form>
         </section>
@@ -315,10 +315,10 @@ function App() {
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-zinc-400 hover:text-zinc-900 transition-colors">
-                <iconify-icon icon="solar:global-linear" width="20" height="20" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:global-linear" width="20" height="20" style={{strokeWidth: "1.5"}}></iconify-icon>
               </a>
               <a href="#" className="text-zinc-400 hover:text-zinc-900 transition-colors">
-                <iconify-icon icon="solar:letter-linear" width="20" height="20" style={{ strokeWidth: "1.5" }}></iconify-icon>
+                <iconify-icon icon="solar:letter-linear" width="20" height="20" style={{strokeWidth: "1.5"}}></iconify-icon>
               </a>
             </div>
           </div>

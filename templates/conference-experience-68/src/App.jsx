@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -39,6 +75,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -177,19 +219,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#E07A5F] mb-3">City Link</p>
 <h3 className="text-xl text-white font-semibold mb-2">Host City DNA</h3>
 <p className="text-sm text-slate-400 mb-4">Indianapolis is Circle City. We translate that local truth into a premium experience motif with rings, orbits, and structured connection moments.</p>
-<span className="ui-tag inline-flex px-2 py-1 rounded border text-[10px] font-mono uppercase tracking-wider" style={{-TagColor: '#E07A5F', borderColor: '#E07A5F55', color: '#E07A5F', background: '#E07A5F1A'}}>Authentic to Place</span>
+<span className="ui-tag inline-flex px-2 py-1 rounded border text-[10px] font-mono uppercase tracking-wider" style={{'--tag-color': '#E07A5F', borderColor: '#E07A5F55', color: '#E07A5F', background: '#E07A5F1A'}}>Authentic to Place</span>
 </article>
 <article className="pillar-card spotlight-card" onmousemove="setSpotlight(event,this)">
 <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#2DF4FF] mb-3">Audience Signal</p>
 <h3 className="text-xl text-white font-semibold mb-2">Premium but Human</h3>
 <p className="text-sm text-slate-400 mb-4">The tone balances sophistication with warmth: cinematic visuals, clear logic, and interaction formats that create trust and utility fast.</p>
-<span className="ui-tag inline-flex px-2 py-1 rounded border text-[10px] font-mono uppercase tracking-wider" style={{-TagColor: '#2DF4FF', borderColor: '#2DF4FF55', color: '#2DF4FF', background: '#2DF4FF1A'}}>Executive-Friendly</span>
+<span className="ui-tag inline-flex px-2 py-1 rounded border text-[10px] font-mono uppercase tracking-wider" style={{'--tag-color': '#2DF4FF', borderColor: '#2DF4FF55', color: '#2DF4FF', background: '#2DF4FF1A'}}>Executive-Friendly</span>
 </article>
 <article className="pillar-card spotlight-card" onmousemove="setSpotlight(event,this)">
 <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#A78BFA] mb-3">Creative Intent</p>
 <h3 className="text-xl text-white font-semibold mb-2">System, Not Decoration</h3>
 <p className="text-sm text-slate-400 mb-4">Every visual choice supports strategy: wayfinding, program framing, content hierarchy, and post-experience follow-through artifacts.</p>
-<span className="ui-tag inline-flex px-2 py-1 rounded border text-[10px] font-mono uppercase tracking-wider" style={{-TagColor: '#A78BFA', borderColor: '#A78BFA55', color: '#A78BFA', background: '#A78BFA1A'}}>Design with Purpose</span>
+<span className="ui-tag inline-flex px-2 py-1 rounded border text-[10px] font-mono uppercase tracking-wider" style={{'--tag-color': '#A78BFA', borderColor: '#A78BFA55', color: '#A78BFA', background: '#A78BFA1A'}}>Design with Purpose</span>
 </article>
 </div>
 </div>

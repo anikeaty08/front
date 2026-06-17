@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -56,6 +92,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -105,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <p className="sm:mt-5 sm:text-base lg:text-lg [animation:fadeSlideIn_1s_ease-out_0.3s_both] animate-on-scroll animate text-sm font-normal text-slate-300 mt-5">Centraliza WhatsApp e Instagram, automatiza respuestas y organiza tus leads en un solo lugar
 </p>
 <div className="flex flex-wrap [animation:fadeSlideIn_1s_ease-out_0.4s_both] animate-on-scroll animate mt-8 gap-x-4 gap-y-4 items-center">
-<a className="group inline-flex items-center justify-center overflow-visible transition-all hover:-translate-y-px hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500/50 isolate text-sm font-semibold text-gray-950 bg-white h-11 rounded-xl ring-gray-200 ring-1 pr-6 pl-6 relative shadow-sm" href="https://cal.com/santiago-silva-lvftf3/30min" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; this.style.setProperty('--x', x + 'px'); this.style.setProperty('--y', y + 'px');" style={{-X: '52px', -Y: '37px', -GlowCore: 'rgba(255, 255, 255, 0.8)', -GlowColor: 'rgba(192, 132, 252, 0.35)', -GlowColorStrong: 'rgba(192, 132, 252, 0.55)'}}>
+<a className="group inline-flex items-center justify-center overflow-visible transition-all hover:-translate-y-px hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500/50 isolate text-sm font-semibold text-gray-950 bg-white h-11 rounded-xl ring-gray-200 ring-1 pr-6 pl-6 relative shadow-sm" href="https://cal.com/santiago-silva-lvftf3/30min" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; this.style.setProperty('--x', x + 'px'); this.style.setProperty('--y', y + 'px');" style={{'--x': '52px', '--y': '37px', '--glow-core': 'rgba(255, 255, 255, 0.8)', '--glow-color': 'rgba(192, 132, 252, 0.35)', '--glow-color-strong': 'rgba(192, 132, 252, 0.55)'}}>
 <span className="absolute inset-[-4px] -z-10 rounded-xl opacity-0 transition-opacity duration-200 group-hover:opacity-100" style={{background: 'radial-gradient(90px 90px at var(--x) var(--y), var(--glow-core) 0%, rgba(255, 255, 255, 0.25) 45%, transparent 70%), radial-gradient(140px 140px at var(--x) var(--y), var(--glow-color-strong) 0%, transparent 75%)', mixBlendMode: 'screen', pointerEvents: 'none'}}></span>
 <span className="absolute inset-[-8px] -z-20 rounded-xl opacity-0 transition-opacity duration-200 group-hover:opacity-100 blur-[20px]" style={{background: 'radial-gradient(200px 200px at var(--x) var(--y), var(--glow-color) 0%, transparent 80%)', pointerEvents: 'none'}}></span>
 <span className="relative z-10 flex items-center gap-2">

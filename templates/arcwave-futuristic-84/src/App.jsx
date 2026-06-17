@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -123,13 +159,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<div className="pointer-events-none fixed inset-0 z-[60] opacity-[0.55]" style={{backgroundImage: 'url(&quot', data: 'image/svg+xml,%3Csvg viewBox=\'0 0 180 180\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.05\'/%3E%3C/svg%3E&quot'}}></div>
+<div className="pointer-events-none fixed inset-0 z-[60] opacity-[0.55]" style={{backgroundImage: 'url(&quot', data: 'image/svg+xml, %3Csvg viewBox=\'0 0 180 180\' xmlns=\'http: //www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.05\'/%3E%3C/svg%3E&quot'}}></div>
 
 <div className="fixed inset-0 -z-10">
 <div className="absolute inset-0 bg-gradient-to-b from-black via-[#070707] to-black"></div>
@@ -154,11 +196,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="flex items-center gap-3">
 <button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-2 text-white/80 transition hover:bg-white/10 hover:text-white" id="menuBtn">
-<iconify-icon className="text-xl" icon="solar:hamburger-menu-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:hamburger-menu-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 <a className="group hidden md:inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-black transition hover:bg-amber-50" href="#contact">
 <span>Get Started</span>
-<iconify-icon className="text-base transition-transform group-hover:translate-x-0.5" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base transition-transform group-hover:translate-x-0.5" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 </div>
@@ -173,7 +215,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white" href="#contact">Contact</a>
 <a className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black transition hover:bg-amber-50" href="#contact">
 <span>Get Started</span>
-<iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 </div>
@@ -244,7 +286,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-full max-w-3xl">
 <div className="reveal inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-950/15 px-3 py-1 text-xs font-medium text-amber-100/80 backdrop-blur">
 <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-amber-500/25 bg-amber-500/10 text-amber-300">
-<iconify-icon className="text-sm" icon="solar:bolt-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:bolt-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <span className="tracking-wide uppercase">Quantum-grade energy infrastructure</span>
 </div>
@@ -258,10 +300,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="reveal reveal-delay-300 mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
 <a className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-amber-400/30 bg-amber-500/90 px-6 py-3 text-sm font-semibold text-black shadow-[0_0_40px_-12px_rgba(245,158,11,0.9)] transition hover:bg-amber-400/95 hover:shadow-[0_0_58px_-14px_rgba(245,158,11,1)] sm:w-auto" href="#contact">
 <span>Get Started</span>
-<iconify-icon className="text-base transition-transform group-hover:translate-x-0.5" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base transition-transform group-hover:translate-x-0.5" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white sm:w-auto" href="#technology">
-<iconify-icon className="text-base" icon="solar:play-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:play-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>Explore Technology</span>
 </a>
 </div>
@@ -298,7 +340,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid items-start gap-10 md:grid-cols-2 md:gap-14">
 <div className="reveal">
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
-<iconify-icon className="text-sm text-amber-300/90" icon="solar:eye-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm text-amber-300/90" icon="solar:eye-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="uppercase tracking-wide">Our Vision</span>
 </div>
 <h2 className="mt-5 text-3xl font-medium tracking-tight text-white md:text-4xl">Energy that scales with humanity.</h2>
@@ -310,7 +352,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
 <div className="flex items-center gap-3">
 <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-300">
-<iconify-icon className="text-xl" icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <div>
 <div className="text-sm font-medium text-white/85">Built for stability</div>
@@ -321,7 +363,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
 <div className="flex items-center gap-3">
 <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-300">
-<iconify-icon className="text-xl" icon="solar:leaf-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:leaf-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <div>
 <div className="text-sm font-medium text-white/85">Designed for net-zero</div>
@@ -352,7 +394,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-xs font-medium text-amber-200/80">99.98%</div>
 </div>
 <div className="mt-3 h-2 w-full rounded-full bg-white/10 overflow-hidden">
-<div className="h-full w-[92%] rounded-full" style={{background: 'linear-gradient(90deg, rgba(245,158,11,0.15), rgba(245,158,11,0.95))', boxShadow: '0 0 24px rgba(245,158,11,0.35)'}}></div>
+<div className="h-full w-[92%] rounded-full" style={{background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.95))', boxShadow: '0 0 24px rgba(245,158,11,0.35)'}}></div>
 </div>
 <div className="mt-6 grid grid-cols-3 gap-3">
 <div className="rounded-xl border border-white/10 bg-white/5 p-3">
@@ -403,7 +445,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 <div className="reveal">
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
-<iconify-icon className="text-sm text-amber-300/90" icon="solar:cpu-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm text-amber-300/90" icon="solar:cpu-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="uppercase tracking-wide">Key Technology</span>
 </div>
 <h2 className="mt-5 text-3xl font-medium tracking-tight text-white md:text-4xl">Precision systems. Quietly powerful.</h2>
@@ -419,8 +461,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="reveal group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/[0.07]">
 <div className="flex items-start justify-between">
-<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-300" style={{boxShadow: '0 0 0 1px rgba(0,0,0,1), 0 0 34px rgba(245,158,11,0.18)'}}>
-<iconify-icon className="text-2xl" icon="solar:diagram-up-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-300" style={{boxShadow: '0 0 0 1px rgba(0, 0, 0, 1), 0 0 34px rgba(245,158,11,0.18)'}}>
+<iconify-icon className="text-2xl" icon="solar:diagram-up-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <span className="text-xs font-medium text-white/35">01</span>
 </div>
@@ -430,13 +472,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <div className="mt-5 flex items-center gap-2 text-xs font-medium text-amber-200/80 opacity-0 transition group-hover:opacity-100">
 <span>Learn more</span>
-<iconify-icon className="text-sm" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="reveal reveal-delay-100 group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/[0.07]">
 <div className="flex items-start justify-between">
-<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-300" style={{boxShadow: '0 0 0 1px rgba(0,0,0,1), 0 0 34px rgba(245,158,11,0.18)'}}>
-<iconify-icon className="text-2xl" icon="solar:sun-2-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-300" style={{boxShadow: '0 0 0 1px rgba(0, 0, 0, 1), 0 0 34px rgba(245,158,11,0.18)'}}>
+<iconify-icon className="text-2xl" icon="solar:sun-2-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <span className="text-xs font-medium text-white/35">02</span>
 </div>
@@ -446,13 +488,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <div className="mt-5 flex items-center gap-2 text-xs font-medium text-amber-200/80 opacity-0 transition group-hover:opacity-100">
 <span>Learn more</span>
-<iconify-icon className="text-sm" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="reveal reveal-delay-200 group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/[0.07]">
 <div className="flex items-start justify-between">
-<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-300" style={{boxShadow: '0 0 0 1px rgba(0,0,0,1), 0 0 34px rgba(245,158,11,0.18)'}}>
-<iconify-icon className="text-2xl" icon="solar:wind-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-300" style={{boxShadow: '0 0 0 1px rgba(0, 0, 0, 1), 0 0 34px rgba(245,158,11,0.18)'}}>
+<iconify-icon className="text-2xl" icon="solar:wind-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <span className="text-xs font-medium text-white/35">03</span>
 </div>
@@ -462,7 +504,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <div className="mt-5 flex items-center gap-2 text-xs font-medium text-amber-200/80 opacity-0 transition group-hover:opacity-100">
 <span>Learn more</span>
-<iconify-icon className="text-sm" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -474,7 +516,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 <div className="reveal">
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
-<iconify-icon className="text-sm text-amber-300/90" icon="solar:gallery-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm text-amber-300/90" icon="solar:gallery-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="uppercase tracking-wide">Case Studies</span>
 </div>
 <h2 className="mt-5 text-3xl font-medium tracking-tight text-white md:text-4xl">Proof in deployment.</h2>
@@ -484,10 +526,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="reveal reveal-delay-100 flex items-center gap-2">
 <button aria-label="Previous case study" className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-2 text-white/75 transition hover:bg-white/10 hover:text-white" id="prevCase">
-<iconify-icon className="text-xl" icon="solar:arrow-left-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:arrow-left-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 <button aria-label="Next case study" className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-2 text-white/75 transition hover:bg-white/10 hover:text-white" id="nextCase">
-<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 </div>
 </div>
@@ -508,7 +550,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-sm font-light text-white/60">Loss reduced by 17% across peak corridors.</p>
 </div>
 <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/40 text-amber-200/80">
-<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -529,7 +571,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-sm font-light text-white/60">Continuous output maintained for 90-day cycle.</p>
 </div>
 <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/40 text-amber-200/80">
-<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -550,7 +592,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-sm font-light text-white/60">Carbon-aware routing across regional nodes.</p>
 </div>
 <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/40 text-amber-200/80">
-<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -571,7 +613,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-sm font-light text-white/60">Peak shaving with predictive scheduling.</p>
 </div>
 <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/40 text-amber-200/80">
-<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -597,7 +639,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-7xl px-6">
 <div className="reveal">
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
-<iconify-icon className="text-sm text-amber-300/90" icon="solar:chat-square-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm text-amber-300/90" icon="solar:chat-square-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="uppercase tracking-wide">Testimonials</span>
 </div>
 <h2 className="mt-5 text-3xl font-medium tracking-tight text-white md:text-4xl">Trusted by teams shipping real infrastructure.</h2>
@@ -619,11 +661,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               The interface is minimal, but it communicates exactly what matters.”
             </blockquote>
 <div className="mt-5 flex items-center gap-1 text-amber-300/90">
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base opacity-70" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base opacity-70" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </figure>
 <figure className="reveal reveal-delay-100 rounded-3xl border border-white/10 bg-white/5 p-6">
@@ -639,11 +681,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               it’s operationally useful, and the alerting is calm and accurate.”
             </blockquote>
 <div className="mt-5 flex items-center gap-1 text-amber-300/90">
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </figure>
 <figure className="reveal reveal-delay-200 rounded-3xl border border-white/10 bg-white/5 p-6">
@@ -659,11 +701,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               without compromising system stability.”
             </blockquote>
 <div className="mt-5 flex items-center gap-1 text-amber-300/90">
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon className="text-base opacity-70" icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon className="text-base opacity-70" icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </figure>
 </div>
@@ -679,7 +721,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid gap-0 md:grid-cols-2">
 <div className="p-8 md:p-10">
 <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-950/15 px-3 py-1 text-xs font-medium text-amber-100/80">
-<iconify-icon className="text-sm" icon="solar:letter-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:letter-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="uppercase tracking-wide">Contact</span>
 </div>
 <h2 className="mt-5 text-3xl font-medium tracking-tight text-white md:text-4xl">Deploy a pilot node.</h2>
@@ -696,7 +738,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <button className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-amber-50" type="submit">
 <span>Send</span>
-<iconify-icon className="text-base transition-transform group-hover:translate-x-0.5" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base transition-transform group-hover:translate-x-0.5" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 <p className="text-xs text-white/45">Typical response time: under 24 hours.</p>
 </div>
@@ -716,25 +758,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-2 text-sm font-light text-white/60">Telemetry, routing, and stability layer.</div>
 </div>
 <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/25 bg-amber-500/10 text-amber-300" style={{boxShadow: '0 0 34px rgba(245,158,11,0.20)'}}>
-<iconify-icon className="text-2xl" icon="solar:server-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-2xl" icon="solar:server-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="mt-6 space-y-3">
 <div className="flex items-center gap-3 text-sm text-white/70">
 <span className="flex h-7 w-7 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-amber-200/80">
-<iconify-icon className="text-lg" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <span>Deployment in 48 hours</span>
 </div>
 <div className="flex items-center gap-3 text-sm text-white/70">
 <span className="flex h-7 w-7 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-amber-200/80">
-<iconify-icon className="text-lg" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <span>On-site integration support</span>
 </div>
 <div className="flex items-center gap-3 text-sm text-white/70">
 <span className="flex h-7 w-7 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-amber-200/80">
-<iconify-icon className="text-lg" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <span>Stability targets + reporting</span>
 </div>
@@ -774,16 +816,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-6 flex items-center gap-2">
 <a aria-label="X" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" href="#">
-<iconify-icon className="text-xl" icon="solar:brand-x-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:brand-x-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 <a aria-label="GitHub" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" href="#">
-<iconify-icon className="text-xl" icon="solar:brand-github-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:brand-github-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 <a aria-label="Discord" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" href="#">
-<iconify-icon className="text-xl" icon="solar:brand-discord-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:brand-discord-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 <a aria-label="LinkedIn" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" href="#">
-<iconify-icon className="text-xl" icon="solar:brand-linkedin-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:brand-linkedin-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 </div>
@@ -812,7 +854,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <form className="mt-5" id="newsletterForm">
 <div className="relative">
-<iconify-icon className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-white/40" icon="solar:letter-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-white/40" icon="solar:letter-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full rounded-full border border-white/10 bg-white/5 py-3 pl-12 pr-28 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-amber-500/40" name="newsletterEmail" placeholder="you@company.com" required="" type="email"/>
 <button className="absolute right-1.5 top-1.5 inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-black transition hover:bg-amber-50" type="submit">
                   Subscribe

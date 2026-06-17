@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -54,6 +90,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -97,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <a className="hover:text-white transition font-sans" href="#">Journal</a>
 </nav>
 <div className="hidden md:flex items-center gap-4">
-<button className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 text-sm text-white/80 border-gradient before:rounded-2xl bg-white/5 hover:text-white transition font-sans" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<button className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 text-sm text-white/80 border-gradient before:rounded-2xl bg-white/5 hover:text-white transition font-sans" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="h-4 w-4" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11.5" cy="11.5" r="9.5"></circle><path d="m20 20l2 2" strokeLinecap="round"></path></g></svg>
               Search
             
@@ -139,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
               <svg className="h-4 w-4" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m19.5 9l-2.094 10.743A2.5 2.5 0 0 1 14.952 22H9.048a2.5 2.5 0 0 1-2.454-2.257L4.5 9M8 9V6.5a4 4 0 0 1 4-4v0a4 4 0 0 1 4 4V9" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
 </a>
 </div>
-<button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-2xl border-gradient before:rounded-2xl bg-white/5" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-2xl border-gradient before:rounded-2xl bg-white/5" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="h-5 w-5 text-white" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18M3 6h18M3 18h18" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
 </button>
 </div>
@@ -161,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <a className="inline-flex items-center justify-center rounded-2xl bg-white text-neutral-900 px-5 py-3 text-sm font-medium shadow-sm hover:bg-white/90 transition font-sans" href="#">
                 Shop the Collection
               </a>
-<a className="inline-flex items-center justify-center gap-2 border-gradient before:rounded-2xl hover:text-white transition text-sm font-medium text-white/90 bg-white/5 rounded-2xl pt-3 pr-5 pb-3 pl-5" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex items-center justify-center gap-2 border-gradient before:rounded-2xl hover:text-white transition text-sm font-medium text-white/90 bg-white/5 rounded-2xl pt-3 pr-5 pb-3 pl-5" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="h-5 w-5" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M15.424 11.233a1 1 0 0 1 0 1.534l-4.5 3a1 1 0 0 1-1.556-.832V8.932a1 1 0 0 1 1.556-.832l4.5 3Z" strokeLinecap="round" strokeLinejoin="round"></path></g></svg>
                 The Ritual Film
                </a>
@@ -187,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="lg:col-span-5 lg:pl-8 [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate">
-<div className="border-gradient before:rounded-3xl sm:p-5 bg-white/5 max-w-sm rounded-3xl ml-auto pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="border-gradient before:rounded-3xl sm:p-5 bg-white/5 max-w-sm rounded-3xl ml-auto pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="flex items-center justify-between">
 <div className="">
 <p className="text-xs uppercase tracking-[0.18em] text-white/60 font-sans">Best Seller</p>
@@ -236,10 +278,10 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </section>
 
 <section className="relative w-full mx-auto max-w-7xl px-6 lg:px-10 mt-24 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll animate">
-<div className="bg-zinc-950/60 w-full border-gradient before:rounded-3xl rounded-3xl pt-6 pr-6 pb-6 pl-6 sm:p-8" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="bg-zinc-950/60 w-full border-gradient before:rounded-3xl rounded-3xl pt-6 pr-6 pb-6 pl-6 sm:p-8" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 sm:gap-10">
 <div className="lg:col-span-6">
-<a className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 border-gradient before:rounded-2xl bg-white/5 text-zinc-200 hover:bg-white/10 transition font-sans" href="#contact" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 border-gradient before:rounded-2xl bg-white/5 text-zinc-200 hover:bg-white/10 transition font-sans" href="#contact" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="w-4 h-4" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"><path d="m5 14l-.914-6.855A2 2 0 0 1 6.069 5h11.862a2 2 0 0 1 1.983 2.145L19 14M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5M5 14h14"></path><path d="M12 18v-4m-3 0l3 3l3-3"></path></g></svg>
             New Arrivals
           </a>
@@ -248,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="mt-6">
 <div className="flex items-center gap-3 flex-wrap">
 <h3 className="text-2xl sm:text-3xl text-zinc-100 font-bricolage font-semibold tracking-tighter" style={{}}>Restorative Serums</h3>
-<span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>From $85</span>
+<span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>From $85</span>
 </div>
 <p className="text-zinc-400 text-sm sm:text-base mt-3 font-sans">Concentrated formulas targeting fine lines, dullness, and hydration deep within.</p>
 </div>
@@ -256,18 +298,18 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="mt-6">
 <div className="flex items-center gap-3 flex-wrap">
 <h3 className="text-2xl sm:text-3xl text-zinc-100 font-bricolage font-semibold tracking-tighter" style={{}}>Essential Creams</h3>
-<span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>From $65</span>
+<span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>From $65</span>
 </div>
 <p className="text-zinc-400 text-sm sm:text-base mt-3 font-sans">Rich, barrier-building moisture that locks in hydration for 24 hours.</p>
 </div>
 <div className="mt-8 flex flex-wrap items-center gap-4">
-<a className="inline-flex items-center justify-center h-14 px-6 rounded-2xl text-base font-medium text-white bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] font-sans" href="#work" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>View Collection</a>
+<a className="inline-flex items-center justify-center h-14 px-6 rounded-2xl text-base font-medium text-white bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] font-sans" href="#work" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>View Collection</a>
 <a className="inline-flex items-center justify-center h-14 px-8 rounded-2xl text-base font-medium text-neutral-900 bg-gradient-to-b from-white to-neutral-300 hover:opacity-90 transition shadow-[0_12px_40px_rgba(0,0,0,0.35)] font-sans" href="#contact">Take Skin Quiz</a>
 </div>
 </div>
 <div className="lg:col-span-6">
 <div className="relative mx-auto w-full max-w-[860px]" style={{filter: 'drop-shadow(0 20px 60px rgba(0,0,0,0.6))'}}>
-<div className="rounded-3xl bg-neutral-900/60 border-gradient before:rounded-3xl p-3" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="rounded-3xl bg-neutral-900/60 border-gradient before:rounded-3xl p-3" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="relative overflow-hidden rounded-3xl bg-neutral-950 border border-white/10">
 <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10">
 <span className="h-3 w-3 rounded-full bg-zinc-700"></span>
@@ -309,11 +351,11 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </section>
 
 <section className="max-w-7xl px-6 lg:px-10 mt-14 sm:mt-20 mx-auto [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll" id="services">
-<div className="border-gradient before:rounded-3xl overflow-hidden bg-white/5 rounded-3xl" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="border-gradient before:rounded-3xl overflow-hidden bg-white/5 rounded-3xl" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="flex items-end justify-between p-6 border-b border-white/10">
 <h2 className="text-2xl sm:text-3xl text-white font-bricolage font-semibold tracking-tighter" style={{}}>Our Philosophy</h2>
 <div className="hidden sm:flex items-center gap-2">
-<a className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-medium tracking-tight text-white bg-white/10 hover:bg-white/20 border-gradient before:rounded-2xl" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-medium tracking-tight text-white bg-white/10 hover:bg-white/20 border-gradient before:rounded-2xl" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="w-3.5 h-3.5" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m19 19l-6-6l-3 3l-6-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
 <span className="font-sans">View Science</span>
 </a>
@@ -434,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <svg className="w-4 h-4" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m5 14l-.914-6.855A2 2 0 0 1 6.069 5h11.862a2 2 0 0 1 1.983 2.145L19 14M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5M5 14h14m-7 4v-4m-3 0l3 3l3-3" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
 <span className="font-sans">Shop Best Sellers</span>
 </a>
-<a className="inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium tracking-tight text-white bg-white/10 hover:bg-white/20 border-gradient before:rounded-2xl" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium tracking-tight text-white bg-white/10 hover:bg-white/20 border-gradient before:rounded-2xl" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="w-4 h-4" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m-3-11v2m3-2v2m3-2v2" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
 <span className="font-sans">Skin Quiz</span>
 </a>
@@ -454,7 +496,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 <div className="relative flex items-center justify-center py-12 sm:py-20 overflow-x-auto" style={{minHeight: '450px'}}>
 <div className="container max-w-full flex justify-center items-center gap-6 px-4">
-<div className="border-gradient before:rounded-3xl flex-shrink-0 w-[340px] h-[340px] rounded-3xl relative backdrop-blur" style={{background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 25px 25px', transform: 'rotate(-10deg)', -FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="border-gradient before:rounded-3xl flex-shrink-0 w-[340px] h-[340px] rounded-3xl relative backdrop-blur" style={{background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 25px 25px', transform: 'rotate(-10deg)', '--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="absolute inset-4 rounded-3xl bg-white text-neutral-900 shadow-2xl ring-1 ring-neutral-200 overflow-hidden">
 <div className="p-6">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-2xl bg-neutral-100 ring-1 ring-neutral-200 mb-4">
@@ -477,8 +519,8 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="border-gradient before:rounded-3xl flex-shrink-0 w-[340px] h-[340px] rounded-3xl relative backdrop-blur" style={{background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 25px 25px', transform: 'rotate(-6deg)', -FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
-<div className="absolute inset-4 rounded-3xl bg-white/90 text-neutral-900 shadow-xl ring-1 ring-neutral-200 overflow-hidden" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="border-gradient before:rounded-3xl flex-shrink-0 w-[340px] h-[340px] rounded-3xl relative backdrop-blur" style={{background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 25px 25px', transform: 'rotate(-6deg)', '--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="absolute inset-4 rounded-3xl bg-white/90 text-neutral-900 shadow-xl ring-1 ring-neutral-200 overflow-hidden" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="p-6">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-2xl bg-neutral-100 ring-1 ring-neutral-200 mb-4">
 <svg className="h-4 w-4 text-neutral-700" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m11.132 3.65l-1.353 4.258a1.27 1.27 0 0 1-1.213.895H4.258a1.27 1.27 0 0 0-.75 2.29l3.352 2.48a1.27 1.27 0 0 1 .465 1.446l-1.282 4.043a1.27 1.27 0 0 0 1.956 1.42l3.419-2.527a1.27 1.27 0 0 1 1.564 0l3.42 2.527a1.27 1.27 0 0 0 1.956-1.42l-1.282-4.043a1.27 1.27 0 0 1 .465-1.447l3.351-2.479a1.27 1.27 0 0 0-.75-2.29h-4.307a1.27 1.27 0 0 1-1.214-.895l-1.353-4.258a1.27 1.27 0 0 0-2.427 0" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
@@ -500,8 +542,8 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="border-gradient before:rounded-3xl flex-shrink-0 w-[340px] h-[340px] rounded-3xl relative backdrop-blur" style={{background: 'linear-gradient(rgba(255, 255, 255, 0.06), transparent)', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 25px 25px', -FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
-<div className="absolute inset-4 rounded-3xl bg-white/80 text-neutral-900 shadow-lg ring-1 ring-neutral-200 overflow-hidden" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="border-gradient before:rounded-3xl flex-shrink-0 w-[340px] h-[340px] rounded-3xl relative backdrop-blur" style={{background: 'linear-gradient(rgba(255, 255, 255, 0.06), transparent)', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 25px 25px', '--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="absolute inset-4 rounded-3xl bg-white/80 text-neutral-900 shadow-lg ring-1 ring-neutral-200 overflow-hidden" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="p-6">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-2xl bg-neutral-100 ring-1 ring-neutral-200 mb-4">
 <svg className="h-4 w-4 text-neutral-700" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m11.132 3.65l-1.353 4.258a1.27 1.27 0 0 1-1.213.895H4.258a1.27 1.27 0 0 0-.75 2.29l3.352 2.48a1.27 1.27 0 0 1 .465 1.446l-1.282 4.043a1.27 1.27 0 0 0 1.956 1.42l3.419-2.527a1.27 1.27 0 0 1 1.564 0l3.42 2.527a1.27 1.27 0 0 0 1.956-1.42l-1.282-4.043a1.27 1.27 0 0 1 .465-1.447l3.351-2.479a1.27 1.27 0 0 0-.75-2.29h-4.307a1.27 1.27 0 0 1-1.214-.895l-1.353-4.258a1.27 1.27 0 0 0-2.427 0" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
@@ -545,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="lg:col-span-5">
 <p className="sm:text-lg text-white/60 max-w-3xl mb-6 font-sans">Our formulas are rigorously tested to ensure efficacy. See the visible difference in texture, tone, and hydration.</p>
 <div className="flex justify-start">
-<a className="inline-flex items-center gap-3 border-gradient before:rounded-full hover:shadow-2xl transition bg-white/5 rounded-full pt-2 pr-2 pb-2 pl-2 shadow" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex items-center gap-3 border-gradient before:rounded-full hover:shadow-2xl transition bg-white/5 rounded-full pt-2 pr-2 pb-2 pl-2 shadow" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white">
 <svg className="w-5 h-5 text-neutral-900" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m14 18l-6-6l6-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
 </span>
@@ -556,7 +598,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="grid grid-cols-1 lg:grid-cols-3 gap-0 rounded-3xl overflow-hidden shadow-sm border-gradient before:rounded-3xl" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-0 rounded-3xl overflow-hidden shadow-sm border-gradient before:rounded-3xl" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="relative overflow-hidden text-white bg-black pt-6 pr-6 pb-6 pl-6">
 <div className="flex gap-2 mb-4 items-center">
 <svg className="w-6 h-6 text-white" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m11.132 3.65l-1.353 4.258a1.27 1.27 0 0 1-1.213.895H4.258a1.27 1.27 0 0 0-.75 2.29l3.352 2.48a1.27 1.27 0 0 1 .465 1.446l-1.282 4.043a1.27 1.27 0 0 0 1.956 1.42l3.419-2.527a1.27 1.27 0 0 1 1.564 0l3.42 2.527a1.27 1.27 0 0 0 1.956-1.42l-1.282-4.043a1.27 1.27 0 0 1 .465-1.447l3.351-2.479a1.27 1.27 0 0 0-.75-2.29h-4.307a1.27 1.27 0 0 1-1.214-.895l-1.353-4.258a1.27 1.27 0 0 0-2.427 0" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
@@ -635,7 +677,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <footer className="z-10 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll bg-[url(https://images.unsplash.com/photo-1614859324967-bdaa65817084?w=3000&amp;auto=format&amp;fit=crop)] bg-cover bg-center border-white/10 border-t mt-20 relative">
 <div className="mx-auto max-w-7xl px-6 lg:px-10 py-12">
-<div className="overflow-hidden border-gradient before:rounded-3xl rounded-3xl relative" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<div className="overflow-hidden border-gradient before:rounded-3xl rounded-3xl relative" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/10"></div>
 <div className="sm:px-10 lg:px-14 lg:py-16 pt-12 pr-6 pb-12 pl-6 relative backdrop-blur-lg">
 <div className="flex flex-col lg:flex-row items-start justify-between gap-10">
@@ -647,9 +689,9 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <form className="mt-6 flex items-center gap-2">
 <div className="flex-1">
 <label className="sr-only font-sans" htmlFor="footer-email">Email</label>
-<input className="w-full rounded-2xl bg-white/5 text-white placeholder-slate-400 px-4 py-3 text-sm border-gradient before:rounded-2xl focus:ring-2 focus:ring-lime-400/30 outline-none" id="footer-email" placeholder="Enter your email" required="" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}} type="email"/>
+<input className="w-full rounded-2xl bg-white/5 text-white placeholder-slate-400 px-4 py-3 text-sm border-gradient before:rounded-2xl focus:ring-2 focus:ring-lime-400/30 outline-none" id="footer-email" placeholder="Enter your email" required="" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}} type="email"/>
 </div>
-<a className="inline-flex items-center justify-center gap-2 border-gradient before:rounded-2xl hover:text-white transition text-sm font-medium text-white/90 bg-white/5 rounded-2xl pt-3 pr-5 pb-3 pl-5" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>Join</a>
+<a className="inline-flex items-center justify-center gap-2 border-gradient before:rounded-2xl hover:text-white transition text-sm font-medium text-white/90 bg-white/5 rounded-2xl pt-3 pr-5 pb-3 pl-5" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>Join</a>
 </form>
 <p className="mt-2 text-xs text-slate-400 font-sans">10% off your first order.</p>
 </div>
@@ -683,13 +725,13 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
 <p className="text-xs text-slate-500 font-sans">© 2024 Lumina Beauty. All rights reserved.</p>
 <div className="flex items-center gap-2">
-<a className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="h-4 w-4 text-slate-300" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m14 14l-4-4m4 0l-4 4m9-2c0 4.97-4.03 9-9 9s-9-4.03-9-9s4.03-9 9-9s9 4.03 9 9" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"></path></svg>
 </a>
-<a className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="h-4 w-4 text-slate-300" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"><path d="M2 11c0-4.714 0-7.071 1.465-8.535C4.929 1 7.286 1 12 1s7.071 0 8.535 1.465C22 3.929 22 6.286 22 11s0 7.071-1.465 8.535C19.071 21 16.714 21 12 21s-7.071 0-8.535-1.465C2 18.071 2 15.714 2 11" strokeLinejoin="round"></path><circle cx="12" cy="11" r="3"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r="1.5"></circle></g></svg>
 </a>
-<a className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition" href="#" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<a className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition" href="#" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <svg className="h-4 w-4 text-slate-300" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"><path d="M12 12c-4 4-2 10-2 10s3-2 5-5s-2-9-2-9s-1 1-1 4" strokeLinejoin="round"></path><path d="M7 16a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2M7 16V8m10 8V8m-10 0V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3m-10 0h10"></path></g></svg>
 </a>
 </div>

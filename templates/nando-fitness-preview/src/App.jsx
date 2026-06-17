@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,6 +139,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -137,7 +179,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </nav>
 
-<header className="relative min-h-screen flex items-center overflow-hidden bg-black isolate" style={{fontFamily: '\'Inter\',system-ui,sans-serif'}}>
+<header className="relative min-h-screen flex items-center overflow-hidden bg-black isolate" style={{fontFamily: '\'Inter\', system-ui, sans-serif'}}>
 <div className="absolute inset-0 -z-20">
 <img alt="" className="w-full h-full object-cover object-center scale-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bfbfe4f3-0766-4e60-aa7b-05e36350bee8_3840w.jpg" style={{animation: 'kenburns 22s ease-in-out infinite alternate'}}/>
 </div>
@@ -180,7 +222,7 @@ gtag('config', 'G-2M6V79H761');
 <path d="m12 5 7 7-7 7"></path>
 </svg>
 </button>
-<button className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_8px_rgba(255,255,255,0.15)] rounded-full relative shadow-[0_8px_40px_rgba(255,255,255,0.05)] w-full sm:w-auto" onclick="document.getElementById('transformaciones') ? document.getElementById('transformaciones').scrollIntoView({behavior: 'smooth'}) : window.location.hash='transformaciones'" style={{-Spread: '90deg', -ShimmerColor: 'rgba(255,255,255,0.6)', -Radius: '9999px', -Speed: '4s', -Cut: '1px', -Bg: 'rgba(255, 255, 255, 0.05)'}} type="button">
+<button className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_8px_rgba(255,255,255,0.15)] rounded-full relative shadow-[0_8px_40px_rgba(255,255,255,0.05)] w-full sm:w-auto" onclick="document.getElementById('transformaciones') ? document.getElementById('transformaciones').scrollIntoView({behavior: 'smooth'}) : window.location.hash='transformaciones'" style={{'--spread': '90deg', '--shimmer-color': 'rgba(255, 255, 255, 0.6)', '--radius': '9999px', '--speed': '4s', '--cut': '1px', '--bg': 'rgba(255, 255, 255, 0.05)'}} type="button">
 <div className="absolute inset-0">
 <div className="absolute inset-[-200%] w-[400%] h-[400%] [animation:rotate-gradient_var(--speed)_linear_infinite]">
 <div className="absolute inset-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]"></div>
@@ -271,7 +313,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-16">
 <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center bg-neutral-900/40 p-6 md:p-10 rounded-[3rem] border border-white/5 shadow-2xl">
 <div className="w-full lg:w-[55%] group relative">
-<div className="aspect-[4/5] md:aspect-square rounded-[2rem] overflow-hidden bg-neutral-950 relative w-full shadow-2xl ring-1 ring-white/10" oninput="this.style.setProperty('--val', event.target.value + '%')" style={{-Val: '75%'}}>
+<div className="aspect-[4/5] md:aspect-square rounded-[2rem] overflow-hidden bg-neutral-950 relative w-full shadow-2xl ring-1 ring-white/10" oninput="this.style.setProperty('--val', event.target.value + '%')" style={{'--val': '75%'}}>
 
 <img alt="Después" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a9685a7c-eca5-457d-a861-8b3d90bd5275_1600w.jpg"/>
 
@@ -332,7 +374,7 @@ Ese cambio no solo transformó mi físico. También cambió mi forma de entender
 <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
 
 <div className="group relative flex flex-col gap-6 bg-neutral-900/30 p-5 md:p-6 rounded-[2.5rem] border border-white/5 hover:border-white/10 hover:bg-neutral-900/50 transition-all duration-300">
-<div className="aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-neutral-950 relative w-full shadow-xl ring-1 ring-white/10" oninput="this.style.setProperty('--val', event.target.value + '%')" style={{-Val: '44%'}}>
+<div className="aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-neutral-950 relative w-full shadow-xl ring-1 ring-white/10" oninput="this.style.setProperty('--val', event.target.value + '%')" style={{'--val': '44%'}}>
 <img alt="Después" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/80bb8876-d273-4b40-8887-ae835e3b6b62_1600w.jpg"/>
 <img alt="Antes" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/623ec666-f3a7-4e5a-8270-477dbc65cdfa_1600w.jpg" style={{clipPath: 'polygon(0 0, var(--val) 0, var(--val) 100%, 0 100%)'}}/>
 <div className="absolute inset-y-0 w-1 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.8)] z-10 pointer-events-none" style={{left: 'var(--val)'}}>
@@ -365,7 +407,7 @@ Ese cambio no solo transformó mi físico. También cambió mi forma de entender
 </div>
 
 <div className="group relative flex flex-col gap-6 bg-neutral-900/30 p-5 md:p-6 rounded-[2.5rem] border border-white/5 hover:border-white/10 hover:bg-neutral-900/50 transition-all duration-300">
-<div className="aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-neutral-950 relative w-full shadow-xl ring-1 ring-white/10" oninput="this.style.setProperty('--val', event.target.value + '%')" style={{-Val: '17%'}}>
+<div className="aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-neutral-950 relative w-full shadow-xl ring-1 ring-white/10" oninput="this.style.setProperty('--val', event.target.value + '%')" style={{'--val': '17%'}}>
 <img alt="Después" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8c874ac9-8923-4da2-94c9-288149e3bfbb_1600w.png"/>
 <img alt="Antes" className="absolute inset-0 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dc6a3033-45f1-4867-b44f-6d349ab55a6d_1600w.png" style={{clipPath: 'polygon(0 0, var(--val) 0, var(--val) 100%, 0 100%)'}}/>
 <div className="absolute inset-y-0 w-1 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.8)] z-10 pointer-events-none" style={{left: 'var(--val)'}}>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -26,6 +62,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -35,7 +77,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-7xl">
 <div className="flex pt-8 items-center justify-center">
 <div className="text-center">
-<h1 className="sm:text-4xl text-7xl tracking-tight font-playfair" style={{fontFamily: '\'Instrument Serif\',serif', fontWeight: '400'}}>Matcha Rituals</h1>
+<h1 className="sm:text-4xl text-7xl tracking-tight font-playfair" style={{fontFamily: '\'Instrument Serif\', serif', fontWeight: '400'}}>Matcha Rituals</h1>
 <p className="text-sm text-slate-200/80 mt-1" style={{fontFamily: 'Inter, sans-serif', fontWeight: '300'}}>Mindful tea guidance for your daily practice</p>
 </div>
 <div className="hidden sm:flex items-center gap-2 text-zinc-300" style={{}}>
@@ -53,7 +95,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-xs px-3 py-1.5 bg-emerald-400/20 text-emerald-200 rounded-full" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>Fresh</span>
 </div>
 <div className="">
-<p className="text-3xl sm:text-4xl tracking-tight" style={{fontFamily: '\'Instrument Serif\',serif', fontWeight: '400'}}>7 Day Ritual</p>
+<p className="text-3xl sm:text-4xl tracking-tight" style={{fontFamily: '\'Instrument Serif\', serif', fontWeight: '400'}}>7 Day Ritual</p>
 <p className="text-emerald-200 text-lg mt-2" style={{fontFamily: 'Inter, sans-serif', fontWeight: '400'}}>Morning Ceremony</p>
 </div>
 <div className="relative">
@@ -68,7 +110,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     </p>
 <div className="flex justify-between items-center">
 <div className="flex items-center gap-2">
-<span className="text-xs tracking-wider" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '600'}}>MATCHA</span>
+<span className="text-xs tracking-wider" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '600'}}>MATCHA</span>
 <svg className="lucide lucide-check-circle w-4 h-4 text-emerald-200" data-lucide="check-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
 </div>
 <a className="text-emerald-200 text-sm hover:underline transition-colors" href="#" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>Continue ritual</a>
@@ -88,23 +130,23 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-xs px-3 py-1.5 bg-cyan-400/20 text-cyan-200 rounded-full" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>Whisking</span>
 </div>
 <div className="">
-<p className="text-2xl sm:text-3xl tracking-tight" style={{fontFamily: '\'Instrument Serif\',serif', fontWeight: '400'}}>Whisk &amp; Breathe</p>
+<p className="text-2xl sm:text-3xl tracking-tight" style={{fontFamily: '\'Instrument Serif\', serif', fontWeight: '400'}}>Whisk &amp; Breathe</p>
 <p className="text-cyan-200 text-base mt-2" style={{fontFamily: 'Inter, sans-serif', fontWeight: '400'}}>Calming Ritual</p>
 </div>
 <div className="relative">
 <div className="absolute top-0 right-0 text-right">
 <p className="text-cyan-200 text-2xl" style={{fontFamily: '"Instrument Serif", serif', fontWeight: '400'}}>5 min</p>
-<p className="text-cyan-300 text-sm" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '300'}}>session</p>
+<p className="text-cyan-300 text-sm" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '300'}}>session</p>
 </div>
 </div>
 </div>
 <div className="space-y-4 border-t border-cyan-600/50 pt-6 relative z-10">
-<p className="leading-relaxed text-sm text-slate-50" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '300'}}>
+<p className="leading-relaxed text-sm text-slate-50" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '300'}}>
       Pair mindful breathing with gentle whisking to settle the mind and invite steady energy.
     </p>
 <div className="flex justify-between items-center">
 <div className="flex items-center gap-2">
-<span className="text-xs tracking-wider" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '600'}}>MATCHA</span>
+<span className="text-xs tracking-wider" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '600'}}>MATCHA</span>
 <svg className="lucide lucide-check-circle w-4 h-4 text-cyan-200" data-lucide="check-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
 </div>
 <a className="text-cyan-200 text-sm hover:underline transition-colors" href="#" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>Start ritual</a>
@@ -123,33 +165,33 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <span className="text-xs px-3 py-1.5 bg-violet-400/20 text-violet-200 rounded-full" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>Tea House</span>
 </div>
-<h2 className="text-4xl sm:text-5xl tracking-tighter" style={{fontFamily: '\'Instrument Serif\',serif', fontWeight: '400'}}>Rituals</h2>
+<h2 className="text-4xl sm:text-5xl tracking-tighter" style={{fontFamily: '\'Instrument Serif\', serif', fontWeight: '400'}}>Rituals</h2>
 <div className="space-y-3 text-sm">
 <div className="flex justify-between items-center hover:bg-violet-700/50 p-2 rounded-xl transition-colors" style={{}}>
 <div className="flex items-center gap-2">
 <div className="w-2 h-2 bg-slate-50 rounded-full" style={{}}></div>
-<span className="" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Clarity</span>
+<span className="" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Clarity</span>
 </div>
 <span className="text-[#ffffff]" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>12 sessions <svg className="lucide lucide-play inline w-3 h-3 ml-1 align-[-2px]" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg></span>
 </div>
 <div className="flex justify-between items-center hover:bg-violet-700/50 p-2 rounded-xl transition-colors" style={{}}>
 <div className="flex items-center gap-2">
 <div className="w-2 h-2 bg-slate-50 rounded-full"></div>
-<span className="" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Calm Energy</span>
+<span className="" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Calm Energy</span>
 </div>
-<span className="text-slate-50" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>8 sessions <svg className="lucide lucide-play inline w-3 h-3 ml-1 align-[-2px]" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg></span>
+<span className="text-slate-50" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>8 sessions <svg className="lucide lucide-play inline w-3 h-3 ml-1 align-[-2px]" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg></span>
 </div>
 <div className="flex justify-between items-center hover:bg-violet-700/50 p-2 rounded-xl transition-colors" style={{}}>
 <div className="flex items-center gap-2">
 <div className="w-2 h-2 bg-slate-50 rounded-full" style={{}}></div>
-<span className="" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Gentle Kindness</span>
+<span className="" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Gentle Kindness</span>
 </div>
 <span className="text-slate-50" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>15 sessions <svg className="lucide lucide-play inline w-3 h-3 ml-1 align-[-2px]" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg></span>
 </div>
 <div className="flex justify-between items-center hover:bg-violet-700/50 p-2 rounded-xl transition-colors" style={{}}>
 <div className="flex items-center gap-2">
 <div className="w-2 h-2 bg-slate-50 rounded-full" style={{}}></div>
-<span className="" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Body Grounding</span>
+<span className="" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Body Grounding</span>
 </div>
 <span className="text-slate-50" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>6 sessions <svg className="lucide lucide-play inline w-3 h-3 ml-1 align-[-2px]" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg></span>
 </div>
@@ -161,7 +203,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     </p>
 <div className="flex justify-between items-center">
 <div className="flex items-center gap-2">
-<span className="text-xs tracking-wider" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '600'}}>MATCHA</span>
+<span className="text-xs tracking-wider" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '600'}}>MATCHA</span>
 <svg className="lucide lucide-check-circle w-4 h-4 text-violet-200" data-lucide="check-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
 </div>
 <a className="text-violet-200 text-sm hover:underline transition-colors" href="#" style={{fontFamily: 'Inter, sans-serif', fontWeight: '500'}}>Explore rituals</a>

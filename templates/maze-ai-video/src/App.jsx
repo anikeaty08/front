@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -47,6 +83,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -176,7 +218,7 @@ gtag('config', 'G-2M6V79H761');
               video content.
             </p>
 <div className="animate-hero-element animate-install mb-16">
-<div className="inline-flex gap-3 bg-zinc-900/80 rounded-xl pt-4 pr-5 pb-4 pl-5 backdrop-blur gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="inline-flex gap-3 bg-zinc-900/80 rounded-xl pt-4 pr-5 pb-4 pl-5 backdrop-blur gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <svg className="flex-shrink-0 text-indigo-400" fill="none" height="18" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <polyline points="4 17 10 11 4 5"></polyline>
 <line x1="12" x2="20" y1="19" y2="19"></line>
@@ -297,7 +339,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="absolute -right-6 top-20 hidden lg:block">
-<div className="bg-zinc-900 w-48 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-xl backdrop-blur" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-zinc-900 w-48 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-xl backdrop-blur" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1))', '--border-radius-before': '12px'}}>
 <div className="flex items-center gap-2 mb-2">
 <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-500/20">
 <svg className="text-indigo-400" fill="none" height="16" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -1190,7 +1232,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="relative flex items-center justify-center py-12 sm:py-20" style={{minHeight: '450px'}}>
 <div className="container max-w-full" style={{position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.1),transparent)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: 'rgba(0,0,0,0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)'}}>
 <div className="absolute inset-4 rounded-xl bg-white text-zinc-900 shadow-2xl ring-1 ring-white/20 overflow-hidden">
 <div className="p-6">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-lg ring-1 mb-4 bg-indigo-100 ring-indigo-200">
@@ -1227,7 +1269,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.08),transparent)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: 'rgba(0,0,0,0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)'}}>
 <div className="absolute inset-4 rounded-xl bg-white/90 text-zinc-900 shadow-xl ring-1 ring-white/20 backdrop-blur overflow-hidden">
 <div className="p-6">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-lg ring-1 mb-4 bg-indigo-100 ring-indigo-200">
@@ -1261,7 +1303,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.06),transparent)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: 'rgba(0,0,0,0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.06), transparent)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)'}}>
 <div className="absolute inset-4 rounded-xl bg-white/80 text-zinc-900 shadow-lg ring-1 ring-white/20 backdrop-blur overflow-hidden">
 <div className="p-6">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-lg ring-1 mb-4 bg-indigo-100 ring-indigo-200">
@@ -1348,52 +1390,52 @@ gtag('config', 'G-2M6V79H761');
                 </style>
 <div className="relative w-[20rem] h-[20rem] sm:w-[24rem] sm:h-[24rem] lg:w-[28rem] lg:h-[28rem]">
 <div className="pointer-events-none absolute -inset-8 rounded-full blur-3xl bg-indigo-400/10"></div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '0deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '0deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bd75d84f-188e-40d3-b218-3f75075edcb2_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '36deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '36deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e50010d2-4f37-4935-8f4d-cf655205bbcb_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '72deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '72deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/39e15168-9f77-4837-9a4b-89c74b8bc38b_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '108deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '108deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/81b590aa-da35-446e-aa23-1920b8fee433_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '144deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '144deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4da38ba9-8fba-45ec-b7df-ea67f7026890_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '180deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '180deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0ec3c6e4-1963-4a99-bb96-b5664a706ece_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '216deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '216deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f2bc9dce-f2a0-4c13-8048-bc291a40e885_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '252deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '252deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5b8cec19-8f14-4d59-9e04-8aa3be536ff3_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '288deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '288deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c8b41f45-708f-4821-8903-b4825f2f3237_320w.webp"/>
 </div>
 </div>
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '324deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '324deg', -R: '10rem', transform: 'translate(-50%,-50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1*var(--angle)))'}}>
 <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 bg-zinc-800 overflow-hidden transition-all duration-300 hover:scale-110 ring-indigo-300/50 hover:ring-indigo-400/70" style={{animation: '60s linear 0s infinite normal none running counterRotate'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2024b6bd-7dee-4c3c-8e15-adfeaab5e3ee_320w.webp"/>
 </div>

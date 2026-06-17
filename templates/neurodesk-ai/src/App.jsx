@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -174,6 +210,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -253,12 +295,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 <form className="[animation:fadeSlideIn_0.8s_ease-out_0.5s_both] max-w-none mt-7">
-<div className="flex shadow-slate-900/60 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-3xl pt-1.5 pr-1.5 pb-1.5 pl-1.5 shadow-inner items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '24px'}}>
+<div className="flex shadow-slate-900/60 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-3xl pt-1.5 pr-1.5 pb-1.5 pl-1.5 shadow-inner items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '24px'}}>
 <div className="flex items-center px-2">
 <svg className="lucide lucide-mail h-3.5 w-3.5 text-slate-500" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></svg>
 </div>
 <input className="h-9 flex-1 bg-transparent text-xs font-normal text-slate-100 placeholder:text-slate-500 focus:outline-none" placeholder="you@company.com" style={{}} type="email"/>
-<button className="inline-flex text-[12px] transition-all hover:brightness-110 hover:shadow-[0_0_40px_rgba(248,181,129,0.9),0_0_0_1px_rgba(251,191,36,0.7)] text-white font-geist bg-gradient-to-bl from-[#fff370] via-orange-500 to-[#fff370] h-9 rounded-full pr-6 pl-6 items-center" style={{borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="submit">
+<button className="inline-flex text-[12px] transition-all hover:brightness-110 hover:shadow-[0_0_40px_rgba(248,181,129,0.9),0_0_0_1px_rgba(251,191,36,0.7)] text-white font-geist bg-gradient-to-bl from-[#fff370] via-orange-500 to-[#fff370] h-9 rounded-full pr-6 pl-6 items-center" style={{borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="submit">
                   Get Started Free
                 </button>
 </div>
@@ -563,7 +605,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 <section className="[animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-6 lg:pb-12 lg:pt-12 max-w-6xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4">
-<div className="md:p-8 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-[28px] pt-6 pr-6 pb-6 pl-6 shadow-[0_40px_120px_rgba(0,0,0,0.95)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '28px'}}>
+<div className="md:p-8 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-[28px] pt-6 pr-6 pb-6 pl-6 shadow-[0_40px_120px_rgba(0,0,0,0.95)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '28px'}}>
 <section className="animate-on-scroll lg:pb-0 lg:pl-0 lg:pr-0 max-w-6xl mr-auto ml-auto pr-0 pb-0 pl-0" id="pricing">
 <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between gap-x-6 gap-y-6 items-start">
 <div className="">
@@ -579,7 +621,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
                     searchable playbook.
                   </p>
 </div>
-<button className="inline-flex text-[12px] transition-all hover:brightness-110 hover:shadow-[0_0_40px_rgba(248,181,129,0.9),0_0_0_1px_rgba(251,191,36,0.7)] text-white font-geist bg-gradient-to-bl from-[#fff370] via-orange-500 to-[#fff370] h-9 rounded-full pr-6 pl-6 items-center" style={{borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="submit">
+<button className="inline-flex text-[12px] transition-all hover:brightness-110 hover:shadow-[0_0_40px_rgba(248,181,129,0.9),0_0_0_1px_rgba(251,191,36,0.7)] text-white font-geist bg-gradient-to-bl from-[#fff370] via-orange-500 to-[#fff370] h-9 rounded-full pr-6 pl-6 items-center" style={{borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="submit">
                   Get Started Free
                 </button>
 </div>
@@ -1055,7 +1097,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </section>
 <section className="[animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-6 lg:pt-12 lg:pb-12 max-w-6xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4">
-<div className="md:p-8 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-[28px] pt-6 pr-6 pb-6 pl-6 shadow-[0_40px_120px_rgba(0,0,0,0.95)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '28px'}}>
+<div className="md:p-8 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-[28px] pt-6 pr-6 pb-6 pl-6 shadow-[0_40px_120px_rgba(0,0,0,0.95)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '28px'}}>
 <div className="flex flex-col gap-8 md:flex-row md:items-stretch md:justify-between md:gap-x-12 gap-y-8">
 
 <div className="flex flex-col md:flex-none max-w-sm justify-between">
@@ -1085,7 +1127,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="w-full md:flex-1 mt-2 md:mt-0">
-<div className="overflow-hidden md:h-[360px] bg-gradient-to-br from-blue-500/10 to-blue-500/0 h-[340px] rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-[0_24px_60px_rgba(0,0,0,0.9)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="overflow-hidden md:h-[360px] bg-gradient-to-br from-blue-500/10 to-blue-500/0 h-[340px] rounded-3xl pt-5 pr-5 pb-5 pl-5 relative shadow-[0_24px_60px_rgba(0,0,0,0.9)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <div className="flex flex-col md:flex-row md:items-center gap-8 h-full relative">
 
 <div className="md:w-5/12 w-full h-full">
@@ -1166,7 +1208,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </section>
 <section className="[animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-6 lg:pt-12 lg:pb-12 max-w-6xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4">
-<div className="md:p-8 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-[28px] pt-6 pr-6 pb-6 pl-6 shadow-[0_40px_120px_rgba(0,0,0,0.95)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', -BorderRadiusBefore: '28px'}}>
+<div className="md:p-8 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-[28px] pt-6 pr-6 pb-6 pl-6 shadow-[0_40px_120px_rgba(0,0,0,0.95)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.2))', '--border-radius-before': '28px'}}>
 <section className="lg:pb-0 lg:pl-0 lg:pr-0 max-w-6xl mr-auto ml-auto pr-0 pb-0 pl-0" id="pricing">
 <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between">
 <div className="">
@@ -1194,7 +1236,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 <div className="grid gap-4 md:grid-cols-3 mt-8 gap-x-4 gap-y-4">
 
-<div className="group relative flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 hover:from-orange-500/10 hover:to-orange-500/0 rounded-2xl pt-4 pr-4 pb-4 pl-4 shadow-[0_18px_45px_rgba(0,0,0,0.8)] transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_30px_60px_rgba(251,146,60,0.15)]" style={{-BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group relative flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 hover:from-orange-500/10 hover:to-orange-500/0 rounded-2xl pt-4 pr-4 pb-4 pl-4 shadow-[0_18px_45px_rgba(0,0,0,0.8)] transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_30px_60px_rgba(251,146,60,0.15)]" style={{'--border-gradient': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 
 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{padding: '1px', background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.5), rgba(251, 146, 60, 0))', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
 
@@ -1246,7 +1288,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 
-<div className="group relative flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 hover:from-orange-500/10 hover:to-orange-500/0 rounded-2xl pt-4 pr-4 pb-4 pl-4 shadow-[0_18px_45px_rgba(0,0,0,0.8)] transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_30px_60px_rgba(251,146,60,0.15)]" style={{-BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group relative flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 hover:from-orange-500/10 hover:to-orange-500/0 rounded-2xl pt-4 pr-4 pb-4 pl-4 shadow-[0_18px_45px_rgba(0,0,0,0.8)] transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_30px_60px_rgba(251,146,60,0.15)]" style={{'--border-gradient': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 
 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{padding: '1px', background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.5), rgba(251, 146, 60, 0))', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
 
@@ -1358,7 +1400,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
                 </h3>
 <div className="space-y-4">
 
-<div className="faq-item flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-4 pb-3 pl-4 gap-x-2 gap-y-2 cursor-pointer group select-none transition-colors hover:from-blue-500/20 hover:to-blue-500/5" onclick="window.neuroToggleFaq(this)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="faq-item flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-4 pb-3 pl-4 gap-x-2 gap-y-2 cursor-pointer group select-none transition-colors hover:from-blue-500/20 hover:to-blue-500/5" onclick="window.neuroToggleFaq(this)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="flex-1 pr-2">
 <p className="text-xs sm:text-sm text-slate-50 font-geist group-hover:text-white transition-colors" style={{}}>
                         What payment methods do you accept?
@@ -1369,14 +1411,14 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
                         payments through PayPal.
                       </p>
 </div>
-<div className="faq-icon shrink-0 inline-flex text-slate-300 bg-slate-900 w-7 h-7 rounded-full items-center justify-center transition-transform duration-300 transform rotate-180" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="faq-icon shrink-0 inline-flex text-slate-300 bg-slate-900 w-7 h-7 rounded-full items-center justify-center transition-transform duration-300 transform rotate-180" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="w-[14px] h-[14px] text-slate-300" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
 </div>
 </div>
 
-<div className="faq-item flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-4 pb-3 pl-4 gap-x-2 gap-y-2 cursor-pointer group select-none transition-colors hover:from-blue-500/20 hover:to-blue-500/5" onclick="window.neuroToggleFaq(this)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="faq-item flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-4 pb-3 pl-4 gap-x-2 gap-y-2 cursor-pointer group select-none transition-colors hover:from-blue-500/20 hover:to-blue-500/5" onclick="window.neuroToggleFaq(this)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="flex-1 pr-2">
 <p className="text-xs sm:text-sm text-slate-50 font-geist group-hover:text-white transition-colors" style={{}}>
                         Can I change my plan later?
@@ -1387,14 +1429,14 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
                         immediately.
                       </p>
 </div>
-<div className="faq-icon shrink-0 inline-flex text-slate-300 bg-slate-900 w-7 h-7 rounded-full items-center justify-center transition-transform duration-300 transform rotate-0" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="faq-icon shrink-0 inline-flex text-slate-300 bg-slate-900 w-7 h-7 rounded-full items-center justify-center transition-transform duration-300 transform rotate-0" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="w-[14px] h-[14px] text-slate-300" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
 </div>
 </div>
 
-<div className="faq-item flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-4 pb-3 pl-4 gap-x-2 gap-y-2 cursor-pointer group select-none transition-colors hover:from-blue-500/20 hover:to-blue-500/5" onclick="window.neuroToggleFaq(this)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="faq-item flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-4 pb-3 pl-4 gap-x-2 gap-y-2 cursor-pointer group select-none transition-colors hover:from-blue-500/20 hover:to-blue-500/5" onclick="window.neuroToggleFaq(this)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="flex-1 pr-2">
 <p className="text-xs sm:text-sm text-slate-50 font-geist group-hover:text-white transition-colors" style={{}}>
                         Do you offer refunds?
@@ -1405,7 +1447,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
                         inquiries.
                       </p>
 </div>
-<div className="faq-icon shrink-0 inline-flex text-slate-300 bg-slate-900 w-7 h-7 rounded-full items-center justify-center transition-transform duration-300 transform rotate-0" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="faq-icon shrink-0 inline-flex text-slate-300 bg-slate-900 w-7 h-7 rounded-full items-center justify-center transition-transform duration-300 transform rotate-0" style={{position: 'relative', -BorderGradient: 'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="w-[14px] h-[14px] text-slate-300" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
@@ -1425,7 +1467,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </main>
 
 <footer className="[animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-6 lg:pt-12 lg:pb-0 max-w-6xl mr-auto ml-auto pt-24 pr-4 pb-24 pl-4" id="footer">
-<div className="lg:px-6 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 max-w-6xl rounded-3xl mr-auto mb-8 ml-auto pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="lg:px-6 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 max-w-6xl rounded-3xl mr-auto mb-8 ml-auto pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 
 <div className="mb-0 pt-8 pr-8 pb-8 pl-8">
 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -1436,7 +1478,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <path d="M7 17 17 7"></path>
 </svg>
 </h2>
-<button className="inline-flex text-[12px] transition-all hover:brightness-110 hover:shadow-[0_0_40px_rgba(248,181,129,0.9),0_0_0_1px_rgba(251,191,36,0.7)] text-white font-geist bg-gradient-to-bl from-[#fff370] via-orange-500 to-[#fff370] h-9 rounded-full pr-6 pl-6 items-center" style={{borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="submit">
+<button className="inline-flex text-[12px] transition-all hover:brightness-110 hover:shadow-[0_0_40px_rgba(248,181,129,0.9),0_0_0_1px_rgba(251,191,36,0.7)] text-white font-geist bg-gradient-to-bl from-[#fff370] via-orange-500 to-[#fff370] h-9 rounded-full pr-6 pl-6 items-center" style={{borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="submit">
                 Get In Touch
               </button>
 </div>

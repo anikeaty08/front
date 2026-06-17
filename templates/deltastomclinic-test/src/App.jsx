@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -169,6 +205,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -370,7 +412,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-1000">
 
-<div className="js-reveal reveal-hidden transform-3d card-3d-hover relative w-full aspect-[4/3] rounded-3xl overflow-hidden glass-panel border border-white/10 group" style={{-Val: '50%'}}>
+<div className="js-reveal reveal-hidden transform-3d card-3d-hover relative w-full aspect-[4/3] rounded-3xl overflow-hidden glass-panel border border-white/10 group" style={{'--val': '50%'}}>
 
 <img alt="После" className="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&amp;w=1000&amp;auto=format&amp;fit=crop"/>
 
@@ -397,7 +439,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="js-reveal reveal-hidden transform-3d card-3d-hover relative w-full aspect-[4/3] rounded-3xl overflow-hidden glass-panel border border-white/10 group" style={{-Val: '50%', transitionDelay: '100ms'}}>
+<div className="js-reveal reveal-hidden transform-3d card-3d-hover relative w-full aspect-[4/3] rounded-3xl overflow-hidden glass-panel border border-white/10 group" style={{'--val': '50%', transitionDelay: '100ms'}}>
 
 <img alt="После" className="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1590625624220-424f1c991b8d?q=80&amp;w=1000&amp;auto=format&amp;fit=crop"/>
 

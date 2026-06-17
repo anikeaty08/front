@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -34,6 +70,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -45,7 +87,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 <div className="flex items-center gap-4">
 <a className="logo flex items-center gap-3" href="https://cu.ru/">
-<tui-icon className="logo__icon" style={{-TIcon: 'url(https://static.centraluniversity.ru/app/site/assets/icons/cu/cuIconLogoShort.svg)', width: '32px', height: '32px'}}></tui-icon>
+<tui-icon className="logo__icon" style={{'--t-icon': 'url(https://static.centraluniversity.ru/app/site/assets/icons/cu/cuIconLogoShort.svg)', width: '32px', height: '32px'}}></tui-icon>
 <h1 className="logo__h text-lg font-bold uppercase tracking-tighter">
                 Центральный университет
               </h1>
@@ -53,10 +95,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center gap-2">
 <a className="vi-link flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-zinc-100" href="https://apply.cu.ru/visuallyimpaired-ba">
-<tui-icon style={{-TIcon: 'url(https://static.centraluniversity.ru/app/site/assets/icons/kit/cuSiteIconEye.svg)', width: '24px', height: '24px'}}></tui-icon>
+<tui-icon style={{'--t-icon': 'url(https://static.centraluniversity.ru/app/site/assets/icons/kit/cuSiteIconEye.svg)', width: '24px', height: '24px'}}></tui-icon>
 </a>
 <a className="hub-button flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-zinc-100" href="https://id.centraluniversity.ru/">
-<tui-icon style={{-TIcon: 'url(https://static.centraluniversity.ru/app/site/assets/icons/kit/cuSiteIconUser.svg)', width: '24px', height: '24px'}}></tui-icon>
+<tui-icon style={{'--t-icon': 'url(https://static.centraluniversity.ru/app/site/assets/icons/kit/cuSiteIconUser.svg)', width: '24px', height: '24px'}}></tui-icon>
 </a>
 <button className="fullscreen-menu-button flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-zinc-100">
 <svg className="burger-icon" fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">

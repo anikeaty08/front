@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -147,6 +183,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -168,7 +210,7 @@ gtag('config', 'G-2M6V79H761');
 <header className="sticky top-0 z-50 backdrop-blur border-b border-black/5" style={{backgroundColor: 'rgba(255,255,255,0.78)'}}>
 <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 <div className="flex h-16 items-center justify-between">
-<a className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md" href="#top" style={{-TwRingColor: '#E74C3C'}}>
+<a className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-md" href="#top" style={{'--tw-ring-color': '#E74C3C'}}>
 <div className="grid place-items-center bg-white/80 w-9 h-9 border-black/10 border rounded-lg overflow-hidden" style={{boxShadow: '0 8px 30px rgba(231, 76, 60, 0.10), inset 0 1px 0 rgba(255,255,255,0.7)'}}>
 <img alt="Logo Le Passage" className="bg-center w-full h-full object-cover pt-0.5 pr-0.5 pb-0.5 pl-0.5" decoding="async" loading="eager" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ed5545ca-37c4-4802-8a41-db72dc254e9d_1600w.png"/>
 </div>
@@ -178,16 +220,16 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </a>
 <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#concept" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Concept</a>
-<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#programme" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Programme</a>
-<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#investissement" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Investissement</a>
-<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#rejoindre" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Rejoindre</a>
+<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#concept" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Concept</a>
+<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#programme" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Programme</a>
+<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#investissement" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Investissement</a>
+<a className="navlink text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#rejoindre" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Rejoindre</a>
 </nav>
 <div className="flex items-center gap-3">
-<a className="hidden sm:inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" href="#rejoindre" style={{background: 'linear-gradient(90deg, #E74C3C, #E67E22)', boxShadow: '0 12px 45px rgba(231, 76, 60, 0.22)', -TwRingColor: '#E74C3C'}}>
+<a className="hidden sm:inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" href="#rejoindre" style={{background: 'linear-gradient(90deg, #E74C3C, #E67E22)', boxShadow: '0 12px 45px rgba(231, 76, 60, 0.22)', '--tw-ring-color': '#E74C3C'}}>
             Rejoindre
           </a>
-<button aria-label="Ouvrir le menu" className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/80 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" id="menuBtn" style={{boxShadow: '0 10px 35px rgba(231, 76, 60, 0.10), inset 0 1px 0 rgba(255,255,255,0.7)', -TwRingColor: '#E74C3C'}}>
+<button aria-label="Ouvrir le menu" className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/80 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" id="menuBtn" style={{boxShadow: '0 10px 35px rgba(231, 76, 60, 0.10), inset 0 1px 0 rgba(255,255,255,0.7)', '--tw-ring-color': '#E74C3C'}}>
 <iconify-icon className="h-5 w-5 text-[#1A1A1A]" icon="solar:hamburger-menu-linear"></iconify-icon>
 </button>
 </div>
@@ -196,11 +238,11 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="md:hidden hidden border-t border-black/5 bg-white/90 backdrop-blur" id="mobileMenu">
 <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 flex flex-col gap-3 text-sm font-medium">
-<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#concept" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Concept</a>
-<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#programme" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Programme</a>
-<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#investissement" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Investissement</a>
-<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#rejoindre" style={{-TwRingColor: '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Rejoindre</a>
-<a className="mt-2 inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" href="#rejoindre" style={{background: 'linear-gradient(90deg, #E74C3C, #E67E22)', boxShadow: '0 16px 55px rgba(231, 76, 60, 0.26)', -TwRingColor: '#E74C3C'}}>
+<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#concept" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Concept</a>
+<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#programme" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Programme</a>
+<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#investissement" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Investissement</a>
+<a className="navlink py-2 text-[#1A1A1A] hover:text-[#E74C3C] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-sm" href="#rejoindre" style={{'--tw-ring-color': '#E74C3C', backgroundImage: 'linear-gradient(rgb(231, 76, 60), rgb(231, 76, 60))', backgroundRepeat: 'no-repeat', backgroundPosition: '0px 100%', backgroundSize: '0% 2px', transition: 'color 0.25s ease-out, background-size 0.25s ease-out'}}>Rejoindre</a>
+<a className="mt-2 inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" href="#rejoindre" style={{background: 'linear-gradient(90deg, #E74C3C, #E67E22)', boxShadow: '0 16px 55px rgba(231, 76, 60, 0.26)', '--tw-ring-color': '#E74C3C'}}>
           Rejoindre
         </a>
 </div>
@@ -225,7 +267,7 @@ gtag('config', 'G-2M6V79H761');
             La formation, accompagnement, entraînement pour transformer sa force intérieure en force rayonnante
           </p>
 <div className="h-12"></div>
-<a className="reveal cta inline-flex items-center justify-center rounded-full text-white font-semibold text-base sm:text-lg px-10 sm:px-12 py-5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 w-[90%] sm:w-auto" href="#rejoindre" style={{background: 'linear-gradient(90deg, #E74C3C, #E67E22)', boxShadow: '0 18px 60px rgba(231, 76, 60, 0.26)', -TwRingColor: '#E74C3C'}}>
+<a className="reveal cta inline-flex items-center justify-center rounded-full text-white font-semibold text-base sm:text-lg px-10 sm:px-12 py-5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 w-[90%] sm:w-auto" href="#rejoindre" style={{background: 'linear-gradient(90deg, #E74C3C, #E67E22)', boxShadow: '0 18px 60px rgba(231, 76, 60, 0.26)', '--tw-ring-color': '#E74C3C'}}>
             Rejoindre Le Passage
           </a>
 <div className="h-5"></div>
@@ -654,7 +696,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 <div className="h-10"></div>
 <div className="flex justify-center">
-<a className="cta cta-strong inline-flex items-center justify-center sm:text-xl sm:px-14 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:w-auto text-lg font-semibold text-white w-[90%] rounded-full pt-6 pr-10 pb-6 pl-10" href="https://karkadann.learnybox.com/order-form/eyJmIjoxNzM4MDh9/" style={{background: 'linear-gradient(90deg, rgb(231, 76, 60), rgb(230, 126, 34)) 0% 50% / 140% 140%', boxShadow: 'rgba(231, 76, 60, 0.30) 0px 18px 70px', -TwRingColor: '#E74C3C', transition: 'transform 0.25s ease-out, box-shadow 0.25s ease-out, filter 0.25s ease-out, background-position 0.25s ease-out'}}>
+<a className="cta cta-strong inline-flex items-center justify-center sm:text-xl sm:px-14 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:w-auto text-lg font-semibold text-white w-[90%] rounded-full pt-6 pr-10 pb-6 pl-10" href="https://karkadann.learnybox.com/order-form/eyJmIjoxNzM4MDh9/" style={{background: 'linear-gradient(90deg, rgb(231, 76, 60), rgb(230, 126, 34)) 0% 50% / 140% 140%', boxShadow: 'rgba(231, 76, 60, 0.30) 0px 18px 70px', '--tw-ring-color': '#E74C3C', transition: 'transform 0.25s ease-out, box-shadow 0.25s ease-out, filter 0.25s ease-out, background-position 0.25s ease-out'}}>
               Rejoindre Le Passage Maintenant
             </a>
 </div>
@@ -750,7 +792,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="h-12"></div>
 <div className="flex justify-center">
-<a className="cta cta-strong inline-flex items-center justify-center sm:text-2xl sm:px-16 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:w-auto text-xl font-semibold text-white w-[90%] rounded-full pt-6 pr-10 pb-6 pl-10" href="https://karkadann.learnybox.com/order-form/eyJmIjoxNzM4MDh9/" style={{background: 'linear-gradient(90deg, rgb(231, 76, 60), rgb(230, 126, 34)) 0% 50% / 140% 140%', boxShadow: 'rgba(231, 76, 60, 0.34) 0px 20px 80px', -TwRingColor: '#E74C3C', transition: 'transform 0.25s ease-out, box-shadow 0.25s ease-out, filter 0.25s ease-out, background-position 0.25s ease-out'}}>
+<a className="cta cta-strong inline-flex items-center justify-center sm:text-2xl sm:px-16 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:w-auto text-xl font-semibold text-white w-[90%] rounded-full pt-6 pr-10 pb-6 pl-10" href="https://karkadann.learnybox.com/order-form/eyJmIjoxNzM4MDh9/" style={{background: 'linear-gradient(90deg, rgb(231, 76, 60), rgb(230, 126, 34)) 0% 50% / 140% 140%', boxShadow: 'rgba(231, 76, 60, 0.34) 0px 20px 80px', '--tw-ring-color': '#E74C3C', transition: 'transform 0.25s ease-out, box-shadow 0.25s ease-out, filter 0.25s ease-out, background-position 0.25s ease-out'}}>
               Rejoindre Le Passage
             </a>
 </div>

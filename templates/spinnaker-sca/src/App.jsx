@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -163,6 +199,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -501,7 +543,7 @@ gtag('config', 'G-2M6V79H761');
 
 <nav className="relative z-30 flex items-center justify-between px-6 lg:px-10 py-5 mx-6 lg:mx-10 rounded-lg border border-cyan-500/10 bg-black/40 backdrop-blur-md">
 <div className="flex items-center gap-3">
-<div className="w-9 h-9 rounded-md flex items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(34,211,238,0.2), rgba(34,211,238,0.05))', border: '1px solid rgba(34,211,238,0.4)', boxShadow: '0 0 15px rgba(34,211,238,0.3)'}}>
+<div className="w-9 h-9 rounded-md flex items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(34, 211, 238, 0.05))', border: '1px solid rgba(34, 211, 238, 0.4)', boxShadow: '0 0 15px rgba(34,211,238,0.3)'}}>
 <iconify-icon icon="solar:globus-linear" style={{fontSize: '1.25rem', color: '#22D3EE'}}></iconify-icon>
 </div>
 <span className="text-lg font-semibold text-white tracking-wider font-mono">
@@ -593,7 +635,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute left-2 lg:left-12 top-0 hidden md:flex flex-col gap-12 z-20">
 <div className="float-node flex items-center gap-4 cursor-pointer max-w-[320px]">
-<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34,211,238,0.4)', background: 'rgba(34,211,238,0.05)'}}>
+<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34, 211, 238, 0.4)', background: 'rgba(34,211,238,0.05)'}}>
 <iconify-icon icon="solar:route-linear" style={{fontSize: '1.5rem', color: '#22d3ee'}}></iconify-icon>
 </div>
 <div className="">
@@ -606,7 +648,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="float-node flex items-center gap-4 cursor-pointer max-w-[320px]">
-<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34,211,238,0.4)', background: 'rgba(34,211,238,0.05)'}}>
+<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34, 211, 238, 0.4)', background: 'rgba(34,211,238,0.05)'}}>
 <iconify-icon icon="solar:calendar-date-linear" style={{fontSize: '1.5rem', color: '#22d3ee'}}></iconify-icon>
 </div>
 <div>
@@ -619,7 +661,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="float-node flex items-center gap-4 cursor-pointer max-w-[320px]">
-<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34,211,238,0.4)', background: 'rgba(34,211,238,0.05)'}}>
+<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34, 211, 238, 0.4)', background: 'rgba(34,211,238,0.05)'}}>
 <iconify-icon icon="solar:box-linear" style={{fontSize: '1.5rem', color: '#22d3ee'}}></iconify-icon>
 </div>
 <div className="">
@@ -635,7 +677,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute right-2 lg:right-12 top-0 hidden md:flex flex-col gap-12 z-20 items-end">
 <div className="float-node flex items-center gap-4 cursor-pointer max-w-[320px] flex-row-reverse">
-<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34,211,238,0.4)', background: 'rgba(34,211,238,0.05)'}}>
+<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34, 211, 238, 0.4)', background: 'rgba(34,211,238,0.05)'}}>
 <iconify-icon icon="solar:delivery-linear" style={{fontSize: '1.5rem', color: '#22d3ee'}}></iconify-icon>
 </div>
 <div className="text-right">
@@ -648,7 +690,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="float-node flex items-center gap-4 cursor-default max-w-[220px] flex-row-reverse opacity-0 pointer-events-none">
-<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34,211,238,0.4)', background: 'rgba(34,211,238,0.05)'}}>
+<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34, 211, 238, 0.4)', background: 'rgba(34,211,238,0.05)'}}>
 <iconify-icon icon="solar:cpu-linear" style={{fontSize: '1.5rem', color: '#22d3ee'}}></iconify-icon>
 </div>
 <div className="text-right">
@@ -661,7 +703,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="float-node flex items-center gap-4 cursor-pointer max-w-[320px] flex-row-reverse">
-<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34,211,238,0.4)', background: 'rgba(34,211,238,0.05)'}}>
+<div className="node-icon w-12 h-12 flex items-center justify-center rounded-md" style={{border: '1px solid rgba(34, 211, 238, 0.4)', background: 'rgba(34,211,238,0.05)'}}>
 <iconify-icon icon="solar:map-arrow-square-linear" style={{fontSize: '1.5rem', color: '#22d3ee'}}></iconify-icon>
 </div>
 <div className="text-right">
@@ -785,7 +827,7 @@ gtag('config', 'G-2M6V79H761');
             </div>
 <div className="code-line" style={{left: '72.5596%', bottom: '0px', animationDuration: '7.05547s'}}>DATA_INGEST::REAL_TIME</div><div className="code-line" style={{left: '25.8956%', bottom: '0px', animationDuration: '9.52218s'}}>AUTO_ROUTING_SUCCESS</div></div>
 
-<div className="absolute top-12 z-30 px-4 py-2 rounded-md" style={{border: '1px solid rgba(34,211,238,0.4)', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)'}}>
+<div className="absolute top-12 z-30 px-4 py-2 rounded-md" style={{border: '1px solid rgba(34, 211, 238, 0.4)', background: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(8px)'}}>
 <div className="text-xl text-cyan-400 tracking-widest font-mono">
               FIVE LENSES FRAMEWORK
             </div>

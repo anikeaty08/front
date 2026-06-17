@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       // Configure Tailwind to include our custom 3D transform utilities
@@ -553,6 +589,12 @@ if (cardswap){
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -705,7 +747,7 @@ if (cardswap){
 </div>
 <div className="flex items-center space-x-3">
 <button className="glass-button group text-base">
-<span className="shiny-text font-medium" style={{-Duration: '3s'}}>
+<span className="shiny-text font-medium" style={{'--duration': '3s'}}>
                                     Work With Us
                                 </span>
 </button>
@@ -733,7 +775,7 @@ if (cardswap){
 <div className="flex flex-col sm:flex-row gap-4 fade-in fade-in-delay-3 justify-center" style={{opacity: '1'}}>
 <a className="transition-all hover:bg-white/90 font-medium text-gray-900 text-center bg-white rounded-xl pt-4 pr-8 pb-4 pl-8" href="#">Explore Services</a>
 <button className="glass-button">
-<span className="shiny-text text-base font-medium" style={{-Duration: '4s'}}>
+<span className="shiny-text text-base font-medium" style={{'--duration': '4s'}}>
                                 Get Started
                             </span>
 </button>
@@ -960,7 +1002,7 @@ if (cardswap){
 <div className="flex items-center px-5 py-2 border-b border-gray-200 rounded-t-xl" style={{minHeight: '60px'}}>
 <img alt="Google" className="h-6 mr-5" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" style={{objectFit: 'contain'}}/>
 <form aria-label="Google search" className="flex flex-1 items-center bg-[#f1f3f4] rounded-full pl-4 pr-1 py-1 border border-[#dfe1e5] focus-within:ring-2 focus-within:ring-blue-200" role="search">
-<input aria-label="Search" className="flex-1 bg-transparent text-[15px] text-gray-900 font-normal outline-none border-none placeholder-gray-500" style={{fontFamily: 'Roboto,Inter,sans-serif'}} value="best home builder sydney"/>
+<input aria-label="Search" className="flex-1 bg-transparent text-[15px] text-gray-900 font-normal outline-none border-none placeholder-gray-500" style={{fontFamily: 'Roboto, Inter, sans-serif'}} value="best home builder sydney"/>
 <button aria-label="Search" className="ml-2 flex items-center justify-center bg-transparent border-none p-1" type="submit">
 <svg fill="none" height="21" stroke="#4285F4" strokeWidth="2.2" viewbox="0 0 24 24" width="21" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
 </button>
@@ -981,42 +1023,42 @@ if (cardswap){
 <span className="text-white bg-gradient-to-r from-indigo-500 via-blue-500 to-indigo-400 px-2 py-0.5 rounded-full text-xs font-medium shadow" style={{letterSpacing: '-0.02em'}}>#1</span>
 <span className="text-[#5f6368] text-[12px] px-1 rounded bg-[#eef6ff] ml-1">Page 1</span>
 </div>
-<a className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2 hover:underline focus:underline outline-none focus:ring-2 focus:ring-[#a78bfa] transition-all" href="#" style={{fontFamily: 'Roboto,Inter,sans-serif'}}>Sydney's Leading Home Builder | OurClient.com.au</a>
+<a className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2 hover:underline focus:underline outline-none focus:ring-2 focus:ring-[#a78bfa] transition-all" href="#" style={{fontFamily: 'Roboto, Inter, sans-serif'}}>Sydney's Leading Home Builder | OurClient.com.au</a>
 <div className="text-[15px] text-[#4d5156] mt-1 leading-snug">Award-winning home designs and builds in Sydney. Free consultations—start your dream home today with the trusted experts.</div>
 </div>
 <div aria-hidden="true" className="py-3 border-b border-[#ececec] relative group competitor-blur" tabindex="-1">
 <div className="text-xs text-[#202124] truncate mb-0.5">
 <span className="text-[#4caf50] font-mono text-[13px]">competitor1.com.au</span>
 </div>
-<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto,Inter,sans-serif'}}>Custom Home Builders Sydney | Competitor1</span>
+<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto, Inter, sans-serif'}}>Custom Home Builders Sydney | Competitor1</span>
 <div className="text-[15px] text-[#4d5156] mt-1 leading-snug">Your trusted Sydney builders for custom homes and renovations.</div>
 </div>
 <div aria-hidden="true" className="py-3 border-b border-[#ececec] relative group competitor-blur" tabindex="-1">
 <div className="text-xs text-[#202124] truncate mb-0.5">
 <span className="text-[#4caf50] font-mono text-[13px]">anotherbuilder.com.au</span>
 </div>
-<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto,Inter,sans-serif'}}>Modern Home Builds | AnotherBuilder</span>
+<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto, Inter, sans-serif'}}>Modern Home Builds | AnotherBuilder</span>
 <div className="text-[15px] text-[#4d5156] mt-1 leading-snug">Modern home builds, renovations, and extensions.</div>
 </div>
 <div aria-hidden="true" className="py-3 group competitor-blur" tabindex="-1">
 <div className="text-xs text-[#202124] truncate mb-0.5">
 <span className="text-[#4caf50] font-mono text-[13px]">qualityhomes.com.au</span>
 </div>
-<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto,Inter,sans-serif'}}>Affordable, Quality New Builds | Quality Homes</span>
+<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto, Inter, sans-serif'}}>Affordable, Quality New Builds | Quality Homes</span>
 <div className="text-[15px] text-[#4d5156] mt-1 leading-snug">Affordable, quality new builds in Sydney.</div>
 </div>
 <div aria-hidden="true" className="py-3 border-b border-[#ececec] relative group competitor-blur" tabindex="-1">
 <div className="text-xs text-[#202124] truncate mb-0.5">
 <span className="text-[#4caf50] font-mono text-[13px]">greenhomes.com.au</span>
 </div>
-<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto,Inter,sans-serif'}}>Eco-Friendly Home Builders | Green Homes</span>
+<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto, Inter, sans-serif'}}>Eco-Friendly Home Builders | Green Homes</span>
 <div className="text-[15px] text-[#4d5156] mt-1 leading-snug">Sustainable home construction and design in Sydney.</div>
 </div>
 <div aria-hidden="true" className="py-3 border-b border-[#ececec] relative group competitor-blur" tabindex="-1">
 <div className="text-xs text-[#202124] truncate mb-0.5">
 <span className="text-[#4caf50] font-mono text-[13px]">citybuilders.com.au</span>
 </div>
-<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto,Inter,sans-serif'}}>City Builders Sydney | CityBuilders</span>
+<span className="text-[20px] tracking-tight text-[#1a0dab] font-medium leading-tight underline-offset-2" style={{fontFamily: 'Roboto, Inter, sans-serif'}}>City Builders Sydney | CityBuilders</span>
 <div className="text-[15px] text-[#4d5156] mt-1 leading-snug">High-quality city home builds and developments.</div>
 </div>
 </div>
@@ -1045,7 +1087,7 @@ if (cardswap){
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
 <div className="group fade-in fade-in-delay-1" style={{opacity: '1'}}>
-<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="websites" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', -SpotlightColor: 'rgba(145, 64, 115, 0.25)', -MouseX: '227.5px', -MouseY: '130.609375px'}}>
+<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="websites" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', '--spotlight-color': 'rgba(145, 64, 115, 0.25)', '--mouse-x': '227.5px', '--mouse-y': '130.609375px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-purple-800/15 via-transparent to-blue-900/20 pointer-events-none"></div>
 <div className="relative z-10">
 <div className="mb-4 mx-auto">
@@ -1083,7 +1125,7 @@ if (cardswap){
 </div>
 
 <div className="group fade-in fade-in-delay-2" style={{opacity: '1'}}>
-<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="seo" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', -SpotlightColor: 'rgba(145, 64, 115, 0.25)', -MouseX: '13.5px', -MouseY: '225.609375px'}}>
+<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="seo" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', '--spotlight-color': 'rgba(145, 64, 115, 0.25)', '--mouse-x': '13.5px', '--mouse-y': '225.609375px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-purple-800/15 via-transparent to-blue-900/20 pointer-events-none"></div>
 <div className="relative z-10">
 <div className="mb-4 mx-auto">
@@ -1121,7 +1163,7 @@ if (cardswap){
 </div>
 
 <div className="group fade-in fade-in-delay-3" style={{opacity: '1'}}>
-<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="ads" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', -SpotlightColor: 'rgba(145, 64, 115, 0.25)'}}>
+<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="ads" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', '--spotlight-color': 'rgba(145, 64, 115, 0.25)'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-purple-800/15 via-transparent to-blue-900/20 pointer-events-none"></div>
 <div className="relative z-10">
 <div className="mb-4 mx-auto">
@@ -1159,7 +1201,7 @@ if (cardswap){
 </div>
 
 <div className="group fade-in fade-in-delay-4" style={{opacity: '1'}}>
-<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="social" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', -SpotlightColor: 'rgba(145, 64, 115, 0.25)'}}>
+<div className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:border-purple-400/30 hover:bg-white/5 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="social" style={{backgroundColor: 'rgb(24, 16, 37)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(145, 64, 115, 0.1) 0px 4px 16px', '--spotlight-color': 'rgba(145, 64, 115, 0.25)'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-purple-800/15 via-transparent to-blue-900/20 pointer-events-none"></div>
 <div className="relative z-10">
 <div className="mb-4 mx-auto">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -260,6 +296,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -336,7 +378,7 @@ gtag('config', 'G-2M6V79H761');
         </h2>
 <div className="grid md:grid-cols-3 gap-6 md:gap-8">
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #fca5a5, #ef4444)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #fca5a5, #ef4444)', '--border-radius-before': '1.5rem'}}>
 <h3 className="text-lg md:text-xl font-montserrat font-semibold mb-2 md:mb-3 text-gray-900">
               Wasting Money on Leads That Never Show
             </h3>
@@ -346,7 +388,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #fca5a5, #ef4444)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #fca5a5, #ef4444)', '--border-radius-before': '1.5rem'}}>
 <h3 className="text-lg md:text-xl font-montserrat font-semibold mb-2 md:mb-3 text-gray-900">
               Paying Before Seeing Results
             </h3>
@@ -356,7 +398,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, #fca5a5, #ef4444)', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-red-50 to-white rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, #fca5a5, #ef4444)', '--border-radius-before': '1.5rem'}}>
 <h3 className="text-lg md:text-xl font-montserrat font-semibold mb-2 md:mb-3 text-gray-900">
               Not Enough Qualified Sales Calls
             </h3>

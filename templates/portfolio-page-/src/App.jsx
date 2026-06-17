@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -32,6 +68,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -70,7 +112,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="z-10 flex flex-col sm:mt-80 text-center border-white/10 border rounded-3xl mt-64 pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-xl items-center" style={{boxShadow: '0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="z-10 flex flex-col sm:mt-80 text-center border-white/10 border rounded-3xl mt-64 pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-xl items-center" style={{boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <h1 className="text-5xl sm:text-7xl font-medium tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 mb-3 drop-shadow-sm">
                     Sakshi
                 </h1>
@@ -131,7 +173,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute -inset-8 bg-gradient-to-b from-aura-purple/30 via-transparent to-aura-pink/20 blur-[60px] opacity-50 group-hover:opacity-100 transition-opacity duration-700 -z-10 rounded-[3rem]"></div>
 
-<div className="relative w-full aspect-[3/4] sm:aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/5 transform transition-transform duration-700 hover:-translate-y-2" style={{boxShadow: '0 30px 60px -15px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="relative w-full aspect-[3/4] sm:aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/5 transform transition-transform duration-700 hover:-translate-y-2" style={{boxShadow: '0 30px 60px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <img alt="Fashion Pose" className="object-center filter contrast-110 w-full h-full object-cover saturate-110" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/878e3873-3b2e-4109-9151-8c0f3e636a8f_1600w.jpg"/>
 
 <div className="absolute bottom-8 left-8 flex flex-col gap-3">

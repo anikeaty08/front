@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -122,6 +158,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -433,7 +475,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col md:p-16 overflow-hidden bg-[#0f172a] border-white/10 border rounded-[3rem] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl gap-x-y-16 gap-y-16">
 
 <div className="pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1e293b] via-[#0f172a] to-[#0f172a] absolute top-0 right-0 bottom-0 left-0 z-0"></div>
-<div className="z-0 opacity-20 absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: 'clamp(24px, 3vw, 40px) clamp(24px, 3vw, 40px)', WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 80%)', maskImage: 'radial-gradient(ellipse at center, black, transparent 80%)'}}></div>
+<div className="z-0 opacity-20 absolute inset-0 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px)', backgroundSize: 'clamp(24px, 3vw, 40px) clamp(24px, 3vw, 40px)', WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 80%)', maskImage: 'radial-gradient(ellipse at center, black, transparent 80%)'}}></div>
 
 <div className="relative z-10 flex flex-col md:flex-row md:items-end gap-8 w-full justify-between stagger-container">
 <div className="flex flex-col gap-6 max-w-2xl reveal-item">

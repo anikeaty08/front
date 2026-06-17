@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 {
@@ -269,6 +305,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -389,7 +431,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-tr from-[#4080FF]/20 via-transparent to-[#10b981]/10 blur-3xl rounded-full z-0 pointer-events-none -translate-x-10 translate-y-10">
 </div>
 
-<div className="flex flex-col overflow-hidden z-10 transition-all duration-500 ease-out hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.14)] bg-gradient-to-b from-white to-slate-50 w-[740px] h-[540px] border-slate-200/60 border rounded-[2rem] absolute top-0 right-0 backdrop-blur-md" style={{boxShadow: '0 30px 60px -15px rgba(15,23,42,0.10), 0 10px 24px -10px rgba(15,23,42,0.08), inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -1px 2px rgba(0,0,0,0.04)', animation: 'dashSlideIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards'}}>
+<div className="flex flex-col overflow-hidden z-10 transition-all duration-500 ease-out hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.14)] bg-gradient-to-b from-white to-slate-50 w-[740px] h-[540px] border-slate-200/60 border rounded-[2rem] absolute top-0 right-0 backdrop-blur-md" style={{boxShadow: '0 30px 60px -15px rgba(15, 23, 42, 0.10), 0 10px 24px -10px rgba(15, 23, 42, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -1px 2px rgba(0, 0, 0, 0.04)', animation: 'dashSlideIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards'}}>
 
 <div className="h-12 bg-gradient-to-b from-slate-50/90 to-slate-100/50 border-b border-slate-200/80 flex items-center px-4 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
 <div className="flex gap-2 w-20 pl-2">
@@ -493,7 +535,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.16)] cursor-pointer group bg-neutral-50 w-[340px] z-20 border-slate-200/60 border rounded-[2rem] px-7 py-7 absolute top-14 left-0" style={{boxShadow: '0 24px 48px -12px rgba(15,23,42,0.14), 0 10px 20px -10px rgba(15,23,42,0.08), inset 0 2px 2px rgba(255,255,255,1), inset 0 -1px 2px rgba(0,0,0,0.03)', animation: 'cardSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards'}}>
+<div className="transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.16)] cursor-pointer group bg-neutral-50 w-[340px] z-20 border-slate-200/60 border rounded-[2rem] px-7 py-7 absolute top-14 left-0" style={{boxShadow: '0 24px 48px -12px rgba(15, 23, 42, 0.14), 0 10px 20px -10px rgba(15, 23, 42, 0.08), inset 0 2px 2px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(0, 0, 0, 0.03)', animation: 'cardSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards'}}>
 <div className="flex items-start justify-between mb-5">
 <div className="flex items-center gap-3">
 <div className="">
@@ -550,8 +592,8 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-7xl mx-auto relative z-10">
 
 <div className="max-w-3xl mb-20 text-center mx-auto">
-<h4 className="text-[#4080FF] font-medium mb-8 text-[10px] tracking-widest uppercase inline-flex items-center justify-center px-6 py-2.5 rounded-full" style={{background: 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%)', border: '1px solid rgba(255,255,255,0.7)', boxShadow: '0 6px 16px rgba(15,23,42,0.03), inset 0 1px 0 rgba(255,255,255,0.9)'}}>
-<div className="w-1.5 h-1.5 rounded-full mr-3" style={{background: '#4080FF', boxShadow: '0 0 6px rgba(64,128,255,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
+<h4 className="text-[#4080FF] font-medium mb-8 text-[10px] tracking-widest uppercase inline-flex items-center justify-center px-6 py-2.5 rounded-full" style={{background: 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%)', border: '1px solid rgba(255, 255, 255, 0.7)', boxShadow: '0 6px 16px rgba(15, 23, 42, 0.03), inset 0 1px 0 rgba(255,255,255,0.9)'}}>
+<div className="w-1.5 h-1.5 rounded-full mr-3" style={{background: '#4080FF', boxShadow: '0 0 6px rgba(64, 128, 255, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
             Naše Služby
           </h4>
 <h2 className="text-4xl lg:text-5xl font-medium tracking-tight text-slate-800 mb-8 skeuo-text-raised">
@@ -857,7 +899,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 pointer-events-none z-0">
 <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-[radial-gradient(circle_at_center,rgba(64,128,255,0.15),transparent_60%)] blur-[100px]"></div>
 <div className="absolute top-[40%] -right-[20%] w-[60%] h-[60%] bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.1),transparent_60%)] blur-[100px]"></div>
-<div className="absolute inset-0" style={{backgroundSize: '40px 40px', backgroundImage: 'linear-gradient(to right,rgba(255,255,255,0.03) 1px,transparent 1px), linear-gradient(to bottom,rgba(255,255,255,0.03) 1px,transparent 1px)', maskImage: 'radial-gradient(circle at center,black 40%,transparent 80%)', WebkitMaskImage: 'radial-gradient(circle at center,black 40%,transparent 80%)'}}></div>
+<div className="absolute inset-0" style={{backgroundSize: '40px 40px', backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', maskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)', WebkitMaskImage: 'radial-gradient(circle at center,black 40%,transparent 80%)'}}></div>
 </div>
 <main className="z-10 flex w-full relative items-center justify-center">
 <div className="max-w-[1280px] w-full mx-auto px-6 sm:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">

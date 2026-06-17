@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -98,6 +134,12 @@ window.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.cr
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -155,7 +197,7 @@ window.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.cr
 </div>
 
 <div className="sm:mt-24 opacity-0 animate-blur-in animate-delay-700 hover-lift relative mt-16" style={{opacity: '1', transform: 'translateY(0px)'}}>
-<div className="antialiased relative z-10 text-slate-100 pt-6 pr-6 pb-6 pl-6" style={{fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\',\'Segoe UI Emoji\''}}>
+<div className="antialiased relative z-10 text-slate-100 pt-6 pr-6 pb-6 pl-6" style={{fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\', \'Segoe UI Emoji\''}}>
 <section className="relative shadow-[0_10px_60px_-15px_rgba(0,0,0,0.6)] overflow-hidden hover:shadow-[0_20px_80px_-15px_rgba(0,0,0,0.8)] hover:border-white/15 transition-all duration-500 bg-gradient-to-b from-slate-900/40 to-slate-800/30 border-white/20 border rounded-3xl backdrop-blur-xl">
 <div className="pointer-events-none absolute -inset-px rounded-[1.45rem] bg-[radial-gradient(80%_60%_at_50%_0%,rgba(90,97,255,0.25),transparent_60%)]"></div>
 <div className="relative pt-8 pr-8 pb-8 pl-8">
@@ -683,7 +725,7 @@ window.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.cr
 <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-blue-500/15 via-blue-600/25 to-blue-800/35 ring-1 ring-white/10 shadow-2xl [transform-style:preserve-3d] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(45deg)_translateX(-20px)_translateZ(-30px)_translateY(-15px)_scale(0.95)]">
 </div>
 
-<div className="relative z-10 rounded-[28px] shadow-2xl p-7 sm:p-8 min-h-[420px] flex flex-col justify-between [transform-style:preserve-3d] origin-left [transform:rotateY(0deg)] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(-10deg)_translateY(-12px)_translateZ(10px)] transform-gpu" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="relative z-10 rounded-[28px] shadow-2xl p-7 sm:p-8 min-h-[420px] flex flex-col justify-between [transform-style:preserve-3d] origin-left [transform:rotateY(0deg)] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(-10deg)_translateY(-12px)_translateZ(10px)] transform-gpu" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06))', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <div className="">
 <div className="text-center">
 <div className="text-xs tracking-[0.2em] text-white/70 mb-3" style={{}}>BASIC</div>
@@ -720,7 +762,7 @@ window.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.cr
 <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-sky-500/15 via-sky-600/25 to-indigo-800/35 ring-1 ring-white/10 shadow-2xl [transform-style:preserve-3d] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(45deg)_translateX(-20px)_translateZ(-30px)_translateY(-15px)_scale(0.95)]">
 </div>
 
-<div className="relative z-10 rounded-[28px] shadow-2xl p-7 sm:p-8 min-h-[420px] flex flex-col justify-between [transform-style:preserve-3d] origin-left [transform:rotateY(0deg)] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(-10deg)_translateY(-12px)_translateZ(10px)] transform-gpu" style={{background: 'linear-gradient(135deg, rgba(56,189,248,0.15), rgba(99,102,241,0.08))', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(56,189,248,0.3)', boxShadow: '0 8px 32px rgba(56,189,248,0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="relative z-10 rounded-[28px] shadow-2xl p-7 sm:p-8 min-h-[420px] flex flex-col justify-between [transform-style:preserve-3d] origin-left [transform:rotateY(0deg)] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(-10deg)_translateY(-12px)_translateZ(10px)] transform-gpu" style={{background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.08))', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(56, 189, 248, 0.3)', boxShadow: '0 8px 32px rgba(56, 189, 248, 0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <div className="">
 <div className="text-center">
 <div className="text-xs tracking-[0.2em] text-sky-300 mb-3" style={{}}>PRO</div>
@@ -757,7 +799,7 @@ window.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.cr
 <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-violet-500/15 via-purple-600/25 to-indigo-800/35 ring-1 ring-white/10 shadow-2xl [transform-style:preserve-3d] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(45deg)_translateX(-20px)_translateZ(-30px)_translateY(-15px)_scale(0.95)]">
 </div>
 
-<div className="relative z-10 rounded-[28px] shadow-2xl p-7 sm:p-8 min-h-[420px] flex flex-col justify-between [transform-style:preserve-3d] origin-left [transform:rotateY(0deg)] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(-10deg)_translateY(-12px)_translateZ(10px)] transform-gpu" style={{background: 'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(147,51,234,0.08))', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(168,85,247,0.3)', boxShadow: '0 8px 32px rgba(168,85,247,0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
+<div className="relative z-10 rounded-[28px] shadow-2xl p-7 sm:p-8 min-h-[420px] flex flex-col justify-between [transform-style:preserve-3d] origin-left [transform:rotateY(0deg)] transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:[transform:rotateY(-10deg)_translateY(-12px)_translateZ(10px)] transform-gpu" style={{background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(147, 51, 234, 0.08))', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(168, 85, 247, 0.3)', boxShadow: '0 8px 32px rgba(168, 85, 247, 0.2), inset 0 1px 0 rgba(255,255,255,0.2)'}}>
 <div className="">
 <div className="text-center">
 <div className="text-xs tracking-[0.2em] text-violet-300 mb-3" style={{}}>ULTRA</div>

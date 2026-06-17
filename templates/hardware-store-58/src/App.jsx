@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -26,6 +62,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -82,7 +124,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-32 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '-35.5px', -MouseY: '2539px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-32 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '-35.5px', '--mouse-y': '2539px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col min-h-[600px] z-10 rounded-[40px] justify-center">
 <main className="container lg:px-12 grid lg:grid-cols-2 z-10 mr-auto ml-auto pt-20 pr-6 pb-20 pl-6 relative gap-x-16 gap-y-16 items-center">
 
@@ -164,7 +206,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="oferta" style={{-MouseX: '-35.5px', -MouseY: '1834.5px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="oferta" style={{'--mouse-x': '-35.5px', '--mouse-y': '1834.5px'}}>
 <div className="spotlight-inner sm:p-12 rounded-[40px] pt-8 pr-8 pb-8 pl-8">
 <div className="flex flex-col sm:flex-row gap-6 mb-12 gap-x-6 gap-y-6 items-end justify-between">
 <div className="">
@@ -272,7 +314,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="sm:mx-6 grid grid-cols-1 lg:grid-cols-12 xl:ml-auto xl:mr-auto max-w-7xl z-10 mt-4 relative gap-4" id="galeria">
 
-<div className="lg:col-span-8 p-[1px] spotlight-card rounded-[40px] relative group" style={{-MouseX: '-35.5px', -MouseY: '1148.5px'}}>
+<div className="lg:col-span-8 p-[1px] spotlight-card rounded-[40px] relative group" style={{'--mouse-x': '-35.5px', '--mouse-y': '1148.5px'}}>
 <div className="spotlight-inner rounded-[40px] p-8 relative overflow-hidden flex flex-col">
 <div className="flex justify-between items-center mb-6 z-10">
 <h3 className="text-2xl tracking-tighter font-geist text-amber-600">Zobacz Asortyment</h3>
@@ -313,7 +355,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:col-span-4 p-[1px] spotlight-card rounded-[40px] relative group h-full" id="dlaczego-my" style={{-MouseX: '-899.5px', -MouseY: '1148.5px'}}>
+<div className="lg:col-span-4 p-[1px] spotlight-card rounded-[40px] relative group h-full" id="dlaczego-my" style={{'--mouse-x': '-899.5px', '--mouse-y': '1148.5px'}}>
 <div className="spotlight-inner rounded-[40px] p-8 flex flex-col justify-between bg-[#1A1A1A]">
 <div className="mb-6">
 <h3 className="text-xl font-medium font-geist mb-2 text-amber-600">Dlaczego My?</h3>
@@ -373,7 +415,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '-35.5px', -MouseY: '493.15625px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '-35.5px', '--mouse-y': '493.15625px'}}>
 <div className="spotlight-inner p-8 sm:p-12 overflow-hidden bg-[#0A0A0A] rounded-[40px]">
 <div className="text-center mb-12">
 <h2 className="text-3xl sm:text-4xl tracking-tighter mb-4 font-geist text-amber-600">Jak to działa?</h2>
@@ -433,7 +475,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="opinie" style={{-MouseX: '-35.5px', -MouseY: '-38.84375px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="opinie" style={{'--mouse-x': '-35.5px', '--mouse-y': '-38.84375px'}}>
 <div className="spotlight-inner p-8 sm:p-12 bg-[#0A0A0A] rounded-[40px]">
 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 border-b border-white/5 pb-8">
 <div className="">
@@ -498,7 +540,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '-35.5px', -MouseY: '-540.84375px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '-35.5px', '--mouse-y': '-540.84375px'}}>
 <div className="spotlight-inner p-8 sm:p-12 bg-[#0A0A0A] rounded-[40px]">
 <h2 className="text-2xl font-bold mb-8 font-geist text-amber-600">Częste pytania</h2>
 <div className="max-w-3xl space-y-4">
@@ -569,7 +611,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mb-20 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="kontakt" style={{-MouseX: '-35.5px', -MouseY: '-1406.84375px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mb-20 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" id="kontakt" style={{'--mouse-x': '-35.5px', '--mouse-y': '-1406.84375px'}}>
 <div className="spotlight-inner rounded-[40px] overflow-hidden bg-[#111]">
 <div className="grid lg:grid-cols-2">
 

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -335,6 +371,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -589,7 +631,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 <div className="rounded-lg border border-slate-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11,31,58,0.08)', color: 'var(--brand)'}}>
+<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11, 31, 58, 0.08)', color: 'var(--brand)'}}>
 <i className="h-5 w-5" data-lucide="credit-card" strokeWidth="1.5"></i>
 </span>
 <h3 className="text-2xl font-semibold tracking-tight">Buy with Fiat</h3>
@@ -631,7 +673,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rounded-lg border border-slate-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11,31,58,0.08)', color: 'var(--brand)'}}>
+<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11, 31, 58, 0.08)', color: 'var(--brand)'}}>
 <i className="h-5 w-5" data-lucide="landmark" strokeWidth="1.5"></i>
 </span>
 <h3 className="text-2xl font-semibold tracking-tight">Sell to Bank</h3>
@@ -679,7 +721,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="lg:col-span-2 rounded-lg border border-slate-200 bg-white p-5">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
-<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11,31,58,0.08)', color: 'var(--brand)'}}>
+<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11, 31, 58, 0.08)', color: 'var(--brand)'}}>
 <i className="h-5 w-5" data-lucide="qr-code" strokeWidth="1.5"></i>
 </span>
 <h3 className="text-2xl font-semibold tracking-tight">Create QR Payment</h3>
@@ -773,7 +815,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-lg border border-slate-200 bg-white p-5">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
-<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11,31,58,0.08)', color: 'var(--brand)'}}>
+<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11, 31, 58, 0.08)', color: 'var(--brand)'}}>
 <i className="h-5 w-5" data-lucide="smartphone" strokeWidth="1.5"></i>
 </span>
 <h3 className="text-2xl font-semibold tracking-tight">Bills &amp; Top-up</h3>
@@ -882,7 +924,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="hidden space-y-6" data-page="activity">
 <div className="rounded-lg border border-slate-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11,31,58,0.08)', color: 'var(--brand)'}}>
+<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11, 31, 58, 0.08)', color: 'var(--brand)'}}>
 <i className="h-5 w-5" data-lucide="history" strokeWidth="1.5"></i>
 </span>
 <h3 className="text-2xl font-semibold tracking-tight">All Activity</h3>
@@ -896,7 +938,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="hidden space-y-6" data-page="settings">
 <div className="rounded-lg border border-slate-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11,31,58,0.08)', color: 'var(--brand)'}}>
+<span className="h-9 w-9 flex items-center justify-center rounded-md" style={{background: 'rgba(11, 31, 58, 0.08)', color: 'var(--brand)'}}>
 <i className="h-5 w-5" data-lucide="settings" strokeWidth="1.5"></i>
 </span>
 <h3 className="text-2xl font-semibold tracking-tight">Settings</h3>

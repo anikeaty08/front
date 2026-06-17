@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -226,6 +262,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -360,7 +402,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex lg:justify-end obs-element relative justify-center w-full h-full lg:min-h-[650px] in-view" style={{transitionDelay: '200ms'}}>
-<div className="flashlight-card hero-card-right relative w-full lg:max-w-[460px] lg:h-full lg:aspect-auto aspect-[4/5] p-[1px] ml-auto overflow-hidden" style={{-MouseX: '424px', -MouseY: '98px'}}>
+<div className="flashlight-card hero-card-right relative w-full lg:max-w-[460px] lg:h-full lg:aspect-auto aspect-[4/5] p-[1px] ml-auto overflow-hidden" style={{'--mouse-x': '424px', '--mouse-y': '98px'}}>
 <div className="flashlight-inner bg-gradient-to-br from-[#1b1064] to-[#050505] hero-gradient-bg overflow-hidden relative flex flex-col justify-start w-full h-full rounded-[inherit] z-10">
 
 <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 flex items-center justify-center hero-orbs">
@@ -579,7 +621,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
 
-<div className="flashlight-card p-[1px] obs-element" style={{transitionDelay: '100ms', -MouseX: '258px', -MouseY: '106.75px'}}>
+<div className="flashlight-card p-[1px] obs-element" style={{transitionDelay: '100ms', '--mouse-x': '258px', '--mouse-y': '106.75px'}}>
 <div className="flashlight-inner p-8 flex flex-col h-full bg-[#0a0a0a]/80 backdrop-blur-md">
 <h3 className="text-2xl font-normal tracking-tight text-white mb-2">AI Foundations</h3>
 <div className="text-4xl font-normal tracking-tight text-white mb-4">$500</div>
@@ -641,7 +683,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flashlight-card p-[1px] obs-element" style={{transitionDelay: '300ms', -MouseX: '14.3359375px', -MouseY: '255.75px'}}>
+<div className="flashlight-card p-[1px] obs-element" style={{transitionDelay: '300ms', '--mouse-x': '14.3359375px', '--mouse-y': '255.75px'}}>
 <div className="flashlight-inner p-8 flex flex-col h-full bg-[#0a0a0a]/80 backdrop-blur-md">
 <h3 className="text-2xl font-normal tracking-tight text-white mb-2">AI Transformation</h3>
 <div className="text-4xl font-normal tracking-tight text-white mb-4">$5,000</div>

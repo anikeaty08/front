@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -196,6 +232,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -501,7 +543,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-[1400px] mx-auto px-8 py-28">
 <div className="max-w-4xl">
 <iconify-icon className="text-neutral-300 mb-10" height="40" icon="solar:quote-up-square-linear" style={{strokeWidth: '1.5'}} width="40"></iconify-icon>
-<p className="serif reveal-text" style={{fontFamily: '\'DM Serif Display\',serif', fontSize: 'clamp(1.75rem, 4vw, 3.25rem)', lineHeight: '1.2', letterSpacing: '-0.02em', color: '#171717'}}>
+<p className="serif reveal-text" style={{fontFamily: '\'DM Serif Display\', serif', fontSize: 'clamp(1.75rem, 4vw, 3.25rem)', lineHeight: '1.2', letterSpacing: '-0.02em', color: '#171717'}}>
           "Without Nexus Studio, we would never have been able to implement this system ourselves. Being a small team we don't have enough hours in the day."
         </p>
 <p className="text-base text-neutral-500 mt-8 leading-relaxed max-w-2xl reveal-fade">
@@ -525,7 +567,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="relative z-10 max-w-[1400px] mx-auto px-8 py-32">
 <p className="tag-pill mb-8" style={{borderColor: '#404040', color: '#737373'}}>Let's work together</p>
-<h2 className="serif reveal-text" style={{fontFamily: '\'DM Serif Display\',serif', fontSize: 'clamp(4rem, 12vw, 10rem)', lineHeight: '0.9', letterSpacing: '-0.03em'}}>Let's Connect<br/><em>There</em></h2>
+<h2 className="serif reveal-text" style={{fontFamily: '\'DM Serif Display\', serif', fontSize: 'clamp(4rem, 12vw, 10rem)', lineHeight: '0.9', letterSpacing: '-0.03em'}}>Let's Connect<br/><em>There</em></h2>
 <div className="mt-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
 <p className="text-base text-neutral-400 max-w-sm leading-relaxed reveal-fade">Ready to bring your next product to life? Drop a line and let's build something exceptional together.</p>
 <button className="flex items-center gap-3 bg-white text-neutral-900 rounded-full px-7 py-4 text-sm font-semibold hover:bg-neutral-100 transition-all duration-300 shrink-0 reveal-fade group">

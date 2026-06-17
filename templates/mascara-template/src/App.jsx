@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -108,10 +150,10 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative w-full max-w-md mx-auto lg:ml-auto aspect-[3/4] group mt-12 lg:mt-0">
 
-<div className="absolute inset-0 w-full h-full bg-[#EAE1D9]/90 translate-x-5 translate-y-6 transition-transform duration-700 group-hover:translate-x-7 group-hover:translate-y-8" style={{WebkitMaskImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25,5 C 40,-2 60,8 75,5 C 90,2 95,20 92,40 C 89,60 98,80 90,100 C 82,120 60,115 45,118 C 30,121 10,110 5,90 C 0,70 15,50 10,30 C 5,10 10,12 25,5 Z%22/%3E%3C/svg%3E\')', WebkitMaskSize: '100% 100%', maskImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25,5 C 40,-2 60,8 75,5 C 90,2 95,20 92,40 C 89,60 98,80 90,100 C 82,120 60,115 45,118 C 30,121 10,110 5,90 C 0,70 15,50 10,30 C 5,10 10,12 25,5 Z%22/%3E%3C/svg%3E\')', maskSize: '100% 100%'}}>
+<div className="absolute inset-0 w-full h-full bg-[#EAE1D9]/90 translate-x-5 translate-y-6 transition-transform duration-700 group-hover:translate-x-7 group-hover:translate-y-8" style={{WebkitMaskImage: 'url(\'data:image/svg+xml, %3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http: //www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25, 5 C 40, -2 60, 8 75, 5 C 90, 2 95, 20 92, 40 C 89, 60 98, 80 90, 100 C 82, 120 60, 115 45, 118 C 30, 121 10, 110 5, 90 C 0, 70 15, 50 10, 30 C 5, 10 10, 12 25, 5 Z%22/%3E%3C/svg%3E\')', WebkitMaskSize: '100% 100%', maskImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25,5 C 40,-2 60,8 75,5 C 90,2 95,20 92,40 C 89,60 98,80 90,100 C 82,120 60,115 45,118 C 30,121 10,110 5,90 C 0,70 15,50 10,30 C 5,10 10,12 25,5 Z%22/%3E%3C/svg%3E\')', maskSize: '100% 100%'}}>
 </div>
 
-<div className="relative w-full h-full" style={{WebkitMaskImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25,5 C 40,-2 60,8 75,5 C 90,2 95,20 92,40 C 89,60 98,80 90,100 C 82,120 60,115 45,118 C 30,121 10,110 5,90 C 0,70 15,50 10,30 C 5,10 10,12 25,5 Z%22/%3E%3C/svg%3E\')', WebkitMaskSize: '100% 100%', maskImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25,5 C 40,-2 60,8 75,5 C 90,2 95,20 92,40 C 89,60 98,80 90,100 C 82,120 60,115 45,118 C 30,121 10,110 5,90 C 0,70 15,50 10,30 C 5,10 10,12 25,5 Z%22/%3E%3C/svg%3E\')', maskSize: '100% 100%'}}>
+<div className="relative w-full h-full" style={{WebkitMaskImage: 'url(\'data:image/svg+xml, %3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http: //www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25, 5 C 40, -2 60, 8 75, 5 C 90, 2 95, 20 92, 40 C 89, 60 98, 80 90, 100 C 82, 120 60, 115 45, 118 C 30, 121 10, 110 5, 90 C 0, 70 15, 50 10, 30 C 5, 10 10, 12 25, 5 Z%22/%3E%3C/svg%3E\')', WebkitMaskSize: '100% 100%', maskImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 100 120%22 preserveAspectRatio=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M 25,5 C 40,-2 60,8 75,5 C 90,2 95,20 92,40 C 89,60 98,80 90,100 C 82,120 60,115 45,118 C 30,121 10,110 5,90 C 0,70 15,50 10,30 C 5,10 10,12 25,5 Z%22/%3E%3C/svg%3E\')', maskSize: '100% 100%'}}>
 <img alt="Soin Mascara Institut" className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)]" src="https://images.unsplash.com/photo-1629946832022-c327f74956e0?w=2160&amp;q=80"/>
 
 <div className="absolute top-0 right-0 bottom-0 left-0">

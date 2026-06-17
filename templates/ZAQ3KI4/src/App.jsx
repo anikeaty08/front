@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
   !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
@@ -121,6 +157,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -546,7 +588,7 @@ export default function App() {
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
 
 <div className="relative group rounded-3xl bg-white/5 p-7 lg:p-8 ring-1 ring-white/15 backdrop-blur-sm overflow-hidden" style={{minHeight: '360px'}}>
-<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(34,197,94,0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite', transform: 'translateX(-100%)'}}></div>
+<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(34, 197, 94, 0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite', transform: 'translateX(-100%)'}}></div>
 <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-green-300/20 blur-3xl"></div>
 <div className="relative z-10">
 <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 ring-1 ring-green-300/30">
@@ -573,7 +615,7 @@ export default function App() {
 </div>
 
 <div className="relative group rounded-3xl bg-white/5 p-7 lg:p-8 ring-1 ring-white/15 backdrop-blur-sm overflow-hidden" style={{minHeight: '360px'}}>
-<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 1s', transform: 'translateX(-100%)'}}></div>
+<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 1s', transform: 'translateX(-100%)'}}></div>
 <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-blue-300/20 blur-3xl"></div>
 <div className="relative z-10">
 <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 ring-1 ring-blue-300/30">
@@ -600,7 +642,7 @@ export default function App() {
 </div>
 
 <div className="relative group rounded-3xl bg-white/5 p-7 lg:p-8 ring-1 ring-white/15 backdrop-blur-sm overflow-hidden" style={{minHeight: '360px'}}>
-<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 2s', transform: 'translateX(-100%)'}}></div>
+<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(168, 85, 247, 0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 2s', transform: 'translateX(-100%)'}}></div>
 <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-purple-300/20 blur-3xl"></div>
 <div className="relative z-10">
 <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 ring-1 ring-purple-300/30">

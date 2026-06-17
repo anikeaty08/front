@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -99,6 +135,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -142,7 +184,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="hidden lg:hidden border-t" id="mobileMenu" style={{background: 'rgba(10,10,10,0.98)', borderColor: 'rgba(201,168,76,0.15)'}}>
+<div className="hidden lg:hidden border-t" id="mobileMenu" style={{background: 'rgba(10, 10, 10, 0.98)', borderColor: 'rgba(201,168,76,0.15)'}}>
 <div className="px-6 py-8 space-y-6">
 <a className="block text-sm tracking-[0.15em] uppercase text-white/70 hover:text-[#C9A84C]" href="#about">About</a>
 <a className="block text-sm tracking-[0.15em] uppercase text-white/70 hover:text-[#C9A84C]" href="#awards">Awards</a>
@@ -168,7 +210,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-24">
 <div className="animate-fade-in mb-8" style={{animationDelay: '0.2s', opacity: '0'}}>
-<div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.05)'}}>
 <div className="w-1.5 h-1.5 rounded-full" style={{background: '#C9A84C'}}></div>
 <span className="text-[10px] md:text-xs tracking-[0.3em] uppercase" style={{color: '#C9A84C'}}>Established in Honour of Nelson Mandela</span>
 </div>
@@ -296,28 +338,28 @@ gtag('config', 'G-2M6V79H761');
 <div className="border-y py-16 px-6" style={{background: '#0D0D0D', borderColor: 'rgba(255,255,255,0.05)'}}>
 <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
 <div className="text-center scroll-reveal">
-<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.05)'}}>
 <iconify-icon icon="solar:shield-star-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="22"></iconify-icon>
 </div>
 <h4 className="font-serif text-lg mb-2 text-white/90">Integrity</h4>
 <p className="text-xs font-light text-white/40 leading-relaxed max-w-[200px] mx-auto">Upholding the highest standards of ethical leadership.</p>
 </div>
 <div className="text-center scroll-reveal" style={{transitionDelay: '0.1s'}}>
-<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.05)'}}>
 <iconify-icon icon="solar:global-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="22"></iconify-icon>
 </div>
 <h4 className="font-serif text-lg mb-2 text-white/90">Global Unity</h4>
 <p className="text-xs font-light text-white/40 leading-relaxed max-w-[200px] mx-auto">Bridging nations through shared humanitarian purpose.</p>
 </div>
 <div className="text-center scroll-reveal" style={{transitionDelay: '0.2s'}}>
-<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.05)'}}>
 <iconify-icon icon="solar:hand-heart-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="22"></iconify-icon>
 </div>
 <h4 className="font-serif text-lg mb-2 text-white/90">Compassion</h4>
 <p className="text-xs font-light text-white/40 leading-relaxed max-w-[200px] mx-auto">Recognising service driven by empathy and human dignity.</p>
 </div>
 <div className="text-center scroll-reveal" style={{transitionDelay: '0.3s'}}>
-<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 mx-auto rounded-full border flex items-center justify-center mb-5" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.05)'}}>
 <iconify-icon icon="solar:diploma-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="22"></iconify-icon>
 </div>
 <h4 className="font-serif text-lg mb-2 text-white/90">Excellence</h4>
@@ -344,9 +386,9 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
 
-<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)'}}>
+<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] transition-all duration-500 opacity-0 group-hover:opacity-100" style={{background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)'}}></div>
-<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.03)'}}>
+<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.03)'}}>
 <iconify-icon icon="solar:crown-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="24"></iconify-icon>
 </div>
 <h3 className="font-serif text-xl lg:text-2xl mb-4 tracking-tight text-white/90">Global Leadership Award</h3>
@@ -356,9 +398,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.1s'}}>
+<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.1s'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] transition-all duration-500 opacity-0 group-hover:opacity-100" style={{background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)'}}></div>
-<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.03)'}}>
+<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.03)'}}>
 <iconify-icon icon="solar:heart-pulse-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="24"></iconify-icon>
 </div>
 <h3 className="font-serif text-xl lg:text-2xl mb-4 tracking-tight text-white/90">Humanitarian Impact Award</h3>
@@ -368,9 +410,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.2s'}}>
+<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.2s'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] transition-all duration-500 opacity-0 group-hover:opacity-100" style={{background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)'}}></div>
-<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.03)'}}>
+<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.03)'}}>
 <iconify-icon icon="solar:flag-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="24"></iconify-icon>
 </div>
 <h3 className="font-serif text-xl lg:text-2xl mb-4 tracking-tight text-white/90">Peace &amp; Diplomacy Award</h3>
@@ -380,9 +422,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30 md:col-span-1" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)'}}>
+<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30 md:col-span-1" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] transition-all duration-500 opacity-0 group-hover:opacity-100" style={{background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)'}}></div>
-<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.03)'}}>
+<div className="w-14 h-14 rounded-full border flex items-center justify-center mb-8 transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.03)'}}>
 <iconify-icon icon="solar:lightbulb-bolt-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="24"></iconify-icon>
 </div>
 <h3 className="font-serif text-xl lg:text-2xl mb-4 tracking-tight text-white/90">Innovation for Humanity</h3>
@@ -392,10 +434,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30 md:col-span-2 lg:col-span-2" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.1s'}}>
+<div className="scroll-reveal group relative p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30 md:col-span-2 lg:col-span-2" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.1s'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] transition-all duration-500 opacity-0 group-hover:opacity-100" style={{background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)'}}></div>
 <div className="flex flex-col lg:flex-row lg:items-start gap-8">
-<div className="w-14 h-14 rounded-full border flex-shrink-0 flex items-center justify-center transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.03)'}}>
+<div className="w-14 h-14 rounded-full border flex-shrink-0 flex items-center justify-center transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:bg-[#C9A84C]/10" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.03)'}}>
 <iconify-icon icon="solar:buildings-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="24"></iconify-icon>
 </div>
 <div>
@@ -542,7 +584,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex gap-6 group">
 <div className="flex flex-col items-center">
-<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201,168,76,0.4)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201, 168, 76, 0.4)', background: 'rgba(201,168,76,0.05)'}}>
 <span className="font-serif text-lg" style={{color: '#C9A84C'}}>1</span>
 </div>
 <div className="w-px h-full mt-2" style={{background: 'rgba(201,168,76,0.15)'}}></div>
@@ -555,7 +597,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex gap-6 group">
 <div className="flex flex-col items-center">
-<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201,168,76,0.4)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201, 168, 76, 0.4)', background: 'rgba(201,168,76,0.05)'}}>
 <span className="font-serif text-lg" style={{color: '#C9A84C'}}>2</span>
 </div>
 <div className="w-px h-full mt-2" style={{background: 'rgba(201,168,76,0.15)'}}></div>
@@ -568,7 +610,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex gap-6 group">
 <div className="flex flex-col items-center">
-<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201,168,76,0.4)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201, 168, 76, 0.4)', background: 'rgba(201,168,76,0.05)'}}>
 <span className="font-serif text-lg" style={{color: '#C9A84C'}}>3</span>
 </div>
 <div className="w-px h-full mt-2" style={{background: 'rgba(201,168,76,0.15)'}}></div>
@@ -581,7 +623,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex gap-6 group">
 <div className="flex flex-col items-center">
-<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201,168,76,0.4)', background: 'rgba(201,168,76,0.05)'}}>
+<div className="w-12 h-12 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]" style={{borderColor: 'rgba(201, 168, 76, 0.4)', background: 'rgba(201,168,76,0.05)'}}>
 <span className="font-serif text-lg" style={{color: '#C9A84C'}}>4</span>
 </div>
 </div>
@@ -594,10 +636,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="scroll-reveal lg:pt-20" style={{transitionDelay: '0.2s'}}>
-<div className="relative rounded-sm overflow-hidden border p-10 lg:p-14" style={{background: 'rgba(201,168,76,0.02)', borderColor: 'rgba(201,168,76,0.15)'}}>
+<div className="relative rounded-sm overflow-hidden border p-10 lg:p-14" style={{background: 'rgba(201, 168, 76, 0.02)', borderColor: 'rgba(201,168,76,0.15)'}}>
 <div className="absolute top-0 left-0 w-full h-[2px]" style={{background: 'linear-gradient(90deg, #C9A84C, transparent)'}}></div>
 <div className="absolute top-0 left-0 h-full w-[2px]" style={{background: 'linear-gradient(180deg, #C9A84C, transparent)'}}></div>
-<div className="w-16 h-16 rounded-full border flex items-center justify-center mb-8" style={{borderColor: 'rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.08)'}}>
+<div className="w-16 h-16 rounded-full border flex items-center justify-center mb-8" style={{borderColor: 'rgba(201, 168, 76, 0.3)', background: 'rgba(201,168,76,0.08)'}}>
 <iconify-icon icon="solar:pen-new-round-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="28"></iconify-icon>
 </div>
 <h3 className="font-serif text-2xl lg:text-3xl tracking-tight mb-4 text-white/90">Begin Your<br/>Nomination</h3>
@@ -646,21 +688,21 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-<div className="scroll-reveal group p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)'}}>
+<div className="scroll-reveal group p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)'}}>
 <div className="flex items-center gap-4 mb-6">
 <iconify-icon icon="solar:users-group-rounded-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="28"></iconify-icon>
 <h4 className="font-serif text-xl text-white/90">Leadership Development</h4>
 </div>
 <p className="text-sm font-light leading-relaxed text-white/40">By recognising exceptional leaders, we create visible role models who inspire the next generation of public servants, diplomats and humanitarian advocates worldwide.</p>
 </div>
-<div className="scroll-reveal group p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.1s'}}>
+<div className="scroll-reveal group p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.1s'}}>
 <div className="flex items-center gap-4 mb-6">
 <iconify-icon icon="solar:global-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="28"></iconify-icon>
 <h4 className="font-serif text-xl text-white/90">International Cooperation</h4>
 </div>
 <p className="text-sm font-light leading-relaxed text-white/40">Our ceremonies and programmes bring together leaders from diverse nations and backgrounds, fostering dialogue, partnership and collaborative solutions to global challenges.</p>
 </div>
-<div className="scroll-reveal group p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.2s'}}>
+<div className="scroll-reveal group p-8 lg:p-10 rounded-sm border transition-all duration-500 hover:border-[#C9A84C]/30" style={{background: 'rgba(255, 255, 255, 0.015)', borderColor: 'rgba(255,255,255,0.05)', transitionDelay: '0.2s'}}>
 <div className="flex items-center gap-4 mb-6">
 <iconify-icon icon="solar:hand-heart-linear" strokeWidth="1.5" style={{color: '#C9A84C'}} width="28"></iconify-icon>
 <h4 className="font-serif text-xl text-white/90">Humanitarian Advocacy</h4>
@@ -702,7 +744,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-sm text-white/50 block font-light leading-relaxed">December 2024<br/>Johannesburg, South Africa</span>
 </div>
 <div className="md:w-2/3">
-<div className="relative overflow-hidden rounded-sm mb-6 group border p-1.5" style={{borderColor: 'rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)'}}>
+<div className="relative overflow-hidden rounded-sm mb-6 group border p-1.5" style={{borderColor: 'rgba(255, 255, 255, 0.05)', background: 'rgba(255,255,255,0.01)'}}>
 <img alt="Awards Ceremony" className="w-full h-56 md:h-72 object-cover transition-transform duration-700 group-hover:scale-105 rounded-sm" src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&amp;q=80" style={{filter: 'brightness(0.7) saturate(0.85)'}}/>
 <div className="absolute inset-0" style={{background: 'linear-gradient(180deg, transparent 40%, rgba(13,13,13,0.9) 100%)'}}></div>
 </div>
@@ -720,7 +762,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-sm text-white/50 block font-light leading-relaxed">September 2024<br/>Geneva, Switzerland</span>
 </div>
 <div className="md:w-2/3">
-<div className="relative overflow-hidden rounded-sm mb-6 group border p-1.5" style={{borderColor: 'rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)'}}>
+<div className="relative overflow-hidden rounded-sm mb-6 group border p-1.5" style={{borderColor: 'rgba(255, 255, 255, 0.05)', background: 'rgba(255,255,255,0.01)'}}>
 <img alt="Leadership Forum" className="w-full h-48 md:h-64 object-cover transition-transform duration-700 group-hover:scale-105 rounded-sm" src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&amp;q=80" style={{filter: 'brightness(0.6) saturate(0.8)'}}/>
 </div>
 <h4 className="font-serif text-2xl mb-3 text-white/90">Global Leadership Forum</h4>

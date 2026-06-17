@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -295,6 +331,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -348,7 +390,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex flex-col items-center text-center">
-<h1 className="text-7xl sm:text-8xl md:text-[10rem] leading-none font-medium tracking-tighter text-white" style={{textShadow: '0 0 30px rgba(255,255,255,0.3), 0 0 80px rgba(249,115,22,0.4)'}}>
+<h1 className="text-7xl sm:text-8xl md:text-[10rem] leading-none font-medium tracking-tighter text-white" style={{textShadow: '0 0 30px rgba(255, 255, 255, 0.3), 0 0 80px rgba(249,115,22,0.4)'}}>
 <span className="inline-block overflow-hidden pt-[0.2em] px-[0.1em] -mt-[0.2em] -mx-[0.1em] pb-[0.05em] -mb-[0.05em] align-bottom">
 <span className="reveal-text inline-block translate-y-[100%] opacity-0">
                 EVENT
@@ -1101,7 +1143,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </section>
-<section className="py-32 px-6 md:px-10 border-b border-white/10 relative overflow-hidden bg-black group" onmousemove="const r = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - r.left) + 'px'); this.style.setProperty('--y', (event.clientY - r.top) + 'px');" ontouchmove="const r = this.getBoundingClientRect(); this.style.setProperty('--x', (event.touches[0].clientX - r.left) + 'px'); this.style.setProperty('--y', (event.touches[0].clientY - r.top) + 'px');" style={{-X: '575px', -Y: '4.5px'}}>
+<section className="py-32 px-6 md:px-10 border-b border-white/10 relative overflow-hidden bg-black group" onmousemove="const r = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - r.left) + 'px'); this.style.setProperty('--y', (event.clientY - r.top) + 'px');" ontouchmove="const r = this.getBoundingClientRect(); this.style.setProperty('--x', (event.touches[0].clientX - r.left) + 'px'); this.style.setProperty('--y', (event.touches[0].clientY - r.top) + 'px');" style={{'--x': '575px', '--y': '4.5px'}}>
 
 <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-black border border-white/20 z-20"></div>
 <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-black border border-white/20 z-20"></div>
@@ -1247,7 +1289,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="absolute pointer-events-none rounded-full border border-orange-500/50 transition-opacity duration-300 opacity-0 group-hover:opacity-100 z-50 w-[360px] h-[360px]" style={{left: 'var(--x)', top: 'var(--y)', boxShadow: 'inset 0 0 40px rgba(249,115,22,0.2), 0 0 20px rgba(249,115,22,0.3)', backdropFilter: 'brightness(1.15) contrast(1.1) saturate(1.2)'}}>
+<div className="absolute pointer-events-none rounded-full border border-orange-500/50 transition-opacity duration-300 opacity-0 group-hover:opacity-100 z-50 w-[360px] h-[360px]" style={{left: 'var(--x)', top: 'var(--y)', boxShadow: 'inset 0 0 40px rgba(249, 115, 22, 0.2), 0 0 20px rgba(249, 115, 22, 0.3)', backdropFilter: 'brightness(1.15) contrast(1.1) saturate(1.2)'}}>
 
 <div className="absolute top-1/2 -left-2 w-4 h-[1px] bg-orange-500/80"></div>
 <div className="absolute top-1/2 -right-2 w-4 h-[1px] bg-orange-500/80"></div>

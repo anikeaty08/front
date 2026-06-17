@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -154,6 +190,12 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -793,7 +835,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-0" onmousemove="for(const card of this.children){const rect=card.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;card.style.setProperty('--mouse-x', x + 'px');card.style.setProperty('--mouse-y', y + 'px');}">
 
-<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '1084px', -MouseY: '5.5px'}}>
+<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '1084px', '--mouse-y': '5.5px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}>
 </div>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}>
@@ -840,7 +882,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '700.671875px', -MouseY: '5.5px'}}>
+<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '700.671875px', '--mouse-y': '5.5px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}>
 </div>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}>
@@ -892,7 +934,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '317.3359375px', -MouseY: '5.5px'}}>
+<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '317.3359375px', '--mouse-y': '5.5px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}>
 </div>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}>
@@ -924,7 +966,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '1084px', -MouseY: '-358px'}}>
+<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '1084px', '--mouse-y': '-358px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}>
 </div>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}>
@@ -996,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '509px', -MouseY: '-358px'}}>
+<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '509px', '--mouse-y': '-358px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}>
 </div>
 <div className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}>
@@ -1650,7 +1692,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 <footer className="pb-10">
 <div className="sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pr-4 pl-4">
 
-<div className="overflow-hidden sm:p-10 sm:mb-10 bg-white/5 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0bcb241d-7f62-4899-8da0-434927914200_1600w.webp)] bg-cover bg-center mb-10 px-6 py-6 relative backdrop-blur-sm rounded-none" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '0px'}}>
+<div className="overflow-hidden sm:p-10 sm:mb-10 bg-white/5 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0bcb241d-7f62-4899-8da0-434927914200_1600w.webp)] bg-cover bg-center mb-10 px-6 py-6 relative backdrop-blur-sm rounded-none" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '0px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-70" style={{background: 'radial-gradient(120% 80% at 10% 10%, rgba(99,102,241,0.25) 0%, rgba(99,102,241,0.08) 35%, rgba(217,70,239,0.12) 60%, rgba(10,11,16,0) 85%)'}}></div>
 <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6 sm:gap-10 relative">
 <div className="">

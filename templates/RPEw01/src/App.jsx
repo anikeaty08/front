@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -37,16 +79,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute left-[55px] right-0 top-[6px] h-[126px]">
 
 <div className="absolute inset-0 flex items-end justify-between">
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '63px', animationDelay: '1.0s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '87px', animationDelay: '1.1s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '51px', animationDelay: '1.2s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '74px', animationDelay: '1.3s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '45px', animationDelay: '1.4s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '69px', animationDelay: '1.5s'}}></div>
-<div className="w-3 bg-purple-500 rounded-sm animate-grow-up" style={{-FinalHeight: '87px', animationDelay: '1.6s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '57px', animationDelay: '1.7s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '74px', animationDelay: '1.8s'}}></div>
-<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{-FinalHeight: '45px', animationDelay: '1.9s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '63px', animationDelay: '1.0s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '87px', animationDelay: '1.1s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '51px', animationDelay: '1.2s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '74px', animationDelay: '1.3s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '45px', animationDelay: '1.4s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '69px', animationDelay: '1.5s'}}></div>
+<div className="w-3 bg-purple-500 rounded-sm animate-grow-up" style={{'--final-height': '87px', animationDelay: '1.6s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '57px', animationDelay: '1.7s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '74px', animationDelay: '1.8s'}}></div>
+<div className="w-3 bg-gray-600 rounded-sm animate-grow-up" style={{'--final-height': '45px', animationDelay: '1.9s'}}></div>
 </div>
 
 <svg className="absolute inset-0" preserveaspectratio="none" viewbox="0 0 220 126">

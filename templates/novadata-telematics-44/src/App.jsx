@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -32,6 +68,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -140,7 +182,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative mx-auto" style={{maxWidth: '58rem'}}>
 <div className="pointer-events-none absolute inset-x-0 -top-6 h-px" style={{background: '#E6EAF0'}}></div>
 <div className="relative flex items-end justify-center gap-4">
-<div className="relative w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 10px 26px rgba(16,24,40,0.06)', transform: 'translateY(0rem)', zIndex: '4'}}>
+<div className="relative w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 10px 26px rgba(16, 24, 40, 0.06)', transform: 'translateY(0rem)', zIndex: '4'}}>
 <div className="aspect-[3/4] w-full">
 <img alt="Suivi des véhicules" className="h-full w-full object-cover" loading="lazy" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"/>
 </div>
@@ -151,7 +193,7 @@ gtag('config', 'G-2M6V79H761');
                       </div>
 </div>
 </div>
-<div className="relative -ml-6 w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 14px 34px rgba(16,24,40,0.08)', transform: 'translateY(-0.75rem)', zIndex: '5'}}>
+<div className="relative -ml-6 w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 14px 34px rgba(16, 24, 40, 0.08)', transform: 'translateY(-0.75rem)', zIndex: '5'}}>
 <div className="aspect-[3/4] w-full">
 <img alt="IoT industriel" className="h-full w-full object-cover" loading="lazy" src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"/>
 </div>
@@ -162,7 +204,7 @@ gtag('config', 'G-2M6V79H761');
                       </div>
 </div>
 </div>
-<div className="relative -ml-6 w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 10px 26px rgba(16,24,40,0.06)', transform: 'translateY(-0.25rem)', zIndex: '3'}}>
+<div className="relative -ml-6 w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 10px 26px rgba(16, 24, 40, 0.06)', transform: 'translateY(-0.25rem)', zIndex: '3'}}>
 <div className="aspect-[3/4] w-full">
 <img alt="Ville intelligente" className="h-full w-full object-cover" loading="lazy" src="https://images.unsplash.com/photo-1496307653780-42ee777d4833?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"/>
 </div>
@@ -173,7 +215,7 @@ gtag('config', 'G-2M6V79H761');
                       </div>
 </div>
 </div>
-<div className="relative -ml-6 w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 10px 26px rgba(16,24,40,0.06)', transform: 'translateY(0.5rem)', zIndex: '2'}}>
+<div className="relative -ml-6 w-56 overflow-hidden rounded-2xl bg-white ring-1" style={{borderColor: '#E6EAF0', boxShadow: '0 10px 26px rgba(16, 24, 40, 0.06)', transform: 'translateY(0.5rem)', zIndex: '2'}}>
 <div className="aspect-[3/4] w-full">
 <img alt="IoT maritime" className="h-full w-full object-cover" loading="lazy" src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"/>
 </div>
@@ -819,25 +861,25 @@ gtag('config', 'G-2M6V79H761');
 <form action="#" className="mt-6 grid gap-4" method="post">
 <div>
 <label className="sr-only" htmlFor="nom_complet">Nom complet</label>
-<input autocomplete="name" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="nom_complet" name="nom_complet" placeholder="Nom complet" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', -TwRingColor: '#E6EAF0'}} type="text"/>
+<input autocomplete="name" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="nom_complet" name="nom_complet" placeholder="Nom complet" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', '--tw-ring-color': '#E6EAF0'}} type="text"/>
 </div>
 <div>
 <label className="sr-only" htmlFor="telephone">Téléphone</label>
-<input autocomplete="tel" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="telephone" name="telephone" placeholder="Téléphone" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', -TwRingColor: '#E6EAF0'}} type="tel"/>
+<input autocomplete="tel" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="telephone" name="telephone" placeholder="Téléphone" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', '--tw-ring-color': '#E6EAF0'}} type="tel"/>
 </div>
 <div>
 <label className="sr-only" htmlFor="email_contact">Email</label>
-<input autocomplete="email" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="email_contact" name="email_contact" placeholder="Email" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', -TwRingColor: '#E6EAF0'}} type="email"/>
+<input autocomplete="email" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="email_contact" name="email_contact" placeholder="Email" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', '--tw-ring-color': '#E6EAF0'}} type="email"/>
 </div>
 <div>
 <label className="sr-only" htmlFor="societe_contact">Société</label>
-<input autocomplete="organization" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="societe_contact" name="societe_contact" placeholder="Société" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', -TwRingColor: '#E6EAF0'}} type="text"/>
+<input autocomplete="organization" className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="societe_contact" name="societe_contact" placeholder="Société" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', '--tw-ring-color': '#E6EAF0'}} type="text"/>
 </div>
 <div>
 <label className="sr-only" htmlFor="message_contact">Message</label>
-<textarea className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="message_contact" name="message_contact" placeholder="Message" rows="6" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', -TwRingColor: '#E6EAF0'}}></textarea>
+<textarea className="w-full rounded-2xl bg-white px-4 py-3 text-sm text-neutral-900 ring-1 placeholder:text-neutral-400 focus:outline-none focus:ring-2" id="message_contact" name="message_contact" placeholder="Message" rows="6" style={{borderColor: '#E6EAF0', boxShadow: '0 1px 2px rgba(16,24,40,0.04)', '--tw-ring-color': '#E6EAF0'}}></textarea>
 </div>
-<button className="mt-1 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-white ring-1 ring-black/5 hover:opacity-95 focus:outline-none focus:ring-2" style={{background: '#E4572E', -TwRingColor: 'rgba(0,0,0,0.06)'}} type="submit">
+<button className="mt-1 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-white ring-1 ring-black/5 hover:opacity-95 focus:outline-none focus:ring-2" style={{background: '#E4572E', '--tw-ring-color': 'rgba(0,0,0,0.06)'}} type="submit">
                       Envoyer
                     </button>
 <p className="text-xs text-neutral-500">

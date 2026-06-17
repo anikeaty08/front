@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -91,6 +127,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -148,7 +190,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="relative mx-auto flex min-h-[40rem] w-full max-w-[120rem] items-center justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
 <div className="w-full max-w-5xl text-center">
-<div className="mx-auto flex max-w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3 py-2 text-sm font-normal text-white/90 backdrop-blur-2xl opacity-0" id="heroCard" style={{boxShadow: 'inset 0 -.1rem .2rem rgba(255,255,255,.08), inset 0 .1rem .2rem rgba(255,255,255,.18), 0 0 0 1px rgba(255,255,255,.02)', animation: 'fadeUp .8s ease forwards .05s, capsulePulse 4s ease-in-out infinite 1s'}}>
+<div className="mx-auto flex max-w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3 py-2 text-sm font-normal text-white/90 backdrop-blur-2xl opacity-0" id="heroCard" style={{boxShadow: 'inset 0 -.1rem .2rem rgba(255, 255, 255, .08), inset 0 .1rem .2rem rgba(255, 255, 255, .18), 0 0 0 1px rgba(255,255,255,.02)', animation: 'fadeUp .8s ease forwards .05s, capsulePulse 4s ease-in-out infinite 1s'}}>
 <div className="relative flex h-6 w-6 items-center justify-center rounded-full">
 <div className="absolute inset-0 rounded-full" style={{background: 'radial-gradient(circle, rgba(255,194,83,.25), rgba(56,189,248,.12), transparent 72%)'}}></div>
 <iconify-icon height="1rem" icon="solar:star-linear" style={{strokeWidth: '1.5', color: '#f8fafc'}} width="1rem"></iconify-icon>
@@ -180,7 +222,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="relative mx-auto mt-16 max-w-4xl opacity-0" style={{animation: 'fadeUp 1s ease forwards .55s'}}>
 <div className="absolute inset-0 rounded-[2rem] blur-3xl" style={{background: 'radial-gradient(circle at 50% 0%, rgba(251,191,36,.08), rgba(56,189,248,.05), transparent 75%)'}}></div>
-<div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-4 backdrop-blur-2xl sm:p-6" id="stage" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,.06), 0 1rem 4rem rgba(0,0,0,.35)'}}>
+<div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-4 backdrop-blur-2xl sm:p-6" id="stage" style={{boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, .06), 0 1rem 4rem rgba(0,0,0,.35)'}}>
 <div className="absolute inset-0 opacity-60" style="background:
                 radial-gradient(circle at 15% 20%, rgba(56,189,248,.12), transparent 22%),
                 radial-gradient(circle at 80% 18%, rgba(251,191,36,.11), transparent 20%),

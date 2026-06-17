@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -252,13 +288,19 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<div className="aura-background-component fixed top-0 w-full h-screen -z-10" style={{maskImage: 'linear-gradient(to bottom,transparent,black 0%,black 80%,transparent)', WebkitMaskImage: 'linear-gradient(to bottom,transparent,black 0%,black 80%,transparent)'}}>
+<div className="aura-background-component fixed top-0 w-full h-screen -z-10" style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom,transparent,black 0%,black 80%,transparent)'}}>
 <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
 <iframe frameborder="0" height="100%" src="https://my.spline.design/advancedlightandshadowblurmaterial-AkTXlsUYXzV54u5a1pc75N0w/" width="100%"></iframe>
 </div>
@@ -792,11 +834,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="popup-form-col" id="leadFormState">
 <div style={{display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '999px', background: '#fff1f2', border: '1px solid #ffe4e6', marginBottom: '16px'}}>
 <span style={{display: 'flex', width: '6px', height: '6px', borderRadius: '50%', background: '#f43f5e', boxShadow: '0 0 6px rgba(244,63,94,0.5)'}}></span>
-<span style={{fontSize: '10px', fontWeight: '600', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#f43f5e', fontFamily: '\'Poppins\',sans-serif'}}>
+<span style={{fontSize: '10px', fontWeight: '600', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#f43f5e', fontFamily: '\'Poppins\', sans-serif'}}>
               Free Guide
             </span>
 </div>
-<h2 style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '20px', fontWeight: '500', color: '#1c1917', lineHeight: '1.3', letterSpacing: '-0.02em', margin: '0 0 8px'}}>
+<h2 style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '20px', fontWeight: '500', color: '#1c1917', lineHeight: '1.3', letterSpacing: '-0.02em', margin: '0 0 8px'}}>
             7 Things HR Leaders
             <br/>
 <span style={{background: 'linear-gradient(to right,#7c3aed,#f43f5e,#f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
@@ -804,7 +846,7 @@ gtag('config', 'G-2M6V79H761');
             </span>
             in the First Hour
           </h2>
-<p style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '13px', color: '#78716c', fontWeight: '300', margin: '0 0 24px', lineHeight: '1.6'}}>
+<p style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '13px', color: '#78716c', fontWeight: '300', margin: '0 0 24px', lineHeight: '1.6'}}>
             The First Hour Checklist — instant access, no fluff.
           </p>
 <input autocomplete="given-name" className="popup-input" id="leadName" placeholder="Your first name" type="text"/>
@@ -812,7 +854,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="popup-submit-btn" id="leadSubmitBtn" onclick="handleLeadSubmit()">
             Send Me the Guide →
           </button>
-<p style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '11px', color: '#a8a29e', margin: '10px 0 0', textAlign: 'center'}}>
+<p style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '11px', color: '#a8a29e', margin: '10px 0 0', textAlign: 'center'}}>
             No spam. Unsubscribe anytime.
           </p>
 </div>
@@ -822,14 +864,14 @@ gtag('config', 'G-2M6V79H761');
 <polyline points="20 6 9 17 4 12"></polyline>
 </svg>
 </div>
-<h3 style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '20px', fontWeight: '500', color: '#1c1917', margin: '0 0 10px'}}>
+<h3 style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '20px', fontWeight: '500', color: '#1c1917', margin: '0 0 10px'}}>
             You're all set.
           </h3>
-<p style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '13px', color: '#78716c', fontWeight: '300', lineHeight: '1.6', maxWidth: '260px', margin: '0 auto 16px'}}>
+<p style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '13px', color: '#78716c', fontWeight: '300', lineHeight: '1.6', maxWidth: '260px', margin: '0 auto 16px'}}>
             Check your inbox — the guide is on its way. Or download it right now
             while you wait.
           </p>
-<a href="https://drive.google.com/uc?export=download&amp;id=1nx1zoUFhW-kVtoNXAMFOdPwfC906-I9E" onmouseout="this.style.background='#1c1917'" onmouseover="this.style.background='#292524'" rel="noopener noreferrer" style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontFamily: '\'Poppins\',sans-serif', fontSize: '13px', fontWeight: '500', color: '#fff', background: '#1c1917', borderRadius: '999px', padding: '10px 20px', textDecoration: 'none', marginBottom: '14px', transition: 'background 0.2s'}} target="_blank">
+<a href="https://drive.google.com/uc?export=download&amp;id=1nx1zoUFhW-kVtoNXAMFOdPwfC906-I9E" onmouseout="this.style.background='#1c1917'" onmouseover="this.style.background='#292524'" rel="noopener noreferrer" style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontFamily: '\'Poppins\', sans-serif', fontSize: '13px', fontWeight: '500', color: '#fff', background: '#1c1917', borderRadius: '999px', padding: '10px 20px', textDecoration: 'none', marginBottom: '14px', transition: 'background 0.2s'}} target="_blank">
 <svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
 <polyline points="7 10 12 15 17 10"></polyline>
@@ -838,7 +880,7 @@ gtag('config', 'G-2M6V79H761');
             Download the Guide
           </a>
 <br/>
-<button onclick="closeLeadPopup()" style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '12px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '3px'}}>
+<button onclick="closeLeadPopup()" style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '12px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '3px'}}>
             Close this window
           </button>
 </div>
@@ -893,13 +935,13 @@ gtag('config', 'G-2M6V79H761');
 <input className="rapid-input" id="rTermDate" title="Date of separation" type="date"/>
 <input className="rapid-input" id="rTermTime" title="Time of separation" type="time"/>
 </div>
-<p style={{fontSize: '11px', color: '#a8a29e', margin: '-4px 0 18px', fontFamily: '\'Poppins\',sans-serif'}}>
+<p style={{fontSize: '11px', color: '#a8a29e', margin: '-4px 0 18px', fontFamily: '\'Poppins\', sans-serif'}}>
             Date and time of separation
           </p>
 <button className="rapid-submit" id="rapidSubmitBtn" onclick="handleRapidSubmit()">
             Submit Rapid Activation →
           </button>
-<p style={{fontSize: '11px', color: '#a8a29e', margin: '10px 0 0', textAlign: 'center', fontFamily: '\'Poppins\',sans-serif'}}>
+<p style={{fontSize: '11px', color: '#a8a29e', margin: '10px 0 0', textAlign: 'center', fontFamily: '\'Poppins\', sans-serif'}}>
             Confidential — handled with discretion.
           </p>
 </div>
@@ -910,14 +952,14 @@ gtag('config', 'G-2M6V79H761');
 <polyline points="20 6 9 17 4 12"></polyline>
 </svg>
 </div>
-<h3 style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '20px', fontWeight: '600', color: '#1c1917', margin: '0 0 14px', letterSpacing: '-0.02em'}}>
+<h3 style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '20px', fontWeight: '600', color: '#1c1917', margin: '0 0 14px', letterSpacing: '-0.02em'}}>
             Activation Received
           </h3>
-<p style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '14px', color: '#57534e', fontWeight: '300', lineHeight: '1.7', maxWidth: '380px', margin: '0 auto 28px'}}>
+<p style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '14px', color: '#57534e', fontWeight: '300', lineHeight: '1.7', maxWidth: '380px', margin: '0 auto 28px'}}>
             Thank you for submitting your Rapid Activation Form, a member of our
             team will be in contact with you within the next 15 minutes.
           </p>
-<button onclick="closeRapidModal()" style={{fontFamily: '\'Poppins\',sans-serif', fontSize: '12px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '3px'}}>
+<button onclick="closeRapidModal()" style={{fontFamily: '\'Poppins\', sans-serif', fontSize: '12px', color: '#a8a29e', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '3px'}}>
             Close this window
           </button>
 </div>

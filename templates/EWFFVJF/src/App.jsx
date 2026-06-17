@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     lucide.createIcons();
@@ -117,22 +153,28 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<section className="relative flex flex-col flex-1 min-h-screen text-white" style={{fontFamily: '\'Space Grotesk\',sans-serif', background: 'linear-gradient(165deg,#042d17 0%,#05341e 40%,#114f29 100%)'}}>
+<section className="relative flex flex-col flex-1 min-h-screen text-white" style={{fontFamily: '\'Space Grotesk\', sans-serif', background: 'linear-gradient(165deg,#042d17 0%,#05341e 40%,#114f29 100%)'}}>
 <div className="flex justify-between items-start px-8 pt-8 md:px-16 md:pt-12">
 <div>
 <span className="text-sm md:text-base font-medium tracking-wider text-white/80 select-none">2025/2026</span>
 </div>
 <div className="absolute left-8 md:left-16 top-16 flex items-center z-10 select-none">
-<span className="font-bold text-2xl md:text-3xl tracking-tight" style={{color: '#ffb800', fontFamily: '\'Space Grotesk\',sans-serif', letterSpacing: '-0.03em'}}>
+<span className="font-bold text-2xl md:text-3xl tracking-tight" style={{color: '#ffb800', fontFamily: '\'Space Grotesk\', sans-serif', letterSpacing: '-0.03em'}}>
           Simplifi
         </span>
-<span className="font-bold text-2xl md:text-3xl tracking-tight ml-2" style={{color: '#ffd84a', fontFamily: '\'Space Grotesk\',sans-serif', letterSpacing: '-0.03em'}}>
+<span className="font-bold text-2xl md:text-3xl tracking-tight ml-2" style={{color: '#ffd84a', fontFamily: '\'Space Grotesk\', sans-serif', letterSpacing: '-0.03em'}}>
           football
         </span>
 </div>
@@ -154,18 +196,18 @@ export default function App() {
 </svg>
 </div>
 <div className="flex flex-col items-start mt-2 px-8 md:px-16 max-w-5xl w-full">
-<h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] uppercase text-left" style={{letterSpacing: '-0.024em', fontFamily: '\'Space Grotesk\',sans-serif'}}>
+<h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] uppercase text-left" style={{letterSpacing: '-0.024em', fontFamily: '\'Space Grotesk\', sans-serif'}}>
         WHAT EVERY<br/>
         FOOTBALL INVESTOR<br/>
         NEEDS TO KNOW FOR S25/26
       </h1>
 <div className="w-full max-w-2xl border-t border-white/20 my-7"></div>
-<h2 className="text-base md:text-lg font-light tracking-normal text-white/80 max-w-2xl" style={{fontFamily: '\'Space Grotesk\',sans-serif', fontWeight: '400'}}>
+<h2 className="text-base md:text-lg font-light tracking-normal text-white/80 max-w-2xl" style={{fontFamily: '\'Space Grotesk\', sans-serif', fontWeight: '400'}}>
         Successful investing isn’t about chasing every opportunity; it’s about controlling your emotions, managing risk, and being disciplined enough to stick to your strategy even when things get tough.
       </h2>
 </div>
 <div className="hidden sm:block absolute top-40 right-0 z-10 pr-8">
-<div className="flex flex-col items-end space-y-2 select-none" style={{fontFamily: '\'Roboto Mono\',monospace', fontSize: '13px', lineHeight: '1.25', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.16)'}}>
+<div className="flex flex-col items-end space-y-2 select-none" style={{fontFamily: '\'Roboto Mono\', monospace', fontSize: '13px', lineHeight: '1.25', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.16)'}}>
 <span>01001101 01100001 01110010</span>
 <span>01101011 01100101 01110100</span>
 <span>00110010 00110000 00110010</span>
@@ -204,10 +246,10 @@ export default function App() {
 </svg>
 </div>
 <footer className="w-full flex justify-between items-end pb-8 px-8 md:px-16 mt-auto">
-<div className="text-xs md:text-sm tracking-widest" style={{fontFamily: '\'Roboto Mono\',monospace'}}>
+<div className="text-xs md:text-sm tracking-widest" style={{fontFamily: '\'Roboto Mono\', monospace'}}>
         Prepared by D. Akin-Britto
       </div>
-<div className="text-xs md:text-sm text-right tracking-widest" style={{fontFamily: '\'Roboto Mono\',monospace'}}>
+<div className="text-xs md:text-sm text-right tracking-widest" style={{fontFamily: '\'Roboto Mono\', monospace'}}>
         For Simplifi Football<br/>
         simplififootball.com
       </div>
@@ -218,7 +260,7 @@ export default function App() {
 <div className="w-1/2 border-t-2 border-dashed border-gray-300"></div>
 </div>
 
-<section className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900 flex flex-col" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<section className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900 flex flex-col" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <main className="flex-grow">
 <section className="px-6 sm:px-10 lg:px-24 pt-16 lg:pt-24">
 <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight leading-tight fade-in" style={{animationDelay: '0.05s'}}>The real problem</h1>
@@ -243,7 +285,7 @@ export default function App() {
 <div className="w-1/2 border-t-2 border-dashed border-gray-300"></div>
 </div>
 
-<section className="min-h-screen flex flex-col items-center text-gray-800 bg-white pt-10 pr-4 pb-20 pl-4" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<section className="min-h-screen flex flex-col items-center text-gray-800 bg-white pt-10 pr-4 pb-20 pl-4" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <div className="spline-container fixed top-0 w-full h-screen -z-10"><iframe frameborder="0" height="100%" src="https://my.spline.design/twistcopy-CPActtgUfoQoOToZfH4Pt18Q" width="100%"></iframe></div>
 <section className="w-full max-w-6xl flex flex-col md:flex-row gap-8 mb-10 items-start">
 <div className="flex-1 min-w-0">
@@ -350,7 +392,7 @@ export default function App() {
 <div className="w-1/2 border-t-2 border-dashed border-gray-300"></div>
 </div>
 
-<section className="min-h-screen flex flex-col items-center text-gray-800 bg-white pt-10 pr-4 pb-20 pl-4" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<section className="min-h-screen flex flex-col items-center text-gray-800 bg-white pt-10 pr-4 pb-20 pl-4" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <section className="w-full max-w-6xl mb-10 flex flex-col items-center">
 <header className="mb-6 w-full flex flex-col items-center">
 <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-2 text-center">Accumulators VS Single Picks for Market Movement</h1>
@@ -676,7 +718,7 @@ export default function App() {
 
 <label className="flex items-center cursor-pointer">
 <input className="peer sr-only" name="subscribe" type="radio" value="yes"/>
-<span className="w-7 h-7 flex items-center justify-center rounded-full border-2 border-red-600 bg-gradient-to-br from-red-500 via-red-400 to-red-700 shadow-inner transition peer-checked:ring-2 peer-checked:ring-red-400 peer-checked:border-red-700 hover:scale-105 hover:ring-2 hover:ring-red-200 outline-none focus-visible:ring-2 focus-visible:ring-red-300" style={{background: 'radial-gradient(ellipse at 60% 30%,#fff9 40%,#f87171 60%,#b91c1c 100%), linear-gradient(135deg,#f87171 60%,#b91c1c 100%)', boxShadow: '0 2px 12px 0 #ef444450'}}>
+<span className="w-7 h-7 flex items-center justify-center rounded-full border-2 border-red-600 bg-gradient-to-br from-red-500 via-red-400 to-red-700 shadow-inner transition peer-checked:ring-2 peer-checked:ring-red-400 peer-checked:border-red-700 hover:scale-105 hover:ring-2 hover:ring-red-200 outline-none focus-visible:ring-2 focus-visible:ring-red-300" style={{background: 'radial-gradient(ellipse at 60% 30%, #fff9 40%, #f87171 60%, #b91c1c 100%), linear-gradient(135deg,#f87171 60%,#b91c1c 100%)', boxShadow: '0 2px 12px 0 #ef444450'}}>
 <svg className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" viewbox="0 0 24 24"><polyline points="20 6 10.6 17 4 11.5"></polyline></svg>
 </span>
 <span className="ml-2 text-sm font-medium text-red-700">Yes</span>
@@ -684,7 +726,7 @@ export default function App() {
 
 <label className="flex items-center cursor-pointer">
 <input className="peer sr-only" name="subscribe" type="radio" value="no"/>
-<span className="w-7 h-7 flex items-center justify-center rounded-full border-2 border-gray-400 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 shadow-inner transition peer-checked:ring-2 peer-checked:ring-gray-400 peer-checked:border-gray-700 hover:scale-105 hover:ring-2 hover:ring-gray-200 outline-none focus-visible:ring-2 focus-visible:ring-gray-300" style={{background: 'radial-gradient(ellipse at 60% 30%,#fff9 40%,#e5e7eb 60%,#6b7280 100%), linear-gradient(135deg,#f3f4f6 60%,#6b7280 100%)', boxShadow: '0 2px 12px 0 #6b728050'}}>
+<span className="w-7 h-7 flex items-center justify-center rounded-full border-2 border-gray-400 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 shadow-inner transition peer-checked:ring-2 peer-checked:ring-gray-400 peer-checked:border-gray-700 hover:scale-105 hover:ring-2 hover:ring-gray-200 outline-none focus-visible:ring-2 focus-visible:ring-gray-300" style={{background: 'radial-gradient(ellipse at 60% 30%, #fff9 40%, #e5e7eb 60%, #6b7280 100%), linear-gradient(135deg,#f3f4f6 60%,#6b7280 100%)', boxShadow: '0 2px 12px 0 #6b728050'}}>
 <svg className="w-4 h-4 text-gray-700 opacity-0 peer-checked:opacity-100 transition" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" viewbox="0 0 24 24"><polyline points="20 6 10.6 17 4 11.5"></polyline></svg>
 </span>
 <span className="ml-2 text-sm font-medium text-gray-700">No</span>

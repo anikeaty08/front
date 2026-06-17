@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -37,6 +73,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -221,7 +263,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
       </h2>
 <div className="grid md:grid-cols-3 gap-6 md:gap-8">
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(244, 63, 94, 0.05))', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-rose-900/20 text-rose-400 border border-rose-500/10">
 <svg className="lucide lucide-trending-down w-5 h-5 md:w-6 md:h-6" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M16 17h6v-6"></path>
@@ -232,7 +274,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 <p className="leading-relaxed text-sm font-light text-gray-400">YOU are the best sales rep and that's the problem. Lacking a scalable sales system that can close deals without you keeps you stuck.</p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg shadow-black" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244,63,94,0.3), rgba(244,63,94,0.05))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg shadow-black" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244,63,94,0.3), rgba(244,63,94,0.05))', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-rose-900/20 text-rose-400 border border-rose-500/10">
 <svg className="lucide lucide-users w-5 h-5 md:w-6 md:h-6" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
@@ -245,7 +287,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 <p className="leading-relaxed text-sm font-light text-gray-400">You've hired reps. They underperform. Leads get cold. No-shows pile up. You end up back on calls because it's better than wasting ad spend or "babysitting"</p>
 </div>
 
-<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg shadow-black" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244,63,94,0.3), rgba(244,63,94,0.05))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="md:p-8 md:rounded-3xl hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 shadow-lg shadow-black" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244,63,94,0.3), rgba(244,63,94,0.05))', '--border-radius-before': '1.5rem'}}>
 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-5 md:mb-6 bg-rose-900/20 text-rose-400 border border-rose-500/10">
 <svg aria-hidden="true" className="lucide lucide-paint-bucket lucide-clock md:w-6 md:h-6 w-[20px] h-[20px]" data-icon-replaced="true" data-icon-set="lucide" data-lucide="paint-bucket" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: 'rgb(251, 113, 133)', width: '20px', height: '20px'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M11 7 6 2"></path><path d="M18.992 12H2.041"></path><path d="M21.145 18.38A3.34 3.34 0 0 1 20 16.5a3.3 3.3 0 0 1-1.145 1.88c-.575.46-.855 1.02-.855 1.595A2 2 0 0 0 20 22a2 2 0 0 0 2-2.025c0-.58-.285-1.13-.855-1.595"></path><path d="m8.5 4.5 2.148-2.148a1.205 1.205 0 0 1 1.704 0l7.296 7.296a1.205 1.205 0 0 1 0 1.704l-7.592 7.592a3.615 3.615 0 0 1-5.112 0l-3.888-3.888a3.615 3.615 0 0 1 0-5.112L5.67 7.33"></path></svg>
 </div>
@@ -262,7 +304,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 </div>
 <div className="grid md:grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
 
-<div className="group md:rounded-3xl md:p-8 overflow-hidden md:h-80 flex flex-col transition-all hover:border-rose-500/30 bg-gradient-to-br from-[#0f0f0f] to-[#050505] h-64 rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(37, 99, 235, 1))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="group md:rounded-3xl md:p-8 overflow-hidden md:h-80 flex flex-col transition-all hover:border-rose-500/30 bg-gradient-to-br from-[#0f0f0f] to-[#050505] h-64 rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(37, 99, 235, 1))', '--border-radius-before': '1.5rem'}}>
 <h3 className="md:mb-4 md:text-xl text-xl font-medium text-white font-montserrat mb-3">Escape Founder-Led Sales Hamster Wheel</h3>
 <p className="leading-relaxed z-10 text-sm font-light text-gray-400 relative">Your new Sales Operating System exists to change that. The rep exists to run it. And we act as your fractional VP of sales to make sure it all scales predictably and consistently.</p>
 <div className="mt-auto self-end group-hover:text-rose-500 transition-colors duration-500 transform group-hover:scale-110 text-white/5">
@@ -270,7 +312,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 </div>
 </div>
 
-<div className="group md:rounded-3xl md:p-8 overflow-hidden md:h-80 flex flex-col transition-all hover:border-rose-500/30 bg-gradient-to-br from-[#0f0f0f] to-[#050505] h-64 rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(37, 99, 235, 1))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="group md:rounded-3xl md:p-8 overflow-hidden md:h-80 flex flex-col transition-all hover:border-rose-500/30 bg-gradient-to-br from-[#0f0f0f] to-[#050505] h-64 rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(37, 99, 235, 1))', '--border-radius-before': '1.5rem'}}>
 <h3 className="md:mb-4 md:text-xl text-xl font-medium text-white font-montserrat mb-4">Double Sales with Half the Effort</h3>
 <p className="leading-relaxed z-10 text-sm font-light text-gray-400 relative">Close deals at 30-40%+ without you taking a single sales call ever again. We move fast and get a sales rep placed and trained on your offer within 21 days. </p>
 <div className="mt-auto self-end group-hover:text-rose-500 transition-colors duration-500 transform group-hover:scale-110 text-white/5">
@@ -278,7 +320,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 </div>
 </div>
 
-<div className="group md:rounded-3xl md:p-8 overflow-hidden md:h-80 flex flex-col transition-all hover:border-rose-500/30 bg-gradient-to-br from-[#0f0f0f] to-[#050505] h-64 rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(37, 99, 235, 1))', -BorderRadiusBefore: '1.5rem'}}>
+<div className="group md:rounded-3xl md:p-8 overflow-hidden md:h-80 flex flex-col transition-all hover:border-rose-500/30 bg-gradient-to-br from-[#0f0f0f] to-[#050505] h-64 rounded-[1.5rem] pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(37, 99, 235, 1))', '--border-radius-before': '1.5rem'}}>
 <h3 className="md:mb-4 md:text-xl text-xl font-medium text-white font-montserrat mb-3">Save 15-25+ Hours Per Week</h3>
 <p className="leading-relaxed z-10 text-sm font-light text-gray-400 pt-6 pb-6 relative">Start working "ON" the business and regain focus on your highest leverage activities. You run the business. We'll run your sales.</p>
 <div className="mt-auto self-end group-hover:text-rose-500 transition-colors duration-500 transform group-hover:scale-110 text-white/5">
@@ -325,7 +367,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 <div className="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent to-transparent -z-10 via-white/10"></div>
 
 <div className="flex flex-col items-center text-center group">
-<div className="flex group-hover:border-rose-500 group-hover:text-rose-500 transition-colors text-xl font-serif w-20 h-20 rounded-full mb-5 shadow-sm items-center justify-center bg-gradient-to-br from-red-400 to-red-600 md:w-24 md:h-24 md:text-2xl md:mb-6 md:bg-clip-text md:text-transparent" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(248, 113, 113, 1), rgba(220, 38, 38, 1))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex group-hover:border-rose-500 group-hover:text-rose-500 transition-colors text-xl font-serif w-20 h-20 rounded-full mb-5 shadow-sm items-center justify-center bg-gradient-to-br from-red-400 to-red-600 md:w-24 md:h-24 md:text-2xl md:mb-6 md:bg-clip-text md:text-transparent" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(248, 113, 113, 1), rgba(220, 38, 38, 1))', '--border-radius-before': '9999px'}}>
             1
           </div>
 <h3 className="md:text-xl md:mb-3 text-lg font-medium text-white font-montserrat mb-2">Install AI Sales Infrastructure</h3>
@@ -333,7 +375,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 </div>
 
 <div className="flex flex-col items-center text-center group">
-<div className="flex group-hover:border-rose-500 group-hover:text-rose-500 transition-colors text-xl font-serif w-20 h-20 rounded-full mb-5 shadow-sm items-center justify-center bg-gradient-to-br from-red-400 to-red-600 md:w-24 md:h-24 md:text-2xl md:mb-6 md:bg-clip-text md:text-transparent" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(248, 113, 113, 1), rgba(220, 38, 38, 1))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex group-hover:border-rose-500 group-hover:text-rose-500 transition-colors text-xl font-serif w-20 h-20 rounded-full mb-5 shadow-sm items-center justify-center bg-gradient-to-br from-red-400 to-red-600 md:w-24 md:h-24 md:text-2xl md:mb-6 md:bg-clip-text md:text-transparent" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(248, 113, 113, 1), rgba(220, 38, 38, 1))', '--border-radius-before': '9999px'}}>
             2
           </div>
 <h3 className="md:text-xl md:mb-3 text-lg font-medium text-white font-montserrat mb-2">Hire &amp; Train A-Players</h3>
@@ -341,7 +383,7 @@ in <br className="hidden md:block"/> 90 Days or <span className="md:border-b-4 f
 </div>
 
 <div className="flex flex-col group text-center items-center">
-<div className="flex group-hover:border-rose-500 group-hover:text-rose-500 transition-colors text-xl font-serif w-20 h-20 rounded-full mb-5 shadow-sm items-center justify-center bg-gradient-to-br from-red-400 to-red-600 md:w-24 md:h-24 md:text-2xl md:mb-6 md:bg-clip-text md:text-transparent" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(248, 113, 113, 1), rgba(220, 38, 38, 1))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex group-hover:border-rose-500 group-hover:text-rose-500 transition-colors text-xl font-serif w-20 h-20 rounded-full mb-5 shadow-sm items-center justify-center bg-gradient-to-br from-red-400 to-red-600 md:w-24 md:h-24 md:text-2xl md:mb-6 md:bg-clip-text md:text-transparent" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(248, 113, 113, 1), rgba(220, 38, 38, 1))', '--border-radius-before': '9999px'}}>
             3
           </div>
 <h3 className="md:text-xl md:mb-3 text-lg font-medium text-white font-montserrat mb-2">We Run Your Sales Department</h3>

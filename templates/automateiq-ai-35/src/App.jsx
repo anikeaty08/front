@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -416,6 +452,12 @@ Notes: ${notes || "—"}
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -451,15 +493,15 @@ Notes: ${notes || "—"}
 </nav>
 <div className="flex items-center gap-2 sm:gap-3">
 <button className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition" id="openPlanner">
-<iconify-icon className="text-lg" icon="solar:magic-stick-3-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:magic-stick-3-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
               Automation planner
             </button>
 <a className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#contact">
-<iconify-icon className="text-lg" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
               Book a call
             </a>
 <button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 p-2.5 hover:bg-white/10 transition" id="openMenu">
-<iconify-icon className="text-xl" icon="solar:hamburger-menu-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:hamburger-menu-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 </div>
 </div>
@@ -499,18 +541,18 @@ Notes: ${notes || "—"}
             </p>
 <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:items-center">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#contact">
-<iconify-icon className="text-lg" icon="solar:calendar-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:calendar-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Get a free automation audit
               </a>
 <button className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10 transition" id="openPlannerHero">
-<iconify-icon className="text-lg" icon="solar:diagram-up-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:diagram-up-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Plan my workflow
               </button>
 </div>
 <div className="mt-8 grid sm:grid-cols-3 gap-4">
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-center gap-2 text-xs text-slate-200/80">
-<iconify-icon className="text-base" icon="solar:clock-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:clock-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Time saved
                 </div>
 <div className="mt-2 text-2xl font-semibold tracking-tight text-white">10–25 hrs</div>
@@ -518,7 +560,7 @@ Notes: ${notes || "—"}
 </div>
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-center gap-2 text-xs text-slate-200/80">
-<iconify-icon className="text-base" icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Reliability
                 </div>
 <div className="mt-2 text-2xl font-semibold tracking-tight text-white">99%+</div>
@@ -526,7 +568,7 @@ Notes: ${notes || "—"}
 </div>
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-center gap-2 text-xs text-slate-200/80">
-<iconify-icon className="text-base" icon="solar:graph-up-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:graph-up-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Impact
                 </div>
 <div className="mt-2 text-2xl font-semibold tracking-tight text-white">2–6×</div>
@@ -562,7 +604,7 @@ Notes: ${notes || "—"}
 <div className="flex items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-xl text-sky-200" icon="solar:inbox-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-sky-200" icon="solar:inbox-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight text-white">Lead intake → CRM</div>
@@ -583,7 +625,7 @@ Notes: ${notes || "—"}
 <div className="flex items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-xl text-emerald-200" icon="solar:chat-square-like-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-emerald-200" icon="solar:chat-square-like-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight text-white">Support triage</div>
@@ -604,7 +646,7 @@ Notes: ${notes || "—"}
 <div className="flex items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-xl text-indigo-200" icon="solar:bill-list-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-indigo-200" icon="solar:bill-list-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight text-white">Invoices + reminders</div>
@@ -630,28 +672,28 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Team size</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:users-group-rounded-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:users-group-rounded-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="teamSize" min="1" type="number" value="8"/>
 </div>
 </div>
 <div>
 <label className="text-xs text-slate-200/70">Hours saved / week</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:clock-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:clock-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="hoursSaved" min="1" type="number" value="6"/>
 </div>
 </div>
 <div>
 <label className="text-xs text-slate-200/70">Avg hourly cost</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:dollar-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:dollar-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="hourlyCost" min="1" type="number" value="35"/>
 </div>
 </div>
 <div>
 <label className="text-xs text-slate-200/70">Weeks / year</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:calendar-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:calendar-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="weeksYear" min="1" type="number" value="48"/>
 </div>
 </div>
@@ -662,7 +704,7 @@ Notes: ${notes || "—"}
                       <div className="mt-1 text-2xl font-semibold tracking-tight text-white" id="roiValue">$—</div>
 </div>
 <button className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition" id="copyROI">
-<iconify-icon className="text-lg" icon="solar:copy-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:copy-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Copy estimate
                     </button>
 </div>
@@ -689,13 +731,13 @@ Notes: ${notes || "—"}
 </div>
 <a className="text-sm font-medium text-slate-200/80 hover:text-white transition inline-flex items-center gap-2" href="#pricing">
             See pricing
-            <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+            <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
 <div className="h-11 w-11 rounded-2xl border border-white/10 bg-slate-950/30 flex items-center justify-center">
-<iconify-icon className="text-2xl text-sky-200" icon="solar:target-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-2xl text-sky-200" icon="solar:target-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="mt-4 text-lg font-semibold tracking-tight text-white">Automation audit</div>
 <p className="mt-2 text-sm text-slate-200/75">
@@ -709,7 +751,7 @@ Notes: ${notes || "—"}
 </div>
 <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
 <div className="h-11 w-11 rounded-2xl border border-white/10 bg-slate-950/30 flex items-center justify-center">
-<iconify-icon className="text-2xl text-indigo-200" icon="solar:diagram-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-2xl text-indigo-200" icon="solar:diagram-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="mt-4 text-lg font-semibold tracking-tight text-white">Workflow build + deploy</div>
 <p className="mt-2 text-sm text-slate-200/75">
@@ -723,7 +765,7 @@ Notes: ${notes || "—"}
 </div>
 <div className="rounded-3xl border border-white/10 bg-white/5 p-6 sm:col-span-2 lg:col-span-1">
 <div className="h-11 w-11 rounded-2xl border border-white/10 bg-slate-950/30 flex items-center justify-center">
-<iconify-icon className="text-2xl text-emerald-200" icon="solar:shield-user-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-2xl text-emerald-200" icon="solar:shield-user-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="mt-4 text-lg font-semibold tracking-tight text-white">Ongoing support</div>
 <p className="mt-2 text-sm text-slate-200/75">
@@ -753,56 +795,56 @@ Notes: ${notes || "—"}
 <div className="flex items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-xl text-sky-200" icon="solar:hand-money-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-sky-200" icon="solar:hand-money-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight text-white">Sales: lead → meeting</div>
 <div className="text-xs text-slate-200/70">Enrich, score, route, schedule</div>
 </div>
 </div>
-<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </button>
 <button className="wfBtn w-full text-left rounded-2xl border border-white/10 bg-slate-950/30 p-4 hover:bg-white/5 transition" data-wf="support">
 <div className="flex items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-xl text-emerald-200" icon="solar:headphones-round-sound-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-emerald-200" icon="solar:headphones-round-sound-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight text-white">Support: triage → resolution</div>
 <div className="text-xs text-slate-200/70">Classify, draft, escalate, learn</div>
 </div>
 </div>
-<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </button>
 <button className="wfBtn w-full text-left rounded-2xl border border-white/10 bg-slate-950/30 p-4 hover:bg-white/5 transition" data-wf="ops">
 <div className="flex items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-xl text-indigo-200" icon="solar:settings-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-indigo-200" icon="solar:settings-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight text-white">Ops: intake → execution</div>
 <div className="text-xs text-slate-200/70">Forms, approvals, SOP steps</div>
 </div>
 </div>
-<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </button>
 <button className="wfBtn w-full text-left rounded-2xl border border-white/10 bg-slate-950/30 p-4 hover:bg-white/5 transition" data-wf="finance">
 <div className="flex items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center">
-<iconify-icon className="text-xl text-fuchsia-200" icon="solar:wallet-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-fuchsia-200" icon="solar:wallet-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight text-white">Finance: invoices → follow-up</div>
 <div className="text-xs text-slate-200/70">Generate, send, reconcile</div>
 </div>
 </div>
-<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/70" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </button>
 </div>
@@ -815,7 +857,7 @@ Notes: ${notes || "—"}
 <div className="mt-1 text-xs text-slate-200/70" id="wfDesc">Enrich, score, route, schedule—without manual copy/paste.</div>
 </div>
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200/80">
-<iconify-icon className="text-base" icon="solar:bolt-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:bolt-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                     Typical: 2–5 days
                   </div>
 </div>
@@ -836,11 +878,11 @@ Notes: ${notes || "—"}
 </div>
 <div className="mt-5 flex flex-col sm:flex-row gap-3 sm:items-center">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#contact">
-<iconify-icon className="text-lg" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                     Talk to an expert
                   </a>
 <button className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10 transition" id="downloadOnePager">
-<iconify-icon className="text-lg" icon="solar:download-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:download-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                     Download one‑pager
                   </button>
 <span aria-live="polite" className="text-xs text-slate-200/60" id="downloadHint"></span>
@@ -864,7 +906,7 @@ Notes: ${notes || "—"}
 <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
 <div className="flex items-center justify-between gap-4">
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200/80">
-<iconify-icon className="text-base" icon="solar:shop-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:shop-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Ecommerce
               </div>
 <div className="text-xs text-slate-200/60">8 weeks</div>
@@ -891,7 +933,7 @@ Notes: ${notes || "—"}
 <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
 <div className="flex items-center justify-between gap-4">
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200/80">
-<iconify-icon className="text-base" icon="solar:buildings-3-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:buildings-3-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 B2B services
               </div>
 <div className="text-xs text-slate-200/60">4 weeks</div>
@@ -918,7 +960,7 @@ Notes: ${notes || "—"}
 <article className="rounded-3xl border border-white/10 bg-white/5 p-6">
 <div className="flex items-center justify-between gap-4">
 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200/80">
-<iconify-icon className="text-base" icon="solar:document-text-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:document-text-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Back office
               </div>
 <div className="text-xs text-slate-200/60">6 weeks</div>
@@ -977,7 +1019,7 @@ Notes: ${notes || "—"}
 </ul>
 <a className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#contact">
               Choose Starter
-              <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+              <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 <div className="rounded-3xl border border-sky-400/30 bg-gradient-to-b from-sky-400/10 to-white/5 p-6">
@@ -1000,7 +1042,7 @@ Notes: ${notes || "—"}
 </ul>
 <a className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#contact">
               Choose Growth
-              <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+              <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
@@ -1022,7 +1064,7 @@ Notes: ${notes || "—"}
 </ul>
 <a className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10 transition" href="#contact">
               Request a proposal
-              <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+              <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 </div>
@@ -1039,7 +1081,7 @@ Notes: ${notes || "—"}
 <div className="text-sm font-semibold tracking-tight text-white">Want a faster answer?</div>
 <p className="mt-2 text-sm text-slate-200/75">Send your current process and we’ll reply with automation ideas.</p>
 <a className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition w-full" href="#contact">
-<iconify-icon className="text-lg" icon="solar:paperclip-2-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:paperclip-2-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Share a process
               </a>
 </div>
@@ -1049,7 +1091,7 @@ Notes: ${notes || "—"}
 <details className="group rounded-2xl border border-white/10 bg-white/5 p-5">
 <summary className="cursor-pointer list-none flex items-center justify-between gap-4">
 <div className="text-sm font-semibold tracking-tight text-white">Do you replace our team?</div>
-<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-3 text-sm text-slate-200/75">
                   No. We remove repetitive work so your team can focus on higher-value tasks. We also keep humans in the loop where accuracy matters.
@@ -1058,7 +1100,7 @@ Notes: ${notes || "—"}
 <details className="group rounded-2xl border border-white/10 bg-white/5 p-5">
 <summary className="cursor-pointer list-none flex items-center justify-between gap-4">
 <div className="text-sm font-semibold tracking-tight text-white">What tools do you integrate with?</div>
-<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-3 text-sm text-slate-200/75">
                   Most modern CRMs, helpdesks, email providers, spreadsheets, databases, and internal APIs. If there’s an API, we can connect it.
@@ -1067,7 +1109,7 @@ Notes: ${notes || "—"}
 <details className="group rounded-2xl border border-white/10 bg-white/5 p-5">
 <summary className="cursor-pointer list-none flex items-center justify-between gap-4">
 <div className="text-sm font-semibold tracking-tight text-white">How do you handle security?</div>
-<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-3 text-sm text-slate-200/75">
                   We scope data access, minimize retention, and use least-privilege credentials. We document what touches what, and add monitoring + audit trails.
@@ -1076,7 +1118,7 @@ Notes: ${notes || "—"}
 <details className="group rounded-2xl border border-white/10 bg-white/5 p-5">
 <summary className="cursor-pointer list-none flex items-center justify-between gap-4">
 <div className="text-sm font-semibold tracking-tight text-white">How fast can we launch?</div>
-<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl text-slate-200/70 group-open:rotate-180 transition" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-3 text-sm text-slate-200/75">
                   Many teams ship the first workflow in 1–2 weeks after discovery, depending on integrations and approval requirements.
@@ -1101,14 +1143,14 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Full name</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:user-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:user-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="name" placeholder="Alex Johnson" required="" type="text"/>
 </div>
 </div>
 <div>
 <label className="text-xs text-slate-200/70">Work email</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:letter-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:letter-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="email" placeholder="alex@company.com" required="" type="email"/>
 </div>
 </div>
@@ -1116,7 +1158,7 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Company</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:buildings-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:buildings-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="company" placeholder="Your company" required="" type="text"/>
 </div>
 </div>
@@ -1124,7 +1166,7 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Primary goal</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:flag-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:flag-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <select className="w-full bg-transparent text-sm text-white outline-none" id="goal">
 <option className="bg-slate-950" value="save-time">Save time / reduce manual work</option>
 <option className="bg-slate-950" value="grow-revenue">Grow revenue / speed sales</option>
@@ -1136,7 +1178,7 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Timeline</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/30 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:stopwatch-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:stopwatch-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <select className="w-full bg-transparent text-sm text-white outline-none" id="timeline">
 <option className="bg-slate-950" value="asap">ASAP</option>
 <option className="bg-slate-950" value="2-4w">2–4 weeks</option>
@@ -1154,14 +1196,14 @@ Notes: ${notes || "—"}
 <div className="mt-2 flex items-center justify-between text-xs text-slate-200/60">
 <span id="charCount">0/600</span>
 <button className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:bg-white/10 transition text-xs font-medium text-white" id="insertTemplate" type="button">
-<iconify-icon className="text-base" icon="solar:text-square-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:text-square-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                     Insert template
                   </button>
 </div>
 </div>
 <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
 <button className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" type="submit">
-<iconify-icon className="text-lg" icon="solar:paper-plane-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:paper-plane-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Send request
                 </button>
 <div aria-live="polite" className="text-xs text-slate-200/60" id="formStatus"></div>
@@ -1186,7 +1228,7 @@ Notes: ${notes || "—"}
 </ol>
 <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-center gap-2 text-xs text-slate-200/70">
-<iconify-icon className="text-base" icon="solar:lock-keyhole-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:lock-keyhole-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                     Security-first build
                   </div>
 <p className="mt-2 text-sm text-slate-200/75">
@@ -1197,15 +1239,15 @@ Notes: ${notes || "—"}
                   Replace company details:
                   <div className="mt-2 grid gap-2">
 <div className="flex items-center gap-2">
-<iconify-icon className="text-base text-slate-200/70" icon="solar:letter-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base text-slate-200/70" icon="solar:letter-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                       hello@automateiq.com
                     </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="text-base text-slate-200/70" icon="solar:phone-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base text-slate-200/70" icon="solar:phone-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                       (555) 123‑4567
                     </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="text-base text-slate-200/70" icon="solar:map-point-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base text-slate-200/70" icon="solar:map-point-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Remote • Worldwide
                     </div>
 </div>
@@ -1228,7 +1270,7 @@ Notes: ${notes || "—"}
 <a className="hover:text-white transition" href="#pricing">Pricing</a>
 <a className="hover:text-white transition" href="#faq">FAQ</a>
 <button className="hover:text-white transition inline-flex items-center gap-2" id="scrollTop">
-<iconify-icon className="text-base" icon="solar:arrow-up-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:arrow-up-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Back to top
               </button>
 </div>
@@ -1247,7 +1289,7 @@ Notes: ${notes || "—"}
 <div className="mt-1 text-xs text-slate-200/70">Answer a few questions and get a workflow outline.</div>
 </div>
 <button aria-label="Close" className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 p-2.5 hover:bg-white/10 transition" id="closePlanner">
-<iconify-icon className="text-xl" icon="solar:close-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:close-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 </div>
 <div className="p-5 sm:p-6 grid gap-4">
@@ -1255,7 +1297,7 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Department</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:case-round-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:case-round-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <select className="w-full bg-transparent text-sm text-white outline-none" id="pDept">
 <option className="bg-slate-950" value="sales">Sales</option>
 <option className="bg-slate-950" value="support">Support</option>
@@ -1268,7 +1310,7 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Main input</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:inbox-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:inbox-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <select className="w-full bg-transparent text-sm text-white outline-none" id="pInput">
 <option className="bg-slate-950" value="form">Website form</option>
 <option className="bg-slate-950" value="email">Email</option>
@@ -1283,14 +1325,14 @@ Notes: ${notes || "—"}
 <div>
 <label className="text-xs text-slate-200/70">Primary system</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:widget-2-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:widget-2-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="pSystem" placeholder="Example: HubSpot, Zendesk, Airtable" type="text"/>
 </div>
 </div>
 <div>
 <label className="text-xs text-slate-200/70">Desired outcome</label>
 <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-<iconify-icon className="text-lg text-slate-200/80" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg text-slate-200/80" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <input className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 outline-none" id="pOutcome" placeholder="Example: book meetings faster" type="text"/>
 </div>
 </div>
@@ -1303,11 +1345,11 @@ Notes: ${notes || "—"}
 </div>
 <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
 <button className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" id="generatePlan">
-<iconify-icon className="text-lg" icon="solar:wand-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:wand-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Generate plan
               </button>
 <button className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white hover:bg-white/10 transition" id="copyPlan">
-<iconify-icon className="text-lg" icon="solar:copy-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:copy-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Copy
               </button>
 </div>

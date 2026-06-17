@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -39,6 +75,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -903,26 +945,26 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 <div className="">
 <label className="block text-base text-blue-900 font-semibold mb-2 tracking-tight" htmlFor="ct-name">Name <span className="text-rose-500">*</span></label>
-<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-name" name="name" placeholder="Your name" required="" style={{-TwRingColor: 'rgb(0, 102, 238)'}} type="text"/>
+<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-name" name="name" placeholder="Your name" required="" style={{'--tw-ring-color': 'rgb(0, 102, 238)'}} type="text"/>
 </div>
 <div className="">
 <label className="block text-base text-blue-900 font-semibold mb-2 tracking-tight" htmlFor="ct-phone">Phone <span className="text-rose-500">*</span></label>
-<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-phone" name="phone" placeholder="(555) 555-5555" required="" style={{-TwRingColor: 'rgb(0, 102, 238)'}} type="tel"/>
+<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-phone" name="phone" placeholder="(555) 555-5555" required="" style={{'--tw-ring-color': 'rgb(0, 102, 238)'}} type="tel"/>
 </div>
 </div>
 <div className="">
 <label className="block text-base text-blue-900 font-semibold mb-2 tracking-tight" htmlFor="ct-email">Email <span className="text-rose-500">*</span></label>
-<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-email" name="email" placeholder="you@example.com" required="" style={{-TwRingColor: 'rgb(0, 102, 238)'}} type="email"/>
+<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-email" name="email" placeholder="you@example.com" required="" style={{'--tw-ring-color': 'rgb(0, 102, 238)'}} type="email"/>
 </div>
 <div className="">
 <label className="block text-base text-blue-900 font-semibold mb-2 tracking-tight" htmlFor="ct-address">Address <span className="text-slate-500">(optional)</span></label>
-<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-address" name="address" placeholder="123 Main St, Austin, TX 78701" style={{-TwRingColor: 'rgb(0, 102, 238)'}} type="text"/>
+<input className="w-full pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-address" name="address" placeholder="123 Main St, Austin, TX 78701" style={{'--tw-ring-color': 'rgb(0, 102, 238)'}} type="text"/>
 </div>
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 <div className="relative">
 <label className="block text-base text-blue-900 font-semibold mb-2 tracking-tight" htmlFor="ct-service">Service Needed</label>
 <div className="relative">
-<select className="appearance-none w-full pl-4 pr-12 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white text-slate-700 transition-all" id="ct-service" name="service" style={{-TwRingColor: 'rgb(0, 102, 238)'}}>
+<select className="appearance-none w-full pl-4 pr-12 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white text-slate-700 transition-all" id="ct-service" name="service" style={{'--tw-ring-color': 'rgb(0, 102, 238)'}}>
 <option selected="" value="">Select a service</option>
 <option>Drain Cleaning</option>
 <option>Leak Detection</option>
@@ -937,7 +979,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative">
 <label className="block text-base text-blue-900 font-semibold mb-2 tracking-tight" htmlFor="ct-time">Preferred Time</label>
 <div className="relative">
-<select className="appearance-none w-full pl-4 pr-12 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white text-slate-700 transition-all" id="ct-time" name="preferred_time" style={{-TwRingColor: 'rgb(0, 102, 238)'}}>
+<select className="appearance-none w-full pl-4 pr-12 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white text-slate-700 transition-all" id="ct-time" name="preferred_time" style={{'--tw-ring-color': 'rgb(0, 102, 238)'}}>
 <option selected="" value="">Select a time</option>
 <option>Morning (8am–12pm)</option>
 <option>Afternoon (12pm–4pm)</option>
@@ -950,7 +992,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="">
 <label className="block text-base text-blue-900 font-semibold mb-2 tracking-tight" htmlFor="ct-msg">Message</label>
-<textarea className="w-full resize-y pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-msg" name="message" placeholder="Tell us about your service needs..." rows="4" style={{-TwRingColor: 'rgb(0, 102, 238)'}}></textarea>
+<textarea className="w-full resize-y pl-4 pr-4 py-3 text-base rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-blue-600 outline-none bg-white placeholder:text-slate-400 transition-all" id="ct-msg" name="message" placeholder="Tell us about your service needs..." rows="4" style={{'--tw-ring-color': 'rgb(0, 102, 238)'}}></textarea>
 </div>
 <button className="w-full inline-flex items-center justify-center rounded-xl px-8 py-4 text-lg font-semibold transition-colors shadow-md text-slate-900" style={{backgroundColor: 'rgb(255, 234, 23)'}} type="submit">
               Schedule Service

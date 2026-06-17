@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -204,6 +240,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -287,7 +329,7 @@ addUtilities({
 
 <div className="fade-in-up delay-300 flex flex-col sm:flex-row gap-4 gap-x-4 gap-y-4 items-center justify-center">
 
-<button className="group sm:w-auto overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(14,165,233,0.6)] hover:scale-[1.02] w-full rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{-X: '192.33343505859375px', -Y: '27.019989013671875px'}}>
+<button className="group sm:w-auto overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(14,165,233,0.6)] hover:scale-[1.02] w-full rounded-full pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{'--x': '192.33343505859375px', '--y': '27.019989013671875px'}}>
 
 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{background: 'radial-gradient(300px circle at var(--x) var(--y), #0ea5e9, #3b82f6, transparent 60%)'}}></span>
 
@@ -299,7 +341,7 @@ addUtilities({
 </span>
 </button>
 
-<button className="group flex transition-all duration-300 hover:bg-white/15 hover:border-white/25 hover:text-white hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] overflow-hidden sm:w-auto text-sm font-medium text-white bg-white/20 w-full rounded-full pt-3.5 pr-8 pb-3.5 pl-8 relative shadow-[0_10px_30px_-18px_rgba(0,0,0,0.9)] backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="group flex transition-all duration-300 hover:bg-white/15 hover:border-white/25 hover:text-white hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] overflow-hidden sm:w-auto text-sm font-medium text-white bg-white/20 w-full rounded-full pt-3.5 pr-8 pb-3.5 pl-8 relative shadow-[0_10px_30px_-18px_rgba(0,0,0,0.9)] backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 
 <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/15 via-white/0 to-white/0"></span>
 <iconify-icon className="relative z-10 opacity-80 transition-opacity duration-300 group-hover:opacity-100" icon="solar:play-circle-linear" width="18"></iconify-icon>
@@ -315,7 +357,7 @@ addUtilities({
 
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl blur-[100px] rounded-full -z-10 bg-sky-900/10">
 </div>
-<div className="glass-panel overflow-hidden bg-[radial-gradient(circle_at_top_left,var(--tw-gradient-stops))] from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-2xl backdrop-blur-xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_60px_-15px_rgba(56,189,248,0.3)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="glass-panel overflow-hidden bg-[radial-gradient(circle_at_top_left,var(--tw-gradient-stops))] from-blue-500/10 via-blue-500/0 to-blue-500/10 rounded-2xl backdrop-blur-xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_60px_-15px_rgba(56,189,248,0.3)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '16px'}}>
 
 <div className="absolute inset-0 z-20 pointer-events-none rounded-2xl overflow-hidden" style={{mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px'}}>
 <div className="absolute top-1/2 left-1/2 w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2 animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_340deg,#38bdf8_360deg)] opacity-100">

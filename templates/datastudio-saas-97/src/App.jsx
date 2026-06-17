@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -278,6 +314,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -365,7 +407,7 @@ addUtilities({
 <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 bg-neutral-950/80">
 
 <div className="space-y-6">
-<div className="spotlight-card p-5 rounded-lg space-y-4 hover:bg-white/[0.03] transition-colors" style={{-MouseX: '-15px', -MouseY: '-556px'}}>
+<div className="spotlight-card p-5 rounded-lg space-y-4 hover:bg-white/[0.03] transition-colors" style={{'--mouse-x': '-15px', '--mouse-y': '-556px'}}>
 <div className="flex justify-between items-center text-xs text-neutral-400">
 <span>Total Revenue</span>
 <svg className="lucide lucide-dollar-sign w-3.5 h-3.5" data-lucide="dollar-sign" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
@@ -375,7 +417,7 @@ addUtilities({
 <svg className="lucide lucide-trending-up w-3 h-3" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> +12.5% vs last month
                                 </div>
 </div>
-<div className="spotlight-card p-5 rounded-lg h-40 flex items-end justify-between gap-2" style={{-MouseX: '-15px', -MouseY: '-722px'}}>
+<div className="spotlight-card p-5 rounded-lg h-40 flex items-end justify-between gap-2" style={{'--mouse-x': '-15px', '--mouse-y': '-722px'}}>
 <div className="w-full bg-indigo-500/20 h-[40%] rounded-sm hover:bg-indigo-500/40 transition-all hover:scale-y-110 origin-bottom bar-animate" style={{animationDelay: '0.1s'}}></div>
 <div className="w-full bg-indigo-500/20 h-[60%] rounded-sm hover:bg-indigo-500/40 transition-all hover:scale-y-110 origin-bottom bar-animate" style={{animationDelay: '0.2s'}}></div>
 <div className="w-full bg-indigo-500/20 h-[30%] rounded-sm hover:bg-indigo-500/40 transition-all hover:scale-y-110 origin-bottom bar-animate" style={{animationDelay: '0.3s'}}></div>
@@ -384,7 +426,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="md:col-span-2 spotlight-card rounded-lg p-5 flex flex-col" style={{-MouseX: '-294.328125px', -MouseY: '-556px'}}>
+<div className="md:col-span-2 spotlight-card rounded-lg p-5 flex flex-col" style={{'--mouse-x': '-294.328125px', '--mouse-y': '-556px'}}>
 <div className="flex justify-between items-center mb-6">
 <h3 className="text-xs font-medium text-neutral-200">Live Traffic</h3>
 <div className="flex gap-2 items-center">
@@ -476,7 +518,7 @@ addUtilities({
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="spotlight-card p-8 rounded-xl group transition-colors duration-500" style={{-MouseX: '-10px', -MouseY: '-1492.0625px'}}>
+<div className="spotlight-card p-8 rounded-xl group transition-colors duration-500" style={{'--mouse-x': '-10px', '--mouse-y': '-1492.0625px'}}>
 <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
 <svg className="lucide lucide-zap w-5 h-5" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
 </div>
@@ -486,7 +528,7 @@ addUtilities({
                 </p>
 </div>
 
-<div className="spotlight-card p-8 rounded-xl group transition-colors duration-500" style={{-MouseX: '-292.65625px', -MouseY: '-1492.0625px'}}>
+<div className="spotlight-card p-8 rounded-xl group transition-colors duration-500" style={{'--mouse-x': '-292.65625px', '--mouse-y': '-1492.0625px'}}>
 <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
 <svg className="lucide lucide-sparkles w-5 h-5" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
 </div>
@@ -496,7 +538,7 @@ addUtilities({
                 </p>
 </div>
 
-<div className="spotlight-card p-8 rounded-xl group transition-colors duration-500" style={{-MouseX: '-575.328125px', -MouseY: '-1492.0625px'}}>
+<div className="spotlight-card p-8 rounded-xl group transition-colors duration-500" style={{'--mouse-x': '-575.328125px', '--mouse-y': '-1492.0625px'}}>
 <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
 <svg className="lucide lucide-layers w-5 h-5" data-lucide="layers" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
 </div>
@@ -518,7 +560,7 @@ addUtilities({
 </div>
 <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[600px]">
 
-<div className="spotlight-card md:col-span-2 md:row-span-2 rounded-2xl p-8 flex flex-col justify-between overflow-hidden relative group" style={{-MouseX: '-10px', -MouseY: '-2112.8125px'}}>
+<div className="spotlight-card md:col-span-2 md:row-span-2 rounded-2xl p-8 flex flex-col justify-between overflow-hidden relative group" style={{'--mouse-x': '-10px', '--mouse-y': '-2112.8125px'}}>
 <div className="relative z-10">
 <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-6 text-white border border-white/10 group-hover:bg-white/10 transition-colors"><svg className="lucide lucide-database w-5 h-5" data-lucide="database" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg></div>
 <h3 className="text-xl font-medium text-white tracking-tight mb-2">Real-time Sync Engine</h3>
@@ -540,7 +582,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="spotlight-card md:col-span-2 rounded-2xl p-8 flex flex-col justify-center relative overflow-hidden group" style={{-MouseX: '-430px', -MouseY: '-2112.8125px'}}>
+<div className="spotlight-card md:col-span-2 rounded-2xl p-8 flex flex-col justify-center relative overflow-hidden group" style={{'--mouse-x': '-430px', '--mouse-y': '-2112.8125px'}}>
 <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-green-500/5 to-transparent transition-opacity opacity-50 group-hover:opacity-100"></div>
 <div className="relative z-10 flex flex-col h-full justify-between">
 <div className="flex justify-between items-start">
@@ -554,7 +596,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="spotlight-card rounded-2xl p-6 flex flex-col justify-between group" style={{-MouseX: '-430px', -MouseY: '-2420.8125px'}}>
+<div className="spotlight-card rounded-2xl p-6 flex flex-col justify-between group" style={{'--mouse-x': '-430px', '--mouse-y': '-2420.8125px'}}>
 <div className="text-3xl font-medium text-white tracking-tighter group-hover:scale-110 transition-transform origin-left">99.99%</div>
 <div>
 <h3 className="text-sm font-medium text-neutral-200 mt-2">Uptime SLA</h3>
@@ -562,7 +604,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="spotlight-card rounded-2xl p-6 flex flex-col justify-between group" style={{-MouseX: '-640px', -MouseY: '-2420.8125px'}}>
+<div className="spotlight-card rounded-2xl p-6 flex flex-col justify-between group" style={{'--mouse-x': '-640px', '--mouse-y': '-2420.8125px'}}>
 <div className="text-3xl font-medium text-white tracking-tighter flex items-center gap-2 group-hover:text-yellow-200 transition-colors"><svg className="lucide lucide-zap w-6 h-6 text-yellow-400 fill-yellow-400/20 group-hover:fill-yellow-400 transition-colors" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg> 40ms</div>
 <div>
 <h3 className="text-sm font-medium text-neutral-200 mt-2">Global Latency</h3>

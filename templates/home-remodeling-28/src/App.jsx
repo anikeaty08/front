@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -102,6 +138,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -159,7 +201,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent pointer-events-none"></div>
 
-<div className="absolute top-0 left-0 z-20 w-full md:w-[60%] lg:w-[45%] p-8 md:p-12 lg:p-16 flex flex-col items-start gap-8 md:rounded-br-[3rem] border-r border-b border-white/20 transition-all duration-500 reveal" data-delay="0.5s" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.1)', backgroundColor: 'rgba(255, 255, 255, 0.75)', animation: '0.8s ease-out 0.5s 1 normal both running animationIn'}}>
+<div className="absolute top-0 left-0 z-20 w-full md:w-[60%] lg:w-[45%] p-8 md:p-12 lg:p-16 flex flex-col items-start gap-8 md:rounded-br-[3rem] border-r border-b border-white/20 transition-all duration-500 reveal" data-delay="0.5s" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.1)', backgroundColor: 'rgba(255, 255, 255, 0.75)', animation: '0.8s ease-out 0.5s 1 normal both running animationIn'}}>
 <div className="flex flex-col gap-6">
 <h1 className="text-4xl md:text-[3.25rem] lg:text-[4rem] leading-[1.05] tracking-tight text-gray-900 font-playfair font-light" style={{}}>
                         Premium home remodeling in Ventura &amp; SB

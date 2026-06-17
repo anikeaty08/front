@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -32,6 +68,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -39,7 +81,7 @@ gtag('config', 'G-2M6V79H761');
       
 
 <nav className="fixed top-4 md:top-6 inset-x-4 md:inset-x-8 z-50 flex justify-center pointer-events-none transition-all duration-300">
-<div className="pointer-events-auto w-full max-w-7xl bg-white/75 backdrop-blur-[20px] rounded-full h-[60px] pl-7 pr-3 flex items-center justify-between" style={{boxShadow: '0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(0,0,0,0.04)'}}>
+<div className="pointer-events-auto w-full max-w-7xl bg-white/75 backdrop-blur-[20px] rounded-full h-[60px] pl-7 pr-3 flex items-center justify-between" style={{boxShadow: '0 4px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 0 0 1px rgba(0,0,0,0.04)'}}>
 <a className="uppercase text-lg font-semibold text-[#163B52] tracking-widest font-heading" href="#">DAURA</a>
 <div className="hidden md:flex items-center gap-8">
 <a className="text-xs font-semibold text-[#4A5568] uppercase tracking-wider hover:text-[#FFB40F] transition-colors font-sans" href="#philosophy">Philosophy</a>

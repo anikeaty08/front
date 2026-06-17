@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -85,6 +121,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -150,7 +192,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8" id="card-grid" style={{perspective: '1200px'}}>
 <div className="webgl-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm transition duration-300 hover:border-orange-400/20 hover:bg-white/[0.06] md:p-10" style={{transformStyle: 'preserve-3d', willChange: 'transform', boxShadow: '0 0 0 rgba(0,0,0,0)'}}>
-<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(251,146,60,0.18), rgba(251,146,60,0.08) 22%, rgba(255,255,255,0.03) 40%, rgba(0,0,0,0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(251, 146, 60, 0.18), rgba(251, 146, 60, 0.08) 22%, rgba(255, 255, 255, 0.03) 40%, rgba(0, 0, 0, 0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
 <div className="pointer-events-none absolute inset-[1px] rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100" style={{background: 'linear-gradient(115deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 24%, rgba(255,255,255,0) 42%, rgba(255,255,255,0.08) 55%, rgba(255,255,255,0) 72%)', transform: 'translate3d(calc(var(--tx,0) * 0.2), calc(var(--ty,0) * 0.2), 0.15rem)', mixBlendMode: 'screen'}}></div>
 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-400/60 to-transparent opacity-70" style={{transform: 'translateZ(0.2rem)'}}></div>
 <div className="relative z-10 mb-8 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-orange-200/70" style={{transform: 'translateZ(1.4rem)'}}>
@@ -175,7 +217,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="webgl-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm transition duration-300 hover:border-orange-400/20 hover:bg-white/[0.06] md:p-10" style={{transformStyle: 'preserve-3d', willChange: 'transform', boxShadow: '0 0 0 rgba(0,0,0,0)'}}>
-<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(253,186,116,0.18), rgba(253,186,116,0.08) 22%, rgba(255,255,255,0.03) 40%, rgba(0,0,0,0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(253, 186, 116, 0.18), rgba(253, 186, 116, 0.08) 22%, rgba(255, 255, 255, 0.03) 40%, rgba(0, 0, 0, 0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
 <div className="pointer-events-none absolute inset-[1px] rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100" style={{background: 'linear-gradient(115deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 24%, rgba(255,255,255,0) 42%, rgba(255,255,255,0.08) 55%, rgba(255,255,255,0) 72%)', transform: 'translate3d(calc(var(--tx,0) * 0.2), calc(var(--ty,0) * 0.2), 0.15rem)', mixBlendMode: 'screen'}}></div>
 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/60 to-transparent opacity-70" style={{transform: 'translateZ(0.2rem)'}}></div>
 <div className="relative z-10 mb-8 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-orange-200/70" style={{transform: 'translateZ(1.4rem)'}}>
@@ -205,7 +247,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="webgl-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm transition duration-300 hover:border-orange-400/20 hover:bg-white/[0.06] md:p-10" style={{transformStyle: 'preserve-3d', willChange: 'transform', boxShadow: '0 0 0 rgba(0,0,0,0)'}}>
-<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(251,146,60,0.18), rgba(251,146,60,0.08) 22%, rgba(255,255,255,0.03) 40%, rgba(0,0,0,0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(251, 146, 60, 0.18), rgba(251, 146, 60, 0.08) 22%, rgba(255, 255, 255, 0.03) 40%, rgba(0, 0, 0, 0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
 <div className="pointer-events-none absolute inset-[1px] rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100" style={{background: 'linear-gradient(115deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 24%, rgba(255,255,255,0) 42%, rgba(255,255,255,0.08) 55%, rgba(255,255,255,0) 72%)', transform: 'translate3d(calc(var(--tx,0) * 0.2), calc(var(--ty,0) * 0.2), 0.15rem)', mixBlendMode: 'screen'}}></div>
 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-300/60 to-transparent opacity-70" style={{transform: 'translateZ(0.2rem)'}}></div>
 <div className="relative z-10 mb-8 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-orange-200/70" style={{transform: 'translateZ(1.4rem)'}}>
@@ -235,7 +277,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="webgl-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm transition duration-300 hover:border-orange-400/20 hover:bg-white/[0.06] md:p-10" style={{transformStyle: 'preserve-3d', willChange: 'transform', boxShadow: '0 0 0 rgba(0,0,0,0)'}}>
-<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(252,165,165,0.18), rgba(248,113,113,0.08) 22%, rgba(255,255,255,0.03) 40%, rgba(0,0,0,0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(252, 165, 165, 0.18), rgba(248, 113, 113, 0.08) 22%, rgba(255, 255, 255, 0.03) 40%, rgba(0, 0, 0, 0) 68%)', transform: 'translateZ(0.1rem)'}}></div>
 <div className="pointer-events-none absolute inset-[1px] rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100" style={{background: 'linear-gradient(115deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 24%, rgba(255,255,255,0) 42%, rgba(255,255,255,0.08) 55%, rgba(255,255,255,0) 72%)', transform: 'translate3d(calc(var(--tx,0) * 0.2), calc(var(--ty,0) * 0.2), 0.15rem)', mixBlendMode: 'screen'}}></div>
 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-300/60 to-transparent opacity-70" style={{transform: 'translateZ(0.2rem)'}}></div>
 <div className="relative z-10 mb-8 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-orange-200/70" style={{transform: 'translateZ(1.4rem)'}}>

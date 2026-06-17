@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -248,6 +284,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -267,11 +309,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="fixed inset-0 z-[100] flex w-full h-full pointer-events-none curtain-active" id="curtain">
-<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{-I: '0'}}></div>
-<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{-I: '1'}}></div>
-<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{-I: '2'}}></div>
-<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{-I: '3'}}></div>
-<div className="panel w-1/5 h-full bg-slate-950" style={{-I: '4'}}></div>
+<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{'--i': '0'}}></div>
+<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{'--i': '1'}}></div>
+<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{'--i': '2'}}></div>
+<div className="panel w-1/5 h-full bg-slate-950 border-r border-slate-900" style={{'--i': '3'}}></div>
+<div className="panel w-1/5 h-full bg-slate-950" style={{'--i': '4'}}></div>
 </div>
 
 <div className="fixed inset-0 z-[90] bg-[#080808] flex flex-col" id="menu-overlay">
@@ -531,7 +573,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full" id="spotlight-grid">
 
-<div className="spotlight-card card-3d group relative h-96 rounded-3xl bg-white/[0.03] border border-white/20 backdrop-blur-xl p-8 flex flex-col justify-between overflow-hidden hover:bg-white/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]" style={{-MouseX: '620px', -MouseY: '375px'}}>
+<div className="spotlight-card card-3d group relative h-96 rounded-3xl bg-white/[0.03] border border-white/20 backdrop-blur-xl p-8 flex flex-col justify-between overflow-hidden hover:bg-white/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]" style={{'--mouse-x': '620px', '--mouse-y': '375px'}}>
 <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 blur-[50px] rounded-full group-hover:bg-white/10 transition-colors"></div>
 <div className="relative z-10">
 <svg aria-hidden="true" className="iconify mb-6 stroke-1 iconify--lucide" data-icon="lucide:minus" data-icon-replaced="true" data-icon-set="lucide" data-lucide="minimize" fill="none" height="40" role="img" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(255, 255, 255)'}} viewbox="0 0 24 24" width="40" xmlns="http://www.w3.org/2000/svg"><path d="M8 3v3a2 2 0 0 1-2 2H3"></path><path d="M21 8h-3a2 2 0 0 1-2-2V3"></path><path d="M3 16h3a2 2 0 0 1 2 2v3"></path><path d="M16 21v-3a2 2 0 0 1 2-2h3"></path></svg>
@@ -542,7 +584,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card card-3d group relative h-96 rounded-3xl bg-white/[0.03] border border-white/20 backdrop-blur-xl p-8 flex flex-col justify-between overflow-hidden hover:bg-white/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]" style={{-MouseX: '297.91168212890625px', -MouseY: '380.0595703125px'}}>
+<div className="spotlight-card card-3d group relative h-96 rounded-3xl bg-white/[0.03] border border-white/20 backdrop-blur-xl p-8 flex flex-col justify-between overflow-hidden hover:bg-white/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]" style={{'--mouse-x': '297.91168212890625px', '--mouse-y': '380.0595703125px'}}>
 <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 blur-[50px] rounded-full group-hover:bg-white/10 transition-colors"></div>
 <div className="relative z-10">
 <svg aria-hidden="true" className="iconify text-white/80 w-10 h-10 mb-6 stroke-1 iconify--lucide" data-icon="lucide:maximize" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
@@ -553,7 +595,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card card-3d group relative h-96 rounded-3xl bg-white/[0.03] border border-white/20 backdrop-blur-xl p-8 flex flex-col justify-between overflow-hidden hover:bg-white/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]" style={{-MouseX: '-24px', -MouseY: '375px'}}>
+<div className="spotlight-card card-3d group relative h-96 rounded-3xl bg-white/[0.03] border border-white/20 backdrop-blur-xl p-8 flex flex-col justify-between overflow-hidden hover:bg-white/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]" style={{'--mouse-x': '-24px', '--mouse-y': '375px'}}>
 <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 blur-[50px] rounded-full group-hover:bg-white/10 transition-colors"></div>
 <div className="relative z-10">
 <svg aria-hidden="true" className="iconify text-white/80 w-10 h-10 mb-6 stroke-1 iconify--lucide" data-icon="lucide:activity" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -104,6 +140,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1017,61 +1059,61 @@ The more context you provide, the better Mira can assist you." spellcheck="false
 <div className="relative w-[20rem] h-[20rem] sm:w-[24rem] sm:h-[24rem] lg:w-[28rem] lg:h-[28rem]">
 <div className="pointer-events-none absolute -inset-8 rounded-full blur-3xl bg-sky-400/10"></div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '0deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '0deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/fc856f12-4738-4299-91f7-4f7be1502a47_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '36deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '36deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/5c16a8c2-83a8-42a0-87bc-c96f7b50bcfa_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '72deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '72deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/2ade2e2d-5057-495c-9d1c-9ca448123393_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '108deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '108deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/4d02199b-9882-4e15-8f0c-cc93fee8bff5_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '144deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '144deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/79c71d64-efe5-46ac-9e25-3af2acd67bd9_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '180deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '180deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/f7f6feef-fd3e-4901-bce6-7271aa74dc87_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '216deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '216deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/ab0ab2bf-0976-4a4b-86d0-748e6a365725_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '252deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '252deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&amp;h=400&amp;fit=crop&amp;crop=face"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '288deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '288deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/05b8d217-cbbf-409b-a1ff-f4515ea6aab3_320w.jpg"/>
 </div>
 </div>
 
-<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{-Angle: '324deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
+<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{'--angle': '324deg', -R: '10rem', transform: 'translate(-50%, -50%) rotate(var(--angle)) translateX(var(--r)) rotate(calc(-1 * var(--angle)))'}}>
 <div className="counter-rotate w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full ring-2 ring-sky-300/50 bg-neutral-800 overflow-hidden transition-all duration-300 hover:scale-110 hover:ring-sky-400/70" style={{animation: 'counterRotate 60s linear infinite'}}>
 <img alt="Team member" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/3b6e4af7-ac86-4163-b303-578671458c76_320w.jpg"/>
 </div>

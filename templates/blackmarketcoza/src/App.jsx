@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -463,6 +499,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -492,7 +534,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="h-12 flex items-center justify-between gap-4">
 <div className="flex items-center gap-2 text-xs text-neutral-300 uppercase tracking-widest">
 <span className="inline-flex items-center gap-2">
-<iconify-icon className="text-neutral-400" icon="solar:alarm-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-neutral-400" icon="solar:alarm-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                         Limited Time Offer
                     </span>
 </div>
@@ -578,7 +620,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <button className="magnetic-btn relative overflow-hidden bg-white text-black px-8 py-3.5 rounded-full font-semibold text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 group/btn" id="btn-buy-vault" onclick="initiateCheckout('vault')">
 <span className="btn-text relative z-10 flex items-center gap-2">
                                 Buy
-                                <iconify-icon className="group-hover/btn:translate-x-1 transition-transform" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+                                <iconify-icon className="group-hover/btn:translate-x-1 transition-transform" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-purple-400 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
 <div className="spinner spinner-dark hidden relative z-20"></div>
@@ -588,7 +630,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-6 pt-6 border-t border-white/5">
 <div className="flex items-center justify-between gap-4">
 <div className="text-xs text-neutral-500 uppercase tracking-widest flex items-center gap-2">
-<iconify-icon className="text-neutral-400" icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-neutral-400" icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                                 100% Secure Checkout
                             </div>
 <div className="flex items-center gap-3 opacity-70">
@@ -596,7 +638,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <iconify-icon className="text-xl" icon="logos:visa"></iconify-icon>
 <iconify-icon className="text-xl" icon="logos:mastercard"></iconify-icon>
 <div className="flex items-center gap-1 text-xs text-neutral-500">
-<iconify-icon icon="solar:lock-keyhole-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:lock-keyhole-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                                     SSL
                                 </div>
 </div>
@@ -631,7 +673,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <button className="magnetic-btn relative overflow-hidden bg-white text-black px-8 py-3.5 rounded-full font-semibold text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 group/btn" id="btn-buy-kit" onclick="initiateCheckout('kit')">
 <span className="btn-text relative z-10 flex items-center gap-2">
                                 Buy
-                                <iconify-icon className="group-hover/btn:translate-x-1 transition-transform" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+                                <iconify-icon className="group-hover/btn:translate-x-1 transition-transform" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
 <div className="spinner spinner-dark hidden relative z-20"></div>
@@ -641,7 +683,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-6 pt-6 border-t border-white/5">
 <div className="flex items-center justify-between gap-4">
 <div className="text-xs text-neutral-500 uppercase tracking-widest flex items-center gap-2">
-<iconify-icon className="text-neutral-400" icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-neutral-400" icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                                 100% Secure Checkout
                             </div>
 <div className="flex items-center gap-3 opacity-70">
@@ -649,7 +691,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <iconify-icon className="text-xl" icon="logos:visa"></iconify-icon>
 <iconify-icon className="text-xl" icon="logos:mastercard"></iconify-icon>
 <div className="flex items-center gap-1 text-xs text-neutral-500">
-<iconify-icon icon="solar:lock-keyhole-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:lock-keyhole-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                                     SSL
                                 </div>
 </div>
@@ -676,11 +718,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="flex items-center gap-1 text-amber-300 mb-4">
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <p className="text-sm text-neutral-300 leading-relaxed font-light">
                         “The Vault prompts are insane. My workflow is faster and my outputs feel instantly more polished.”
@@ -695,11 +737,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="flex items-center gap-1 text-amber-300 mb-4">
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <p className="text-sm text-neutral-300 leading-relaxed font-light">
                         “Faceless Kit is a complete playbook. We launched a new channel format in one afternoon.”
@@ -714,11 +756,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="flex items-center gap-1 text-amber-300 mb-4">
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <p className="text-sm text-neutral-300 leading-relaxed font-light">
                         “Clean UI, instant delivery, and the content frameworks are very actionable. Worth it.”
@@ -738,7 +780,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm font-semibold text-white">How does delivery work?</div>
 <div className="text-xs text-neutral-500 mt-1">Instant access after payment is captured.</div>
 </div>
-<iconify-icon className="text-neutral-400 text-xl faq-chevron" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-neutral-400 text-xl faq-chevron" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 <div className="hidden px-8 py-6 text-sm text-neutral-300 leading-relaxed font-light faq-panel">
                     After checkout, the payment is captured, then the download link is revealed instantly on this page (no redirects).
@@ -748,7 +790,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm font-semibold text-white">Is there a refund policy?</div>
 <div className="text-xs text-neutral-500 mt-1">Digital goods policy.</div>
 </div>
-<iconify-icon className="text-neutral-400 text-xl faq-chevron" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-neutral-400 text-xl faq-chevron" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 <div className="hidden px-8 py-6 text-sm text-neutral-300 leading-relaxed font-light faq-panel">
                     Due to the digital nature of the products and instant delivery, all sales are final.
@@ -758,7 +800,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm font-semibold text-white">Will I receive updates?</div>
 <div className="text-xs text-neutral-500 mt-1">If the toolkit gets expanded.</div>
 </div>
-<iconify-icon className="text-neutral-400 text-xl faq-chevron" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-neutral-400 text-xl faq-chevron" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 <div className="hidden px-8 py-6 text-sm text-neutral-300 leading-relaxed font-light faq-panel">
                     If updates are released, you’ll be able to download the latest version from the link provided after purchase.
@@ -834,7 +876,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative z-10" id="checkout-content">
 <div className="flex justify-between items-center mb-8">
 <h3 className="text-xl font-semibold text-white flex items-center gap-2 tracking-tight">
-<iconify-icon className="text-emerald-400" icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon> Secure PayPal Checkout
+<iconify-icon className="text-emerald-400" icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon> Secure PayPal Checkout
                     </h3>
 </div>
 <div className="mb-6" id="cart-item-display"></div>
@@ -845,7 +887,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hidden mb-5 px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-2xl" id="payment-error">
 <div className="flex items-start gap-3">
-<iconify-icon className="text-red-400 text-xl" icon="solar:danger-triangle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-red-400 text-xl" icon="solar:danger-triangle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <div>
 <div className="text-sm text-red-200 font-semibold">Payment issue</div>
 <div className="text-xs text-red-200/80 mt-1" id="payment-error-msg">Please try again.</div>
@@ -912,7 +954,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <button className="magnetic-btn w-full py-4 bg-white text-black font-semibold rounded-xl flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all" id="card-submit-fallback" type="button">
 <span className="flex items-center gap-2">
                                         Pay Now
-                                        <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+                                        <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 </button>
 <p className="text-xs text-neutral-500 leading-relaxed">
@@ -929,7 +971,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="hidden" id="download-area">
 <div className="mb-6 px-4 py-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
 <div className="flex items-start gap-3">
-<iconify-icon className="text-emerald-400 text-xl" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-emerald-400 text-xl" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <div>
 <div className="text-sm text-emerald-100 font-semibold">Payment approved</div>
 <div className="text-xs text-emerald-100/80 mt-1">Your download is ready.</div>
@@ -939,7 +981,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="magnetic-btn w-full py-4 bg-white text-black font-semibold rounded-xl flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all" href="#" id="download-btn" rel="noopener" target="_blank">
 <span className="flex items-center gap-2" id="download-btn-text">
                             Download
-                            <iconify-icon icon="solar:download-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+                            <iconify-icon icon="solar:download-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </span>
 </a>
 <button className="mt-4 w-full py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs text-neutral-300 transition-colors uppercase tracking-widest magnetic-btn" onclick="toggleCart()">
@@ -953,7 +995,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-md hidden" id="terms-modal">
 <div className="glass-panel w-full max-w-sm p-8 rounded-3xl relative">
 <button className="absolute top-4 right-4 text-neutral-500 hover:text-white" onclick="toggleTerms()">
-<iconify-icon className="text-2xl" icon="solar:close-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-2xl" icon="solar:close-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 <h3 className="text-lg font-semibold text-white mb-4 tracking-tight">Terms of Service</h3>
 <p className="text-sm text-neutral-400 leading-relaxed">All sales are final due to the digital nature of these products.</p>
@@ -964,7 +1006,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="glass-panel border border-white/10 rounded-2xl px-4 py-3 max-w-xs shadow-[0_0_40px_rgba(0,0,0,0.35)]">
 <div className="flex items-start gap-3">
 <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-cyan-300">
-<iconify-icon className="text-xl" icon="solar:bag-check-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:bag-check-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="min-w-0">
 <div className="text-xs font-semibold text-white truncate" id="toast-title">Someone just purchased a tool!</div>

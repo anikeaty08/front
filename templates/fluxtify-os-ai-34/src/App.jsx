@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -145,6 +181,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -303,7 +345,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-slate-400 mb-2">Market Opportunity</p>
 <div className="flex items-end gap-1 h-8 mb-1">
 <div className="w-full bg-[#131B2C] rounded-sm h-full relative overflow-hidden">
-<div className="absolute bottom-0 left-0 w-full bg-cyan-500 h-[85%] progress-fill shadow-[0_0_10px_rgba(0,255,255,0.5)]" style={{-TargetHeight: '85%'}}></div>
+<div className="absolute bottom-0 left-0 w-full bg-cyan-500 h-[85%] progress-fill shadow-[0_0_10px_rgba(0,255,255,0.5)]" style={{'--target-height': '85%'}}></div>
 </div>
 </div>
 <p className="text-sm font-medium text-white">High ($1.2B TAM)</p>
@@ -312,7 +354,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="bg-[#0B0F19]/50 rounded-xl p-4 border border-white/5">
 <p className="text-xs text-slate-400 mb-2">Tech Complexity</p>
 <div className="h-1.5 w-full bg-[#131B2C] rounded-full mt-4 mb-3 overflow-hidden">
-<div className="h-full bg-cyan-400 rounded-full progress-fill shadow-[0_0_10px_rgba(0,255,255,0.5)]" style={{-TargetWidth: '30%'}}></div>
+<div className="h-full bg-cyan-400 rounded-full progress-fill shadow-[0_0_10px_rgba(0,255,255,0.5)]" style={{'--target-width': '30%'}}></div>
 </div>
 <p className="text-sm font-medium text-white">Low (Fast Build)</p>
 </div>
@@ -353,14 +395,14 @@ gtag('config', 'G-2M6V79H761');
 <div className="bg-[#0B0F19]/50 rounded-xl p-4 border border-white/5">
 <p className="text-xs text-slate-400 mb-2">Revenue Potential</p>
 <div className="h-1.5 w-full bg-[#131B2C] rounded-full mt-4 mb-3 overflow-hidden">
-<div className="h-full bg-purple-500 rounded-full progress-fill shadow-[0_0_10px_rgba(168,85,247,0.5)]" style={{-TargetWidth: '95%'}}></div>
+<div className="h-full bg-purple-500 rounded-full progress-fill shadow-[0_0_10px_rgba(168,85,247,0.5)]" style={{'--target-width': '95%'}}></div>
 </div>
 <p className="text-sm font-medium text-white">Very High (SaaS)</p>
 </div>
 <div className="bg-[#0B0F19]/50 rounded-xl p-4 border border-white/5">
 <p className="text-xs text-slate-400 mb-2">Tech Complexity</p>
 <div className="h-1.5 w-full bg-[#131B2C] rounded-full mt-4 mb-3 overflow-hidden">
-<div className="h-full bg-pink-500 rounded-full progress-fill shadow-[0_0_10px_rgba(236,72,153,0.5)]" style={{-TargetWidth: '80%'}}></div>
+<div className="h-full bg-pink-500 rounded-full progress-fill shadow-[0_0_10px_rgba(236,72,153,0.5)]" style={{'--target-width': '80%'}}></div>
 </div>
 <p className="text-sm font-medium text-white">
                     High (6 mo. build)
@@ -412,7 +454,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-right">
 <p className="text-xs text-slate-400 mb-1">Confidence</p>
 <div className="w-24 h-1.5 bg-[#131B2C] rounded-full overflow-hidden">
-<div className="h-full bg-blue-400 rounded-full progress-fill shadow-[0_0_10px_rgba(96,165,250,0.5)]" style={{-TargetWidth: '45%'}}></div>
+<div className="h-full bg-blue-400 rounded-full progress-fill shadow-[0_0_10px_rgba(96,165,250,0.5)]" style={{'--target-width': '45%'}}></div>
 </div>
 </div>
 </div>

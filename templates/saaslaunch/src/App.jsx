@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -45,6 +81,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -352,7 +394,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="aspect-[9/16] bg-slate-900 border border-white/10 rounded-xl relative overflow-hidden group">
 <div className="absolute inset-0 z-0">
 
-<div id="vidalytics_embed_l5BtVbfUpS6ZABpg" style={{width: '100%', position: 'relative', paddingTop: '177.78%'}}><div className="LoaderPlaceholder"><div className="Loader__wrapper vid_loader--portrait vid_loader--small"><img alt="" className="Loader__img" role="presentation" src="https://fast.vidalytics.com/video/3ly89aZR/bZNhIGfZ2b5TyfMK/245825/227295__FFMPEG/thumb/preview-5_0.jpg"/><div aria-hidden="true" className="Loader__wave"></div><div className="Loader__body"><div className="Loader__layout Loader__layout--active"><button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(57, 116, 255)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{-VidPulseSize: '21.67px', color: 'rgb(57, 116, 255)'}}></div></div></button></div><div className="Loader__layout Loader__layout--hidden"><div aria-label="Loading video" aria-valuetext="Loading in progress" className="LoaderProgress__progress" role="progressbar" style={{borderWidth: '2.58px', borderColor: 'rgba(255, 255, 255, 0.8)'}}></div></div></div></div></div></div>
+<div id="vidalytics_embed_l5BtVbfUpS6ZABpg" style={{width: '100%', position: 'relative', paddingTop: '177.78%'}}><div className="LoaderPlaceholder"><div className="Loader__wrapper vid_loader--portrait vid_loader--small"><img alt="" className="Loader__img" role="presentation" src="https://fast.vidalytics.com/video/3ly89aZR/bZNhIGfZ2b5TyfMK/245825/227295__FFMPEG/thumb/preview-5_0.jpg"/><div aria-hidden="true" className="Loader__wave"></div><div className="Loader__body"><div className="Loader__layout Loader__layout--active"><button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(57, 116, 255)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{'--vid-pulse-size': '21.67px', color: 'rgb(57, 116, 255)'}}></div></div></button></div><div className="Loader__layout Loader__layout--hidden"><div aria-label="Loading video" aria-valuetext="Loading in progress" className="LoaderProgress__progress" role="progressbar" style={{borderWidth: '2.58px', borderColor: 'rgba(255, 255, 255, 0.8)'}}></div></div></div></div></div></div>
 
 </div>
 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
@@ -364,7 +406,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="aspect-[9/16] bg-slate-900 border border-white/10 rounded-xl relative overflow-hidden group">
 <div className="absolute inset-0 z-0">
-<div id="vidalytics_embed_8QHuqyf_gjiHtiaV" style={{width: '100%', position: 'relative', paddingTop: '177.78%'}}><div className="LoaderPlaceholder"><div className="Loader__wrapper vid_loader--portrait vid_loader--small"><img alt="" className="Loader__img" role="presentation" src="https://fast.vidalytics.com/video/3ly89aZR/f_5tU6cCWLX10uwL/245824/227294__FFMPEG/thumb/preview-5_0.jpg"/><div aria-hidden="true" className="Loader__wave"></div><div className="Loader__body"><div className="Loader__layout Loader__layout--active"><button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(57, 116, 255)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{-VidPulseSize: '21.67px', color: 'rgb(57, 116, 255)'}}></div></div></button></div><div className="Loader__layout Loader__layout--hidden"><div aria-label="Loading video" aria-valuetext="Loading in progress" className="LoaderProgress__progress" role="progressbar" style={{borderWidth: '2.58px', borderColor: 'rgba(255, 255, 255, 0.8)'}}></div></div></div></div></div></div>
+<div id="vidalytics_embed_8QHuqyf_gjiHtiaV" style={{width: '100%', position: 'relative', paddingTop: '177.78%'}}><div className="LoaderPlaceholder"><div className="Loader__wrapper vid_loader--portrait vid_loader--small"><img alt="" className="Loader__img" role="presentation" src="https://fast.vidalytics.com/video/3ly89aZR/f_5tU6cCWLX10uwL/245824/227294__FFMPEG/thumb/preview-5_0.jpg"/><div aria-hidden="true" className="Loader__wave"></div><div className="Loader__body"><div className="Loader__layout Loader__layout--active"><button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(57, 116, 255)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{'--vid-pulse-size': '21.67px', color: 'rgb(57, 116, 255)'}}></div></div></button></div><div className="Loader__layout Loader__layout--hidden"><div aria-label="Loading video" aria-valuetext="Loading in progress" className="LoaderProgress__progress" role="progressbar" style={{borderWidth: '2.58px', borderColor: 'rgba(255, 255, 255, 0.8)'}}></div></div></div></div></div></div>
 
 </div>
 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
@@ -376,7 +418,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="aspect-[9/16] bg-slate-900 border border-white/10 rounded-xl relative overflow-hidden group">
 <div className="absolute inset-0 z-0">
-<div id="vidalytics_embed_eGab8bzwadrTMiH9" style={{width: '100%', position: 'relative', paddingTop: '177.94%'}}><div className="LoaderPlaceholder"><div className="Loader__wrapper vid_loader--portrait vid_loader--small"><img alt="" className="Loader__img" role="presentation" src="https://fast.vidalytics.com/video/3ly89aZR/GpsDZ0ClY_gaPjod/245852/227316__FFMPEG/thumb/preview-5_0.jpg"/><div aria-hidden="true" className="Loader__wave"></div><div className="Loader__body"><div className="Loader__layout Loader__layout--active"><button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(57, 116, 255)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{-VidPulseSize: '21.67px', color: 'rgb(57, 116, 255)'}}></div></div></button></div><div className="Loader__layout Loader__layout--hidden"><div aria-label="Loading video" aria-valuetext="Loading in progress" className="LoaderProgress__progress" role="progressbar" style={{borderWidth: '2.58px', borderColor: 'rgba(255, 255, 255, 0.8)'}}></div></div></div></div></div></div>
+<div id="vidalytics_embed_eGab8bzwadrTMiH9" style={{width: '100%', position: 'relative', paddingTop: '177.94%'}}><div className="LoaderPlaceholder"><div className="Loader__wrapper vid_loader--portrait vid_loader--small"><img alt="" className="Loader__img" role="presentation" src="https://fast.vidalytics.com/video/3ly89aZR/GpsDZ0ClY_gaPjod/245852/227316__FFMPEG/thumb/preview-5_0.jpg"/><div aria-hidden="true" className="Loader__wave"></div><div className="Loader__body"><div className="Loader__layout Loader__layout--active"><button aria-label="Play video" className="LoaderPlay__button" data-vid-testid="controls:loader-play-button" type="button"><div className="LoaderPlay__body"><svg aria-hidden="true" className="LoaderPlay__icon" focusable="false" style={{backgroundColor: 'rgb(57, 116, 255)', color: 'rgb(255, 255, 255)'}} viewbox="0 0 107 107"><path d="M44.25 39.25V71.5a2.27 2.27 0 0 1-4.54 0V36.84c0-2.48 2.7-4 4.82-2.72L71.86 50.7a3.17 3.17 0 0 1 .13 5.35L55.9 66.84a2.27 2.27 0 0 1-2.53-3.77l14.31-9.61-23.44-14.2Z" fill="currentColor" fill-rule="evenodd"></path></svg><div aria-hidden="true" className="LoaderPlay__pulse" style={{'--vid-pulse-size': '21.67px', color: 'rgb(57, 116, 255)'}}></div></div></button></div><div className="Loader__layout Loader__layout--hidden"><div aria-label="Loading video" aria-valuetext="Loading in progress" className="LoaderProgress__progress" role="progressbar" style={{borderWidth: '2.58px', borderColor: 'rgba(255, 255, 255, 0.8)'}}></div></div></div></div></div></div>
 
 </div>
 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>

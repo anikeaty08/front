@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -309,6 +345,12 @@ import * as THREE from 'three';
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -360,7 +402,7 @@ import * as THREE from 'three';
 </button>
 </header>
 
-<div className="relative w-full h-screen overflow-hidden bg-[#0a0a0a] text-white select-none" style={{-CAccent: '#a855f7', -FontSerif: '\'Playfair Display\', serif', -FontMono: '\'Space Mono\', monospace'}}>
+<div className="relative w-full h-screen overflow-hidden bg-[#0a0a0a] text-white select-none" style={{'--c-accent': '#a855f7', '--font-serif': '\'Playfair Display\', serif', '--font-mono': '\'Space Mono\', monospace'}}>
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Italianno&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap');
@@ -416,7 +458,7 @@ import * as THREE from 'three';
 <div className="fixed z-0 top-0 right-0 bottom-0 left-0" id="three-canvas-container">
 
 </div>
-<div className="absolute inset-0 z-10 pointer-events-none backdrop-blur-[20px] blur-mask transition-[backdrop-filter]" style={{-X: '0%', -Y: '0%'}}>
+<div className="absolute inset-0 z-10 pointer-events-none backdrop-blur-[20px] blur-mask transition-[backdrop-filter]" style={{'--x': '0%', '--y': '0%'}}>
 </div>
 <div className="absolute inset-0 z-20 pointer-events-none opacity-10 mix-blend-overlay" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=\\'0 0 200 200\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cfilter id=\\'n\\'%3E%3CfeTurbulence type=\\'fractalNoise\\' baseFrequency=\\'0.6\\'/%3E%3C/filter%3E%3Crect width=\\'100%25\\' height=\\'100%25\\' filter=\\'url(%23n)\\'/%3E%3C/svg%3E\')'}}>
 </div>

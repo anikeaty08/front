@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
         document.addEventListener('DOMContentLoaded', () => {
@@ -43,6 +79,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -62,7 +104,7 @@ export default function App() {
 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
 <div className="group fade-in fade-in-delay-1" style={{opacity: '1'}}>
-<div aria-label="Websites Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="websites" style={{-SpotlightColor: 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
+<div aria-label="Websites Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="websites" style={{'--spotlight-color': 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
 <div className="flex items-center gap-3 px-8 pt-8 pb-4 relative z-10">
 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/5">
 <i className="w-6 h-6 text-purple-400" data-lucide="monitor-smartphone"></i>
@@ -118,7 +160,7 @@ export default function App() {
 </div>
 
 <div className="group fade-in fade-in-delay-2" style={{opacity: '1'}}>
-<div aria-label="SEO Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="seo" style={{-SpotlightColor: 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
+<div aria-label="SEO Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="seo" style={{'--spotlight-color': 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
 <div className="flex items-center gap-3 px-8 pt-8 pb-4 relative z-10">
 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/5">
 <i className="w-6 h-6 text-purple-400" data-lucide="trending-up"></i>
@@ -174,7 +216,7 @@ export default function App() {
 </div>
 
 <div className="group fade-in fade-in-delay-3" style={{opacity: '1'}}>
-<div aria-label="Google Ads Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="ads" style={{-SpotlightColor: 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
+<div aria-label="Google Ads Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="ads" style={{'--spotlight-color': 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
 <div className="flex items-center gap-3 px-8 pt-8 pb-4 relative z-10">
 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/5">
 <i className="w-6 h-6 text-purple-400" data-lucide="dollar-sign"></i>
@@ -230,7 +272,7 @@ export default function App() {
 </div>
 
 <div className="group fade-in fade-in-delay-4" style={{opacity: '1'}}>
-<div aria-label="Social Media Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="social" style={{-SpotlightColor: 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
+<div aria-label="Social Media Solution Card" className="rounded-2xl p-0 border border-gray-800/60 bg-gradient-to-br from-gray-900/20 to-gray-800/10 backdrop-blur-sm hover:border-gray-700/80 hover:bg-gray-800/20 transition-all duration-500 h-full flex flex-col relative overflow-hidden solution-card-spotlight" data-card="social" style={{'--spotlight-color': 'rgba(145, 64, 115, 0.30)'}} tabindex="0">
 <div className="flex items-center gap-3 px-8 pt-8 pb-4 relative z-10">
 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/5">
 <i className="w-6 h-6 text-purple-400" data-lucide="users"></i>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -68,6 +104,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -97,7 +139,7 @@ gtag('config', 'G-2M6V79H761');
 
 <main className="flex-1 w-full h-full flex items-center justify-center relative vault-space overflow-hidden">
 
-<div className="absolute left-1/2 top-1/2 -ml-[380px] -mt-[180px] w-64 h-80 bg-zinc-900/20 backdrop-blur-sm border border-white/[0.03] rounded-3xl bg-element z-0 pointer-events-none flex items-center justify-center overflow-hidden" style={{-Rx: '15deg', -Ry: '25deg', -Tz: '-200px'}}>
+<div className="absolute left-1/2 top-1/2 -ml-[380px] -mt-[180px] w-64 h-80 bg-zinc-900/20 backdrop-blur-sm border border-white/[0.03] rounded-3xl bg-element z-0 pointer-events-none flex items-center justify-center overflow-hidden" style={{'--rx': '15deg', '--ry': '25deg', '--tz': '-200px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50"></div>
 <svg className="text-white/20 animate-[spin_40s_linear_infinite]" fill="none" height="120" stroke="currentColor" strokeWidth="0.5" viewbox="0 0 100 100" width="120">
 <circle cx="50" cy="50" r="40" stroke-dasharray="2 4"></circle>
@@ -106,7 +148,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 
-<div className="absolute left-1/2 top-1/2 ml-[140px] -mt-[220px] w-72 h-96 bg-indigo-500/[0.02] backdrop-blur-sm border border-white/[0.03] rounded-3xl bg-element z-0 pointer-events-none" style={{-Rx: '-10deg', -Ry: '-20deg', -Tz: '-300px', animationDelay: '-3s'}}>
+<div className="absolute left-1/2 top-1/2 ml-[140px] -mt-[220px] w-72 h-96 bg-indigo-500/[0.02] backdrop-blur-sm border border-white/[0.03] rounded-3xl bg-element z-0 pointer-events-none" style={{'--rx': '-10deg', '--ry': '-20deg', '--tz': '-300px', animationDelay: '-3s'}}>
 <div className="absolute inset-0 bg-gradient-to-bl from-indigo-500/10 to-transparent opacity-30"></div>
 </div>
 

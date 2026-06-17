@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -110,6 +146,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -268,7 +310,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="md:col-span-2 flex flex-col gap-x-5 gap-y-5 h-full">
 
-<div className="border-white/[0.05] flex flex-col overflow-hidden bg-gradient-to-r from-white/10 to-white/0 h-full rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="border-white/[0.05] flex flex-col overflow-hidden bg-gradient-to-r from-white/10 to-white/0 h-full rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 
 <div className="flex items-center justify-between mb-6 z-10">
 <h3 className="text-lg font-medium tracking-tight font-geist text-neutral-50">AI Telemetry
@@ -423,7 +465,7 @@ gtag('config', 'G-2M6V79H761');
 
 </div>
 
-<div className="border-white/[0.05] flex flex-col bg-gradient-to-r from-white/10 to-white/0 w-full h-full rounded-xl pt-6 pr-6 pb-6 pl-6 shadow-sm justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="border-white/[0.05] flex flex-col bg-gradient-to-r from-white/10 to-white/0 w-full h-full rounded-xl pt-6 pr-6 pb-6 pl-6 shadow-sm justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 
 <div className="flex flex-col items-start mb-6 w-full gap-1.5">
 <h3 className="text-lg font-medium tracking-tight font-geist text-neutral-50">Active Threat
@@ -482,7 +524,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="border-white/[0.05] min-h-[220px] flex flex-col bg-gradient-to-r from-white/10 to-white/0 rounded-xl px-5 py-5 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="border-white/[0.05] min-h-[220px] flex flex-col bg-gradient-to-r from-white/10 to-white/0 rounded-xl px-5 py-5 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="flex items-center justify-between mb-4">
 <h3 className="text-xs font-medium font-geist text-neutral-400">Real-Time Activity Log</h3>
 <span className="text-[0.65rem] text-neutral-500 font-mono font-geist">Live Sync</span>
@@ -539,7 +581,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="border-white/[0.05] flex flex-col group overflow-hidden md:col-span-2 md:p-7 bg-gradient-to-r from-white/10 to-white/0 rounded-[20px] pt-6 pr-6 pb-6 pl-6 relative shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="border-white/[0.05] flex flex-col group overflow-hidden md:col-span-2 md:p-7 bg-gradient-to-r from-white/10 to-white/0 rounded-[20px] pt-6 pr-6 pb-6 pl-6 relative shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <style className="">
             @keyframes drawPath {
               to {
@@ -1019,7 +1061,7 @@ gtag('config', 'G-2M6V79H761');
         }
       </style>
 
-<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll bg-gradient-to-r from-white/10 to-white/0 h-[340px] rounded-[20px] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll bg-gradient-to-r from-white/10 to-white/0 h-[340px] rounded-[20px] pt-6 pr-6 pb-6 pl-6 shadow-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <h3 className="text-lg font-medium text-neutral-50 tracking-tight font-geist">Unified Telemetry</h3>
 <p className="text-sm leading-relaxed font-geist mb-6 text-neutral-400">
           Aggregates agent events, node throughput, and system streams into one centralized monitoring layer.
@@ -1498,7 +1540,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="sm:py-24 [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll w-full pt-24 pb-16">
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6 w-full">
 
-<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <div className="lg:p-10 flex-1 flex flex-col z-10 pt-8 pr-8 pb-8 pl-8 relative">
 <svg className="w-6 h-6 text-emerald-500 mb-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
@@ -1528,7 +1570,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <div className="lg:p-10 flex-1 flex flex-col z-10 pt-8 pr-8 pb-8 pl-8 relative">
 <svg className="w-6 h-6 text-emerald-500 mb-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
@@ -1558,7 +1600,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="group flex flex-col border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <div className="lg:p-10 flex-1 flex flex-col z-10 pt-8 pr-8 pb-8 pl-8 relative">
 <svg className="w-6 h-6 text-emerald-500 mb-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
@@ -1621,7 +1663,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="[animation:animationIn_0.8s_ease-out_0.2s_both] animate-on-scroll grid grid-cols-1 lg:grid-cols-3 lg:gap-6 fade-in-up animate z-10 w-full relative gap-x-5 gap-y-5">
-<div className="group flex flex-col border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] bg-neutral-950 relative" style={{-BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="group flex flex-col border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] bg-neutral-950 relative" style={{'--border-gradient': 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <div className="lg:p-10 flex-1 flex flex-col z-10 pt-8 pr-8 pb-8 pl-8 relative">
 <h3 className="text-2xl font-medium tracking-tight font-geist mb-2 text-neutral-50">Starter</h3>
 <p className="text-sm font-geist leading-relaxed min-h-[44px] mb-6 text-neutral-400">
@@ -1652,7 +1694,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 </div>
-<div className="group flex flex-col border border-emerald-500/20 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40 bg-gradient-to-r from-emerald-500/10 to-transparent z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] bg-neutral-950 relative" style={{-BorderGradient: 'linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="group flex flex-col border border-emerald-500/20 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40 bg-gradient-to-r from-emerald-500/10 to-transparent z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] bg-neutral-950 relative" style={{'--border-gradient': 'linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <div className="lg:p-10 flex-1 flex flex-col z-10 pt-8 pr-8 pb-8 pl-8 relative">
 <h3 className="text-2xl font-medium tracking-tight font-geist mb-2 text-neutral-50">Pro</h3>
 <p className="text-sm font-geist leading-relaxed min-h-[44px] mb-6 text-neutral-400">
@@ -1687,7 +1729,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 </div>
-<div className="group flex flex-col border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] bg-neutral-950 relative" style={{-BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '20px'}}>
+<div className="group flex flex-col border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 bg-gradient-to-r from-white/10 to-white/0 z-10 rounded-[20px] shadow-[0_2px_14px_-4px_rgba(0,0,0,0.5)] bg-neutral-950 relative" style={{'--border-gradient': 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '20px'}}>
 <div className="lg:p-10 flex-1 flex flex-col z-10 pt-8 pr-8 pb-8 pl-8 relative">
 <h3 className="text-2xl font-medium tracking-tight font-geist mb-2 text-neutral-50">Enterprise</h3>
 <p className="text-sm font-geist leading-relaxed min-h-[44px] mb-6 text-neutral-400">

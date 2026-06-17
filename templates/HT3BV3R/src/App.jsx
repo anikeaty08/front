@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       // Initialize Lucide icons with default stroke width 1.5
@@ -186,6 +222,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -200,7 +242,7 @@ export default function App() {
 <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-tr from-teal-500/20 to-teal-300/10 ring-1 ring-white/10">
 <svg className="lucide lucide-diamond w-[20px] h-[20px] w-5 h-5" data-lucide="diamond" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{width: '20px', height: '20px', color: 'rgb(94, 234, 212)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path></svg>
 </span>
-<span className="text-lg sm:text-xl font-semibold tracking-tight" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Prism Studio</span>
+<span className="text-lg sm:text-xl font-semibold tracking-tight" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Prism Studio</span>
 </a>
 
 <div className="hidden md:flex items-center gap-8">
@@ -250,7 +292,7 @@ export default function App() {
 <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-tr from-teal-500/20 to-teal-300/10 ring-1 ring-white/10">
 <svg className="lucide lucide-diamond text-teal-300 w-5 h-5" data-lucide="diamond" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path></svg>
 </span>
-<span className="text-base font-semibold tracking-tight" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Prism Studio</span>
+<span className="text-base font-semibold tracking-tight" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Prism Studio</span>
 </div>
 <button aria-label="Close menu" className="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-teal-400 hover:bg-gray-900/60 transition-colors" id="btn-close">
 <svg className="lucide lucide-x w-5 h-5" data-lucide="x" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
@@ -300,7 +342,7 @@ export default function App() {
 <div className="max-w-7xl sm:px-6 lg:px-8 mr-auto ml-auto pr-4 pl-4">
 <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 <div className="">
-<h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight font-semibold leading-tight transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] opacity-100 translate-y-0" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>
+<h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight font-semibold leading-tight transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] opacity-100 translate-y-0" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>
                 Design That
                 <span className="bg-gradient-to-r from-[#3c4f56] to-[#e7edf1] bg-clip-text text-transparent">Converts</span>
 </h1>
@@ -368,7 +410,7 @@ export default function App() {
 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 <div className="space-y-6">
 <p className="text-sm font-medium uppercase tracking-wider text-teal-400 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] opacity-100 translate-y-0">About Prism Studio</p>
-<h2 className="text-3xl lg:text-4xl tracking-tight font-semibold text-gray-100 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] delay-100 opacity-100 translate-y-0" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>
+<h2 className="text-3xl lg:text-4xl tracking-tight font-semibold text-gray-100 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] delay-100 opacity-100 translate-y-0" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>
                 We Don't Just Design—We Engineer Success
               </h2>
 <p className="text-lg text-gray-400 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] delay-200 opacity-100 translate-y-0">
@@ -395,7 +437,7 @@ export default function App() {
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div className="text-center max-w-3xl mx-auto">
 <p className="text-sm font-medium uppercase tracking-wider text-teal-400 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] opacity-100 translate-y-0">Our Services</p>
-<h3 className="mt-3 text-3xl lg:text-4xl tracking-tight font-semibold text-gray-100 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] delay-100 opacity-100 translate-y-0" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>
+<h3 className="mt-3 text-3xl lg:text-4xl tracking-tight font-semibold text-gray-100 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] delay-100 opacity-100 translate-y-0" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>
               Everything You Need to Scale
             </h3>
 <p className="mt-5 text-lg text-gray-400 transition-all duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] delay-200 opacity-100 translate-y-0">
@@ -447,7 +489,7 @@ export default function App() {
 <section className="py-20 border-t border-white/5" id="work">
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div className="flex items-end justify-between gap-4">
-<h3 className="text-2xl sm:text-3xl tracking-tight font-semibold" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Selected Work</h3>
+<h3 className="text-2xl sm:text-3xl tracking-tight font-semibold" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Selected Work</h3>
 <a className="inline-flex items-center gap-2 text-sm text-teal-300 hover:text-teal-200 transition-colors" href="#contact">
               Start a project
               <svg className="lucide lucide-arrow-right w-4 h-4 w-5 h-5" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
@@ -482,7 +524,7 @@ export default function App() {
 <section className="bg-gradient-to-r from-emerald-300/20 via-teal-500/25 to-cyan-800 border-t pt-20 pb-20 backdrop-blur-md" id="testimonials">
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div className="text-center max-w-3xl mx-auto">
-<h3 className="text-3xl tracking-tight font-semibold" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>What clients say</h3>
+<h3 className="text-3xl tracking-tight font-semibold" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>What clients say</h3>
 <p className="mt-4 text-gray-400">Real impact, real results.</p>
 </div>
 <div className="mt-10 grid md:grid-cols-3 gap-6">
@@ -506,7 +548,7 @@ export default function App() {
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div className="text-center max-w-3xl mx-auto">
 <p className="text-sm font-medium uppercase tracking-wider text-teal-400">Let's Work Together</p>
-<h3 className="mt-3 text-3xl lg:text-4xl tracking-tight font-semibold" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Ready to Transform Your Business?</h3>
+<h3 className="mt-3 text-3xl lg:text-4xl tracking-tight font-semibold" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Ready to Transform Your Business?</h3>
 <p className="mt-4 text-lg text-gray-400">Get in touch today and let's discuss how we can help you achieve your goals.</p>
 </div>
 <div className="mt-10 max-w-2xl mx-auto">
@@ -559,7 +601,7 @@ export default function App() {
 <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-tr from-teal-500/20 to-teal-300/10 ring-1 ring-white/10">
 <svg className="lucide lucide-diamond text-teal-300 w-5 h-5" data-lucide="diamond" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path></svg>
 </span>
-<span className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Prism Studio</span>
+<span className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Prism Studio</span>
 </div>
 <p className="mt-3 text-gray-400">Design that converts. We create sophisticated digital experiences that drive results.</p>
 </div>

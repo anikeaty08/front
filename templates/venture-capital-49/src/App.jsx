@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -215,6 +251,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -762,7 +804,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-8 border border-white/5 rounded-2xl bg-[#0a0a0a]">
 
-<div className="flex flex-col items-center dial-container group" style={{-TargetOffset: '36.79'}}> 
+<div className="flex flex-col items-center dial-container group" style={{'--target-offset': '36.79'}}> 
 <div className="relative w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-105 transition-transform duration-500 ease-out">
 <svg className="w-full h-full -rotate-90" viewbox="0 0 100 100">
 <circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.05)" strokeWidth="6"></circle>
@@ -775,7 +817,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-display font-bold text-sm text-center text-white">Infrastructure</span>
 </div>
 
-<div className="flex flex-col items-center dial-container group" style={{-TargetOffset: '76.41'}}> 
+<div className="flex flex-col items-center dial-container group" style={{'--target-offset': '76.41'}}> 
 <div className="relative w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-105 transition-transform duration-500 ease-out">
 <svg className="w-full h-full -rotate-90" viewbox="0 0 100 100">
 <circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.05)" strokeWidth="6"></circle>
@@ -788,7 +830,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-display font-bold text-sm text-center text-white">AI-Native</span>
 </div>
 
-<div className="flex flex-col items-center dial-container group" style={{-TargetOffset: '25.47'}}> 
+<div className="flex flex-col items-center dial-container group" style={{'--target-offset': '25.47'}}> 
 <div className="relative w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-105 transition-transform duration-500 ease-out">
 <svg className="w-full h-full -rotate-90" viewbox="0 0 100 100">
 <circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.05)" strokeWidth="6"></circle>
@@ -801,7 +843,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-display font-bold text-sm text-center text-white">Dev Tools</span>
 </div>
 
-<div className="flex flex-col items-center dial-container group" style={{-TargetOffset: '90.56'}}> 
+<div className="flex flex-col items-center dial-container group" style={{'--target-offset': '90.56'}}> 
 <div className="relative w-32 h-32 md:w-40 md:h-40 mb-6 group-hover:scale-105 transition-transform duration-500 ease-out">
 <svg className="w-full h-full -rotate-90" viewbox="0 0 100 100">
 <circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.05)" strokeWidth="6"></circle>

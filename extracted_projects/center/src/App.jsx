@@ -17,6 +17,42 @@ const handleAnchor = (e, id) => {
 /* ---------- HOOKS ---------- */
 function useReveal() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const els = document.querySelectorAll(".reveal, .reveal-fast");
     const io = new IntersectionObserver(
       (entries) => {
@@ -172,14 +208,14 @@ function Hero() {
     <section id="top" className="relative min-h-screen flex items-center overflow-hidden vignette">
       <div className="absolute inset-0 hero-bg" />
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=1920&q=80')] bg-cover bg-center opacity-25 mix-blend-luminosity" />
-      <div className="absolute inset-0" style={{ background: "rgba(10,9,6,0.55)" }} />
+      <div className="absolute inset-0" style={{background: "rgba(10,9,6,0.55)"}} />
 
       {/* Glow halos */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(201,168,76,0.18), transparent 70%)" }} />
-      <div className="absolute bottom-1/4 right-1/5 w-[400px] h-[400px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(196,75,43,0.15), transparent 70%)" }} />
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none" style={{background: "radial-gradient(circle, rgba(201,168,76,0.18), transparent 70%)"}} />
+      <div className="absolute bottom-1/4 right-1/5 w-[400px] h-[400px] rounded-full pointer-events-none" style={{background: "radial-gradient(circle, rgba(196,75,43,0.15), transparent 70%)"}} />
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-12 py-32 w-full">
-        <div className="reveal" style={{ animationDelay: "0.2s" }}>
+        <div className="reveal" style={{animationDelay: "0.2s"}}>
           <span className="eyebrow flex items-center gap-3">
             <span className="inline-block w-8 h-px bg-[#C9A84C]" />
             New York · Algerian Community · Est. 2024
@@ -189,26 +225,26 @@ function Hero() {
         <h1 className="font-display mt-8 leading-[0.88] tracking-tight text-balance">
           <span className="block">
             {words.map((w, i) => (
-              <span key={i} className="inline-block reveal mr-4 italic" style={{ animationDelay: `${0.4 + i * 0.12}s`, fontSize: "clamp(3.5rem, 11vw, 9.5rem)", fontWeight: 500 }}>
+              <span key={i} className="inline-block reveal mr-4 italic" style={{animationDelay: `${0.4 + i * 0.12}s`, fontSize: "clamp(3.5rem, 11vw, 9.5rem)", fontWeight: 500}}>
                 {w}
               </span>
             ))}
           </span>
           <span className="block mt-2">
             {words2.map((w, i) => (
-              <span key={i} className="inline-block reveal mr-4" style={{ animationDelay: `${0.8 + i * 0.12}s`, fontSize: "clamp(3.5rem, 11vw, 9.5rem)", fontWeight: 400 }}>
+              <span key={i} className="inline-block reveal mr-4" style={{animationDelay: `${0.8 + i * 0.12}s`, fontSize: "clamp(3.5rem, 11vw, 9.5rem)", fontWeight: 400}}>
                 {i === 1 ? <span className="text-[#C9A84C]">{w}</span> : w}
               </span>
             ))}
           </span>
         </h1>
 
-        <p className="reveal mt-10 max-w-xl text-lg leading-relaxed text-[var(--bone-dim)]" style={{ animationDelay: "1.2s" }}>
+        <p className="reveal mt-10 max-w-xl text-lg leading-relaxed text-[var(--bone-dim)]" style={{animationDelay: "1.2s"}}>
           Real skills. Recognized certifications.<br/>
           A community that carries you forward.
         </p>
 
-        <div className="reveal mt-12 flex flex-wrap items-center gap-4" style={{ animationDelay: "1.5s" }}>
+        <div className="reveal mt-12 flex flex-wrap items-center gap-4" style={{animationDelay: "1.5s"}}>
           <a href="#programs" onClick={(e) => handleAnchor(e, "programs")} className="btn-gold" data-magnet>
             Start Your Journey <iconify-icon icon="solar:arrow-right-linear" />
           </a>
@@ -221,14 +257,14 @@ function Hero() {
           href="#problem"
           onClick={(e) => handleAnchor(e, "problem")}
           className="reveal absolute bottom-8 left-6 lg:left-12 flex items-center gap-3 font-syne text-[10px] tracking-[0.3em] uppercase text-[var(--bone-dim)] hover:text-[#C9A84C] transition-colors"
-          style={{ animationDelay: "1.8s" }}
+          style={{animationDelay: "1.8s"}}
         >
           <span>Scroll</span>
           <span className="inline-block w-12 h-px bg-[var(--bone-dim)]" />
           <iconify-icon icon="solar:arrow-down-linear" />
         </a>
 
-        <div className="reveal absolute bottom-8 right-6 lg:right-12 hidden md:flex flex-col items-end gap-1 font-syne text-[10px] tracking-[0.25em] uppercase text-[var(--bone-dim)]" style={{ animationDelay: "1.8s" }}>
+        <div className="reveal absolute bottom-8 right-6 lg:right-12 hidden md:flex flex-col items-end gap-1 font-syne text-[10px] tracking-[0.25em] uppercase text-[var(--bone-dim)]" style={{animationDelay: "1.8s"}}>
           <span>40.7128° N</span>
           <span>74.0060° W</span>
         </div>
@@ -243,7 +279,7 @@ function Stat({ stat, trigger }) {
   const display = stat.value < 10 ? v.toFixed(1) : Math.floor(v);
   return (
     <div className="reveal border-l border-[#C9A84C]/20 pl-6 py-2">
-      <div className="font-display text-6xl md:text-7xl text-[#C9A84C] tracking-tight" style={{ fontWeight: 500 }}>
+      <div className="font-display text-6xl md:text-7xl text-[#C9A84C] tracking-tight" style={{fontWeight: 500}}>
         {stat.prefix}{display}{stat.suffix}
       </div>
       <div className="mt-3 text-sm text-[var(--bone-dim)] max-w-[240px] leading-relaxed">{stat.label}</div>
@@ -264,7 +300,7 @@ function Problem() {
     <section id="problem" className="relative py-32 lg:py-48">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <span className="eyebrow reveal">— The Reality</span>
-        <h2 className="reveal font-display italic mt-6 leading-[0.95] tracking-tight text-balance" style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 400 }}>
+        <h2 className="reveal font-display italic mt-6 leading-[0.95] tracking-tight text-balance" style={{fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 400}}>
           You arrived with everything.<br/>
           <span className="text-[var(--bone-dim)]">But the system sees nothing.</span>
         </h2>
@@ -298,7 +334,7 @@ function Solution() {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="text-center max-w-3xl mx-auto">
           <span className="eyebrow reveal">— The Bridge</span>
-          <h2 className="reveal font-display mt-6 tracking-tight text-balance" style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 400 }}>
+          <h2 className="reveal font-display mt-6 tracking-tight text-balance" style={{fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 400}}>
             The system you needed<br/>from <span className="italic text-[#C9A84C]">day one</span>.
           </h2>
         </div>
@@ -310,9 +346,9 @@ function Solution() {
             <div key={i} className="reveal bg-[#0A0906] p-10 lg:p-14 group hover:bg-[#11100B] transition-colors duration-700" data-delay={i * 120}>
               <div className="flex items-baseline justify-between">
                 <span className="font-syne text-[11px] tracking-[0.3em] text-[#C9A84C]">{p.tag}</span>
-                <iconify-icon icon={p.icon} width="22" style={{ color: "#C9A84C" }} />
+                <iconify-icon icon={p.icon} width="22" style={{color: "#C9A84C"}} />
               </div>
-              <h3 className="font-display italic mt-8 text-5xl tracking-tight" style={{ fontWeight: 500 }}>{p.title}</h3>
+              <h3 className="font-display italic mt-8 text-5xl tracking-tight" style={{fontWeight: 500}}>{p.title}</h3>
               <p className="mt-6 text-[var(--bone-dim)] leading-relaxed text-sm">{p.body}</p>
               <div className="mt-10 h-px bg-gradient-to-r from-[#C9A84C]/40 to-transparent group-hover:from-[#C9A84C] transition-all duration-700" />
             </div>
@@ -352,7 +388,7 @@ function Programs() {
         <div className="flex items-end justify-between flex-wrap gap-6">
           <div>
             <span className="eyebrow reveal">— Programs</span>
-            <h2 className="reveal font-display mt-6 tracking-tight" style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 400 }}>
+            <h2 className="reveal font-display mt-6 tracking-tight" style={{fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 400}}>
               Master the <span className="italic">craft</span>.
             </h2>
           </div>
@@ -364,14 +400,14 @@ function Programs() {
         {/* Flagship HVAC */}
         <article className="reveal mt-20 relative rounded-3xl overflow-hidden group">
           <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[3s] group-hover:scale-105"
-               style={{ backgroundImage: "url('https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1600&q=80')" }} />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,9,6,0.95) 0%, rgba(10,9,6,0.7) 50%, rgba(10,9,6,0.4) 100%)" }} />
+               style={{backgroundImage: "url('https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1600&q=80')"}} />
+          <div className="absolute inset-0" style={{background: "linear-gradient(90deg, rgba(10,9,6,0.95) 0%, rgba(10,9,6,0.7) 50%, rgba(10,9,6,0.4) 100%)"}} />
           <div className="relative p-10 lg:p-20 max-w-2xl">
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C44B2B]/15 border border-[#C44B2B]/40 font-syne text-[10px] tracking-[0.25em] uppercase text-[#E8A893]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#C44B2B] animate-pulse" />
               Most In-Demand Trade in NYC
             </span>
-            <h3 className="font-display mt-8 leading-[0.95] tracking-tight" style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 500 }}>
+            <h3 className="font-display mt-8 leading-[0.95] tracking-tight" style={{fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 500}}>
               Master HVAC.<br/><span className="italic text-[#C9A84C]">Own your income.</span>
             </h3>
             <p className="mt-6 text-[var(--bone-dim)] leading-relaxed max-w-md">
@@ -399,9 +435,9 @@ function Programs() {
               data-magnet
             >
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C] to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
-              <iconify-icon icon={p.icon} width="28" style={{ color: "#C9A84C" }} />
+              <iconify-icon icon={p.icon} width="28" style={{color: "#C9A84C"}} />
               <h4 className="font-syne mt-6 text-xl font-semibold tracking-tight">{p.title}</h4>
-              <p className="font-display italic mt-2 text-[#C9A84C] text-lg" style={{ fontWeight: 500 }}>"{p.hook}"</p>
+              <p className="font-display italic mt-2 text-[#C9A84C] text-lg" style={{fontWeight: 500}}>"{p.hook}"</p>
               <p className="mt-5 text-sm text-[var(--bone-dim)] leading-relaxed">{p.body}</p>
               <div className="mt-8 flex items-center gap-2 font-syne text-[11px] tracking-[0.25em] uppercase text-[#C9A84C] opacity-70 group-hover:opacity-100 transition-opacity">
                 Learn more <iconify-icon icon="solar:arrow-right-up-linear" />
@@ -422,7 +458,7 @@ function Authority() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <span className="eyebrow reveal">— Certification</span>
-            <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight" style={{ fontSize: "clamp(2.25rem, 5vw, 4rem)", fontWeight: 400 }}>
+            <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight" style={{fontSize: "clamp(2.25rem, 5vw, 4rem)", fontWeight: 400}}>
               Train to U.S. standards.<br/>
               <span className="italic text-[#C9A84C]">Certify.</span> Get hired.
             </h2>
@@ -439,14 +475,14 @@ function Authority() {
           {/* Badge mockup */}
           <div className="reveal flex items-center justify-center">
             <div className="relative w-[340px] h-[340px]">
-              <div className="absolute inset-0 rounded-full border border-[#C9A84C]/30 animate-spin" style={{ animationDuration: "30s" }}>
+              <div className="absolute inset-0 rounded-full border border-[#C9A84C]/30 animate-spin" style={{animationDuration: "30s"}}>
                 <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#C9A84C]" />
               </div>
               <div className="absolute inset-6 rounded-full border border-[#C9A84C]/15" />
-              <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle at center, rgba(201,168,76,0.15), transparent 65%)" }} />
+              <div className="absolute inset-0 rounded-full" style={{background: "radial-gradient(circle at center, rgba(201,168,76,0.15), transparent 65%)"}} />
               <div className="absolute inset-12 rounded-full glass flex flex-col items-center justify-center text-center p-8">
-                <iconify-icon icon="solar:medal-ribbons-star-bold" width="42" style={{ color: "#C9A84C" }} />
-                <div className="font-display italic text-3xl mt-4 tracking-tight" style={{ fontWeight: 500 }}>Certified</div>
+                <iconify-icon icon="solar:medal-ribbons-star-bold" width="42" style={{color: "#C9A84C"}} />
+                <div className="font-display italic text-3xl mt-4 tracking-tight" style={{fontWeight: 500}}>Certified</div>
                 <div className="font-syne text-[10px] tracking-[0.3em] uppercase text-[var(--bone-dim)] mt-2">EPA 608 · OSHA 30</div>
                 <div className="gold-rule w-12 mt-4" />
                 <div className="font-syne text-[9px] tracking-[0.3em] uppercase text-[#C9A84C] mt-3">AlgeriaRise · NYC</div>
@@ -461,7 +497,7 @@ function Authority() {
           <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0c0a07] to-transparent z-10 pointer-events-none" />
           <div className="marquee-track gap-16 items-center text-[var(--bone-dim)]">
             {[...PARTNERS, ...PARTNERS].map((p, i) => (
-              <iconify-icon key={i} icon={p} width="36" style={{ flexShrink: 0, opacity: 0.5 }} />
+              <iconify-icon key={i} icon={p} width="36" style={{flexShrink: 0, opacity: 0.5}} />
             ))}
           </div>
         </div>
@@ -483,19 +519,19 @@ function Community() {
     "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&q=80",
   ];
   return (
-    <section id="community" className="relative py-32 lg:py-48 overflow-hidden" style={{ background: "linear-gradient(180deg, #0A0906 0%, #2A1F12 30%, #3D2A18 50%, #2A1F12 70%, #0A0906 100%)" }}>
-      <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{ background: "radial-gradient(ellipse at center, rgba(201,168,76,0.4), transparent 70%)" }} />
+    <section id="community" className="relative py-32 lg:py-48 overflow-hidden" style={{background: "linear-gradient(180deg, #0A0906 0%, #2A1F12 30%, #3D2A18 50%, #2A1F12 70%, #0A0906 100%)"}}>
+      <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{background: "radial-gradient(ellipse at center, rgba(201,168,76,0.4), transparent 70%)"}} />
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-12 text-center">
         <span className="eyebrow reveal">— Community</span>
-        <h2 className="reveal font-display italic mt-6 leading-[0.92] tracking-tight text-balance mx-auto max-w-4xl" style={{ fontSize: "clamp(2.5rem, 7vw, 6rem)", fontWeight: 400 }}>
+        <h2 className="reveal font-display italic mt-6 leading-[0.92] tracking-tight text-balance mx-auto max-w-4xl" style={{fontSize: "clamp(2.5rem, 7vw, 6rem)", fontWeight: 400}}>
           You don't have to figure<br/>this out alone.
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8 mt-24 text-left">
           {COMMUNITY.map((c, i) => (
             <div key={i} className="reveal" data-delay={i * 120}>
-              <iconify-icon icon={c.icon} width="32" style={{ color: "#C9A84C" }} />
+              <iconify-icon icon={c.icon} width="32" style={{color: "#C9A84C"}} />
               <h3 className="font-syne text-lg font-semibold mt-6 tracking-tight">{c.title}</h3>
               <p className="mt-4 text-[var(--bone-dim)] leading-relaxed text-sm">{c.body}</p>
             </div>
@@ -503,7 +539,7 @@ function Community() {
         </div>
 
         <blockquote className="reveal mt-32 max-w-3xl mx-auto">
-          <p className="font-display italic leading-[1.05] tracking-tight" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", fontWeight: 400 }}>
+          <p className="font-display italic leading-[1.05] tracking-tight" style={{fontSize: "clamp(2rem, 5vw, 4rem)", fontWeight: 400}}>
             "Find your people.<br/>Build your network.<br/><span className="text-[#C9A84C]">Grow together.</span>"
           </p>
         </blockquote>
@@ -534,13 +570,13 @@ function Founder() {
   return (
     <section id="founder" className="relative py-32 lg:py-48 overflow-hidden">
       {/* Soft gold ambient */}
-      <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%)" }} />
-      <div className="absolute bottom-1/4 -right-40 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(196,75,43,0.06), transparent 70%)" }} />
+      <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] rounded-full pointer-events-none" style={{background: "radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%)"}} />
+      <div className="absolute bottom-1/4 -right-40 w-[500px] h-[500px] rounded-full pointer-events-none" style={{background: "radial-gradient(circle, rgba(196,75,43,0.06), transparent 70%)"}} />
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="text-center max-w-3xl mx-auto">
           <span className="eyebrow reveal">— The Founders</span>
-          <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight text-balance" style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 400 }}>
+          <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight text-balance" style={{fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 400}}>
             Two visions.<br/>
             <span className="italic text-[#C9A84C]">One movement.</span>
           </h2>
@@ -557,7 +593,7 @@ function Founder() {
                 loading="eager"
                 decoding="async"
               />
-              <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(10,9,6,0.85) 100%)" }} />
+              <div className="absolute inset-0 pointer-events-none" style={{background: "linear-gradient(180deg, transparent 50%, rgba(10,9,6,0.85) 100%)"}} />
 
               {/* Top corner mark */}
               <div className="absolute top-6 left-6 right-6 flex items-start justify-between font-syne text-[10px] tracking-[0.3em] uppercase">
@@ -569,10 +605,10 @@ function Founder() {
               <div className="absolute bottom-6 left-6 right-6">
                 <div className="flex items-end justify-between gap-4">
                   <div>
-                    <div className="font-display italic text-3xl md:text-4xl tracking-tight leading-[1]" style={{ fontWeight: 500 }}>
+                    <div className="font-display italic text-3xl md:text-4xl tracking-tight leading-[1]" style={{fontWeight: 500}}>
                       Belkacem
                     </div>
-                    <div className="font-display text-3xl md:text-4xl tracking-tight leading-[1] mt-1" style={{ fontWeight: 500 }}>
+                    <div className="font-display text-3xl md:text-4xl tracking-tight leading-[1] mt-1" style={{fontWeight: 500}}>
                       Hamitouche
                     </div>
                   </div>
@@ -590,7 +626,7 @@ function Founder() {
               <span className="font-syne text-[11px] tracking-[0.3em] uppercase text-[#C9A84C]">The Founder</span>
             </div>
 
-            <h3 className="reveal font-display italic mt-6 leading-[1.05] tracking-tight" style={{ fontSize: "clamp(2rem, 4.5vw, 3.75rem)", fontWeight: 400 }}>
+            <h3 className="reveal font-display italic mt-6 leading-[1.05] tracking-tight" style={{fontSize: "clamp(2rem, 4.5vw, 3.75rem)", fontWeight: 400}}>
               "I built this for the<br/>
               <span className="text-[#C9A84C]">ones who arrive</span><br/>
               with everything but a map."
@@ -606,7 +642,7 @@ function Founder() {
             </div>
 
             <div className="reveal mt-14 pl-6 border-l-2 border-[#C9A84C]" data-delay="200">
-              <p className="font-display italic text-[#C9A84C] leading-[1.2]" style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)", fontWeight: 400 }}>
+              <p className="font-display italic text-[#C9A84C] leading-[1.2]" style={{fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)", fontWeight: 400}}>
                 "We are not a charity.<br/>
                 We are a launchpad.<br/>
                 And every Algerian deserves one."
@@ -618,15 +654,15 @@ function Founder() {
 
             <div className="reveal mt-12 grid grid-cols-3 gap-6 max-w-md" data-delay="300">
               <div>
-                <div className="font-display text-4xl text-[#C9A84C] tracking-tight" style={{ fontWeight: 500 }}>15+</div>
+                <div className="font-display text-4xl text-[#C9A84C] tracking-tight" style={{fontWeight: 500}}>15+</div>
                 <div className="font-syne text-[10px] tracking-[0.25em] uppercase text-[var(--bone-dim)] mt-2">Years Building</div>
               </div>
               <div>
-                <div className="font-display text-4xl text-[#C9A84C] tracking-tight" style={{ fontWeight: 500 }}>400+</div>
+                <div className="font-display text-4xl text-[#C9A84C] tracking-tight" style={{fontWeight: 500}}>400+</div>
                 <div className="font-syne text-[10px] tracking-[0.25em] uppercase text-[var(--bone-dim)] mt-2">Lives Changed</div>
               </div>
               <div>
-                <div className="font-display text-4xl text-[#C9A84C] tracking-tight" style={{ fontWeight: 500 }}>1</div>
+                <div className="font-display text-4xl text-[#C9A84C] tracking-tight" style={{fontWeight: 500}}>1</div>
                 <div className="font-syne text-[10px] tracking-[0.25em] uppercase text-[var(--bone-dim)] mt-2">Mission</div>
               </div>
             </div>
@@ -647,7 +683,7 @@ function Founder() {
                 loading="eager"
                 decoding="async"
               />
-              <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(10,9,6,0.85) 100%)" }} />
+              <div className="absolute inset-0 pointer-events-none" style={{background: "linear-gradient(180deg, transparent 50%, rgba(10,9,6,0.85) 100%)"}} />
 
               <div className="absolute top-6 left-6 right-6 flex items-start justify-between font-syne text-[10px] tracking-[0.3em] uppercase">
                 <span className="text-[#C9A84C]">Co-Founder · 02</span>
@@ -657,7 +693,7 @@ function Founder() {
               <div className="absolute bottom-6 left-6 right-6">
                 <div className="flex items-end justify-between gap-4">
                   <div>
-                    <div className="font-display italic text-3xl md:text-4xl tracking-tight leading-[1]" style={{ fontWeight: 500 }}>
+                    <div className="font-display italic text-3xl md:text-4xl tracking-tight leading-[1]" style={{fontWeight: 500}}>
                       Akram
                     </div>
                     <div className="font-syne text-[11px] tracking-[0.25em] uppercase text-[var(--bone-dim)] mt-3">
@@ -678,7 +714,7 @@ function Founder() {
               <span className="font-syne text-[11px] tracking-[0.3em] uppercase text-[#C9A84C]">The Storyteller</span>
             </div>
 
-            <h3 className="reveal font-display italic mt-6 leading-[1.05] tracking-tight" style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", fontWeight: 400 }}>
+            <h3 className="reveal font-display italic mt-6 leading-[1.05] tracking-tight" style={{fontSize: "clamp(2rem, 4.5vw, 3.5rem)", fontWeight: 400}}>
               "I didn't come here to make films.<br/>
               <span className="text-[#C9A84C]">I came here to tell the truth.</span>"
             </h3>
@@ -693,7 +729,7 @@ function Founder() {
             </div>
 
             <div className="reveal mt-14 pl-6 border-l-2 border-[#C9A84C]" data-delay="200">
-              <p className="font-display italic text-[#C9A84C] leading-[1.2]" style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)", fontWeight: 400 }}>
+              <p className="font-display italic text-[#C9A84C] leading-[1.2]" style={{fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)", fontWeight: 400}}>
                 "This is more than education.<br/>
                 This is about giving people<br/>
                 a real chance."
@@ -719,7 +755,7 @@ function Stories() {
         <div className="flex items-end justify-between flex-wrap gap-6 mb-20">
           <div>
             <span className="eyebrow reveal">— Stories</span>
-            <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight" style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 400 }}>
+            <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight" style={{fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 400}}>
               Before. <span className="italic text-[#C9A84C]">After.</span>
             </h2>
           </div>
@@ -736,9 +772,9 @@ function Stories() {
         <div className="reveal grid lg:grid-cols-12 gap-10 items-center" key={idx}>
           <div className="lg:col-span-5">
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
-              <img src={story.image} alt={story.name} className="w-full h-full object-cover story-image" style={{ animation: "fadeIn 0.8s ease" }} />
+              <img src={story.image} alt={story.name} className="w-full h-full object-cover story-image" style={{animation: "fadeIn 0.8s ease"}} />
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#0A0906] to-transparent">
-                <div className="font-display text-3xl tracking-tight" style={{ fontWeight: 500 }}>{story.name}</div>
+                <div className="font-display text-3xl tracking-tight" style={{fontWeight: 500}}>{story.name}</div>
                 <div className="font-syne text-[11px] tracking-[0.25em] uppercase text-[var(--bone-dim)] mt-1">
                   {story.age} · {story.location}
                 </div>
@@ -752,7 +788,7 @@ function Stories() {
                 <span className="font-syne text-[10px] tracking-[0.3em] uppercase text-[#C44B2B]">Before</span>
                 <span className="flex-1 h-px bg-[#C44B2B]/20" />
               </div>
-              <p className="font-display italic text-2xl lg:text-3xl leading-[1.3] text-[var(--bone-dim)]" style={{ fontWeight: 400 }}>
+              <p className="font-display italic text-2xl lg:text-3xl leading-[1.3] text-[var(--bone-dim)]" style={{fontWeight: 400}}>
                 {story.before}
               </p>
             </div>
@@ -762,13 +798,13 @@ function Stories() {
                 <span className="font-syne text-[10px] tracking-[0.3em] uppercase text-[#C9A84C]">After</span>
                 <span className="flex-1 h-px bg-[#C9A84C]/30" />
               </div>
-              <p className="font-display text-2xl lg:text-3xl leading-[1.3]" style={{ fontWeight: 500 }}>
+              <p className="font-display text-2xl lg:text-3xl leading-[1.3]" style={{fontWeight: 500}}>
                 {story.after}
               </p>
             </div>
 
             <blockquote className="pt-6 border-t border-[#C9A84C]/15">
-              <p className="font-display italic text-[#C9A84C] text-2xl leading-snug" style={{ fontWeight: 400 }}>
+              <p className="font-display italic text-[#C9A84C] text-2xl leading-snug" style={{fontWeight: 400}}>
                 "{story.quote}"
               </p>
             </blockquote>
@@ -796,7 +832,7 @@ function Vision() {
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="max-w-3xl">
           <span className="eyebrow reveal">— The Vision</span>
-          <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight text-balance" style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)", fontWeight: 400 }}>
+          <h2 className="reveal font-display mt-6 leading-[0.95] tracking-tight text-balance" style={{fontSize: "clamp(2.5rem, 6vw, 5.5rem)", fontWeight: 400}}>
             The <span className="italic text-[#C9A84C]">#1 hub</span> for Algerians in America.
           </h2>
           <p className="reveal mt-10 text-lg leading-[1.85] text-[var(--bone-dim)] max-w-xl">
@@ -807,7 +843,7 @@ function Vision() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-[#C9A84C]/10 mt-24">
           {VISION.map((v, i) => (
             <div key={i} className="reveal bg-[#0A0906] p-10 group hover:bg-[#11100B] transition-colors duration-700" data-delay={i * 80}>
-              <div className="font-display text-7xl text-[#C9A84C]/30 group-hover:text-[#C9A84C] transition-colors duration-700" style={{ fontWeight: 500 }}>
+              <div className="font-display text-7xl text-[#C9A84C]/30 group-hover:text-[#C9A84C] transition-colors duration-700" style={{fontWeight: 500}}>
                 {v.num}
               </div>
               <div className="font-syne text-sm tracking-tight font-semibold mt-6">{v.label}</div>
@@ -845,15 +881,15 @@ function FinalCTA({ setLang }) {
 
   return (
     <section id="cta" className="relative min-h-screen flex items-center overflow-hidden vignette">
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1920&q=80')" }} />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,9,6,0.85) 0%, rgba(10,9,6,0.7) 50%, rgba(10,9,6,0.95) 100%)" }} />
+      <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: "url('https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1920&q=80')"}} />
+      <div className="absolute inset-0" style={{background: "linear-gradient(180deg, rgba(10,9,6,0.85) 0%, rgba(10,9,6,0.7) 50%, rgba(10,9,6,0.95) 100%)"}} />
 
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(201,168,76,0.2), transparent 70%)" }} />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full pointer-events-none" style={{background: "radial-gradient(circle, rgba(201,168,76,0.2), transparent 70%)"}} />
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-12 w-full text-center py-32">
         <span className="eyebrow reveal">— Begin</span>
 
-        <h2 className="reveal font-display italic mt-8 leading-[0.92] tracking-tight text-balance mx-auto max-w-5xl" style={{ fontSize: "clamp(2.75rem, 8vw, 7rem)", fontWeight: 400 }}>
+        <h2 className="reveal font-display italic mt-8 leading-[0.92] tracking-tight text-balance mx-auto max-w-5xl" style={{fontSize: "clamp(2.75rem, 8vw, 7rem)", fontWeight: 400}}>
           Your new life in America<br/>
           <span className="text-[#C9A84C]">starts here.</span>
         </h2>
@@ -907,7 +943,7 @@ function FinalCTA({ setLang }) {
               ref={btnRef}
               type="submit"
               className="btn-gold gold-glow text-base px-10 py-5"
-              style={{ transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s" }}
+              style={{transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s"}}
               data-magnet
             >
               {submitted ? "Application Received ✓" : "Join AlgeriaRise Now"}
@@ -1039,9 +1075,9 @@ export default function App() {
   return (
     <>
       {!loaded && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center bg-[#0A0906] transition-opacity duration-700" style={{ opacity: loaded ? 0 : 1 }}>
+        <div className="fixed inset-0 z-[300] flex items-center justify-center bg-[#0A0906] transition-opacity duration-700" style={{opacity: loaded ? 0 : 1}}>
           <div className="text-center">
-            <div className="w-16 h-16 rounded-full border border-[#C9A84C] flex items-center justify-center mx-auto" style={{ animation: "fadeIn 0.8s ease" }}>
+            <div className="w-16 h-16 rounded-full border border-[#C9A84C] flex items-center justify-center mx-auto" style={{animation: "fadeIn 0.8s ease"}}>
               <span className="font-display italic text-[#C9A84C] text-2xl">A</span>
             </div>
             <div className="font-syne text-[10px] tracking-[0.4em] uppercase text-[var(--bone-dim)] mt-6">Algeria Rise</div>
@@ -1051,7 +1087,7 @@ export default function App() {
 
       <div className="grain" />
       <Cursor />
-      <div className="scroll-progress" style={{ width: `${progress}%` }} />
+      <div className="scroll-progress" style={{width: `${progress}%`}} />
 
       <Nav lang={lang} setLang={setLang} />
 

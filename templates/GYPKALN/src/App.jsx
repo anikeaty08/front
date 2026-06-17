@@ -2,11 +2,53 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -14,7 +56,7 @@ export default function App() {
       
 <div className="min-h-screen">
 
-<header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/50" style={{backgroundColor: 'rgba(251,250,249,0.55)', backdropFilter: 'saturate(140%) blur(10px)'}}>
+<header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/50" style={{backgroundColor: 'rgba(251, 250, 249, 0.55)', backdropFilter: 'saturate(140%) blur(10px)'}}>
 <div className="mx-auto max-w-3xl lg:max-w-4xl px-6">
 <div className="flex items-center justify-between py-4">
 <a className="inline-flex items-center space-x-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-md" href="#" style={{textDecoration: 'none', color: 'var(--ink)', outlineColor: 'var(--glacier-400)'}}>
@@ -24,10 +66,10 @@ export default function App() {
 <span className="sr-only">Minimalist Notion-Vibe Blog</span>
 </a>
 <nav aria-label="Primary" className="flex items-center gap-6">
-<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#about" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16,20,24,0.25)', outlineColor: 'var(--glacier-400)'}}>About</a>
-<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#posts" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16,20,24,0.25)', outlineColor: 'var(--glacier-400)'}}>Posts</a>
-<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#photography" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16,20,24,0.25)', outlineColor: 'var(--glacier-400)'}}>Photography</a>
-<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#artwork" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16,20,24,0.25)', outlineColor: 'var(--glacier-400)'}}>Artwork</a>
+<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#about" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16, 20, 24, 0.25)', outlineColor: 'var(--glacier-400)'}}>About</a>
+<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#posts" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16, 20, 24, 0.25)', outlineColor: 'var(--glacier-400)'}}>Posts</a>
+<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#photography" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16, 20, 24, 0.25)', outlineColor: 'var(--glacier-400)'}}>Photography</a>
+<a className="text-sm underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-sm transition-colors" href="#artwork" style={{color: 'var(--ink)', textDecorationColor: 'rgba(16, 20, 24, 0.25)', outlineColor: 'var(--glacier-400)'}}>Artwork</a>
 </nav>
 </div>
 </div>
@@ -50,7 +92,7 @@ export default function App() {
 <div className="pt-16 sm:pt-24 lg:pt-28 pb-10 sm:pb-16 relative">
 
 <div className="hidden md:block absolute right-0 lg:right-2 top-2" style={{animation: 'blurReveal .7s ease-out .05s both'}}>
-<div className="rounded-lg border backdrop-blur" style={{borderColor: 'var(--mist-100)', backgroundColor: 'rgba(255,255,255,0.6)', boxShadow: '0 12px 50px rgba(16,20,24,0.06)', backdropFilter: 'blur(10px) saturate(120%)'}}>
+<div className="rounded-lg border backdrop-blur" style={{borderColor: 'var(--mist-100)', backgroundColor: 'rgba(255, 255, 255, 0.6)', boxShadow: '0 12px 50px rgba(16, 20, 24, 0.06)', backdropFilter: 'blur(10px) saturate(120%)'}}>
 <div className="px-3 py-2.5 flex items-center gap-2">
 <svg fill="none" height="18" style={{stroke: 'var(--glacier-700)', strokeWidth: '1.5'}} viewbox="0 0 24 24" width="18">
 <path d="M12 3v2"></path>
@@ -84,13 +126,13 @@ export default function App() {
 <a className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm tracking-tight transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:opacity-90" href="#posts" style={{backgroundColor: 'var(--glacier-500)', color: 'var(--paper)', outlineColor: 'var(--glacier-400)', boxShadow: '0 8px 26px rgba(76,160,234,0.28)'}}>
                   Read the posts
                 </a>
-<a className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm tracking-tight transition-colors border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-white" href="#about" style={{borderColor: 'var(--mist-100)', color: 'var(--ink)', backgroundColor: 'rgba(255,247,214,0.4)', outlineColor: 'var(--glacier-400)'}}>
+<a className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm tracking-tight transition-colors border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-white" href="#about" style={{borderColor: 'var(--mist-100)', color: 'var(--ink)', backgroundColor: 'rgba(255, 247, 214, 0.4)', outlineColor: 'var(--glacier-400)'}}>
                   About me
                 </a>
 </div>
 
 <div className="mt-5 fade-up" style={{animation: 'fadeUp .7s ease-out .35s both'}}>
-<p className="inline-flex items-center gap-2 text-xs rounded-full px-2.5 py-1 border" style={{color: 'var(--ink-60)', borderColor: 'var(--mist-100)', backgroundColor: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(6px) saturate(120%)'}}>
+<p className="inline-flex items-center gap-2 text-xs rounded-full px-2.5 py-1 border" style={{color: 'var(--ink-60)', borderColor: 'var(--mist-100)', backgroundColor: 'rgba(255, 255, 255, 0.6)', backdropFilter: 'blur(6px) saturate(120%)'}}>
 <span className="inline-block h-1.5 w-1.5 rounded-full" style={{backgroundColor: 'var(--sun-400)'}}></span>
                   Currently reading: The Design of Everyday Things
                 </p>

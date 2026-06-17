@@ -57,6 +57,42 @@ export default function App() {
   const [visualizerBars, setVisualizerBars] = useState(Array.from({ length: 18 }, () => Math.random() * 80 + 20));
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     let interval;
     if (isPlaying) {
       interval = setInterval(() => {
@@ -497,7 +533,7 @@ export default function App() {
                                 onClick={() => addTrackToPlaylist(track.id, playlist.id, playlist.title)}
                                 className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-white truncate flex items-center gap-2"
                               >
-                                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: playlist.color }}></span>
+                                <span className="w-2 h-2 rounded-full" style={{backgroundColor: playlist.color}}></span>
                                 {playlist.title}
                               </button>
                             ))}
@@ -616,7 +652,7 @@ export default function App() {
                           className={`w-6 h-6 rounded-full transition-all border ${
                             newPlaylistColor === color ? "scale-125 border-white" : "border-transparent"
                           }`}
-                          style={{ backgroundColor: color }}
+                          style={{backgroundColor: color}}
                         />
                       ))}
                     </div>
@@ -676,10 +712,10 @@ export default function App() {
                   <div 
                     key={playlist.id} 
                     className="glass-panel p-5 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:border-slate-700 transition-all"
-                    style={{ borderLeft: `4px solid ${playlist.color}` }}
+                    style={{borderLeft: `4px solid ${playlist.color}`}}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-lg flex items-center justify-center text-slate-950 font-semibold" style={{ backgroundColor: playlist.color }}>
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center text-slate-950 font-semibold" style={{backgroundColor: playlist.color}}>
                         <iconify-icon icon="solar:folder-with-files-bold" class="text-xl" />
                       </div>
                       <div>
@@ -909,12 +945,12 @@ export default function App() {
             {/* Active tracking fill */}
             <div 
               className="absolute left-0 top-0 h-full bg-gradient-to-r from-sky-400 to-indigo-500 rounded-full"
-              style={{ width: `${(currentTime / currentTrack.duration) * 100}%` }}
+              style={{width: `${(currentTime / currentTrack.duration) * 100}%`}}
             />
             {/* Seeker knob handle */}
             <div 
               className="absolute w-3 h-3 rounded-full bg-white border border-slate-950 opacity-0 group-hover:opacity-100 transition-opacity -top-1 pointer-events-none"
-              style={{ left: `calc(${(currentTime / currentTrack.duration) * 100}% - 6px)` }}
+              style={{left: `calc(${(currentTime / currentTrack.duration) * 100}% - 6px)`}}
             />
           </div>
           <span className="text-[10px] font-mono-tech text-slate-400 w-10 text-left">{formatTime(currentTrack.duration)}</span>
@@ -972,7 +1008,7 @@ export default function App() {
                 <div 
                   key={i} 
                   className="w-[2px] rounded-t bg-sky-400/80 transition-all duration-150" 
-                  style={{ height: `${h}%` }}
+                  style={{height: `${h}%`}}
                 />
               ))}
             </div>

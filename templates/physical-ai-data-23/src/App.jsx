@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -37,7 +73,7 @@ backgroundImage: {
 
         // --- Icons Wrapper ---
         const Icon = ({ icon, className }) => (
-            <iconify-icon icon={icon} class={className} style={{ strokeWidth: '1.5' }}></iconify-icon>
+            <iconify-icon icon={icon} class={className} style={{strokeWidth: '1.5'}}></iconify-icon>
         );
 
         // --- Components ---
@@ -56,7 +92,7 @@ backgroundImage: {
                 <div className="fixed right-0 top-0 bottom-0 w-px bg-grid z-50 hidden md:block">
                     <motion.div 
                         className="w-[2px] bg-cyan origin-top"
-                        style={{ scaleY, height: '100%' }}
+                        style={{scaleY, height: '100%'}}
                     />
                 </div>
             );
@@ -165,7 +201,7 @@ backgroundImage: {
                             <motion.div 
                                 key={i}
                                 className="absolute top-1/2 left-1/2 w-[200px] h-[1px] bg-gradient-to-r from-cyan/40 to-transparent origin-left"
-                                style={{ rotate: i * 45 }}
+                                style={{rotate: i * 45}}
                                 animate={{ 
                                     rotate: i * 45 + (mousePos.x * 0.01),
                                     width: 150 + Math.sin(i + mousePos.y * 0.01) * 50
@@ -284,7 +320,7 @@ backgroundImage: {
                         {/* Data Overlay Box moving with value */}
                         <motion.div 
                             className="absolute top-10 bg-graphite/90 border border-white/10 p-2 font-mono text-[10px] text-steel shadow-xl backdrop-blur-md"
-                            style={{ left: `${Math.min(Math.max(val, 10), 90)}%` }}
+                            style={{left: `${Math.min(Math.max(val, 10), 90)}%`}}
                         >
                             <div className="flex flex-col gap-1">
                                 <div className="flex justify-between gap-4"><span>FORCE_Z:</span> <span className="text-cyan">{randomData.f} N</span></div>
@@ -553,6 +589,12 @@ backgroundImage: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

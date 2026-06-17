@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -154,6 +190,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -347,7 +389,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="bento-grid reveal-element in-view">
 
-<div className="bento-card group cursor-pointer md:col-span-4 md:row-span-2" style={{-MouseX: '683px', -MouseY: '340px'}}>
+<div className="bento-card group cursor-pointer md:col-span-4 md:row-span-2" style={{'--mouse-x': '683px', '--mouse-y': '340px'}}>
 <div className="noise-bg absolute inset-0 z-0"></div>
 
 <img alt="CNC Diamond Cutting Lathe" className="absolute inset-0 h-full w-full mix-blend-overlay object-cover opacity-60 grayscale transition-all duration-700 group-hover:scale-105 group-hover:opacity-80" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
@@ -356,7 +398,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 -z-20 bg-[#050505]"></div>
 <img alt="CNC Diamond Cutting Detail" className="-z-10 transition-transform duration-700 group-hover:scale-105 opacity-60 w-full h-full object-cover absolute top-0 right-0 bottom-0 left-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f2ea8104-f379-48ea-b9fd-fd03a589e984_1600w.png"/>
-<div className="bg-center transition-transform duration-700 ease-out group-hover:scale-105 bg-cover -z-10 absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0.1) 100%), url(\'CNC.jpeg\')'}}></div>
+<div className="bg-center transition-transform duration-700 ease-out group-hover:scale-105 bg-cover -z-10 absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to right, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 45%, rgba(0, 0, 0, 0.1) 100%), url(\'CNC.jpeg\')'}}></div>
 
 <div className="mb-6 flex h-10 w-10 items-center justify-center rounded border border-white/10 bg-black/50 backdrop-blur-md transition-colors group-hover:border-[#FF2800]">
 <iconify-icon className="text-white" icon="lucide:disc-3" width="20"></iconify-icon>
@@ -371,7 +413,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bento-card group cursor-pointer md:col-span-2 md:row-span-1" style={{-MouseX: '227px', -MouseY: '76.75px'}}>
+<div className="bento-card group cursor-pointer md:col-span-2 md:row-span-1" style={{'--mouse-x': '227px', '--mouse-y': '76.75px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-[#111]/70 to-black/90 z-10"></div>
 
 <img alt="Spray Painting Wheel" className="transition-all duration-700 group-hover:scale-105 group-hover:opacity-70 opacity-50 w-full h-full object-cover z-10 absolute top-0 right-0 bottom-0 left-0 grayscale" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0490edf6-2341-4c41-8f49-7ba1f2507def_800w.png"/>
@@ -391,7 +433,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bento-card group cursor-pointer md:col-span-2 md:row-span-1" style={{-MouseX: '333px', -MouseY: '106.51730346679688px'}}>
+<div className="bento-card group cursor-pointer md:col-span-2 md:row-span-1" style={{'--mouse-x': '333px', '--mouse-y': '106.51730346679688px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-[#111]/70 to-black/90 z-10"></div>
 
 <img alt="Polishing and Prep Work" className="absolute inset-0 h-full w-full object-cover opacity-50 grayscale transition-all duration-500 group-hover:opacity-70" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/285499ea-af67-43c1-a25f-524508178188_800w.png"/>
@@ -410,7 +452,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bento-card group flex cursor-pointer items-center justify-between p-6 md:col-span-3 md:row-span-1" style={{-MouseX: '420px', -MouseY: '15px'}}>
+<div className="bento-card group flex cursor-pointer items-center justify-between p-6 md:col-span-3 md:row-span-1" style={{'--mouse-x': '420px', '--mouse-y': '15px'}}>
 
 <img alt="Wheel Buckle Repair Inspection" className="absolute inset-0 h-full w-full object-cover opacity-40 grayscale transition-all duration-500 group-hover:opacity-60" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cd46174c-88b1-4e13-8bbb-61453bd596ca_1600w.png"/>
 <div className="bg-gradient-to-r from-[#111]/80 to-transparent absolute top-0 right-0 bottom-0 left-0 z-10"></div>
@@ -425,7 +467,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bento-card group flex cursor-pointer items-center justify-between p-6 md:col-span-3 md:row-span-1" style={{-MouseX: '510px', -MouseY: '159px'}}>
+<div className="bento-card group flex cursor-pointer items-center justify-between p-6 md:col-span-3 md:row-span-1" style={{'--mouse-x': '510px', '--mouse-y': '159px'}}>
 
 <img alt="TIG Welding" className="absolute inset-0 h-full w-full object-cover opacity-20 grayscale transition-all duration-500 group-hover:opacity-40" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c14f7b55-1496-4861-912f-75491f59b4ac_1600w.png"/>
 <div className="bg-gradient-to-r from-[#111]/80 to-transparent absolute top-0 right-0 bottom-0 left-0 z-10"></div>

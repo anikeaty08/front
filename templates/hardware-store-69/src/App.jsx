@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -26,6 +62,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -37,7 +79,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 </div></div>
 
-<div className="fixed inset-0 z-[-1]" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '24px 24px', maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'}}></div>
+<div className="fixed inset-0 z-[-1]" style={{backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px)', backgroundSize: '24px 24px', maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'}}></div>
 <div className="fixed top-[-20%] left-[20%] w-[600px] h-[600px] bg-orange-600/10 rounded-full blur-[120px] pointer-events-none z-[-1]"></div>
 
 <div className="w-full border-b border-white/5 bg-[#080808] z-50 relative hidden md:block">
@@ -85,7 +127,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <main className="sm:pt-48 sm:pb-24 overflow-hidden pt-32 pb-16 relative">
 <div className="max-w-7xl mx-auto px-6 relative z-10">
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1333.5px', -MouseY: '102px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1333.5px', '--mouse-y': '102px'}}>
 <div className="spotlight-inner bg-[#0C0C0C] rounded-3xl relative overflow-hidden">
 
 <div className="grid lg:grid-cols-2 min-h-[500px]">
@@ -169,7 +211,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-<div className="spotlight-card rounded-2xl p-[1px] group" style={{-MouseX: '1333.5px', -MouseY: '-787px'}}>
+<div className="spotlight-card rounded-2xl p-[1px] group" style={{'--mouse-x': '1333.5px', '--mouse-y': '-787px'}}>
 <div className="spotlight-inner bg-[#111] p-6 rounded-2xl h-full flex flex-col hover:bg-[#161616] transition-colors">
 <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500 mb-4 group-hover:scale-110 transition-transform">
 <iconify-icon icon="solar:screw-large-minimalistic-linear" style={{fontSize: '24px'}}></iconify-icon>
@@ -183,7 +225,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-2xl p-[1px] group" style={{-MouseX: '1021.5px', -MouseY: '-787px'}}>
+<div className="spotlight-card rounded-2xl p-[1px] group" style={{'--mouse-x': '1021.5px', '--mouse-y': '-787px'}}>
 <div className="spotlight-inner bg-[#111] p-6 rounded-2xl h-full flex flex-col hover:bg-[#161616] transition-colors">
 <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 mb-4 group-hover:scale-110 transition-transform">
 <iconify-icon icon="solar:sledgehammer-linear" style={{fontSize: '24px'}}></iconify-icon>
@@ -197,7 +239,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-2xl p-[1px] group" style={{-MouseX: '709.5px', -MouseY: '-787px'}}>
+<div className="spotlight-card rounded-2xl p-[1px] group" style={{'--mouse-x': '709.5px', '--mouse-y': '-787px'}}>
 <div className="spotlight-inner bg-[#111] p-6 rounded-2xl h-full flex flex-col hover:bg-[#161616] transition-colors">
 <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500 mb-4 group-hover:scale-110 transition-transform">
 <iconify-icon icon="solar:wrench-linear" style={{fontSize: '24px'}}></iconify-icon>
@@ -211,7 +253,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-2xl p-[1px] group" style={{-MouseX: '397.5px', -MouseY: '-787px'}}>
+<div className="spotlight-card rounded-2xl p-[1px] group" style={{'--mouse-x': '397.5px', '--mouse-y': '-787px'}}>
 <div className="spotlight-inner bg-[#111] p-6 rounded-2xl h-full flex flex-col hover:bg-[#161616] transition-colors">
 <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 mb-4 group-hover:scale-110 transition-transform">
 <iconify-icon icon="solar:link-circle-linear" style={{fontSize: '24px'}}></iconify-icon>
@@ -230,7 +272,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="max-w-7xl mr-auto ml-auto pt-12 pr-6 pb-12 pl-6" id="dlaczego-my">
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-<div className="lg:col-span-1 spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1333.5px', -MouseY: '-1131.5px'}}>
+<div className="lg:col-span-1 spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1333.5px', '--mouse-y': '-1131.5px'}}>
 <div className="spotlight-inner bg-[#0E0E0E] p-8 rounded-3xl h-full flex flex-col justify-between">
 <div className="">
 <h3 className="text-xl font-semibold text-white mb-6">Dlaczego Metal-Max?</h3>
@@ -273,7 +315,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:col-span-2 spotlight-card rounded-3xl p-[1px] relative group overflow-hidden min-h-[300px]" style={{-MouseX: '917.5px', -MouseY: '-1131.5px'}}>
+<div className="lg:col-span-2 spotlight-card rounded-3xl p-[1px] relative group overflow-hidden min-h-[300px]" style={{'--mouse-x': '917.5px', '--mouse-y': '-1131.5px'}}>
 <div className="spotlight-inner bg-[#0E0E0E] rounded-3xl h-full w-full absolute inset-0">
 <img className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700 grayscale" src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>

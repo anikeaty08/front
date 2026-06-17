@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -158,6 +194,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -312,7 +354,7 @@ addUtilities({
 </div>
 <div className="grid lg:grid-cols-2 gap-8">
 
-<div className="relative h-[400px] lg:h-auto w-full bg-[#0B101E] rounded-3xl border border-white/10 overflow-hidden group spotlight-card flex items-center justify-center" style={{-MouseX: '215px', -MouseY: '2268.5px'}}>
+<div className="relative h-[400px] lg:h-auto w-full bg-[#0B101E] rounded-3xl border border-white/10 overflow-hidden group spotlight-card flex items-center justify-center" style={{'--mouse-x': '215px', '--mouse-y': '2268.5px'}}>
 <div className="spotlight-border"></div>
 
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
@@ -354,7 +396,7 @@ addUtilities({
 
 <div className="flex flex-col gap-4">
 
-<div className="spotlight-card p-8 rounded-3xl bg-[#0B101E] border border-white/10 group" style={{-MouseX: '-417px', -MouseY: '2268.5px'}}>
+<div className="spotlight-card p-8 rounded-3xl bg-[#0B101E] border border-white/10 group" style={{'--mouse-x': '-417px', '--mouse-y': '2268.5px'}}>
 <div className="spotlight-border"></div>
 <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4 text-blue-400 group-hover:scale-110 transition-transform duration-500">
 <svg className="lucide lucide-activity w-5 h-5" data-lucide="activity" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
@@ -365,7 +407,7 @@ addUtilities({
                         </p>
 </div>
 
-<div className="spotlight-card p-8 rounded-3xl bg-[#0B101E] border border-white/10 group" style={{-MouseX: '-417px', -MouseY: '2049px'}}>
+<div className="spotlight-card p-8 rounded-3xl bg-[#0B101E] border border-white/10 group" style={{'--mouse-x': '-417px', '--mouse-y': '2049px'}}>
 <div className="spotlight-border"></div>
 <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4 text-purple-400 group-hover:scale-110 transition-transform duration-500">
 <svg className="lucide lucide-layers w-5 h-5" data-lucide="layers" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
@@ -389,7 +431,7 @@ addUtilities({
 
 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{-MouseX: '215px', -MouseY: '1432.5px'}}>
+<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{'--mouse-x': '215px', '--mouse-y': '1432.5px'}}>
 <div className="spotlight-border"></div>
 <div className="w-10 h-10 rounded-lg bg-blue-900/20 border border-blue-500/20 flex items-center justify-center mb-5 text-blue-400 group-hover:text-blue-300 transition-colors">
 <svg className="lucide lucide-book-open w-5 h-5" data-lucide="book-open" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
@@ -400,7 +442,7 @@ addUtilities({
                     </p>
 </div>
 
-<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{-MouseX: '-99px', -MouseY: '1432.5px'}}>
+<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{'--mouse-x': '-99px', '--mouse-y': '1432.5px'}}>
 <div className="spotlight-border"></div>
 <div className="w-10 h-10 rounded-lg bg-emerald-900/20 border border-emerald-500/20 flex items-center justify-center mb-5 text-emerald-400 group-hover:text-emerald-300 transition-colors">
 <svg className="lucide lucide-file-text w-5 h-5" data-lucide="file-text" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
@@ -411,7 +453,7 @@ addUtilities({
                     </p>
 </div>
 
-<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{-MouseX: '-413px', -MouseY: '1432.5px'}}>
+<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{'--mouse-x': '-413px', '--mouse-y': '1432.5px'}}>
 <div className="spotlight-border"></div>
 <div className="w-10 h-10 rounded-lg bg-indigo-900/20 border border-indigo-500/20 flex items-center justify-center mb-5 text-indigo-400 group-hover:text-indigo-300 transition-colors">
 <svg className="lucide lucide-pie-chart w-5 h-5" data-lucide="pie-chart" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
@@ -422,7 +464,7 @@ addUtilities({
                     </p>
 </div>
 
-<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{-MouseX: '-727px', -MouseY: '1432.5px'}}>
+<div className="spotlight-card rounded-2xl border border-white/10 bg-[#020408] p-6 group" style={{'--mouse-x': '-727px', '--mouse-y': '1432.5px'}}>
 <div className="spotlight-border"></div>
 <div className="w-10 h-10 rounded-lg bg-orange-900/20 border border-orange-500/20 flex items-center justify-center mb-5 text-orange-400 group-hover:text-orange-300 transition-colors">
 <svg className="lucide lucide-shield-check w-5 h-5" data-lucide="shield-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
@@ -443,7 +485,7 @@ addUtilities({
 <h2 className="text-2xl md:text-4xl font-semibold text-white tracking-tight mb-16 text-center">What Our Clients Say</h2>
 <div className="grid md:grid-cols-3 gap-6">
 
-<div className="spotlight-card bg-[#0B101E] border border-white/5 p-8 rounded-2xl relative group hover:border-white/10 transition-colors" style={{-MouseX: '215px', -MouseY: '872px'}}>
+<div className="spotlight-card bg-[#0B101E] border border-white/5 p-8 rounded-2xl relative group hover:border-white/10 transition-colors" style={{'--mouse-x': '215px', '--mouse-y': '872px'}}>
 <div className="spotlight-border"></div>
 <div className="mb-6 text-blue-500">
 <svg className="lucide lucide-quote w-6 h-6 fill-current opacity-20" data-lucide="quote" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>
@@ -460,7 +502,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="spotlight-card bg-[#0B101E] border border-white/5 p-8 rounded-2xl relative group hover:border-white/10 transition-colors" style={{-MouseX: '-203.65625px', -MouseY: '872px'}}>
+<div className="spotlight-card bg-[#0B101E] border border-white/5 p-8 rounded-2xl relative group hover:border-white/10 transition-colors" style={{'--mouse-x': '-203.65625px', '--mouse-y': '872px'}}>
 <div className="spotlight-border"></div>
 <div className="mb-6 text-blue-500">
 <svg className="lucide lucide-quote w-6 h-6 fill-current opacity-20" data-lucide="quote" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>
@@ -477,7 +519,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="spotlight-card bg-[#0B101E] border border-white/5 p-8 rounded-2xl relative group hover:border-white/10 transition-colors" style={{-MouseX: '-622.328125px', -MouseY: '872px'}}>
+<div className="spotlight-card bg-[#0B101E] border border-white/5 p-8 rounded-2xl relative group hover:border-white/10 transition-colors" style={{'--mouse-x': '-622.328125px', '--mouse-y': '872px'}}>
 <div className="spotlight-border"></div>
 <div className="mb-6 text-blue-500">
 <svg className="lucide lucide-quote w-6 h-6 fill-current opacity-20" data-lucide="quote" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>

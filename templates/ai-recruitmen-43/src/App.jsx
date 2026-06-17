@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -134,6 +170,12 @@ float: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -192,7 +234,7 @@ float: {
 </span>
 </button>
 
-<button className="group relative w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white/90 overflow-hidden" style={{-BorderGradient: 'linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0.05))', -BorderRadiusBefore: '9999px'}}>
+<button className="group relative w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white/90 overflow-hidden" style={{'--border-gradient': 'linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0.05))', '--border-radius-before': '9999px'}}>
 <span>View Demo</span>
 <iconify-icon className="text-lg opacity-60 group-hover:text-indigo-400 group-hover:opacity-100 transition-all" icon="solar:play-circle-linear"></iconify-icon>
 </button>

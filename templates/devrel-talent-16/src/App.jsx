@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -1282,6 +1318,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1614,31 +1656,31 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none z-0"></div>
 <div className="flex z-10 w-full h-full relative items-center justify-center" data-bouncing-initialized="true">
 
-<div className="transform group-hover:rotate-[20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex z-20 dvd-bounce bg-white/70 w-14 h-14 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_12px_32px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[12deg] items-center justify-center" data-h="56" data-w="56" style={{-W: '56px', -H: '56px', -Dx: '8s', -Dy: '13s', -Delx: '-2s', -Dely: '-1s', animationPlayState: 'running !important'}}>
+<div className="transform group-hover:rotate-[20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex z-20 dvd-bounce bg-white/70 w-14 h-14 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_12px_32px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[12deg] items-center justify-center" data-h="56" data-w="56" style={{'--w': '56px', '--h': '56px', '--dx': '8s', '--dy': '13s', '--delx': '-2s', '--dely': '-1s', animationPlayState: 'running !important'}}>
 <svg className="w-7 h-7 text-slate-400/70" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24">
 <path d="M11.66 4.34c-1.3-1.3-3.41-1.3-4.71 0-2.43 2.42-3.8 6.45-2.2 9.4 1.25 2.27 3.59 4.26 6.9 4.26s5.66-1.99 6.9-4.26c1.6-2.95.23-6.98-2.2-9.4-1.29-1.3-3.4-1.3-4.69 0z"></path>
 <circle cx="12" cy="14" r="3"></circle>
 </svg>
 </div>
-<div className="group-hover:bg-blue-400/10 transition-colors duration-700 dvd-bounce bg-blue-400/5 w-40 h-40 rounded-full absolute blur-2xl" style={{-W: '10rem', -H: '10rem', -Dx: '16s', -Dy: '12s', -Delx: '0s', -Dely: '0s', animationPlayState: 'running !important'}}></div>
+<div className="group-hover:bg-blue-400/10 transition-colors duration-700 dvd-bounce bg-blue-400/5 w-40 h-40 rounded-full absolute blur-2xl" style={{'--w': '10rem', '--h': '10rem', '--dx': '16s', '--dy': '12s', '--delx': '0s', '--dely': '0s', animationPlayState: 'running !important'}}></div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-10deg] group-hover:rotate-[-5deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '11s', -Dy: '9s', -Delx: '-5s', -Dely: '-3s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-10deg] group-hover:rotate-[-5deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '11s', '--dy': '9s', '--delx': '-5s', '--dely': '-3s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-xl" icon="mdi:youtube"></iconify-icon>
 </div>
 
-<div className="transform group-hover:rotate-[15deg] group-hover:scale-110 transition-transform duration-700 ease-out flex z-20 dvd-bounce bg-white/70 w-12 h-12 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_8px_24px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[8deg] items-center justify-center" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '14s', -Dy: '10s', -Delx: '-1s', -Dely: '-7s', animationPlayState: 'running !important'}}>
+<div className="transform group-hover:rotate-[15deg] group-hover:scale-110 transition-transform duration-700 ease-out flex z-20 dvd-bounce bg-white/70 w-12 h-12 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_8px_24px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[8deg] items-center justify-center" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '14s', '--dy': '10s', '--delx': '-1s', '--dely': '-7s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-xl" icon="lucide:file-text"></iconify-icon>
 </div>
 
-<div className="transform group-hover:rotate-[-20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex z-20 dvd-bounce bg-white/70 w-12 h-12 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_8px_24px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[-15deg] items-center justify-center" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '9s', -Dy: '15s', -Delx: '-8s', -Dely: '-4s', animationPlayState: 'running !important'}}>
+<div className="transform group-hover:rotate-[-20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex z-20 dvd-bounce bg-white/70 w-12 h-12 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_8px_24px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[-15deg] items-center justify-center" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '9s', '--dy': '15s', '--delx': '-8s', '--dely': '-4s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-xl" icon="lucide:layout"></iconify-icon>
 </div>
 
-<div className="transform group-hover:rotate-[0deg] group-hover:scale-110 transition-transform duration-700 ease-out flex dvd-bounce bg-white/70 w-14 h-14 z-20 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_12px_32px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[5deg] items-center justify-center" data-h="56" data-w="56" style={{-W: '56px', -H: '56px', -Dx: '12s', -Dy: '11s', -Delx: '-4s', -Dely: '-6s', animationPlayState: 'running !important'}}>
+<div className="transform group-hover:rotate-[0deg] group-hover:scale-110 transition-transform duration-700 ease-out flex dvd-bounce bg-white/70 w-14 h-14 z-20 border-white border rounded-2xl mt-0 mr-0 mb-0 ml-0 absolute shadow-[0_12px_32px_rgba(0,0,0,0.04)] backdrop-blur-xl rotate-[5deg] items-center justify-center" data-h="56" data-w="56" style={{'--w': '56px', '--h': '56px', '--dx': '12s', '--dy': '11s', '--delx': '-4s', '--dely': '-6s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-[22px]" icon="lucide:mic"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[5deg] group-hover:rotate-[12deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '10s', -Dy: '14s', -Delx: '-6s', -Dely: '-2s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[5deg] group-hover:rotate-[12deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '10s', '--dy': '14s', '--delx': '-6s', '--dely': '-2s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-xl text-slate-400/70" height="20" icon="lucide:message-square" style={{color: 'rgb(148, 163, 184)'}} width="20"></iconify-icon>
 </div>
 </div>
@@ -1711,7 +1753,7 @@ gtag('config', 'G-2M6V79H761');
                     </style>
 
 
-<div className="group-hover:bg-blue-400/10 transition-colors duration-300 dvd-bounce bg-blue-400/5 w-48 h-48 rounded-full absolute blur-3xl" style={{-W: '12rem', -H: '12rem', -Dx: '12s', -Dy: '9s', -Delx: '0s', -Dely: '0s', animationPlayState: 'running !important'}}>
+<div className="group-hover:bg-blue-400/10 transition-colors duration-300 dvd-bounce bg-blue-400/5 w-48 h-48 rounded-full absolute blur-3xl" style={{'--w': '12rem', '--h': '12rem', '--dx': '12s', '--dy': '9s', '--delx': '0s', '--dely': '0s', animationPlayState: 'running !important'}}>
 <style>
                         [data-element-id="aura-emntc1szc1kirh60x"] ~ div iconify-icon[icon="lucide:mail"] { color: #3b82f6 !important; }
                         [data-element-id="aura-emntc1szc1kirh60x"] ~ div iconify-icon[icon="lucide:newspaper"] { color: #8b5cf6 !important; }
@@ -1722,27 +1764,27 @@ gtag('config', 'G-2M6V79H761');
                       </style>
 </div>
 
-<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-10deg] group-hover:rotate-[-18deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{-W: '56px', -H: '56px', -Dx: '6s', -Dy: '8s', -Delx: '-1s', -Dely: '-2s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-10deg] group-hover:rotate-[-18deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{'--w': '56px', '--h': '56px', '--dx': '6s', '--dy': '8s', '--delx': '-1s', '--dely': '-2s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-[22px]" icon="lucide:mail"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[12deg] group-hover:rotate-[8deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '8s', -Dy: '6s', -Delx: '-4s', -Dely: '-1s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[12deg] group-hover:rotate-[8deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '8s', '--dy': '6s', '--delx': '-4s', '--dely': '-1s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-xl" icon="lucide:newspaper"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-5deg] group-hover:rotate-[5deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '7s', -Dy: '10s', -Delx: '-3s', -Dely: '-6s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-5deg] group-hover:rotate-[5deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '7s', '--dy': '10s', '--delx': '-3s', '--dely': '-6s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-xl" icon="lucide:message-circle"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[15deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '9s', -Dy: '7s', -Delx: '-2s', -Dely: '-3s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[15deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '9s', '--dy': '7s', '--delx': '-2s', '--dely': '-3s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-xl" icon="lucide:dollar-sign"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[0deg] group-hover:rotate-[-8deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{-W: '56px', -H: '56px', -Dx: '7s', -Dy: '9s', -Delx: '-2s', -Dely: '-5s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[0deg] group-hover:rotate-[-8deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{'--w': '56px', '--h': '56px', '--dx': '7s', '--dy': '9s', '--delx': '-2s', '--dely': '-5s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-[22px]" icon="lucide:megaphone"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-8deg] group-hover:rotate-[10deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '10s', -Dy: '6s', -Delx: '-5s', -Dely: '-7s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-8deg] group-hover:rotate-[10deg] group-hover:scale-110 transition-transform duration-300 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '10s', '--dy': '6s', '--delx': '-5s', '--dely': '-7s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-slate-400/70 text-xl" icon="lucide:linkedin"></iconify-icon>
 </div>
 </div>
@@ -1800,25 +1842,25 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent,rgba(255,255,255,0.8))] pointer-events-none z-0"></div>
 <div className="flex z-10 w-full h-full relative items-center justify-center" data-bouncing-initialized="true">
 
-<div className="group-hover:bg-[#94a3b8]/10 transition-colors duration-700 dvd-bounce w-40 h-40 rounded-full absolute blur-2xl" style={{-W: '10rem', -H: '10rem', -Dx: '16s', -Dy: '12s', -Delx: '0s', -Dely: '0s', animationPlayState: 'running !important'}}></div>
+<div className="group-hover:bg-[#94a3b8]/10 transition-colors duration-700 dvd-bounce w-40 h-40 rounded-full absolute blur-2xl" style={{'--w': '10rem', '--h': '10rem', '--dx': '16s', '--dy': '12s', '--delx': '0s', '--dely': '0s', animationPlayState: 'running !important'}}></div>
 
-<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[12deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{-W: '56px', -H: '56px', -Dx: '8s', -Dy: '13s', -Delx: '-2s', -Dely: '-1s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[12deg] group-hover:rotate-[20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{'--w': '56px', '--h': '56px', '--dx': '8s', '--dy': '13s', '--delx': '-2s', '--dely': '-1s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-[#94a3b8] text-[22px]" icon="tabler:brand-slack"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-10deg] group-hover:rotate-[-5deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '11s', -Dy: '9s', -Delx: '-5s', -Dely: '-3s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-10deg] group-hover:rotate-[-5deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '11s', '--dy': '9s', '--delx': '-5s', '--dely': '-3s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-[#94a3b8] text-xl" icon="ri:twitter-x-fill"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[8deg] group-hover:rotate-[15deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '14s', -Dy: '10s', -Delx: '-1s', -Dely: '-7s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[8deg] group-hover:rotate-[15deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '14s', '--dy': '10s', '--delx': '-1s', '--dely': '-7s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-[#94a3b8] text-xl" icon="simple-icons:reddit"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-15deg] group-hover:rotate-[-20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{-W: '48px', -H: '48px', -Dx: '9s', -Dy: '15s', -Delx: '-8s', -Dely: '-4s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-12 h-12 bg-white/70 backdrop-blur-xl border border-white shadow-[0_8px_24px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[-15deg] group-hover:rotate-[-20deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="48" data-w="48" style={{'--w': '48px', '--h': '48px', '--dx': '9s', '--dy': '15s', '--delx': '-8s', '--dely': '-4s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-[#94a3b8] text-[22px]" icon="tabler:brand-discord"></iconify-icon>
 </div>
 
-<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[5deg] group-hover:rotate-[0deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{-W: '56px', -H: '56px', -Dx: '12s', -Dy: '11s', -Delx: '-4s', -Dely: '-6s', animationPlayState: 'running !important'}}>
+<div className="absolute m-0 w-14 h-14 bg-white/70 backdrop-blur-xl border border-white shadow-[0_12px_32px_rgba(0,0,0,0.04)] rounded-2xl transform rotate-[5deg] group-hover:rotate-[0deg] group-hover:scale-110 transition-transform duration-700 ease-out flex items-center justify-center z-20 dvd-bounce" data-h="56" data-w="56" style={{'--w': '56px', '--h': '56px', '--dx': '12s', '--dy': '11s', '--delx': '-4s', '--dely': '-6s', animationPlayState: 'running !important'}}>
 <iconify-icon className="text-[#94a3b8] text-[22px]" icon="lucide:calendar-days"></iconify-icon>
 </div>
 </div>

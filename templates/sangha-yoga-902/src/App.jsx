@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -200,6 +236,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -269,7 +311,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="mb-10 animate-fade-in opacity-0" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
-<h1 className="md:text-6xl lg:text-7xl leading-[1.1] cursor-default text-4xl font-semibold tracking-tight text-center w-full mx-auto" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{backgroundImage: 'radial-gradient(300px circle at var(--x, 50%) var(--y, 50%), #e3a66a 0%, #1a1a1a 60%)', backgroundClip: 'text', color: 'transparent', -X: '694.6484375px', -Y: '58px'}}>Build a Sangha, not just a following.</h1>
+<h1 className="md:text-6xl lg:text-7xl leading-[1.1] cursor-default text-4xl font-semibold tracking-tight text-center w-full mx-auto" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{backgroundImage: 'radial-gradient(300px circle at var(--x, 50%) var(--y, 50%), #e3a66a 0%, #1a1a1a 60%)', backgroundClip: 'text', color: 'transparent', '--x': '694.6484375px', '--y': '58px'}}>Build a Sangha, not just a following.</h1>
 <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight leading-[1.1] interactive-text cursor-default mt-2 transition-all duration-300 hover:drop-shadow-[0_0_25px_rgba(227,166,106,0.6)]">
 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#9a6435] via-[#e3a66a] to-[#9a6435]">We nurture the tribe.</span>
 </h1>

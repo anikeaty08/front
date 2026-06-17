@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -408,7 +450,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="w-[360px] aspect-[4/3] rounded-xl overflow-hidden relative shadow-2xl shrink-0 group/card bg-gray-900">
 <img alt="Website Design" className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&amp;q=80"/>
-<div className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover/card:scale-105" style={{backgroundImage: 'linear-gradient(to top, rgba(17, 24, 39, 0.9), transparent), url(\'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&amp'}}></div>
+<div className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover/card:scale-105" style={{backgroundImage: 'linear-gradient(to top, rgba(17, 24, 39, 0.9), transparent), url(\'https: //images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&amp'}}></div>
 <div className="absolute bottom-4 left-4 right-4 z-10">
 <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2.5 py-0.5 text-xs font-medium text-blue-400 border border-blue-500/20 mb-2">Web Design</span>
 <p className="text-white text-sm font-medium">Conversion-Focused Layouts</p>

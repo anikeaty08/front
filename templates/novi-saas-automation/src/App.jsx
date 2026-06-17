@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -268,6 +304,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -333,7 +375,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-[0.22em] text-white">
                     Smart workflows × social growth
                   </p>
-<h1 className="mt-5 text-5xl leading-[1.08] tracking-tight text-white md:text-6xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '200'}}>
+<h1 className="mt-5 text-5xl leading-[1.08] tracking-tight text-white md:text-6xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '200'}}>
                     Turn Social Conversations Into
                     <span className="text-white">Automated Growth</span>
 </h1>
@@ -361,7 +403,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-white/35">
                 Automations run
               </p>
-<p className="mt-4 text-3xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<p className="mt-4 text-3xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                 18M+
               </p>
 </div>
@@ -369,7 +411,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-white/35">
                 Avg. hours saved
               </p>
-<p className="mt-4 text-3xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<p className="mt-4 text-3xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                 26/wk
               </p>
 </div>
@@ -377,7 +419,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-white/35">
                 Brand safeguards
               </p>
-<p className="mt-4 text-3xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<p className="mt-4 text-3xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                 99.9%
               </p>
 </div>
@@ -385,7 +427,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-white/35">
                 Channels linked
               </p>
-<p className="mt-4 text-3xl tracking-tight text-[#00e5ff]" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<p className="mt-4 text-3xl tracking-tight text-[#00e5ff]" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                 42+
               </p>
 </div>
@@ -398,7 +440,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   // Features
                 </p>
-<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Governed </span>
 </span>
@@ -438,7 +480,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-2xl" icon="solar:magic-stick-3-linear" strokeWidth="1.5"></iconify-icon>
 </span>
 </div>
-<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Campaign Autopilot
                 </h3>
 <p className="mt-4 text-sm leading-relaxed text-white/45">
@@ -455,7 +497,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-2xl" icon="solar:shield-check-linear" strokeWidth="1.5"></iconify-icon>
 </span>
 </div>
-<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Brand Guardrails
                 </h3>
 <p className="mt-4 text-sm leading-relaxed text-white/45">
@@ -472,7 +514,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-2xl" icon="solar:radar-2-linear" strokeWidth="1.5"></iconify-icon>
 </span>
 </div>
-<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Signal Listening
                 </h3>
 <p className="mt-4 text-sm leading-relaxed text-white/45">
@@ -542,7 +584,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   // Channels &amp; Integrations
                 </p>
-<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Connect </span>
 </span>
@@ -596,7 +638,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   // How It Works
                 </p>
-<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Three </span>
 </span>
@@ -629,7 +671,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-2xl" icon="solar:link-circle-linear" strokeWidth="1.5"></iconify-icon>
 </span>
 </div>
-<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Connect Accounts
                 </h3>
 <p className="mt-4 text-sm leading-relaxed text-white/45">
@@ -647,7 +689,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-2xl" icon="solar:flow-node-linear" strokeWidth="1.5"></iconify-icon>
 </span>
 </div>
-<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Build Workflows
                 </h3>
 <p className="mt-4 text-sm leading-relaxed text-white/45">
@@ -664,7 +706,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-2xl" icon="solar:rocket-linear" strokeWidth="1.5"></iconify-icon>
 </span>
 </div>
-<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="text-xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Launch &amp; Monitor
                 </h3>
 <p className="mt-4 text-sm leading-relaxed text-white/45">
@@ -681,7 +723,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   // About Novi
                 </p>
-<h2 className="reveal mt-5 text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mt-5 text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Built </span>
 </span>
@@ -777,7 +819,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   // Campaign Gallery
                 </p>
-<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mt-5 max-w-md text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>
                       Visualizing 
@@ -836,7 +878,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="absolute right-0 bottom-0 h-6 w-6 border-b border-r border-[#00e5ff]/40"></span>
 <div className="mx-auto max-w-4xl text-center">
 <iconify-icon className="mx-auto mb-8 text-5xl text-white/20" icon="solar:quote-left-linear" strokeWidth="1.5"></iconify-icon>
-<h2 className="reveal text-3xl uppercase leading-tight tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal text-3xl uppercase leading-tight tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Novi </span>
 </span>
@@ -912,7 +954,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   Proof 01
                 </p>
-<p className="mt-5 text-2xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<p className="mt-5 text-2xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   3.7x
                 </p>
 <p className="mt-2 text-sm text-white/45">
@@ -923,7 +965,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   Proof 02
                 </p>
-<p className="mt-5 text-2xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<p className="mt-5 text-2xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   68%
                 </p>
 <p className="mt-2 text-sm text-white/45">
@@ -934,7 +976,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   Proof 03
                 </p>
-<p className="mt-5 text-2xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<p className="mt-5 text-2xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   12 min
                 </p>
 <p className="mt-2 text-sm text-white/45">
@@ -949,7 +991,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   // Pricing
                 </p>
-<h2 className="reveal mt-5 text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mt-5 text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Scale </span>
 </span>
@@ -988,11 +1030,11 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-white/40">
                   Starter
                 </p>
-<h3 className="mt-3 text-2xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="mt-3 text-2xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Launch
                 </h3>
 <div className="my-8 border-y border-white/10 py-6">
-<span className="price text-5xl tracking-tight text-white" data-month="$49" data-year="$39" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<span className="price text-5xl tracking-tight text-white" data-month="$49" data-year="$39" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                     $39
                   </span>
 <span className="font-mono text-xs uppercase tracking-widest text-white/35">
@@ -1024,11 +1066,11 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   Growth
                 </p>
-<h3 className="mt-3 text-2xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="mt-3 text-2xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Scale
                 </h3>
 <div className="my-8 border-y border-white/10 py-6">
-<span className="price text-5xl tracking-tight text-white" data-month="$149" data-year="$119" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<span className="price text-5xl tracking-tight text-white" data-month="$149" data-year="$119" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                     $119
                   </span>
 <span className="font-mono text-xs uppercase tracking-widest text-white/35">
@@ -1062,11 +1104,11 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-white/40">
                   Enterprise
                 </p>
-<h3 className="mt-3 text-2xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h3 className="mt-3 text-2xl uppercase tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                   Control
                 </h3>
 <div className="my-8 border-y border-white/10 py-6">
-<span className="text-5xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<span className="text-5xl tracking-tight text-white" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
                     Custom
                   </span>
 </div>
@@ -1102,7 +1144,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                   // Contact
                 </p>
-<h2 className="reveal mt-5 text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mt-5 text-4xl uppercase leading-none tracking-tight text-white md:text-5xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Map </span>
 </span>
@@ -1186,7 +1228,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="font-mono text-xs uppercase tracking-widest text-[#00e5ff]">
                 // Novi is ready
               </p>
-<h2 className="reveal mx-auto mt-5 max-w-3xl text-4xl uppercase leading-none tracking-tight text-white md:text-6xl" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontWeight: '300'}}>
+<h2 className="reveal mx-auto mt-5 max-w-3xl text-4xl uppercase leading-none tracking-tight text-white md:text-6xl" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontWeight: '300'}}>
 <span style={{display: 'inline-block', overflow: 'hidden', verticalAlign: 'top'}}>
 <span style={{display: 'inline-block'}}>Launch </span>
 </span>

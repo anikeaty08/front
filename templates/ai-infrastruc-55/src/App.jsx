@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -116,6 +152,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -180,14 +222,14 @@ gtag('config', 'G-2M6V79H761');
 <h3>The Conversational Flywheel™</h3>
 <p>Revenue isn't a linear path. It's a momentum-driven engine.</p>
 <div className="widget-bars">
-<div className="bar" style={{-H: '0.35'}}></div>
-<div className="bar" style={{-H: '0.55'}}></div>
-<div className="bar" style={{-H: '0.8'}}></div>
-<div className="bar" style={{-H: '0.45'}}></div>
-<div className="bar" style={{-H: '0.92'}}></div>
-<div className="bar" style={{-H: '0.65'}}></div>
-<div className="bar" style={{-H: '0.75'}}></div>
-<div className="bar" style={{-H: '0.5'}}></div>
+<div className="bar" style={{'--h': '0.35'}}></div>
+<div className="bar" style={{'--h': '0.55'}}></div>
+<div className="bar" style={{'--h': '0.8'}}></div>
+<div className="bar" style={{'--h': '0.45'}}></div>
+<div className="bar" style={{'--h': '0.92'}}></div>
+<div className="bar" style={{'--h': '0.65'}}></div>
+<div className="bar" style={{'--h': '0.75'}}></div>
+<div className="bar" style={{'--h': '0.5'}}></div>
 </div>
 </div>
 <div className="bento-card w2 reveal-child">
@@ -216,11 +258,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="widget-progress">
 <div className="progress-item">
 <div className="progress-label"><span>Context Retention</span><span>78%</span></div>
-<div className="progress-track"><div className="progress-fill" style={{-W: '78%'}}></div></div>
+<div className="progress-track"><div className="progress-fill" style={{'--w': '78%'}}></div></div>
 </div>
 <div className="progress-item">
 <div className="progress-label"><span>Sentiment Alignment</span><span>92%</span></div>
-<div className="progress-track"><div className="progress-fill" style={{-W: '92%'}}></div></div>
+<div className="progress-track"><div className="progress-fill" style={{'--w': '92%'}}></div></div>
 </div>
 </div>
 </div>
@@ -345,20 +387,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="widget-progress">
 <div className="progress-item">
 <div className="progress-label"><span>Speech-to-Text Latency</span><span>120ms</span></div>
-<div className="progress-track"><div className="progress-fill" style={{-W: '12%'}}></div></div>
+<div className="progress-track"><div className="progress-fill" style={{'--w': '12%'}}></div></div>
 </div>
 <div className="progress-item">
 <div className="progress-label"><span>LLM Inference</span><span>340ms</span></div>
-<div className="progress-track"><div className="progress-fill" style={{-W: '34%'}}></div></div>
+<div className="progress-track"><div className="progress-fill" style={{'--w': '34%'}}></div></div>
 </div>
 <div className="progress-item">
 <div className="progress-label"><span>Text-to-Speech Output</span><span>210ms</span></div>
-<div className="progress-track"><div className="progress-fill" style={{-W: '21%'}}></div></div>
+<div className="progress-track"><div className="progress-fill" style={{'--w': '21%'}}></div></div>
 </div>
 </div>
 <div className="widget-logs" style={{marginTop: '24px'}}>
 <div className="log-line"><span className="log-time">00:01</span><span className="log-method get" style={{background: 'rgba(52,211,153,0.15)', color: '#34d399'}}>LEAD</span><span className="log-msg">"Yeah, I'm looking to book a session..."</span></div>
-<div className="log-line"><span className="log-time">00:01</span><span className="log-method post" style={{background: 'rgba(245,158,11,0.15)', color: 'var(--accent2)'}}>AI</span><span className="log-msg">"Perfect. Are you available this Tuesday?"</span></div>
+<div className="log-line"><span className="log-time">00:01</span><span className="log-method post" style={{background: 'rgba(245, 158, 11, 0.15)', color: 'var(--accent2)'}}>AI</span><span className="log-msg">"Perfect. Are you available this Tuesday?"</span></div>
 </div>
 </div>
 </div>

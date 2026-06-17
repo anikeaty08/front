@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -882,6 +918,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -922,7 +964,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative overflow-hidden rounded-[28px] shadow-2xl" style={{width: '148px', height: '148px'}}>
 <img alt="" className="absolute inset-0 w-full h-full object-cover" draggable="false" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/62e34734-6979-48e0-bb66-7cc664f1ec85_3840w.png"/>
-<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
+<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
 <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white text-black shrink-0">
 <iconify-icon icon="solar:play-linear" style={{strokeWidth: '1.5'}} width="12"></iconify-icon>
 </span>
@@ -934,7 +976,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative hidden md:block overflow-hidden rounded-[28px] shadow-2xl" style={{width: '148px', height: '148px'}}>
 <img alt="" className="absolute inset-0 w-full h-full object-cover" draggable="false" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fe66c237-c3d9-4488-93a1-044f5cb739ce_3840w.png"/>
-<div className="absolute inset-x-0 bottom-0 px-4 py-3 text-left" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
+<div className="absolute inset-x-0 bottom-0 px-4 py-3 text-left" style={{background: 'linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
 <span className="text-white text-base leading-tight block font-sans" style={{fontFamily: '\'Viaoda Libre\', serif'}}>
                     12 Cyber Augments
                   </span>
@@ -943,7 +985,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative hidden md:block overflow-hidden rounded-[28px] shadow-2xl" style={{width: '148px', height: '148px'}}>
 <img alt="" className="absolute inset-0 w-full h-full object-cover" draggable="false" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/409635fc-7079-4402-a64a-8381d62d1fc0_3840w.png"/>
-<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
+<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
 <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white text-black shrink-0">
 <iconify-icon icon="solar:play-linear" style={{strokeWidth: '1.5'}} width="12"></iconify-icon>
 </span>
@@ -973,7 +1015,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative overflow-hidden rounded-[28px] shadow-2xl group cursor-pointer" style={{width: '158px', height: '158px'}}>
 <img alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" draggable="false" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/813c2845-f956-4246-a91f-1e233cbddd93_320w.png"/>
-<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
+<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
 <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white text-black shrink-0">
 <iconify-icon icon="solar:play-linear" style={{strokeWidth: '1.5'}} width="12"></iconify-icon>
 </span>
@@ -985,7 +1027,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative overflow-hidden rounded-[28px] shadow-2xl group cursor-pointer" style={{width: '158px', height: '158px'}}>
 <img alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" draggable="false" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c50ffffc-037a-4668-9399-ff3f39f87824_800w.png"/>
-<div className="absolute inset-x-0 bottom-0 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
+<div className="absolute inset-x-0 bottom-0 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
 <span className="text-white text-base leading-tight block font-sans" style={{fontFamily: '\'Viaoda Libre\', serif'}}>
                     12 Cyber Augments
                   </span>
@@ -994,7 +1036,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative overflow-hidden rounded-[28px] shadow-2xl group cursor-pointer" style={{width: '158px', height: '158px'}}>
 <img alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" draggable="false" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/d5eda910-b626-4f40-a899-88837766c0d1_320w.png"/>
-<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
+<div className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 py-3" style={{background: 'linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.18) 60%, transparent 100%)', backdropFilter: 'blur(6px)'}}>
 <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white text-black shrink-0">
 <iconify-icon icon="solar:play-linear" style={{strokeWidth: '1.5'}} width="12"></iconify-icon>
 </span>
@@ -1092,7 +1134,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative z-10 flex h-full w-full overflow-hidden" id="carousel">
 
 <article aria-label="Chrono Sphere panel" className="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-white/10" data-active="false" data-index="0" style={{width: '20%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 64% 38%, rgba(255,255,255,.04), transparent 35%), linear-gradient(135deg, #09090b 0%, #18181b 45%, #000000 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 64% 38%, rgba(255, 255, 255, .04), transparent 35%), linear-gradient(135deg, #09090b 0%, #18181b 45%, #000000 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[35%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[15%] top-[10%] w-[80%] aspect-square opacity-60" style={{transform: 'rotate(-214.144deg)'}}>
@@ -1156,7 +1198,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 
 <article aria-label="Resonance Core panel" className="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-white/10" data-active="false" data-index="1" style={{width: '20%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 54% 43%, rgba(255,255,255,.05), transparent 30%), linear-gradient(135deg, #0a0a0c 0%, #1f1f22 40%, #050505 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 54% 43%, rgba(255, 255, 255, .05), transparent 30%), linear-gradient(135deg, #0a0a0c 0%, #1f1f22 40%, #050505 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[45%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[5%] top-[15%] w-[90%] aspect-square opacity-50" style={{transform: 'rotate(214.144deg)'}}>
@@ -1225,7 +1267,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 
 <article aria-label="Astral Aperture panel" className="panel group relative h-full min-w-0 flex-none overflow-hidden" data-active="false" data-index="2" style={{width: '20%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 55% 44%, rgba(255,255,255,.06), transparent 35%), linear-gradient(135deg, #111112 0%, #050506 58%, #0a0a0c 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 55% 44%, rgba(255, 255, 255, .06), transparent 35%), linear-gradient(135deg, #111112 0%, #050506 58%, #0a0a0c 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[60%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[12%] top-[15%] w-[85%] aspect-square opacity-40" style={{transform: 'rotate(-214.144deg)'}}>
@@ -1295,7 +1337,7 @@ gtag('config', 'G-2M6V79H761');
 </nav>
 </article>
 <article aria-label="Quantum Drift panel" className="panel group relative h-full min-w-0 flex-none overflow-hidden" data-active="true" data-index="2" style={{width: '40%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 55% 44%, rgba(255,255,255,.06), transparent 35%), linear-gradient(135deg, #111112 0%, #050506 58%, #0a0a0c 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 55% 44%, rgba(255, 255, 255, .06), transparent 35%), linear-gradient(135deg, #111112 0%, #050506 58%, #0a0a0c 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[60%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[12%] top-[15%] w-[85%] aspect-square opacity-40" style={{transform: 'rotate(-214.144deg)'}}>
@@ -1424,7 +1466,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative z-10 flex h-full w-full overflow-hidden" id="carousel">
 
 <article className="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-white/10" data-active="false" data-index="0" style={{width: '20%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 64% 38%, rgba(255,255,255,.04), transparent 35%), linear-gradient(135deg, #09090b 0%, #18181b 45%, #000000 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 64% 38%, rgba(255, 255, 255, .04), transparent 35%), linear-gradient(135deg, #09090b 0%, #18181b 45%, #000000 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[40%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[15%] top-[10%] w-[80%] aspect-square opacity-60">
@@ -1499,7 +1541,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 
 <article className="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-white/10" data-active="false" data-index="1" style={{width: '20%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 54% 43%, rgba(255,255,255,.05), transparent 30%), linear-gradient(135deg, #0a0a0c 0%, #1f1f22 40%, #050505 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 54% 43%, rgba(255, 255, 255, .05), transparent 30%), linear-gradient(135deg, #0a0a0c 0%, #1f1f22 40%, #050505 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[40%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[15%] top-[10%] w-[80%] aspect-square opacity-60">
@@ -1573,7 +1615,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 
 <article className="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-white/10" data-active="false" data-index="2" style={{width: '20%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 45% 55%, rgba(255,255,255,.04), transparent 40%), linear-gradient(135deg, #0d0d0f 0%, #141416 50%, #000000 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 45% 55%, rgba(255, 255, 255, .04), transparent 40%), linear-gradient(135deg, #0d0d0f 0%, #141416 50%, #000000 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[40%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[15%] top-[10%] w-[80%] aspect-square opacity-60">
@@ -1648,7 +1690,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 
 <article className="panel group relative h-full min-w-0 flex-none overflow-hidden border-r border-white/10" data-active="false" data-index="3" style={{width: '20%'}}>
-<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 35% 65%, rgba(255,255,255,.05), transparent 35%), linear-gradient(135deg, #060608 0%, #1a1a1c 60%, #020202 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(circle at 35% 65%, rgba(255, 255, 255, .05), transparent 35%), linear-gradient(135deg, #060608 0%, #1a1a1c 60%, #020202 100%)'}}></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px)', backgroundSize: '2rem 2rem'}}></div>
 <div className="pointer-events-none absolute left-[40%] top-0 z-0 h-full w-px bg-white/5"></div>
 <div aria-hidden="true" className="ring-field pointer-events-none absolute left-[15%] top-[10%] w-[80%] aspect-square opacity-60">

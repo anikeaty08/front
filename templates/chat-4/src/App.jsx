@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -208,6 +244,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -237,7 +279,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex items-center shrink-0">
-<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_2.5rem_-0.625rem_rgba(212,175,55,0.4)] focus:outline-none text-xs sm:text-sm font-medium text-white h-10 sm:h-12 rounded-full px-6 sm:px-8 relative items-center justify-center shrink-0" onclick="openModal(event)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(212,175,55, 0.4), rgba(212,175,55, 0), rgba(212,175,55, 0.4))', -BorderRadiusBefore: '9999rem'}}>
+<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_2.5rem_-0.625rem_rgba(212,175,55,0.4)] focus:outline-none text-xs sm:text-sm font-medium text-white h-10 sm:h-12 rounded-full px-6 sm:px-8 relative items-center justify-center shrink-0" onclick="openModal(event)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(212,175,55, 0.4), rgba(212,175,55, 0), rgba(212,175,55, 0.4))', '--border-radius-before': '9999rem'}}>
 <div className="absolute inset-0 -z-20 rounded-full overflow-hidden p-[0.0625rem]">
 <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#D4AF37_360deg)]" style={{animation: 'beam-spin 3s linear infinite'}}></div>
 <div className="absolute inset-[0.0625rem] rounded-full bg-[#0a0a0c]"></div>
@@ -280,7 +322,7 @@ gtag('config', 'G-2M6V79H761');
         </p>
 
 <div className="relative w-full sm:w-auto mb-6">
-<a className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_2.5rem_-0.625rem_rgba(212,175,55,0.4)] focus:outline-none w-full sm:w-auto text-base sm:text-lg font-normal text-white h-[3.375rem] sm:h-[3.75rem] rounded-full px-8 relative items-center justify-center" href="#" onclick="openModal(event)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(212,175,55, 0.4), rgba(212,175,55, 0), rgba(212,175,55, 0.4))', -BorderRadiusBefore: '9999rem'}}>
+<a className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_2.5rem_-0.625rem_rgba(212,175,55,0.4)] focus:outline-none w-full sm:w-auto text-base sm:text-lg font-normal text-white h-[3.375rem] sm:h-[3.75rem] rounded-full px-8 relative items-center justify-center" href="#" onclick="openModal(event)" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(212,175,55, 0.4), rgba(212,175,55, 0), rgba(212,175,55, 0.4))', '--border-radius-before': '9999rem'}}>
 <div className="absolute inset-0 -z-20 rounded-full overflow-hidden p-[0.0625rem]">
 <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#D4AF37_360deg)]" style={{animation: 'beam-spin 3s linear infinite'}}></div>
 <div className="absolute inset-[0.0625rem] rounded-full bg-[#0a0a0c]"></div>

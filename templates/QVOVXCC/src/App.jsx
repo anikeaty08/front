@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     /* Pointer-following gradient */
@@ -21,6 +57,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -28,7 +70,7 @@ export default function App() {
       
 
 <header className="relative w-full flex flex-col gap-12 items-center">
-<div aria-hidden="true" className="gradient-wrap"><div className="gradient" style={{-X: '14.556327488111412%', -Y: '4.170981174045139%'}}></div></div>
+<div aria-hidden="true" className="gradient-wrap"><div className="gradient" style={{'--x': '14.556327488111412%', '--y': '4.170981174045139%'}}></div></div>
 <div className="relative h-[100px] w-full flex z-10 items-center justify-center">
 <h1 aria-live="polite" className="text-white text-[92px] leading-none font-thin tracking-tight font-[Manrope] cursor transition-opacity select-none" id="typewriter" style={{opacity: '1'}}>Elevate Brands</h1>
 </div>

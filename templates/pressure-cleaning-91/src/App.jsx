@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -56,7 +98,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     Commercial, industrial, and domestic pressure cleaning. We remove the grime, graffiti, and mould that others leave behind.
                 </p>
 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-16">
-<a className="group shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all duration-300 overflow-hidden hover:bg-cyan-600 font-medium text-white bg-cyan-600 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-xl" href="tel:0466154395" style={{boxShadow: '0 18px 40px -15px rgba(8,145,178,0.4), inset 0 2px 4px rgba(255,255,255,0.2)', borderRadius: '0.6rem'}}>
+<a className="group shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all duration-300 overflow-hidden hover:bg-cyan-600 font-medium text-white bg-cyan-600 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-xl" href="tel:0466154395" style={{boxShadow: '0 18px 40px -15px rgba(8, 145, 178, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)', borderRadius: '0.6rem'}}>
 <span className="flex items-center gap-2 relative">
                             Get a Free Quote 
                             <iconify-icon className="group-hover:translate-x-0.5 transition-transform duration-300" height="16" icon="lucide:arrow-right" width="16"></iconify-icon>

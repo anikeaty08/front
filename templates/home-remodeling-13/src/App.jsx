@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -87,6 +123,12 @@ card.style.setProperty('--mouse-y', `${y}px`);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -95,7 +137,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 
 <div className="fixed top-0 w-full h-screen -z-10 opacity-90 bg-cover bg-center mix-blend-luminosity brightness-75" style={{backgroundImage: 'url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/932f9f82-c448-471c-b979-4a37ec799374_3840w.webp\')', maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}></div>
 
-<nav className="fixed z-50 w-full border-b top-0 bg-slate-950/10 border-white/5 [animation:animationIn_0.8s_ease-out_0s_both] animate-on-scroll" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
+<nav className="fixed z-50 w-full border-b top-0 bg-slate-950/10 border-white/5 [animation:animationIn_0.8s_ease-out_0s_both] animate-on-scroll" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}}>
 <div className="flex h-20 max-w-7xl mr-auto ml-auto pr-6 pl-6 items-center justify-between">
 <div className="flex cursor-pointer group items-center gap-2">
 <span className="iconify text-blue-500 w-[28px] h-[28px] group-hover:rotate-12 transition-transform duration-300" data-icon="solar:layers-minimalistic-bold-duotone"></span>

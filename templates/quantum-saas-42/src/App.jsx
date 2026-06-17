@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -88,6 +124,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -389,9 +431,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 <div className="step-visual-card">
 <div className="step-visual-icon g1"><i className="fa-solid fa-code-branch"></i></div>
 <div className="step-visual-bars">
-<div className="step-bar"><div className="step-bar-fill reveal-child g1" style={{-Fill: '90%'}}></div></div>
-<div className="step-bar"><div className="step-bar-fill reveal-child g1" style={{-Fill: '75%'}}></div></div>
-<div className="step-bar"><div className="step-bar-fill reveal-child g1" style={{-Fill: '95%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g1" style={{'--fill': '90%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g1" style={{'--fill': '75%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g1" style={{'--fill': '95%'}}></div></div>
 </div>
 </div>
 </div>
@@ -406,9 +448,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 <div className="step-visual-card">
 <div className="step-visual-icon g2"><i className="fa-solid fa-sliders"></i></div>
 <div className="step-visual-bars">
-<div className="step-bar"><div className="step-bar-fill reveal-child g2" style={{-Fill: '60%'}}></div></div>
-<div className="step-bar"><div className="step-bar-fill reveal-child g2" style={{-Fill: '85%'}}></div></div>
-<div className="step-bar"><div className="step-bar-fill reveal-child g2" style={{-Fill: '70%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g2" style={{'--fill': '60%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g2" style={{'--fill': '85%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g2" style={{'--fill': '70%'}}></div></div>
 </div>
 </div>
 </div>
@@ -423,9 +465,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 <div className="step-visual-card">
 <div className="step-visual-icon g3"><i className="fa-solid fa-rocket"></i></div>
 <div className="step-visual-bars">
-<div className="step-bar"><div className="step-bar-fill reveal-child g3" style={{-Fill: '100%'}}></div></div>
-<div className="step-bar"><div className="step-bar-fill reveal-child g3" style={{-Fill: '88%'}}></div></div>
-<div className="step-bar"><div className="step-bar-fill reveal-child g3" style={{-Fill: '95%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g3" style={{'--fill': '100%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g3" style={{'--fill': '88%'}}></div></div>
+<div className="step-bar"><div className="step-bar-fill reveal-child g3" style={{'--fill': '95%'}}></div></div>
 </div>
 </div>
 </div>

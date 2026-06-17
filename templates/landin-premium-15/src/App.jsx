@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -135,6 +171,12 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -146,7 +188,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 
 </div></div>
 
-<header className="sticky top-0 z-50" style={{backgroundColor: 'rgba(8,8,8,0.7)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
+<header className="sticky top-0 z-50" style={{backgroundColor: 'rgba(8, 8, 8, 0.7)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
 <div className="mx-auto flex items-center justify-between px-6 py-4" style={{maxWidth: '1280px'}}>
 <a className="flex items-center gap-2" href="#">
 <span className="flex h-7 w-7 items-center justify-center rounded-lg" style={{backgroundColor: '#0055FE'}}>
@@ -166,7 +208,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 <main className="mx-auto px-6" style={{maxWidth: '1280px'}}>
 
 <section className="relative flex flex-col items-center pt-28 pb-24 text-center glow">
-<div className="mb-6 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>
+<div className="mb-6 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>
 <span className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: '#0055FE'}}></span>
       Premium Creative Studio
     </div>
@@ -178,7 +220,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
     </p>
 <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
 <a className="rounded-[10px] px-6 py-3.5 text-sm font-medium transition-opacity hover:opacity-90" href="#" style={{backgroundColor: '#EFEFEC', color: '#131313'}}>Start a Project</a>
-<a className="rounded-[10px] px-6 py-3.5 text-sm font-medium transition-colors hover:bg-white/5" href="#" style={{backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff'}}>View Portfolio</a>
+<a className="rounded-[10px] px-6 py-3.5 text-sm font-medium transition-colors hover:bg-white/5" href="#" style={{backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff'}}>View Portfolio</a>
 </div>
 
 <div className="logo-mask mt-20 w-full overflow-hidden">
@@ -203,17 +245,17 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 <div className="grid gap-6 md:grid-cols-2">
 <div className="relative overflow-hidden rounded-[30px]" style={{border: '1px solid rgba(255,255,255,0.08)'}}>
 <img alt="" className="h-full w-full object-cover" src="https://framerusercontent.com/images/Nx7bt7sxDAxlLsAxW9jTN1wUsY.jpeg?scale-down-to=1024" style={{minHeight: '420px'}}/>
-<div className="absolute bottom-5 left-5 right-5 rounded-[20px] p-5" style={{backgroundColor: 'rgba(8,8,8,0.7)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="absolute bottom-5 left-5 right-5 rounded-[20px] p-5" style={{backgroundColor: 'rgba(8, 8, 8, 0.7)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="flex flex-wrap gap-2">
 <span className="rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(0,85,254,0.15)', color: '#7aa6ff'}}>60% Increased Traffic</span>
-<span className="rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>Brand Strategy</span>
+<span className="rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>Brand Strategy</span>
 </div>
 <h3 className="mt-4 text-xl font-semibold tracking-tight">Reimagining digital identities</h3>
 <p className="mt-2 text-sm leading-relaxed" style={{color: 'rgba(255,255,255,0.6)'}}>A complete brand overhaul delivering measurable growth across all channels.</p>
 </div>
 </div>
 <div className="flex flex-col justify-center rounded-[30px] p-9" style={{backgroundColor: '#131313', border: '1px solid rgba(255,255,255,0.08)'}}>
-<div className="mb-5 inline-flex w-fit items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>
+<div className="mb-5 inline-flex w-fit items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>
 <span className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: '#0055FE'}}></span>About
         </div>
 <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">Building experiences <span style={{color: 'rgba(255,255,255,0.4)'}}>that last.</span></h2>
@@ -234,7 +276,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 
 <section className="pb-24">
 <div className="mb-10 text-center">
-<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>
+<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>
 <span className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: '#0055FE'}}></span>Portfolio
       </div>
 <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Selected <span style={{color: 'rgba(255,255,255,0.4)'}}>work.</span></h2>
@@ -266,7 +308,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 
 <section className="pb-24">
 <div className="mb-10">
-<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>
+<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>
 <span className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: '#0055FE'}}></span>Services
       </div>
 <h2 className="max-w-xl text-3xl font-bold leading-tight tracking-tight md:text-4xl">Everything you need <span style={{color: 'rgba(255,255,255,0.4)'}}>in one studio.</span></h2>
@@ -324,7 +366,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 
 <section className="pb-24" id="pricing">
 <div className="mb-10 text-center">
-<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>
+<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>
 <span className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: '#0055FE'}}></span>Pricing
       </div>
 <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Simple, transparent <span style={{color: 'rgba(255,255,255,0.4)'}}>plans.</span></h2>
@@ -342,7 +384,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 <li className="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" style={{color: '#0055FE'}} width="18"></iconify-icon>Brand consultation</li>
 <li className="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" style={{color: '#0055FE'}} width="18"></iconify-icon>Email support</li>
 </ul>
-<a className="mt-8 block rounded-[10px] py-3.5 text-center text-sm font-medium transition-colors hover:bg-white/5" href="#" style={{backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff'}}>Choose Starter</a>
+<a className="mt-8 block rounded-[10px] py-3.5 text-center text-sm font-medium transition-colors hover:bg-white/5" href="#" style={{backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff'}}>Choose Starter</a>
 </div>
 <div className="relative overflow-hidden rounded-[30px] p-9 glow" style={{backgroundColor: '#131313', border: '1px solid rgba(0,85,254,0.4)'}}>
 <span className="absolute right-7 top-9 rounded-[10px] px-3 py-1 text-xs font-medium" style={{backgroundColor: '#0055FE', color: '#fff'}}>Popular</span>
@@ -365,7 +407,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 
 <section className="pb-24">
 <div className="mb-10 text-center">
-<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>
+<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>
 <span className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: '#0055FE'}}></span>Testimonials
       </div>
 <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Loved by <span style={{color: 'rgba(255,255,255,0.4)'}}>our clients.</span></h2>
@@ -397,7 +439,7 @@ document.querySelectorAll('.faq-item button').forEach(btn => {
 
 <section className="pb-24" id="faq">
 <div className="mb-10 text-center">
-<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)'}}>
+<div className="mb-4 inline-flex items-center gap-2 rounded-[10px] px-3 py-1.5 text-xs font-medium" style={{backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255,255,255,0.7)'}}>
 <span className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: '#0055FE'}}></span>FAQ
       </div>
 <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Frequently asked <span style={{color: 'rgba(255,255,255,0.4)'}}>questions.</span></h2>

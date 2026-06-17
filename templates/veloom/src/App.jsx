@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -120,7 +162,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="pointer-events-none opacity-[0.08] absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '12px 100%'}}></div>
 <div className="bg-gradient-to-b from-transparent via-black/10 to-black/30 absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="flex flex-col cursor-pointer bg-center z-10 h-full bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/7f9f798d-5ff1-4d9e-9f40-e86c314351e1_1600w.png)] bg-cover pt-6 pr-6 pb-6 pl-6 relative justify-end" onclick="window.location.href='/auron'" role="button">
-<div className="bg-clip-text font-medium text-transparent tracking-tight font-poppins bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-orange-400 via-orange-600 to-orange-400 max-w-min ring-8 absolute top-5" style={{fontFamily: 'Manrope, ui-sans-serif, system-ui', fontWeight: '500', fontSize: 'clamp(22px,3vw,28px)', lineHeight: '1.2', maskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)'}}>
+<div className="bg-clip-text font-medium text-transparent tracking-tight font-poppins bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-orange-400 via-orange-600 to-orange-400 max-w-min ring-8 absolute top-5" style={{fontFamily: 'Manrope, ui-sans-serif, system-ui', fontWeight: '500', fontSize: 'clamp(22px, 3vw, 28px)', lineHeight: '1.2', maskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)'}}>
                 Auron
               </div>
 
@@ -147,7 +189,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '12px 100%'}}></div>
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30"></div>
 <div className="flex flex-col bg-center cursor-pointer h-full bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/e2d8fb54-baa5-4a82-be45-8f649c63d181_3840w.jpg)] bg-cover z-10 pt-6 pr-6 pb-6 pl-6 relative justify-end" onclick="window.location.href='/era'" role="button">
-<div className="bg-clip-text font-medium text-transparent tracking-tight font-poppins bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-violet-400 via-violet-600 to-violet-400 max-w-fit absolute top-5" style={{fontFamily: 'Manrope, ui-sans-serif, system-ui', fontWeight: '500', fontSize: 'clamp(22px,3vw,28px)', lineHeight: '1.2', maskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)'}}>
+<div className="bg-clip-text font-medium text-transparent tracking-tight font-poppins bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-violet-400 via-violet-600 to-violet-400 max-w-fit absolute top-5" style={{fontFamily: 'Manrope, ui-sans-serif, system-ui', fontWeight: '500', fontSize: 'clamp(22px, 3vw, 28px)', lineHeight: '1.2', maskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)'}}>
                 ERA
               </div>
 <p className="transition-all duration-500 group-hover/panel:opacity-100 group-hover/panel:translate-y-0 aria-[expanded=true]:opacity-100 aria-[expanded=true]:translate-y-0 font-medium text-white/80 tracking-tight font-poppins opacity-0 mt-2 translate-y-1" style={{fontFamily: 'Nunito, ui-sans-serif, system-ui', fontSize: '14.5px'}}>
@@ -173,7 +215,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '12px 100%'}}></div>
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30"></div>
 <div className="flex flex-col bg-center cursor-pointer z-10 h-full bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/91c837d9-74da-41cc-b070-2bbb004ed526_1600w.jpg)] bg-cover pt-6 pr-6 pb-6 pl-6 relative justify-end" onclick="window.location.href='/syster';window.location.href='/syster';window.location.href='/syster';window.location.href='/syster';window.location.href='/syster';window.location.href='/syster';window.location.href='/syster';window.location.href='/syster';window.location.href='/syster'" role="button">
-<div className="bg-clip-text font-medium text-transparent tracking-tight font-poppins bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-lime-400 via-lime-600 to-lime-400 max-w-min absolute top-5" style={{fontFamily: 'Manrope, ui-sans-serif, system-ui', fontWeight: '500', fontSize: 'clamp(22px,3vw,28px)', lineHeight: '1.2', maskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)'}}>
+<div className="bg-clip-text font-medium text-transparent tracking-tight font-poppins bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-lime-400 via-lime-600 to-lime-400 max-w-min absolute top-5" style={{fontFamily: 'Manrope, ui-sans-serif, system-ui', fontWeight: '500', fontSize: 'clamp(22px, 3vw, 28px)', lineHeight: '1.2', maskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 50%, black 100%, transparent)'}}>
                 Syster
               </div>
 <p className="transition-all duration-500 group-hover/panel:opacity-100 group-hover/panel:translate-y-0 aria-[expanded=true]:opacity-100 aria-[expanded=true]:translate-y-0 font-medium text-white/80 tracking-tight font-poppins opacity-0 mt-2 translate-y-1" style={{fontFamily: 'Nunito, ui-sans-serif, system-ui', fontSize: '14.5px'}}>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -37,6 +73,12 @@ observer.observe(hero);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -49,7 +91,7 @@ observer.observe(hero);
 
 <a aria-label="Near Far home" className="flex items-center gap-3" href="#hero">
 <div className="flex flex-col leading-tight">
-<span className="text-sm sm:text-base font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<span className="text-sm sm:text-base font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                 Near
                 <span className="text-[0.65rem] align-middle text-slate-400">
                   //
@@ -131,10 +173,10 @@ observer.observe(hero);
 <span className="inline-flex h-1.5 w-1.5 rounded-full bg-amber-300"></span>
                 Still in pre-launch · RV literally still in the driveway
               </p>
-<h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\',serif'}}>
+<h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\', serif'}}>
                 Small towns. Big stories.
               </h1>
-<p className="text-sm sm:text-base lg:text-lg text-slate-200" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base lg:text-lg text-slate-200" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                 Near // Far is a long-term RV road trip and storytelling project
                 chasing the festivals, diners, and locals that keep small-town
                 America interesting — starting soon, and open for you to follow
@@ -180,10 +222,10 @@ observer.observe(hero);
 <div className="mx-auto max-w-6xl px-4 lg:px-6 py-12 sm:py-16 lg:py-20">
 <div className="flex flex-col gap-4 sm:gap-6 sm:flex-row sm:items-end sm:justify-between">
 <div className="space-y-2 sm:space-y-3 max-w-xl">
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\', serif'}}>
                   Follow the first leg of the journey
                 </h2>
-<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                   From the desert edge of Arizona across small towns, county
                   fairs, and riverside camps — the first months are mapped, just
                   waiting on a turn of the key.
@@ -380,10 +422,10 @@ observer.observe(hero);
 <div className="mx-auto max-w-6xl px-4 lg:px-6 py-12 sm:py-16 lg:py-20">
 <div className="flex flex-col gap-4 sm:gap-6 sm:flex-row sm:items-end sm:justify-between">
 <div className="space-y-2 sm:space-y-3 max-w-xl">
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\', serif'}}>
                   Stories from the road (not yet, promise)
                 </h2>
-<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                   The plan: slow stories from small places — parades, quiet side
                   streets, night shifts at all-night diners, and the people who
                   know them best. The first pieces will publish shortly after
@@ -461,16 +503,16 @@ observer.observe(hero);
 <div className="mx-auto max-w-6xl px-4 lg:px-6 py-12 sm:py-16 lg:py-20">
 <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center">
 <div className="space-y-4 sm:space-y-5">
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\', serif'}}>
                   What is Near // Far?
                 </h2>
-<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                   Near // Far is a slow, long-haul road project: living out of
                   an RV, driving into small towns you might only see on exit
                   signs, and telling the stories you almost never see in big
                   travel guides.
                 </p>
-<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                   Think: field notes, quiet portraits, festival weekends, and
                   route tools you can steal for your own trip. Right now
                   everything is in “before” mode — gear packed, route sketched,
@@ -497,10 +539,10 @@ observer.observe(hero);
 <div className="mx-auto max-w-6xl px-4 lg:px-6 py-12 sm:py-16 lg:py-20">
 <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-start">
 <div className="space-y-4 sm:space-y-5">
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\', serif'}}>
                   See the route &amp; hidden gems
                 </h2>
-<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                   The first months are mapped from Arizona across the Southwest
                   and toward the Gulf. Anchor events, tiny towns, and the “we’ll
                   see when we get there” gaps are all in the plan.
@@ -617,10 +659,10 @@ observer.observe(hero);
 <div className="mx-auto max-w-6xl px-4 lg:px-6 py-12 sm:py-16 lg:py-20">
 <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 <div className="space-y-2">
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\', serif'}}>
                   Free tools we’re using to prep
                 </h2>
-<p className="text-sm sm:text-base text-slate-300 max-w-xl" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base text-slate-300 max-w-xl" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                   Simple checklists and planners built for this trip — but easy
                   to steal for your own RV run, road trip, or long weekend.
                 </p>
@@ -718,10 +760,10 @@ observer.observe(hero);
 <div className="mx-auto max-w-6xl px-4 lg:px-6 py-12 sm:py-16 lg:py-20">
 <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
 <div className="space-y-4 sm:space-y-5">
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'PT Serif\', serif'}}>
                   Know a hidden gem on this path?
                 </h2>
-<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-sm sm:text-base text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                   A festival the internet barely mentions. A counter stool that
                   hasn’t moved in 30 years. A highway exit that deserves a
                   detour. Share it, and we might show up with cameras and
@@ -790,7 +832,7 @@ observer.observe(hero);
 <div className="space-y-4">
 <a aria-label="Near Far home" className="flex items-center gap-3" href="#hero">
 <div className="flex flex-col leading-tight">
-<span className="text-sm sm:text-base font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<span className="text-sm sm:text-base font-semibold tracking-tight text-slate-50" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                     Near
                     <span className="text-[0.65rem] align-middle text-slate-400">
                       //
@@ -802,7 +844,7 @@ observer.observe(hero);
                   </span>
 </div>
 </a>
-<p className="text-xs sm:text-sm text-slate-300 max-w-sm" style={{fontFamily: '\'Inter\',system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif'}}>
+<p className="text-xs sm:text-sm text-slate-300 max-w-sm" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
                 A roaming field notebook for small-town America — built out of
                 an RV, a few cameras, too much coffee, and the hope that slow
                 stories still matter.

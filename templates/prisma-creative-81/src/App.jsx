@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -109,7 +145,7 @@ gtag('config', 'G-2M6V79H761');
                         const end = i / chars.length + 0.05;
                         const opacity = useTransform(scrollYProgress, [Math.max(0, start), Math.min(1, end)], [0.2, 1]);
                         return (
-                            <motion.span key={i} style={{ opacity }} className="whitespace-pre">
+                            <motion.span key={i} style={{opacity}} className="whitespace-pre">
                                 {char}
                             </motion.span>
                         );
@@ -155,7 +191,7 @@ gtag('config', 'G-2M6V79H761');
                                     href="#" 
                                     key={link} 
                                     className="text-[10px] sm:text-xs md:text-sm font-light tracking-wide transition-colors duration-300" 
-                                    style={{ color: 'rgba(225,224,204,0.8)' }} 
+                                    style={{color: 'rgba(225,224,204,0.8)'}} 
                                     onMouseEnter={e => e.currentTarget.style.color = '#E1E0CC'} 
                                     onMouseLeave={e => e.currentTarget.style.color = 'rgba(225,224,204,0.8)'}
                                 >
@@ -171,7 +207,7 @@ gtag('config', 'G-2M6V79H761');
                                         text="Prisma" 
                                         showAsterisk 
                                         className="text-[26vw] sm:text-[24vw] md:text-[22vw] lg:text-[20vw] xl:text-[19vw] 2xl:text-[20vw] font-normal leading-[0.85] tracking-[-0.07em]" 
-                                        style={{ color: '#E1E0CC' }}
+                                        style={{color: '#E1E0CC'}}
                                     />
                                 </div>
                                 <div className="md:col-span-4 flex flex-col items-start gap-5 md:gap-6 md:pb-4 lg:pb-6">
@@ -180,7 +216,7 @@ gtag('config', 'G-2M6V79H761');
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                                         className="text-primary/70 text-xs sm:text-sm md:text-base font-light tracking-wide max-w-sm"
-                                        style={{ lineHeight: 1.2 }}
+                                        style={{lineHeight: 1.2}}
                                     >
                                         Prisma is a worldwide network of visual artists, filmmakers and storytellers bound not by place, status or labels but by passion and hunger to unlock potential through our unique perspectives.
                                     </motion.p>
@@ -363,6 +399,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

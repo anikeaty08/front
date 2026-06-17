@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -39,6 +75,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -60,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="fixed flex w-full z-50 pt-6 pr-4 pl-4 top-0 left-0 justify-center">
-<nav className="shadow-black/50 flex md:gap-12 md:w-auto bg-black/60 w-full max-w-7xl rounded-full pt-2 pr-2 pb-2 pl-6 shadow-2xl backdrop-blur-xl gap-x-8 gap-y-8 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<nav className="shadow-black/50 flex md:gap-12 md:w-auto bg-black/60 w-full max-w-7xl rounded-full pt-2 pr-2 pb-2 pl-6 shadow-2xl backdrop-blur-xl gap-x-8 gap-y-8 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
 <div className="flex items-center gap-2 shrink-0">
 <span className="text-base font-medium tracking-tight text-white font-sans">Nexus Federal</span>
 </div>
@@ -124,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="text-center max-w-5xl z-10 mt-24 mr-auto mb-24 ml-auto pr-6 pl-6 relative">
 
-<div className="[animation:fadeSlideIn_1s_ease-out_0.8s_both] animate-on-scroll inline-flex transition-transform hover:scale-105 cursor-pointer group animate bg-gradient-to-br from-white/10 to-white/0 rounded-full mb-10 pt-1.5 pr-3 pb-1.5 pl-3 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<div className="[animation:fadeSlideIn_1s_ease-out_0.8s_both] animate-on-scroll inline-flex transition-transform hover:scale-105 cursor-pointer group animate bg-gradient-to-br from-white/10 to-white/0 rounded-full mb-10 pt-1.5 pr-3 pb-1.5 pl-3 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <span className="flex h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)] group-hover:animate-pulse"></span>
 <span className="text-xs font-medium text-blue-100/80 tracking-wide group-hover:text-white transition-colors font-sans">Trusted Partner for Federal Digital Transformation</span>
 </div>
@@ -300,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <section className="z-20 w-full max-w-7xl mt-24 mr-auto mb-24 ml-auto pt-10 pr-2 pb-32 pl-2 relative">
 
-<div className="group overflow-hidden bg-gradient-to-br from-white/10 to-white/0 z-10 rounded-[2.5rem] mb-6 relative backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group overflow-hidden bg-gradient-to-br from-white/10 to-white/0 z-10 rounded-[2.5rem] mb-6 relative backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 
 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent opacity-40 pointer-events-none"></div>
 <div className="grid lg:grid-cols-2 gap-0 gap-x-0 gap-y-0">
@@ -362,19 +404,19 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="absolute inset-0 p-8 flex flex-col justify-center">
 <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-6">Active Contracts</h3>
 <div className="space-y-3 mb-8">
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <p className="text-white font-medium text-sm mb-1">GSA Schedule 70</p>
 <p className="text-xs text-gray-500">Information Technology</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <p className="text-white font-medium text-sm mb-1">CIO-SP3</p>
 <p className="text-xs text-gray-500">Enterprise IT Solutions</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <p className="text-white font-medium text-sm mb-1">SEWP V</p>
 <p className="text-xs text-gray-500">Technology Products</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <p className="text-white font-medium text-sm mb-1">8(a) STARS III</p>
 <p className="text-xs text-gray-500">Small Business Solutions</p>
 </div>
@@ -391,7 +433,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div className="group overflow-hidden bg-gradient-to-br from-white/10 to-white/0 z-10 rounded-[2.5rem] relative backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group overflow-hidden bg-gradient-to-br from-white/10 to-white/0 z-10 rounded-[2.5rem] relative backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-tr from-green-500/10 via-transparent to-transparent opacity-40 pointer-events-none"></div>
 <div className="grid lg:grid-cols-2 gap-0">
 
@@ -399,15 +441,15 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="absolute inset-0 p-8 flex flex-col justify-center">
 <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-6">Solutions Portfolio</h3>
 <div className="space-y-3 mb-8">
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <p className="text-white font-medium text-sm mb-1">Precision Agriculture Systems</p>
 <p className="text-xs text-gray-500">IoT sensor networks for monitoring</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <p className="text-white font-medium text-sm mb-1">Oil &amp; Gas Infrastructure</p>
 <p className="text-xs text-gray-500">SCADA systems for pipelines</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-xl p-4 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <p className="text-white font-medium text-sm mb-1">Environmental Monitoring</p>
 <p className="text-xs text-gray-500">Real-time EPA compliance</p>
 </div>
@@ -466,19 +508,19 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="lg:col-span-4 flex order-1 lg:order-2 lg:py-0 pt-12 pb-12 relative justify-center">
 <div className="grid grid-cols-2 gap-6 w-full max-w-md">
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-4xl font-bold text-white mb-2 font-sans">$127M</p>
 <p className="text-xs text-gray-400 uppercase tracking-wider">Contract Value</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-4xl font-bold text-white mb-2 font-sans">100%</p>
 <p className="text-xs text-gray-400 uppercase tracking-wider">On-Time Delivery</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-4xl font-bold text-white mb-2 font-sans">47</p>
 <p className="text-xs text-gray-400 uppercase tracking-wider">Contracts Completed</p>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl p-6 backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-4xl font-bold text-white mb-2 font-sans">12</p>
 <p className="text-xs text-gray-400 uppercase tracking-wider">Agency Partners</p>
 </div>
@@ -486,7 +528,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="lg:col-span-4 flex flex-col gap-5 lg:items-end order-3 justify-center relative z-10">
-<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-2xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-2xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 <h4 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-4">Technical Excellence</h4>
 <div className="space-y-4">
 <div className="flex items-center justify-between">
@@ -529,7 +571,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="grid grid-cols-1 lg:grid-cols-12 mb-12 pt-4 pr-4 pb-4 pl-4 gap-x-6 gap-y-6">
 
 <div className="lg:col-span-7 flex flex-col gap-6">
-<div className="group hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-bl from-blue-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="relative z-10">
 <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
@@ -556,7 +598,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 gap-x-6 gap-y-6">
-<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="relative z-10">
 <svg className="text-zinc-700 mb-4" fill="none" height="32" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
 <p className="text-sm text-gray-300 font-sans leading-relaxed mb-6">
@@ -598,7 +640,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="lg:col-span-5 flex flex-col gap-6">
-<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="relative z-10">
 <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/20">
 <svg className="text-blue-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
@@ -620,7 +662,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="relative z-10">
 <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center mb-6 border border-green-500/20">
 <svg className="text-green-400" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline><polyline points="7.5 19.79 7.5 14.6 3 12"></polyline><polyline points="21 12 16.5 14.6 16.5 19.79"></polyline><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" x2="12" y1="22.08" y2="12"></line></svg>

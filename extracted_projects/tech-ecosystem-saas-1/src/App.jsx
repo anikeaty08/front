@@ -147,7 +147,7 @@ export default function App() {
         {/* Main */}
         <main className="flex w-full flex-1 flex-col gap-14">
           {/* Hero */}
-          <section className="overflow-hidden rounded-2xl p-10 mob:p-6" style={{ backgroundImage: "url('https://cdn.astanahub.com/static/img_v2/home-bg.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}>
+          <section className="overflow-hidden rounded-2xl p-10 mob:p-6" style={{backgroundImage: "url('https://cdn.astanahub.com/static/img_v2/home-bg.jpg')", backgroundSize: "cover", backgroundPosition: "center"}}>
             <div className="flex flex-col gap-10">
               <div className="mx-auto flex flex-col items-center gap-5 text-center">
                 <h1 className="text-5xl font-bold tracking-[-1.9px] text-white md:text-6xl">Join the Unicorn Game</h1>
@@ -180,7 +180,7 @@ export default function App() {
 
           {/* E-lab banner + cookies */}
           <section className="relative">
-            <div className="flex items-center justify-between overflow-hidden rounded-2xl px-8 py-7" style={{ background: "linear-gradient(100deg,#0b3550,#1273a8 55%,#23a7c9)" }}>
+            <div className="flex items-center justify-between overflow-hidden rounded-2xl px-8 py-7" style={{background: "linear-gradient(100deg,#0b3550,#1273a8 55%,#23a7c9)"}}>
               <div className="text-lg font-semibold text-white">E-lab — инфраструктура для тестирования и разработки ваших продуктов</div>
               <span className="hidden text-white/70 md:block"><Ic n="solar:test-tube-linear" s={44} /></span>
             </div>
@@ -202,7 +202,7 @@ export default function App() {
                     <span className="rounded-full bg-[rgba(22,175,56,0.08)] px-2.5 py-1 text-xs font-medium text-[#16AF38]">Идёт прием заявок</span>
                     <CardIcons />
                   </div>
-                  <div className="flex h-[150px] items-center justify-center rounded-lg text-lg font-bold tracking-widest text-white/90" style={{ background: p.g }}>{p.logo}</div>
+                  <div className="flex h-[150px] items-center justify-center rounded-lg text-lg font-bold tracking-widest text-white/90" style={{background: p.g}}>{p.logo}</div>
                   <h3 className="text-base font-semibold">{p.t}</h3>
                   <p className="line-clamp-3 text-sm text-[#777]">{p.d}</p>
                 </article>
@@ -214,14 +214,14 @@ export default function App() {
           {/* News */}
           <section>
             <H2 t="Последние новости" />
-            <article className="relative flex min-h-[320px] flex-col justify-end overflow-hidden rounded-2xl p-8" style={{ background: "linear-gradient(120deg,#1c1033,#3a1a6e 60%,#9555e1)" }}>
+            <article className="relative flex min-h-[320px] flex-col justify-end overflow-hidden rounded-2xl p-8" style={{background: "linear-gradient(120deg,#1c1033,#3a1a6e 60%,#9555e1)"}}>
               <span className="absolute right-8 top-8 text-white/30"><Ic n="solar:smartphone-linear" s={120} /></span>
               <div className="text-sm text-white/70">11 Июн, 09:00 · Новости</div>
               <h3 className="mt-2 max-w-[640px] text-3xl font-bold text-white">IT Quest: стартовал городской технологический квест для школьников и студентов</h3>
             </article>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               {NEWS_SMALL.map((n) => (
-                <article key={n.t} className="relative flex min-h-[200px] flex-col justify-end overflow-hidden rounded-2xl p-6" style={{ background: n.g }}>
+                <article key={n.t} className="relative flex min-h-[200px] flex-col justify-end overflow-hidden rounded-2xl p-6" style={{background: n.g}}>
                   <div className="text-xs text-white/70">{n.m}</div>
                   <h3 className="mt-2 text-lg font-bold text-white">{n.t}</h3>
                 </article>
@@ -240,7 +240,7 @@ export default function App() {
                     <span className="flex items-center gap-1.5"><Ic n="solar:calendar-linear" s={14} /> {e.d} <span className="rounded-full bg-[#f3f3f3] px-2 py-0.5">{e.p}</span></span>
                     <CardIcons />
                   </div>
-                  <div className="h-[140px] rounded-lg" style={{ background: e.g }} />
+                  <div className="h-[140px] rounded-lg" style={{background: e.g}} />
                   <h3 className="text-base font-semibold">{e.t}</h3>
                   <p className="line-clamp-2 text-sm text-[#777]">{e.desc}</p>
                 </article>
@@ -263,7 +263,7 @@ export default function App() {
             <div className="mt-6 flex flex-col gap-5">
               {POSTS.map((p) => (
                 <article key={p.t} className="card flex flex-col gap-4 p-4 md:flex-row">
-                  <div className="h-[160px] w-full shrink-0 rounded-lg md:w-[340px]" style={{ background: p.g }} />
+                  <div className="h-[160px] w-full shrink-0 rounded-lg md:w-[340px]" style={{background: p.g}} />
                   <div className="flex flex-1 flex-col gap-2">
                     <div className="flex items-start justify-between">
                       <span className="rounded-full bg-[rgba(22,175,56,0.08)] px-2.5 py-1 text-xs font-medium text-[#16AF38]">{p.tag}</span>
@@ -288,7 +288,7 @@ export default function App() {
           </section>
 
           {/* CTA */}
-          <section className="relative overflow-hidden rounded-2xl p-10" style={{ background: "linear-gradient(110deg,#04130a,#0c3a1f 55%,#13522c)" }}>
+          <section className="relative overflow-hidden rounded-2xl p-10" style={{background: "linear-gradient(110deg,#04130a,#0c3a1f 55%,#13522c)"}}>
             <div className="relative z-10 max-w-[520px]">
               <h2 className="text-3xl font-bold text-white md:text-4xl">Развивайте нетворкинг вместе с Astana Hub</h2>
               <a href="#" className="btn-green mt-6 inline-block">Присоединиться</a>

@@ -106,7 +106,43 @@ const DrawingCanvas = ({ pendulums, isPlaying, globalSpeed, trailLength, clearTr
   });
 
   // Sync props to mutable ref
-  useEffect(() => { stateRef.current.pendulums = pendulums; }, [pendulums]);
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {} stateRef.current.pendulums = pendulums; }, [pendulums]);
   useEffect(() => { stateRef.current.globalSpeed = globalSpeed; }, [globalSpeed]);
   useEffect(() => { stateRef.current.trailLength = trailLength; }, [trailLength]);
   useEffect(() => { stateRef.current.showArms = showArms; }, [showArms]);

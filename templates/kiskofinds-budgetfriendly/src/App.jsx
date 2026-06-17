@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -181,6 +217,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -214,15 +256,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="flex items-center gap-2">
 <a className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white hover:bg-white/10 transition font-geist" href="#visit" style={{}}>
-<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
             Get Directions
           </a>
 <a className="inline-flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-semibold text-zinc-950 hover:bg-zinc-100 transition font-geist" href="#reserve" style={{}}>
-<iconify-icon icon="solar:calendar-add-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:calendar-add-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
             Reserve
           </a>
 <button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 p-2 hover:bg-white/10 transition" id="menuBtn">
-<iconify-icon icon="solar:hamburger-menu-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:hamburger-menu-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 </div>
 </div>
@@ -238,11 +280,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="rounded-xl px-3 py-2 hover:bg-white/5 transition font-geist" href="#visit" style={{}}>Visit</a>
 <div className="flex gap-2 pt-2">
 <a className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white hover:bg-white/10 transition font-geist" href="#visit" style={{}}>
-<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
               Directions
             </a>
 <a className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-semibold text-zinc-950 hover:bg-zinc-100 transition font-geist" href="#reserve" style={{}}>
-<iconify-icon icon="solar:calendar-add-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:calendar-add-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
               Reserve
             </a>
 </div>
@@ -268,18 +310,18 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <div className="mt-6 flex flex-col sm:flex-row gap-3">
 <a className="inline-flex items-center justify-center gap-2 hover:bg-zinc-100 transition text-sm font-semibold text-zinc-950 font-geist bg-white rounded-2xl pt-3 pr-5 pb-3 pl-5" href="#menu">
-<iconify-icon icon="solar:plate-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:plate-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Explore Menu
               </a>
 <a className="inline-flex items-center justify-center gap-2 hover:bg-white/10 transition text-sm font-semibold text-white font-geist bg-white/5 border-white/10 border rounded-2xl pt-3 pr-5 pb-3 pl-5" href="#gallery">
-<iconify-icon icon="solar:gallery-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:gallery-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 See the Ambience
               </a>
 </div>
 <div className="mt-8 grid grid-cols-3 gap-3 max-w-xl" data-tilt-group="" style={{perspective: '1200px'}}>
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-sm shadow-black/30" data-tilt="" style={{willChange: 'transform', transformStyle: 'preserve-3d', transition: 'transform 350ms'}}>
 <div className="flex items-center gap-2 text-xs text-zinc-200/80 font-geist" style={{}}>
-<iconify-icon icon="solar:stars-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:stars-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Signature
                 </div>
 <div className="mt-2 text-sm font-semibold tracking-tight font-geist" style={{}}>Aesthetic seating</div>
@@ -287,7 +329,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-sm shadow-black/30" data-tilt="" style={{willChange: 'transform', transformStyle: 'preserve-3d', transition: 'transform 350ms'}}>
 <div className="flex items-center gap-2 text-xs text-zinc-200/80 font-geist" style={{}}>
-<iconify-icon icon="solar:pizza-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:pizza-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Food
                 </div>
 <div className="mt-2 text-sm font-semibold tracking-tight font-geist" style={{}}>All types of pizza</div>
@@ -295,7 +337,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-sm shadow-black/30" data-tilt="" style={{willChange: 'transform', transformStyle: 'preserve-3d', transition: 'transform 350ms'}}>
 <div className="flex items-center gap-2 text-xs text-zinc-200/80 font-geist" style={{}}>
-<iconify-icon icon="solar:cup-hot-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:cup-hot-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Drinks
                 </div>
 <div className="mt-2 text-sm font-semibold tracking-tight font-geist" style={{}}>Mojitos &amp; cocktails</div>
@@ -317,7 +359,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-xs text-zinc-200/70 font-geist" style={{}}>Today’s vibe</div>
 <div className="text-sm font-semibold tracking-tight font-geist" style={{}}>Golden hour seating</div>
 </div>
-<iconify-icon icon="solar:sun-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:sun-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="rounded-2xl border border-white/10 bg-zinc-950/40 backdrop-blur px-4 py-3">
@@ -326,7 +368,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-xs text-zinc-200/70 font-geist" style={{}}>Popular</div>
 <div className="text-sm font-semibold tracking-tight font-geist" style={{}}>Fresh mojitos</div>
 </div>
-<iconify-icon icon="solar:glass-water-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:glass-water-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -340,15 +382,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-zinc-200/70">
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:camera-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:camera-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Photo-ready corners
               </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:leaf-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:leaf-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Calm &amp; aesthetic
               </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:clock-circle-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:clock-circle-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Open late (edit hours)
               </span>
 </div>
@@ -369,7 +411,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 </div>
 <a className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold hover:bg-white/10 transition font-geist" href="#reserve" style={{}}>
-<iconify-icon icon="solar:phone-rounded-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:phone-rounded-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
             Call / Reserve
           </a>
 </div>
@@ -379,7 +421,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="bg-center lg:text-stone-50 bg-slate-50 bg-[url(https://images.unsplash.com/photo-1696422132479-d068aad1af90?w=800&amp;q=80)] bg-cover absolute top-0 right-0 bottom-0 left-0" style={{}}></div>
 <div className="absolute bottom-0 p-5">
 <div className="flex gap-2 text-xs text-zinc-200/75 font-geist gap-x-2 gap-y-2 items-center">
-<iconify-icon icon="solar:sofa-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:sofa-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Seating
               </div>
 <div className="mt-2 text-lg font-semibold tracking-tight font-geist" style={{}}>Comfort-first corners</div>
@@ -391,7 +433,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="bg-gradient-to-t from-zinc-950/75 via-zinc-950/5 to-transparent absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="absolute bottom-0 p-5">
 <div className="flex items-center gap-2 text-xs text-zinc-200/75 font-geist" style={{}}>
-<iconify-icon icon="solar:buildings-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:buildings-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 View
               </div>
 <div className="mt-2 text-lg font-semibold tracking-tight font-geist" style={{}}>Beautiful outlook</div>
@@ -403,7 +445,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/75 via-zinc-950/5 to-transparent"></div>
 <div className="pt-5 pr-5 pb-5 pl-5 absolute bottom-0">
 <div className="flex items-center gap-2 text-xs text-zinc-200/75 font-geist" style={{}}>
-<iconify-icon icon="solar:chef-hat-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:chef-hat-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Craft
               </div>
 <div className="mt-2 text-lg font-semibold tracking-tight font-geist" style={{}}>Freshly made</div>
@@ -429,19 +471,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex flex-wrap gap-2">
 <button className="filterBtn inline-flex items-center gap-2 rounded-full bg-white text-zinc-950 px-4 py-2 text-xs font-semibold transition font-geist" data-filter="all" style={{}}>
-<iconify-icon icon="solar:menu-dots-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:menu-dots-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   All
                 </button>
 <button className="filterBtn inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold hover:bg-white/10 transition font-geist" data-filter="pizza" style={{}}>
-<iconify-icon icon="solar:pizza-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:pizza-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Pizza
                 </button>
 <button className="filterBtn inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold hover:bg-white/10 transition font-geist" data-filter="burgers" style={{}}>
-<iconify-icon icon="solar:hamburger-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:hamburger-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Burgers
                 </button>
 <button className="filterBtn inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold hover:bg-white/10 transition font-geist" data-filter="drinks" style={{}}>
-<iconify-icon icon="solar:glass-water-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:glass-water-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Drinks
                 </button>
 </div>
@@ -459,11 +501,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-200/70">
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:fire-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:fire-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Oven-baked
                     </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:leaf-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:leaf-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Veg
                     </span>
 </div>
@@ -481,11 +523,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-200/70">
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:stars-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:stars-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       House favorite
                     </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:chef-hat-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:chef-hat-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Fresh prep
                     </span>
 </div>
@@ -503,11 +545,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-200/70">
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:fork-knife-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:fork-knife-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Bestseller
                     </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:fire-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:fire-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Sizzling
                     </span>
 </div>
@@ -525,11 +567,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-200/70">
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:shield-check-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:shield-check-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Quality
                     </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:heart-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:heart-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Crowd-pleaser
                     </span>
 </div>
@@ -547,11 +589,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-200/70">
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:snowflake-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:snowflake-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Cold
                     </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:dropper-2-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:dropper-2-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Fresh
                     </span>
 </div>
@@ -569,11 +611,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex items-center gap-2 text-xs text-zinc-200/70">
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:star-shine-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-shine-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Premium
                     </span>
 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-geist" style={{}}>
-<iconify-icon icon="solar:glass-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:glass-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Crafted
                     </span>
 </div>
@@ -588,7 +630,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm text-zinc-200/70 font-geist mt-1">Tell us your toppings, spice level, and drink sweetness.</div>
 </div>
 <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/10 bg-white/5">
-<iconify-icon icon="solar:settings-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:settings-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -599,7 +641,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm text-zinc-200/70 font-geist mt-1">Friends, dates, birthdays — reserve your spot.</div>
 </div>
 <div className="grid place-items-center bg-white/5 w-10 h-10 border-white/10 border rounded-2xl">
-<iconify-icon icon="solar:users-group-two-rounded-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:users-group-two-rounded-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -609,7 +651,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-zinc-950">
-<iconify-icon icon="solar:delivery-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:delivery-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <div className="">
 <div className="text-sm font-semibold tracking-tight font-geist cursor-pointer" onclick="window.location.href='/bandlaguda ghouse nagar'" role="button">Want to place an order?</div>
@@ -618,11 +660,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex gap-2">
 <a className="inline-flex items-center justify-center gap-2 hover:bg-zinc-100 transition text-sm font-semibold text-zinc-950 font-geist bg-white rounded-2xl pt-3 pr-5 pb-3 pl-5" href="/+91 63037 20881">
-<iconify-icon className="" icon="solar:chat-round-line-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="" icon="solar:chat-round-line-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   WhatsApp Order
                 </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition font-geist" href="#visit" style={{}}>
-<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Find Us
                 </a>
 </div>
@@ -644,7 +686,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 </div>
 <div className="flex items-center gap-2 text-xs text-zinc-200/70 font-geist" style={{}}>
-<iconify-icon icon="solar:info-circle-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:info-circle-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
             Replace images with your real cafe photos anytime.
           </div>
 </div>
@@ -687,7 +729,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </p>
 </div>
 <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-zinc-950/30 px-4 py-3 text-xs text-zinc-200/80">
-<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="font-semibold text-white font-geist" style={{}}>4.8</span>
 <span className="text-zinc-200/70 font-geist" style={{}}>avg rating</span>
 </div>
@@ -695,7 +737,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-8 grid gap-4 lg:grid-cols-3" data-tilt-group="" style={{perspective: '1200px'}}>
 <figure className="rounded-3xl border border-white/10 bg-zinc-950/30 p-6 shadow-sm shadow-black/30" data-tilt="" style={{willChange: 'transform', transformStyle: 'preserve-3d', transition: 'transform 350ms'}}>
 <div className="flex items-center gap-2 text-xs text-zinc-200/70">
-<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="font-geist" style={{}}>5.0</span>
 </div>
 <blockquote className="mt-3 text-sm text-zinc-100/90 font-geist" style={{}}>
@@ -708,7 +750,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </figure>
 <figure className="rounded-3xl border border-white/10 bg-zinc-950/30 p-6 shadow-sm shadow-black/30" data-tilt="" style={{willChange: 'transform', transformStyle: 'preserve-3d', transition: 'transform 350ms'}}>
 <div className="flex items-center gap-2 text-xs text-zinc-200/70">
-<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="font-geist" style={{}}>4.9</span>
 </div>
 <blockquote className="mt-3 text-sm text-zinc-100/90 font-geist" style={{}}>
@@ -721,7 +763,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </figure>
 <figure className="rounded-3xl border border-white/10 bg-zinc-950/30 p-6 shadow-sm shadow-black/30" data-tilt="" style={{willChange: 'transform', transformStyle: 'preserve-3d', transition: 'transform 350ms'}}>
 <div className="flex items-center gap-2 text-xs text-zinc-200/70">
-<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{fontSize: '1rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span className="font-geist" style={{}}>4.8</span>
 </div>
 <blockquote className="mt-3 text-sm text-zinc-100/90 font-geist" style={{}}>
@@ -776,11 +818,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   </div>
 <div className="flex gap-2">
 <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-zinc-950 hover:bg-zinc-100 transition font-geist" style={{}} type="submit">
-<iconify-icon icon="solar:check-circle-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:check-circle-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Submit
                     </button>
 <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition font-geist" id="whatsBtn" style={{}} type="button">
-<iconify-icon icon="solar:chat-round-line-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:chat-round-line-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       WhatsApp
                     </button>
 </div>
@@ -798,7 +840,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-1 text-sm text-zinc-200/70 font-geist" style={{}}>Ask for today’s pizza + mojito pairing.</div>
 </div>
 <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/10 bg-white/5">
-<iconify-icon icon="solar:magic-stick-3-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:magic-stick-3-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -820,16 +862,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4 text-xs text-zinc-200/60 font-geist" style={{}}>Edit these times to match your cafe.</div>
 </div>
 <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/10 bg-white/5">
-<iconify-icon icon="solar:clock-circle-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:clock-circle-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 <div className="mt-6 grid gap-3 sm:grid-cols-2">
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-zinc-950/30 px-4 py-3 text-sm font-semibold hover:bg-zinc-950/40 transition font-geist" href="#visit" style={{}}>
-<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Location
                 </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-zinc-950/30 px-4 py-3 text-sm font-semibold hover:bg-zinc-950/40 transition font-geist" href="#menu" style={{}}>
-<iconify-icon icon="solar:plate-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:plate-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                   Menu
                 </a>
 </div>
@@ -859,17 +901,17 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-1 text-xs text-zinc-200/60 font-geist" style={{}}>Replace with the real cafe location.</div>
 </div>
 <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/10 bg-white/5">
-<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:map-point-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
 <div className="grid gap-3 sm:grid-cols-2">
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-zinc-950 hover:bg-zinc-100 transition font-geist" href="tel:+910000000000" id="callLink" style={{}}>
-<iconify-icon icon="solar:phone-rounded-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:phone-rounded-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                     Call Now
                   </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition font-geist" href="https://maps.google.com" id="mapsLink" rel="noreferrer" style={{}} target="_blank">
-<iconify-icon icon="solar:route-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:route-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                     Open Maps
                   </a>
 </div>
@@ -882,7 +924,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       </div>
 </div>
 <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/10 bg-white/5">
-<iconify-icon icon="solar:pen-new-square-linear" style={{fontSize: '1.25rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:pen-new-square-linear" style={{fontSize: '1.25rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 </div>
 </div>
@@ -904,7 +946,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-zinc-950 hover:bg-zinc-100 transition font-geist" href="#reserve" style={{}}>
-<iconify-icon icon="solar:calendar-add-linear" style={{fontSize: '1.125rem', -IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon icon="solar:calendar-add-linear" style={{fontSize: '1.125rem', '--iconify-stroke-width': '1.5'}}></iconify-icon>
                       Reserve a spot
                     </a>
 </div>

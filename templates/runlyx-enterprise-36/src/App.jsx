@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -143,6 +179,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -172,7 +214,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="transition-colors hover:text-[#D4A574]" href="#">Enterprise</a>
 </nav>
 <div className="flex items-center justify-center gap-3">
-<a className="group relative inline-flex items-center gap-2 rounded-md border border-[#D4A574]/30 bg-[#1B4D3E]/30 px-5 py-2.5 text-sm font-semibold text-[#D4A574] transition-all duration-300 hover:bg-[#1B4D3E]/50 hover:text-white hover:border-[#D4A574]/60" href="#" style={{-BorderGradient: 'linear-gradient(135deg, rgba(212, 165, 116, 0), rgba(212, 165, 116, 0.4), rgba(212, 165, 116, 0))', -BorderRadiusBefore: '6px'}}>
+<a className="group relative inline-flex items-center gap-2 rounded-md border border-[#D4A574]/30 bg-[#1B4D3E]/30 px-5 py-2.5 text-sm font-semibold text-[#D4A574] transition-all duration-300 hover:bg-[#1B4D3E]/50 hover:text-white hover:border-[#D4A574]/60" href="#" style={{'--border-gradient': 'linear-gradient(135deg, rgba(212, 165, 116, 0), rgba(212, 165, 116, 0.4), rgba(212, 165, 116, 0))', '--border-radius-before': '6px'}}>
                             See It In Action
                         </a>
 </div>
@@ -222,7 +264,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="mt-12 flex flex-col items-center justify-center gap-5 sm:flex-row">
 
-<div className="btn-wrapper" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#D4A574', -LineColor: '#D4A574', -GridColor: 'rgba(212, 165, 116, 0.2)'}}>
+<div className="btn-wrapper" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#D4A574', '--line-color': '#D4A574', '--grid-color': 'rgba(212, 165, 116, 0.2)'}}>
 <div className="line horizontal top"></div>
 <div className="line vertical right"></div>
 <div className="line horizontal bottom"></div>
@@ -664,7 +706,7 @@ s.save("v1.2.1", "Added safety verification");</pre>
 </div>
 </div>
 <div className="mt-12 space-y-4">
-<button className="plan-select-btn group flex w-full items-center justify-between rounded-xl bg-gradient-to-br from-[#1B4D3E]/20 to-transparent p-5 text-left border border-[#D4A574]/20 transition hover:bg-[#1B4D3E]/30 hover:border-[#D4A574]/40" data-plan-select="starter" style={{-BorderGradient: 'linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(212, 165, 116, 0))', -BorderRadiusBefore: '12px'}}>
+<button className="plan-select-btn group flex w-full items-center justify-between rounded-xl bg-gradient-to-br from-[#1B4D3E]/20 to-transparent p-5 text-left border border-[#D4A574]/20 transition hover:bg-[#1B4D3E]/30 hover:border-[#D4A574]/40" data-plan-select="starter" style={{'--border-gradient': 'linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(212, 165, 116, 0))', '--border-radius-before': '12px'}}>
 <div>
 <p className="text-xl font-semibold tracking-tight text-white">Starter</p>
 <p className="mt-1 text-[12px] uppercase tracking-wide text-[#a8b3af]">Launch fast, learn faster.</p>

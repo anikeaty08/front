@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -113,6 +149,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -143,10 +185,10 @@ gtag('config', 'G-2M6V79H761');
 
 <div id="mobile-menu" style={{display: 'none', background: '#ffffff', borderTop: '1px solid #e0f2fe', padding: '16px 24px 24px'}}>
 <div style={{display: 'flex', flexDirection: 'column', gap: '4px'}}>
-<button onclick="switchPage('page-services'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\',sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Usługi</button>
-<button onclick="switchPage('page-for-whom'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\',sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Obsługiwane branże</button>
-<button onclick="switchPage('page-how'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\',sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Jak Działamy</button>
-<button onclick="switchPage('page-contact'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\',sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Kontakt</button>
+<button onclick="switchPage('page-services'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\', sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Usługi</button>
+<button onclick="switchPage('page-for-whom'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\', sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Obsługiwane branże</button>
+<button onclick="switchPage('page-how'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\', sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Jak Działamy</button>
+<button onclick="switchPage('page-contact'); closeMobileMenu();" style={{background: 'none', border: 'none', cursor: 'pointer', fontFamily: '\'Outfit\', sans-serif', fontSize: '16px', fontWeight: '500', color: '#1e293b', textAlign: 'left', padding: '12px 0', borderBottom: '1px solid #f0f9ff'}}>Kontakt</button>
 <a href="tel:+48221234567" style={{display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: '#0ea5e9', fontSize: '17px', fontWeight: '600', padding: '16px 0 4px'}}>
 <iconify-icon icon="solar:phone-linear" style={{fontSize: '20px'}}></iconify-icon>
                     +48 22 123 45 67
@@ -676,7 +718,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
 <h1 className="text-3xl md:text-5xl font-['Outfit'] font-semibold tracking-tight text-[#0c4a6e] mb-5">Kontakt</h1>
 <p className="text-lg text-[#0c4a6e]/80 font-normal max-w-xl leading-relaxed mb-8">Opisz swój obiekt i aktualne potrzeby w zakresie obsługi pralniczej. Przygotujemy indywidualną ofertę w ciągu 24 godzin.</p>
-<a href="tel:+48221234567" style={{display: 'inline-flex', alignItems: 'center', gap: '12px', background: '#0c4a6e', color: 'white', padding: '14px 28px', borderRadius: '10px', textDecoration: 'none', fontSize: '18px', fontWeight: '500', fontFamily: '\'Outfit\',sans-serif'}}>
+<a href="tel:+48221234567" style={{display: 'inline-flex', alignItems: 'center', gap: '12px', background: '#0c4a6e', color: 'white', padding: '14px 28px', borderRadius: '10px', textDecoration: 'none', fontSize: '18px', fontWeight: '500', fontFamily: '\'Outfit\', sans-serif'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" width="20"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 6.75z" strokeLinecap="round" strokeLinejoin="round"></path></svg>
                 +48 22 123 45 67
             </a>
@@ -745,7 +787,7 @@ gtag('config', 'G-2M6V79H761');
 <div>
 <label className="block text-sm font-medium text-gray-700 mb-2">Rodzaj obiektu</label>
 <div className="relative">
-<select className="w-full bg-[#f0f9ff] border border-transparent rounded-lg py-3 px-4 outline-none text-base appearance-none text-[#1e293b]" style={{fontFamily: '\'Outfit\',sans-serif'}}>
+<select className="w-full bg-[#f0f9ff] border border-transparent rounded-lg py-3 px-4 outline-none text-base appearance-none text-[#1e293b]" style={{fontFamily: '\'Outfit\', sans-serif'}}>
 <option>Hotel / Pensjonat</option>
 <option>Apartamenty / Najem krótkoterminowy</option>
 <option>Restauracja / Gastronomia</option>
@@ -788,20 +830,20 @@ gtag('config', 'G-2M6V79H761');
 <div>
 <h4 style={{fontSize: '13px', fontWeight: '600', marginBottom: '20px', color: '#bae6fd', textTransform: 'uppercase', letterSpacing: '0.1em'}}>Nawigacja</h4>
 <ul style={{listStyle: 'none', padding: '0', margin: '0', display: 'flex', flexDirection: 'column', gap: '12px'}}>
-<li><button className="hover:text-white transition-colors" onclick="switchPage('page-services')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Usługi</button></li>
-<li><button className="hover:text-white transition-colors" onclick="switchPage('page-for-whom')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Obsługiwane branże</button></li>
-<li><button className="hover:text-white transition-colors" onclick="switchPage('page-how')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Jak Działamy</button></li>
-<li><button className="hover:text-white transition-colors" onclick="switchPage('page-contact')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Kontakt</button></li>
+<li><button className="hover:text-white transition-colors" onclick="switchPage('page-services')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Usługi</button></li>
+<li><button className="hover:text-white transition-colors" onclick="switchPage('page-for-whom')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Obsługiwane branże</button></li>
+<li><button className="hover:text-white transition-colors" onclick="switchPage('page-how')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Jak Działamy</button></li>
+<li><button className="hover:text-white transition-colors" onclick="switchPage('page-contact')" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Kontakt</button></li>
 </ul>
 </div>
 <div>
 <h4 style={{fontSize: '13px', fontWeight: '600', marginBottom: '20px', color: '#bae6fd', textTransform: 'uppercase', letterSpacing: '0.1em'}}>Usługi</h4>
 <ul style={{listStyle: 'none', padding: '0', margin: '0', display: 'flex', flexDirection: 'column', gap: '12px'}}>
-<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Pranie pościeli i ręczników</button></li>
-<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Krochmalenie obrusów</button></li>
-<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Pranie odzieży pracowniczej</button></li>
-<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Pakowanie i segregacja</button></li>
-<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\',sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Odbiór i dostawa</button></li>
+<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Pranie pościeli i ręczników</button></li>
+<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Krochmalenie obrusów</button></li>
+<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Pranie odzieży pracowniczej</button></li>
+<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Pakowanie i segregacja</button></li>
+<li><button onclick="switchPage('page-services')" onmouseout="this.style.color='rgba(255,255,255,0.85)'" onmouseover="this.style.color='white'" style={{background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', fontFamily: '\'Outfit\', sans-serif', fontSize: '15px', padding: '0', textAlign: 'left'}}>Odbiór i dostawa</button></li>
 </ul>
 </div>
 <div>

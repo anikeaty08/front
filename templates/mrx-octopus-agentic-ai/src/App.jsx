@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -47,18 +89,18 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 py-16 relative w-full">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 <div className="">
-<div className="inline-flex items-center gap-2 rounded-full border border-stone-800 bg-stone-900 px-4 py-1.5 text-xs text-stone-300 font-sans mb-6 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="inline-flex items-center gap-2 rounded-full border border-stone-800 bg-stone-900 px-4 py-1.5 text-xs text-stone-300 font-sans mb-6 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
           Powered by Octopus AI Agentic Network
         </div>
-<h1 className="sm:text-6xl lg:text-7xl leading-[1.05] reveal-up text-5xl font-semibold text-white tracking-tight font-grotesk" style={{-RevealDelay: '120ms'}}>
+<h1 className="sm:text-6xl lg:text-7xl leading-[1.05] reveal-up text-5xl font-semibold text-white tracking-tight font-grotesk" style={{'--reveal-delay': '120ms'}}>
           Go Glo-Cal
           <span className="block text-orange-500 mt-2">Now</span>
 </h1>
-<p className="mt-6 text-xl text-stone-400 font-sans leading-relaxed max-w-xl reveal-up" style={{-RevealDelay: '220ms'}}>
+<p className="mt-6 text-xl text-stone-400 font-sans leading-relaxed max-w-xl reveal-up" style={{'--reveal-delay': '220ms'}}>
           Hyper-localize your brand for unparalleled global growth. Stop generic campaigns. Start converting.
         </p>
-<div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 reveal-up" style={{-RevealDelay: '320ms'}}>
+<div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 reveal-up" style={{'--reveal-delay': '320ms'}}>
 <button className="inline-flex hover:bg-stone-200 transition-all hover-lift cursor-pointer text-base font-medium text-stone-950 bg-white rounded-lg pt-4 pr-8 pb-4 pl-8 gap-x-2 gap-y-2 items-center" onclick="window.location.href='https://drive.google.com/file/d/1yIe-JnwfQIC_fxWZ6c-HxhvFTct6C0_Q/view';window.location.href='https://drive.google.com/file/d/1yIe-JnwfQIC_fxWZ6c-HxhvFTct6C0_Q/view';window.location.href='/file:///C:/Users/rugma/Downloads/test%20PPT%20MRX-Octopus.pdf'" role="button">
             Start Your First 30 Days
             <i className="w-[20px] h-[20px]" data-icon-replaced="true" data-lucide="arrow-right" strokeWidth="2" style={{color: 'rgb(12, 10, 9)', width: '20px', height: '20px'}}></i>
@@ -68,7 +110,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             See Results
           </a>
 </div>
-<div className="mt-12 flex items-center gap-8 pt-8 border-t border-stone-800 reveal-up" style={{-RevealDelay: '420ms'}}>
+<div className="mt-12 flex items-center gap-8 pt-8 border-t border-stone-800 reveal-up" style={{'--reveal-delay': '420ms'}}>
 <div>
 <div className="text-3xl font-grotesk font-semibold tracking-tight text-white">2X</div>
 <div className="text-sm text-stone-500 font-sans">Lead Accuracy</div>
@@ -85,7 +127,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="relative reveal-zoom" style={{-RevealDelay: '160ms'}}>
+<div className="relative reveal-zoom" style={{'--reveal-delay': '160ms'}}>
 <div className="relative rounded-2xl overflow-hidden border border-stone-800 bg-stone-900 p-8 shadow-2xl animate-rotate-sequence">
 <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-orange-500"></div>
 <img alt="Global Team Collaboration" className="w-full h-80 object-cover rounded-lg" src="https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&amp;w=800&amp;fit=crop" style={{maskImage: 'linear-gradient(190deg, transparent, black 0%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(190deg, transparent, black 0%, black 100%, transparent)'}}/>
@@ -112,7 +154,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="py-20 bg-stone-900 border-y border-stone-800 min-h-screen flex items-center" id="challenge">
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 w-full">
-<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <h2 className="text-4xl sm:text-5xl font-grotesk font-semibold tracking-tight text-white mb-4">
         The Cost of Poor Local Appeal
       </h2>
@@ -121,7 +163,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       </p>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-<div className="bg-stone-800 rounded-xl p-8 border border-stone-700 hover-lift reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-stone-800 rounded-xl p-8 border border-stone-700 hover-lift reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-red-900/30 text-red-400 mb-6">
 <i className="w-6 h-6" data-lucide="trending-down"></i>
 </div>
@@ -134,7 +176,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="bg-stone-800 rounded-xl p-8 border border-stone-700 hover-lift reveal-up" style={{-RevealDelay: '120ms'}}>
+<div className="bg-stone-800 rounded-xl p-8 border border-stone-700 hover-lift reveal-up" style={{'--reveal-delay': '120ms'}}>
 <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-orange-900/30 text-orange-400 mb-6">
 <i className="w-6 h-6" data-lucide="clock"></i>
 </div>
@@ -147,7 +189,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="bg-stone-800 rounded-xl p-8 border border-stone-700 hover-lift reveal-up" style={{-RevealDelay: '240ms'}}>
+<div className="bg-stone-800 rounded-xl p-8 border border-stone-700 hover-lift reveal-up" style={{'--reveal-delay': '240ms'}}>
 <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-purple-900/30 text-purple-400 mb-6">
 <i className="w-6 h-6" data-lucide="users-x"></i>
 </div>
@@ -166,7 +208,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="py-20 bg-stone-950 min-h-screen flex items-center" id="solution">
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 w-full">
-<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-900/30 text-indigo-400 text-sm font-medium mb-4 font-sans">
         The MRX Edge
       </div>
@@ -178,7 +220,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       </p>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 shadow-lg hover-lift reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 shadow-lg hover-lift reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white mb-6">
 <i className="w-7 h-7" data-lucide="cpu"></i>
 </div>
@@ -205,7 +247,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </li>
 </ul>
 </div>
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 shadow-lg hover-lift reveal-up" style={{-RevealDelay: '140ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 shadow-lg hover-lift reveal-up" style={{'--reveal-delay': '140ms'}}>
 <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-pink-600 text-white mb-6">
 <i className="w-7 h-7" data-lucide="sparkles"></i>
 </div>
@@ -232,7 +274,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </li>
 </ul>
 </div>
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 shadow-lg hover-lift reveal-up" style={{-RevealDelay: '280ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 shadow-lg hover-lift reveal-up" style={{'--reveal-delay': '280ms'}}>
 <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 text-white mb-6">
 <i className="w-7 h-7" data-lucide="zap"></i>
 </div>
@@ -265,7 +307,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="py-20 bg-stone-900 min-h-screen flex items-center" id="process">
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 w-full">
-<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <h2 className="text-4xl sm:text-5xl font-grotesk font-semibold tracking-tight text-white mb-4">
         The Glo-Cal Growth Engine
       </h2>
@@ -277,26 +319,26 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute left-8 top-20 bottom-20 w-0.5 bg-gradient-to-b from-indigo-500 via-purple-500 to-orange-500 hidden lg:block"></div>
 <div className="space-y-12">
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-<div className="lg:col-span-1 flex lg:block justify-center reveal-zoom" style={{-RevealDelay: '0ms'}}>
+<div className="lg:col-span-1 flex lg:block justify-center reveal-zoom" style={{'--reveal-delay': '0ms'}}>
 <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-2xl font-grotesk font-semibold">
               1
             </div>
 </div>
-<div className="lg:col-span-11 bg-stone-800 rounded-2xl p-8 border border-stone-700 reveal-up" style={{-RevealDelay: '120ms'}}>
+<div className="lg:col-span-11 bg-stone-800 rounded-2xl p-8 border border-stone-700 reveal-up" style={{'--reveal-delay': '120ms'}}>
 <h3 className="text-2xl font-grotesk font-semibold text-white mb-3">PROFILE — Deep Local Insight</h3>
 <p className="text-stone-400 font-sans mb-6">
               We immerse ourselves in your customer's local culture, language, and trends. We don't just study your brand—we become your customer.
             </p>
 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="text-sm font-medium text-white mb-1 font-sans">Cultural Deep Dive</div>
 <div className="text-xs text-stone-500 font-sans">Local holidays, values, behaviors</div>
 </div>
-<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 reveal-up" style={{-RevealDelay: '100ms'}}>
+<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 reveal-up" style={{'--reveal-delay': '100ms'}}>
 <div className="text-sm font-medium text-white mb-1 font-sans">Language Nuances</div>
 <div className="text-xs text-stone-500 font-sans">Idioms, slang, tone preferences</div>
 </div>
-<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 reveal-up" style={{-RevealDelay: '200ms'}}>
+<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 reveal-up" style={{'--reveal-delay': '200ms'}}>
 <div className="text-sm font-medium text-white mb-1 font-sans">Trend Analysis</div>
 <div className="text-xs text-stone-500 font-sans">Real-time market pulse monitoring</div>
 </div>
@@ -304,30 +346,30 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-<div className="lg:col-span-1 flex lg:block justify-center reveal-zoom" style={{-RevealDelay: '0ms'}}>
+<div className="lg:col-span-1 flex lg:block justify-center reveal-zoom" style={{'--reveal-delay': '0ms'}}>
 <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 text-white text-2xl font-grotesk font-semibold">
               2
             </div>
 </div>
-<div className="lg:col-span-11 bg-stone-800 rounded-2xl p-8 border border-stone-700 reveal-up" style={{-RevealDelay: '120ms'}}>
+<div className="lg:col-span-11 bg-stone-800 rounded-2xl p-8 border border-stone-700 reveal-up" style={{'--reveal-delay': '120ms'}}>
 <h3 className="text-2xl font-grotesk font-semibold text-white mb-3">CREATE — Magnetic Content</h3>
 <p className="text-stone-400 font-sans mb-6">
               We identify viral trends and craft content that's super-targeted to multiple audiences by influencing the customer's CORE through deep understanding.
             </p>
 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="text-xl font-grotesk font-semibold text-purple-400 mb-1">Show</div>
 <div className="text-xs text-stone-500 font-sans">Awareness</div>
 </div>
-<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{-RevealDelay: '90ms'}}>
+<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{'--reveal-delay': '90ms'}}>
 <div className="text-xl font-grotesk font-semibold text-purple-400 mb-1">Attract</div>
 <div className="text-xs text-stone-500 font-sans">Engagement</div>
 </div>
-<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{-RevealDelay: '180ms'}}>
+<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{'--reveal-delay': '180ms'}}>
 <div className="text-xl font-grotesk font-semibold text-purple-400 mb-1">Convince</div>
 <div className="text-xs text-stone-500 font-sans">Consideration</div>
 </div>
-<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{-RevealDelay: '270ms'}}>
+<div className="bg-stone-900 rounded-lg p-4 border border-stone-700 text-center reveal-up" style={{'--reveal-delay': '270ms'}}>
 <div className="text-xl font-grotesk font-semibold text-purple-400 mb-1">Convert</div>
 <div className="text-xs text-stone-500 font-sans">Action</div>
 </div>
@@ -339,25 +381,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-<div className="lg:col-span-1 flex lg:block justify-center reveal-zoom" style={{-RevealDelay: '0ms'}}>
+<div className="lg:col-span-1 flex lg:block justify-center reveal-zoom" style={{'--reveal-delay': '0ms'}}>
 <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 text-white text-2xl font-grotesk font-semibold">
               3
             </div>
 </div>
-<div className="lg:col-span-11 bg-stone-800 rounded-2xl p-8 border border-stone-700 reveal-up" style={{-RevealDelay: '120ms'}}>
+<div className="lg:col-span-11 bg-stone-800 rounded-2xl p-8 border border-stone-700 reveal-up" style={{'--reveal-delay': '120ms'}}>
 <h3 className="text-2xl font-grotesk font-semibold text-white mb-3">CONVERT — Automated Growth</h3>
 <p className="text-stone-400 font-sans mb-6">
               We deploy hyper-targeted micro-campaigns and use AI bots to qualify leads, delivering only Sales-Ready Opportunities to your team.
             </p>
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div className="bg-stone-900 rounded-lg p-5 border border-stone-700 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-stone-900 rounded-lg p-5 border border-stone-700 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="flex items-center gap-3 mb-3">
 <i className="w-5 h-5 text-orange-400" data-lucide="target"></i>
 <div className="text-sm font-medium text-white font-sans">Micro-Campaign Deployment</div>
 </div>
 <div className="text-xs text-stone-500 font-sans">Launch within hours across multiple channels and segments</div>
 </div>
-<div className="bg-stone-900 rounded-lg p-5 border border-stone-700 reveal-up" style={{-RevealDelay: '120ms'}}>
+<div className="bg-stone-900 rounded-lg p-5 border border-stone-700 reveal-up" style={{'--reveal-delay': '120ms'}}>
 <div className="flex items-center gap-3 mb-3">
 <i className="w-5 h-5 text-orange-400" data-lucide="bot"></i>
 <div className="text-sm font-medium text-white font-sans">AI Lead Qualification</div>
@@ -374,7 +416,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="py-20 bg-stone-950 text-white min-h-screen flex items-center" id="results">
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 w-full">
-<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <h2 className="text-4xl sm:text-5xl font-grotesk font-semibold tracking-tight mb-4">
         Results Speak
       </h2>
@@ -383,7 +425,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       </p>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="text-sm text-stone-500 mb-4 font-sans">Lead Quality</div>
 <div className="flex items-end gap-4 mb-4">
 <div className="flex-1">
@@ -402,7 +444,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-3xl font-grotesk font-semibold text-green-400 mb-2">2X Better</div>
 <div className="text-sm text-stone-500 font-sans">Conversion Rate Improvement</div>
 </div>
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 reveal-up" style={{-RevealDelay: '140ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 reveal-up" style={{'--reveal-delay': '140ms'}}>
 <div className="text-sm text-stone-500 mb-4 font-sans">Brand Recall</div>
 <div className="flex items-end gap-4 mb-4">
 <div className="flex-1">
@@ -421,7 +463,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-3xl font-grotesk font-semibold text-purple-400 mb-2">3X Higher</div>
 <div className="text-sm text-stone-500 font-sans">Memorable Local Campaigns</div>
 </div>
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 reveal-up" style={{-RevealDelay: '280ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 reveal-up" style={{'--reveal-delay': '280ms'}}>
 <div className="text-sm text-stone-500 mb-4 font-sans">Campaign Speed</div>
 <div className="flex items-end gap-4 mb-4">
 <div className="flex-1">
@@ -441,7 +483,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm text-stone-500 font-sans">Launch Speed</div>
 </div>
 </div>
-<div className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-2xl p-8 border border-indigo-800/50 text-center reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-2xl p-8 border border-indigo-800/50 text-center reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="text-2xl font-grotesk font-semibold mb-3">We do the grunt work.</div>
 <div className="text-lg text-stone-300 font-sans">You focus on closing the leads.</div>
 </div>
@@ -450,7 +492,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="py-20 bg-stone-900 min-h-screen flex items-center">
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 w-full">
-<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <h2 className="text-4xl sm:text-5xl font-grotesk font-semibold tracking-tight text-white mb-4">
         Your First 30 Days
       </h2>
@@ -461,7 +503,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative max-w-4xl mx-auto">
 <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-stone-800"></div>
 <div className="space-y-8">
-<div className="relative pl-12 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="relative pl-12 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-indigo-900/50 border-4 border-stone-900 flex items-center justify-center text-xs font-semibold text-indigo-400 font-sans">1</div>
 <div className="bg-stone-800 rounded-xl p-6 border border-stone-700 shadow-sm hover-lift">
 <div className="flex items-center justify-between mb-3">
@@ -471,7 +513,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-stone-400 font-sans">Study your brand, product, audience, experience, and past strategies. We become experts in your business.</p>
 </div>
 </div>
-<div className="relative pl-12 reveal-up" style={{-RevealDelay: '120ms'}}>
+<div className="relative pl-12 reveal-up" style={{'--reveal-delay': '120ms'}}>
 <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-purple-900/50 border-4 border-stone-900 flex items-center justify-center text-xs font-semibold text-purple-400 font-sans">2</div>
 <div className="bg-stone-800 rounded-xl p-6 border border-stone-700 shadow-sm hover-lift">
 <div className="flex items-center justify-between mb-3">
@@ -481,7 +523,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-stone-400 font-sans">Create 3 sample campaigns in your language, for your people. See exactly how we'll represent your brand.</p>
 </div>
 </div>
-<div className="relative pl-12 reveal-up" style={{-RevealDelay: '240ms'}}>
+<div className="relative pl-12 reveal-up" style={{'--reveal-delay': '240ms'}}>
 <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-pink-900/50 border-4 border-stone-900 flex items-center justify-center text-xs font-semibold text-pink-400 font-sans">3</div>
 <div className="bg-stone-800 rounded-xl p-6 border border-stone-700 shadow-sm hover-lift">
 <div className="flex items-center justify-between mb-3">
@@ -491,7 +533,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-stone-400 font-sans">Content creation and generation phase for different target audiences. Our global creators get to work.</p>
 </div>
 </div>
-<div className="relative pl-12 reveal-up" style={{-RevealDelay: '360ms'}}>
+<div className="relative pl-12 reveal-up" style={{'--reveal-delay': '360ms'}}>
 <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-orange-900/50 border-4 border-stone-900 flex items-center justify-center text-xs font-semibold text-orange-400 font-sans">4</div>
 <div className="bg-stone-800 rounded-xl p-6 border border-stone-700 shadow-sm hover-lift">
 <div className="flex items-center justify-between mb-3">
@@ -501,7 +543,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-stone-400 font-sans">We run the campaigns—you start seeing real results. Watch the qualified leads start flowing.</p>
 </div>
 </div>
-<div className="relative pl-12 reveal-up" style={{-RevealDelay: '480ms'}}>
+<div className="relative pl-12 reveal-up" style={{'--reveal-delay': '480ms'}}>
 <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-green-900/50 border-4 border-stone-900 flex items-center justify-center text-xs font-semibold text-green-400 font-sans">5</div>
 <div className="bg-stone-800 rounded-xl p-6 border border-stone-700 shadow-sm hover-lift">
 <div className="flex items-center justify-between mb-3">
@@ -518,7 +560,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="py-20 bg-stone-950 min-h-screen flex items-center" id="pricing">
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 w-full">
-<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="text-center max-w-3xl mx-auto mb-16 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <h2 className="text-4xl sm:text-5xl font-grotesk font-semibold tracking-tight text-white mb-4">
         Tailor-made for Your Growth
       </h2>
@@ -527,7 +569,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       </p>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 hover-lift reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 hover-lift reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-900/30 text-green-400 text-xs font-medium mb-6 font-sans">
           For Fast Growers
         </div>
@@ -558,7 +600,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </li>
 </ul>
 </div>
-<div className="bg-gradient-to-br from-indigo-900/30 to-purple-900/30 rounded-2xl p-8 border-2 border-indigo-700 hover-lift relative shadow-xl reveal-up" style={{-RevealDelay: '140ms'}}>
+<div className="bg-gradient-to-br from-indigo-900/30 to-purple-900/30 rounded-2xl p-8 border-2 border-indigo-700 hover-lift relative shadow-xl reveal-up" style={{'--reveal-delay': '140ms'}}>
 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-xs font-medium rounded-full font-sans">
           Most Popular
         </div>
@@ -591,7 +633,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </li>
 </ul>
 </div>
-<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 hover-lift reveal-up" style={{-RevealDelay: '280ms'}}>
+<div className="bg-stone-900 rounded-2xl p-8 border border-stone-800 hover-lift reveal-up" style={{'--reveal-delay': '280ms'}}>
 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-900/30 text-orange-400 text-xs font-medium mb-6 font-sans">
           For Visionaries
         </div>
@@ -627,13 +669,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="py-20 bg-stone-900 text-white min-h-screen flex items-center">
 <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8 w-full">
-<div className="text-center max-w-3xl mx-auto mb-12 reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="text-center max-w-3xl mx-auto mb-12 reveal-up" style={{'--reveal-delay': '0ms'}}>
 <h2 className="text-4xl sm:text-5xl font-grotesk font-semibold tracking-tight mb-6">
         You Have 3 Choices
       </h2>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-<div className="bg-gradient-to-br from-green-900/50 to-emerald-900/50 rounded-2xl p-8 border border-green-800/50 text-center hover-lift reveal-up" style={{-RevealDelay: '0ms'}}>
+<div className="bg-gradient-to-br from-green-900/50 to-emerald-900/50 rounded-2xl p-8 border border-green-800/50 text-center hover-lift reveal-up" style={{'--reveal-delay': '0ms'}}>
 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-600 text-white mb-6">
 <i className="w-8 h-8" data-lucide="trending-up"></i>
 </div>
@@ -643,7 +685,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           Start Now
         </button>
 </div>
-<div className="bg-stone-800/50 rounded-2xl p-8 border border-stone-700 text-center opacity-75 reveal-up" style={{-RevealDelay: '140ms'}}>
+<div className="bg-stone-800/50 rounded-2xl p-8 border border-stone-700 text-center opacity-75 reveal-up" style={{'--reveal-delay': '140ms'}}>
 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-900/50 text-red-400 mb-6">
 <i className="w-8 h-8" data-lucide="trending-down"></i>
 </div>
@@ -651,7 +693,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-stone-400 font-sans mb-6">More spend. Low ROI. Same old story.</p>
 <div className="text-sm text-stone-500 font-sans">Not recommended</div>
 </div>
-<div className="bg-stone-800/50 rounded-2xl p-8 border border-stone-700 text-center opacity-75 reveal-up" style={{-RevealDelay: '280ms'}}>
+<div className="bg-stone-800/50 rounded-2xl p-8 border border-stone-700 text-center opacity-75 reveal-up" style={{'--reveal-delay': '280ms'}}>
 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-900/50 text-orange-400 mb-6">
 <i className="w-8 h-8" data-lucide="repeat"></i>
 </div>

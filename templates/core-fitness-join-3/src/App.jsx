@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -145,6 +181,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -217,7 +259,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="absolute w-3/5 h-3/5 border-[2px] border-[#FF3CAC]/20 rounded-full animate-[spin_20s_linear_infinite] shadow-[0_0_20px_rgba(255,60,172,0.1)]" style={{transformStyle: 'preserve-3d', transform: 'rotateX(50deg) rotateY(-5deg)'}}></div>
 
-<div className="flex flex-col gap-3 animate-[bounce_3s_ease-in-out_infinite] hover:-translate-y-4 hover:rotate-12 transition-all duration-500 bg-[#0F172A]/90 w-48 h-48 border-white/10 border rounded-3xl relative backdrop-blur-xl items-center justify-center cursor-pointer group" style={{transform: 'translateZ(150px)', boxShadow: '0 30px 60px rgba(0,0,0,0.8), inset 0 2px 0 rgba(255,255,255,0.2), inset 0 -10px 20px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,46,46,0.2)', transformStyle: 'preserve-3d'}}>
+<div className="flex flex-col gap-3 animate-[bounce_3s_ease-in-out_infinite] hover:-translate-y-4 hover:rotate-12 transition-all duration-500 bg-[#0F172A]/90 w-48 h-48 border-white/10 border rounded-3xl relative backdrop-blur-xl items-center justify-center cursor-pointer group" style={{transform: 'translateZ(150px)', boxShadow: '0 30px 60px rgba(0, 0, 0, 0.8), inset 0 2px 0 rgba(255, 255, 255, 0.2), inset 0 -10px 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255,46,46,0.2)', transformStyle: 'preserve-3d'}}>
 <iconify-icon className="text-6xl text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] animate-[spin_4s_linear_infinite] group-hover:scale-110 group-hover:text-[#FF2E2E] transition-all duration-300" icon="solar:dumbbell-large-linear" style={{transform: 'translateZ(30px)'}}></iconify-icon>
 <div className="w-16 h-1 bg-gradient-to-r from-transparent via-[#FF2E2E] to-transparent opacity-50 rounded-full shadow-[0_5px_10px_#FF2E2E] animate-pulse group-hover:scale-150 transition-all duration-300" style={{transform: 'translateZ(20px)'}}></div>
 </div>
@@ -288,7 +330,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" style={{perspective: '1500px'}}>
 
 
-<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#FF2E2E]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
+<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#FF2E2E]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 bg-gradient-to-tr from-[#FF2E2E]/0 to-transparent group-hover:from-[#FF2E2E]/10 transition-colors duration-500 rounded-3xl -z-10"></div>
 
 <div className="w-14 h-14 rounded-2xl bg-[#1e293b] border border-white/10 flex items-center justify-center mb-6 shadow-[0_15px_25px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_15px_30px_rgba(255,46,46,0.3),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] transition-shadow duration-500" style={{transform: 'translateZ(40px)'}}>
@@ -298,7 +340,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-slate-400 font-medium leading-relaxed drop-shadow-sm" style={{transform: 'translateZ(20px)'}}>Free weights, Olympic platforms, and isolation machines to build raw power.</p>
 </div>
 
-<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#00E5FF]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
+<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#00E5FF]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 bg-gradient-to-tr from-[#00E5FF]/0 to-transparent group-hover:from-[#00E5FF]/10 transition-colors duration-500 rounded-3xl -z-10"></div>
 <div className="w-14 h-14 rounded-2xl bg-[#1e293b] border border-white/10 flex items-center justify-center mb-6 shadow-[0_15px_25px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_15px_30px_rgba(0,229,255,0.3),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] transition-shadow duration-500" style={{transform: 'translateZ(40px)'}}>
 <iconify-icon className="text-2xl text-white group-hover:text-[#00E5FF] transition-colors drop-shadow-md" icon="solar:heart-pulse-linear" style={{transform: 'translateZ(10px)'}}></iconify-icon>
@@ -307,7 +349,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-slate-400 font-medium leading-relaxed drop-shadow-sm" style={{transform: 'translateZ(20px)'}}>High-intensity intervals to shred fat and push your cardiovascular limits.</p>
 </div>
 
-<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#FF3CAC]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
+<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#FF3CAC]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 bg-gradient-to-tr from-[#FF3CAC]/0 to-transparent group-hover:from-[#FF3CAC]/10 transition-colors duration-500 rounded-3xl -z-10"></div>
 <div className="w-14 h-14 rounded-2xl bg-[#1e293b] border border-white/10 flex items-center justify-center mb-6 shadow-[0_15px_25px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_15px_30px_rgba(255,60,172,0.3),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] transition-shadow duration-500" style={{transform: 'translateZ(40px)'}}>
 <iconify-icon className="text-2xl text-white group-hover:text-[#FF3CAC] transition-colors drop-shadow-md" icon="solar:music-note-linear" style={{transform: 'translateZ(10px)'}}></iconify-icon>
@@ -316,7 +358,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-slate-400 font-medium leading-relaxed drop-shadow-sm" style={{transform: 'translateZ(20px)'}}>Dance to the rhythm, burn calories, and experience high-energy group sessions.</p>
 </div>
 
-<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#2979FF]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
+<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#2979FF]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 bg-gradient-to-tr from-[#2979FF]/0 to-transparent group-hover:from-[#2979FF]/10 transition-colors duration-500 rounded-3xl -z-10"></div>
 <div className="w-14 h-14 rounded-2xl bg-[#1e293b] border border-white/10 flex items-center justify-center mb-6 shadow-[0_15px_25px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_15px_30px_rgba(41,121,255,0.3),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] transition-shadow duration-500" style={{transform: 'translateZ(40px)'}}>
 <iconify-icon className="text-2xl text-white group-hover:text-[#2979FF] transition-colors drop-shadow-md" icon="solar:body-shape-linear" style={{transform: 'translateZ(10px)'}}></iconify-icon>
@@ -325,7 +367,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-slate-400 font-medium leading-relaxed drop-shadow-sm" style={{transform: 'translateZ(20px)'}}>Find balance, flexibility, and core strength in our dedicated calm zones.</p>
 </div>
 
-<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#FF2E2E]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
+<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#FF2E2E]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 bg-gradient-to-tr from-[#FF2E2E]/0 to-transparent group-hover:from-[#FF2E2E]/10 transition-colors duration-500 rounded-3xl -z-10"></div>
 <div className="w-14 h-14 rounded-2xl bg-[#1e293b] border border-white/10 flex items-center justify-center mb-6 shadow-[0_15px_25px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_15px_30px_rgba(255,46,46,0.3),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] transition-shadow duration-500" style={{transform: 'translateZ(40px)'}}>
 <iconify-icon className="text-2xl text-white group-hover:text-[#FF2E2E] transition-colors drop-shadow-md" icon="solar:boxing-linear" style={{transform: 'translateZ(10px)'}}></iconify-icon>
@@ -334,7 +376,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-slate-400 font-medium leading-relaxed drop-shadow-sm" style={{transform: 'translateZ(20px)'}}>Professional mats, heavy bags, and expert coaching for combat sports.</p>
 </div>
 
-<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#00E5FF]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
+<div className="group relative p-6 rounded-3xl bg-[#0F172A] border border-white/5 hover:border-[#00E5FF]/50 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-[-5deg] hover:rotate-y-[5deg]" style={{transformStyle: 'preserve-3d', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.05), inset 0 -6px 0 rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 bg-gradient-to-tr from-[#00E5FF]/0 to-transparent group-hover:from-[#00E5FF]/10 transition-colors duration-500 rounded-3xl -z-10"></div>
 <div className="w-14 h-14 rounded-2xl bg-[#1e293b] border border-white/10 flex items-center justify-center mb-6 shadow-[0_15px_25px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_15px_30px_rgba(0,229,255,0.3),inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-3px_0_rgba(0,0,0,0.5)] transition-shadow duration-500" style={{transform: 'translateZ(40px)'}}>
 <iconify-icon className="text-2xl text-white group-hover:text-[#00E5FF] transition-colors drop-shadow-md" icon="solar:treadmill-linear" style={{transform: 'translateZ(10px)'}}></iconify-icon>

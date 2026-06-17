@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -430,6 +466,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -659,7 +701,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="relative md:col-span-7 md:col-start-4">
 <div className="relative flex min-h-[520px] items-center justify-center">
-<span className="masked-number text-[13rem] font-black leading-none tracking-[-0.09em] md:text-[24rem] lg:text-[29rem]" style={{-NumberImage: 'url(\'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&amp'}}>04</span>
+<span className="masked-number text-[13rem] font-black leading-none tracking-[-0.09em] md:text-[24rem] lg:text-[29rem]" style={{'--number-image': 'url(\'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&amp'}}>04</span>
 <img alt="Project preview one" className="project-card absolute left-0 top-14 hidden h-44 w-72 rotate-[-14deg] rounded-[18px] border border-[#f3f0e8]/10 object-cover md:block" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bf697fb6-c82a-4c34-95ec-cbfc47b8622f_3840w.png"/>
 <img alt="Project preview two" className="project-card absolute right-4 top-6 hidden h-44 w-72 rotate-[10deg] rounded-[18px] border border-[#f3f0e8]/10 object-cover md:block" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/095918f0-0508-4c1f-867f-ec46e9f0720d_3840w.png"/>
 </div>

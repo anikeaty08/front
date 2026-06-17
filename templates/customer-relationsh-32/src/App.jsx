@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -64,6 +100,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -108,7 +150,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 -m-3 rounded-full bg-indigo-500/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out z-0"></div>
 <div className="absolute inset-0 -m-6 rounded-full bg-indigo-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out z-0"></div>
 <div className="relative z-10 flex items-center justify-center p-2 rounded-full transition-all duration-300 group-hover:shadow-purple-500/20" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.1) 100%)', boxShadow: 'inset 0 4px 6px rgba(255, 255, 255, 0.95), inset 0 -5px 8px rgba(0, 0, 0, 0.08), 0 12px 24px -6px rgba(0, 0, 0, 0.15), 0 4px 8px -4px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.4)', backdropFilter: 'blur(12px)'}}>
-<div className="flex overflow-hidden transition-all duration-300 rounded-full pt-3.5 pr-8 pb-3.5 pl-8 relative items-center justify-center" style={{background: 'linear-gradient(180deg,#6366f1 0%,#4f46e5 100%)', boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.45), inset 0 -3px 6px rgba(0,0,0,0.35), 0 6px 14px rgba(79,70,229,0.35)'}}>
+<div className="flex overflow-hidden transition-all duration-300 rounded-full pt-3.5 pr-8 pb-3.5 pl-8 relative items-center justify-center" style={{background: 'linear-gradient(180deg, #6366f1 0%, #4f46e5 100%)', boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 0.45), inset 0 -3px 6px rgba(0, 0, 0, 0.35), 0 6px 14px rgba(79,70,229,0.35)'}}>
 <div className="absolute top-0 left-[15%] right-[15%] h-[40%] bg-gradient-to-b from-white/30 to-transparent rounded-full blur-[1px]"></div>
 <span className="text-white text-sm font-light tracking-widest uppercase drop-shadow-md relative z-20 pointer-events-none">
                   Request a private introduction
@@ -126,7 +168,7 @@ gtag('config', 'G-2M6V79H761');
         </style>
 <div className="-translate-y-1/2 lg:left-16 w-[860px] h-[540px] absolute top-1/2 left-8">
 <div className="absolute inset-0 bg-gradient-to-tr from-[#5B58F6]/20 via-transparent to-violet-300/10 blur-3xl rounded-full z-0 pointer-events-none -translate-x-10 translate-y-10"></div>
-<div className="flex flex-col overflow-hidden z-10 transition-all duration-500 ease-out hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.14)] bg-gradient-to-b from-white to-slate-50 w-[740px] h-[540px] border-slate-200/60 border rounded-[2rem] absolute top-0 right-0 backdrop-blur-md" style={{boxShadow: '0 30px 60px -15px rgba(15,23,42,0.10), 0 10px 24px -10px rgba(15,23,42,0.08), inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -1px 2px rgba(0,0,0,0.04)', animation: 'dashSlideIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards'}}>
+<div className="flex flex-col overflow-hidden z-10 transition-all duration-500 ease-out hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.14)] bg-gradient-to-b from-white to-slate-50 w-[740px] h-[540px] border-slate-200/60 border rounded-[2rem] absolute top-0 right-0 backdrop-blur-md" style={{boxShadow: '0 30px 60px -15px rgba(15, 23, 42, 0.10), 0 10px 24px -10px rgba(15, 23, 42, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -1px 2px rgba(0, 0, 0, 0.04)', animation: 'dashSlideIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards'}}>
 <div className="h-12 bg-gradient-to-b from-slate-50/90 to-slate-100/50 border-b border-slate-200/80 flex items-center px-4 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
 <div className="flex gap-2 w-20 pl-2">
 <div className="w-3 h-3 rounded-full bg-gradient-to-b from-slate-200 to-slate-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_1px_1px_rgba(0,0,0,0.1),inset_0_-1px_1px_rgba(0,0,0,0.05)]"></div>
@@ -245,8 +287,8 @@ gtag('config', 'G-2M6V79H761');
     </style>
 <div className="max-w-7xl mx-auto relative z-10">
 <div className="max-w-3xl mb-24 text-center mx-auto">
-<h4 className="text-[#5B58F6] font-normal mb-8 text-xs tracking-widest uppercase inline-flex items-center justify-center px-6 py-2.5 rounded-full" style={{background: 'linear-gradient(180deg, #eef3f8 0%, #e4ebf3 100%)', border: '1px solid rgba(255,255,255,0.7)', boxShadow: '0 6px 16px rgba(15,23,42,0.05), inset 0 1px 0 rgba(255,255,255,0.9)'}}>
-<div className="w-2 h-2 rounded-full mr-3" style={{background: '#5B58F6', boxShadow: '0 0 6px rgba(91,88,246,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
+<h4 className="text-[#5B58F6] font-normal mb-8 text-xs tracking-widest uppercase inline-flex items-center justify-center px-6 py-2.5 rounded-full" style={{background: 'linear-gradient(180deg, #eef3f8 0%, #e4ebf3 100%)', border: '1px solid rgba(255, 255, 255, 0.7)', boxShadow: '0 6px 16px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255,255,255,0.9)'}}>
+<div className="w-2 h-2 rounded-full mr-3" style={{background: '#5B58F6', boxShadow: '0 0 6px rgba(91, 88, 246, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
           What Heart Share Delivers
         </h4>
 <h2 className="text-4xl lg:text-6xl font-thin tracking-tight text-slate-800 mb-8 font-serif skeuo-text-raised">
@@ -262,27 +304,27 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative z-20">
 <div className="flex items-center gap-6 mb-10">
 <div className="w-16 h-16 rounded-2xl flex items-center justify-center relative skeuo-plate">
-<div className="absolute inset-1.5 rounded-xl" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.75), inset 0 -1px 0 rgba(148,163,184,0.10)'}}></div>
+<div className="absolute inset-1.5 rounded-xl" style={{boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.75), inset 0 -1px 0 rgba(148,163,184,0.10)'}}></div>
 <iconify-icon className="text-2xl text-[#5B58F6] relative z-10" icon="solar:layers-linear"></iconify-icon>
 </div>
 <span className="font-thin text-3xl text-slate-800 font-serif skeuo-text-raised">Heart Share provides:</span>
 </div>
 <div className="grid grid-cols-1 gap-y-6 text-sm font-light mb-14 skeuo-well p-8 rounded-[2.5rem]">
 <div className="flex items-start gap-4 group cursor-default">
-<div className="w-4 h-4 rounded-full relative flex items-center justify-center shrink-0 mt-1" style={{background: 'linear-gradient(180deg,#e6edf4 0%, #d7e0ea 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.8), inset 0 -1px 1px rgba(148,163,184,0.2)'}}>
-<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{boxShadow: '0 0 5px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
+<div className="w-4 h-4 rounded-full relative flex items-center justify-center shrink-0 mt-1" style={{background: 'linear-gradient(180deg, #e6edf4 0%, #d7e0ea 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.8), inset 0 -1px 1px rgba(148,163,184,0.2)'}}>
+<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{boxShadow: '0 0 5px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
 </div>
 <span className="text-slate-600 skeuo-text-raised text-base">A clear measure of emotional loyalty, through our Heart Share Index</span>
 </div>
 <div className="flex items-start gap-4 group cursor-default">
-<div className="w-4 h-4 rounded-full relative flex items-center justify-center shrink-0 mt-1" style={{background: 'linear-gradient(180deg,#e6edf4 0%, #d7e0ea 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.8), inset 0 -1px 1px rgba(148,163,184,0.2)'}}>
-<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '0.5s', boxShadow: '0 0 5px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
+<div className="w-4 h-4 rounded-full relative flex items-center justify-center shrink-0 mt-1" style={{background: 'linear-gradient(180deg, #e6edf4 0%, #d7e0ea 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.8), inset 0 -1px 1px rgba(148,163,184,0.2)'}}>
+<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '0.5s', boxShadow: '0 0 5px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
 </div>
 <span className="text-slate-600 skeuo-text-raised text-base">A structured assessment of the organization’s ability to act, through our Organizational Readiness</span>
 </div>
 <div className="flex items-start gap-4 group cursor-default">
-<div className="w-4 h-4 rounded-full relative flex items-center justify-center shrink-0 mt-1" style={{background: 'linear-gradient(180deg,#e6edf4 0%, #d7e0ea 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.8), inset 0 -1px 1px rgba(148,163,184,0.2)'}}>
-<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '1.2s', boxShadow: '0 0 5px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
+<div className="w-4 h-4 rounded-full relative flex items-center justify-center shrink-0 mt-1" style={{background: 'linear-gradient(180deg, #e6edf4 0%, #d7e0ea 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.8), inset 0 -1px 1px rgba(148,163,184,0.2)'}}>
+<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '1.2s', boxShadow: '0 0 5px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}></div>
 </div>
 <span className="text-slate-600 skeuo-text-raised text-base">A comprehensive report translating insights into strategic priorities and suggested action areas.</span>
 </div>

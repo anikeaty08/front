@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -96,6 +132,12 @@ colorShift: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -127,7 +169,7 @@ colorShift: {
 <div className="relative z-10">
 
 <div className="fixed top-0 left-0 right-0 z-50 pt-4 px-4 md:pt-6 md:px-6">
-<div className="max-w-4xl mx-auto border border-white/10 rounded-full px-5 py-3 md:px-6 md:py-3" style={{background: 'linear-gradient(180deg, rgba(14,16,26,0.8), rgba(14,16,26,0.6)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.35), rgba(255,255,255,0.08)) border-box', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.25)'}}>
+<div className="max-w-4xl mx-auto border border-white/10 rounded-full px-5 py-3 md:px-6 md:py-3" style={{background: 'linear-gradient(180deg, rgba(14, 16, 26, 0.8), rgba(14, 16, 26, 0.6)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)) border-box', backdropFilter: 'blur(16px)', boxShadow: '0 10px 30px rgba(0,0,0,0.25)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-1.5">
 <span className="text-lg font-semibold text-white/90 tracking-tight font-geist">Mondro</span>

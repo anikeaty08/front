@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -29,7 +71,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div></div>
 
 <nav className="fixed z-50 w-full top-0 pointer-events-none">
-<div className="pointer-events-auto flex max-w-5xl mx-auto px-5 py-2.5 items-center justify-between rounded-full mt-6" style={{background: 'linear-gradient(180deg, rgba(14,16,26,0.6), rgba(14,16,26,0.4)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0.05)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="pointer-events-auto flex max-w-5xl mx-auto px-5 py-2.5 items-center justify-between rounded-full mt-6" style={{background: 'linear-gradient(180deg, rgba(14, 16, 26, 0.6), rgba(14, 16, 26, 0.4)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <a className="flex items-center gap-3 group" href="#">
 <div className="w-9 h-9 bg-white/5 rounded-full flex items-center justify-center border border-white/10 group-hover:bg-white/10 transition-colors duration-300">
 <span className="text-white font-medium text-lg">B</span>
@@ -135,7 +177,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite]" style={{background: 'conic-gradient(from 90deg at 50% 50%, #0000 0%, #0000 50%, #ffffff 100%)', opacity: '0.3'}}>
 </div>
 
-<div className="flex flex-col group border-[3px] md:flex-row md:p-12 md:text-left text-center bg-neutral-900 w-full h-full border-transparent rounded-[31px] pt-8 pr-8 pb-8 pl-8 relative gap-x-12 gap-y-12 items-center" onmouseleave="this.style.setProperty('--mouse-x','-9999px');this.style.setProperty('--mouse-y','-9999px')" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',`${event.clientX-rect.left}px`);this.style.setProperty('--mouse-y',`${event.clientY-rect.top}px`)" style={{background: 'padding-box padding-box rgb(14, 16, 26)', boxShadow: 'rgba(0, 0, 0, 0.2) 0px 20px 50px, rgba(255, 255, 255, 0.02) 0px 1px 0px inset', transition: 'opacity 0.3s', -MouseX: '-9999px', -MouseY: '-9999px'}}>
+<div className="flex flex-col group border-[3px] md:flex-row md:p-12 md:text-left text-center bg-neutral-900 w-full h-full border-transparent rounded-[31px] pt-8 pr-8 pb-8 pl-8 relative gap-x-12 gap-y-12 items-center" onmouseleave="this.style.setProperty('--mouse-x','-9999px');this.style.setProperty('--mouse-y','-9999px')" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',`${event.clientX-rect.left}px`);this.style.setProperty('--mouse-y',`${event.clientY-rect.top}px`)" style={{background: 'padding-box padding-box rgb(14, 16, 26)', boxShadow: 'rgba(0, 0, 0, 0.2) 0px 20px 50px, rgba(255, 255, 255, 0.02) 0px 1px 0px inset', transition: 'opacity 0.3s', '--mouse-x': '-9999px', '--mouse-y': '-9999px'}}>
 <style>
     /* Slow down and dim the sibling beam animation */
     div:has(> [data-element-id="aura-emjorsjwp0nvnai5"])>.animate-\[spin_4s_linear_infinite\] {

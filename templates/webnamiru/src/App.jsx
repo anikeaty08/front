@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -89,6 +125,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -173,7 +215,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-[#D6FF33]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
 <div className="w-full max-w-[440px] h-[400px] md:h-[520px] bg-[#0A0A0A] rounded-2xl md:rounded-[24px] relative z-10 flex flex-col border border-white/[0.03] shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden group hover:-translate-y-1 transition-transform duration-500">
 <div className="absolute inset-0 opacity-[0.04] pointer-events-none mix-blend-overlay z-50" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E\')'}}></div>
-<div className="absolute inset-0 z-0 opacity-40 pointer-events-none" style={{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '24px 24px', maskImage: 'radial-gradient(circle at 80% 80%, black, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at 80% 80%, black, transparent 70%)'}}></div>
+<div className="absolute inset-0 z-0 opacity-40 pointer-events-none" style={{backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', backgroundSize: '24px 24px', maskImage: 'radial-gradient(circle at 80% 80%, black, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at 80% 80%, black, transparent 70%)'}}></div>
 <div className="absolute top-6 md:top-8 left-4 md:left-6 w-[calc(100%-3rem)] md:w-[280px] max-w-[280px] h-[180px] md:h-[240px] bg-gradient-to-br from-[#161616] to-[#050505] rounded-xl border border-white/[0.05] p-4 md:p-5 rotate-[-4deg] opacity-50 blur-[1px] transform origin-bottom-left transition-opacity duration-500 group-hover:opacity-40 z-10 shadow-lg flex flex-col">
 <div className="flex justify-between items-center mb-4 md:mb-6">
 <div className="flex gap-1.5">

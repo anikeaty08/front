@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -429,6 +465,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1056,7 +1098,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-</div><section className="fade-in-up -translate-y-6 [animation:animationIn_0.8s_ease-out_0.1s_both] animate-on-scroll bg-gradient-to-br from-white/10 via-white/0 to-white/10 from-white/20 w-full max-w-[1400px] rounded-3xl mt-24 mr-auto mb-24 ml-auto pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '24px'}}>
+</div><section className="fade-in-up -translate-y-6 [animation:animationIn_0.8s_ease-out_0.1s_both] animate-on-scroll bg-gradient-to-br from-white/10 via-white/0 to-white/10 from-white/20 w-full max-w-[1400px] rounded-3xl mt-24 mr-auto mb-24 ml-auto pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '24px'}}>
 
 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-16 gap-x-4 gap-y-4">
 <div className="">
@@ -1631,7 +1673,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="overflow-hidden animate-[slideUp_0.6s_ease-out_0.1s_both] bg-[#0A0B0E] border border-white/10 rounded-2xl shadow-2xl relative group" id="pricingCard" onmousemove="updateCursor(event)" style={{-X: '724px', -Y: '330.90625px'}}>
+<div className="overflow-hidden animate-[slideUp_0.6s_ease-out_0.1s_both] bg-[#0A0B0E] border border-white/10 rounded-2xl shadow-2xl relative group" id="pricingCard" onmousemove="updateCursor(event)" style={{'--x': '724px', '--y': '330.90625px'}}>
 
 <div className="pointer-events-none absolute -inset-px p-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-100 z-10" style="background: radial-gradient(600px circle at var(--x, 0px) var(--y, 0px), rgba(16, 185, 129, 0.4), transparent 40%); 
                 -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); 

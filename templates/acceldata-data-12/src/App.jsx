@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -113,6 +149,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -217,7 +259,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-cyan-500 to-purple-500 rounded-xl blur-lg opacity-20 group-hover:opacity-30 transition duration-1000">
 </div>
-<div className="relative bg-[#0A0A1B] border border-white/10 rounded-xl shadow-2xl overflow-hidden spotlight-card group" id="main-dashboard-card" style={{-MouseX: '997px', -MouseY: '-615.5px'}}>
+<div className="relative bg-[#0A0A1B] border border-white/10 rounded-xl shadow-2xl overflow-hidden spotlight-card group" id="main-dashboard-card" style={{'--mouse-x': '997px', '--mouse-y': '-615.5px'}}>
 
 <div className="h-10 border-b border-white/5 bg-white/5 flex items-center px-4 gap-2 relative z-20">
 <div className="flex gap-1.5">
@@ -412,7 +454,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 spotlight-group">
 
-<div className="spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '100ms', -MouseX: '997px', -MouseY: '-1831.5px'}}>
+<div className="spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '100ms', '--mouse-x': '997px', '--mouse-y': '-1831.5px'}}>
 <div className="relative z-10">
 <div className="w-12 h-12 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6">
 <svg className="lucide lucide-shield-check w-6 h-6" data-lucide="shield-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
@@ -424,7 +466,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '200ms', -MouseX: '653px', -MouseY: '-1831.5px'}}>
+<div className="spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '200ms', '--mouse-x': '653px', '--mouse-y': '-1831.5px'}}>
 <div className="relative z-10">
 <div className="w-12 h-12 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6">
 <svg className="lucide lucide-coins w-6 h-6" data-lucide="coins" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6"></circle><path d="M18.09 10.37A6 6 0 1 1 10.34 18"></path><path d="M7 6h1v4"></path><path d="m16.71 13.88.7.71-2.82 2.82"></path></svg>
@@ -436,7 +478,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '300ms', -MouseX: '309px', -MouseY: '-1831.5px'}}>
+<div className="spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '300ms', '--mouse-x': '309px', '--mouse-y': '-1831.5px'}}>
 <div className="relative z-10">
 <div className="w-12 h-12 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center text-fuchsia-400 mb-6">
 <svg className="lucide lucide-git-branch w-6 h-6" data-lucide="git-branch" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="6" x2="6" y1="3" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>
@@ -448,7 +490,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 md:col-span-2 spotlight-card rounded-2xl p-8 border border-white/10 flex flex-col sm:flex-row justify-between min-h-[300px] reveal-trigger" style={{transitionDelay: '400ms', -MouseX: '997px', -MouseY: '-2124.5px'}}>
+<div className="col-span-1 md:col-span-2 spotlight-card rounded-2xl p-8 border border-white/10 flex flex-col sm:flex-row justify-between min-h-[300px] reveal-trigger" style={{transitionDelay: '400ms', '--mouse-x': '997px', '--mouse-y': '-2124.5px'}}>
 <div className="relative z-10 max-w-sm">
 <h3 className="text-xl font-medium text-white mb-2">Automated Rules</h3>
 <p className="text-slate-400 text-sm">Set up ML-driven alerts that adapt to your data's seasonality without manual thresholding.</p>
@@ -471,7 +513,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '500ms', -MouseX: '309px', -MouseY: '-2124.5px'}}>
+<div className="col-span-1 spotlight-card rounded-2xl p-8 border border-white/10 reveal-trigger" style={{transitionDelay: '500ms', '--mouse-x': '309px', '--mouse-y': '-2124.5px'}}>
 <div className="relative z-10 h-full flex flex-col">
 <h3 className="text-xl font-medium text-white mb-2">Integrations</h3>
 <p className="text-slate-400 text-sm mb-8">Seamlessly connects with your stack.</p>

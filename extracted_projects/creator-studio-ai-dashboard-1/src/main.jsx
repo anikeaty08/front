@@ -6,9 +6,9 @@ import 'iconify-icon'
 import { SubscriptionProvider } from './context/SubscriptionContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <SubscriptionProvider>
       <App />
     </SubscriptionProvider>
-  </React.StrictMode>,
+  ,
 )

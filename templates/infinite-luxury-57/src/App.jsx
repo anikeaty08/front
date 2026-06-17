@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -146,6 +182,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -154,7 +196,7 @@ gtag('config', 'G-2M6V79H761');
 
 <nav className="fixed z-50 flex bg-gradient-to-b from-zinc-950/80 to-transparent w-full pt-8 pr-6 pb-8 pl-6 top-0 items-center justify-between">
 <div className="flex items-center gap-3">
-<svg aria-hidden="true" className="lucide lucide-diamond text-amber-500 w-5 h-5" data-darkreader-inline-stroke="" data-lucide="diamond" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path></svg>
+<svg aria-hidden="true" className="lucide lucide-diamond text-amber-500 w-5 h-5" data-darkreader-inline-stroke="" data-lucide="diamond" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"></path></svg>
 <span className="text-lg font-medium tracking-tight uppercase tracking-widest text-zinc-100">
                 Infinite Luxury
             </span>
@@ -163,7 +205,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="hidden md:flex text-lg text-zinc-300 hover:text-amber-500 transition-colors">Collection</button>
 <button className="hidden md:flex text-lg text-zinc-300 hover:text-amber-500 transition-colors">Heritage</button>
 <button className="text-zinc-100 hover:text-amber-500 transition-colors p-2">
-<svg aria-hidden="true" className="lucide lucide-menu w-6 h-6" data-darkreader-inline-stroke="" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+<svg aria-hidden="true" className="lucide lucide-menu w-6 h-6" data-darkreader-inline-stroke="" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
 </button>
 </div>
 </nav>
@@ -183,7 +225,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="group flex items-center gap-3 text-lg font-medium text-zinc-100 hover:text-amber-500 transition-colors">
                         Explore provenance 
                         <span className="bg-amber-500/10 p-2 rounded-full group-hover:bg-amber-500 group-hover:text-zinc-950 transition-all">
-<svg aria-hidden="true" className="lucide lucide-arrow-right w-4 h-4" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+<svg aria-hidden="true" className="lucide lucide-arrow-right w-4 h-4" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </span>
 </button>
 </div>
@@ -200,7 +242,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="group flex items-center gap-3 text-lg font-medium text-zinc-100 hover:text-amber-500 transition-colors">
                         Explore provenance 
                         <span className="bg-amber-500/10 p-2 rounded-full group-hover:bg-amber-500 group-hover:text-zinc-950 transition-all">
-<svg aria-hidden="true" className="lucide lucide-arrow-right w-4 h-4" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+<svg aria-hidden="true" className="lucide lucide-arrow-right w-4 h-4" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </span>
 </button>
 </div>
@@ -217,7 +259,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="group flex items-center gap-3 text-lg font-medium text-zinc-100 hover:text-amber-500 transition-colors">
                         Explore provenance 
                         <span className="bg-amber-500/10 p-2 rounded-full group-hover:bg-amber-500 group-hover:text-zinc-950 transition-all">
-<svg aria-hidden="true" className="lucide lucide-arrow-right w-4 h-4" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+<svg aria-hidden="true" className="lucide lucide-arrow-right w-4 h-4" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </span>
 </button>
 </div>
@@ -231,10 +273,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex-1 h-px bg-zinc-800"></div>
 <div className="flex gap-4 pr-6 md:pr-16 lg:pr-24">
 <button className="text-zinc-400 hover:text-amber-500 transition-colors p-2 border border-zinc-800 rounded-full hover:border-amber-500/50 bg-zinc-950/50 backdrop-blur-sm" id="prev-btn">
-<svg aria-hidden="true" className="lucide lucide-chevron-left w-5 h-5" data-darkreader-inline-stroke="" data-lucide="chevron-left" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
+<svg aria-hidden="true" className="lucide lucide-chevron-left w-5 h-5" data-darkreader-inline-stroke="" data-lucide="chevron-left" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
 </button>
 <button className="text-zinc-400 hover:text-amber-500 transition-colors p-2 border border-zinc-800 rounded-full hover:border-amber-500/50 bg-zinc-950/50 backdrop-blur-sm" id="next-btn">
-<svg aria-hidden="true" className="lucide lucide-chevron-right w-5 h-5" data-darkreader-inline-stroke="" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+<svg aria-hidden="true" className="lucide lucide-chevron-right w-5 h-5" data-darkreader-inline-stroke="" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
 </button>
 </div>
 </div>

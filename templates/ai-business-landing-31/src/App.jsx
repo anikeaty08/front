@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -258,6 +294,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -378,7 +420,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="net-worth-card sm:-right-[2%] xl:-right-[5%] sm:w-72 bg-white/25 opacity-95 w-64 z-[70] border-white/60 border rounded-3xl pt-5 pr-5 pb-5 pl-5 absolute top-[62%] right-[18%] left-12 shadow-[0_8px_32px_rgb(0,0,0,0.06)] backdrop-blur-2xl [--fx-filter:blur(10px)_liquid-glass(1.4,10)_saturate(1.4)_noise(0.5,1,0)_contrast(1.15)]" style={{transformStyle: 'preserve-3d', cursor: 'pointer', overflow: 'visible'}}>
 
-<div className="card-border-glow absolute -inset-[1px] rounded-[1.6rem] pointer-events-none z-0" style={{background: 'linear-gradient(135deg, rgba(99,102,241,0.3), rgba(34,211,238,0.2), rgba(99,102,241,0.1))', filter: 'blur(1px)'}}></div>
+<div className="card-border-glow absolute -inset-[1px] rounded-[1.6rem] pointer-events-none z-0" style={{background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(34, 211, 238, 0.2), rgba(99, 102, 241, 0.1))', filter: 'blur(1px)'}}></div>
 
 <div className="card-inner-glow absolute inset-0 rounded-[1.5rem] pointer-events-none z-[1]" style={{background: 'radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 60%)'}}></div>
 

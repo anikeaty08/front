@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -214,6 +250,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -352,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div bis_size='{"x":362,"y":947,"w":314,"h":340,"abs_x":842,"abs_y":989}' className="group spotlight-card spotlight-border rounded-2xl border p-8 relative [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll h-[340px] flex flex-col justify-between overflow-hidden border-white/5 animate" style={{-MouseX: '170.07498168945312px', -MouseY: '83.80000305175781px'}}>
+<div bis_size='{"x":362,"y":947,"w":314,"h":340,"abs_x":842,"abs_y":989}' className="group spotlight-card spotlight-border rounded-2xl border p-8 relative [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll h-[340px] flex flex-col justify-between overflow-hidden border-white/5 animate" style={{'--mouse-x': '170.07498168945312px', '--mouse-y': '83.80000305175781px'}}>
 <div bis_size='{"x":395,"y":980,"w":249,"h":168,"abs_x":875,"abs_y":1022}' className="relative z-10">
 <div bis_size='{"x":395,"y":980,"w":40,"h":40,"abs_x":875,"abs_y":1022}' className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 text-blue-400">
 <iconify-icon bis_size='{"x":405,"y":990,"w":20,"h":20,"abs_x":885,"abs_y":1032}' icon="solar:code-square-linear" width="20"></iconify-icon>
@@ -370,7 +412,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
                     </div>
 </div>
 
-<div bis_size='{"x":701,"y":947,"w":314,"h":340,"abs_x":1181,"abs_y":989}' className="group spotlight-card spotlight-border rounded-2xl border p-8 relative [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll h-[340px] flex flex-col justify-between border-white/5 animate" style={{-MouseX: '76.13751220703125px', -MouseY: '239.79999923706055px'}}>
+<div bis_size='{"x":701,"y":947,"w":314,"h":340,"abs_x":1181,"abs_y":989}' className="group spotlight-card spotlight-border rounded-2xl border p-8 relative [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll h-[340px] flex flex-col justify-between border-white/5 animate" style={{'--mouse-x': '76.13751220703125px', '--mouse-y': '239.79999923706055px'}}>
 <div bis_size='{"x":734,"y":980,"w":249,"h":168,"abs_x":1214,"abs_y":1022}' className="relative z-10">
 <div bis_size='{"x":734,"y":980,"w":40,"h":40,"abs_x":1214,"abs_y":1022}' className="w-10 h-10 rounded-lg border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 bg-white/5 border-white/10 text-white">
 <iconify-icon bis_size='{"x":744,"y":990,"w":20,"h":20,"abs_x":1224,"abs_y":1032}' icon="solar:palette-linear" width="20"></iconify-icon>
@@ -398,7 +440,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 
-<div bis_size='{"x":362,"y":1311,"w":314,"h":300,"abs_x":842,"abs_y":1353}' className="group spotlight-card spotlight-border rounded-2xl border p-8 relative [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll h-[300px] md:col-span-1.5 flex flex-col justify-between border-white/5 animate" style={{-MouseX: '261.0749816894531px', -MouseY: '122.19998168945312px'}}>
+<div bis_size='{"x":362,"y":1311,"w":314,"h":300,"abs_x":842,"abs_y":1353}' className="group spotlight-card spotlight-border rounded-2xl border p-8 relative [animation:animationIn_0.8s_ease-out_0.6s_both] animate-on-scroll h-[300px] md:col-span-1.5 flex flex-col justify-between border-white/5 animate" style={{'--mouse-x': '261.0749816894531px', '--mouse-y': '122.19998168945312px'}}>
 <div bis_size='{"x":395,"y":1344,"w":249,"h":145,"abs_x":875,"abs_y":1386}' className="relative z-10">
 <div bis_size='{"x":395,"y":1344,"w":40,"h":40,"abs_x":875,"abs_y":1386}' className="w-10 h-10 rounded-lg border flex items-center justify-center mb-6 bg-white/5 border-white/10 text-white">
 <iconify-icon bis_size='{"x":405,"y":1354,"w":20,"h":20,"abs_x":885,"abs_y":1396}' icon="solar:settings-linear" width="20"></iconify-icon>

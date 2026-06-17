@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -136,6 +172,12 @@ nodePulse3: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -232,17 +274,17 @@ nodePulse3: {
 <div className="relative w-0 h-0">
 
 
-<div className="absolute w-10 h-10 bg-ink-900 border border-white/10 shadow-sm" style={{-Tx: '-120px', -Ty: '-160px', -Fx: '-40px', -Fy: '-40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.1s'}}></div>
-<div className="absolute w-10 h-10 bg-ink-teal border border-white/10 shadow-sm" style={{-Tx: '40px', -Ty: '-200px', -Fx: '0px', -Fy: '-40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.15s'}}></div>
-<div className="absolute w-10 h-10 bg-blue-500 border border-white/10 shadow-sm" style={{-Tx: '160px', -Ty: '-80px', -Fx: '40px', -Fy: '-40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.2s'}}></div>
+<div className="absolute w-10 h-10 bg-ink-900 border border-white/10 shadow-sm" style={{'--tx': '-120px', '--ty': '-160px', '--fx': '-40px', '--fy': '-40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.1s'}}></div>
+<div className="absolute w-10 h-10 bg-ink-teal border border-white/10 shadow-sm" style={{'--tx': '40px', '--ty': '-200px', '--fx': '0px', '--fy': '-40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.15s'}}></div>
+<div className="absolute w-10 h-10 bg-blue-500 border border-white/10 shadow-sm" style={{'--tx': '160px', '--ty': '-80px', '--fx': '40px', '--fy': '-40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.2s'}}></div>
 
-<div className="absolute w-10 h-10 bg-ink-600 border border-white/10 shadow-sm" style={{-Tx: '-200px', -Ty: '0px', -Fx: '-40px', -Fy: '0px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.25s'}}></div>
-<div className="absolute w-10 h-10 bg-ink-800 border border-white/10 shadow-sm" style={{-Tx: '0px', -Ty: '-120px', -Fx: '0px', -Fy: '0px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.3s'}}></div>
-<div className="absolute w-10 h-10 bg-teal-600 border border-white/10 shadow-sm" style={{-Tx: '120px', -Ty: '80px', -Fx: '40px', -Fy: '0px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.35s'}}></div>
+<div className="absolute w-10 h-10 bg-ink-600 border border-white/10 shadow-sm" style={{'--tx': '-200px', '--ty': '0px', '--fx': '-40px', '--fy': '0px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.25s'}}></div>
+<div className="absolute w-10 h-10 bg-ink-800 border border-white/10 shadow-sm" style={{'--tx': '0px', '--ty': '-120px', '--fx': '0px', '--fy': '0px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.3s'}}></div>
+<div className="absolute w-10 h-10 bg-teal-600 border border-white/10 shadow-sm" style={{'--tx': '120px', '--ty': '80px', '--fx': '40px', '--fy': '0px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.35s'}}></div>
 
-<div className="absolute w-10 h-10 bg-blue-600 border border-white/10 shadow-sm" style={{-Tx: '-80px', -Ty: '160px', -Fx: '-40px', -Fy: '40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.4s'}}></div>
-<div className="absolute w-10 h-10 bg-ink-teal/80 border border-white/10 shadow-sm" style={{-Tx: '40px', -Ty: '200px', -Fx: '0px', -Fy: '40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.45s'}}></div>
-<div className="absolute w-10 h-10 bg-ink-900 border border-white/10 shadow-sm" style={{-Tx: '160px', -Ty: '120px', -Fx: '40px', -Fy: '40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.5s'}}></div>
+<div className="absolute w-10 h-10 bg-blue-600 border border-white/10 shadow-sm" style={{'--tx': '-80px', '--ty': '160px', '--fx': '-40px', '--fy': '40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.4s'}}></div>
+<div className="absolute w-10 h-10 bg-ink-teal/80 border border-white/10 shadow-sm" style={{'--tx': '40px', '--ty': '200px', '--fx': '0px', '--fy': '40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.45s'}}></div>
+<div className="absolute w-10 h-10 bg-ink-900 border border-white/10 shadow-sm" style={{'--tx': '160px', '--ty': '120px', '--fx': '40px', '--fy': '40px', animation: 'shard-2d-assemble 6s cubic-bezier(0.4, 0, 0.2, 1) infinite', animationDelay: '0.5s'}}></div>
 </div>
 </div>
 </div>

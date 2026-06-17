@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -44,6 +80,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -262,7 +304,7 @@ gtag('config', 'G-2M6V79H761');
 <h4 className="text-base font-semibold text-neutral-900 leading-tight mt-6 mb-2">Find the Right Doctor</h4>
 <p className="text-sm text-neutral-500 mb-4 line-clamp-2">Connect with specialized doctors across all medical departments.</p>
 <div className="mt-auto w-full">
-<button className="group shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 overflow-hidden font-medium text-white bg-gradient-to-r from-[#4B83F4] to-[#2F6DF2] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(47,109,242,0.6), inset 0 4px 6.3px rgba(106,155,246,1), inset 0 -5px 6.3px rgba(29,78,216,1)'}}>
+<button className="group shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 overflow-hidden font-medium text-white bg-gradient-to-r from-[#4B83F4] to-[#2F6DF2] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(47, 109, 242, 0.6), inset 0 4px 6.3px rgba(106, 155, 246, 1), inset 0 -5px 6.3px rgba(29,78,216,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 translate-y-full"></div>
 <span className="relative flex items-center justify-center gap-2">
             Learn More
@@ -284,7 +326,7 @@ gtag('config', 'G-2M6V79H761');
 <h4 className="text-base font-semibold text-[#1e3a8a] leading-tight mt-6 mb-2">Easy Appointment Booking</h4>
 <p className="text-sm text-neutral-500 mb-4 line-clamp-2">Schedule and manage your hospital visits instantly online.</p>
 <div className="mt-auto w-full">
-<button className="group shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 overflow-hidden font-medium text-white bg-gradient-to-r from-[#4B83F4] to-[#2F6DF2] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(47,109,242,0.6), inset 0 4px 6.3px rgba(106,155,246,1), inset 0 -5px 6.3px rgba(29,78,216,1)'}}>
+<button className="group shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 overflow-hidden font-medium text-white bg-gradient-to-r from-[#4B83F4] to-[#2F6DF2] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(47, 109, 242, 0.6), inset 0 4px 6.3px rgba(106, 155, 246, 1), inset 0 -5px 6.3px rgba(29,78,216,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 translate-y-full"></div>
 <span className="relative flex items-center justify-center gap-2">
             Book Now
@@ -307,7 +349,7 @@ gtag('config', 'G-2M6V79H761');
 <h4 className="text-base font-semibold text-neutral-900 leading-tight mt-6 mb-2">Digital Health Records</h4>
 <p className="text-sm text-neutral-500 mb-4 line-clamp-2">Access your test results and health history securely.</p>
 <div className="mt-auto w-full">
-<button className="group shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 overflow-hidden font-medium text-white bg-gradient-to-r from-[#4B83F4] to-[#2F6DF2] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(47,109,242,0.6), inset 0 4px 6.3px rgba(106,155,246,1), inset 0 -5px 6.3px rgba(29,78,216,1)'}}>
+<button className="group shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 overflow-hidden font-medium text-white bg-gradient-to-r from-[#4B83F4] to-[#2F6DF2] rounded-lg py-2.5 px-4 relative shadow-lg w-full text-sm" style={{boxShadow: '0 15px 33px -12px rgba(47, 109, 242, 0.6), inset 0 4px 6.3px rgba(106, 155, 246, 1), inset 0 -5px 6.3px rgba(29,78,216,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 translate-y-full"></div>
 <span className="relative flex items-center justify-center gap-2">
             View Portal

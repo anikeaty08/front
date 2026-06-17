@@ -11,6 +11,42 @@ export default function App() {
   });
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observerOptions = {
       threshold: 0.15,
       rootMargin: "0px 0px -10% 0px"
@@ -49,9 +85,9 @@ export default function App() {
   };
 
   return (
-    <div className="h-full w-full" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div className="h-full w-full" style={{fontFamily: "'Inter', sans-serif"}}>
       <div className="aura-background-component -z-10 w-full h-[1040px] absolute top-0">
-        <div className="absolute w-full h-full left-0 top-0 -z-10" style={{ filter: 'hue-rotate(90deg)' }}>
+        <div className="absolute w-full h-full left-0 top-0 -z-10" style={{filter: 'hue-rotate(90deg)'}}>
           <UnicornScene projectId="vTTCp5g4cVl9nwjlT56Z" />
         </div>
       </div>
@@ -96,7 +132,7 @@ export default function App() {
                   { title: "Stripe Rebrand", name: "Sarah Chen", role: "Lead Designer", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1080&q=80", bg: "https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&q=80" },
                   { title: "Vercel Ship", name: "David Park", role: "Creative Developer", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1080&q=80", bg: "https://images.unsplash.com/photo-1629946832022-c327f74956e0?w=2160&q=80" }
                 ].map((card, idx) => (
-                  <div key={idx} className="relative overflow-hidden rounded-2xl lg:rounded-3xl group bg-cover bg-center shadow-xl w-full min-h-[350px]" style={{ backgroundImage: `url('${card.bg}')` }}>
+                  <div key={idx} className="relative overflow-hidden rounded-2xl lg:rounded-3xl group bg-cover bg-center shadow-xl w-full min-h-[350px]" style={{backgroundImage: `url('${card.bg}')`}}>
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-500"></div>
                     <div className="z-10 flex flex-col p-6 h-full relative justify-between text-left">
                       <h3 className="text-2xl font-normal text-white tracking-tight">{card.title}</h3>

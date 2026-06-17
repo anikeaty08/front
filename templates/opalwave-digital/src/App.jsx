@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -145,6 +181,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -943,7 +985,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="overflow-hidden pt-24 pb-12 relative" id="audit">
 <div className="max-w-4xl mx-auto px-6">
-<div className="glass-panel p-1 rounded-3xl relative overflow-hidden group hover:border-purple-500/30 transition-colors duration-500" style={{-MouseX: '-67px', -MouseY: '-913px'}}>
+<div className="glass-panel p-1 rounded-3xl relative overflow-hidden group hover:border-purple-500/30 transition-colors duration-500" style={{'--mouse-x': '-67px', '--mouse-y': '-913px'}}>
 <div className="bg-[#050505] rounded-[22px] p-8 md:p-12 relative overflow-hidden">
 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-purple-500/20 to-indigo-500/5 rounded-full filter blur-[100px] pointer-events-none group-hover:opacity-80 transition-opacity"></div>
 <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-emerald-500/5 rounded-full filter blur-[80px] pointer-events-none"></div>

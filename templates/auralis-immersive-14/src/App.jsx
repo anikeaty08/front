@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -473,6 +509,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -575,7 +617,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="tab-pane grid grid-cols-1 md:grid-cols-2 gap-6" id="tab-infra">
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1300.2727355957031px', -MouseY: '2956.426025390625px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1300.2727355957031px', '--mouse-y': '2956.426025390625px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#F97316] group-hover:translate-x-2">01</span>
@@ -599,7 +641,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 </div>
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '648.2770385742188px', -MouseY: '2956.426025390625px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '648.2770385742188px', '--mouse-y': '2956.426025390625px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#429DFE] group-hover:translate-x-2">02</span>
@@ -626,7 +668,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="tab-pane hidden grid-cols-1 md:grid-cols-2 gap-6" id="tab-intel">
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#FF91E3] group-hover:translate-x-2">03</span>
@@ -650,7 +692,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 </div>
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#10B981] group-hover:translate-x-2">04</span>
@@ -677,7 +719,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="tab-pane hidden grid-cols-1 md:grid-cols-2 gap-6" id="tab-connect">
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#F59E0B] group-hover:translate-x-2">05</span>
@@ -701,7 +743,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 </div>
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#8B5CF6] group-hover:translate-x-2">06</span>
@@ -728,7 +770,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="tab-pane hidden grid-cols-1 md:grid-cols-2 gap-6" id="tab-security">
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#EF4444] group-hover:translate-x-2">07</span>
@@ -752,7 +794,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 </div>
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#6366F1] group-hover:translate-x-2">08</span>
@@ -779,7 +821,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="tab-pane hidden grid-cols-1 md:grid-cols-2 gap-6" id="tab-analytics">
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#14B8A6] group-hover:translate-x-2">09</span>
@@ -803,7 +845,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 </div>
-<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{-MouseX: '1443px', -MouseY: '556px'}}>
+<div className="glow-card interactive bg-[#020617] border border-[#262626] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden group min-h-[60vh] transition-all duration-700 hover:-translate-y-2 hover:border-white/20" style={{'--mouse-x': '1443px', '--mouse-y': '556px'}}>
 <div className="absolute inset-0 bg-[#080808] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0 pointer-events-none"></div>
 <div className="relative z-10 flex justify-between items-start mb-12">
 <span className="text-5xl font-extralight opacity-20 font-mono transition-all duration-500 group-hover:opacity-100 group-hover:text-[#EC4899] group-hover:translate-x-2">10</span>
@@ -849,7 +891,7 @@ gtag('config', 'G-2M6V79H761');
                 </h2>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-<div className="glow-card interactive bg-[#080808] border border-[#262626] p-8 md:p-10 rounded-3xl flex flex-col justify-between min-h-[400px] gs-fade-up hover:border-white/20 transition-all duration-700 hover:-translate-y-2 group cursor-default" style={{-MouseX: '1116.1660614013672px', -MouseY: '-3138.343505859375px'}}>
+<div className="glow-card interactive bg-[#080808] border border-[#262626] p-8 md:p-10 rounded-3xl flex flex-col justify-between min-h-[400px] gs-fade-up hover:border-white/20 transition-all duration-700 hover:-translate-y-2 group cursor-default" style={{'--mouse-x': '1116.1660614013672px', '--mouse-y': '-3138.343505859375px'}}>
 <iconify-icon className="text-white/10 group-hover:text-[#F97316] transition-colors duration-500 mb-8" icon="solar:quote-left-linear" width="32"></iconify-icon>
 <p className="text-base md:text-lg font-light text-white/80 leading-relaxed mb-12 flex-grow group-hover:text-white transition-colors duration-500">
                         "Auralis completely redefined our developmental workflow. The environment acts as a catalyst for deep work, stripping away the friction of traditional spaces."

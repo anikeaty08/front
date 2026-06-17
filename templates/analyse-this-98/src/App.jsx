@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -233,6 +269,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -273,19 +315,19 @@ gtag('config', 'G-2M6V79H761');
         <span>// WORLD CUP 2026</span>
 </div>
 <nav style={{display: 'flex', alignItems: 'center', gap: '0'}}>
-<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
+<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
           Home
         </a>
-<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
+<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
           About
         </a>
-<a href="#glory-section" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
+<a href="#glory-section" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
           How It Works
         </a>
-<a href="#prizes-section" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
+<a href="#prizes-section" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', transition: 'color 0.2s'}}>
           Prizes
         </a>
-<a href="#conduct-section" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', marginRight: '20px', transition: 'color 0.2s'}}>
+<a href="#conduct-section" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(255,255,255,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', textDecoration: 'none', padding: '8px 16px', marginRight: '20px', transition: 'color 0.2s'}}>
           Rules
         </a>
 <a className="btn-primary" href="#" style={{fontSize: '11px', padding: '13px 24px', clipPath: 'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)', gap: '8px'}}>
@@ -703,10 +745,10 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="8.5" cy="8.5" r="1.5"></circle>
 <polyline points="21 15 16 10 5 21"></polyline>
 </svg>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(255,196,0,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(255,196,0,0.4)', textTransform: 'uppercase'}}>
                   Grand Final
                 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.25)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.25)', textTransform: 'uppercase'}}>
                   Event Photo
                 </div>
 </div>
@@ -742,10 +784,10 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 <div id="funnel-container" style={{position: 'relative', maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', gap: '0'}}>
-<div className="funnel-step" data-funnel="0" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease,transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+<div className="funnel-step" data-funnel="0" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease, transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 <div style={{position: 'relative', width: '100%', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.18)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1,215,253,0.04)', border: '1px solid rgba(1,215,253,0.18)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s,background 0.3s', cursor: 'default'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
+<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.18)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1, 215, 253, 0.04)', border: '1px solid rgba(1,215,253,0.18)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s, background 0.3s', cursor: 'default'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
                   Registration
                 </div>
 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2px', maxWidth: '160px', margin: '4px auto'}}>
@@ -802,16 +844,16 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="7" r="4"></circle>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
 <span style={{color: 'var(--neon)', textShadow: '0 0 15px rgba(1,215,253,0.5)'}}>
                     1,000,000
                   </span>
                   +
                 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                   Traders
                 </div>
-<div style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
+<div style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
                   Global open registration
                 </div>
 </div>
@@ -823,10 +865,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M8 5L0 0v10l8-5z" fill="rgba(1,215,253,0.3)"></path>
 </svg>
 </div>
-<div className="funnel-step" data-funnel="1" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease,transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+<div className="funnel-step" data-funnel="1" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease, transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 <div style={{position: 'relative', width: '100%', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.16)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1,215,253,0.04)', border: '1px solid rgba(1,215,253,0.16)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s,background 0.3s', cursor: 'default'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
+<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.16)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1, 215, 253, 0.04)', border: '1px solid rgba(1,215,253,0.16)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s, background 0.3s', cursor: 'default'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
                   Qualifiers
                 </div>
 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '3px', maxWidth: '140px', margin: '6px auto'}}>
@@ -857,15 +899,15 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="7" r="4"></circle>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
 <span style={{color: 'var(--neon)', textShadow: '0 0 15px rgba(1,215,253,0.5)'}}>
                     48
                   </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                   Traders
                 </div>
-<div style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
+<div style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
                   Top 1 per country
                 </div>
 </div>
@@ -877,10 +919,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M8 5L0 0v10l8-5z" fill="rgba(1,215,253,0.3)"></path>
 </svg>
 </div>
-<div className="funnel-step" data-funnel="2" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease,transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+<div className="funnel-step" data-funnel="2" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease, transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 <div style={{position: 'relative', width: '100%', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.14)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1,215,253,0.04)', border: '1px solid rgba(1,215,253,0.14)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s,background 0.3s', cursor: 'default'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
+<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.14)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1, 215, 253, 0.04)', border: '1px solid rgba(1,215,253,0.14)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s, background 0.3s', cursor: 'default'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
                   Round of 48
                 </div>
 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '3px', maxWidth: '100px', margin: '8px auto'}}>
@@ -899,15 +941,15 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="7" r="4"></circle>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
 <span style={{color: 'var(--neon)', textShadow: '0 0 15px rgba(1,215,253,0.5)'}}>
                     24
                   </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                   Traders
                 </div>
-<div style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
+<div style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
                   1v1 bracket matches
                 </div>
 </div>
@@ -919,10 +961,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M8 5L0 0v10l8-5z" fill="rgba(1,215,253,0.3)"></path>
 </svg>
 </div>
-<div className="funnel-step" data-funnel="3" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease,transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+<div className="funnel-step" data-funnel="3" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease, transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 <div style={{position: 'relative', width: '100%', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.14)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1,215,253,0.04)', border: '1px solid rgba(1,215,253,0.14)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s,background 0.3s', cursor: 'default'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
+<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.4)';this.style.background='rgba(1,215,253,0.07)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.14)';this.style.background='rgba(1,215,253,0.04)'" style={{width: '100%', height: '260px', background: 'rgba(1, 215, 253, 0.04)', border: '1px solid rgba(1,215,253,0.14)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s, background 0.3s', cursor: 'default'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
                   Round of 24
                 </div>
 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '4px', maxWidth: '80px', margin: '8px auto'}}>
@@ -935,15 +977,15 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="7" r="4"></circle>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
 <span style={{color: 'var(--neon)', textShadow: '0 0 15px rgba(1,215,253,0.5)'}}>
                     12
                   </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                   Traders
                 </div>
-<div style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
+<div style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
                   Weekly elimination
                 </div>
 </div>
@@ -955,10 +997,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M8 5L0 0v10l8-5z" fill="rgba(1,215,253,0.3)"></path>
 </svg>
 </div>
-<div className="funnel-step" data-funnel="4" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease,transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+<div className="funnel-step" data-funnel="4" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease, transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 <div style={{position: 'relative', width: '100%', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.45)';this.style.background='rgba(1,215,253,0.08)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.16)';this.style.background='rgba(1,215,253,0.05)'" style={{width: '100%', height: '260px', background: 'rgba(1,215,253,0.05)', border: '1px solid rgba(1,215,253,0.16)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s,background 0.3s', cursor: 'default'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
+<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.45)';this.style.background='rgba(1,215,253,0.08)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.16)';this.style.background='rgba(1,215,253,0.05)'" style={{width: '100%', height: '260px', background: 'rgba(1, 215, 253, 0.05)', border: '1px solid rgba(1,215,253,0.16)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s, background 0.3s', cursor: 'default'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase'}}>
                   Quarter-Finals
                 </div>
 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px', margin: '10px auto'}}>
@@ -973,15 +1015,15 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="7" r="4"></circle>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
 <span style={{color: 'var(--neon)', textShadow: '0 0 15px rgba(1,215,253,0.5)'}}>
                     4
                   </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                   Traders
                 </div>
-<div style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
+<div style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
                   Best of the best
                 </div>
 </div>
@@ -993,10 +1035,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M8 5L0 0v10l8-5z" fill="rgba(255,196,0,0.35)"></path>
 </svg>
 </div>
-<div className="funnel-step" data-funnel="5" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease,transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+<div className="funnel-step" data-funnel="5" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease, transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 <div style={{position: 'relative', width: '100%', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div onmouseenter="this.style.borderColor='rgba(255,196,0,0.45)';this.style.background='rgba(255,196,0,0.06)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.2)';this.style.background='rgba(255,196,0,0.03)'" style={{width: '100%', height: '260px', background: 'rgba(255,196,0,0.03)', border: '1px solid rgba(255,196,0,0.2)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s,background 0.3s', cursor: 'default'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(255,196,0,0.6)', textTransform: 'uppercase'}}>
+<div onmouseenter="this.style.borderColor='rgba(255,196,0,0.45)';this.style.background='rgba(255,196,0,0.06)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.2)';this.style.background='rgba(255,196,0,0.03)'" style={{width: '100%', height: '260px', background: 'rgba(255, 196, 0, 0.03)', border: '1px solid rgba(255,196,0,0.2)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'center', transition: 'border-color 0.3s, background 0.3s', cursor: 'default'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(255,196,0,0.6)', textTransform: 'uppercase'}}>
                   Semi-Finals
                 </div>
 <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', margin: '10px auto'}}>
@@ -1007,13 +1049,13 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="7" r="4"></circle>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 15px rgba(255,196,0,0.5)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 15px rgba(255,196,0,0.5)'}}>
                   2
                 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(255,196,0,0.5)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(255,196,0,0.5)', textTransform: 'uppercase'}}>
                   Traders
                 </div>
-<div style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
+<div style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
                   Two finalists emerge
                 </div>
 </div>
@@ -1025,10 +1067,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M8 5L0 0v10l8-5z" fill="rgba(255,196,0,0.45)"></path>
 </svg>
 </div>
-<div className="funnel-step" data-funnel="6" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease,transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+<div className="funnel-step" data-funnel="6" style={{opacity: '0', transform: 'translateY(30px)', transition: 'opacity 0.6s ease, transform 0.6s ease', flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 <div style={{position: 'relative', width: '100%', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div onmouseenter="this.style.borderColor='rgba(255,196,0,0.6)';this.style.background='rgba(255,196,0,0.1)';this.style.boxShadow='0 0 40px rgba(255,196,0,0.15)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.06)';this.style.boxShadow='none'" style={{width: '100%', height: '260px', background: 'rgba(255,196,0,0.06)', border: '1px solid rgba(255,196,0,0.35)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', textAlign: 'center', transition: 'border-color 0.3s,background 0.3s,box-shadow 0.3s', cursor: 'default'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(255,196,0,0.7)', textTransform: 'uppercase'}}>
+<div onmouseenter="this.style.borderColor='rgba(255,196,0,0.6)';this.style.background='rgba(255,196,0,0.1)';this.style.boxShadow='0 0 40px rgba(255,196,0,0.15)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.06)';this.style.boxShadow='none'" style={{width: '100%', height: '260px', background: 'rgba(255, 196, 0, 0.06)', border: '1px solid rgba(255,196,0,0.35)', padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', textAlign: 'center', transition: 'border-color 0.3s, background 0.3s, box-shadow 0.3s', cursor: 'default'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(255,196,0,0.7)', textTransform: 'uppercase'}}>
                   Grand Final
                 </div>
 <div style={{display: 'flex', justifyContent: 'center', margin: '8px auto'}}>
@@ -1037,13 +1079,13 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="7" r="4"></circle>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 15px rgba(255,196,0,0.5)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 15px rgba(255,196,0,0.5)'}}>
                   1
                 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(255,196,0,0.5)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(255,196,0,0.5)', textTransform: 'uppercase'}}>
                   Trader
                 </div>
-<div style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
+<div style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', color: 'rgba(255,255,255,0.4)', marginTop: '4px'}}>
                   🏆 World Champion
                 </div>
 </div>
@@ -1061,11 +1103,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="section-eyebrow">
 <span className="eyebrow-line" style={{background: 'linear-gradient(90deg,transparent,rgba(255,196,0,0.5))'}}></span>
 <span style={{color: 'rgba(255,196,0,0.6)'}}>The Spoils Of War</span>
-<span className="eyebrow-line" style={{background: 'linear-gradient(90deg,transparent,rgba(255,196,0,0.5))', transform: 'scaleX(-1)'}}></span>
+<span className="eyebrow-line" style={{background: 'linear-gradient(90deg, transparent, rgba(255, 196, 0, 0.5))', transform: 'scaleX(-1)'}}></span>
 </div>
 <h2 className="section-title" style={{letterSpacing: '0.05em'}}>
             LIFE-CHANGING
-            <span style={{color: '#ffc400', textShadow: '0 0 30px rgba(255,196,0,0.4),0 0 80px rgba(255,196,0,0.15)'}}>
+            <span style={{color: '#ffc400', textShadow: '0 0 30px rgba(255, 196, 0, 0.4), 0 0 80px rgba(255,196,0,0.15)'}}>
               REWARDS
             </span>
 </h2>
@@ -1076,22 +1118,22 @@ gtag('config', 'G-2M6V79H761');
 
 <div style={{display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '20px', maxWidth: '1000px', margin: '0 auto 100px', flexWrap: 'wrap'}}>
 
-<div className="prize-card" style={{flex: '1', minWidth: '260px', maxWidth: '300px', order: '1', opacity: '0', transform: 'translateY(40px)', transition: 'opacity 0.7s ease,transform 0.7s ease'}}>
-<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.45)';this.style.boxShadow='0 0 40px rgba(1,215,253,0.12)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.2)';this.style.boxShadow='none'" style={{position: 'relative', border: '1px solid rgba(1,215,253,0.2)', background: 'linear-gradient(180deg,rgba(1,215,253,0.06) 0%,rgba(1,215,253,0.01) 100%)', clipPath: 'polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))', padding: '0', overflow: 'hidden', transition: 'border-color 0.3s,box-shadow 0.3s'}}>
+<div className="prize-card" style={{flex: '1', minWidth: '260px', maxWidth: '300px', order: '1', opacity: '0', transform: 'translateY(40px)', transition: 'opacity 0.7s ease, transform 0.7s ease'}}>
+<div onmouseenter="this.style.borderColor='rgba(1,215,253,0.45)';this.style.boxShadow='0 0 40px rgba(1,215,253,0.12)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.2)';this.style.boxShadow='none'" style={{position: 'relative', border: '1px solid rgba(1,215,253,0.2)', background: 'linear-gradient(180deg,rgba(1,215,253,0.06) 0%,rgba(1,215,253,0.01) 100%)', clipPath: 'polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))', padding: '0', overflow: 'hidden', transition: 'border-color 0.3s, box-shadow 0.3s'}}>
 
-<div style={{background: 'linear-gradient(135deg,rgba(1,215,253,0.12),rgba(1,215,253,0.04))', padding: '16px 24px 12px', borderBottom: '1px solid rgba(1,215,253,0.1)', textAlign: 'center'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase', marginBottom: '4px'}}>
+<div style={{background: 'linear-gradient(135deg, rgba(1, 215, 253, 0.12), rgba(1, 215, 253, 0.04))', padding: '16px 24px 12px', borderBottom: '1px solid rgba(1,215,253,0.1)', textAlign: 'center'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase', marginBottom: '4px'}}>
                   3rd Place
                 </div>
 <div style={{fontSize: '36px', lineHeight: '1', marginBottom: '6px'}}>
                   🥉
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '15px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '15px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
                   2nd Runner Up
                 </div>
 </div>
 
-<div style={{width: '100%', aspectRatio: '4/3', background: 'linear-gradient(135deg,rgba(1,215,253,0.04),rgba(2,6,16,0.9))', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(1,215,253,0.08)', position: 'relative', overflow: 'hidden'}}>
+<div style={{width: '100%', aspectRatio: '4/3', background: 'linear-gradient(135deg, rgba(1, 215, 253, 0.04), rgba(2, 6, 16, 0.9))', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(1,215,253,0.08)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', inset: '0', background: 'repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(1,215,253,0.02) 10px,rgba(1,215,253,0.02) 20px)'}}></div>
 <div style={{textAlign: 'center', position: 'relative', zIndex: '1'}}>
 <svg fill="none" height="48" stroke="rgba(1,215,253,0.25)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewbox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -1099,35 +1141,35 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="8.5" cy="8.5" r="1.5"></circle>
 <polyline points="21 15 16 10 5 21"></polyline>
 </svg>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.25)', textTransform: 'uppercase', marginTop: '8px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.25)', textTransform: 'uppercase', marginTop: '8px'}}>
                     Prize Photo
                   </div>
 </div>
 </div>
 
 <div style={{padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px'}}>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(1,215,253,0.04)', border: '1px solid rgba(1,215,253,0.1)'}}>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(1, 215, 253, 0.04)', border: '1px solid rgba(1,215,253,0.1)'}}>
 <div style={{width: '8px', height: '8px', background: 'var(--neon)', boxShadow: '0 0 12px var(--neon)', borderRadius: '1px', flexShrink: '0'}}></div>
 <div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
 <span style={{color: 'var(--neon)', textShadow: '0 0 20px rgba(1,215,253,0.5)'}}>
                         $5,000
                       </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginTop: '2px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginTop: '2px'}}>
                       Cash Prize
                     </div>
 </div>
 </div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(1,215,253,0.04)', border: '1px solid rgba(1,215,253,0.1)'}}>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(1, 215, 253, 0.04)', border: '1px solid rgba(1,215,253,0.1)'}}>
 <div style={{width: '8px', height: '8px', background: 'var(--neon)', boxShadow: '0 0 12px var(--neon)', borderRadius: '1px', flexShrink: '0'}}></div>
 <div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(18px,2vw,22px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(18px,2vw,22px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
 <span style={{color: 'var(--neon)', textShadow: '0 0 20px rgba(1,215,253,0.5)'}}>
                         $50K
                       </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginTop: '2px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginTop: '2px'}}>
                       Funded Trading Account
                     </div>
 </div>
@@ -1136,27 +1178,27 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="prize-card" style={{flex: '1', minWidth: '280px', maxWidth: '340px', order: '2', opacity: '0', transform: 'translateY(40px)', transition: 'opacity 0.7s ease 0.15s,transform 0.7s ease 0.15s'}}>
-<div onmouseenter="this.style.borderColor='rgba(255,196,0,0.6)';this.style.boxShadow='0 0 80px rgba(255,196,0,0.2),0 0 160px rgba(255,196,0,0.06)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.35)';this.style.boxShadow='0 0 60px rgba(255,196,0,0.08),0 0 120px rgba(255,196,0,0.03)'" style={{position: 'relative', border: '1px solid rgba(255,196,0,0.35)', background: 'linear-gradient(180deg,rgba(255,196,0,0.08) 0%,rgba(255,196,0,0.01) 100%)', clipPath: 'polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))', padding: '0', overflow: 'hidden', transition: 'border-color 0.3s,box-shadow 0.3s', boxShadow: '0 0 60px rgba(255,196,0,0.08),0 0 120px rgba(255,196,0,0.03)'}}>
+<div className="prize-card" style={{flex: '1', minWidth: '280px', maxWidth: '340px', order: '2', opacity: '0', transform: 'translateY(40px)', transition: 'opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s'}}>
+<div onmouseenter="this.style.borderColor='rgba(255,196,0,0.6)';this.style.boxShadow='0 0 80px rgba(255,196,0,0.2),0 0 160px rgba(255,196,0,0.06)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.35)';this.style.boxShadow='0 0 60px rgba(255,196,0,0.08),0 0 120px rgba(255,196,0,0.03)'" style={{position: 'relative', border: '1px solid rgba(255, 196, 0, 0.35)', background: 'linear-gradient(180deg, rgba(255, 196, 0, 0.08) 0%, rgba(255, 196, 0, 0.01) 100%)', clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))', padding: '0', overflow: 'hidden', transition: 'border-color 0.3s, box-shadow 0.3s', boxShadow: '0 0 60px rgba(255, 196, 0, 0.08), 0 0 120px rgba(255,196,0,0.03)'}}>
 
 <div style={{position: 'absolute', top: '0', right: '0', width: '0', height: '0', borderTop: '20px solid rgba(255,196,0,0.3)', borderLeft: '20px solid transparent', zIndex: '2'}}></div>
 
 <div style={{position: 'absolute', top: '-1px', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,transparent,rgba(255,196,0,0.6),transparent)', animation: 'shimmer 3s ease-in-out infinite'}}></div>
 
-<div style={{background: 'linear-gradient(135deg,rgba(255,196,0,0.15),rgba(255,196,0,0.04))', padding: '20px 24px 16px', borderBottom: '1px solid rgba(255,196,0,0.15)', textAlign: 'center', position: 'relative'}}>
+<div style={{background: 'linear-gradient(135deg, rgba(255, 196, 0, 0.15), rgba(255, 196, 0, 0.04))', padding: '20px 24px 16px', borderBottom: '1px solid rgba(255,196,0,0.15)', textAlign: 'center', position: 'relative'}}>
 <div style={{position: 'absolute', inset: '0', background: 'radial-gradient(ellipse at 50% 0%,rgba(255,196,0,0.1),transparent 70%)', pointerEvents: 'none'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.5em', color: 'rgba(255,196,0,0.7)', textTransform: 'uppercase', marginBottom: '6px', position: 'relative'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.5em', color: 'rgba(255,196,0,0.7)', textTransform: 'uppercase', marginBottom: '6px', position: 'relative'}}>
                   World Champion
                 </div>
 <div style={{fontSize: '48px', lineHeight: '1', marginBottom: '8px', filter: 'drop-shadow(0 0 20px rgba(255,196,0,0.4))', position: 'relative'}}>
                   🏆
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '18px', fontWeight: '800', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', textShadow: '0 0 30px rgba(255,196,0,0.5)', position: 'relative'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '18px', fontWeight: '800', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', textShadow: '0 0 30px rgba(255,196,0,0.5)', position: 'relative'}}>
                   THE GOLDEN BULL
                 </div>
 </div>
 
-<div style={{width: '100%', aspectRatio: '4/3', background: 'linear-gradient(135deg,rgba(255,196,0,0.04),rgba(2,6,16,0.9))', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(255,196,0,0.1)', position: 'relative', overflow: 'hidden'}}>
+<div style={{width: '100%', aspectRatio: '4/3', background: 'linear-gradient(135deg, rgba(255, 196, 0, 0.04), rgba(2, 6, 16, 0.9))', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(255,196,0,0.1)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', inset: '0', background: 'repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,196,0,0.015) 10px,rgba(255,196,0,0.015) 20px)'}}></div>
 <div style={{position: 'absolute', inset: '0', background: 'radial-gradient(ellipse at 50% 50%,rgba(255,196,0,0.06),transparent 70%)'}}></div>
 <div style={{textAlign: 'center', position: 'relative', zIndex: '1'}}>
@@ -1165,31 +1207,31 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="8.5" cy="8.5" r="1.5"></circle>
 <polyline points="21 15 16 10 5 21"></polyline>
 </svg>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.3)', textTransform: 'uppercase', marginTop: '8px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.3)', textTransform: 'uppercase', marginTop: '8px'}}>
                     Prize Photo
                   </div>
 </div>
 </div>
 
 <div style={{padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px'}}>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 18px', background: 'rgba(255,196,0,0.06)', border: '1px solid rgba(255,196,0,0.18)'}}>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 18px', background: 'rgba(255, 196, 0, 0.06)', border: '1px solid rgba(255,196,0,0.18)'}}>
 <div style={{width: '10px', height: '10px', background: '#ffc400', boxShadow: '0 0 16px rgba(255,196,0,0.6)', borderRadius: '1px', flexShrink: '0'}}></div>
 <div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(24px,3vw,34px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 25px rgba(255,196,0,0.5)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(24px, 3vw, 34px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 25px rgba(255,196,0,0.5)'}}>
                       $25,000
                     </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.6)', textTransform: 'uppercase', marginTop: '3px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.6)', textTransform: 'uppercase', marginTop: '3px'}}>
                       Cash Prize
                     </div>
 </div>
 </div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 18px', background: 'rgba(255,196,0,0.06)', border: '1px solid rgba(255,196,0,0.18)'}}>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 18px', background: 'rgba(255, 196, 0, 0.06)', border: '1px solid rgba(255,196,0,0.18)'}}>
 <div style={{width: '10px', height: '10px', background: '#ffc400', boxShadow: '0 0 16px rgba(255,196,0,0.6)', borderRadius: '1px', flexShrink: '0'}}></div>
 <div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(22px,2.5vw,28px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 25px rgba(255,196,0,0.5)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(22px, 2.5vw, 28px)', fontWeight: '700', color: '#ffc400', lineHeight: '1', textShadow: '0 0 25px rgba(255,196,0,0.5)'}}>
                       $250K
                     </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.6)', textTransform: 'uppercase', marginTop: '3px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(255,196,0,0.6)', textTransform: 'uppercase', marginTop: '3px'}}>
                       Funded Trading Account
                     </div>
 </div>
@@ -1198,22 +1240,22 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="prize-card" style={{flex: '1', minWidth: '260px', maxWidth: '300px', order: '3', opacity: '0', transform: 'translateY(40px)', transition: 'opacity 0.7s ease 0.3s,transform 0.7s ease 0.3s'}}>
-<div onmouseenter="this.style.borderColor='rgba(192,192,192,0.45)';this.style.boxShadow='0 0 40px rgba(192,192,192,0.1)'" onmouseleave="this.style.borderColor='rgba(192,192,192,0.2)';this.style.boxShadow='none'" style={{position: 'relative', border: '1px solid rgba(192,192,192,0.2)', background: 'linear-gradient(180deg,rgba(192,192,192,0.06) 0%,rgba(192,192,192,0.01) 100%)', clipPath: 'polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))', padding: '0', overflow: 'hidden', transition: 'border-color 0.3s,box-shadow 0.3s'}}>
+<div className="prize-card" style={{flex: '1', minWidth: '260px', maxWidth: '300px', order: '3', opacity: '0', transform: 'translateY(40px)', transition: 'opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s'}}>
+<div onmouseenter="this.style.borderColor='rgba(192,192,192,0.45)';this.style.boxShadow='0 0 40px rgba(192,192,192,0.1)'" onmouseleave="this.style.borderColor='rgba(192,192,192,0.2)';this.style.boxShadow='none'" style={{position: 'relative', border: '1px solid rgba(192,192,192,0.2)', background: 'linear-gradient(180deg,rgba(192,192,192,0.06) 0%,rgba(192,192,192,0.01) 100%)', clipPath: 'polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))', padding: '0', overflow: 'hidden', transition: 'border-color 0.3s, box-shadow 0.3s'}}>
 
-<div style={{background: 'linear-gradient(135deg,rgba(192,192,192,0.1),rgba(192,192,192,0.03))', padding: '16px 24px 12px', borderBottom: '1px solid rgba(192,192,192,0.1)', textAlign: 'center'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(192,192,192,0.6)', textTransform: 'uppercase', marginBottom: '4px'}}>
+<div style={{background: 'linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(192, 192, 192, 0.03))', padding: '16px 24px 12px', borderBottom: '1px solid rgba(192,192,192,0.1)', textAlign: 'center'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(192,192,192,0.6)', textTransform: 'uppercase', marginBottom: '4px'}}>
                   2nd Place
                 </div>
 <div style={{fontSize: '36px', lineHeight: '1', marginBottom: '6px'}}>
                   🥈
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '15px', fontWeight: '700', color: 'rgba(192,192,192,0.9)', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '15px', fontWeight: '700', color: 'rgba(192,192,192,0.9)', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
                   1st Runner Up
                 </div>
 </div>
 
-<div style={{width: '100%', aspectRatio: '4/3', background: 'linear-gradient(135deg,rgba(192,192,192,0.03),rgba(2,6,16,0.9))', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(192,192,192,0.08)', position: 'relative', overflow: 'hidden'}}>
+<div style={{width: '100%', aspectRatio: '4/3', background: 'linear-gradient(135deg, rgba(192, 192, 192, 0.03), rgba(2, 6, 16, 0.9))', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(192,192,192,0.08)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', inset: '0', background: 'repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(192,192,192,0.015) 10px,rgba(192,192,192,0.015) 20px)'}}></div>
 <div style={{textAlign: 'center', position: 'relative', zIndex: '1'}}>
 <svg fill="none" height="48" stroke="rgba(192,192,192,0.25)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" viewbox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -1221,35 +1263,35 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="8.5" cy="8.5" r="1.5"></circle>
 <polyline points="21 15 16 10 5 21"></polyline>
 </svg>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(192,192,192,0.25)', textTransform: 'uppercase', marginTop: '8px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(192,192,192,0.25)', textTransform: 'uppercase', marginTop: '8px'}}>
                     Prize Photo
                   </div>
 </div>
 </div>
 
 <div style={{padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px'}}>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(192,192,192,0.04)', border: '1px solid rgba(192,192,192,0.12)'}}>
-<div style={{width: '8px', height: '8px', background: 'rgba(192,192,192,0.8)', boxShadow: '0 0 12px rgba(192,192,192,0.4)', borderRadius: '1px', flexShrink: '0'}}></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(192, 192, 192, 0.04)', border: '1px solid rgba(192,192,192,0.12)'}}>
+<div style={{width: '8px', height: '8px', background: 'rgba(192, 192, 192, 0.8)', boxShadow: '0 0 12px rgba(192,192,192,0.4)', borderRadius: '1px', flexShrink: '0'}}></div>
 <div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
-<span style={{color: 'rgba(192,192,192,0.9)', textShadow: '0 0 20px rgba(192,192,192,0.4)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<span style={{color: 'rgba(192, 192, 192, 0.9)', textShadow: '0 0 20px rgba(192,192,192,0.4)'}}>
                         $10,000
                       </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(192,192,192,0.5)', textTransform: 'uppercase', marginTop: '2px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(192,192,192,0.5)', textTransform: 'uppercase', marginTop: '2px'}}>
                       Cash Prize
                     </div>
 </div>
 </div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(192,192,192,0.04)', border: '1px solid rgba(192,192,192,0.12)'}}>
-<div style={{width: '8px', height: '8px', background: 'rgba(192,192,192,0.8)', boxShadow: '0 0 12px rgba(192,192,192,0.4)', borderRadius: '1px', flexShrink: '0'}}></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', background: 'rgba(192, 192, 192, 0.04)', border: '1px solid rgba(192,192,192,0.12)'}}>
+<div style={{width: '8px', height: '8px', background: 'rgba(192, 192, 192, 0.8)', boxShadow: '0 0 12px rgba(192,192,192,0.4)', borderRadius: '1px', flexShrink: '0'}}></div>
 <div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(18px,2vw,22px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
-<span style={{color: 'rgba(192,192,192,0.9)', textShadow: '0 0 20px rgba(192,192,192,0.4)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(18px,2vw,22px)', fontWeight: '700', color: '#fff', lineHeight: '1'}}>
+<span style={{color: 'rgba(192, 192, 192, 0.9)', textShadow: '0 0 20px rgba(192,192,192,0.4)'}}>
                         $100K
                       </span>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(192,192,192,0.5)', textTransform: 'uppercase', marginTop: '2px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(192,192,192,0.5)', textTransform: 'uppercase', marginTop: '2px'}}>
                       Funded Trading Account
                     </div>
 </div>
@@ -1261,10 +1303,10 @@ gtag('config', 'G-2M6V79H761');
 
 <div style={{maxWidth: '900px', margin: '0 auto 80px'}}>
 <div style={{textAlign: 'center', marginBottom: '40px'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.5em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase', marginBottom: '12px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.5em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase', marginBottom: '12px'}}>
               // Additional Rewards
             </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(22px,3vw,32px)', fontWeight: '800', color: '#fff', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(22px,3vw,32px)', fontWeight: '800', color: '#fff', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
               ELITE
               <span style={{color: 'var(--neon)', textShadow: '0 0 20px rgba(1,215,253,0.4)'}}>
                 PERKS
@@ -1273,11 +1315,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div id="perks-grid" style={{display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px'}}>
 
-<div className="perk-card" onmouseenter="this.style.borderColor='rgba(1,215,253,0.3)';this.style.background='rgba(1,215,253,0.05)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.12)';this.style.background='rgba(1,215,253,0.02)'" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity 0.5s ease,transform 0.5s ease', border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', transition: 'opacity 0.5s ease,transform 0.5s ease,border-color 0.3s,background 0.3s'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.35em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase'}}>
+<div className="perk-card" onmouseenter="this.style.borderColor='rgba(1,215,253,0.3)';this.style.background='rgba(1,215,253,0.05)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.12)';this.style.background='rgba(1,215,253,0.02)'" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity 0.5s ease,transform 0.5s ease', border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', transition: 'opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, background 0.3s'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.35em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase'}}>
                 11th - 25th Place
               </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '16px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.05em', textShadow: '0 0 15px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '16px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.05em', textShadow: '0 0 15px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                 Free Funded Accounts
               </div>
 <div style={{width: '40px', height: '1px', background: 'linear-gradient(90deg,transparent,rgba(1,215,253,0.3),transparent)'}}></div>
@@ -1286,11 +1328,11 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 
-<div className="perk-card" onmouseenter="this.style.borderColor='rgba(1,215,253,0.3)';this.style.background='rgba(1,215,253,0.05)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.12)';this.style.background='rgba(1,215,253,0.02)'" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity 0.5s ease 0.1s,transform 0.5s ease 0.1s', border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', transition: 'opacity 0.5s ease 0.1s,transform 0.5s ease 0.1s,border-color 0.3s,background 0.3s'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.35em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase'}}>
+<div className="perk-card" onmouseenter="this.style.borderColor='rgba(1,215,253,0.3)';this.style.background='rgba(1,215,253,0.05)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.12)';this.style.background='rgba(1,215,253,0.02)'" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity 0.5s ease 0.1s,transform 0.5s ease 0.1s', border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', transition: 'opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s, border-color 0.3s, background 0.3s'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.35em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase'}}>
                 26th - 48th Place
               </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '16px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.05em', textShadow: '0 0 15px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '16px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.05em', textShadow: '0 0 15px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                 50% Discount Vouchers
               </div>
 <div style={{width: '40px', height: '1px', background: 'linear-gradient(90deg,transparent,rgba(1,215,253,0.3),transparent)'}}></div>
@@ -1301,11 +1343,11 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 
-<div className="perk-card" onmouseenter="this.style.borderColor='rgba(1,215,253,0.3)';this.style.background='rgba(1,215,253,0.05)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.12)';this.style.background='rgba(1,215,253,0.02)'" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity 0.5s ease 0.2s,transform 0.5s ease 0.2s', border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', transition: 'opacity 0.5s ease 0.2s,transform 0.5s ease 0.2s,border-color 0.3s,background 0.3s'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.35em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase'}}>
+<div className="perk-card" onmouseenter="this.style.borderColor='rgba(1,215,253,0.3)';this.style.background='rgba(1,215,253,0.05)'" onmouseleave="this.style.borderColor='rgba(1,215,253,0.12)';this.style.background='rgba(1,215,253,0.02)'" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity 0.5s ease 0.2s,transform 0.5s ease 0.2s', border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', transition: 'opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s, border-color 0.3s, background 0.3s'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.35em', color: 'rgba(1,215,253,0.5)', textTransform: 'uppercase'}}>
                 Top 48 Finalists
               </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '16px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.05em', textShadow: '0 0 15px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '16px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.05em', textShadow: '0 0 15px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
                 Official Physical Jersey
               </div>
 <div style={{width: '40px', height: '1px', background: 'linear-gradient(90deg,transparent,rgba(1,215,253,0.3),transparent)'}}></div>
@@ -1329,10 +1371,10 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 <div style={{flex: '1', minWidth: '240px'}}>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: 'var(--neon)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px'}}>
                   What Is A "Funded Account"?
                 </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.6)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.6)', margin: '0'}}>
 <strong style={{color: '#fff'}}>Hola Prime</strong>
                   provides the capital. You trade it. You keep up to
                   <strong style={{color: 'var(--neon)'}}>90% of the profits</strong>
@@ -1358,11 +1400,11 @@ gtag('config', 'G-2M6V79H761');
 <span style={{color: 'rgba(255,196,0,0.6)'}}>
               The Pinnacle Of Trading
             </span>
-<span className="eyebrow-line" style={{background: 'linear-gradient(90deg,transparent,rgba(255,196,0,0.5))', transform: 'scaleX(-1)'}}></span>
+<span className="eyebrow-line" style={{background: 'linear-gradient(90deg, transparent, rgba(255, 196, 0, 0.5))', transform: 'scaleX(-1)'}}></span>
 </div>
 <h2 className="section-title" style={{letterSpacing: '0.05em'}}>
             THE TRADING
-            <span style={{color: '#ffc400', textShadow: '0 0 30px rgba(255,196,0,0.4),0 0 80px rgba(255,196,0,0.15)'}}>
+            <span style={{color: '#ffc400', textShadow: '0 0 30px rgba(255, 196, 0, 0.4), 0 0 80px rgba(255,196,0,0.15)'}}>
               THEATER
             </span>
 </h2>
@@ -1391,15 +1433,15 @@ gtag('config', 'G-2M6V79H761');
 <div style={{position: 'relative', zIndex: '2', padding: '20px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,196,0,0.1)'}}>
 <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
 <div style={{width: '8px', height: '8px', background: '#ff4444', borderRadius: '50%', boxShadow: '0 0 10px rgba(255,68,68,0.8)', animation: 'pulse 1.5s ease-in-out infinite'}}></div>
-<span style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(255,68,68,0.9)', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.4em', color: 'rgba(255,68,68,0.9)', textTransform: 'uppercase'}}>
                   Live Broadcast
                 </span>
 </div>
 <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.25em', color: 'rgba(255,196,0,0.6)'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.25em', color: 'rgba(255,196,0,0.6)'}}>
                   📍 DUBAI 2026
                 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.2em', color: 'rgba(1,215,253,0.5)'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.2em', color: 'rgba(1,215,253,0.5)'}}>
                   YOUTUBE · TWITCH
                 </div>
 </div>
@@ -1409,41 +1451,41 @@ gtag('config', 'G-2M6V79H761');
 
 <div style={{position: 'absolute', inset: '0', background: 'repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px)', pointerEvents: 'none'}}></div>
 
-<div style={{position: 'absolute', top: '16px', left: '16px', width: '28px', height: '28px', borderTop: '2px solid rgba(255,196,0,0.5)', borderLeft: '2px solid rgba(255,196,0,0.5)'}}></div>
-<div style={{position: 'absolute', top: '16px', right: '16px', width: '28px', height: '28px', borderTop: '2px solid rgba(255,196,0,0.5)', borderRight: '2px solid rgba(255,196,0,0.5)'}}></div>
-<div style={{position: 'absolute', bottom: '16px', left: '16px', width: '28px', height: '28px', borderBottom: '2px solid rgba(255,196,0,0.5)', borderLeft: '2px solid rgba(255,196,0,0.5)'}}></div>
-<div style={{position: 'absolute', bottom: '16px', right: '16px', width: '28px', height: '28px', borderBottom: '2px solid rgba(255,196,0,0.5)', borderRight: '2px solid rgba(255,196,0,0.5)'}}></div>
+<div style={{position: 'absolute', top: '16px', left: '16px', width: '28px', height: '28px', borderTop: '2px solid rgba(255, 196, 0, 0.5)', borderLeft: '2px solid rgba(255,196,0,0.5)'}}></div>
+<div style={{position: 'absolute', top: '16px', right: '16px', width: '28px', height: '28px', borderTop: '2px solid rgba(255, 196, 0, 0.5)', borderRight: '2px solid rgba(255,196,0,0.5)'}}></div>
+<div style={{position: 'absolute', bottom: '16px', left: '16px', width: '28px', height: '28px', borderBottom: '2px solid rgba(255, 196, 0, 0.5)', borderLeft: '2px solid rgba(255,196,0,0.5)'}}></div>
+<div style={{position: 'absolute', bottom: '16px', right: '16px', width: '28px', height: '28px', borderBottom: '2px solid rgba(255, 196, 0, 0.5)', borderRight: '2px solid rgba(255,196,0,0.5)'}}></div>
 
-<div style={{position: 'relative', zIndex: '1', width: '72px', height: '72px', border: '2px solid rgba(255,196,0,0.4)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,196,0,0.06)', boxShadow: '0 0 40px rgba(255,196,0,0.15)'}}>
+<div style={{position: 'relative', zIndex: '1', width: '72px', height: '72px', border: '2px solid rgba(255, 196, 0, 0.4)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255, 196, 0, 0.06)', boxShadow: '0 0 40px rgba(255,196,0,0.15)'}}>
 <div style={{width: '0', height: '0', borderTop: '14px solid transparent', borderBottom: '14px solid transparent', borderLeft: '22px solid rgba(255,196,0,0.7)', marginLeft: '5px'}}></div>
 </div>
 <div style={{position: 'relative', zIndex: '1', textAlign: 'center'}}>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(13px,2vw,18px)', fontWeight: '700', color: 'rgba(255,196,0,0.6)', letterSpacing: '0.2em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(13px, 2vw, 18px)', fontWeight: '700', color: 'rgba(255,196,0,0.6)', letterSpacing: '0.2em', textTransform: 'uppercase'}}>
                   Stream Coming Soon
                 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.25)', marginTop: '8px', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.25)', marginTop: '8px', textTransform: 'uppercase'}}>
                   Grand Final · August 2026 · Dubai
                 </div>
 </div>
 </div>
 
-<div style={{position: 'relative', zIndex: '2', padding: '16px 32px', borderTop: '1px solid rgba(255,196,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.3)'}}>
+<div style={{position: 'relative', zIndex: '2', padding: '16px 32px', borderTop: '1px solid rgba(255, 196, 0, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.3)'}}>
 <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(1,215,253,0.5)'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(1,215,253,0.5)'}}>
                   TRADER 1
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '16px', fontWeight: '700', color: '#00ff9d', textShadow: '0 0 10px rgba(0,255,157,0.5)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '16px', fontWeight: '700', color: '#00ff9d', textShadow: '0 0 10px rgba(0,255,157,0.5)'}}>
                   +12.4%
                 </div>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '12px', fontWeight: '700', color: 'rgba(255,196,0,0.5)', letterSpacing: '0.2em'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '12px', fontWeight: '700', color: 'rgba(255,196,0,0.5)', letterSpacing: '0.2em'}}>
                 VS
               </div>
 <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '16px', fontWeight: '700', color: '#ff4466', textShadow: '0 0 10px rgba(255,68,102,0.5)'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '16px', fontWeight: '700', color: '#ff4466', textShadow: '0 0 10px rgba(255,68,102,0.5)'}}>
                   +8.7%
                 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(1,215,253,0.5)'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '8px', letterSpacing: '0.2em', color: 'rgba(1,215,253,0.5)'}}>
                   TRADER 2
                 </div>
 </div>
@@ -1452,7 +1494,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div style={{display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px'}}>
 
-<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s,background 0.3s'}}>
+<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s, background 0.3s'}}>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(255,196,0,0.25)', background: 'rgba(255,196,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
 <svg fill="none" height="20" stroke="rgba(255,196,0,0.8)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <rect height="14" rx="2" width="20" x="2" y="3"></rect>
@@ -1460,31 +1502,31 @@ gtag('config', 'G-2M6V79H761');
 <path d="M2 10h20"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
                 Live P&amp;L On LED Screens
               </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
                 Every tick, every trade, visible to thousands in the arena and
                 millions online.
               </p>
 </div>
 
-<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s,background 0.3s'}}>
+<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s, background 0.3s'}}>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(255,196,0,0.25)', background: 'rgba(255,196,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
 <svg fill="none" height="20" stroke="rgba(255,196,0,0.8)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
                 Biometric Monitoring
               </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
                 Heart rate and stress levels via WHOOP wearables displayed live
                 on screen.
               </p>
 </div>
 
-<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s,background 0.3s'}}>
+<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s, background 0.3s'}}>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(255,196,0,0.25)', background: 'rgba(255,196,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
 <svg fill="none" height="20" stroke="rgba(255,196,0,0.8)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -1493,26 +1535,26 @@ gtag('config', 'G-2M6V79H761');
 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
                 Pro Commentary Team
               </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
                 Expert analysis from top trading veterans and esports
                 shoutcasters.
               </p>
 </div>
 
-<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s,background 0.3s'}}>
+<div className="theater-feat" onmouseenter="this.style.borderColor='rgba(255,196,0,0.35)';this.style.background='rgba(255,196,0,0.05)'" onmouseleave="this.style.borderColor='rgba(255,196,0,0.14)';this.style.background='rgba(255,196,0,0.02)'" style={{border: '1px solid rgba(255,196,0,0.14)', background: 'rgba(255,196,0,0.02)', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: '14px', clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%)', transition: 'border-color 0.3s, background 0.3s'}}>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(255,196,0,0.25)', background: 'rgba(255,196,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
 <svg fill="none" height="20" stroke="rgba(255,196,0,0.8)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <rect height="20" rx="2" width="20" x="2" y="2"></rect>
 <path d="M8 6h.01M12 6h.01M16 6h.01M8 12h.01M12 12h.01M16 12h.01M8 18h.01M12 18h.01M16 18h.01"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '12px', fontWeight: '700', color: '#ffc400', letterSpacing: '0.1em', textTransform: 'uppercase', lineHeight: '1.2'}}>
                 Zero-Latency Setup
               </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
                 Dual-ISP fiber, UPS backup, and institutional-grade hardware.
               </p>
 </div>
@@ -1544,11 +1586,11 @@ gtag('config', 'G-2M6V79H761');
 </h2>
 <p className="section-sub">A High-Stakes Entertainment Experience.</p>
 </div>
-<div id="engagement-grid" style={{display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'rgba(1,215,253,0.06)', border: '1px solid rgba(1,215,253,0.1)'}}>
+<div id="engagement-grid" style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: 'rgba(1, 215, 253, 0.06)', border: '1px solid rgba(1,215,253,0.1)'}}>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease,transform 0.55s ease', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease, transform 0.55s ease', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For Fair Play
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1557,19 +1599,19 @@ gtag('config', 'G-2M6V79H761');
 <path d="m9 12 2 2 4-4"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               VAR Anti-Cheat
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               Our proprietary 'Video Assistant Referee' monitors every trade for
               latency abuse, hedging, or group trading. Fair play is
               non-negotiable.
             </p>
 </div>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.07s,transform 0.55s ease 0.07s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.07s, transform 0.55s ease 0.07s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For Strategists
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1579,18 +1621,18 @@ gtag('config', 'G-2M6V79H761');
 <line x1="1" x2="23" y1="1" y2="23"></line>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               Hidden Trades
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               During 1v1 matches, you cannot see your opponent's positions until
               the round is over. No copy-trading. No sabotage. Just skill.
             </p>
 </div>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.14s,transform 0.55s ease 0.14s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.14s, transform 0.55s ease 0.14s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For Mental Giants
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1598,18 +1640,18 @@ gtag('config', 'G-2M6V79H761');
 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               Live Biometrics
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               In the final rounds, we track heart rate and stress levels. The
               audience sees who's cracking under pressure and who's ice-cold.
             </p>
 </div>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.21s,transform 0.55s ease 0.21s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.21s, transform 0.55s ease 0.21s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For The Community
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1617,10 +1659,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               Fan Voting
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               Fans can vote for their favorite traders. The 'Fan Favorite' wins
               a special
               <strong style={{color: 'var(--neon)'}}>$5,000 bonus</strong>
@@ -1628,9 +1670,9 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.28s,transform 0.55s ease 0.28s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.28s, transform 0.55s ease 0.28s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For Spectators
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1643,18 +1685,18 @@ gtag('config', 'G-2M6V79H761');
 <line x1="3" x2="3.01" y1="18" y2="18"></line>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               Bracket Pick'em
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               Free to play. Predict the winners of each knockout round. Top
               predictors win cash prizes and merch.
             </p>
 </div>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.35s,transform 0.55s ease 0.35s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.35s, transform 0.55s ease 0.35s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For Top 48
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1662,18 +1704,18 @@ gtag('config', 'G-2M6V79H761');
 <path d="M20.38 3.46 16 2 12 5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23Z"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               Jersey Drop
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               Custom physical jerseys with your name and country flag shipped to
               your door. Wear your colors with pride.
             </p>
 </div>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.42s,transform 0.55s ease 0.42s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.42s, transform 0.55s ease 0.42s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For Countries
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1684,18 +1726,18 @@ gtag('config', 'G-2M6V79H761');
 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               National Coaches
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               Top influencers from each nation provide live coaching and
               commentary for their team. National pride on the line.
             </p>
 </div>
 
-<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.49s,transform 0.55s ease 0.49s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
+<div className="eng-card" onmouseenter="this.style.background='rgba(1,215,253,0.04)'" onmouseleave="this.style.background='var(--bg2)'" style={{opacity: '0', transform: 'translateY(24px)', transition: 'opacity 0.55s ease 0.49s, transform 0.55s ease 0.49s', background: 'var(--bg2)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '2px', background: 'linear-gradient(90deg,var(--neon),transparent)', opacity: '0.4'}}></div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               For Nations
             </div>
 <div style={{width: '44px', height: '44px', border: '1px solid rgba(1,215,253,0.22)', background: 'rgba(1,215,253,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px)', flexShrink: '0'}}>
@@ -1705,10 +1747,10 @@ gtag('config', 'G-2M6V79H761');
 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
 </svg>
 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '1.2'}}>
               Country Rankings
             </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '15px', fontWeight: '400', lineHeight: '1.65', color: 'rgba(255,255,255,0.5)', margin: '0'}}>
               Real-time ranking of countries based on the average performance of
               their top 100 traders. Which nation is the smartest?
             </p>
@@ -1769,40 +1811,40 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 <div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
                   Section 01
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
                   Account Specs
                 </div>
 </div>
 </div>
 <ul style={{listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '11px'}}>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
 <strong style={{color: '#fff'}}>$50,000</strong>
                   Virtual Starting Balance
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
 <strong style={{color: '#fff'}}>3%</strong>
                   Daily Loss Limit
-                  <span style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.15em', color: 'rgba(255,68,68,0.7)'}}>
+                  <span style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.15em', color: 'rgba(255,68,68,0.7)'}}>
                     (Hard Breach)
                   </span>
 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
 <strong style={{color: '#fff'}}>6%</strong>
                   Maximum Overall Drawdown
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   MatchTrader or
@@ -1821,16 +1863,16 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 <div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
                   Section 02
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
                   Trading Rules
                 </div>
 </div>
 </div>
 <ul style={{listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '11px'}}>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Minimum
@@ -1838,14 +1880,14 @@ gtag('config', 'G-2M6V79H761');
                   required
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   No single trade &gt;
                   <strong style={{color: '#fff'}}>50% of total profit</strong>
 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Highest
@@ -1853,7 +1895,7 @@ gtag('config', 'G-2M6V79H761');
                   at end of round wins
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   All positions
@@ -1872,30 +1914,30 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 <div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
                   Section 03
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
                   Fair Play
                 </div>
 </div>
 </div>
 <ul style={{listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '11px'}}>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
 <strong style={{color: '#fff'}}>Hidden trades</strong>
                   in 1v1 (revealed at end)
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Strictly
                   <strong style={{color: '#fff'}}>one account per person</strong>
 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Automated
@@ -1903,7 +1945,7 @@ gtag('config', 'G-2M6V79H761');
                   every 10s
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   No
@@ -1926,16 +1968,16 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 <div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '9px', letterSpacing: '0.4em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', marginBottom: '4px'}}>
                   Section 04
                 </div>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '14px', fontWeight: '700', color: '#fff', letterSpacing: '0.08em', textTransform: 'uppercase'}}>
                   Tie-Breakers
                 </div>
 </div>
 </div>
 <ul style={{listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '11px'}}>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Lowest
@@ -1943,7 +1985,7 @@ gtag('config', 'G-2M6V79H761');
                   recorded
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Highest
@@ -1951,14 +1993,14 @@ gtag('config', 'G-2M6V79H761');
                   percentage
                 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Shortest
                   <strong style={{color: '#fff'}}>average trade duration</strong>
 </span>
 </li>
-<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
+<li style={{display: 'flex', alignItems: 'flex-start', gap: '12px', fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', color: 'rgba(255,255,255,0.6)', lineHeight: '1.45'}}>
 <span style={{width: '5px', height: '5px', background: 'var(--neon)', borderRadius: '50%', flexShrink: '0', marginTop: '7px', boxShadow: '0 0 6px var(--neon)'}}></span>
 <span>
                   Most
@@ -1978,8 +2020,8 @@ gtag('config', 'G-2M6V79H761');
 <line x1="12" x2="12.01" y1="17" y2="17"></line>
 </svg>
 </div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '14px', fontWeight: '500', lineHeight: '1.6', color: 'rgba(255,255,255,0.45)', margin: '0'}}>
-<strong style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(255,68,68,0.75)', textTransform: 'uppercase'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '14px', fontWeight: '500', lineHeight: '1.6', color: 'rgba(255,255,255,0.45)', margin: '0'}}>
+<strong style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(255,68,68,0.75)', textTransform: 'uppercase'}}>
                 WARNING:
               </strong>
               Any breach of the Code of Conduct results in immediate
@@ -2015,7 +2057,7 @@ gtag('config', 'G-2M6V79H761');
 <div id="faq-list" style={{maxWidth: '860px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2px'}}>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 Do I need trading experience?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2023,7 +2065,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 No! While experienced traders have an edge, the
                 <strong style={{color: '#fff'}}>$10 entry</strong>
                 makes it a perfect low-cost way for beginners to learn the
@@ -2033,7 +2075,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 Is this gambling?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2041,7 +2083,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 Absolutely not. This is a
                 <strong style={{color: '#fff'}}>skill-based competition</strong>
                 using simulated trading accounts. No real money is ever at risk
@@ -2051,7 +2093,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 What is Hola Prime?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2059,7 +2101,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
 <strong style={{color: '#fff'}}>Hola Prime</strong>
                 is a leading prop trading technology provider. We organize this
                 event to find the world's best trading talent and give them the
@@ -2069,7 +2111,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 What's a funded account?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2077,7 +2119,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 It's a professional account where we provide the capital. You
                 trade it, and we
                 <strong style={{color: 'var(--neon)'}}>split the profits</strong>
@@ -2087,7 +2129,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 Which countries can participate?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2095,7 +2137,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 Traders from over
                 <strong style={{color: '#fff'}}>150 countries</strong>
                 can join. The top 48 nations with the most signups will form the
@@ -2105,7 +2147,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 What platform will I use?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2113,7 +2155,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 You can choose between
                 <strong style={{color: '#fff'}}>MatchTrader</strong>
                 or
@@ -2125,7 +2167,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 What happens if my internet disconnects?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2133,7 +2175,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 As in any professional sport, technical issues are the player's
                 responsibility. However, our support team is available
                 <strong style={{color: '#fff'}}>24/7</strong>
@@ -2143,7 +2185,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 Can I just spectate?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2151,7 +2193,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 Yes! You can join the
                 <strong style={{color: 'var(--neon)'}}>
                   Bracket Pick'em for free
@@ -2163,7 +2205,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 What is the timeline?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2171,7 +2213,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
 <strong style={{color: '#fff'}}>Registration:</strong>
                 Now – May 31  · 
                 <strong style={{color: '#fff'}}>Qualifiers:</strong>
@@ -2185,7 +2227,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{border: '1px solid rgba(1,215,253,0.12)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', overflow: 'hidden', transition: 'border-color 0.3s'}}>
 <button className="faq-trigger" onclick="toggleFaq(this)" onmouseenter="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.3)'" onmouseleave="this.closest('.faq-item').style.borderColor='rgba(1,215,253,0.12)'" style={{width: '100%', background: 'none', border: 'none', cursor: 'none', padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', textAlign: 'left'}}>
-<span style={{fontFamily: '\'Orbitron\',monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
+<span style={{fontFamily: '\'Orbitron\', monospace', fontSize: '13px', fontWeight: '600', color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase'}}>
                 How do I register?
               </span>
 <svg className="faq-chevron" fill="none" height="18" style={{flexShrink: '0', transition: 'transform 0.3s'}} viewbox="0 0 18 18" width="18">
@@ -2193,7 +2235,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 <div className="faq-body" style={{maxHeight: '0', overflow: 'hidden', transition: 'max-height 0.4s cubic-bezier(0.22,1,0.36,1)'}}>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '16px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', margin: '0', padding: '0 28px 24px'}}>
                 Click any
                 <strong style={{color: 'var(--neon)'}}>Register</strong>
                 button on this page, pay the
@@ -2222,17 +2264,17 @@ gtag('config', 'G-2M6V79H761');
 <span className="eyebrow-line"></span>
 </div>
 
-<h2 style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(28px,5.5vw,72px)', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: '1.05', color: '#fff', margin: '0 0 8px'}}>
+<h2 style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(28px,5.5vw,72px)', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: '1.05', color: '#fff', margin: '0 0 8px'}}>
             YOUR COUNTRY NEEDS A
           </h2>
-<h2 style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(28px,5.5vw,72px)', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: '1.05', color: 'var(--neon)', textShadow: '0 0 40px rgba(1,215,253,0.5),0 0 100px rgba(1,215,253,0.2)', margin: '0 0 16px'}}>
+<h2 style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(28px, 5.5vw, 72px)', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: '1.05', color: 'var(--neon)', textShadow: '0 0 40px rgba(1, 215, 253, 0.5), 0 0 100px rgba(1,215,253,0.2)', margin: '0 0 16px'}}>
             CHAMPION.
           </h2>
-<h2 style={{fontFamily: '\'Orbitron\',monospace', fontSize: 'clamp(22px,4vw,56px)', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.06em', lineHeight: '1.1', color: 'rgba(255,255,255,0.85)', margin: '0 0 48px'}}>
+<h2 style={{fontFamily: '\'Orbitron\', monospace', fontSize: 'clamp(22px, 4vw, 56px)', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.06em', lineHeight: '1.1', color: 'rgba(255,255,255,0.85)', margin: '0 0 48px'}}>
             WILL YOU ANSWER?
           </h2>
 
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '18px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', maxWidth: '580px', margin: '0 0 56px', letterSpacing: '0.03em'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '18px', fontWeight: '400', lineHeight: '1.7', color: 'rgba(255,255,255,0.55)', maxWidth: '580px', margin: '0 0 56px', letterSpacing: '0.03em'}}>
             Join
             <strong style={{color: '#fff'}}>1,000,000 traders</strong>
             in the ultimate battle for global dominance, institutional capital,
@@ -2241,13 +2283,13 @@ gtag('config', 'G-2M6V79H761');
             .
           </p>
 
-<a className="btn-primary" href="#" style={{fontSize: '14px', padding: '22px 52px', clipPath: 'polygon(16px 0%,100% 0%,calc(100% - 16px) 100%,0% 100%)', boxShadow: '0 0 40px rgba(1,215,253,0.25),0 0 80px rgba(1,215,253,0.1)'}}>
+<a className="btn-primary" href="#" style={{fontSize: '14px', padding: '22px 52px', clipPath: 'polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%)', boxShadow: '0 0 40px rgba(1, 215, 253, 0.25), 0 0 80px rgba(1,215,253,0.1)'}}>
 <span className="flag">🚩</span>
             REGISTER NOW
             <span className="btn-price">$10 ENTRY</span>
 </a>
 
-<div style={{marginTop: '48px', fontFamily: '\'Share Tech Mono\',monospace', fontSize: '13px', letterSpacing: '0.45em', color: 'rgba(1,215,253,0.35)', textTransform: 'uppercase'}}>
+<div style={{marginTop: '48px', fontFamily: '\'Share Tech Mono\', monospace', fontSize: '13px', letterSpacing: '0.45em', color: 'rgba(1,215,253,0.35)', textTransform: 'uppercase'}}>
             #WEARETRADERS
           </div>
 
@@ -2255,41 +2297,41 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </section>
-<footer style={{position: 'relative', zIndex: '5', borderTop: '1px solid rgba(1,215,253,0.12)', background: 'rgba(2,6,16,0.98)'}}>
+<footer style={{position: 'relative', zIndex: '5', borderTop: '1px solid rgba(1, 215, 253, 0.12)', background: 'rgba(2,6,16,0.98)'}}>
 <div style={{padding: '64px var(--px) 48px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg,transparent 0%,rgba(1,215,253,0.25) 30%,rgba(1,215,253,0.25) 70%,transparent 100%)'}}></div>
 <div style={{position: 'absolute', top: '-200px', left: '50%', transform: 'translateX(-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse,rgba(1,215,253,0.03) 0%,transparent 70%)', pointerEvents: 'none'}}></div>
 <div style={{position: 'relative', zIndex: '2', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '40px'}}>
 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
-<div style={{fontFamily: '\'Orbitron\',monospace', fontSize: '18px', fontWeight: '700', letterSpacing: '0.08em', color: 'var(--neon)', textShadow: '0 0 20px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Orbitron\', monospace', fontSize: '18px', fontWeight: '700', letterSpacing: '0.08em', color: 'var(--neon)', textShadow: '0 0 20px rgba(1,215,253,0.4)', textTransform: 'uppercase'}}>
               PROP TRADING WORLD CUP
             </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.45em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.45em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase'}}>
               2026  ·  Organized &amp; Sponsored by Hola Prime
             </div>
 </div>
 <div style={{width: '100%', maxWidth: '500px', height: '1px', background: 'linear-gradient(90deg,transparent,rgba(1,215,253,0.15),transparent)'}}></div>
 <nav style={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 32px'}}>
-<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
+<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
               Terms of Service
             </a>
 <span style={{width: '3px', height: '3px', background: 'rgba(1,215,253,0.2)', borderRadius: '50%', flexShrink: '0'}}></span>
-<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
+<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
               Privacy Policy
             </a>
 <span style={{width: '3px', height: '3px', background: 'rgba(1,215,253,0.2)', borderRadius: '50%', flexShrink: '0'}}></span>
-<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
+<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
               Risk Disclosure
             </a>
 <span style={{width: '3px', height: '3px', background: 'rgba(1,215,253,0.2)', borderRadius: '50%', flexShrink: '0'}}></span>
-<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
+<a href="#" onmouseenter="this.style.color='var(--neon)'" onmouseleave="this.style.color='rgba(1,215,253,0.55)'" style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '11px', letterSpacing: '0.25em', color: 'rgba(1,215,253,0.55)', textTransform: 'uppercase', textDecoration: 'none', transition: 'color 0.2s'}}>
               Support Center
             </a>
 </nav>
 <div style={{width: '100%', maxWidth: '760px', border: '1px solid rgba(1,215,253,0.1)', background: 'rgba(1,215,253,0.02)', clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))', padding: '20px 28px', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg,transparent,rgba(1,215,253,0.25),transparent)'}}></div>
-<p style={{fontFamily: '\'Rajdhani\',sans-serif', fontSize: '13px', fontWeight: '400', lineHeight: '1.75', color: 'rgba(255,255,255,0.3)', margin: '0', textAlign: 'center'}}>
-<strong style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', display: 'block', marginBottom: '8px'}}>
+<p style={{fontFamily: '\'Rajdhani\', sans-serif', fontSize: '13px', fontWeight: '400', lineHeight: '1.75', color: 'rgba(255,255,255,0.3)', margin: '0', textAlign: 'center'}}>
+<strong style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(1,215,253,0.45)', textTransform: 'uppercase', display: 'block', marginBottom: '8px'}}>
                 Disclaimer
               </strong>
               THE PROP TRADING WORLD CUP – 2026 ORGANIZED AND SPONSORED BY HOLA
@@ -2302,7 +2344,7 @@ gtag('config', 'G-2M6V79H761');
               future results.
             </p>
 </div>
-<div style={{fontFamily: '\'Share Tech Mono\',monospace', fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase'}}>
+<div style={{fontFamily: '\'Share Tech Mono\', monospace', fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase'}}>
             © 2026 Hola Prime. All rights reserved.
           </div>
 </div>

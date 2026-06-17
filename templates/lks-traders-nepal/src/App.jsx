@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -546,6 +582,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -584,7 +626,7 @@ gtag('config', 'G-2M6V79H761');
 </nav>
 
 <section className="relative w-full h-screen flex items-center justify-center overflow-hidden hero-gradient">
-<canvas className="z-0 pointer-events-auto cursor-move opacity-90 w-full h-full absolute top-0 right-0 bottom-0 left-0" height="636" id="hero-3d-canvas" style={{width: '100%', height: '100%', backgroundImage: 'url(\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%25%22 height=%22100%25%22 preserveAspectRatio=%22xMidYMid slice%22%3E%3Cstyle%3E@keyframes pan %7B 0%25 %7B transform: scale(1.1) translate(0,0) rotate(0deg)', %7D 50%25 %7B transform: 'scale(1.15) translate(-1.5%25,-1.5%25) rotate(1.5deg)', %7D 100%25 %7B transform: 'scale(1.1) translate(0,0) rotate(0deg)', %7D %7D .bg %7B animation: 'pan 25s ease-in-out infinite', transformOrigin: 'center', %7D%3C/style%3E%3Cg class=%22bg%22%3E%3Cimage href=%22https: '//images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format%26fit=crop%26q=80%26w=1200%22 width=%22100%25%22 height=%22100%25%22 preserveAspectRatio=%22xMidYMid slice%22 opacity=%220.5%22/%3E%3C/g%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23D4AF37%22 opacity=%220.3%22 style=%22mix-blend-mode: color', backgroundSize: 'cover', backgroundPosition: 'center'}} width="926"></canvas>
+<canvas className="z-0 pointer-events-auto cursor-move opacity-90 w-full h-full absolute top-0 right-0 bottom-0 left-0" height="636" id="hero-3d-canvas" style={{width: '100%', height: '100%', backgroundImage: 'url(\'data:image/svg+xml, %3Csvg xmlns=%22http: //www.w3.org/2000/svg%22 width=%22100%25%22 height=%22100%25%22 preserveAspectRatio=%22xMidYMid slice%22%3E%3Cstyle%3E@keyframes pan %7B 0%25 %7B transform: scale(1.1) translate(0, 0) rotate(0deg)', %7D 50%25 %7B transform: 'scale(1.15) translate(-1.5%25, -1.5%25) rotate(1.5deg)', %7D 100%25 %7B transform: 'scale(1.1) translate(0, 0) rotate(0deg)', %7D %7D .bg %7B animation: 'pan 25s ease-in-out infinite', transformOrigin: 'center', %7D%3C/style%3E%3Cg class=%22bg%22%3E%3Cimage href=%22https: '//images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format%26fit=crop%26q=80%26w=1200%22 width=%22100%25%22 height=%22100%25%22 preserveAspectRatio=%22xMidYMid slice%22 opacity=%220.5%22/%3E%3C/g%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23D4AF37%22 opacity=%220.3%22 style=%22mix-blend-mode: color', backgroundSize: 'cover', backgroundPosition: 'center'}} width="926"></canvas>
 <div className="relative z-10 flex flex-col items-center text-center px-6 mt-16 pointer-events-none">
 <div className="text-xs font-medium tracking-widest text-[#D4AF37] uppercase mb-4 opacity-80 animate-pulse">Birgunj's Premier Store</div>
 <h1 className="text-5xl md:text-7xl font-medium tracking-tight text-white mb-6 leading-tight drop-shadow-2xl">

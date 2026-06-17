@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -29,6 +65,12 @@ serif: ['Merriweather', 'serif'],
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -228,7 +270,7 @@ serif: ['Merriweather', 'serif'],
 <div style={{display: 'flex', gap: '48px', alignItems: 'flex-start', flexWrap: 'wrap'}}>
 
 <div style={{flex: '0 0 55%', maxWidth: '520px'}}>
-<div style={{background: '#ffffff', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)'}}>
+<div style={{background: '#ffffff', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)'}}>
 
 <div style={{background: '#F1F1F1', borderBottom: '1px solid #E2E8F0', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '12px'}}>
 <div style={{display: 'flex', gap: '6px'}}>
@@ -260,10 +302,10 @@ serif: ['Merriweather', 'serif'],
 <div style={{position: 'absolute', top: '0', bottom: '0', left: '50px', width: '1px', background: 'rgba(255,255,255,0.5)'}}></div>
 <div style={{position: 'absolute', top: '0', bottom: '0', left: '75px', width: '1px', background: 'rgba(255,255,255,0.5)'}}></div>
 
-<div style={{position: 'absolute', top: '52px', left: '-8px', right: '0', height: '6px', background: 'rgba(197,213,228,0.6)', borderRadius: '9999px', transform: 'rotate(-3deg)'}}></div>
+<div style={{position: 'absolute', top: '52px', left: '-8px', right: '0', height: '6px', background: 'rgba(197, 213, 228, 0.6)', borderRadius: '9999px', transform: 'rotate(-3deg)'}}></div>
 
 <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-<div className="pin-pulse" style={{width: '20px', height: '20px', borderRadius: '50%', border: '1px solid rgba(29,185,146,0.3)', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}></div>
+<div className="pin-pulse" style={{width: '20px', height: '20px', borderRadius: '50%', border: '1px solid rgba(29, 185, 146, 0.3)', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#0D4F4F', border: '2px solid #fff', boxShadow: '0 1px 3px rgba(0,0,0,0.3)', position: 'relative', zIndex: '1'}}></div>
 </div>
 </div>

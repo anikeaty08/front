@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -105,6 +141,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -123,7 +165,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="container relative w-full flex items-center justify-center" style={{height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 
-<div className="glass" data-default-transform="rotate(-12deg) translateY(-8px)" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))', boxShadow: '0 25px 45px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -50px', transform: 'rotate(-12deg) translateY(-8px)', zIndex: '1', -FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)', filter: 'var(--fx-filter)', WebkitFilter: 'var(--fx-filter)'}}>
+<div className="glass" data-default-transform="rotate(-12deg) translateY(-8px)" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05))', boxShadow: '0 25px 45px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -50px', transform: 'rotate(-12deg) translateY(-8px)', zIndex: '1', '--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)', filter: 'var(--fx-filter)', WebkitFilter: 'var(--fx-filter)'}}>
 <div className="absolute inset-4 rounded-xl bg-gradient-to-br shadow-2xl overflow-hidden backdrop-blur-sm border-gradient before:rounded-xl from-neutral-900/95 to-neutral-950/95 text-neutral-100">
 <div className="p-6 h-full flex flex-col">
 
@@ -156,7 +198,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glass" data-default-transform="rotate(-4deg) translateY(0)" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08))', boxShadow: '0 30px 60px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -50px', transform: 'rotate(-4deg) translateY(0)', zIndex: '2', -FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)', filter: 'var(--fx-filter)', WebkitFilter: 'var(--fx-filter)'}}>
+<div className="glass" data-default-transform="rotate(-4deg) translateY(0)" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08))', boxShadow: '0 30px 60px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -50px', transform: 'rotate(-4deg) translateY(0)', zIndex: '2', '--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)', filter: 'var(--fx-filter)', WebkitFilter: 'var(--fx-filter)'}}>
 <div className="absolute inset-4 rounded-xl bg-gradient-to-br shadow-2xl overflow-hidden backdrop-blur-sm border-gradient before:rounded-xl from-neutral-900/98 to-neutral-950/98 text-neutral-100">
 <div className="p-6 h-full flex flex-col">
 
@@ -189,7 +231,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glass" data-default-transform="rotate(10deg) translateY(6px)" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))', boxShadow: '0 25px 45px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -50px', transform: 'rotate(10deg) translateY(6px)', zIndex: '1', -FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)', filter: 'var(--fx-filter)', WebkitFilter: 'var(--fx-filter)'}}>
+<div className="glass" data-default-transform="rotate(10deg) translateY(6px)" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05))', boxShadow: '0 25px 45px rgba(0, 0, 0, 0.3), 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -50px', transform: 'rotate(10deg) translateY(6px)', zIndex: '1', '--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)', filter: 'var(--fx-filter)', WebkitFilter: 'var(--fx-filter)'}}>
 <div className="absolute inset-4 rounded-xl bg-gradient-to-br shadow-2xl overflow-hidden backdrop-blur-sm border-gradient before:rounded-xl from-neutral-900/95 to-neutral-950/95 text-neutral-100">
 <div className="p-6 h-full flex flex-col">
 
@@ -228,7 +270,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <form className="flex flex-col sm:flex-row gap-3">
 <input className="flex-1 px-4 py-2.5 rounded-full bg-white/10 border-white/5 border before:rounded-full text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all text-sm backdrop-blur-xl" placeholder="Enter your email" type="email"/>
 <div className="inline-block group relative">
-<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient text-sm font-medium text-white/80 hover:text-white tracking-tight bg-white/5 backdrop-blur-xl rounded-full before:rounded-full py-3 px-5 relative items-center justify-center gap-2" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}} type="submit">
+<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient text-sm font-medium text-white/80 hover:text-white tracking-tight bg-white/5 backdrop-blur-xl rounded-full before:rounded-full py-3 px-5 relative items-center justify-center gap-2" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)'}} type="submit">
 <svg className="h-4 w-4" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path>
 <circle cx="12" cy="12" r="10"></circle>
@@ -236,7 +278,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="relative">Join Waitlist</span>
 <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255,255,255,.55), rgba(255,255,255,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(255, 255, 255, .55), rgba(255, 255, 255, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </form>
 </div>

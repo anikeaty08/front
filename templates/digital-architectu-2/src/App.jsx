@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -171,6 +207,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -178,7 +220,7 @@ gtag('config', 'G-2M6V79H761');
       
 
 <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#09090b]" id="loader-wrapper" style={{transition: 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'}}>
-<div className="rounded-2xl flex items-center justify-center w-24 h-24 relative overflow-hidden" style={{background: '#09090b', boxShadow: '8px 8px 16px rgba(0,0,0,0.8), -8px -8px 16px rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.01)'}}>
+<div className="rounded-2xl flex items-center justify-center w-24 h-24 relative overflow-hidden" style={{background: '#09090b', boxShadow: '8px 8px 16px rgba(0, 0, 0, 0.8), -8px -8px 16px rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255,255,255,0.01)'}}>
 <span className="text-3xl font-semibold tracking-tighter absolute" style="background-image: linear-gradient(to top, #ffffff 50%, #27272a 50%);
                          background-size: 100% 200%;
                          background-position: center top;
@@ -193,14 +235,14 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[600px] pointer-events-none opacity-40 mix-blend-screen" style={{background: 'radial-gradient(circle at center, rgba(168,85,247,0.15) 0%, rgba(59,130,246,0.1) 30%, transparent 70%)'}}></div>
 
-<nav className="fixed top-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full flex items-center gap-8 z-40 transition-all hover:scale-[1.01]" style={{background: '#09090b', boxShadow: '6px 6px 14px rgba(0,0,0,0.6), -6px -6px 14px rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.02)', backdropFilter: 'blur(10px)'}}>
+<nav className="fixed top-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full flex items-center gap-8 z-40 transition-all hover:scale-[1.01]" style={{background: '#09090b', boxShadow: '6px 6px 14px rgba(0, 0, 0, 0.6), -6px -6px 14px rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.02)', backdropFilter: 'blur(10px)'}}>
 <div className="text-sm font-semibold tracking-tighter text-white pr-4 border-r border-white/10">AVANTE</div>
 <div className="flex items-center gap-6 text-xs font-medium text-zinc-400">
 <a className="hover:text-white transition-colors" href="#">Work</a>
 <a className="hover:text-white transition-colors" href="#">Studio</a>
 <a className="hover:text-white transition-colors" href="#">Process</a>
 </div>
-<button className="ml-4 w-8 h-8 rounded-full flex items-center justify-center text-zinc-300 hover:text-white transition-all active:scale-90" style={{background: '#09090b', boxShadow: 'inset 2px 2px 5px rgba(0,0,0,0.5), inset -2px -2px 5px rgba(255,255,255,0.02)'}}>
+<button className="ml-4 w-8 h-8 rounded-full flex items-center justify-center text-zinc-300 hover:text-white transition-all active:scale-90" style={{background: '#09090b', boxShadow: 'inset 2px 2px 5px rgba(0, 0, 0, 0.5), inset -2px -2px 5px rgba(255,255,255,0.02)'}}>
 <iconify-icon height="16" icon="solar:hamburger-menu-linear" strokeWidth="1.5" width="16"></iconify-icon>
 </button>
 </nav>
@@ -221,7 +263,7 @@ gtag('config', 'G-2M6V79H761');
                         We are a digital architecture studio obsessed with performance, interactive motion, and pixel-perfect execution.
                     </p>
 <div className="flex items-center gap-4 pt-4">
-<button className="px-6 py-3 rounded-full text-sm font-medium text-white transition-all hover:text-white/80 active:scale-95 flex items-center gap-2 group" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0,0,0,0.6), -4px -4px 10px rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<button className="px-6 py-3 rounded-full text-sm font-medium text-white transition-all hover:text-white/80 active:scale-95 flex items-center gap-2 group" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0, 0, 0, 0.6), -4px -4px 10px rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255,255,255,0.05)'}}>
                             Start a Project
                             <iconify-icon className="transition-transform group-hover:translate-x-1" height="16" icon="solar:arrow-right-linear" strokeWidth="1.5" width="16"></iconify-icon>
 </button>
@@ -251,7 +293,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="absolute bottom-1/4 left-1/4 w-32 h-32 rounded-2xl flex items-center justify-center z-20" style={{background: '#09090b', boxShadow: '8px 8px 16px rgba(0,0,0,0.8), -8px -8px 16px rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.02)', animation: 'floatSlow 5s ease-in-out infinite 1s'}}>
+<div className="absolute bottom-1/4 left-1/4 w-32 h-32 rounded-2xl flex items-center justify-center z-20" style={{background: '#09090b', boxShadow: '8px 8px 16px rgba(0, 0, 0, 0.8), -8px -8px 16px rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.02)', animation: 'floatSlow 5s ease-in-out infinite 1s'}}>
 <iconify-icon className="text-white/80" height="32" icon="solar:magic-stick-3-linear" width="32"></iconify-icon>
 </div>
 </div>
@@ -270,7 +312,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="group relative p-8 rounded-3xl border border-white/5 backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.02] transition-colors duration-500 overflow-hidden cursor-pointer">
 <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-<div className="w-12 h-12 rounded-2xl mb-12 flex items-center justify-center relative z-10" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0,0,0,0.6), -4px -4px 10px rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.02)'}}>
+<div className="w-12 h-12 rounded-2xl mb-12 flex items-center justify-center relative z-10" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0, 0, 0, 0.6), -4px -4px 10px rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.02)'}}>
 <iconify-icon className="text-zinc-300" height="20" icon="solar:pen-new-square-linear" width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium text-white tracking-tight mb-3 relative z-10">Interface Design</h3>
@@ -279,7 +321,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="group relative p-8 rounded-3xl border border-white/5 backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.02] transition-colors duration-500 overflow-hidden cursor-pointer">
 <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-<div className="w-12 h-12 rounded-2xl mb-12 flex items-center justify-center relative z-10" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0,0,0,0.6), -4px -4px 10px rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.02)'}}>
+<div className="w-12 h-12 rounded-2xl mb-12 flex items-center justify-center relative z-10" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0, 0, 0, 0.6), -4px -4px 10px rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.02)'}}>
 <iconify-icon className="text-zinc-300" height="20" icon="solar:layers-minimalistic-linear" width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium text-white tracking-tight mb-3 relative z-10">Creative Engineering</h3>
@@ -288,7 +330,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="group relative p-8 rounded-3xl border border-white/5 backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.02] transition-colors duration-500 overflow-hidden cursor-pointer">
 <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-<div className="w-12 h-12 rounded-2xl mb-12 flex items-center justify-center relative z-10" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0,0,0,0.6), -4px -4px 10px rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.02)'}}>
+<div className="w-12 h-12 rounded-2xl mb-12 flex items-center justify-center relative z-10" style={{background: '#09090b', boxShadow: '4px 4px 10px rgba(0, 0, 0, 0.6), -4px -4px 10px rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.02)'}}>
 <iconify-icon className="text-zinc-300" height="20" icon="solar:play-circle-linear" width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium text-white tracking-tight mb-3 relative z-10">Motion Interaction</h3>

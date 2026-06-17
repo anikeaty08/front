@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -66,6 +102,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -137,7 +179,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               Explore Work
               <svg className="lucide lucide-arrow-right ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </a>
-<a className="group inline-flex items-center justify-center rounded-md px-5 py-3 text-sm font-medium text-black transition border" href="#contact" style={{backgroundColor: '#FFB347', borderColor: 'rgba(255,179,71,0.2)', boxShadow: '0 0 24px rgba(255,179,71,0.25)'}}>
+<a className="group inline-flex items-center justify-center rounded-md px-5 py-3 text-sm font-medium text-black transition border" href="#contact" style={{backgroundColor: '#FFB347', borderColor: 'rgba(255, 179, 71, 0.2)', boxShadow: '0 0 24px rgba(255,179,71,0.25)'}}>
               Get in Touch
               <svg className="lucide lucide-message-square ml-2 h-4 w-4" data-lucide="message-square" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>
 </a>
@@ -188,7 +230,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="rounded-md border border-white/15 bg-black/30 px-2 py-0.5 text-[10px] text-white/70">Realtime</span>
 </div>
 </div>
-<div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{boxShadow: 'inset 0 0 0 1px rgba(255,179,71,0.2), 0 0 32px rgba(255,179,71,0.15)'}}></div>
+<div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 179, 71, 0.2), 0 0 32px rgba(255,179,71,0.15)'}}></div>
 </article>
 
 <article className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 transform-gpu will-change-transform transition-all duration-700 ease-out" data-animate="fade-up" style={{filter: 'blur(0px)', transitionDelay: '100ms'}}>
@@ -200,7 +242,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="rounded-md border border-white/15 bg-black/30 px-2 py-0.5 text-[10px] text-white/70">Render</span>
 </div>
 </div>
-<div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{boxShadow: 'inset 0 0 0 1px rgba(255,179,71,0.2), 0 0 32px rgba(255,179,71,0.15)'}}></div>
+<div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 179, 71, 0.2), 0 0 32px rgba(255,179,71,0.15)'}}></div>
 </article>
 
 <article className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 transform-gpu will-change-transform transition-all duration-700 ease-out" data-animate="fade-up" style={{filter: 'blur(0px)', transitionDelay: '200ms'}}>
@@ -212,7 +254,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="rounded-md border border-white/15 bg-black/30 px-2 py-0.5 text-[10px] text-white/70">AR/VR</span>
 </div>
 </div>
-<div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{boxShadow: 'inset 0 0 0 1px rgba(255,179,71,0.2), 0 0 32px rgba(255,179,71,0.15)'}}></div>
+<div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 179, 71, 0.2), 0 0 32px rgba(255,179,71,0.15)'}}></div>
 </article>
 </div>
 </div>

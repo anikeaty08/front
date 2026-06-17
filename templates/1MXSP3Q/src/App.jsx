@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     const slides = [{ key: 'docs', bullet: 'Real‑time briefs', accent: 'emerald', icon: 'users', pillText: 'Co‑create', tailText: 'product briefs', body: 'Draft clear briefs together with multiplayer editing. Structure work with headings, checklists, and callouts.', badges: [{ text: 'noa', color: 'emerald' , target: 'briefs' }, { text: 'leo', color: 'violet' , target: 'checklists' }] }, { key: 'comments', bullet: 'Threaded reviews', accent: 'amber', icon: 'message-square', pillText: 'Review in', tailText: 'context', body: 'Keep decisions attached to the work with inline threads. Mention teammates, resolve quickly, and move forward.', badges: [{ text: 'ivan', color: 'amber', target: 'threads' }, { text: 'sara', color: 'sky', target: 'Mention' }] }, { key: 'commands', bullet: 'Commands to tickets', accent: 'violet', icon: 'workflow', pillText: 'Turn notes into', tailText: 'tickets', body: 'Use quick commands to convert writing into scoped tickets with owners, labels, and estimates.', badges: [{ text: 'jin',  color: 'violet', target: 'tickets' }, { text: 'nora', color: 'emerald', target: 'owners' }] }]; const accents = { emerald: { pill: 'ring-emerald-500/60 bg-emerald-500/10 text-emerald-200', iconBox: 'bg-emerald-500/10 text-emerald-400', bar: 'bg-emerald-400', }, amber: { pill: 'ring-amber-500/60 bg-amber-500/10 text-amber-200', iconBox: 'bg-amber-500/10 text-amber-400', bar: 'bg-amber-400', }, violet: { pill: 'ring-violet-500/60 bg-violet-500/10 text-violet-200', iconBox: 'bg-violet-500/10 text-violet-400', bar: 'bg-violet-400', }, sky: { pill: 'ring-sky-500/60 bg-sky-500/10 text-sky-200', iconBox: 'bg-sky-500/10 text-sky-400', bar: 'bg-sky-400', } }; const highlightMap = { docs: ['briefs', 'checklists'], comments: ['threads', 'Mention'], commands: ['tickets', 'owners'] }; const root = document.querySelector('[data-component="feature-rotator"]') || document.querySelector('div'); const bulletList = document.getElementById('bulletList'); const iconBox = document.getElementById('iconBox'); const highlightPill = document.getElementById('highlightPill'); const highlightTail = document.getElementById('highlightTail'); const bodyCopy = document.getElementById('bodyCopy'); const badgesLayer = document.getElementById('badgesLayer'); function renderBullets(active) { bulletList.innerHTML = ''; slides.forEach((s, i) => { const isActive = i === active; const row = document.createElement('button'); row.type = 'button'; row.setAttribute('data-index', i); row.className = 'group w-full flex items-center gap-3 sm:gap-4'; row.innerHTML = `<span class="h-6 w-1 rounded-full ${isActive ? accents[slides[active].accent].bar : 'bg-neutral-700'} transition-colors"></span><span class="text-sm sm:text-base ${isActive ? 'text-white' : 'text-neutral-500 group-hover:text-neutral-300'} font-medium">${s.bullet}</span>`; row.addEventListener('click', () => setActive(i, true)); bulletList.appendChild(row); }); } function setIcon(icon, accent) { iconBox.className = `w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${accents[accent].iconBox}`; iconBox.innerHTML = `<i data-lucide="${icon}" class="w-6 h-6"></i>`; lucide.createIcons({ attrs: { 'stroke-width': 1.5 } }); } function setBadges() { badgesLayer.innerHTML = ''; } function colorMap(name, alpha = 1) { const colors = { emerald: `rgba(16,185,129,${alpha})`, violet: `rgba(139,92,246,${alpha})`, amber: `rgba(245,158,11,${alpha})`, sky: `rgba(14,165,233,${alpha})` }; return colors[name] || `rgba(16,185,129,${alpha})`; } function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); } function applyHighlights(text, slideKey, badges) { const tokens = (highlightMap[slideKey] || []).slice(); let result = text; tokens.forEach((token, idx) => { const b = badges[idx]; if (!b) return; const re = new RegExp(`\\b(${escapeRegExp(token)})\\b`, 'i'); const bg = colorMap(b.color, 0.18); const border = colorMap(b.color, 0.35); result = result.replace(re, (m) => { return `<span class="rounded-md px-1.5 -mx-0.5 ring-1" style="background:${bg}; box-shadow: inset 0 0 0 1px ${border};">${m}</span>`; }); }); return result; } let index = 0; let timer; function setActive(i, manual = false) { index = i % slides.length; if (index < 0) index = slides.length - 1; const s = slides[index]; renderBullets(index); setIcon(s.icon, s.accent); highlightPill.className = `inline-flex items-center rounded-md px-2.5 py-1.5 ring-1 text-base sm:text-lg ${accents[s.accent].pill}`; highlightPill.textContent = s.pillText; highlightTail.textContent = s.tailText; bodyCopy.innerHTML = applyHighlights(s.body, s.key, s.badges); setBadges(); if (manual) { clearInterval(timer); timer = startRotation(); } } function startRotation() { return setInterval(() => setActive((index + 1) % slides.length), 4500); } renderBullets(index); setActive(0); timer = startRotation(); root.addEventListener('mouseenter', () => clearInterval(timer)); root.addEventListener('mouseleave', () => { clearInterval(timer); timer = startRotation(); }); setTimeout(() => lucide.createIcons({ attrs: { 'stroke-width': 1.5 } }), 100);
@@ -36,6 +72,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -109,7 +151,7 @@ export default function App() {
 </h2>
 <div className="relative" id="badgesLayer"></div>
 </div>
-<p className="mt-5 leading-relaxed max-w-prose text-[17px] sm:text-lg text-neutral-400" id="bodyCopy">Draft clear <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(16,185,129,0.18)', boxShadow: 'inset 0 0 0 1px rgba(16,185,129,0.35)'}}>briefs</span> together with multiplayer editing. Structure work with headings, <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(139,92,246,0.18)', boxShadow: 'inset 0 0 0 1px rgba(139,92,246,0.35)'}}>checklists</span>, and callouts.</p>
+<p className="mt-5 leading-relaxed max-w-prose text-[17px] sm:text-lg text-neutral-400" id="bodyCopy">Draft clear <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(16, 185, 129, 0.18)', boxShadow: 'inset 0 0 0 1px rgba(16,185,129,0.35)'}}>briefs</span> together with multiplayer editing. Structure work with headings, <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(139, 92, 246, 0.18)', boxShadow: 'inset 0 0 0 1px rgba(139,92,246,0.35)'}}>checklists</span>, and callouts.</p>
 <div className="mt-8 space-y-2">
 <div className="h-3 rounded w-2/3 bg-neutral-800/70"></div>
 <div className="h-3 rounded w-5/6 bg-neutral-800/70"></div>

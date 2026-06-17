@@ -8,6 +8,42 @@ const ScrollToAnchor = () => {
   const { pathname, hash } = useLocation();
   
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     if (hash) {
       setTimeout(() => {
         const id = hash.replace('#', '');
@@ -41,7 +77,7 @@ const ScrollIndicator = () => {
     <aside className="fixed right-6 lg:right-10 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-6 mix-blend-difference pointer-events-none">
       <span className="text-[10px] font-bold text-white tracking-widest">01</span>
       <div className="w-[1px] h-32 bg-white/20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full bg-[#eab308] transition-all duration-100 ease-out" style={{ height: `${scroll}%` }}></div>
+        <div className="absolute top-0 left-0 w-full bg-[#eab308] transition-all duration-100 ease-out" style={{height: `${scroll}%`}}></div>
       </div>
       <span className="text-[10px] font-bold text-white tracking-widest">02</span>
     </aside>
@@ -128,7 +164,7 @@ const TemplateHero = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative bg-[#06120b]" style={{ height: '250vh' }}>
+    <section ref={sectionRef} className="relative bg-[#06120b]" style={{height: '250vh'}}>
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Background Image Layer */}
         <div className="absolute inset-0">
@@ -553,7 +589,7 @@ function Home() {
 
       <section className="relative w-full py-24 overflow-hidden">
         <div className="aura-background-component top-0 w-full -z-10 absolute h-full">
-          <div className="absolute w-full h-full left-0 top-0 -z-10" style={{ filter: 'hue-rotate(145deg)' }}>
+          <div className="absolute w-full h-full left-0 top-0 -z-10" style={{filter: 'hue-rotate(145deg)'}}>
             <UnicornScene projectId="ILgOO23w4wEyPQOKyLO4" />
           </div>
         </div>
@@ -650,12 +686,12 @@ function Home() {
                 <textarea placeholder="Parlaci della tua azienda..." rows="4" className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#eab308] resize-none"></textarea>
                 <button type="submit" className="group w-full sm:w-auto flex overflow-hidden uppercase transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(234,179,8,0.5)] focus:outline-none text-[11px] font-semibold text-white tracking-widest rounded-full px-10 py-4 relative items-center justify-center mt-2">
                   <div className="absolute inset-0 -z-20 rounded-full overflow-hidden p-[1px]">
-                    <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#eab308_360deg)]" style={{ animation: 'beam-spin 3s linear infinite' }}></div>
+                    <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#eab308_360deg)]" style={{animation: 'beam-spin 3s linear infinite'}}></div>
                     <div className="absolute inset-[1px] rounded-full bg-[#102418]"></div>
                   </div>
                   <div className="-z-10 overflow-hidden bg-[#102418] rounded-full absolute top-[2px] right-[2px] bottom-[2px] left-[2px]">
                     <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
-                    <div className="opacity-30 mix-blend-overlay absolute top-0 right-0 bottom-0 left-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '12px 12px', animation: 'dots-move 8s linear infinite' }}></div>
+                    <div className="opacity-30 mix-blend-overlay absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '12px 12px', animation: 'dots-move 8s linear infinite'}}></div>
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-1/2 bg-[#eab308]/10 blur-2xl rounded-full pointer-events-none transition-colors duration-500 group-hover:bg-[#eab308]/30"></div>
                   </div>
                   <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
@@ -714,12 +750,12 @@ function AppContent() {
           <div className="flex items-center gap-4">
             <Link to="/#contact" className="group flex overflow-hidden uppercase transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(234,179,8,0.5)] focus:outline-none text-[11px] font-semibold text-white tracking-widest rounded-full px-5 py-2.5 relative items-center justify-center">
               <div className="absolute inset-0 -z-20 rounded-full overflow-hidden p-[1px]">
-                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#eab308_360deg)]" style={{ animation: 'beam-spin 3s linear infinite' }}></div>
+                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#eab308_360deg)]" style={{animation: 'beam-spin 3s linear infinite'}}></div>
                 <div className="absolute inset-[1px] rounded-full bg-[#06120b]"></div>
               </div>
               <div className="-z-10 overflow-hidden bg-[#06120b] rounded-full absolute top-[2px] right-[2px] bottom-[2px] left-[2px]">
                 <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
-                <div className="opacity-30 mix-blend-overlay absolute top-0 right-0 bottom-0 left-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '12px 12px', animation: 'dots-move 8s linear infinite' }}></div>
+                <div className="opacity-30 mix-blend-overlay absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '12px 12px', animation: 'dots-move 8s linear infinite'}}></div>
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-1/2 bg-[#eab308]/10 blur-2xl rounded-full pointer-events-none transition-colors duration-500 group-hover:bg-[#eab308]/30"></div>
               </div>
               <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,6 +48,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -116,7 +158,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="relative z-10 w-52 sm:w-72 h-[320px] sm:h-[440px] flex flex-col overflow-hidden border-white/20 border rounded-r-2xl pt-6 pr-6 pb-6 pl-6 sm:pt-10 sm:pr-10 sm:pb-10 sm:pl-10 shadow-2xl justify-between group transition-transform duration-700 hover:-translate-y-2" style={{background: 'linear-gradient(135deg, #059669 0%, #064E3B 50%, #022C22 100%)', transform: 'perspective(1000px) rotateY(-10deg) rotateX(5deg)', boxShadow: '-30px 30px 60px rgba(0,0,0,0.9), 0 0 50px rgba(16,185,129,0.3), inset 2px 0 15px rgba(255,255,255,0.3)'}}>
+<div className="relative z-10 w-52 sm:w-72 h-[320px] sm:h-[440px] flex flex-col overflow-hidden border-white/20 border rounded-r-2xl pt-6 pr-6 pb-6 pl-6 sm:pt-10 sm:pr-10 sm:pb-10 sm:pl-10 shadow-2xl justify-between group transition-transform duration-700 hover:-translate-y-2" style={{background: 'linear-gradient(135deg, #059669 0%, #064E3B 50%, #022C22 100%)', transform: 'perspective(1000px) rotateY(-10deg) rotateX(5deg)', boxShadow: '-30px 30px 60px rgba(0, 0, 0, 0.9), 0 0 50px rgba(16, 185, 129, 0.3), inset 2px 0 15px rgba(255,255,255,0.3)'}}>
 
 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-60 pointer-events-none"></div>
 

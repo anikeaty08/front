@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -359,6 +395,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -525,15 +567,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="parallax-element absolute inset-0" id="heroFloat" style={{transform: 'translate3d(0px, 0px, 0px)'}}>
-<div className="absolute top-20 right-20 w-32 h-32 rounded-3xl border hidden lg:block transform rotate-12" style={{background: 'rgba(255,255,255,0.10)', borderColor: 'rgba(255,255,255,0.20)'}}></div>
-<div className="absolute bottom-40 left-20 w-24 h-24 rounded-2xl border hidden lg:block transform -rotate-6" style={{background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)'}}></div>
+<div className="absolute top-20 right-20 w-32 h-32 rounded-3xl border hidden lg:block transform rotate-12" style={{background: 'rgba(255, 255, 255, 0.10)', borderColor: 'rgba(255,255,255,0.20)'}}></div>
+<div className="absolute bottom-40 left-20 w-24 h-24 rounded-2xl border hidden lg:block transform -rotate-6" style={{background: 'rgba(255, 255, 255, 0.06)', borderColor: 'rgba(255,255,255,0.12)'}}></div>
 </div>
 </div>
 
 <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
 <div className="max-w-4xl mx-auto">
 
-<div className="fade-in-up stagger-1 inline-flex items-center gap-2 glass-morphism rounded-full px-4 py-2 text-white text-sm font-medium mb-8 border" style={{background: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.24)'}}>
+<div className="fade-in-up stagger-1 inline-flex items-center gap-2 glass-morphism rounded-full px-4 py-2 text-white text-sm font-medium mb-8 border" style={{background: 'rgba(255, 255, 255, 0.12)', borderColor: 'rgba(255,255,255,0.24)'}}>
 <svg className="lucide lucide-globe-2 w-4 h-4" data-lucide="globe-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"></path><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"></path><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"></path><circle cx="12" cy="12" r="10"></circle></svg>
 <span>Importação e Distribuição de Matéria-Prima Química desde 1992</span>
 </div>
@@ -553,7 +595,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-arrow-right w-5 h-5" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </a>
 <a className="inline-flex items-center gap-4 text-white font-medium text-lg group" href="#contato">
-<div className="w-14 h-14 rounded-full glass-morphism border grid place-items-center group-hover:scale-110 transition-transform duration-300" style={{background: 'rgba(255,255,255,0.20)', borderColor: 'rgba(255,255,255,0.32)'}}>
+<div className="w-14 h-14 rounded-full glass-morphism border grid place-items-center group-hover:scale-110 transition-transform duration-300" style={{background: 'rgba(255, 255, 255, 0.20)', borderColor: 'rgba(255,255,255,0.32)'}}>
 <svg className="lucide lucide-phone w-6 h-6" data-lucide="phone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
 </div>
 <span className="group-hover:text-white/80 transition-colors">Falar com um especialista</span>
@@ -562,7 +604,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="fade-in-up stagger-5 mt-10 sm:mt-12">
-<div className="mx-auto w-full max-w-3xl rounded-2xl border px-6 py-5 backdrop-blur" style={{borderColor: 'rgba(255,255,255,0.24)', background: 'rgba(255,255,255,0.10)'}}>
+<div className="mx-auto w-full max-w-3xl rounded-2xl border px-6 py-5 backdrop-blur" style={{borderColor: 'rgba(255, 255, 255, 0.24)', background: 'rgba(255,255,255,0.10)'}}>
 <dl className="grid grid-cols-3 divide-x text-center" style={{divideColor: 'rgba(255,255,255,0.20)'}}>
 <div className="px-3">
 <dd className="counter counter-animate text-3xl font-light leading-tight text-white" data-target="33">0</dd>
@@ -812,7 +854,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
 <div className="text-center mb-16">
-<div className="fade-in-up stagger-1 inline-flex items-center gap-2 glass-morphism border text-white rounded-full px-4 py-2 text-sm font-medium mb-6" style={{background: 'rgba(255,255,255,0.10)', borderColor: 'rgba(255,255,255,0.20)'}}>
+<div className="fade-in-up stagger-1 inline-flex items-center gap-2 glass-morphism border text-white rounded-full px-4 py-2 text-sm font-medium mb-6" style={{background: 'rgba(255, 255, 255, 0.10)', borderColor: 'rgba(255,255,255,0.20)'}}>
 <svg className="lucide lucide-package w-4 h-4" data-lucide="package" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
 <span>Produtos</span>
 </div>
@@ -826,13 +868,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
 <div className="scale-in stagger-1 lg:col-span-8 group">
-<div className="relative rounded-3xl overflow-hidden border hover:border-white/30 transition-all duration-500 transform hover:-translate-y-2" style={{background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.15)'}}>
+<div className="relative rounded-3xl overflow-hidden border hover:border-white/30 transition-all duration-500 transform hover:-translate-y-2" style={{background: 'rgba(255, 255, 255, 0.06)', borderColor: 'rgba(255,255,255,0.15)'}}>
 <img alt="Imagem do produto em destaque" className="w-full h-96 lg:h-[420px] object-cover" data-aurabuild="image" data-field="product_featured_image" src="https://images.unsplash.com/photo-1717386255773-1e3037c81788?w=1600&amp;q=80"/>
 <div className="absolute inset-0" style={{background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)'}}></div>
 <div className="absolute bottom-0 left-0 right-0 p-8">
 <h3 className="text-3xl font-semibold mb-3 tracking-tight">Linha de Aditivos</h3>
 <p className="text-white/80 text-lg leading-relaxed mb-6 max-w-2xl">Aditivos para performance, estabilidade e processos.</p>
-<button className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300" style={{background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.30)'}}>
+<button className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300" style={{background: 'rgba(255, 255, 255, 0.18)', border: '1px solid rgba(255,255,255,0.30)'}}>
 <span>Ver detalhes</span>
 <svg className="lucide lucide-external-link w-4 h-4" data-lucide="external-link" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
 </button>
@@ -841,7 +883,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="lg:col-span-4 space-y-8">
 <div className="scale-in stagger-2 group">
-<div className="relative rounded-3xl overflow-hidden border hover:border-white/30 transition-all duration-500" style={{background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.15)'}}>
+<div className="relative rounded-3xl overflow-hidden border hover:border-white/30 transition-all duration-500" style={{background: 'rgba(255, 255, 255, 0.06)', borderColor: 'rgba(255,255,255,0.15)'}}>
 <img alt="Imagem de Resinas e Polímeros" className="w-full h-48 object-cover" data-aurabuild="image" data-field="product_card1_image" src="https://images.unsplash.com/photo-1582489853490-cd3a53eb4530?w=800&amp;q=80"/>
 <div className="p-6">
 <h4 className="text-xl font-semibold mb-2">Resinas e Polímeros</h4>
@@ -850,7 +892,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="scale-in stagger-3 group">
-<div className="relative rounded-3xl overflow-hidden border hover:border-white/30 transition-all duration-500" style={{background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.15)'}}>
+<div className="relative rounded-3xl overflow-hidden border hover:border-white/30 transition-all duration-500" style={{background: 'rgba(255, 255, 255, 0.06)', borderColor: 'rgba(255,255,255,0.15)'}}>
 <img alt="Imagem de Solventes e Intermediários" className="w-full h-48 object-cover" data-aurabuild="image" data-field="product_card2_image" src="https://images.unsplash.com/photo-1581091215367-9b6c00b3035a?w=800&amp;q=80"/>
 <div className="p-6">
 <h4 className="text-xl font-semibold mb-2">Solventes &amp; Intermediários</h4>

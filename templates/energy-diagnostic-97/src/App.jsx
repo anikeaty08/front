@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -68,7 +104,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         // --- SHARED UI COMPONENTS ---
 
         const Icon = ({ icon, className = "" }) => (
-            <iconify-icon icon={icon} class={className} style={{ fontSize: '1.5em' }}></iconify-icon>
+            <iconify-icon icon={icon} class={className} style={{fontSize: '1.5em'}}></iconify-icon>
         );
 
         const Button = ({ children, onClick, disabled, variant = 'primary', className = '' }) => {
@@ -174,7 +210,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     <div className="h-1 bg-[#E5E7EB] rounded-full w-full overflow-hidden">
                         <div 
                             className="h-full bg-[#1E3A5F] transition-all duration-500 ease-out rounded-full"
-                            style={{ width: `${progressPercentage}%` }}
+                            style={{width: `${progressPercentage}%`}}
                         ></div>
                     </div>
                 </div>
@@ -463,7 +499,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                             {['A','B','C','D','E','F','G'].map((l, i) => {
                                 const info = getDPE(i === 0 ? 0 : i===1?71:i===2?111:i===3?181:i===4?251:i===5?331:421);
                                 return (
-                                    <div key={l} className="relative h-8 flex items-center rounded-r-md transition-all" style={{ width: info.w, backgroundColor: info.c }}>
+                                    <div key={l} className="relative h-8 flex items-center rounded-r-md transition-all" style={{width: info.w, backgroundColor: info.c}}>
                                         <div className="w-8 flex justify-center font-bold text-white pl-2 drop-shadow-md">{l}</div>
                                         {dpe.l === l && (
                                             <>
@@ -519,7 +555,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                         </div>
                                         <div className="mt-6 pt-4 border-t border-slate-100">
                                             <div className="flex justify-between text-xs mb-1"><span className="text-slate-500">ROI après aides</span><span className="font-bold text-[#1E3A5F]">{p.roiLabel}</span></div>
-                                            <div className="h-2 bg-slate-200 rounded-full overflow-hidden w-full"><div className="h-full bg-[#2ECC71]" style={{ width: `${Math.min(p.roi * 10, 100)}%` }}></div></div>
+                                            <div className="h-2 bg-slate-200 rounded-full overflow-hidden w-full"><div className="h-full bg-[#2ECC71]" style={{width: `${Math.min(p.roi * 10, 100)}%`}}></div></div>
                                         </div>
                                     </div>
                                 </div>
@@ -820,7 +856,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                                     <td className="px-5 py-4 font-semibold">{c.nom}</td>
                                                     <td className="px-5 py-4 text-slate-500">{c.act}</td>
                                                     <td className="px-5 py-4">{c.s}</td>
-                                                    <td className="px-5 py-4"><span className="font-bold px-2 py-0.5 rounded" style={{ backgroundColor: `${c.cc}20`, color: c.cc }}>{c.c}</span></td>
+                                                    <td className="px-5 py-4"><span className="font-bold px-2 py-0.5 rounded" style={{backgroundColor: `${c.cc}20`, color: c.cc}}>{c.c}</span></td>
                                                     <td className="px-5 py-4"><span className={`px-3 py-1 rounded-full text-xs font-semibold ${c.stc}`}>{c.st}</span></td>
                                                     <td className="px-5 py-4 flex gap-3 text-slate-400"><Icon icon="solar:eye-linear" className="hover:text-[#1E3A5F] cursor-pointer" /><Icon icon="solar:send-linear" className="hover:text-[#1E3A5F] cursor-pointer" /></td>
                                                 </tr>
@@ -1013,6 +1049,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

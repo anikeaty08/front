@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -36,11 +78,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex items-center gap-2">
 <button aria-label="Search" className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm ring-1 backdrop-blur transition bg-white/70 ring-zinc-200/60 hover:bg-white">
-<iconify-icon className="text-zinc-700" height="22" icon="solar:magnifer-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="22" icon="solar:magnifer-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </button>
 <button aria-label="Notifications" className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm ring-1 backdrop-blur transition bg-white/70 ring-zinc-200/60 hover:bg-white">
 <div className="relative">
-<iconify-icon className="text-zinc-700" height="22" icon="solar:bell-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="22" icon="solar:bell-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 <span className="absolute -right-1 -top-1 inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
 </div>
 </button>
@@ -49,7 +91,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="relative mt-5 flex items-center justify-between rounded-3xl p-3 shadow-sm ring-1 backdrop-blur bg-white/70 ring-zinc-200/60">
 <button aria-label="Previous month" className="inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium transition text-zinc-700 hover:bg-zinc-100/70" style={{fontFamily: 'Inter, "Be Vietnam Pro", ui-sans-serif, system-ui'}}>
-<iconify-icon className="text-zinc-600" height="18" icon="solar:alt-arrow-left-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-zinc-600" height="18" icon="solar:alt-arrow-left-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
           Dec
         </button>
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>
@@ -57,7 +99,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         </div>
 <button aria-label="Next month" className="inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium transition text-zinc-700 hover:bg-zinc-100/70" style={{fontFamily: 'Inter, "Be Vietnam Pro", ui-sans-serif, system-ui'}}>
           Feb
-          <iconify-icon className="text-zinc-600" height="18" icon="solar:alt-arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+          <iconify-icon className="text-zinc-600" height="18" icon="solar:alt-arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </button>
 </div>
 </header>
@@ -75,12 +117,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   128.450.000 <span className="text-base font-medium text-zinc-500" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>₫</span>
 </div>
 <div className="mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ring-1 bg-emerald-50 text-emerald-700 ring-emerald-100" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>
-<iconify-icon className="text-emerald-700" height="14" icon="solar:arrow-up-linear" style={{-IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon className="text-emerald-700" height="14" icon="solar:arrow-up-linear" style={{'--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
                   +3.2% vs last month
                 </div>
 </div>
 <button className="inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold shadow-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-200 bg-zinc-900 text-white hover:bg-zinc-800" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>
-<iconify-icon className="text-white" height="18" icon="solar:card-transfer-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-white" height="18" icon="solar:card-transfer-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                 Transfer
               </button>
 </div>
@@ -88,25 +130,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-5 grid grid-cols-4 gap-3">
 <button aria-label="Income" className="group flex flex-col items-center gap-2 rounded-2xl p-3 ring-1 transition bg-zinc-50/80 ring-zinc-200/60 hover:bg-white">
 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl ring-1 bg-emerald-50 ring-emerald-100">
-<iconify-icon className="text-emerald-700" height="20" icon="solar:wallet-money-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-emerald-700" height="20" icon="solar:wallet-money-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </span>
 <span className="text-xs font-medium text-zinc-700" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Income</span>
 </button>
 <button aria-label="Spending" className="group flex flex-col items-center gap-2 rounded-2xl p-3 ring-1 transition bg-zinc-50/80 ring-zinc-200/60 hover:bg-white">
 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl ring-1 bg-zinc-100 ring-zinc-200">
-<iconify-icon className="text-zinc-700" height="20" icon="solar:tag-price-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="20" icon="solar:tag-price-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </span>
 <span className="text-xs font-medium text-zinc-700" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Spend</span>
 </button>
 <button aria-label="Goals" className="group flex flex-col items-center gap-2 rounded-2xl p-3 ring-1 transition bg-zinc-50/80 ring-zinc-200/60 hover:bg-white">
 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl ring-1 bg-emerald-50 ring-emerald-100">
-<iconify-icon className="text-emerald-700" height="20" icon="solar:target-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-emerald-700" height="20" icon="solar:target-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </span>
 <span className="text-xs font-medium text-zinc-700" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Goals</span>
 </button>
 <button aria-label="Reports" className="group flex flex-col items-center gap-2 rounded-2xl p-3 ring-1 transition bg-zinc-50/80 ring-zinc-200/60 hover:bg-white">
 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl ring-1 bg-zinc-100 ring-zinc-200">
-<iconify-icon className="text-zinc-700" height="20" icon="solar:chart-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="20" icon="solar:chart-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </span>
 <span className="text-xs font-medium text-zinc-700" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Reports</span>
 </button>
@@ -131,7 +173,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-2">
 <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl ring-1 bg-emerald-50 ring-emerald-100">
-<iconify-icon className="text-emerald-700" height="18" icon="solar:cash-out-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-emerald-700" height="18" icon="solar:cash-out-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </span>
 <div>
 <div className="text-xs font-medium text-zinc-500" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Income</div>
@@ -153,7 +195,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-2">
 <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl ring-1 bg-zinc-100 ring-zinc-200">
-<iconify-icon className="text-zinc-700" height="18" icon="solar:receipt-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="18" icon="solar:receipt-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </span>
 <div>
 <div className="text-xs font-medium text-zinc-500" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Spending</div>
@@ -178,7 +220,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>Accounts</div>
 <button className="inline-flex items-center gap-1.5 text-sm font-semibold transition text-zinc-700 hover:text-zinc-900" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>
             Manage
-            <iconify-icon className="text-zinc-500" height="18" icon="solar:alt-arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+            <iconify-icon className="text-zinc-500" height="18" icon="solar:alt-arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </button>
 </div>
 <div className="mt-3 grid gap-3">
@@ -214,7 +256,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <button className="flex w-full items-center justify-between rounded-2xl p-3 ring-1 transition bg-zinc-50/80 ring-zinc-200/60 hover:bg-white">
 <div className="flex items-center gap-3">
 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl ring-1 bg-emerald-50 ring-emerald-100">
-<iconify-icon className="text-emerald-700" height="20" icon="solar:buildings-3-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-emerald-700" height="20" icon="solar:buildings-3-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </span>
 <div className="text-left">
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>Vietcombank</div>
@@ -229,7 +271,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <button className="flex w-full items-center justify-between rounded-2xl p-3 ring-1 transition bg-zinc-50/80 ring-zinc-200/60 hover:bg-white">
 <div className="flex items-center gap-3">
 <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl ring-1 bg-zinc-100 ring-zinc-200">
-<iconify-icon className="text-zinc-700" height="20" icon="solar:safe-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="20" icon="solar:safe-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </span>
 <div className="text-left">
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>Emergency fund</div>
@@ -259,7 +301,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between gap-3 p-4">
 <div className="flex items-center gap-3">
 <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl ring-1 bg-zinc-100 ring-zinc-200">
-<iconify-icon className="text-zinc-700" height="22" icon="solar:cup-hot-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="22" icon="solar:cup-hot-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </span>
 <div>
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>The Coffee House</div>
@@ -274,7 +316,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between gap-3 p-4">
 <div className="flex items-center gap-3">
 <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl ring-1 bg-emerald-50 ring-emerald-100">
-<iconify-icon className="text-emerald-700" height="22" icon="solar:cash-in-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-emerald-700" height="22" icon="solar:cash-in-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </span>
 <div>
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>January salary</div>
@@ -289,7 +331,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between gap-3 p-4">
 <div className="flex items-center gap-3">
 <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl ring-1 bg-zinc-100 ring-zinc-200">
-<iconify-icon className="text-zinc-700" height="22" icon="solar:home-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="22" icon="solar:home-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </span>
 <div>
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>Rent</div>
@@ -304,7 +346,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between gap-3 p-4">
 <div className="flex items-center gap-3">
 <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl ring-1 bg-zinc-100 ring-zinc-200">
-<iconify-icon className="text-zinc-700" height="22" icon="solar:bus-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-700" height="22" icon="solar:bus-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </span>
 <div>
 <div className="text-sm font-semibold tracking-tight text-zinc-900" style={{fontFamily: '"Be Vietnam Pro", Inter, ui-sans-serif, system-ui'}}>Grab</div>
@@ -331,25 +373,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-[2rem] shadow-[0_18px_60px_-35px_rgba(16,24,40,0.35)] ring-1 backdrop-blur bg-white/80 ring-zinc-200/60">
 <div className="grid grid-cols-5 items-center px-2 py-2.5">
 <button aria-label="Home" className="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 text-emerald-700">
-<iconify-icon className="text-emerald-700" height="22" icon="solar:home-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-emerald-700" height="22" icon="solar:home-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 <span className="text-xs font-semibold" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Home</span>
 </button>
 <button aria-label="Budget" className="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition text-zinc-600 hover:text-zinc-900">
-<iconify-icon className="text-zinc-600" height="22" icon="solar:pie-chart-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-600" height="22" icon="solar:pie-chart-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 <span className="text-xs font-medium" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Budget</span>
 </button>
 <button aria-label="Create new" className="relative -mt-7 flex flex-col items-center gap-1">
 <span className="inline-flex h-14 w-14 items-center justify-center rounded-[1.5rem] shadow-[0_18px_50px_-22px_rgba(5,150,105,0.85)] ring-1 ring-emerald-500/40 transition bg-emerald-600 hover:bg-emerald-700">
-<iconify-icon className="text-white" height="26" icon="solar:add-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="26"></iconify-icon>
+<iconify-icon className="text-white" height="26" icon="solar:add-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="26"></iconify-icon>
 </span>
 <span className="text-xs font-semibold text-zinc-700" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Add</span>
 </button>
 <button aria-label="Goals" className="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition text-zinc-600 hover:text-zinc-900">
-<iconify-icon className="text-zinc-600" height="22" icon="solar:target-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-600" height="22" icon="solar:target-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 <span className="text-xs font-medium" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Goals</span>
 </button>
 <button aria-label="Personal" className="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition text-zinc-600 hover:text-zinc-900">
-<iconify-icon className="text-zinc-600" height="22" icon="solar:user-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-zinc-600" height="22" icon="solar:user-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 <span className="text-xs font-medium" style={{fontFamily: 'Inter, Be Vietnam Pro, ui-sans-serif, system-ui'}}>Personal</span>
 </button>
 </div>

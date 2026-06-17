@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -19,6 +55,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -101,7 +143,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             guiding your project from zero to launch and beyond.
           </p>
 <div className="flex flex-col gap-3 sm:flex-row sm:items-center mt-8">
-<a className="group inline-flex items-center gap-3 text-sm font-semibold text-white rounded-full pt-2.5 pr-4 pb-2.5 pl-4 shiny-cta" href="#contact" style={{-GradientAngle: '0deg', -GradientAngleOffset: '0deg', -GradientPercent: '20%', -GradientShine: '#10b981', -ShadowSize: '2px', position: 'relative', overflow: 'hidden', background: 'linear-gradient(rgb(10, 10, 10), rgb(10, 10, 10)) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #059669 5%, var(--gradient-shine) 15%, #059669 30%, transparent 40%, transparent 100%) border-box', border: '2px solid transparent', boxShadow: 'rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset', backdropFilter: 'blur(16px)', cursor: 'pointer', isolation: 'isolate', animation: '2.5s linear 0s infinite normal none running border-spin', padding: '0.625rem 1rem'}}>
+<a className="group inline-flex items-center gap-3 text-sm font-semibold text-white rounded-full pt-2.5 pr-4 pb-2.5 pl-4 shiny-cta" href="#contact" style={{'--gradient-angle': '0deg', '--gradient-angle-offset': '0deg', '--gradient-percent': '20%', '--gradient-shine': '#10b981', '--shadow-size': '2px', position: 'relative', overflow: 'hidden', background: 'linear-gradient(rgb(10, 10, 10), rgb(10, 10, 10)) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #059669 5%, var(--gradient-shine) 15%, #059669 30%, transparent 40%, transparent 100%) border-box', border: '2px solid transparent', boxShadow: 'rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset', backdropFilter: 'blur(16px)', cursor: 'pointer', isolation: 'isolate', animation: '2.5s linear 0s infinite normal none running border-spin', padding: '0.625rem 1rem'}}>
 <style>
                 @property --gradient-angle {
                   syntax: "<angle>";

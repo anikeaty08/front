@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -228,6 +264,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -543,7 +585,7 @@ addUtilities({
 
 <div className="grid gap-6 lg:grid-cols-2 gap-x-6 gap-y-6">
 
-<section className="animate-in delay-200 overflow-hidden sm:p-8 hover-card-effect group bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent rounded-3xl pt-6 pr-6 pb-6 pl-6 relative shadow-[0_0_60px_rgba(16,185,129,0.15)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="animate-in delay-200 overflow-hidden sm:p-8 hover-card-effect group bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent rounded-3xl pt-6 pr-6 pb-6 pl-6 relative shadow-[0_0_60px_rgba(16,185,129,0.15)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none group-hover:opacity-60 transition-opacity duration-500 opacity-40 absolute top-0 right-0 bottom-0 left-0">
 <div className="absolute -left-24 top-10 h-64 w-64 rounded-full bg-emerald-500/25 blur-3xl animate-pulse" style={{}}></div>
 <div className="absolute right-0 -bottom-10 h-52 w-52 rounded-full bg-emerald-400/20 blur-3xl" style={{}}></div>
@@ -631,7 +673,7 @@ addUtilities({
 </div>
 </section>
 
-<section className="animate-in delay-300 overflow-hidden sm:p-8 bg-gradient-to-bl from-emerald-500/20 via-emerald-500/5 to-transparent rounded-3xl pt-6 pr-6 pb-6 pl-6 relative hover-card-effect" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="animate-in delay-300 overflow-hidden sm:p-8 bg-gradient-to-bl from-emerald-500/20 via-emerald-500/5 to-transparent rounded-3xl pt-6 pr-6 pb-6 pl-6 relative hover-card-effect" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-40">
 <div className="absolute right-0 top-0 h-60 w-60 -translate-y-10 translate-x-10 rounded-full bg-emerald-500/25 blur-3xl" style={{}}></div>
 <div className="absolute left-1/4 bottom-0 h-40 w-40 translate-y-1/3 rounded-full bg-emerald-400/20 blur-3xl" style={{}}></div>
@@ -734,7 +776,7 @@ addUtilities({
 
 <div className="grid gap-6 md:grid-cols-3 mt-6 gap-x-6 gap-y-6">
 
-<section className="animate-in delay-400 overflow-hidden sm:p-6 bg-gradient-to-tr from-emerald-500/10 via-black to-black rounded-3xl pt-5 pr-5 pb-5 pl-5 relative hover-card-effect" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="animate-in delay-400 overflow-hidden sm:p-6 bg-gradient-to-tr from-emerald-500/10 via-black to-black rounded-3xl pt-5 pr-5 pb-5 pl-5 relative hover-card-effect" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-30">
 <div className="absolute -right-10 top-0 h-40 w-40 rounded-full bg-emerald-500/30 blur-3xl" style={{}}></div>
 </div>
@@ -769,7 +811,7 @@ addUtilities({
 </div>
 </section>
 
-<section className="animate-in delay-500 overflow-hidden sm:p-6 bg-gradient-to-tr from-black via-slate-950 to-emerald-500/10 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative hover-card-effect group" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="animate-in delay-500 overflow-hidden sm:p-6 bg-gradient-to-tr from-black via-slate-950 to-emerald-500/10 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative hover-card-effect group" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-40">
 <div className="absolute left-1/2 top-0 h-40 w-40 -translate-x-1/2 rounded-full bg-emerald-500/30 blur-3xl" style={{}}></div>
 </div>
@@ -823,7 +865,7 @@ addUtilities({
 </div>
 </section>
 
-<section className="animate-in delay-500 overflow-hidden sm:p-6 bg-gradient-to-tr from-emerald-500/15 via-black to-black rounded-3xl pt-5 pr-5 pb-5 pl-5 relative hover-card-effect" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="animate-in delay-500 overflow-hidden sm:p-6 bg-gradient-to-tr from-emerald-500/15 via-black to-black rounded-3xl pt-5 pr-5 pb-5 pl-5 relative hover-card-effect" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-40">
 <div className="absolute right-0 bottom-0 h-44 w-44 translate-y-10 translate-x-6 rounded-full bg-emerald-500/30 blur-3xl" style={{}}></div>
 </div>
@@ -1082,8 +1124,8 @@ addUtilities({
 
 <div className="grid gap-6 md:grid-cols-2 gap-x-6 gap-y-6">
 
-<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', -BorderRadiusBefore: '2rem'}}>
-<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', '--border-radius-before': '2rem'}}>
+<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', '--border-radius-before': '24px'}}>
 
 <div className="[mask-image:radial-gradient(black,transparent)] absolute top-0 right-0 bottom-0 left-0 opacity-50 group-hover:opacity-80 transition-opacity duration-700">
 </div>
@@ -1145,8 +1187,8 @@ addUtilities({
         </p>
 </div>
 
-<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', -BorderRadiusBefore: '2rem'}}>
-<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', '--border-radius-before': '2rem'}}>
+<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 w-64 rounded-2xl border border-white/10 bg-[#0F0F0F] p-5 shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-transform duration-500 group-hover:scale-[1.02]">
 <div className="mb-5 flex items-start justify-between">
 <div className="flex items-center gap-3">
@@ -1201,8 +1243,8 @@ addUtilities({
         </p>
 </div>
 
-<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', -BorderRadiusBefore: '2rem'}}>
-<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', '--border-radius-before': '2rem'}}>
+<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', '--border-radius-before': '24px'}}>
 
 <div className="absolute top-10 opacity-30 blur-[1px] transition-transform duration-700 group-hover:-translate-y-4 group-hover:rotate-6 group-hover:translate-x-2">
 <div className="h-28 w-48 rounded-xl bg-slate-800 border border-white/20 shadow-2xl"></div>
@@ -1254,8 +1296,8 @@ addUtilities({
         </p>
 </div>
 
-<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', -BorderRadiusBefore: '2rem'}}>
-<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group overflow-hidden hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:bg-emerald-950/30 transition-all duration-500 bg-emerald-950/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.2))', '--border-radius-before': '2rem'}}>
+<div className="flex bg-gradient-to-b from-white/5 to-transparent h-64 rounded-3xl mb-8 relative shadow-inner items-center justify-center group-hover:bg-white/[0.07] transition-colors duration-500" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(107, 114, 128, 0.1), rgba(107, 114, 128, 0))', '--border-radius-before': '24px'}}>
 <div className="relative z-10 w-64 rounded-2xl border border-white/10 bg-[#0F0F0F] p-4 shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-transform duration-500 group-hover:scale-[1.02]">
 
 <div className="mb-4 flex items-center gap-3 border-b border-white/5 pb-3">
@@ -1395,7 +1437,7 @@ addUtilities({
 
 <div className="grid gap-6 md:grid-cols-12">
 
-<div className="group col-span-1 overflow-hidden hover:border-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 md:col-span-7 md:p-10 bg-gradient-to-br from-emerald-400/5 to-emerald-600/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '2rem'}}>
+<div className="group col-span-1 overflow-hidden hover:border-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 md:col-span-7 md:p-10 bg-gradient-to-br from-emerald-400/5 to-emerald-600/20 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '2rem'}}>
 
 <div className="absolute inset-0 pointer-events-none">
 <img alt="Network Mesh" className="h-full w-full object-cover opacity-20 mix-blend-screen transition-transform duration-[2s] ease-in-out group-hover:scale-110 group-hover:rotate-1" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1ebff6d5-cc57-4279-972f-e83f6c19894e_1600w.jpg" style={{}}/>
@@ -1438,7 +1480,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="group col-span-1 flex flex-col overflow-hidden hover:border-emerald-500/30 hover:bg-slate-900/80 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/5 md:col-span-5 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-emerald-400/20 via-[#ededed]/0 to-emerald-600/10 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '2rem'}}>
+<div className="group col-span-1 flex flex-col overflow-hidden hover:border-emerald-500/30 hover:bg-slate-900/80 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/5 md:col-span-5 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-emerald-400/20 via-[#ededed]/0 to-emerald-600/10 rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '2rem'}}>
 <div className="mb-6 flex items-center justify-between">
 <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 group-hover:border-emerald-500/30 group-hover:bg-emerald-500/10 transition-colors duration-300">
 <svg className="text-slate-200 group-hover:text-emerald-400 transition-colors" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
@@ -1451,7 +1493,7 @@ addUtilities({
 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" style={{}}></div>
 </div>
 </div>
-<div className="overflow-hidden group-hover:border-emerald-500/20 transition-colors duration-300 group-hover:bg-black/80 bg-black/50 rounded-xl mb-6 pt-4 pr-4 pb-4 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '12px'}}>
+<div className="overflow-hidden group-hover:border-emerald-500/20 transition-colors duration-300 group-hover:bg-black/80 bg-black/50 rounded-xl mb-6 pt-4 pr-4 pb-4 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1))', '--border-radius-before': '12px'}}>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 <div className="p-1.5 rounded-md bg-white/10 hover:bg-white/20 cursor-pointer text-slate-400 hover:text-white transition-colors">
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -103,6 +139,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -110,7 +152,7 @@ gtag('config', 'G-2M6V79H761');
       
 <div className="sm:px-6 sm:py-24 lg:px-8 max-w-4xl mx-auto pt-16 px-4 pb-16 space-y-32">
 
-<section className="flex flex-col items-center text-center space-y-8 load-stage" style={{-D: '0ms'}}>
+<section className="flex flex-col items-center text-center space-y-8 load-stage" style={{'--d': '0ms'}}>
 <img alt="Foundcommon Logo" className="h-8 sm:h-10 lg:h-12 w-auto object-contain" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8e2b4e38-c7a4-4c9b-ab51-07f7536ceff3_800w.png"/>
 <div className="inline-flex items-center gap-2 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-full py-1 px-3 shadow-[0_0_15px_-3px_rgba(52,211,153,0.3)] backdrop-blur-sm hover:bg-emerald-500/20 hover:shadow-[0_0_20px_-3px_rgba(52,211,153,0.4)] transition-all duration-300 cursor-default">
 <span className="relative flex h-2 w-2">
@@ -139,7 +181,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="reveal load-stage" style={{-D: '60ms'}}>
+<section className="reveal load-stage" style={{'--d': '60ms'}}>
 <div className="text-center space-y-2">
 <h2 className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">QuickMath</h2>
 <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
@@ -223,7 +265,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="space-y-10 reveal load-stage" style={{-D: '80ms'}}>
+<section className="space-y-10 reveal load-stage" style={{'--d': '80ms'}}>
 <div className="text-center space-y-2">
 <h2 className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">Your Upcoming Call</h2>
 <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
@@ -286,7 +328,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-center text-xl text-zinc-500 pt-4 reveal delay-400 hover:text-zinc-400 transition-colors">No pressure. No 90-minute pitch. Just a real conversation.</p>
 </section>
 
-<section className="reveal load-stage" style={{-D: '140ms'}}>
+<section className="reveal load-stage" style={{'--d': '140ms'}}>
 <div className="relative rounded-3xl border border-emerald-400/50 bg-gradient-to-b from-emerald-500/10 via-emerald-500/5 to-zinc-950/10 p-8 sm:p-12 text-center shadow-[0_0_70px_-18px_rgba(52,211,153,0.30)] overflow-hidden group backdrop-blur-sm transition-all duration-500 hover:border-emerald-300/60 hover:shadow-[0_0_100px_-20px_rgba(52,211,153,0.42)]">
 <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-emerald-400/20 blur-3xl pointer-events-none transition-opacity duration-500 group-hover:opacity-90"></div>
 <div className="absolute -bottom-28 -right-24 h-80 w-80 rounded-full bg-blue-400/15 blur-3xl pointer-events-none transition-opacity duration-500 group-hover:opacity-90"></div>
@@ -338,7 +380,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="space-y-10 max-w-3xl mx-auto load-stage" style={{-D: '200ms'}}>
+<section className="space-y-10 max-w-3xl mx-auto load-stage" style={{'--d': '200ms'}}>
 <div className="text-center space-y-2 reveal">
 <h2 className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">Common Questions</h2>
 <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
@@ -382,7 +424,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="reveal space-y-10 load-stage" style={{-D: '260ms'}}>
+<section className="reveal space-y-10 load-stage" style={{'--d': '260ms'}}>
 <div className="text-center space-y-2">
 <h2 className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">You're In Good Hands</h2>
 <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
@@ -408,7 +450,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="pb-20 load-stage" style={{-D: '320ms'}}>
+<section className="pb-20 load-stage" style={{'--d': '320ms'}}>
 <div className="max-w-2xl mx-auto">
 <div className="relative rounded-3xl border border-emerald-500/40 bg-emerald-500/5 overflow-hidden backdrop-blur-sm shadow-[0_0_55px_-16px_rgba(52,211,153,0.22)] transition-all duration-500 hover:shadow-[0_0_85px_-18px_rgba(52,211,153,0.3)] hover:border-emerald-500/60">
 <div className="absolute inset-0 pointer-events-none">

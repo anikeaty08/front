@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -37,6 +73,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -47,7 +89,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="pointer-events-none absolute inset-0 hidden dark:block">
 
-<div className="absolute inset-0" style={{background: 'radial-gradient(1200px 600px at 20% -10%, rgba(0,224,199,0.12) 0%, rgba(0,224,199,0.06) 20%, transparent 55%), radial-gradient(800px 600px at 90% 10%, rgba(255,210,76,0.10) 0%, rgba(255,210,76,0.06) 30%, transparent 60%), linear-gradient(180deg, #0B172A 0%, #0A1526 40%, #091223 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(1200px 600px at 20% -10%, rgba(0, 224, 199, 0.12) 0%, rgba(0, 224, 199, 0.06) 20%, transparent 55%), radial-gradient(800px 600px at 90% 10%, rgba(255, 210, 76, 0.10) 0%, rgba(255, 210, 76, 0.06) 30%, transparent 60%), linear-gradient(180deg, #0B172A 0%, #0A1526 40%, #091223 100%)'}}></div>
 
 <svg className="absolute inset-0 opacity-[0.12]" xmlns="http://www.w3.org/2000/svg">
 <defs>
@@ -76,7 +118,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="pointer-events-none absolute inset-0 dark:hidden">
-<div className="absolute inset-0" style={{background: 'radial-gradient(1200px 600px at 80% -10%, rgba(0,224,199,0.10) 0%, rgba(0,224,199,0.05) 25%, transparent 60%), linear-gradient(180deg, #FFFFFF 0%, #F9FBFF 45%, #F4F7FB 100%)'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(1200px 600px at 80% -10%, rgba(0, 224, 199, 0.10) 0%, rgba(0, 224, 199, 0.05) 25%, transparent 60%), linear-gradient(180deg, #FFFFFF 0%, #F9FBFF 45%, #F4F7FB 100%)'}}></div>
 <svg className="absolute inset-0 opacity-[0.12]" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <pattern height="36" id="gridLight" patternunits="userSpaceOnUse" width="36">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -56,7 +98,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       We turn passive traffic into predictable revenue. Our data-driven marketing frameworks reduce CAC and scale your brand without the guesswork.
     </p>
 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 mb-16">
-<button className="group shadow-blue-500/30 hover:shadow-blue-500/60 transition-all duration-300 overflow-hidden hover:bg-blue-600 font-medium text-white bg-blue-600 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: '0 18px 40px -15px rgba(37,99,235,0.85), inset 0 2px 4px rgba(255,255,255,0.2)', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(147, 197, 253, 0.4), rgba(37, 99, 235, 0.5))', -BorderRadiusBefore: '8px'}}>
+<button className="group shadow-blue-500/30 hover:shadow-blue-500/60 transition-all duration-300 overflow-hidden hover:bg-blue-600 font-medium text-white bg-blue-600 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: '0 18px 40px -15px rgba(37,99,235,0.85), inset 0 2px 4px rgba(255,255,255,0.2)', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(147, 197, 253, 0.4), rgba(37, 99, 235, 0.5))', '--border-radius-before': '8px'}}>
 <div className="group-hover:translate-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full"></div>
 <span className="flex items-center gap-2 relative font-geist">Get Your Audit <iconify-icon className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" height="16" icon="solar:arrow-right-up-outline" width="16"></iconify-icon></span>
 </button>
@@ -408,7 +450,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="bg-black/80 absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="container mx-auto px-6 lg:px-12 relative z-10">
 <div className="max-w-3xl mx-auto text-center">
-<div className="inline-flex bg-gradient-to-b from-white/10 to-white/0 rounded-full mb-6 pt-1 pr-4 pb-1 pl-4 backdrop-blur-lg gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex bg-gradient-to-b from-white/10 to-white/0 rounded-full mb-6 pt-1 pr-4 pb-1 pl-4 backdrop-blur-lg gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="text-blue-300" icon="solar:flash-circle-bold-duotone"></iconify-icon>
 <span className="text-[11px] uppercase font-medium text-gray-100 tracking-[0.18em] font-geist">
           Results in 90 days
@@ -425,7 +467,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           Start Your Audit
            <iconify-icon height="16" icon="solar:arrow-right-up-bold-duotone" width="16"></iconify-icon>
 </button>
-<button className="inline-flex hover:border-neutral-400 hover:text-white transition-colors text-white text-sm font-medium bg-gradient-to-b from-white/10 to-white/0 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] backdrop-blur-xl items-center justify-center font-geist" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="inline-flex hover:border-neutral-400 hover:text-white transition-colors text-white text-sm font-medium bg-gradient-to-b from-white/10 to-white/0 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] backdrop-blur-xl items-center justify-center font-geist" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
           Book a 15-min Strategy Call
         </button>
 </div>

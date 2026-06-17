@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -267,6 +303,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -395,23 +437,23 @@ gtag('config', 'G-2M6V79H761');
 <div className="section wrap intro">
 <div>
 <span className="col-num reveal">The Studio</span>
-<h2 className="reveal" style={{-I: '1'}}>
+<h2 className="reveal" style={{'--i': '1'}}>
               One pair of hands.
               <br/>
               Your whole day.
             </h2>
-<p className="reveal" style={{-I: '2'}}>
+<p className="reveal" style={{'--i': '2'}}>
               Freshjive is a Riverside studio for couples across Southern
               California who don't want their wedding handed off to a rotating
               crew. The same eye that meets you at the engagement shoot is the
               one behind the camera when you say your vows.
             </p>
-<p className="reveal" style={{-I: '3'}}>
+<p className="reveal" style={{'--i': '3'}}>
               We work like documentarians with an editorial eye — present enough
               to catch the unrepeatable moments, invisible enough that the day
               still belongs to you.
             </p>
-<a className="link-u reveal" data-link="studio" style={{-I: '4'}}>
+<a className="link-u reveal" data-link="studio" style={{'--i': '4'}}>
               Meet the studio
               <span>→</span>
 </a>
@@ -425,18 +467,18 @@ gtag('config', 'G-2M6V79H761');
 <div className="worlds-head">
 <div>
 <p className="eyebrow reveal">What we do</p>
-<h2 className="serif reveal" style={{-I: '1'}}>
+<h2 className="serif reveal" style={{'--i': '1'}}>
                 Four crafts. One studio. Each one obsessed over on its own.
               </h2>
 </div>
-<p className="reveal" style={{-I: '2', maxWidth: '30ch', color: '#5a5040'}}>
+<p className="reveal" style={{'--i': '2', maxWidth: '30ch', color: '#5a5040'}}>
               Most studios blur it all together. We give photography, film,
               sound, and the booth their own room to breathe — so you actually
               know what you're getting.
             </p>
 </div>
 <div className="worlds">
-<a className="world reveal" data-cursor="" data-link="photography" style={{-I: '0'}}>
+<a className="world reveal" data-cursor="" data-link="photography" style={{'--i': '0'}}>
 <div className="wimg">
 <img alt="Photography" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A1624-min-683x1024.jpg"/>
 </div>
@@ -447,7 +489,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="wmore">Explore →</span>
 </div>
 </a>
-<a className="world reveal" data-cursor="" data-link="films" style={{-I: '1'}}>
+<a className="world reveal" data-cursor="" data-link="films" style={{'--i': '1'}}>
 <div className="wimg">
 <img alt="Films" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A8178-min-1024x683.jpg"/>
 </div>
@@ -458,7 +500,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="wmore">Explore →</span>
 </div>
 </a>
-<a className="world reveal" data-cursor="" data-link="experiences" style={{-I: '2'}}>
+<a className="world reveal" data-cursor="" data-link="experiences" style={{'--i': '2'}}>
 <div className="wimg">
 <img alt="Sound and light" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A9760-min-1024x683.jpg"/>
 </div>
@@ -469,7 +511,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="wmore">Explore →</span>
 </div>
 </a>
-<a className="world reveal" data-cursor="" data-link="experiences" style={{-I: '3'}}>
+<a className="world reveal" data-cursor="" data-link="experiences" style={{'--i': '3'}}>
 <div className="wimg">
 <img alt="Photo booth" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A1964-2-min-683x1024.jpg"/>
 </div>
@@ -486,20 +528,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="section wrap jt">
 <div className="jt-imgs">
 <img alt="Engagement" className="a reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/00015AE-2019-min-1024x683.jpg"/>
-<img alt="Wedding day" className="b reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A2826-min-683x1024.jpg" style={{-I: '1'}}/>
+<img alt="Wedding day" className="b reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A2826-min-683x1024.jpg" style={{'--i': '1'}}/>
 </div>
 <div>
 <p className="eyebrow reveal">The approach</p>
-<h2 className="reveal" style={{-I: '1'}}>
+<h2 className="reveal" style={{'--i': '1'}}>
               We photograph the whole arc — not just the eight hours.
             </h2>
-<p className="reveal" style={{-I: '2'}}>
+<p className="reveal" style={{'--i': '2'}}>
               A wedding isn't a single day. It's a season. The nervous
               engagement shoot, the morning everything changes, the night the
               room lets go, the quiet that comes after. We build your
               photography around that journey, not around a stopwatch.
             </p>
-<div className="steps reveal" style={{-I: '3'}}>
+<div className="steps reveal" style={{'--i': '3'}}>
 <div>
                 Chapter 01
                 <span>Engagement</span>
@@ -517,7 +559,7 @@ gtag('config', 'G-2M6V79H761');
                 <span>After</span>
 </div>
 </div>
-<a className="btn reveal" data-link="photography" style={{-I: '4'}}>
+<a className="btn reveal" data-link="photography" style={{'--i': '4'}}>
               Walk the journey
               <span className="ar">→</span>
 </a>
@@ -530,15 +572,15 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="wrap">
 <p className="eyebrow reveal">Wedding Films</p>
-<h2 className="reveal" style={{-I: '1'}}>
+<h2 className="reveal" style={{'--i': '1'}}>
               The day, edited into something you'll press play on for years.
             </h2>
-<p className="reveal" style={{-I: '2'}}>
+<p className="reveal" style={{'--i': '2'}}>
               Cinematic films shot right alongside the photography —
               full-length, highlight trailer, aerial coverage, scored to feel
               like the night actually felt.
             </p>
-<a className="btn reveal" data-link="films" style={{-I: '3'}}>
+<a className="btn reveal" data-link="films" style={{'--i': '3'}}>
               Watch the films
               <span className="ar">→</span>
 </a>
@@ -548,11 +590,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="section wrap">
 <div className="quote">
 <div className="stars reveal">✦ ✦ ✦ ✦ ✦</div>
-<p className="q reveal" style={{-I: '1'}}>
+<p className="q reveal" style={{'--i': '1'}}>
               "We've watched our film more times than I can count. Freshjive
               didn't just cover our wedding — they handed us the feeling back."
             </p>
-<p className="qby reveal" style={{-I: '2'}}>
+<p className="qby reveal" style={{'--i': '2'}}>
               Marisol &amp; David · Married in Riverside
             </p>
 </div>
@@ -566,11 +608,11 @@ gtag('config', 'G-2M6V79H761');
               <br/>
               about your day.
             </h2>
-<p className="reveal" style={{-I: '1'}}>
+<p className="reveal" style={{'--i': '1'}}>
               Tell us your date and your story. We only take a limited number of
               weddings each season.
             </p>
-<a className="btn reveal" data-link="inquire" style={{-I: '2'}}>
+<a className="btn reveal" data-link="inquire" style={{'--i': '2'}}>
               Start your inquiry
               <span className="ar">→</span>
 </a>
@@ -613,7 +655,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="ch-imgs">
 <img alt="Engagement" className="big reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V3A9361-min-1024x683.jpg"/>
-<img alt="Engagement portrait" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A0454-copy-min-683x1024.jpg" style={{-I: '1'}}/>
+<img alt="Engagement portrait" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A0454-copy-min-683x1024.jpg" style={{'--i': '1'}}/>
 </div>
 </div>
 
@@ -634,7 +676,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="ch-imgs">
 <img alt="Wedding day" className="big reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A1704-min-1024x683.jpg"/>
-<img alt="Wedding portrait" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A1624-min-683x1024.jpg" style={{-I: '1'}}/>
+<img alt="Wedding portrait" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A1624-min-683x1024.jpg" style={{'--i': '1'}}/>
 </div>
 </div>
 
@@ -651,7 +693,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="ch-imgs">
 <img alt="Celebration" className="big reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A2728-min-1024x683.jpg"/>
-<img alt="Reception" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A2938-min-683x1024.jpg" style={{-I: '1'}}/>
+<img alt="Reception" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A2938-min-683x1024.jpg" style={{'--i': '1'}}/>
 </div>
 </div>
 
@@ -668,7 +710,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="ch-imgs">
 <img alt="After" className="big reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/5U8A9845-min-1024x683.jpg"/>
-<img alt="Family" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A3453-min-683x1024.jpg" style={{-I: '1'}}/>
+<img alt="Family" className="small reveal clip" src="https://freshjiveent.com/wp-content/uploads/2021/03/V6A3453-min-683x1024.jpg" style={{'--i': '1'}}/>
 </div>
 </div>
 </div>
@@ -756,7 +798,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="worlds-head">
 <div>
 <p className="eyebrow reveal">Photography Collections</p>
-<h2 className="serif reveal" style={{-I: '1'}}>
+<h2 className="serif reveal" style={{'--i': '1'}}>
                 Chosen by the story you want kept.
               </h2>
 </div>
@@ -782,7 +824,7 @@ gtag('config', 'G-2M6V79H761');
                 <span className="ar">→</span>
 </a>
 </div>
-<div className="col-card reveal" data-cursor="" style={{-I: '1'}}>
+<div className="col-card reveal" data-cursor="" style={{'--i': '1'}}>
 <span className="tag">The Day · Gold</span>
 <h3>Everything that mattered, beautifully kept.</h3>
 <p className="desc">
@@ -880,18 +922,18 @@ gtag('config', 'G-2M6V79H761');
 <p className="eyebrow center reveal" style={{justifyContent: 'center'}}>
               Film Collections
             </p>
-<h2 className="reveal" style={{-I: '1'}}>
+<h2 className="reveal" style={{'--i': '1'}}>
               10-minute film.
               <br/>
               2-minute trailer.
               <br/>
               Aerial coverage.
             </h2>
-<p className="reveal" style={{-I: '2'}}>
+<p className="reveal" style={{'--i': '2'}}>
               Available on its own, or paired with photography so one team
               captures both — in sync, all day.
             </p>
-<a className="btn reveal" data-link="inquire" style={{-I: '3'}}>
+<a className="btn reveal" data-link="inquire" style={{'--i': '3'}}>
               Inquire about films
               <span className="ar">→</span>
 </a>
@@ -983,16 +1025,16 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="wrap">
 <p className="eyebrow reveal">One team, one point of contact</p>
-<h2 className="reveal" style={{-I: '1'}}>
+<h2 className="reveal" style={{'--i': '1'}}>
               Want it all handled under one roof?
             </h2>
-<p className="reveal" style={{-I: '2'}}>
+<p className="reveal" style={{'--i': '2'}}>
               Our all-inclusive collections bring photo, film, sound, and booth
               together — so your day runs through a single team that's already
               in sync, not five vendors who've never met. Specialists in each
               craft, coordinated as one.
             </p>
-<a className="btn reveal" data-link="inquire" style={{-I: '3'}}>
+<a className="btn reveal" data-link="inquire" style={{'--i': '3'}}>
               Ask about all-inclusive
               <span className="ar">→</span>
 </a>
@@ -1016,35 +1058,35 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div>
 <p className="eyebrow reveal">Behind the lens</p>
-<h2 className="reveal" style={{-I: '1'}}>
+<h2 className="reveal" style={{'--i': '1'}}>
               I'd rather be the person you remember than the logo on the
               invoice.
             </h2>
-<p className="reveal" style={{-I: '2'}}>
+<p className="reveal" style={{'--i': '2'}}>
               Freshjive started as a full-service entertainment company, and we
               still do all of it well. But the longer I shoot weddings, the more
               I've leaned into the part that matters most to me — being the one
               actually there, behind the camera, on the most important day of
               your life.
             </p>
-<p className="reveal" style={{-I: '3'}}>
+<p className="reveal" style={{'--i': '3'}}>
               Couples don't want their day farmed out to whoever's free that
               weekend. They want to know who's showing up. So I keep things
               personal on purpose: I meet you, I shoot your engagement, I learn
               how you move — and by the time the day comes, the camera's just a
               friend in the room.
             </p>
-<p className="reveal" style={{-I: '4'}}>
+<p className="reveal" style={{'--i': '4'}}>
               I work out of Riverside and shoot across all of Southern
               California — Los Angeles, Orange County, Temecula, San Diego, and
               everywhere the drive is worth it. I keep my calendar small for a
               reason. Fewer weddings, fully present at each one.
             </p>
-<p className="sig serif reveal" style={{-I: '5'}}>Freshjive</p>
-<p className="signote reveal" style={{-I: '5'}}>
+<p className="sig serif reveal" style={{'--i': '5'}}>Freshjive</p>
+<p className="signote reveal" style={{'--i': '5'}}>
               Founder &amp; Photographer · Freshjive
             </p>
-<div className="reveal" style={{-I: '6', marginTop: '2.4rem'}}>
+<div className="reveal" style={{'--i': '6', marginTop: '2.4rem'}}>
 <a className="btn" data-link="inquire">
                 Let's work together
                 <span className="ar">→</span>
@@ -1150,7 +1192,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="eyebrow reveal" style={{marginBottom: '1.5rem'}}>
                 What happens next
               </p>
-<ul className="steps-list reveal" style={{-I: '1'}}>
+<ul className="steps-list reveal" style={{'--i': '1'}}>
 <li>
 <div>
 <b>We reply, personally</b>
@@ -1179,7 +1221,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </li>
 </ul>
-<div className="contact-rows reveal" style={{-I: '2'}}>
+<div className="contact-rows reveal" style={{'--i': '2'}}>
 <a href="tel:+19514150807">
 <span className="lbl">Call</span>
                   (951) 415-0807

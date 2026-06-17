@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -123,6 +159,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -300,7 +342,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <path className="text-[#d6d3d1]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="2"></path>
 
-<path className="text-[#9a3412] circle-chart-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" style={{-TargetPercent: '85'}}></path>
+<path className="text-[#9a3412] circle-chart-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" style={{'--target-percent': '85'}}></path>
 </svg>
 <div className="absolute inset-0 flex flex-col items-center justify-center">
 <span className="text-4xl md:text-5xl font-serif font-medium text-[#292524]">85%</span>
@@ -489,7 +531,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>$8,000 (41%)</span>
 </div>
 <div className="w-full rounded-full h-8 md:h-10 overflow-hidden relative bg-[#e7e5e4]">
-<div className="bar-fill absolute top-0 left-0 h-full rounded-full bg-[#292524]" style={{-TargetWidth: '41%'}}></div>
+<div className="bar-fill absolute top-0 left-0 h-full rounded-full bg-[#292524]" style={{'--target-width': '41%'}}></div>
 </div>
 <p className="text-xs mt-2 pl-1 text-[#a8a29e]">8 procesos anuales x $1000</p>
 </div>
@@ -500,7 +542,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>$7,500 (38%)</span>
 </div>
 <div className="w-full rounded-full h-8 md:h-10 overflow-hidden relative bg-[#e7e5e4]">
-<div className="bar-fill absolute top-0 left-0 h-full rounded-full bg-[#78716c]" style={{-TargetWidth: '38%', transitionDelay: '0.2s'}}></div>
+<div className="bar-fill absolute top-0 left-0 h-full rounded-full bg-[#78716c]" style={{'--target-width': '38%', transitionDelay: '0.2s'}}></div>
 </div>
 </div>
 
@@ -510,7 +552,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>$4,000 (21%)</span>
 </div>
 <div className="w-full rounded-full h-8 md:h-10 overflow-hidden relative bg-[#e7e5e4]">
-<div className="bar-fill absolute top-0 left-0 h-full rounded-full bg-[#a8a29e]" style={{-TargetWidth: '21%', transitionDelay: '0.4s'}}></div>
+<div className="bar-fill absolute top-0 left-0 h-full rounded-full bg-[#a8a29e]" style={{'--target-width': '21%', transitionDelay: '0.4s'}}></div>
 </div>
 </div>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -188,6 +224,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -274,7 +316,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-wrap max-w-2xl z-10 mt-auto relative gap-5">
 
-<div className="bg-gradient-to-br from-white/90 to-white/40 w-64 rounded-3xl p-5 shadow-xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="bg-gradient-to-br from-white/90 to-white/40 w-64 rounded-3xl p-5 shadow-xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-2 mb-6 text-emerald-800">
 <span className="iconify text-xl" data-icon="lucide:package-check" data-strokeWidth="1.5"></span>
 <span className="text-sm font-medium">Affari Conclusi</span>
@@ -288,7 +330,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="bg-gradient-to-br from-white/90 to-white/40 w-64 rounded-3xl p-5 shadow-xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '24px'}}>
+<div className="bg-gradient-to-br from-white/90 to-white/40 w-64 rounded-3xl p-5 shadow-xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-2 mb-6 text-sky-800">
 <span className="iconify text-xl" data-icon="lucide:euro" data-strokeWidth="1.5"></span>
 <span className="text-sm font-medium">Ricavo Netto</span>

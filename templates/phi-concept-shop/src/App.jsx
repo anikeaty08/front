@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -251,6 +287,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -299,7 +341,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="hidden sm:flex absolute -bottom-6 left-6 rounded-2xl border border-neutral-200/80 bg-white/90 backdrop-blur-sm shadow-sm shadow-neutral-200/70 px-4 py-3 items-center gap-3">
 <div className="w-8 h-8 rounded-full bg-emerald-50/80 flex items-center justify-center">
 
-<svg className="w-4 h-4 text-emerald-600" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-emerald-600" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 4l7 3v5c0 4.5-3 7-7 8-4-1-7-3.5-7-8V7l7-3z"></path>
 <path d="M9.5 12.5L11 14l3.5-3.5" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg>
@@ -479,7 +521,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="group border border-neutral-200/80 rounded-2xl bg-white hover:bg-neutral-50/60 transition-colors duration-150 p-5 sm:p-6 flex flex-col gap-4">
 <div className="w-9 h-9 rounded-full bg-neutral-100 flex items-center justify-center">
 
-<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="7"></circle>
 <path d="M8 8l8 8" strokeLinecap="round"></path>
 <path d="M9.5 5.5L8 4M14.5 5.5L16 4M9.5 18.5L8 20M14.5 18.5L16 20" strokeLinecap="round"></path>
@@ -498,7 +540,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="group border border-neutral-200/80 rounded-2xl bg-white hover:bg-neutral-50/60 transition-colors duration-150 p-5 sm:p-6 flex flex-col gap-4">
 <div className="w-9 h-9 rounded-full bg-neutral-100 flex items-center justify-center">
 
-<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M8 13.5V8.8a1.8 1.8 0 1 1 3.6 0V12" strokeLinecap="round"></path>
 <path d="M11.6 11V7.8a1.8 1.8 0 1 1 3.6 0v4.7" strokeLinecap="round"></path>
 <path d="M7 15.5l3.2 1.6a5 5 0 0 0 4.5.1L19 15" strokeLinecap="round" strokeLinejoin="round"></path>
@@ -518,7 +560,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="group border border-neutral-200/80 rounded-2xl bg-white hover:bg-neutral-50/60 transition-colors duration-150 p-5 sm:p-6 flex flex-col gap-4">
 <div className="w-9 h-9 rounded-full bg-neutral-100 flex items-center justify-center">
 
-<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <rect height="11" rx="1.5" width="6" x="9" y="8"></rect>
 <path d="M10 4h4l1.5 2H8.5L10 4z"></path>
 <path d="M12 4V2.5" strokeLinecap="round"></path>
@@ -538,7 +580,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="group border border-neutral-200/80 rounded-2xl bg-white hover:bg-neutral-50/60 transition-colors duration-150 p-5 sm:p-6 flex flex-col gap-4">
 <div className="w-9 h-9 rounded-full bg-neutral-100 flex items-center justify-center">
 
-<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-700" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <rect height="18" rx="2" width="8" x="8" y="3"></rect>
 <path d="M11 6h2" strokeLinecap="round"></path>
 </svg>
@@ -565,7 +607,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-[65%] h-full flex flex-col justify-between py-5">
 <div className="h-6 rounded-full bg-neutral-900/90 w-[65%] mx-auto"></div>
 <div className="border border-neutral-200/80 rounded-2xl h-[55%] bg-white/90 flex items-center justify-center">
-<svg className="w-10 h-10 text-neutral-800" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 64 64">
+<svg className="w-10 h-10 text-neutral-800" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 64 64">
 <g>
 <path d="M32 6c0 10.5 0 15.8-2.7 19.3C26.6 29 22.5 30.3 12 30.3"></path>
 <path d="M32 6c0 10.5 0 15.8 2.7 19.3C37.4 29 41.5 30.3 52 30.3"></path>
@@ -706,19 +748,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-1.5">
 
 <div className="flex items-center gap-0.5">
-<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{-DarkreaderInlineFill: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{'--darkreader-inline-fill': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 3.75l2.297 4.655 5.138.747-3.717 3.624.878 5.114L12 15.875l-4.596 2.415.878-5.114-3.717-3.624 5.138-.747L12 3.75z"></path>
 </svg>
-<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{-DarkreaderInlineFill: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{'--darkreader-inline-fill': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 3.75l2.297 4.655 5.138.747-3.717 3.624.878 5.114L12 15.875l-4.596 2.415.878-5.114-3.717-3.624 5.138-.747L12 3.75z"></path>
 </svg>
-<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{-DarkreaderInlineFill: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{'--darkreader-inline-fill': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 3.75l2.297 4.655 5.138.747-3.717 3.624.878 5.114L12 15.875l-4.596 2.415.878-5.114-3.717-3.624 5.138-.747L12 3.75z"></path>
 </svg>
-<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{-DarkreaderInlineFill: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-3.5 h-3.5 text-amber-500" data-darkreader-inline-fill="" fill="currentColor" style={{'--darkreader-inline-fill': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 3.75l2.297 4.655 5.138.747-3.717 3.624.878 5.114L12 15.875l-4.596 2.415.878-5.114-3.717-3.624 5.138-.747L12 3.75z"></path>
 </svg>
-<svg className="w-3.5 h-3.5 text-amber-300" data-darkreader-inline-fill="" fill="currentColor" style={{-DarkreaderInlineFill: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-3.5 h-3.5 text-amber-300" data-darkreader-inline-fill="" fill="currentColor" style={{'--darkreader-inline-fill': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 3.75l2.297 4.655 5.138.747-3.717 3.624.878 5.114L12 15.875l-4.596 2.415.878-5.114-3.717-3.624 5.138-.747L12 3.75z"></path>
 </svg>
 </div>
@@ -844,7 +886,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     </span>
 </div>
 <div className="shrink-0">
-<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg>
 </div>
@@ -861,7 +903,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-sm font-medium text-neutral-900">
                     Est‑il adapté aux peaux sensibles ?
                   </span>
-<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg>
 </summary>
@@ -877,7 +919,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-sm font-medium text-neutral-900">
                     À quelle fréquence puis‑je l’utiliser dans la journée ?
                   </span>
-<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg>
 </summary>
@@ -893,7 +935,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-sm font-medium text-neutral-900">
                     Quelles sont les conditions de retour ?
                   </span>
-<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-4 h-4 text-neutral-500 transition-transform duration-150 group-open:rotate-180" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"></path>
 </svg>
 </summary>
@@ -993,7 +1035,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-3">
 <button className="w-7 h-7 rounded-full border border-neutral-200/80 flex items-center justify-center text-neutral-700 hover:border-neutral-400 hover:text-neutral-900 transition-colors duration-150">
 
-<svg className="w-3.5 h-3.5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-3.5 h-3.5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <rect height="18" rx="5" width="18" x="3" y="3"></rect>
 <circle cx="12" cy="12" r="4"></circle>
 <path d="M17.5 6.5h.01" strokeLinecap="round"></path>
@@ -1001,7 +1043,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </button>
 <button className="w-7 h-7 rounded-full border border-neutral-200/80 flex items-center justify-center text-neutral-700 hover:border-neutral-400 hover:text-neutral-900 transition-colors duration-150">
 
-<svg className="w-3.5 h-3.5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg className="w-3.5 h-3.5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 5l14 14M19 5L5 19" strokeLinecap="round"></path>
 </svg>
 </button>

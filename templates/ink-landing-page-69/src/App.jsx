@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -575,6 +611,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -694,10 +736,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="wrap">
 <div className="eyebrow reveal" style={{marginBottom: '40px'}}>Built different</div>
 <div className="specGrid">
-<div className="spec" style={{-W: '92%'}}><div className="num" data-count="60">0</div><div className="cap">Frames per second</div><div className="barwrap"><i></i></div></div>
-<div className="spec" style={{-W: '100%'}}><div className="num" data-count="1">0</div><div className="cap">Single HTML file</div><div className="barwrap"><i></i></div></div>
-<div className="spec" style={{-W: '10%'}}><div className="num" data-count="0">0</div><div className="cap">Dependencies</div><div className="barwrap"><i></i></div></div>
-<div className="spec" style={{-W: '100%'}}><div className="num">∞</div><div className="cap">Frames, never repeating</div><div className="barwrap"><i></i></div></div>
+<div className="spec" style={{'--w': '92%'}}><div className="num" data-count="60">0</div><div className="cap">Frames per second</div><div className="barwrap"><i></i></div></div>
+<div className="spec" style={{'--w': '100%'}}><div className="num" data-count="1">0</div><div className="cap">Single HTML file</div><div className="barwrap"><i></i></div></div>
+<div className="spec" style={{'--w': '10%'}}><div className="num" data-count="0">0</div><div className="cap">Dependencies</div><div className="barwrap"><i></i></div></div>
+<div className="spec" style={{'--w': '100%'}}><div className="num">∞</div><div className="cap">Frames, never repeating</div><div className="barwrap"><i></i></div></div>
 </div>
 </div>
 <div className="marq" style={{marginTop: '0'}}>

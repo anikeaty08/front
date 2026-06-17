@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -20,6 +56,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -100,7 +142,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute inset-0 bg-blue-600/40 blur-[80px] rounded-full mix-blend-screen"></div>
 
-<div className="relative w-[75%] h-[75%] border-[36px] sm:border-[48px] border-[#0A1B6B] rounded-[64px] sm:rounded-[80px] backdrop-blur-md flex items-center justify-center" style={{boxShadow: '0 30px 60px rgba(0,0,0,0.6), inset 0 0 60px #1E40AF, inset 0 0 15px rgba(255,255,255,0.4), 0 0 0 1px rgba(59,130,246,0.3)'}}>
+<div className="relative w-[75%] h-[75%] border-[36px] sm:border-[48px] border-[#0A1B6B] rounded-[64px] sm:rounded-[80px] backdrop-blur-md flex items-center justify-center" style={{boxShadow: '0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 60px #1E40AF, inset 0 0 15px rgba(255, 255, 255, 0.4), 0 0 0 1px rgba(59,130,246,0.3)'}}>
 
 <div className="absolute inset-[-48px] border-t-2 border-l-2 border-white/30 rounded-[80px] blur-[1px]"></div>
 

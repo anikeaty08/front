@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -68,7 +104,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         // --- UI COMPONENTS ---
 
         const Icon = ({ icon, className = "" }) => (
-            <iconify-icon icon={icon} class={className} style={{ fontSize: '1.5em' }}></iconify-icon>
+            <iconify-icon icon={icon} class={className} style={{fontSize: '1.5em'}}></iconify-icon>
         );
 
         const CardSelect = ({ selected, onClick, icon, label, sub }) => (
@@ -133,7 +169,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     <div className="h-1 bg-[#E5E7EB] rounded-full w-full overflow-hidden">
                         <div 
                             className="h-full bg-[#1E3A5F] transition-all duration-500 ease-out rounded-full"
-                            style={{ width: `${progressPercentage}%` }}
+                            style={{width: `${progressPercentage}%`}}
                         ></div>
                     </div>
                     <div className="text-right mt-1.5 text-xs text-slate-400 font-medium">
@@ -846,7 +882,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                         <h2 className="text-xl font-bold text-[#1E3A5F] mb-6">Votre performance énergétique estimée</h2>
                         <div className="flex flex-col gap-1 mb-4 relative">
                             {levels.map((lvl) => (
-                                <div key={lvl.l} className="relative h-8 flex items-center rounded-r-md transition-all" style={{ width: lvl.w, backgroundColor: lvl.c }}>
+                                <div key={lvl.l} className="relative h-8 flex items-center rounded-r-md transition-all" style={{width: lvl.w, backgroundColor: lvl.c}}>
                                     <div className="w-8 flex justify-center font-bold text-white pl-2 drop-shadow-md">{lvl.l}</div>
                                     <div className={`flex-1 text-center text-xs font-medium ${lvl.t ? 'text-[#2C3E50]' : 'text-white'}`}>{lvl.range}</div>
                                     
@@ -1079,7 +1115,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                                 <span className="font-bold text-[#1E3A5F]">{p.roiLabel}</span>
                                             </div>
                                             <div className="h-2 bg-slate-200 rounded-full overflow-hidden w-full">
-                                                <div className="h-full bg-[#2ECC71]" style={{ width: `${Math.min(p.roi * 10, 100)}%` }}></div>
+                                                <div className="h-full bg-[#2ECC71]" style={{width: `${Math.min(p.roi * 10, 100)}%`}}></div>
                                             </div>
                                             <div className="flex justify-between text-[10px] text-slate-400 mt-1">
                                                 <span>Rapide</span>
@@ -1308,6 +1344,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

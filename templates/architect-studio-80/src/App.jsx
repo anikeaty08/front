@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -81,7 +117,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       {/* --- LAYER 2: OFFICE (DESTINATION) Z-10 --- */}
                       <motion.div
                           className="absolute inset-0 z-10 w-full h-full flex items-center justify-center image-container origin-center"
-                          style={{ scale: officeScale }}
+                          style={{scale: officeScale}}
                       >
                           <div className="relative w-full h-full">
                               <img
@@ -92,7 +128,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
                               <motion.div
                                   className="absolute inset-0 flex flex-col items-center justify-center z-50 px-4"
-                                  style={{ opacity: finalUiOpacity, y: finalUiY }}
+                                  style={{opacity: finalUiOpacity, y: finalUiY}}
                               >
                                   <span className="text-xs uppercase tracking-[0.3em] text-zinc-400 mb-6 border border-zinc-700/50 px-3 py-1 rounded-full backdrop-blur-md">
                                       Interior
@@ -113,7 +149,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       {/* --- LAYER 1: FACADE (START) Z-30 --- */}
                       <motion.div
                           className="absolute inset-0 z-30 w-full h-full flex items-center justify-center image-container origin-center pointer-events-none"
-                          style={{ scale: facadeScale, opacity: facadeOpacity }}
+                          style={{scale: facadeScale, opacity: facadeOpacity}}
                       >
                           <div className="relative w-full h-full">
                               <img
@@ -128,7 +164,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       {/* --- TITLE OVERLAY --- */}
                       <motion.div
                           className="absolute z-40 inset-0 flex flex-col items-center justify-center pointer-events-none"
-                          style={{ opacity: textOpacity, scale: textScale }}
+                          style={{opacity: textOpacity, scale: textScale}}
                       >
                           <h1 className="text-[10vw] md:text-[140px] font-medium tracking-tighter text-white leading-none mix-blend-overlay opacity-90">
                               CONOCENOS
@@ -138,7 +174,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       {/* Scroll Prompt */}
                       <motion.div
                           className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50 text-center flex flex-col items-center gap-4"
-                          style={{ opacity: textOpacity }}
+                          style={{opacity: textOpacity}}
                       >
                           <p className="text-xs uppercase tracking-[0.2em] text-white/50">Entrar al espacio</p>
                           <div className="w-[1px] h-12 bg-gradient-to-b from-white/0 via-white/50 to-white/0"></div>
@@ -161,6 +197,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

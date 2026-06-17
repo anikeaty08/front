@@ -316,7 +316,7 @@ function App() {
         <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="bg-slate-900 rounded-3xl p-8 md:p-16 text-center border border-slate-800 relative overflow-hidden">
             {/* Subtle background pattern */}
-            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+            <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px'}}></div>
             
             <div className="relative z-10">
               <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-white mb-4">Ready to modernize your local business?</h2>

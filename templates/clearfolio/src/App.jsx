@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -458,6 +494,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -470,7 +512,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <canvas className="opacity-60" data-engine="three.js r160" height="908" id="ballpit-canvas" style={{width: '1337px', height: '908px'}} width="1337"></canvas>
 
 <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 animate-enter delay-0">
-<div className="flashlight-card relative flex items-center gap-1 p-2 rounded-full border shadow-2xl shadow-black/20 bg-stone-900/40 border-white/10 backdrop-blur-md" style={{-FxFilter: 'liquid-glass(2, 10) saturate(1.25)', -X: '446.453125px', -Y: '30px'}}>
+<div className="flashlight-card relative flex items-center gap-1 p-2 rounded-full border shadow-2xl shadow-black/20 bg-stone-900/40 border-white/10 backdrop-blur-md" style={{'--fx-filter': 'liquid-glass(2, 10) saturate(1.25)', '--x': '446.453125px', '--y': '30px'}}>
 <a className="px-5 py-2.5 text-xs font-semibold tracking-wide transition-colors rounded-full hover:bg-white/10 text-stone-300 hover:text-white" href="#">HOME</a>
 <a className="px-5 py-2.5 text-xs font-semibold tracking-wide transition-colors rounded-full hover:bg-white/10 text-stone-300 hover:text-white" href="#works">WORKS</a>
 <a className="transition-colors hover:bg-white/10 hover:text-white text-xs font-semibold text-stone-300 tracking-wide rounded-full pt-2.5 pr-5 pb-2.5 pl-5" href="#about">ABOUT </a>
@@ -571,7 +613,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group flashlight-card flex flex-col md:flex-row md:items-center justify-between p-4 -mx-4 rounded-2xl hover:bg-stone-900/40 border border-transparent hover:border-white/5 transition-all" style={{-X: '357.671875px', -Y: '47.8125px'}}>
+<div className="group flashlight-card flex flex-col md:flex-row md:items-center justify-between p-4 -mx-4 rounded-2xl hover:bg-stone-900/40 border border-transparent hover:border-white/5 transition-all" style={{'--x': '357.671875px', '--y': '47.8125px'}}>
 <span className="text-sm font-medium text-stone-500 mb-2 md:mb-0 tabular-nums">Dec 2024 - Feb 2025</span>
 <div className="flex items-center gap-2 text-base">
 <span className="text-stone-300">Product Designer at</span>
@@ -582,7 +624,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group flashlight-card flex flex-col md:flex-row md:items-center justify-between p-4 -mx-4 rounded-2xl hover:bg-stone-900/40 border border-transparent hover:border-white/5 transition-all" style={{-X: '12.671875px', -Y: '43.8125px'}}>
+<div className="group flashlight-card flex flex-col md:flex-row md:items-center justify-between p-4 -mx-4 rounded-2xl hover:bg-stone-900/40 border border-transparent hover:border-white/5 transition-all" style={{'--x': '12.671875px', '--y': '43.8125px'}}>
 <span className="text-sm font-medium text-stone-500 mb-2 md:mb-0 tabular-nums">Nov 2024 - Dec 2024</span>
 <div className="flex items-center gap-2 text-base">
 <span className="text-stone-300">Design Intern at</span>

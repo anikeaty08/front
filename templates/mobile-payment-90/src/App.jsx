@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -24,10 +66,10 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative w-full max-w-[414px] h-[896px] max-h-[100dvh] cosmic-bg sm:rounded-[44px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] overflow-hidden border-[8px] border-white flex flex-col">
 
-<div className="absolute top-40 -left-12 text-slate-300/40 pointer-events-none floating-icon blur-[1px]" style={{-Rot: '15deg'}}>
+<div className="absolute top-40 -left-12 text-slate-300/40 pointer-events-none floating-icon blur-[1px]" style={{'--rot': '15deg'}}>
 <iconify-icon height="140" icon="solar:shield-check-bold-duotone" width="140"></iconify-icon>
 </div>
-<div className="absolute bottom-64 -right-16 text-purple-200/30 pointer-events-none floating-icon blur-[2px]" style={{-Rot: '-20deg', animationDelay: '-3s'}}>
+<div className="absolute bottom-64 -right-16 text-purple-200/30 pointer-events-none floating-icon blur-[2px]" style={{'--rot': '-20deg', animationDelay: '-3s'}}>
 <iconify-icon height="180" icon="solar:shield-keyhole-bold-duotone" width="180"></iconify-icon>
 </div>
 

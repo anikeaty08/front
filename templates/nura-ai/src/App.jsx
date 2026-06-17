@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -225,6 +261,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -300,11 +342,11 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
             </span>
 </p>
 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 items-center justify-center [animation:fadeSlideIn_0.8s_ease-out_0.6s_both] animate-on-scroll">
-<a className="group inline-flex items-center justify-center gap-3 shadow-neutral-900/20 transition duration-200 ease-out hover:-translate-y-0.5 overflow-hidden text-base font-medium text-white bg-gradient-to-br from-[#3d81f0] to-[#0c118d] rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-lg" href="#get-started" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(117, 170, 255, 1), rgba(7, 31, 70, 1))', -BorderRadiusBefore: '9999px'}}>
+<a className="group inline-flex items-center justify-center gap-3 shadow-neutral-900/20 transition duration-200 ease-out hover:-translate-y-0.5 overflow-hidden text-base font-medium text-white bg-gradient-to-br from-[#3d81f0] to-[#0c118d] rounded-full pt-3 pr-6 pb-3 pl-6 relative shadow-lg" href="#get-started" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(117, 170, 255, 1), rgba(7, 31, 70, 1))', '--border-radius-before': '9999px'}}>
 <span className="group-hover:opacity-100 transition duration-300 bg-gradient-to-tr from-violet-500/20 to-fuchsia-400/10 opacity-0 absolute top-0 right-0 bottom-0 left-0"></span>
 <span className="relative z-10 font-geist" style={{}}>Get Started</span>
 </a>
-<a className="inline-flex items-center justify-center hover:bg-white/15 transition text-base font-medium text-neutral-200 bg-gradient-to-br from-white/20 to-white/0 rounded-full px-6 py-3 font-geist" href="#learn-more" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<a className="inline-flex items-center justify-center hover:bg-white/15 transition text-base font-medium text-neutral-200 bg-gradient-to-br from-white/20 to-white/0 rounded-full px-6 py-3 font-geist" href="#learn-more" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
               Learn More
             </a>
 </div>

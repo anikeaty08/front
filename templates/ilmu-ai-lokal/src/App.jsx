@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -133,7 +175,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
   </style>
 
 <div className="flex flex-col items-center gap-4 group">
-<div className="shiny-card-container w-20 h-20" style={{-ShineColor: 'rgba(255,255,255,0.4)'}}>
+<div className="shiny-card-container w-20 h-20" style={{'--shine-color': 'rgba(255,255,255,0.4)'}}>
 <svg aria-hidden="true" className="iconify text-3xl text-gray-400 group-hover:text-white transition-colors iconify--solar relative z-10" data-icon="solar:chat-round-line-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22Z" fill="none" stroke="currentColor" strokeWidth="1.5"></path>
 </svg>
@@ -142,7 +184,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="flex flex-col gap-4 relative gap-x-4 gap-y-4 items-center">
-<div className="shiny-card-container primary w-24 h-24 z-20" style={{-ShineColor: '#f97316', -ShineSecondary: '#fbbf24', -ShineColorDim: 'rgba(249,115,22,0.3)'}}>
+<div className="shiny-card-container primary w-24 h-24 z-20" style={{'--shine-color': '#f97316', '--shine-secondary': '#fbbf24', '--shine-color-dim': 'rgba(249,115,22,0.3)'}}>
 
 <div className="relative z-10 flex items-center justify-center">
 
@@ -158,7 +200,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="flex flex-col items-center gap-4 group">
-<div className="shiny-card-container w-20 h-20" style={{-ShineColor: 'rgba(16, 185, 129, 0.5)'}}>
+<div className="shiny-card-container w-20 h-20" style={{'--shine-color': 'rgba(16, 185, 129, 0.5)'}}>
 <svg aria-hidden="true" className="iconify text-3xl text-gray-400 group-hover:text-white transition-colors iconify--solar relative z-10" data-icon="solar:check-circle-line-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <g className="" fill="none" stroke="currentColor" strokeWidth="1.5">
 <circle className="" cx="12" cy="12" opacity=".5" r="10"></circle>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -2478,6 +2514,12 @@ setupSection5Animations();
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2774,10 +2816,10 @@ setupSection5Animations();
 <div className="nexus-s2-core"></div>
 </div>
 
-<div className="nexus-s2-flow-pixel" style={{-Delay: '0s'}}></div>
-<div className="nexus-s2-flow-pixel pink" style={{-Delay: '-1.2s'}}></div>
-<div className="nexus-s2-flow-pixel gold" style={{-Delay: '-2.4s'}}></div>
-<div className="nexus-s2-flow-pixel blue" style={{-Delay: '-3.6s'}}></div>
+<div className="nexus-s2-flow-pixel" style={{'--delay': '0s'}}></div>
+<div className="nexus-s2-flow-pixel pink" style={{'--delay': '-1.2s'}}></div>
+<div className="nexus-s2-flow-pixel gold" style={{'--delay': '-2.4s'}}></div>
+<div className="nexus-s2-flow-pixel blue" style={{'--delay': '-3.6s'}}></div>
 
 <div className="nexus-s2-console" data-s2-collider="console">
 <div className="grid gap-4 md:grid-cols-[1fr_150px] md:items-end">
@@ -2848,19 +2890,19 @@ setupSection5Animations();
 <div className="nexus-s3-meter-row">
 <span>Speed</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '96%', -Delay: '0s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '96%', '--delay': '0s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Clarity</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '74%', -Delay: '-0.6s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '74%', '--delay': '-0.6s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Risk</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '62%', -Delay: '-1.2s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '62%', '--delay': '-1.2s'}}></i>
 </div>
 </div>
 </div>
@@ -2889,19 +2931,19 @@ setupSection5Animations();
 <div className="nexus-s3-meter-row">
 <span>Speed</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '72%', -Delay: '-0.2s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '72%', '--delay': '-0.2s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Flow</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '94%', -Delay: '-0.8s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '94%', '--delay': '-0.8s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Polish</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '88%', -Delay: '-1.4s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '88%', '--delay': '-1.4s'}}></i>
 </div>
 </div>
 </div>
@@ -2930,19 +2972,19 @@ setupSection5Animations();
 <div className="nexus-s3-meter-row">
 <span>Pressure</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '92%', -Delay: '-0.3s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '92%', '--delay': '-0.3s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Clarity</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '86%', -Delay: '-0.9s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '86%', '--delay': '-0.9s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Fix rate</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '78%', -Delay: '-1.5s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '78%', '--delay': '-1.5s'}}></i>
 </div>
 </div>
 </div>
@@ -2971,19 +3013,19 @@ setupSection5Animations();
 <div className="nexus-s3-meter-row">
 <span>Freedom</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '98%', -Delay: '-0.4s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '98%', '--delay': '-0.4s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Risk</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '76%', -Delay: '-1s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '76%', '--delay': '-1s'}}></i>
 </div>
 </div>
 <div className="nexus-s3-meter-row">
 <span>Range</span>
 <div className="nexus-s3-meter-track">
-<i className="nexus-s3-meter-fill" style={{-MeterWidth: '91%', -Delay: '-1.6s'}}></i>
+<i className="nexus-s3-meter-fill" style={{'--meter-width': '91%', '--delay': '-1.6s'}}></i>
 </div>
 </div>
 </div>
@@ -3141,7 +3183,7 @@ setupSection5Animations();
 <span>94%</span>
 </div>
 <div className="nexus-s4-signal-track">
-<i className="nexus-s4-signal-fill" style={{-SignalWidth: '94%', -Delay: '0s'}}></i>
+<i className="nexus-s4-signal-fill" style={{'--signal-width': '94%', '--delay': '0s'}}></i>
 </div>
 </div>
 <div data-s4-collider="signal" style={{color: 'var(--nexus-pink)'}}>
@@ -3150,7 +3192,7 @@ setupSection5Animations();
 <span>88%</span>
 </div>
 <div className="nexus-s4-signal-track">
-<i className="nexus-s4-signal-fill" style={{-SignalWidth: '88%', -Delay: '-0.8s'}}></i>
+<i className="nexus-s4-signal-fill" style={{'--signal-width': '88%', '--delay': '-0.8s'}}></i>
 </div>
 </div>
 <div data-s4-collider="signal" style={{color: 'var(--nexus-gold)'}}>
@@ -3159,7 +3201,7 @@ setupSection5Animations();
 <span>97%</span>
 </div>
 <div className="nexus-s4-signal-track">
-<i className="nexus-s4-signal-fill" style={{-SignalWidth: '97%', -Delay: '-1.4s'}}></i>
+<i className="nexus-s4-signal-fill" style={{'--signal-width': '97%', '--delay': '-1.4s'}}></i>
 </div>
 </div>
 </div>
@@ -3205,7 +3247,7 @@ setupSection5Animations();
 <div className="nexus-s5-metric-inner">
 <div className="nexus-s5-metric-top" data-s5-collider="metric-top">
 <div className="nexus-s5-metric-label">Concepts</div>
-<span className="nexus-s5-dot" style={{-Delay: '0s'}}></span>
+<span className="nexus-s5-dot" style={{'--delay': '0s'}}></span>
 </div>
 <div className="nexus-s5-number" data-s5-collider="metric-number">
 <span className="nexus-count" data-count="128">0</span>
@@ -3217,7 +3259,7 @@ setupSection5Animations();
 <div className="nexus-s5-metric-inner">
 <div className="nexus-s5-metric-top" data-s5-collider="metric-top">
 <div className="nexus-s5-metric-label">Worlds</div>
-<span className="nexus-s5-dot" style={{-Delay: '-0.4s'}}></span>
+<span className="nexus-s5-dot" style={{'--delay': '-0.4s'}}></span>
 </div>
 <div className="nexus-s5-number" data-s5-collider="metric-number">
 <span className="nexus-count" data-count="42">0</span>
@@ -3229,7 +3271,7 @@ setupSection5Animations();
 <div className="nexus-s5-metric-inner">
 <div className="nexus-s5-metric-top" data-s5-collider="metric-top">
 <div className="nexus-s5-metric-label">Speed</div>
-<span className="nexus-s5-dot" style={{-Delay: '-0.8s'}}></span>
+<span className="nexus-s5-dot" style={{'--delay': '-0.8s'}}></span>
 </div>
 <div className="nexus-s5-number" data-s5-collider="metric-number">
 <span className="nexus-count" data-count="9.8" data-decimal="1" data-suffix="x">0</span>
@@ -3241,7 +3283,7 @@ setupSection5Animations();
 <div className="nexus-s5-metric-inner">
 <div className="nexus-s5-metric-top" data-s5-collider="metric-top">
 <div className="nexus-s5-metric-label">Modes</div>
-<span className="nexus-s5-dot" style={{-Delay: '-1.2s'}}></span>
+<span className="nexus-s5-dot" style={{'--delay': '-1.2s'}}></span>
 </div>
 <div className="nexus-s5-number" data-s5-collider="metric-number">
 <span className="nexus-count" data-count="4" data-prefix="0">0</span>
@@ -3320,7 +3362,7 @@ setupSection5Animations();
 <span>87%</span>
 </div>
 <div className="nexus-s5-progress-track">
-<i className="nexus-s5-progress-fill" style={{-TargetWidth: '87%', -Delay: '0s'}}></i>
+<i className="nexus-s5-progress-fill" style={{'--target-width': '87%', '--delay': '0s'}}></i>
 </div>
 </div>
 <div className="text-[#6f9bff]" data-s5-collider="progress-row">
@@ -3329,7 +3371,7 @@ setupSection5Animations();
 <span>74%</span>
 </div>
 <div className="nexus-s5-progress-track">
-<i className="nexus-s5-progress-fill" style={{-TargetWidth: '74%', -Delay: '0.18s'}}></i>
+<i className="nexus-s5-progress-fill" style={{'--target-width': '74%', '--delay': '0.18s'}}></i>
 </div>
 </div>
 <div className="text-[#ff66b3]" data-s5-collider="progress-row">
@@ -3338,7 +3380,7 @@ setupSection5Animations();
 <span>91%</span>
 </div>
 <div className="nexus-s5-progress-track">
-<i className="nexus-s5-progress-fill" style={{-TargetWidth: '91%', -Delay: '0.36s'}}></i>
+<i className="nexus-s5-progress-fill" style={{'--target-width': '91%', '--delay': '0.36s'}}></i>
 </div>
 </div>
 </div>
@@ -3526,7 +3568,7 @@ setupSection5Animations();
 <span>94%</span>
 </div>
 <div className="nexus-s6-meter-track">
-<i className="nexus-s6-meter-fill" style={{-MeterWidth: '94%', -Delay: '0s'}}></i>
+<i className="nexus-s6-meter-fill" style={{'--meter-width': '94%', '--delay': '0s'}}></i>
 </div>
 </div>
 <div data-s6-collider="meter-row" style={{color: 'var(--nexus-purple)'}}>
@@ -3535,7 +3577,7 @@ setupSection5Animations();
 <span>88%</span>
 </div>
 <div className="nexus-s6-meter-track">
-<i className="nexus-s6-meter-fill" style={{-MeterWidth: '88%', -Delay: '-0.8s'}}></i>
+<i className="nexus-s6-meter-fill" style={{'--meter-width': '88%', '--delay': '-0.8s'}}></i>
 </div>
 </div>
 <div data-s6-collider="meter-row" style={{color: 'var(--nexus-cyan)'}}>
@@ -3544,16 +3586,16 @@ setupSection5Animations();
 <span>97%</span>
 </div>
 <div className="nexus-s6-meter-track">
-<i className="nexus-s6-meter-fill" style={{-MeterWidth: '97%', -Delay: '-1.4s'}}></i>
+<i className="nexus-s6-meter-fill" style={{'--meter-width': '97%', '--delay': '-1.4s'}}></i>
 </div>
 </div>
 </div>
 </div>
 
 <div className="nexus-s6-chip-row" data-s6-collider="chips">
-<span className="nexus-s6-chip" data-s6-collider="chip" style={{-Delay: '0s', color: 'var(--nexus-pink)'}}>HTML</span>
-<span className="nexus-s6-chip" data-s6-collider="chip" style={{-Delay: '-0.6s', color: 'var(--nexus-purple)'}}>Design DNA</span>
-<span className="nexus-s6-chip" data-s6-collider="chip" style={{-Delay: '-1.2s', color: 'var(--nexus-cyan)'}}>Export</span>
+<span className="nexus-s6-chip" data-s6-collider="chip" style={{'--delay': '0s', color: 'var(--nexus-pink)'}}>HTML</span>
+<span className="nexus-s6-chip" data-s6-collider="chip" style={{'--delay': '-0.6s', color: 'var(--nexus-purple)'}}>Design DNA</span>
+<span className="nexus-s6-chip" data-s6-collider="chip" style={{'--delay': '-1.2s', color: 'var(--nexus-cyan)'}}>Export</span>
 </div>
 </div>
 </aside>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -399,6 +435,12 @@ document.addEventListener('scroll',()=>{const e=document.getElementById('home');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -967,7 +1009,7 @@ document.addEventListener('scroll',()=>{const e=document.getElementById('home');
 <div className="absolute left-8 top-0 bottom-0 w-px bg-white/10"></div>
 <div className="space-y-8">
 
-<div className="js-step relative flex items-start gap-6" data-delay="220" style={{-Delay: '220ms'}}>
+<div className="js-step relative flex items-start gap-6" data-delay="220" style={{'--delay': '220ms'}}>
 
 <div className="step-num relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-black shadow-lg">
 <span className="text-sm font-semibold text-white">01</span>
@@ -988,7 +1030,7 @@ document.addEventListener('scroll',()=>{const e=document.getElementById('home');
 </div>
 </div>
 
-<div className="js-step relative flex items-start gap-6" data-delay="320" style={{-Delay: '320ms'}}>
+<div className="js-step relative flex items-start gap-6" data-delay="320" style={{'--delay': '320ms'}}>
 <div className="step-num relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-black shadow-lg">
 <span className="text-sm font-semibold text-white">02</span>
 </div>
@@ -1007,7 +1049,7 @@ document.addEventListener('scroll',()=>{const e=document.getElementById('home');
 </div>
 </div>
 
-<div className="js-step relative flex items-start gap-6" data-delay="420" style={{-Delay: '420ms'}}>
+<div className="js-step relative flex items-start gap-6" data-delay="420" style={{'--delay': '420ms'}}>
 <div className="step-num relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-black shadow-lg">
 <span className="text-sm font-semibold text-white">03</span>
 </div>
@@ -1026,7 +1068,7 @@ document.addEventListener('scroll',()=>{const e=document.getElementById('home');
 </div>
 </div>
 
-<div className="js-step relative flex items-start gap-6" data-delay="520" style={{-Delay: '520ms'}}>
+<div className="js-step relative flex items-start gap-6" data-delay="520" style={{'--delay': '520ms'}}>
 <div className="step-num relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-black shadow-lg">
 <span className="text-sm font-semibold text-white">04</span>
 </div>

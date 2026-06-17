@@ -100,7 +100,43 @@ function Spinner() {
 
 function ThinkingPart({ part }) {
   const [open, setOpen] = useState(true);
-  useEffect(() => { if (part.status === "done") setOpen(false); }, [part.status]);
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {} if (part.status === "done") setOpen(false); }, [part.status]);
   const running = part.status === "running";
   return (
     <div className="rounded-lg border border-zinc-800/70 bg-zinc-900/30 overflow-hidden">
@@ -135,7 +171,7 @@ function ToolPart({ part }) {
         className="w-full flex items-center gap-2 px-3 py-2 hover:bg-zinc-800/40 transition-colors text-left"
         aria-expanded={open}
       >
-        <iconify-icon icon={meta.icon} width="14" style={{ color: meta.color }} />
+        <iconify-icon icon={meta.icon} width="14" style={{color: meta.color}} />
         <span className="text-xs font-medium text-zinc-300">{meta.verb}</span>
         <span className="text-xs mono text-zinc-500 truncate flex-1">{part.title}</span>
         {running ? <Spinner /> : <iconify-icon icon="solar:check-circle-linear" width="14" class="text-emerald-400/80" />}

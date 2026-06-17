@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -181,6 +217,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -200,7 +242,7 @@ gtag('config', 'G-2M6V79H761');
             VARLEM GROUP
           </div>
 </a>
-<div className="hidden md:flex items-center gap-10" style={{fontFamily: '\'Inter\',sans-serif', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em'}}>
+<div className="hidden md:flex items-center gap-10" style={{fontFamily: '\'Inter\', sans-serif', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em'}}>
 <a className="nav-link" href="#valle" style={{color: '#8E8D8A', transition: 'color 0.25s'}}>
             El Valle
           </a>
@@ -232,12 +274,12 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="max-w-[1500px] w-full mx-auto pt-6 pb-8 flex items-center justify-between hero-fade-up" style={{borderTop: '1px solid rgba(44,44,44,0.12)', animationDelay: '200ms'}}>
-<div className="" style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.25em', color: '#8E8D8A'}}>
+<div className="" style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.25em', color: '#8E8D8A'}}>
           Desarrollo integral · Baja California
         </div>
 <div className="flex items-center gap-4">
 <span className="hero-scroll-line" style={{display: 'block', height: '1px', background: '#8E8D8A', width: '48px'}}></span>
-<span className="" style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.25em', color: '#8E8D8A'}}>
+<span className="" style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.25em', color: '#8E8D8A'}}>
             Scroll
           </span>
 </div>
@@ -268,7 +310,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
 <div className="reveal">
 <div className="label mb-6">DIFERENCIADORES</div>
-<h2 className="font-display tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(44px,6vw,80px)', fontWeight: '200', lineHeight: '1.0', color: '#2C2C2C'}}>
+<h2 className="font-display tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(44px,6vw,80px)', fontWeight: '200', lineHeight: '1.0', color: '#2C2C2C'}}>
             El mercado tiene opciones.
             <br/>
             Pocos tienen estructura,
@@ -277,7 +319,7 @@ gtag('config', 'G-2M6V79H761');
           </h2>
 </div>
 <div className="reveal" style={{transitionDelay: '0.2s'}}>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '16px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '440px', marginBottom: '40px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '16px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '440px', marginBottom: '40px'}}>
             Varlem Group se distingue por integrar en una sola plataforma los
             servicios de desarrollo inmobiliario, diseño arquitectónico,
             construcción y comercialización — garantizando mayor control,
@@ -428,20 +470,20 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
                 Terreno
               </h3>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
                 Identificamos y analizamos el terreno ideal para tu proyecto.
               </p>
 </div>
 </div>
 <div className="sol-row sol-reveal" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', padding: '72px 0', borderTop: '1px solid rgba(44,44,44,0.10)', alignItems: 'center'}}>
 <div>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
                 Análisis
               </h3>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
                 Estudiamos el viento, la luz, la pendiente. Cada dato fundamenta
                 una decisión con criterio.
               </p>
@@ -459,10 +501,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
                 Concepto
               </h3>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
                 Una propuesta arquitectónica que nace del lugar, no impuesta
                 sobre él.
               </p>
@@ -470,10 +512,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="sol-row sol-reveal" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', padding: '72px 0', borderTop: '1px solid rgba(44,44,44,0.10)', alignItems: 'center'}}>
 <div>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
                 Diseño
               </h3>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
                 Planos, renders y especificaciones que convierten la visión en
                 un proyecto ejecutable.
               </p>
@@ -491,10 +533,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
                 Desarrollo
               </h3>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
                 Gestión de permisos, infraestructura y proveedores con
                 cronograma respetado.
               </p>
@@ -502,10 +544,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="sol-row sol-reveal" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', padding: '72px 0', borderTop: '1px solid rgba(44,44,44,0.10)', alignItems: 'center'}}>
 <div>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
                 Construcción
               </h3>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
                 Ejecución con control total. Manos locales, materiales nobles,
                 calidad supervisada.
               </p>
@@ -516,17 +558,17 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="sol-row sol-reveal" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', padding: '72px 0', borderTop: '1px solid rgba(44,44,44,0.10)', borderBottom: '1px solid rgba(44,44,44,0.10)', alignItems: 'center'}}>
+<div className="sol-row sol-reveal" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', padding: '72px 0', borderTop: '1px solid rgba(44, 44, 44, 0.10)', borderBottom: '1px solid rgba(44,44,44,0.10)', alignItems: 'center'}}>
 <div className="sol-img-wrap" style={{aspectRatio: '16 / 10', overflow: 'hidden', position: 'relative'}}>
 <div className="parallax-wrap" style={{position: 'absolute', top: '-35%', left: '0px', width: '100%', height: '170%', willChange: 'transform'}}>
 <img alt="" className="sol-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect width='1' height='1' fill='%23FF3333'/%3E%3C/svg%3E" style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 1.2s cubic-bezier(0.16,1,0.3,1)'}}/>
 </div>
 </div>
 <div>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(32px,3.5vw,48px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.05', marginBottom: '24px'}}>
                 Entrega
               </h3>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A', maxWidth: '380px'}}>
                 Entrega completa, supervisada y documentada. El inicio de tu
                 patrimonio.
               </p>
@@ -558,7 +600,7 @@ gtag('config', 'G-2M6V79H761');
 <h3 className="font-display tracking-tight" style={{fontSize: 'clamp(52px,7vw,88px)', fontWeight: '200', color: '#2C2C2C', marginBottom: '32px', lineHeight: '1.0'}}>
             Inversionista
           </h3>
-<ul style={{fontFamily: '\'Inter\',sans-serif', fontSize: '14px', color: 'rgba(44,44,44,0.75)', lineHeight: '1.9', listStyle: 'none', padding: '0', margin: '0'}}>
+<ul style={{fontFamily: '\'Inter\', sans-serif', fontSize: '14px', color: 'rgba(44,44,44,0.75)', lineHeight: '1.9', listStyle: 'none', padding: '0', margin: '0'}}>
 <li>— Mayor control del proyecto en cada etapa.</li>
 <li>— Minimiza riesgos para inversionistas y clientes.</li>
 <li>— Visión comercial con criterio técnico.</li>
@@ -568,7 +610,7 @@ gtag('config', 'G-2M6V79H761');
 <h3 className="font-display tracking-tight" style={{fontSize: 'clamp(52px,7vw,88px)', fontWeight: '200', color: '#C66B3D', marginBottom: '32px', lineHeight: '1.0'}}>
             Residente
           </h3>
-<ul style={{fontFamily: '\'Inter\',sans-serif', fontSize: '14px', color: 'rgba(217,197,178,0.7)', lineHeight: '1.9', listStyle: 'none', padding: '0', margin: '0'}}>
+<ul style={{fontFamily: '\'Inter\', sans-serif', fontSize: '14px', color: 'rgba(217,197,178,0.7)', lineHeight: '1.9', listStyle: 'none', padding: '0', margin: '0'}}>
 <li>— Procesos optimizados de inicio a entrega.</li>
 <li>— Ejecución coherente en diseño y construcción.</li>
 <li>— Capacidad técnica integral bajo una sola dirección.</li>
@@ -581,11 +623,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="reveal flex flex-col md:flex-row md:items-end md:justify-between gap-8" style={{borderBottom: '1px solid rgba(217,197,178,0.12)', paddingBottom: '40px', marginBottom: '80px'}}>
 <div>
 <div className="label mb-6">Portafolio de Obras</div>
-<h2 className="tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(44px,6vw,72px)', fontWeight: '200', lineHeight: '1.0', color: '#F5F0E8'}}>
+<h2 className="tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(44px,6vw,72px)', fontWeight: '200', lineHeight: '1.0', color: '#F5F0E8'}}>
               Cada obra, una extensión del territorio.
             </h2>
 </div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '13px', color: '#8E8D8A', maxWidth: '280px', textAlign: 'right', lineHeight: '1.6'}}>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '13px', color: '#8E8D8A', maxWidth: '280px', textAlign: 'right', lineHeight: '1.6'}}>
             Sin precios. Sin grids. Imágenes que hablan.
           </div>
 </div>
@@ -597,10 +639,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div style={{paddingTop: '24px'}}>
-<h4 className="port-title" style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(28px,3vw,40px)', fontWeight: '200', color: '#F5F0E8', lineHeight: '1.05', marginBottom: '10px', transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)'}}>
+<h4 className="port-title" style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: '200', color: '#F5F0E8', lineHeight: '1.05', marginBottom: '10px', transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)'}}>
                 San Antonio de las Minas
               </h4>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '12px', color: '#8E8D8A'}}>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '12px', color: '#8E8D8A'}}>
                 Campestre · Valle de Guadalupe · 12 ha
               </div>
 </div>
@@ -612,10 +654,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div style={{paddingTop: '24px'}}>
-<h4 className="port-title" style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(28px,3vw,40px)', fontWeight: '200', color: '#F5F0E8', lineHeight: '1.05', marginBottom: '10px', transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)'}}>
+<h4 className="port-title" style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: '200', color: '#F5F0E8', lineHeight: '1.05', marginBottom: '10px', transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)'}}>
                 El Porvenir
               </h4>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '12px', color: '#8E8D8A'}}>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '12px', color: '#8E8D8A'}}>
                 Residencial · Ensenada B.C. · 8 lotes
               </div>
 </div>
@@ -627,10 +669,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div style={{paddingTop: '24px'}}>
-<h4 className="port-title" style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(28px,3vw,40px)', fontWeight: '200', color: '#F5F0E8', lineHeight: '1.05', marginBottom: '10px', transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)'}}>
+<h4 className="port-title" style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: '200', color: '#F5F0E8', lineHeight: '1.05', marginBottom: '10px', transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)'}}>
                 Ruta del Vino
               </h4>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '12px', color: '#8E8D8A'}}>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '12px', color: '#8E8D8A'}}>
                 Comercial · Uso mixto · Valle de Guadalupe
               </div>
 </div>
@@ -649,34 +691,34 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-[1500px] mx-auto">
 <div className="reveal" style={{textAlign: 'center', maxWidth: '800px', margin: '0 auto 100px'}}>
 <div className="label mb-6">Patrimonio</div>
-<h2 className="tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(44px,6vw,72px)', fontWeight: '200', lineHeight: '1.05', color: '#2C2C2C'}}>
+<h2 className="tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(44px,6vw,72px)', fontWeight: '200', lineHeight: '1.05', color: '#2C2C2C'}}>
             Desarrollo estructurado. Valor que permanece.
           </h2>
 </div>
 <div className="fil-grid" style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr'}}>
 <div className="reveal" style={{padding: '48px', paddingLeft: '0'}}>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#2C2C2C', marginBottom: '24px'}}>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#2C2C2C', marginBottom: '24px'}}>
               Filosofía de diseño
             </div>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A'}}>
               La arquitectura pertenece al paisaje. El lujo está en la
               experiencia, no en lo ostentoso.
             </p>
 </div>
 <div className="reveal" style={{padding: '48px', borderLeft: '1px solid #D9C5B2', transitionDelay: '0.15s'}}>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#2C2C2C', marginBottom: '24px'}}>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#2C2C2C', marginBottom: '24px'}}>
               Permanencia
             </div>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A'}}>
               Diseños que envejecen bien. Proyectos pensados a largo plazo que
               generan valor en el tiempo.
             </p>
 </div>
 <div className="reveal" style={{padding: '48px', borderLeft: '1px solid #D9C5B2', transitionDelay: '0.3s'}}>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#2C2C2C', marginBottom: '24px'}}>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#2C2C2C', marginBottom: '24px'}}>
               Posicionamiento
             </div>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.85', color: '#8E8D8A'}}>
               Ejecución coherente en cada etapa. Capacidad técnica integral que
               optimiza procesos y garantiza resultados con visión de largo
               plazo.
@@ -697,40 +739,40 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="vp-text-col">
 <div className="label mb-6">El Valle</div>
-<h2 className="tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(36px,4vw,56px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.15', marginBottom: '32px'}}>
+<h2 className="tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(36px,4vw,56px)', fontWeight: '200', color: '#2C2C2C', lineHeight: '1.15', marginBottom: '32px'}}>
           Conocemos el territorio.
           <br/>
           Lo traducimos en proyectos
           <br/>
           que le pertenecen.
         </h2>
-<p style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', lineHeight: '1.9', color: '#8E8D8A', marginBottom: '48px'}}>
+<p style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', lineHeight: '1.9', color: '#8E8D8A', marginBottom: '48px'}}>
           Varlem Group nace de la integración de BRANA Inmobiliaria y J+A
           Arquitectos. Dos décadas construyendo en Baja California. Lo que
           construimos no se impone. Pertenece.
         </p>
 <div style={{borderTop: '1px solid rgba(44,44,44,0.12)'}}>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 0', borderBottom: '1px solid rgba(44,44,44,0.08)'}}>
-<span style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#8E8D8A'}}>
+<span style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#8E8D8A'}}>
               Trayectoria
             </span>
-<span style={{fontFamily: '\'Inter\',sans-serif', fontSize: '13px', color: '#2C2C2C'}}>
+<span style={{fontFamily: '\'Inter\', sans-serif', fontSize: '13px', color: '#2C2C2C'}}>
               12+ años en el territorio
             </span>
 </div>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 0', borderBottom: '1px solid rgba(44,44,44,0.08)'}}>
-<span style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#8E8D8A'}}>
+<span style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#8E8D8A'}}>
               Origen
             </span>
-<span style={{fontFamily: '\'Inter\',sans-serif', fontSize: '13px', color: '#2C2C2C'}}>
+<span style={{fontFamily: '\'Inter\', sans-serif', fontSize: '13px', color: '#2C2C2C'}}>
               BRANA Inmobiliaria + J+A Arquitectos
             </span>
 </div>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 0', borderBottom: '1px solid rgba(44,44,44,0.08)'}}>
-<span style={{fontFamily: '\'Inter\',sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#8E8D8A'}}>
+<span style={{fontFamily: '\'Inter\', sans-serif', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#8E8D8A'}}>
               Capacidad técnica
             </span>
-<span style={{fontFamily: '\'Inter\',sans-serif', fontSize: '13px', color: '#2C2C2C'}}>
+<span style={{fontFamily: '\'Inter\', sans-serif', fontSize: '13px', color: '#2C2C2C'}}>
               Inmobiliaria · Arquitectura · Construcción
             </span>
 </div>

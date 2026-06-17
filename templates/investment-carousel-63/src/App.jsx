@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -117,6 +153,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -275,7 +317,7 @@ gtag('config', 'G-2M6V79H761');
 </h2>
 <div className="relative w-full h-40 flex items-center justify-center bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 backdrop-blur-sm">
 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent z-0"></div>
-<div className="absolute inset-0 opacity-20 z-0" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '16px 16px', [maskImage: 'radial-gradient(ellipse_at_center,black,transparent_70%)]'}}></div>
+<div className="absolute inset-0 opacity-20 z-0" style={{backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.6) 1px, transparent 1px)', backgroundSize: '16px 16px', [maskImage: 'radial-gradient(ellipse_at_center,black,transparent_70%)]'}}></div>
 <svg className="w-full h-full absolute inset-0 z-10" viewbox="0 0 320 160">
 <path d="M20,130 Q100,130 150,90 T300,30" fill="none" stroke="#C5F848" strokeWidth="2" style={{filter: 'drop-shadow(0 4px 6px rgba(197, 248, 72, 0.2))'}}></path>
 <circle className="animate-pulse" cx="300" cy="30" fill="#C5F848" r="4" style={{filter: 'drop-shadow(0 0 10px rgba(197, 248, 72, 0.8))'}}></circle>

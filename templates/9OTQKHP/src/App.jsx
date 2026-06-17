@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -37,6 +73,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -77,16 +119,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute -bottom-20 -right-10 w-96 h-96 rounded-full bg-pink-300/30 blur-3xl"></div>
 </div>
 <div className="relative mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12">
-<div className="flex flex-col justify-center animate-fadeUp" style={{-Delay: '0s'}}>
+<div className="flex flex-col justify-center animate-fadeUp" style={{'--delay': '0s'}}>
 <h1 className="text-4xl md:text-5xl tracking-tight font-semibold text-gray-900 mb-6">Split expenses &amp; smash goals together.</h1>
 <p className="text-lg text-gray-700 mb-8">BuddyBudget makes sharing rent, groceries, and adventures effortless—so you can focus on the fun, not the funds.</p>
 <div className="flex gap-3">
-<a className="px-5 py-3 rounded-lg bg-purple-600 text-white font-medium shadow hover:bg-purple-500 transition animate-fadeUp" href="#" style={{-Delay: '.1s'}}>Download free</a>
-<a className="px-5 py-3 rounded-lg bg-gray-100 text-gray-900 font-medium hover:bg-gray-200 transition animate-fadeUp" href="#video" style={{-Delay: '.15s'}}>Watch demo</a>
+<a className="px-5 py-3 rounded-lg bg-purple-600 text-white font-medium shadow hover:bg-purple-500 transition animate-fadeUp" href="#" style={{'--delay': '.1s'}}>Download free</a>
+<a className="px-5 py-3 rounded-lg bg-gray-100 text-gray-900 font-medium hover:bg-gray-200 transition animate-fadeUp" href="#video" style={{'--delay': '.15s'}}>Watch demo</a>
 </div>
 </div>
 
-<div className="relative animate-fadeUp" style={{-Delay: '.2s'}}>
+<div className="relative animate-fadeUp" style={{'--delay': '.2s'}}>
 <div className="mx-auto w-64 h-[540px] rounded-3xl overflow-hidden shadow-2xl border-8 border-gray-900">
 <img alt="BuddyBudget App screenshot" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 </div>
@@ -97,45 +139,45 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="py-24 bg-gray-50" id="features">
 <div className="mx-auto max-w-7xl px-6">
 <h2 className="text-3xl tracking-tight font-semibold text-gray-900 text-center mb-4 animate-fadeUp">Why you’ll love BuddyBudget</h2>
-<p className="text-center text-gray-600 mb-16 animate-fadeUp" style={{-Delay: '.05s'}}>Simple tools, cheerful design, and powerful insights—perfect for besties, couples, and crews.</p>
+<p className="text-center text-gray-600 mb-16 animate-fadeUp" style={{'--delay': '.05s'}}>Simple tools, cheerful design, and powerful insights—perfect for besties, couples, and crews.</p>
 <div className="grid md:grid-cols-3 gap-12">
 
-<div className="animate-fadeUp" style={{-Delay: '.1s'}}>
+<div className="animate-fadeUp" style={{'--delay': '.1s'}}>
 <div className="w-12 h-12 mb-4 flex items-center justify-center rounded-xl bg-purple-100 text-purple-700">
 <i className="w-6 h-6 stroke-[1.5]" data-lucide="split"></i>
 </div>
 <h3 className="font-semibold text-lg mb-2">Instant Splits</h3>
 <p className="text-gray-600">Add an expense, choose buddies, and let the app calculate who owes what—no spreadsheets needed.</p>
 </div>
-<div className="animate-fadeUp" style={{-Delay: '.15s'}}>
+<div className="animate-fadeUp" style={{'--delay': '.15s'}}>
 <div className="w-12 h-12 mb-4 flex items-center justify-center rounded-xl bg-pink-100 text-pink-700">
 <i className="w-6 h-6 stroke-[1.5]" data-lucide="piggy-bank"></i>
 </div>
 <h3 className="font-semibold text-lg mb-2">Shared Goals</h3>
 <p className="text-gray-600">Set a trip fund or furniture budget and track progress together with motivational nudges.</p>
 </div>
-<div className="animate-fadeUp" style={{-Delay: '.2s'}}>
+<div className="animate-fadeUp" style={{'--delay': '.2s'}}>
 <div className="w-12 h-12 mb-4 flex items-center justify-center rounded-xl bg-yellow-100 text-yellow-700">
 <i className="w-6 h-6 stroke-[1.5]" data-lucide="bell-ring"></i>
 </div>
 <h3 className="font-semibold text-lg mb-2">Gentle Reminders</h3>
 <p className="text-gray-600">Friendly notifications keep everyone on track—no more awkward “you owe me” texts.</p>
 </div>
-<div className="animate-fadeUp" style={{-Delay: '.25s'}}>
+<div className="animate-fadeUp" style={{'--delay': '.25s'}}>
 <div className="w-12 h-12 mb-4 flex items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
 <i className="w-6 h-6 stroke-[1.5]" data-lucide="trending-up"></i>
 </div>
 <h3 className="font-semibold text-lg mb-2">Smart Insights</h3>
 <p className="text-gray-600">See where money goes each month and get tips to save together.</p>
 </div>
-<div className="animate-fadeUp" style={{-Delay: '.3s'}}>
+<div className="animate-fadeUp" style={{'--delay': '.3s'}}>
 <div className="w-12 h-12 mb-4 flex items-center justify-center rounded-xl bg-teal-100 text-teal-700">
 <i className="w-6 h-6 stroke-[1.5]" data-lucide="shield-check"></i>
 </div>
 <h3 className="font-semibold text-lg mb-2">Bank-Level Security</h3>
 <p className="text-gray-600">All data is encrypted so your finances stay private and protected.</p>
 </div>
-<div className="animate-fadeUp" style={{-Delay: '.35s'}}>
+<div className="animate-fadeUp" style={{'--delay': '.35s'}}>
 <div className="w-12 h-12 mb-4 flex items-center justify-center rounded-xl bg-green-100 text-green-700">
 <i className="w-6 h-6 stroke-[1.5]" data-lucide="zap"></i>
 </div>
@@ -189,7 +231,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <p className="text-gray-600">“No more spreadsheets! We paid our rent, Wi-Fi, and Netflix in one tap. Life-changing.”</p>
 </div>
-<div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm animate-fadeUp" style={{-Delay: '.05s'}}>
+<div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm animate-fadeUp" style={{'--delay': '.05s'}}>
 <div className="flex items-center gap-4 mb-4">
 <img alt="User" className="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&amp;fit=crop&amp;w=72&amp;q=80"/>
 <div>
@@ -199,7 +241,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <p className="text-gray-600">“We’re saving for a puppy together and the progress ring keeps us motivated!”</p>
 </div>
-<div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm animate-fadeUp" style={{-Delay: '.1s'}}>
+<div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm animate-fadeUp" style={{'--delay': '.1s'}}>
 <div className="flex items-center gap-4 mb-4">
 <img alt="User" className="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&amp;fit=crop&amp;w=72&amp;q=80"/>
 <div>
@@ -230,7 +272,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="block w-full py-3 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-500 transition" href="#">Get started</a>
 </div>
 
-<div className="border-2 border-purple-600 rounded-xl p-8 bg-white shadow-lg w-full max-w-sm animate-fadeUp" style={{-Delay: '.05s'}}>
+<div className="border-2 border-purple-600 rounded-xl p-8 bg-white shadow-lg w-full max-w-sm animate-fadeUp" style={{'--delay': '.05s'}}>
 <h3 className="text-lg font-semibold mb-2">Plus</h3>
 <p className="text-3xl font-semibold text-gray-900 mb-4">$4<span className="text-lg font-normal text-gray-600">/mo</span></p>
 <ul className="mb-8 space-y-3 text-gray-600 text-sm">
@@ -256,14 +298,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </summary>
 <p className="mt-4 text-gray-600">Nope! Share an invite link—buddies can settle up via PayPal or Venmo without downloading.</p>
 </details>
-<details className="group py-6 animate-fadeUp" style={{-Delay: '.05s'}}>
+<details className="group py-6 animate-fadeUp" style={{'--delay': '.05s'}}>
 <summary className="flex justify-between items-center cursor-pointer list-none">
 <span className="font-medium text-gray-900">Is my bank info secure?</span>
 <i className="w-5 h-5 stroke-[1.5] group-open:rotate-180 transition-transform" data-lucide="chevron-down"></i>
 </summary>
 <p className="mt-4 text-gray-600">Yes. We use 256-bit encryption and never store your credentials.</p>
 </details>
-<details className="group py-6 animate-fadeUp" style={{-Delay: '.1s'}}>
+<details className="group py-6 animate-fadeUp" style={{'--delay': '.1s'}}>
 <summary className="flex justify-between items-center cursor-pointer list-none">
 <span className="font-medium text-gray-900">Can we export our data?</span>
 <i className="w-5 h-5 stroke-[1.5] group-open:rotate-180 transition-transform" data-lucide="chevron-down"></i>

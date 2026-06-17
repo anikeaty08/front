@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1060,6 +1096,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1068,7 +1110,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <canvas height="852" id="webgl-canvas" style={{position: 'fixed', top: '0px', left: '0px', width: '393px', height: '852px', zIndex: '0'}} width="393"></canvas>
 <div id="bloom-overlay" style={{position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', zIndex: '1', pointerEvents: 'none', mixBlendMode: 'screen', opacity: '0.3', background: 'radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.08) 0%, transparent 60%), radial-gradient(ellipse at 20% 70%, rgba(6,182,212,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(168,85,247,0.05) 0%, transparent 50%)'}}></div>
 <div style={{position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', zIndex: '2', pointerEvents: 'none', background: 'radial-gradient(ellipse at 50% 30%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.6) 100%)'}}></div>
-<nav className="md:px-12 pt-4 pr-6 pb-4 pl-6" style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: '50', backdropFilter: 'blur(24px) saturate(1.5)', background: 'rgba(0,0,0,0.25)', borderBottom: '1px solid rgba(255,255,255,0.04)'}}>
+<nav className="md:px-12 pt-4 pr-6 pb-4 pl-6" style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: '50', backdropFilter: 'blur(24px) saturate(1.5)', background: 'rgba(0, 0, 0, 0.25)', borderBottom: '1px solid rgba(255,255,255,0.04)'}}>
 <div className="max-w-7xl mx-auto flex items-center justify-between">
 <div className="flex items-center gap-2">
 <div className="flex [--fx-filter:blur(10px)_liquid-glass(2.9,10)_saturate(1.25)_noise(0.5,1,0)] items-center justify-center" style={{width: '32px', height: '32px', background: 'linear-gradient(135deg, #6366f1, #06b6d4)', borderRadius: '8px', boxShadow: '0 0 20px rgba(99,102,241,0.3)'}}>
@@ -1107,7 +1149,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span style={{position: 'relative', zIndex: '1'}}>Explore Our Universe</span>
 <iconify-icon icon="solar:arrow-right-linear" style={{marginLeft: '8px', verticalAlign: 'middle', position: 'relative', zIndex: '1'}} width="16"></iconify-icon>
 </button>
-<button className="px-8 py-3.5 rounded-xl text-sm font-medium transition-all duration-500 text-black/70 hover:bg-black/8 hover:border-black/15" style={{background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', backdropFilter: 'blur(10px)'}}>
+<button className="px-8 py-3.5 rounded-xl text-sm font-medium transition-all duration-500 text-black/70 hover:bg-black/8 hover:border-black/15" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', cursor: 'pointer', backdropFilter: 'blur(10px)'}}>
                         Watch Showreel
                         <iconify-icon icon="solar:play-linear" style={{marginLeft: '8px', verticalAlign: 'middle'}} width="16"></iconify-icon>
 </button>
@@ -1131,49 +1173,49 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-base max-w-xl mx-auto font-light text-black/35">End-to-end digital solutions designed for the next era of immersive experiences.</p>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="services-grid">
-<div className="service-card group" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="service-card group" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <div className="card-shine" style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)', opacity: '0', transition: 'opacity 0.5s'}}></div>
-<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.15))', borderRadius: '14px', border: '1px solid rgba(99,102,241,0.15)'}}>
+<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.15))', borderRadius: '14px', border: '1px solid rgba(99,102,241,0.15)'}}>
 <iconify-icon icon="solar:code-square-linear" style={{color: '#6366f1'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-3 text-black/90">Web Development</h3>
 <p className="text-sm leading-relaxed font-light text-black/35">Full-stack web applications built with cutting-edge frameworks and immersive 3D experiences.</p>
 </div>
-<div className="service-card group" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="service-card group" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <div className="card-shine" style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)', opacity: '0', transition: 'opacity 0.5s'}}></div>
-<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(236,72,153,0.15))', borderRadius: '14px', border: '1px solid rgba(168,85,247,0.15)'}}>
+<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(236, 72, 153, 0.15))', borderRadius: '14px', border: '1px solid rgba(168,85,247,0.15)'}}>
 <iconify-icon icon="solar:pallete-2-linear" style={{color: '#a855f7'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-3 text-black/90">Brand Design</h3>
 <p className="text-sm leading-relaxed font-light text-black/35">Visual identity systems that resonate across dimensions — from pixels to volumetric space.</p>
 </div>
-<div className="service-card group" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="service-card group" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <div className="card-shine" style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)', opacity: '0', transition: 'opacity 0.5s'}}></div>
-<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(6,182,212,0.15), rgba(34,211,238,0.15))', borderRadius: '14px', border: '1px solid rgba(6,182,212,0.15)'}}>
+<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(34, 211, 238, 0.15))', borderRadius: '14px', border: '1px solid rgba(6,182,212,0.15)'}}>
 <iconify-icon icon="solar:smartphone-2-linear" style={{color: '#06b6d4'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-3 text-black/90">Mobile Apps</h3>
 <p className="text-sm leading-relaxed font-light text-black/35">Native and cross-platform mobile applications with fluid animations and premium UX.</p>
 </div>
-<div className="service-card group" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="service-card group" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <div className="card-shine" style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)', opacity: '0', transition: 'opacity 0.5s'}}></div>
-<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(244,114,182,0.15), rgba(251,146,60,0.15))', borderRadius: '14px', border: '1px solid rgba(244,114,182,0.15)'}}>
+<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(244, 114, 182, 0.15), rgba(251, 146, 60, 0.15))', borderRadius: '14px', border: '1px solid rgba(244,114,182,0.15)'}}>
 <iconify-icon icon="solar:figma-linear" style={{color: '#f472b6'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-3 text-black/90">UI/UX Design</h3>
 <p className="text-sm leading-relaxed font-light text-black/35">Research-driven design systems that balance aesthetics with intuitive user journeys.</p>
 </div>
-<div className="service-card group" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="service-card group" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <div className="card-shine" style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)', opacity: '0', transition: 'opacity 0.5s'}}></div>
-<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(74,222,128,0.15), rgba(34,197,94,0.15))', borderRadius: '14px', border: '1px solid rgba(74,222,128,0.15)'}}>
+<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(34, 197, 94, 0.15))', borderRadius: '14px', border: '1px solid rgba(74,222,128,0.15)'}}>
 <iconify-icon icon="solar:server-linear" style={{color: '#4ade80'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-3 text-black/90">Cloud &amp; DevOps</h3>
 <p className="text-sm leading-relaxed font-light text-black/35">Scalable infrastructure, CI/CD pipelines, and cloud-native architectures for global reach.</p>
 </div>
-<div className="service-card group" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="service-card group" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(30px) saturate(1.3)', borderRadius: '20px', padding: '32px', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <div className="card-shine" style={{position: 'absolute', top: '0', left: '0', right: '0', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)', opacity: '0', transition: 'opacity 0.5s'}}></div>
-<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.15))', borderRadius: '14px', border: '1px solid rgba(251,191,36,0.15)'}}>
+<div className="flex items-center justify-center mb-6" style={{width: '48px', height: '48px', background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15))', borderRadius: '14px', border: '1px solid rgba(251,191,36,0.15)'}}>
 <iconify-icon icon="solar:chart-2-linear" style={{color: '#fbbf24'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-3 text-black/90">Analytics &amp; AI</h3>
@@ -1192,13 +1234,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-base max-w-xl mx-auto font-light text-black/35">A selection of projects that define our commitment to digital excellence.</p>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6" id="portfolio-grid">
-<div className="portfolio-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
-<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99,102,241,0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
+<div className="portfolio-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
+<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99, 102, 241, 0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
 <div style={{height: '240px', background: 'linear-gradient(135deg, #0c0a1f, #1e1b4b, #312e81)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', inset: '0', background: 'radial-gradient(circle at 30% 50%, rgba(99,102,241,0.25), transparent 70%)'}}></div>
 <div style={{position: 'absolute', inset: '0', background: 'radial-gradient(circle at 70% 30%, rgba(6,182,212,0.1), transparent 60%)'}}></div>
 <div style={{position: 'absolute', bottom: '20px', left: '20px', right: '20px'}}>
-<div style={{background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)', borderRadius: '12px', padding: '16px', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div style={{background: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(16px)', borderRadius: '12px', padding: '16px', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="flex items-center gap-2 mb-2">
 <div style={{width: '8px', height: '8px', borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 6px #4ade80'}}></div>
 <div style={{width: '8px', height: '8px', borderRadius: '50%', background: '#fbbf24', boxShadow: '0 0 6px #fbbf24'}}></div>
@@ -1212,64 +1254,64 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-6">
 <div className="flex items-center gap-2 mb-3">
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(99,102,241,0.1)', color: '#a5b4fc', borderRadius: '8px', border: '1px solid rgba(99,102,241,0.15)'}}>Web App</span>
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(6,182,212,0.1)', color: '#67e8f9', borderRadius: '8px', border: '1px solid rgba(6,182,212,0.15)'}}>SaaS</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(99, 102, 241, 0.1)', color: '#a5b4fc', borderRadius: '8px', border: '1px solid rgba(99,102,241,0.15)'}}>Web App</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(6, 182, 212, 0.1)', color: '#67e8f9', borderRadius: '8px', border: '1px solid rgba(6,182,212,0.15)'}}>SaaS</span>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2 text-black/90">NovaPlatform</h3>
 <p className="text-sm font-light text-black/35">Enterprise analytics dashboard with real-time 3D data visualization and AI-powered insights.</p>
 </div>
 </div>
-<div className="portfolio-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
-<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99,102,241,0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
+<div className="portfolio-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
+<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99, 102, 241, 0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
 <div className="" style={{height: '240px', background: 'linear-gradient(135deg, #042f2e, #134e4a, #0f766e)', position: 'relative', overflow: 'hidden'}}>
 <div className="" style={{position: 'absolute', inset: '0', background: 'radial-gradient(circle at 70% 40%, rgba(6,182,212,0.3), transparent 70%)'}}></div>
 <div style={{position: 'absolute', top: '50%', left: '50%'}}>
-<div style={{width: '80px', height: '80px', border: '2px solid rgba(255,255,255,0.15)', borderRadius: '16px', boxShadow: '0 0 20px rgba(6,182,212,0.2)'}}></div>
+<div style={{width: '80px', height: '80px', border: '2px solid rgba(255, 255, 255, 0.15)', borderRadius: '16px', boxShadow: '0 0 20px rgba(6,182,212,0.2)'}}></div>
 <div style={{width: '60px', height: '60px', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '12px', position: 'absolute', top: '10px', left: '10px'}}></div>
 </div>
 </div>
 <div className="p-6">
 <div className="flex items-center gap-2 mb-3">
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(20,184,166,0.1)', color: '#5eead4', borderRadius: '8px', border: '1px solid rgba(20,184,166,0.15)'}}>Mobile</span>
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(168,85,247,0.1)', color: '#c084fc', borderRadius: '8px', border: '1px solid rgba(168,85,247,0.15)'}}>Fintech</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(20, 184, 166, 0.1)', color: '#5eead4', borderRadius: '8px', border: '1px solid rgba(20,184,166,0.15)'}}>Mobile</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(168, 85, 247, 0.1)', color: '#c084fc', borderRadius: '8px', border: '1px solid rgba(168,85,247,0.15)'}}>Fintech</span>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2 text-black/90">PulseWallet</h3>
 <p className="text-sm font-light text-black/35">Next-generation mobile banking with biometric security and immersive financial experiences.</p>
 </div>
 </div>
-<div className="portfolio-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
-<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99,102,241,0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
+<div className="portfolio-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
+<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99, 102, 241, 0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
 <div style={{height: '240px', background: 'linear-gradient(135deg, #1a0527, #4a1d4e, #7e22ce)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', inset: '0', background: 'radial-gradient(circle at 50% 60%, rgba(168,85,247,0.35), transparent 70%)'}}></div>
 <div style={{position: 'absolute', top: '50%', left: '50%', display: 'flex', gap: '8px'}}>
-<div style={{width: '40px', height: '60px', background: 'rgba(255,255,255,0.08)', borderRadius: '8px', backdropFilter: 'blur(5px)', border: '1px solid rgba(255,255,255,0.06)'}}></div>
-<div style={{width: '40px', height: '80px', background: 'rgba(255,255,255,0.12)', borderRadius: '8px', backdropFilter: 'blur(5px)', marginTop: '-10px', border: '1px solid rgba(255,255,255,0.08)'}}></div>
-<div style={{width: '40px', height: '50px', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', backdropFilter: 'blur(5px)', marginTop: '5px', border: '1px solid rgba(255,255,255,0.04)'}}></div>
+<div style={{width: '40px', height: '60px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px', backdropFilter: 'blur(5px)', border: '1px solid rgba(255,255,255,0.06)'}}></div>
+<div style={{width: '40px', height: '80px', background: 'rgba(255, 255, 255, 0.12)', borderRadius: '8px', backdropFilter: 'blur(5px)', marginTop: '-10px', border: '1px solid rgba(255,255,255,0.08)'}}></div>
+<div style={{width: '40px', height: '50px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '8px', backdropFilter: 'blur(5px)', marginTop: '5px', border: '1px solid rgba(255,255,255,0.04)'}}></div>
 </div>
 </div>
 <div className="p-6">
 <div className="flex items-center gap-2 mb-3">
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(168,85,247,0.1)', color: '#c084fc', borderRadius: '8px', border: '1px solid rgba(168,85,247,0.15)'}}>Brand</span>
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(244,114,182,0.1)', color: '#f9a8d4', borderRadius: '8px', border: '1px solid rgba(244,114,182,0.15)'}}>Identity</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(168, 85, 247, 0.1)', color: '#c084fc', borderRadius: '8px', border: '1px solid rgba(168,85,247,0.15)'}}>Brand</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(244, 114, 182, 0.1)', color: '#f9a8d4', borderRadius: '8px', border: '1px solid rgba(244,114,182,0.15)'}}>Identity</span>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2 text-black/90">Apex Studios</h3>
 <p className="text-sm font-light text-black/35">Complete brand overhaul for a creative agency — identity, motion design, and 3D assets.</p>
 </div>
 </div>
-<div className="portfolio-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
-<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99,102,241,0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
+<div className="portfolio-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', overflow: 'hidden', transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)', cursor: 'pointer', position: 'relative'}}>
+<div className="card-border-glow" style={{position: 'absolute', inset: '0', borderRadius: '20px', padding: '1px', background: 'linear-gradient(135deg, transparent 30%, rgba(99, 102, 241, 0.15) 50%, transparent 70%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', opacity: '0', transition: 'opacity 0.5s', pointerEvents: 'none'}}></div>
 <div className="" style={{height: '240px', background: 'linear-gradient(135deg, #0c0a09, #1c1917, #44403c)', position: 'relative', overflow: 'hidden'}}>
 <div className="" style={{position: 'absolute', inset: '0', background: 'radial-gradient(circle at 60% 30%, rgba(251,191,36,0.25), transparent 70%)'}}></div>
 <div style={{position: 'absolute', top: '50%', left: '50%'}}>
-<div style={{width: '100px', height: '100px', border: '1px solid rgba(251,191,36,0.25)', borderRadius: '50%', boxShadow: '0 0 30px rgba(251,191,36,0.1)'}}></div>
+<div style={{width: '100px', height: '100px', border: '1px solid rgba(251, 191, 36, 0.25)', borderRadius: '50%', boxShadow: '0 0 30px rgba(251,191,36,0.1)'}}></div>
 <div style={{width: '60px', height: '60px', border: '1px solid rgba(251,191,36,0.15)', borderRadius: '50%', position: 'absolute', top: '20px', left: '20px'}}></div>
-<div style={{width: '20px', height: '20px', background: 'rgba(251,191,36,0.25)', borderRadius: '50%', position: 'absolute', top: '40px', left: '40px', boxShadow: '0 0 20px rgba(251,191,36,0.4)'}}></div>
+<div style={{width: '20px', height: '20px', background: 'rgba(251, 191, 36, 0.25)', borderRadius: '50%', position: 'absolute', top: '40px', left: '40px', boxShadow: '0 0 20px rgba(251,191,36,0.4)'}}></div>
 </div>
 </div>
 <div className="p-6">
 <div className="flex items-center gap-2 mb-3">
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(251,191,36,0.1)', color: '#fde68a', borderRadius: '8px', border: '1px solid rgba(251,191,36,0.15)'}}>AI</span>
-<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(74,222,128,0.1)', color: '#86efac', borderRadius: '8px', border: '1px solid rgba(74,222,128,0.15)'}}>Platform</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(251, 191, 36, 0.1)', color: '#fde68a', borderRadius: '8px', border: '1px solid rgba(251,191,36,0.15)'}}>AI</span>
+<span className="text-xs px-2.5 py-1 font-medium" style={{background: 'rgba(74, 222, 128, 0.1)', color: '#86efac', borderRadius: '8px', border: '1px solid rgba(74,222,128,0.15)'}}>Platform</span>
 </div>
 <h3 className="text-lg font-medium tracking-tight mb-2 text-black/90">OrbitalAI</h3>
 <p className="text-sm font-light text-black/35">Machine learning platform with automated model training, deployment, and monitoring systems.</p>
@@ -1289,60 +1331,60 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="" id="tech-orbit-container" style={{position: 'relative', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 <div className="" id="tech-orbit" style={{position: 'relative', width: '340px', height: '340px'}}>
-<div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.25))', borderRadius: '50%', border: '1px solid rgba(99,102,241,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99,102,241,0.2), 0 0 160px rgba(99,102,241,0.05)'}}>
+<div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))', borderRadius: '50%', border: '1px solid rgba(99, 102, 241, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99, 102, 241, 0.2), 0 0 160px rgba(99,102,241,0.05)'}}>
 <span className="text-lg font-semibold tracking-tighter" style={{background: 'linear-gradient(135deg, #a5b4fc, #c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>DI</span>
 </div>
-<div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.25))', borderRadius: '50%', border: '1px solid rgba(99,102,241,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99,102,241,0.2), 0 0 160px rgba(99,102,241,0.05)'}}></div>
-<div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.25))', borderRadius: '50%', border: '1px solid rgba(99,102,241,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99,102,241,0.2), 0 0 160px rgba(99,102,241,0.05)'}}></div>
-<div className="" style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.25))', borderRadius: '50%', border: '1px solid rgba(99,102,241,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99,102,241,0.2), 0 0 160px rgba(99,102,241,0.05)'}}></div>
+<div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))', borderRadius: '50%', border: '1px solid rgba(99, 102, 241, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99, 102, 241, 0.2), 0 0 160px rgba(99,102,241,0.05)'}}></div>
+<div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))', borderRadius: '50%', border: '1px solid rgba(99, 102, 241, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99, 102, 241, 0.2), 0 0 160px rgba(99,102,241,0.05)'}}></div>
+<div className="" style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80px', height: '80px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25))', borderRadius: '50%', border: '1px solid rgba(99, 102, 241, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 80px rgba(99, 102, 241, 0.2), 0 0 160px rgba(99,102,241,0.05)'}}></div>
 </div>
 </div>
 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-12" id="tech-grid">
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:programming-linear" style={{color: '#6366f1', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">React</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:bolt-linear" style={{color: '#06b6d4', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">Next.js</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:box-minimalistic-linear" style={{color: '#a855f7', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">Three.js</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:database-linear" style={{color: '#4ade80', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">PostgreSQL</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:cloud-linear" style={{color: '#f472b6', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">AWS</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:cpu-bolt-linear" style={{color: '#fbbf24', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">TensorFlow</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:shield-check-linear" style={{color: '#22d3ee', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">TypeScript</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:layers-linear" style={{color: '#fb7185', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">Docker</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:rocket-2-linear" style={{color: '#34d399', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">GraphQL</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:atom-linear" style={{color: '#818cf8', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">WebGL</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:link-round-linear" style={{color: '#e879f9', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">Redis</span>
 </div>
-<div className="tech-item" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
+<div className="tech-item" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '20px', textAlign: 'center', transition: 'all 0.5s cubic-bezier(0.23,1,0.32,1)', cursor: 'pointer', position: 'relative', overflow: 'hidden'}}>
 <iconify-icon icon="solar:monitor-linear" style={{color: '#38bdf8', display: 'block', margin: '0 auto 8px'}} width="28"></iconify-icon>
 <span className="text-xs font-medium text-black/40">Figma</span>
 </div>
@@ -1358,22 +1400,22 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     </h2>
 </div>
 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6" id="stats-grid">
-<div className="stat-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
+<div className="stat-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 60%)', pointerEvents: 'none'}}></div>
 <div className="stat-number text-4xl md:text-5xl font-semibold tracking-tight mb-2" data-target="147" style={{background: 'linear-gradient(135deg, #6366f1, #a5b4fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 20px rgba(99,102,241,0.2))'}}>0</div>
 <div className="text-sm font-light text-black/35">Projects Delivered</div>
 </div>
-<div className="stat-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
+<div className="stat-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 60%)', pointerEvents: 'none'}}></div>
 <div className="stat-number text-4xl md:text-5xl font-semibold tracking-tight mb-2" data-suffix="%" data-target="98" style={{background: 'linear-gradient(135deg, #06b6d4, #67e8f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 20px rgba(6,182,212,0.2))'}}>0</div>
 <div className="text-sm font-light text-black/35">Client Satisfaction</div>
 </div>
-<div className="stat-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
+<div className="stat-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 60%)', pointerEvents: 'none'}}></div>
 <div className="stat-number text-4xl md:text-5xl font-semibold tracking-tight mb-2" data-target="32" style={{background: 'linear-gradient(135deg, #a855f7, #c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 20px rgba(168,85,247,0.2))'}}>0</div>
 <div className="text-sm font-light text-black/35">Team Members</div>
 </div>
-<div className="stat-card" style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
+<div className="stat-card" style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '20px', padding: '32px', textAlign: 'center', transition: 'all 0.6s cubic-bezier(0.23,1,0.32,1)', position: 'relative', overflow: 'hidden'}}>
 <div style={{position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle, rgba(244,114,182,0.05) 0%, transparent 60%)', pointerEvents: 'none'}}></div>
 <div className="stat-number text-4xl md:text-5xl font-semibold tracking-tight mb-2" data-suffix="M+" data-target="12" style={{background: 'linear-gradient(135deg, #f472b6, #f9a8d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 20px rgba(244,114,182,0.2))'}}>0</div>
 <div className="text-sm font-light text-black/35">Users Reached</div>
@@ -1384,7 +1426,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="min-h-screen py-32 px-6 flex items-center" id="contact">
 <div className="max-w-3xl mx-auto text-center w-full">
 <div className="mb-8">
-<div style={{width: '64px', height: '64px', background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.15))', borderRadius: '18px', border: '1px solid rgba(99,102,241,0.15)', margin: '0 auto 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(99,102,241,0.15)'}}>
+<div style={{width: '64px', height: '64px', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.15))', borderRadius: '18px', border: '1px solid rgba(99, 102, 241, 0.15)', margin: '0 auto 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(99,102,241,0.15)'}}>
 <iconify-icon icon="solar:letter-linear" style={{color: '#6366f1'}} width="28"></iconify-icon>
 </div>
 <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4" style={{background: 'linear-gradient(135deg, #fff, #a5b4fc, #67e8f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
@@ -1394,13 +1436,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                         Let's create something extraordinary together. Reach out and let's explore the possibilities.
                     </p>
 </div>
-<div style={{background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(30px) saturate(1.3)'}}>
+<div style={{background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(30px) saturate(1.3)'}}>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 <input onblur="this.style.borderColor='rgba(255,255,255,0.06)';this.style.boxShadow='none'" onfocus="this.style.borderColor='rgba(99,102,241,0.4)';this.style.boxShadow='0 0 20px rgba(99,102,241,0.1)'" placeholder="Your Name" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '14px', padding: '14px 16px', color: 'rgb(255, 255, 255)', fontSize: '14px', fontFamily: 'Inter, sans-serif'}} type="text"/>
 <input onblur="this.style.borderColor='rgba(255,255,255,0.06)';this.style.boxShadow='none'" onfocus="this.style.borderColor='rgba(99,102,241,0.4)';this.style.boxShadow='0 0 20px rgba(99,102,241,0.1)'" placeholder="Email Address" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '14px', padding: '14px 16px', color: 'rgb(255, 255, 255)', fontSize: '14px', fontFamily: 'Inter, sans-serif'}} type="email"/>
 </div>
 <textarea onblur="this.style.borderColor='rgba(255,255,255,0.06)';this.style.boxShadow='none'" onfocus="this.style.borderColor='rgba(99,102,241,0.4)';this.style.boxShadow='0 0 20px rgba(99,102,241,0.1)'" placeholder="Tell us about your project..." rows="4" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '14px', padding: '14px 16px', color: 'rgb(255, 255, 255)', fontSize: '14px', fontFamily: 'Inter, sans-serif', resize: 'vertical', marginBottom: '16px'}}></textarea>
-<button className="py-3.5 rounded-xl text-sm font-medium hover:opacity-90 transition-all duration-500 text-black" style={{width: '100%', background: 'linear-gradient(135deg, #6366f1, #7c3aed)', border: 'none', cursor: 'pointer', boxShadow: '0 0 50px rgba(99,102,241,0.25), inset 0 1px 0 rgba(255,255,255,0.1)', fontFamily: '\'Inter\', sans-serif'}}>
+<button className="py-3.5 rounded-xl text-sm font-medium hover:opacity-90 transition-all duration-500 text-black" style={{width: '100%', background: 'linear-gradient(135deg, #6366f1, #7c3aed)', border: 'none', cursor: 'pointer', boxShadow: '0 0 50px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255,255,255,0.1)', fontFamily: '\'Inter\', sans-serif'}}>
                         Send Message
                         <iconify-icon icon="solar:arrow-right-linear" style={{marginLeft: '8px', verticalAlign: 'middle'}} width="16"></iconify-icon>
 </button>

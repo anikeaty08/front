@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -374,6 +410,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -514,7 +556,7 @@ gtag('config', 'G-2M6V79H761');
 
 <main className="flex-1 lg:ml-[260px] min-w-0">
 
-<header className="sticky top-0 z-30 backdrop-blur-md border-b" style={{background: 'rgba(250,250,251,0.85)', borderColor: 'var(--border)'}}>
+<header className="sticky top-0 z-30 backdrop-blur-md border-b" style={{background: 'rgba(250, 250, 251, 0.85)', borderColor: 'var(--border)'}}>
 <div className="px-6 lg:px-10 py-3.5 flex items-center justify-between">
 <div className="flex items-center gap-2 text-sm">
 <button aria-label="Otevřít navigaci" className="lg:hidden p-2 -ml-2 rounded-md border bg-white hover:bg-[var(--bg-muted)] focus-ring" id="mobile-nav-open" style={{borderColor: 'var(--border)', color: 'var(--fg-default)'}}>
@@ -723,7 +765,7 @@ gtag('config', 'G-2M6V79H761');
                   Zobrazit vše
                 </button>
 </div>
-<div className="divide-y" style={{-TwDivideOpacity: '1'}}>
+<div className="divide-y" style={{'--tw-divide-opacity': '1'}}>
 
 <div className="px-5 py-3.5 flex items-center gap-3 hover:bg-[var(--bg-app)] cursor-pointer transition-colors">
 <div className="w-1 h-10 rounded-full shrink-0" style={{background: '#10B981'}}></div>
@@ -732,7 +774,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs font-mono" style={{color: 'var(--fg-muted)'}}>
                         ALBRECHT
                       </span>
-<span className="text-xs px-1.5 py-0.5 rounded font-medium" style={{background: 'rgba(239,68,68,0.1)', color: 'var(--danger)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded font-medium" style={{background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)'}}>
                         URGENT
                       </span>
 </div>
@@ -906,7 +948,7 @@ gtag('config', 'G-2M6V79H761');
                       </div>
 </div>
 </div>
-<span className="text-xs font-mono px-1.5 py-0.5 rounded" style={{background: 'rgba(239,68,68,0.1)', color: 'var(--danger)'}}>
+<span className="text-xs font-mono px-1.5 py-0.5 rounded" style={{background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)'}}>
                     2 dny
                   </span>
 </div>
@@ -997,7 +1039,7 @@ gtag('config', 'G-2M6V79H761');
                       </div>
 </div>
 </div>
-<span className="text-xs font-mono px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs font-mono px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                     na cestě
                   </span>
 </div>
@@ -1099,7 +1141,7 @@ gtag('config', 'G-2M6V79H761');
                             DUOCARDS
                           </span>
 </div>
-<span className="text-xs px-1 rounded font-medium" style={{background: 'rgba(239,68,68,0.1)', color: 'var(--danger)', fontSize: '10px'}}>
+<span className="text-xs px-1 rounded font-medium" style={{background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', fontSize: '10px'}}>
                           URGENT
                         </span>
 </div>
@@ -1190,7 +1232,7 @@ gtag('config', 'G-2M6V79H761');
                       </span>
 </div>
 </div>
-<div className="rounded-lg p-2 space-y-2" style={{background: 'rgba(245,158,11,0.05)', border: '1px dashed rgba(245,158,11,0.3)'}}>
+<div className="rounded-lg p-2 space-y-2" style={{background: 'rgba(245, 158, 11, 0.05)', border: '1px dashed rgba(245,158,11,0.3)'}}>
 <div className="rounded-lg bg-white border p-3 cursor-grab hover-lift" style={{borderColor: 'var(--border)'}}>
 <div className="flex items-center gap-1.5 mb-1.5">
 <span className="w-1.5 h-1.5 rounded-full" style={{background: '#ec4899'}}></span>
@@ -1276,7 +1318,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
 <div className="rounded-xl bg-white border p-4 hover-lift" style={{borderColor: 'var(--border)'}}>
-<div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3" style={{background: 'rgba(59,130,246,0.1)', color: 'var(--info)'}}>
+<div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3" style={{background: 'rgba(59, 130, 246, 0.1)', color: 'var(--info)'}}>
 <iconify-icon icon="solar:inbox-in-linear" width="16"></iconify-icon>
 </div>
 <div className="text-sm font-semibold tracking-tight">Intake</div>
@@ -1312,7 +1354,7 @@ gtag('config', 'G-2M6V79H761');
                 </div>
 </div>
 <div className="rounded-xl bg-white border p-4 hover-lift" style={{borderColor: 'var(--border)'}}>
-<div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3" style={{background: 'rgba(245,158,11,0.1)', color: 'var(--warning)'}}>
+<div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3" style={{background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)'}}>
 <iconify-icon icon="solar:clipboard-check-linear" width="16"></iconify-icon>
 </div>
 <div className="text-sm font-semibold tracking-tight">
@@ -1326,7 +1368,7 @@ gtag('config', 'G-2M6V79H761');
                 </div>
 </div>
 <div className="rounded-xl bg-white border p-4 hover-lift" style={{borderColor: 'var(--border)'}}>
-<div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
 <iconify-icon icon="solar:calendar-add-linear" width="16"></iconify-icon>
 </div>
 <div className="text-sm font-semibold tracking-tight">
@@ -1574,7 +1616,7 @@ gtag('config', 'G-2M6V79H761');
                       </td>
 <td className="px-5 py-3 font-mono text-xs">8/měs.</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                           OK
                         </span>
 </td>
@@ -1586,7 +1628,7 @@ gtag('config', 'G-2M6V79H761');
                       </td>
 <td className="px-5 py-3 font-mono text-xs">12/měs.</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(245,158,11,0.1)', color: 'var(--warning)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)'}}>
                           blokuje
                         </span>
 </td>
@@ -1598,7 +1640,7 @@ gtag('config', 'G-2M6V79H761');
                       </td>
 <td className="px-5 py-3 font-mono text-xs">8/měs.</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                           OK
                         </span>
 </td>
@@ -1617,7 +1659,7 @@ gtag('config', 'G-2M6V79H761');
                     Paušály, náklady a automatické faktury.
                   </p>
 </div>
-<span className="text-xs font-mono px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs font-mono px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                   +14 %
                 </span>
 </div>
@@ -2114,7 +2156,7 @@ gtag('config', 'G-2M6V79H761');
                             DUOCARDS
                           </span>
 </div>
-<span className="text-xs px-1 rounded font-medium" style={{background: 'rgba(239,68,68,0.1)', color: 'var(--danger)', fontSize: '10px'}}>
+<span className="text-xs px-1 rounded font-medium" style={{background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', fontSize: '10px'}}>
                           URGENT
                         </span>
 </div>
@@ -2241,7 +2283,7 @@ gtag('config', 'G-2M6V79H761');
                       </span>
 </div>
 </div>
-<div className="rounded-lg p-2 space-y-2" style={{background: 'rgba(245,158,11,0.05)', border: '1px dashed rgba(245,158,11,0.3)'}}>
+<div className="rounded-lg p-2 space-y-2" style={{background: 'rgba(245, 158, 11, 0.05)', border: '1px dashed rgba(245,158,11,0.3)'}}>
 <div className="rounded-lg bg-white border p-3 cursor-grab hover-lift" style={{borderColor: 'var(--border)'}}>
 <div className="flex items-center gap-1.5 mb-1.5">
 <span className="w-1.5 h-1.5 rounded-full" style={{background: '#ec4899'}}></span>
@@ -2590,7 +2632,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3">Anna</td>
 <td className="px-5 py-3 font-mono text-xs">42 000 Kč</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                         aktivní
                       </span>
 </td>
@@ -2603,7 +2645,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3">Petr</td>
 <td className="px-5 py-3 font-mono text-xs">68 000 Kč</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(245,158,11,0.1)', color: 'var(--warning)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)'}}>
                         blokuje
                       </span>
 </td>
@@ -2616,7 +2658,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3">Tomáš</td>
 <td className="px-5 py-3 font-mono text-xs">38 000 Kč</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                         aktivní
                       </span>
 </td>
@@ -2629,7 +2671,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3">Lucie</td>
 <td className="px-5 py-3 font-mono text-xs">22 000 Kč</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(59,130,246,0.1)', color: 'var(--info)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(59, 130, 246, 0.1)', color: 'var(--info)'}}>
                         onboarding
                       </span>
 </td>
@@ -2642,7 +2684,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3">Anna</td>
 <td className="px-5 py-3 font-mono text-xs">14 000 Kč</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                         aktivní
                       </span>
 </td>
@@ -2893,7 +2935,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3 font-mono">42 000 Kč</td>
 <td className="px-5 py-3">15. 5.</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                         uhrazeno
                       </span>
 </td>
@@ -2904,7 +2946,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3 font-mono">38 000 Kč</td>
 <td className="px-5 py-3">17. 5.</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(59,130,246,0.1)', color: 'var(--info)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(59, 130, 246, 0.1)', color: 'var(--info)'}}>
                         odesláno
                       </span>
 </td>
@@ -2915,7 +2957,7 @@ gtag('config', 'G-2M6V79H761');
 <td className="px-5 py-3 font-mono">68 000 Kč</td>
 <td className="px-5 py-3">10. 5.</td>
 <td className="px-5 py-3">
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(239,68,68,0.1)', color: 'var(--danger)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)'}}>
                         po splatnosti
                       </span>
 </td>
@@ -3069,13 +3111,13 @@ gtag('config', 'G-2M6V79H761');
 <div className="space-y-2">
 <div className="flex items-center justify-between rounded-lg border p-3" style={{borderColor: 'var(--border)'}}>
 <span className="text-sm">Slack</span>
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                       připojeno
                     </span>
 </div>
 <div className="flex items-center justify-between rounded-lg border p-3" style={{borderColor: 'var(--border)'}}>
 <span className="text-sm">Google Drive</span>
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                       připojeno
                     </span>
 </div>
@@ -3087,7 +3129,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex items-center justify-between rounded-lg border p-3" style={{borderColor: 'var(--border)'}}>
 <span className="text-sm">Fakturoid</span>
-<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16,185,129,0.1)', color: 'var(--success)'}}>
+<span className="text-xs px-1.5 py-0.5 rounded" style={{background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)'}}>
                       připojeno
                     </span>
 </div>

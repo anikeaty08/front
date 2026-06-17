@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -290,6 +326,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -493,7 +535,7 @@ gtag('config', 'G-2M6V79H761');
               просторные массажные кабинеты.
             </p>
 </div>
-<div className="service-card reveal-child" style={{-MouseX: '395px', -MouseY: '241.21875px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '395px', '--mouse-y': '241.21875px'}}>
 <div className="service-card-number">02</div>
 <div className="service-card-icon">
 <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:sofa-2-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -507,7 +549,7 @@ gtag('config', 'G-2M6V79H761');
               окруженные лаунж-зонами.
             </p>
 </div>
-<div className="service-card reveal-child" style={{-MouseX: '5px', -MouseY: '207.21875px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '5px', '--mouse-y': '207.21875px'}}>
 <div className="service-card-number">03</div>
 <div className="service-card-icon">
 <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:streets-map-point-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -522,7 +564,7 @@ gtag('config', 'G-2M6V79H761');
               исключительно для резидентов.
             </p>
 </div>
-<div className="service-card reveal-child" style={{-MouseX: '433px', -MouseY: '224px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '433px', '--mouse-y': '224px'}}>
 <div className="service-card-number">04</div>
 <div className="service-card-icon">
 <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:lightbulb-bolt-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -535,7 +577,7 @@ gtag('config', 'G-2M6V79H761');
               современном оборудовании.
             </p>
 </div>
-<div className="service-card reveal-child" style={{-MouseX: '193px', -MouseY: '217px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '193px', '--mouse-y': '217px'}}>
 <div className="service-card-number">05</div>
 <div className="service-card-icon">
 <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:home-angle-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">

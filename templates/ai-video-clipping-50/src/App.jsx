@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -25,7 +67,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="pointer-none absolute inset-0 overflow-hidden">
 <div className="absolute -top-24 left-1/2 h- w-72translate-1/2 rounded-full bg-violet-500/10-3xl"></div>
 <div className="right-[8%] top-24 h-56 w-56 rounded-full bg-green-/10 blur-3"></div>
-<div className="absolute inset-0 opacity-[0.08]" style={{backgroundImage: 'linear-gradientgba(255,255,2550.06) .0625rem, transparent .0625rem), linear-gradient(90deg, rgba(255,,255,0.06) 0.062rem, transparent 0.0625rem background:2 2rem'}}></div>
+<div className="absolute inset-0 opacity-[0.08]" style={{backgroundImage: 'linear-gradientgba(255, 255, 2550.06) .0625rem, transparent .0625rem), linear-gradient(90deg, rgba(255,,255,0.06) 0.062rem, transparent 0.0625rem background: 2 2rem'}}></div>
 <div className="inset-0 top-24 h-px bg-gradient-to-r from-transparent via-violet-40030 to-transparent"></div>
 <div="absolute animate-pulsediv="" bg-green-400="" h-1.5="" left-[12%]="" rounded-full="" shadow-[0__1.rem_rgba(74,222,128,09="" top-[22%]="" w-1.5="">
 <div className="absolute right-[16%] top-[28%] h-1 w-1-full bg-violet400 shadow-[0_0_1.25rem_rgba167139,250,0.9)] animate-pulse"></div>

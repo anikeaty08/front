@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -22,6 +58,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -44,7 +86,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="flex items-center gap-3">
 <a className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-neutral-700 hover:text-neutral-900" href="#how">
-<iconify-icon className="w-5 h-5" icon="lucide:play-circle" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5" icon="lucide:play-circle" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Voir comment ça fonctionne
             </a>
 <a className="inline-flex items-center justify-center rounded-md bg-neutral-900 text-neutral-50 text-sm font-medium px-4 py-2 hover:bg-neutral-800" href="#pricing">
@@ -86,19 +128,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-8 grid grid-cols-2 gap-4 text-xs text-neutral-600">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:link-2" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:link-2" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                 Lien unique à partager
               </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:mouse-pointer-click" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:mouse-pointer-click" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                 Réponse en 3 secondes
               </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:smartphone" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:smartphone" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                 100% mobile
               </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:user-x" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:user-x" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                 Sans compte joueur
               </div>
 </div>
@@ -111,7 +153,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <div className="text-sm font-medium text-neutral-700">Avant</div>
 <span className="inline-flex items-center gap-1 rounded-full bg-neutral-100 text-neutral-800 px-2 py-1 text-xs font-medium">
-<iconify-icon className="w-4 h-4" icon="lucide:message-circle-x" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4" icon="lucide:message-circle-x" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                     WhatsApp
                   </span>
 </div>
@@ -130,7 +172,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   </div>
 </div>
 <div className="mt-3 flex items-center gap-2 text-xs text-neutral-600">
-<iconify-icon className="w-4 h-4 text-amber-600" icon="lucide:triangle-alert" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-amber-600" icon="lucide:triangle-alert" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                   Réponses éparpillées, messages noyés, stress avant l’entraînement.
                 </div>
 </div>
@@ -139,7 +181,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <div className="text-sm font-medium text-neutral-700">Après</div>
 <span className="inline-flex items-center gap-1 rounded-full bg-neutral-900 text-neutral-50 px-2 py-1 text-xs font-medium">
-<iconify-icon className="w-4 h-4" icon="lucide:check-circle-2" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4" icon="lucide:check-circle-2" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                     Présences Pro
                   </span>
 </div>
@@ -161,27 +203,27 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between p-2 text-xs">
 <span className="text-neutral-700">M. Diallo</span>
 <span className="inline-flex items-center gap-1 text-green-700">
-<iconify-icon className="w-3.5 h-3.5" icon="lucide:check" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-3.5 h-3.5" icon="lucide:check" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                       Présent
                     </span>
 </div>
 <div className="flex items-center justify-between p-2 text-xs">
 <span className="text-neutral-700">A. Martin</span>
 <span className="inline-flex items-center gap-1 text-red-700">
-<iconify-icon className="w-3.5 h-3.5" icon="lucide:x" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-3.5 h-3.5" icon="lucide:x" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                       Absent
                     </span>
 </div>
 <div className="flex items-center justify-between p-2 text-xs">
 <span className="text-neutral-700">S. Lopez</span>
 <span className="inline-flex items-center gap-1 text-amber-700">
-<iconify-icon className="w-3.5 h-3.5" icon="lucide:clock" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-3.5 h-3.5" icon="lucide:clock" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                       En attente
                     </span>
 </div>
 </div>
 <div className="mt-3 flex items-center gap-2 text-xs text-neutral-600">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:bar-chart-3" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:bar-chart-3" style={{'--svg-stroke': '1.5'}}></iconify-icon>
                   Stats d’assiduité objectives pour décider sereinement.
                 </div>
 </div>
@@ -200,7 +242,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative aspect-video rounded-xl border border-neutral-200 bg-neutral-100 overflow-hidden">
 <button className="absolute inset-0 w-full h-full flex items-center justify-center group" id="videoPlay">
 <div className="rounded-full bg-white/90 backdrop-blur border border-neutral-200 inline-flex items-center gap-2 px-4 py-2 shadow-sm">
-<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:play" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:play" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 <span className="text-sm font-medium text-neutral-900">Lire la vidéo</span>
 </div>
 </button>
@@ -213,28 +255,28 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div className="rounded-xl border border-neutral-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-5 h-5 text-amber-600" icon="lucide:alert-triangle" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-amber-600" icon="lucide:alert-triangle" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 <h2 className="text-2xl font-semibold tracking-tight">Le problème (reconnaissance immédiate)</h2>
 </div>
 <div className="mt-4 grid grid-cols-1 gap-2 text-sm">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Messages noyés dans WhatsApp
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Réponses tardives ou ambiguës
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Emojis sans contexte
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Compilation mentale stressante avant chaque match
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-red-600" icon="lucide:x-circle" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Décisions prises “au feeling”
             </div>
 </div>
@@ -251,22 +293,22 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rounded-xl border border-neutral-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:check-circle-2" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:check-circle-2" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 <h2 className="text-2xl font-semibold tracking-tight">La solution</h2>
 </div>
 <p className="mt-3 text-sm text-neutral-700">Un lien. Une réponse. Une vision claire.</p>
 <p className="mt-1 text-sm text-neutral-700">Avec Présences Pro, vous remplacez le chaos par un système simple et équitable.</p>
 <div className="mt-4 grid grid-cols-1 gap-2 text-sm">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:link" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:link" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Un lien unique pour votre équipe
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:zap" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:zap" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Une réponse en 3 secondes pour les joueurs
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:bar-chart-3" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:bar-chart-3" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Un tableau de bord clair pour le coach
             </div>
 </div>
@@ -283,48 +325,48 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div className="rounded-xl border border-neutral-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-5 h-5 text-neutral-700" icon="lucide:history" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-700" icon="lucide:history" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 <h2 className="text-2xl font-semibold tracking-tight">Avant (WhatsApp)</h2>
 </div>
 <div className="mt-4 grid grid-cols-1 gap-3 text-sm">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:list" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:list" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               80 messages à relire
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:smile-plus" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:smile-plus" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Des “👍” sans contexte
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:search-x" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:search-x" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Des réponses perdues
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:timer" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-700" icon="lucide:timer" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Du stress inutile
             </div>
 </div>
 </div>
 <div className="rounded-xl border border-neutral-200 bg-white p-5">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:sparkles" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:sparkles" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 <h2 className="text-2xl font-semibold tracking-tight">Après (Présences Pro)</h2>
 </div>
 <div className="mt-4 grid grid-cols-1 gap-3 text-sm">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-green-700" icon="lucide:list-checks" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-green-700" icon="lucide:list-checks" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               ✅ Présents / ❌ Absents / ⏳ En attente
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:list-tree" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:list-tree" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Liste claire et à jour
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:bar-chart-3" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:bar-chart-3" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Statistiques d’assiduité
             </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:scale" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:scale" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Décisions justifiées et sereines
             </div>
 </div>
@@ -360,7 +402,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4 flex items-center justify-between rounded-lg border border-neutral-200 bg-neutral-50 p-3">
 <div className="truncate text-xs text-neutral-700">presences.pro/votre-equipe-evenement</div>
 <button className="inline-flex items-center gap-1 text-xs font-medium text-neutral-900 hover:opacity-80">
-<iconify-icon className="w-4 h-4" icon="lucide:copy" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4" icon="lucide:copy" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Copier
             </button>
 </div>
@@ -374,17 +416,17 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-sm text-neutral-700">Ouvrent le lien • Sélectionnent leur nom • Cliquent Je viens / Je ne viens pas</p>
 <div className="mt-4 grid grid-cols-3 gap-2">
 <button className="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-xs font-medium text-green-800 inline-flex items-center justify-center gap-1">
-<iconify-icon className="w-4 h-4" icon="lucide:check" style={{-SvgStroke: '1.5'}}></iconify-icon> Je viens
+<iconify-icon className="w-4 h-4" icon="lucide:check" style={{'--svg-stroke': '1.5'}}></iconify-icon> Je viens
             </button>
 <button className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-800 inline-flex items-center justify-center gap-1">
-<iconify-icon className="w-4 h-4" icon="lucide:x" style={{-SvgStroke: '1.5'}}></iconify-icon> Je ne viens pas
+<iconify-icon className="w-4 h-4" icon="lucide:x" style={{'--svg-stroke': '1.5'}}></iconify-icon> Je ne viens pas
             </button>
 <button className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800 inline-flex items-center justify-center gap-1">
-<iconify-icon className="w-4 h-4" icon="lucide:clock" style={{-SvgStroke: '1.5'}}></iconify-icon> En attente
+<iconify-icon className="w-4 h-4" icon="lucide:clock" style={{'--svg-stroke': '1.5'}}></iconify-icon> En attente
             </button>
 </div>
 <div className="mt-3 inline-flex items-center gap-2 text-xs text-neutral-700">
-<iconify-icon className="w-4 h-4" icon="lucide:timer" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4" icon="lucide:timer" style={{'--svg-stroke': '1.5'}}></iconify-icon>
             ⏱️ Temps moyen : 3 secondes
           </div>
 </div>
@@ -471,7 +513,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm text-neutral-700">Absences non justifiées</div>
 <div className="mt-1 text-2xl font-semibold tracking-tight">3</div>
 <div className="mt-2 flex items-center gap-2 text-xs text-neutral-600">
-<iconify-icon className="w-4 h-4" icon="lucide:info" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4" icon="lucide:info" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Base de décision pour les compositions et convocations.
             </div>
 </div>
@@ -482,24 +524,24 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-screen-xl px-5 sm:px-6 lg:px-8 py-10 md:py-14">
 <div className="rounded-xl border border-neutral-200 bg-white p-6">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:users" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-900" icon="lucide:users" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 <h3 className="text-xl font-semibold tracking-tight">Pour qui ?</h3>
 </div>
 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{'--svg-stroke': '1.5'}}></iconify-icon>
             Clubs amateurs (foot, basket, hand, rugby…)
           </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{'--svg-stroke': '1.5'}}></iconify-icon>
             Entraîneurs bénévoles ou semi-pro
           </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{'--svg-stroke': '1.5'}}></iconify-icon>
             Managers d’équipes jeunes ou seniors
           </div>
 <div className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:check" style={{'--svg-stroke': '1.5'}}></iconify-icon>
             Toute équipe fatiguée du chaos WhatsApp
           </div>
 </div>
@@ -513,19 +555,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-neutral-700 text-base">Accès à vie – 19 €</p>
 <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
 <li className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:infinity" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:infinity" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Utilisation illimitée pour une équipe
             </li>
 <li className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:calendar-range" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:calendar-range" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Tous les événements de la saison
             </li>
 <li className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:badge-check" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:badge-check" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Aucun abonnement
             </li>
 <li className="flex items-center gap-2">
-<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:shield" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4 text-neutral-900" icon="lucide:shield" style={{'--svg-stroke': '1.5'}}></iconify-icon>
               Aucune carte cachée
             </li>
 </ul>
@@ -542,7 +584,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             Commencer maintenant
           </a>
 <div className="mt-3 flex items-center justify-center gap-2 text-xs text-neutral-600">
-<iconify-icon className="w-4 h-4" icon="lucide:lock" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-4 h-4" icon="lucide:lock" style={{'--svg-stroke': '1.5'}}></iconify-icon>
             Paiement sécurisé
           </div>
 </div>
@@ -557,35 +599,35 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <details className="group rounded-lg border border-neutral-200 bg-white p-4">
 <summary className="flex cursor-pointer list-none items-center justify-between">
 <span className="text-sm font-medium">Les joueurs doivent-ils créer un compte ?</span>
-<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-2 text-sm text-neutral-700">Non. Ils sélectionnent simplement leur nom et répondent.</p>
 </details>
 <details className="group rounded-lg border border-neutral-200 bg-white p-4">
 <summary className="flex cursor-pointer list-none items-center justify-between">
 <span className="text-sm font-medium">Est-ce une application à installer ?</span>
-<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-2 text-sm text-neutral-700">Non. Tout fonctionne via un lien web, mobile-first.</p>
 </details>
 <details className="group rounded-lg border border-neutral-200 bg-white p-4">
 <summary className="flex cursor-pointer list-none items-center justify-between">
 <span className="text-sm font-medium">Est-ce que ça remplace WhatsApp ?</span>
-<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-2 text-sm text-neutral-700">Non. Ça le complète intelligemment.</p>
 </details>
 <details className="group rounded-lg border border-neutral-200 bg-white p-4">
 <summary className="flex cursor-pointer list-none items-center justify-between">
 <span className="text-sm font-medium">Fonctionne-t-il sur tous les téléphones ?</span>
-<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-2 text-sm text-neutral-700">Oui. Android, iPhone, aucun téléchargement requis.</p>
 </details>
 <details className="group rounded-lg border border-neutral-200 bg-white p-4">
 <summary className="flex cursor-pointer list-none items-center justify-between">
 <span className="text-sm font-medium">Puis-je l’utiliser pour plusieurs événements ?</span>
-<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{-SvgStroke: '1.5'}}></iconify-icon>
+<iconify-icon className="w-5 h-5 text-neutral-700 transition-transform group-open:rotate-180" icon="lucide:chevron-down" style={{'--svg-stroke': '1.5'}}></iconify-icon>
 </summary>
 <p className="mt-2 text-sm text-neutral-700">Oui, autant que vous voulez.</p>
 </details>

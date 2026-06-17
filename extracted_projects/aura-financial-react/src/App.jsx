@@ -3,6 +3,42 @@ import UnicornScene from "unicornstudio-react";
 
 const useAOS = () => {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -42,10 +78,8 @@ const SpotlightCard = ({ children, className, delay }) => {
       />
       <div 
         className="pointer-events-none absolute inset-0 rounded-[32px] border border-brand-sky/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-50" 
-        style={{
-          maskImage: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), black, transparent)',
-          WebkitMaskImage: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), black, transparent)'
-        }}
+        style={{maskImage: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), black, transparent)',
+          WebkitMaskImage: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), black, transparent)'}}
       />
       {children}
     </div>
@@ -57,7 +91,7 @@ function App() {
 
   return (
     <>
-      <div className="aura-background-component top-0 w-full h-screen -z-10 fixed" data-alpha-mask="80" style={{ maskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)' }}>
+      <div className="aura-background-component top-0 w-full h-screen -z-10 fixed" data-alpha-mask="80" style={{maskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)'}}>
         <div className="aura-background-component top-0 w-full -z-10 absolute h-full">
           <UnicornScene projectId="FixNvEwvWwbu3QX9qC3F" sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js" className="absolute w-full h-full left-0 top-0 -z-10" />
         </div>
@@ -68,7 +102,7 @@ function App() {
       <nav className="fixed -translate-x-1/2 flex shadow-black/50 transition-all duration-300 hover:border-white/20 hover:shadow-brand-sky/5 bg-gradient-to-br from-white/10 to-white/0 w-full lg:w-fit max-w-[90vw] z-50 rounded-full ring-white/10 ring-1 pt-1.5 pr-1.5 pb-1.5 pl-4 top-6 left-1/2 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] backdrop-blur-xl items-center justify-between">
         <div className="flex gap-2.5 items-center mr-8">
           <div className="relative flex items-center justify-center">
-             <iconify-icon icon="solar:layers-minimalistic-bold-duotone" width="24" height="24" style={{ color: '#38bdf8' }}></iconify-icon>
+             <iconify-icon icon="solar:layers-minimalistic-bold-duotone" width="24" height="24" style={{color: '#38bdf8'}}></iconify-icon>
           </div>
           <span className="font-sans font-medium text-base tracking-tight text-white">Aura</span>
         </div>
@@ -109,7 +143,7 @@ function App() {
               <span>Initialize Protocol</span>
             </button>
 
-            <button className="hover:bg-white/10 hover:text-white transition-all flex text-sm font-medium text-slate-300 bg-white/5 rounded-full pt-3 pr-6 pb-3 pl-6 gap-2 items-center group" style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)', position: 'relative', '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15))', '--border-radius-before': '9999px' }}>
+            <button className="hover:bg-white/10 hover:text-white transition-all flex text-sm font-medium text-slate-300 bg-white/5 rounded-full pt-3 pr-6 pb-3 pl-6 gap-2 items-center group" style={{boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)', position: 'relative', '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15))', '--border-radius-before': '9999px'}}>
               <span className="text-sm font-medium tracking-tight">View Ecosystem</span>
               <iconify-icon icon="solar:arrow-right-linear" width="16" height="16" className="opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"></iconify-icon>
             </button>
@@ -130,15 +164,15 @@ function App() {
             </g>
             <g>
               <path d="M -50 450 C 100 450, 100 300, 300 300" fill="none" stroke="white" strokeWidth="1" className="opacity-[0.08]" />
-              <path d="M -50 450 C 100 450, 100 300, 300 300" fill="none" stroke="#38BDF8" strokeWidth="1.5" className="beam-line animate-beam opacity-60" style={{ animationDelay: '-1s' }} />
+              <path d="M -50 450 C 100 450, 100 300, 300 300" fill="none" stroke="#38BDF8" strokeWidth="1.5" className="beam-line animate-beam opacity-60" style={{animationDelay: '-1s'}} />
             </g>
             <g>
               <path d="M 650 100 C 500 100, 500 300, 300 300" fill="none" stroke="white" strokeWidth="1" className="opacity-[0.08]" />
-              <path d="M 650 100 C 500 100, 500 300, 300 300" fill="none" stroke="#38BDF8" strokeWidth="1.5" className="beam-line animate-beam opacity-60" style={{ animationDelay: '-2s' }} />
+              <path d="M 650 100 C 500 100, 500 300, 300 300" fill="none" stroke="#38BDF8" strokeWidth="1.5" className="beam-line animate-beam opacity-60" style={{animationDelay: '-2s'}} />
             </g>
             <g>
               <path d="M 650 500 C 500 500, 500 300, 300 300" fill="none" stroke="white" strokeWidth="1" className="opacity-[0.08]" />
-              <path d="M 650 500 C 500 500, 500 300, 300 300" fill="none" stroke="#38BDF8" strokeWidth="1.5" className="beam-line animate-beam opacity-60" style={{ animationDelay: '-1.5s' }} />
+              <path d="M 650 500 C 500 500, 500 300, 300 300" fill="none" stroke="#38BDF8" strokeWidth="1.5" className="beam-line animate-beam opacity-60" style={{animationDelay: '-1.5s'}} />
             </g>
 
             <g transform="translate(300, 300)">
@@ -150,7 +184,7 @@ function App() {
               <circle r="65" fill="none" stroke="white" strokeOpacity="0.1" strokeWidth="1" strokeDasharray="10 20" className="animate-spin-slow" />
               <circle r="45" fill="none" stroke="#38BDF8" strokeOpacity="0.2" strokeWidth="1" strokeDasharray="4 6" className="animate-spin-slow-reverse" />
 
-              <g className="animate-spin-slow" style={{ animationDuration: '20s' }}>
+              <g className="animate-spin-slow" style={{animationDuration: '20s'}}>
                 <path d="M -80 0 L -70 0" stroke="white" strokeOpacity="0.2" />
                 <path d="M 80 0 L 70 0" stroke="white" strokeOpacity="0.2" />
                 <path d="M 0 -80 L 0 -70" stroke="white" strokeOpacity="0.2" />
@@ -185,13 +219,13 @@ function App() {
           <div className="flex flex-col lg:flex-row overflow-hidden opacity-50 w-full pt-6 gap-x-6 gap-y-6 items-center justify-between">
             <div className="flex-1 overflow-hidden mask-gradient-fade w-full relative">
               <div className="flex animate-marquee hover:[animation-play-state:paused] w-max gap-x-32 gap-y-16 items-center">
-                <iconify-icon icon="simple-icons:vercel" width="124" height="28" style={{ color: 'white' }}></iconify-icon>
-                <iconify-icon icon="simple-icons:amplitude" width="124" height="28" style={{ color: 'white' }}></iconify-icon>
-                <iconify-icon icon="simple-icons:anthropic" width="96" height="30" style={{ color: 'white' }}></iconify-icon>
+                <iconify-icon icon="simple-icons:vercel" width="124" height="28" style={{color: 'white'}}></iconify-icon>
+                <iconify-icon icon="simple-icons:amplitude" width="124" height="28" style={{color: 'white'}}></iconify-icon>
+                <iconify-icon icon="simple-icons:anthropic" width="96" height="30" style={{color: 'white'}}></iconify-icon>
                 
-                <iconify-icon icon="simple-icons:vercel" width="124" height="28" style={{ color: 'white' }}></iconify-icon>
-                <iconify-icon icon="simple-icons:amplitude" width="124" height="28" style={{ color: 'white' }}></iconify-icon>
-                <iconify-icon icon="simple-icons:anthropic" width="96" height="30" style={{ color: 'white' }}></iconify-icon>
+                <iconify-icon icon="simple-icons:vercel" width="124" height="28" style={{color: 'white'}}></iconify-icon>
+                <iconify-icon icon="simple-icons:amplitude" width="124" height="28" style={{color: 'white'}}></iconify-icon>
+                <iconify-icon icon="simple-icons:anthropic" width="96" height="30" style={{color: 'white'}}></iconify-icon>
               </div>
             </div>
             <div className="flex items-center gap-3 text-white/30 text-xs font-mono shrink-0 relative z-10 bg-[#030303] pl-4 lg:bg-transparent lg:pl-0">
@@ -495,7 +529,7 @@ function App() {
             </div>
 
             <div className="lg:w-1/2 bg-[#050505] relative min-h-[400px] border-t lg:border-t-0 lg:border-l border-white/5 overflow-hidden flex items-center justify-center">
-              <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '48px 96px' }}></div>
+              <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '48px 96px'}}></div>
               <div className="relative w-full h-full flex items-center justify-center p-12 perspective-1000">
                 <div className="relative w-72 h-56 transform [transform:rotateX(6deg)_rotateY(-6deg)] hover:[transform:rotateX(0deg)_rotateY(0deg)] transition-transform duration-700 ease-out">
                   
@@ -588,7 +622,7 @@ function App() {
           <div className="lg:col-span-3 flex flex-col gap-8">
             <div className="flex items-center gap-3">
               <div className="relative flex items-center justify-center w-10 h-10 bg-white/5 rounded-xl border border-white/10 shadow-[0_0_15px_rgba(56,189,248,0.15)]">
-                 <iconify-icon icon="solar:layers-minimalistic-bold-duotone" width="24" height="24" style={{ color: '#38bdf8' }}></iconify-icon>
+                 <iconify-icon icon="solar:layers-minimalistic-bold-duotone" width="24" height="24" style={{color: '#38bdf8'}}></iconify-icon>
               </div>
               <span className="font-serif font-medium text-2xl tracking-tight text-white">Aura</span>
             </div>

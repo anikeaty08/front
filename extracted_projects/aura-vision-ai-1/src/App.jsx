@@ -7,6 +7,42 @@ function AuraBackground() {
   const glowRef = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const onMove = (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 140;
       const y = (e.clientY / window.innerHeight - 0.5) * 100;
@@ -27,21 +63,14 @@ function AuraBackground() {
       >
         <div
           className="absolute left-1/2 top-full -translate-x-1/2 -translate-y-1/3 w-[150vmax] h-[95vmax] rounded-full"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(204,128,51,0.45) 0%, rgba(153,38,0,0.32) 26%, rgba(38,5,0,0.55) 54%, transparent 74%)",
-            filter: "blur(40px)",
-          }}
+          style={{background: "radial-gradient(ellipse at center, rgba(204, 128, 51, 0.45) 0%, rgba(153, 38, 0, 0.32) 26%, rgba(38, 5, 0, 0.55) 54%, transparent 74%)", filter: "blur(40px)"}}
         />
       </div>
 
       {/* Subtle diagonal texture */}
       <div
         className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 1px, transparent 1px, transparent 24px)",
-        }}
+        style={{backgroundImage: "repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 1px, transparent 1px, transparent 24px)"}}
       />
 
       {/* Precision grid */}
@@ -120,7 +149,7 @@ function Header({ onAccess }) {
 
       <div
         className="hidden md:inline-flex relative group rounded-full"
-        style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.02))", padding: "1px" }}
+        style={{background: "linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.02))", padding: "1px"}}
       >
         <button
           onClick={onAccess}
@@ -166,7 +195,7 @@ function Hero({ onEnable }) {
 
   const Word = ({ w, d, dim }) => (
     <span className="word-mask">
-      <span className={`word-inner ${dim ? "text-white/90" : ""}`} style={{ animationDelay: `${d}s` }}>{w}</span>
+      <span className={`word-inner ${dim ? "text-white/90" : ""}`} style={{animationDelay: `${d}s`}}>{w}</span>
     </span>
   );
 
@@ -192,7 +221,7 @@ function Hero({ onEnable }) {
       <p className="max-w-lg mx-auto text-sm sm:text-base text-white/60 font-extralight leading-relaxed mb-12 z-10 flex flex-wrap justify-center">
         {sub.map((w, i) => (
           <span key={i} className="word-mask mr-1.5 align-top">
-            <span className="word-inner" style={{ animationDelay: `${0.45 + i * 0.025}s` }}>{w}</span>
+            <span className="word-inner" style={{animationDelay: `${0.45 + i * 0.025}s`}}>{w}</span>
           </span>
         ))}
       </p>
@@ -208,7 +237,7 @@ function Hero({ onEnable }) {
 
         <div
           className="w-full sm:w-auto relative group rounded-full"
-          style={{ background: "linear-gradient(to bottom right, rgba(255,255,255,0.3), rgba(255,255,255,0.05))", padding: "1px" }}
+          style={{background: "linear-gradient(to bottom right, rgba(255,255,255,0.3), rgba(255,255,255,0.05))", padding: "1px"}}
         >
           <a
             href="#scanner"
@@ -348,12 +377,12 @@ function Scanner({ startSignal }) {
               muted
               autoPlay
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ transform: mirrored ? "scaleX(-1)" : "none" }}
+              style={{transform: mirrored ? "scaleX(-1)" : "none"}}
             />
             <canvas
               ref={overlayRef}
               className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-              style={{ transform: mirrored ? "scaleX(-1)" : "none" }}
+              style={{transform: mirrored ? "scaleX(-1)" : "none"}}
             />
 
             {/* HUD chrome */}

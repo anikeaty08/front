@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -21,10 +63,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 opacity-[0.06] mix-blend-soft-light" style={{backgroundImage: 'url(\'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
 
-<div className="absolute -left-10 top-16 h-[140%] w-px bg-white/80 opacity-70 blur-[0.5px]" style={{boxShadow: '0 0 32px rgba(255,255,255,0.55)', transform: 'rotate(-12deg)'}}></div>
-<div className="absolute left-[20%] -top-24 h-[160%] w-[2px] bg-white/70 opacity-60 blur-[0.5px]" style={{boxShadow: '0 0 26px rgba(255,255,255,0.5)', transform: 'rotate(8deg)'}}></div>
-<div className="absolute right-[15%] top-0 h-[150%] w-px bg-white/60 opacity-60 blur-[0.5px]" style={{boxShadow: '0 0 24px rgba(255,255,255,0.45)', transform: 'rotate(18deg)'}}></div>
-<div className="absolute -right-8 top-10 h-[120%] w-[3px] bg-white/70 opacity-70 blur-[0.5px]" style={{boxShadow: '0 0 36px rgba(255,255,255,0.6)', transform: 'rotate(-6deg)'}}></div>
+<div className="absolute -left-10 top-16 h-[140%] w-px bg-white/80 opacity-70 blur-[0.5px]" style={{boxShadow: '0 0 32px rgba(255, 255, 255, 0.55)', transform: 'rotate(-12deg)'}}></div>
+<div className="absolute left-[20%] -top-24 h-[160%] w-[2px] bg-white/70 opacity-60 blur-[0.5px]" style={{boxShadow: '0 0 26px rgba(255, 255, 255, 0.5)', transform: 'rotate(8deg)'}}></div>
+<div className="absolute right-[15%] top-0 h-[150%] w-px bg-white/60 opacity-60 blur-[0.5px]" style={{boxShadow: '0 0 24px rgba(255, 255, 255, 0.45)', transform: 'rotate(18deg)'}}></div>
+<div className="absolute -right-8 top-10 h-[120%] w-[3px] bg-white/70 opacity-70 blur-[0.5px]" style={{boxShadow: '0 0 36px rgba(255, 255, 255, 0.6)', transform: 'rotate(-6deg)'}}></div>
 
 <div className="absolute left-0 right-0 top-[28%] h-px bg-white/10"></div>
 </div>
@@ -275,8 +317,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="relative z-10 pb-20">
 <div className="mx-auto max-w-7xl px-6">
 <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.06))] p-8 md:p-10 backdrop-blur-2xl ring-1 ring-inset ring-white/10">
-<div className="absolute -right-8 -top-8 h-40 w-px bg-white/70 opacity-70" style={{boxShadow: '0 0 26px rgba(255,255,255,0.55)', transform: 'rotate(35deg)'}}></div>
-<div className="absolute -left-10 -bottom-10 h-48 w-[3px] bg-white/60 opacity-70" style={{boxShadow: '0 0 36px rgba(255,255,255,0.6)', transform: 'rotate(-22deg)'}}></div>
+<div className="absolute -right-8 -top-8 h-40 w-px bg-white/70 opacity-70" style={{boxShadow: '0 0 26px rgba(255, 255, 255, 0.55)', transform: 'rotate(35deg)'}}></div>
+<div className="absolute -left-10 -bottom-10 h-48 w-[3px] bg-white/60 opacity-70" style={{boxShadow: '0 0 36px rgba(255, 255, 255, 0.6)', transform: 'rotate(-22deg)'}}></div>
 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
 <div>
 <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-white">Ready to modernize mission-critical procurement?</h3>

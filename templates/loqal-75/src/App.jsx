@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -32,6 +68,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -117,21 +159,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="lg:col-span-8 grid sm:grid-cols-3 gap-4 gap-x-4 gap-y-4">
-<div className="spotlight-card bg-white border-gray-200 border rounded-3xl pt-6 pr-6 pb-6 pl-6" onmousemove="handleSpotlight(event)" style={{-MouseX: '120.34375px', -MouseY: '10.5px'}}>
+<div className="spotlight-card bg-white border-gray-200 border rounded-3xl pt-6 pr-6 pb-6 pl-6" onmousemove="handleSpotlight(event)" style={{'--mouse-x': '120.34375px', '--mouse-y': '10.5px'}}>
 <div className="w-10 h-10 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center mb-4">
 <iconify-icon icon="lucide:ban"></iconify-icon>
 </div>
 <h3 className="font-medium text-gray-900 mb-2 text-sm" style={{}}>Keine Website</h3>
 <p className="leading-relaxed text-xs text-gray-500" style={{}}>Sie verlieren täglich potenzielle Kunden an die Konkurrenz.</p>
 </div>
-<div className="bg-white rounded-3xl p-6 border border-gray-200 spotlight-card" onmousemove="handleSpotlight(event)" style={{-MouseX: '216.90625px', -MouseY: '36.5px'}}>
+<div className="bg-white rounded-3xl p-6 border border-gray-200 spotlight-card" onmousemove="handleSpotlight(event)" style={{'--mouse-x': '216.90625px', '--mouse-y': '36.5px'}}>
 <div className="w-10 h-10 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center mb-4">
 <iconify-icon icon="lucide:smartphone-off"></iconify-icon>
 </div>
 <h3 className="font-medium text-gray-900 mb-2 text-sm" style={{}}>Veraltete Technik</h3>
 <p className="leading-relaxed text-xs text-gray-500" style={{}}>Nicht mobil-optimiert oder bei Google unauffindbar.</p>
 </div>
-<div className="bg-white rounded-3xl p-6 border border-gray-200 spotlight-card" onmousemove="handleSpotlight(event)" style={{-MouseX: '101.453125px', -MouseY: '97.5px'}}>
+<div className="bg-white rounded-3xl p-6 border border-gray-200 spotlight-card" onmousemove="handleSpotlight(event)" style={{'--mouse-x': '101.453125px', '--mouse-y': '97.5px'}}>
 <div className="w-10 h-10 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center mb-4">
 <iconify-icon icon="lucide:wallet"></iconify-icon>
 </div>

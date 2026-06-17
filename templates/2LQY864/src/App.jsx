@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Dark mode toggle script
@@ -71,6 +107,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -79,7 +121,7 @@ export default function App() {
 
 <header className="fixed top-0 left-0 w-full z-30 bg-[--background] bg-opacity-80 border-b border-[--muted] shadow-sm transition">
 <nav className="container mx-auto px-4 py-3 flex items-center justify-between">
-<a className="text-3xl font-bold text-[--primary]" href="/" style={{fontFamily: 'Oxanium,sans-serif'}}>Mosivant</a>
+<a className="text-3xl font-bold text-[--primary]" href="/" style={{fontFamily: 'Oxanium, sans-serif'}}>Mosivant</a>
 <div className="hidden md:flex gap-8 items-center text-lg">
 <a className="hover:text-[--primary] transition" href="/services">Services</a>
 <a className="hover:text-[--primary] transition" href="/about">About</a>
@@ -117,7 +159,7 @@ export default function App() {
 <section className="relative flex flex-col items-center justify-center text-center pt-36 pb-16 bg-gradient-to-br from-[--primary]/20 via-[--accent]/10 to-[--secondary]/10 overflow-hidden">
 <div className="absolute -top-24 -left-24 w-72 h-72 bg-[--primary]/20 rounded-full blur-2xl animate-pulse"></div>
 <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[--accent]/10 rounded-full blur-3xl"></div>
-<h1 className="text-5xl md:text-6xl font-bold mb-6" style={{fontFamily: 'Oxanium,sans-serif'}}>
+<h1 className="text-5xl md:text-6xl font-bold mb-6" style={{fontFamily: 'Oxanium, sans-serif'}}>
       Modern IT Consulting<br/>
 <span className="text-[--primary]">for Forward-Thinking Teams</span>
 </h1>
@@ -134,7 +176,7 @@ export default function App() {
 </section>
 
 <section className="container mx-auto px-4 py-16">
-<h2 className="text-3xl font-bold mb-10 text-center" style={{fontFamily: 'Oxanium,sans-serif'}}>Our Solutions</h2>
+<h2 className="text-3xl font-bold mb-10 text-center" style={{fontFamily: 'Oxanium, sans-serif'}}>Our Solutions</h2>
 <div className="grid md:grid-cols-4 gap-8">
 <div className="bg-[--card] rounded-lg shadow p-6 flex flex-col items-center text-center">
 <div className="mb-3 text-[--primary]">
@@ -168,7 +210,7 @@ export default function App() {
 </section>
 
 <section className="bg-gradient-to-r from-[--primary]/10 via-[--accent]/10 to-[--secondary]/10 py-16">
-<h2 className="text-3xl font-bold text-center mb-8" style={{fontFamily: 'Oxanium,sans-serif'}}>Client Success Stories</h2>
+<h2 className="text-3xl font-bold text-center mb-8" style={{fontFamily: 'Oxanium, sans-serif'}}>Client Success Stories</h2>
 <div className="relative max-w-2xl mx-auto">
 <div className="bg-[--card] rounded-lg shadow p-10 text-center transition" id="testimonialCarousel">
 <div className="text-xl mb-4 italic text-[--muted-foreground]" id="testimonialQuote"></div>
@@ -184,7 +226,7 @@ export default function App() {
 </section>
 
 <section className="container mx-auto px-4 py-20 text-center">
-<h2 className="text-3xl font-bold mb-6" style={{fontFamily: 'Oxanium,sans-serif'}}>Ready to Transform Your Tech?</h2>
+<h2 className="text-3xl font-bold mb-6" style={{fontFamily: 'Oxanium, sans-serif'}}>Ready to Transform Your Tech?</h2>
 <p className="mb-8 text-lg text-[--muted-foreground]">Let’s discuss how Mosivant can help your business succeed with technology.</p>
 <a className="px-10 py-5 rounded bg-[--primary] text-[--primary-foreground] font-bold shadow hover:bg-[--accent] transition text-lg" href="/booking">Book a Free Consultation</a>
 </section>
@@ -192,7 +234,7 @@ export default function App() {
 <footer className="bg-[--card] border-t border-[--muted] mt-auto">
 <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
 <div>
-<span className="font-bold text-[--primary]" style={{fontFamily: 'Oxanium,sans-serif'}}>Mosivant</span>
+<span className="font-bold text-[--primary]" style={{fontFamily: 'Oxanium, sans-serif'}}>Mosivant</span>
 <span className="ml-3 text-[--muted-foreground]">© 2024 All rights reserved.</span>
 </div>
 <nav className="flex gap-5">

@@ -20,6 +20,42 @@ export default function App() {
 
     // Initialize config from localStorage
     useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
         const saved = localStorage.getItem('styleExtractorConfig');
         if (saved) {
             try {
@@ -315,7 +351,7 @@ export default function App() {
                                     <div className="grid grid-cols-2 gap-3">
                                         {(extractedData.colors || []).map((c, i) => (
                                             <div key={i} className="bg-white border border-neutral-100 rounded-lg p-2 shadow-sm flex items-center gap-3 cursor-pointer hover:bg-neutral-50 transition-colors" onClick={() => copyText(c.hex, `Color ${c.hex}`)} title={`Copy ${c.hex}`}>
-                                                <div className="w-8 h-8 rounded-md shadow-inner border border-black/5 shrink-0" style={{ backgroundColor: c.hex }}></div>
+                                                <div className="w-8 h-8 rounded-md shadow-inner border border-black/5 shrink-0" style={{backgroundColor: c.hex}}></div>
                                                 <div className="flex-1 min-w-0">
                                                     <p className="text-[10px] font-mono text-neutral-500 uppercase truncate">{c.name}</p>
                                                     <p className="text-xs font-semibold text-neutral-900 uppercase">{c.hex}</p>
@@ -337,7 +373,7 @@ export default function App() {
                                                     <span className="text-xs font-medium text-neutral-500 capitalize">{t.role}</span>
                                                     <span className="text-[10px] font-mono text-neutral-400 bg-neutral-100 px-1.5 rounded">{t.family}</span>
                                                 </div>
-                                                <div style={{ fontFamily: `'${t.family}', ${t.substitute || 'sans-serif'}`, fontWeight: t.weights?.[0] || 400, lineHeight: t.lineHeight || 1.2, fontSize: t.sizes?.[0] || '16px' }} className="text-neutral-900 truncate">
+                                                <div style={{fontFamily: `'${t.family}', ${t.substitute || 'sans-serif'}`, fontWeight: t.weights?.[0] || 400, lineHeight: t.lineHeight || 1.2, fontSize: t.sizes?.[0] || '16px'}} className="text-neutral-900 truncate">
                                                     The quick brown fox
                                                 </div>
                                             </div>
@@ -359,7 +395,7 @@ export default function App() {
                                                     <div key={i} className="flex items-center gap-3">
                                                         <div className="w-8 text-[10px] font-mono text-neutral-500 text-right">{s.name}</div>
                                                         <div className="flex-1 bg-neutral-100 rounded-r h-4 flex items-center relative group cursor-help">
-                                                            <div className="bg-neutral-900 h-full rounded-r transition-all" style={{ width: `${width}%` }}></div>
+                                                            <div className="bg-neutral-900 h-full rounded-r transition-all" style={{width: `${width}%`}}></div>
                                                             <span className="absolute left-full ml-2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-mono whitespace-nowrap bg-neutral-800 text-white px-1 rounded z-10">{s.value}</span>
                                                         </div>
                                                     </div>
@@ -370,7 +406,7 @@ export default function App() {
                                         <div className="flex flex-wrap gap-2">
                                             {(extractedData.borderRadius || []).map((r, i) => (
                                                 <div key={i} className="flex items-center gap-2 border border-neutral-100 rounded px-2 py-1 bg-neutral-50">
-                                                    <div className="w-4 h-4 border border-neutral-300 border-t-0 border-l-0" style={{ borderBottomRightRadius: r.value }}></div>
+                                                    <div className="w-4 h-4 border border-neutral-300 border-t-0 border-l-0" style={{borderBottomRightRadius: r.value}}></div>
                                                     <span className="text-[10px] font-mono text-neutral-600">{r.name}: {r.value}</span>
                                                 </div>
                                             ))}

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -58,7 +100,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-full lg:w-[56%] flex flex-col items-start">
 
 <div className="flex flex-col mb-10 gap-x-4 gap-y-4 items-start">
-<div className="inline-flex text-[11px] text-neutral-200 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-4 py-1.5 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex text-[11px] text-neutral-200 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-4 py-1.5 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.85)]"></div>
 <span className="uppercase tracking-[0.22em] text-neutral-400">En uso</span>
 <span className="h-3 w-px bg-neutral-800"></span>
@@ -77,11 +119,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="mt-10 flex flex-col sm:flex-row items-start gap-4">
-<button className="inline-flex text-[15px] hover:bg-amber-200 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 font-medium text-neutral-950 bg-amber-300 rounded-full pt-3.5 pr-7 pb-3.5 pl-7 shadow-[0_20px_45px_rgba(251,191,36,0.7)] gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="button">
+<button className="inline-flex text-[15px] hover:bg-amber-200 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 font-medium text-neutral-950 bg-amber-300 rounded-full pt-3.5 pr-7 pb-3.5 pl-7 shadow-[0_20px_45px_rgba(251,191,36,0.7)] gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="button">
 <i className="lucide w-[20px] h-[20px]" data-lucide="calendar"></i>
 <span>Reserva una demo de 20 min</span>
 </button>
-<button className="inline-flex text-[15px] hover:bg-neutral-900 hover:border-neutral-500 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-100 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-6 py-3 gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="button">
+<button className="inline-flex text-[15px] hover:bg-neutral-900 hover:border-neutral-500 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-100 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-6 py-3 gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="button">
 <i className="lucide w-[16px] h-[16px]" data-lucide="check-circle-2"></i>
 <span>Ver AIOS en acción</span>
 </button>
@@ -128,7 +170,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="CEO revisando panel AIOS" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&amp;fit=crop&amp;w=800&amp;q=80"/>
 </div>
 
-<div className="flex flex-col bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-3xl pt-6 pr-5 pb-6 pl-5 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-3xl pt-6 pr-5 pb-6 pl-5 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="space-y-3">
 <div className="flex items-center justify-between text-[11px] text-neutral-300">
 <span className="uppercase tracking-[0.22em] text-amber-200">Salud operativa</span>
@@ -166,7 +208,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-2 flex flex-col sm:flex-row sm:items-center bg-gradient-to-br from-white/5 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-6 gap-y-6 items-start justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="col-span-2 flex flex-col sm:flex-row sm:items-center bg-gradient-to-br from-white/5 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-6 gap-y-6 items-start justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4">
 <div className="flex flex-none bg-amber-300 w-11 h-11 rounded-3xl shadow-[0_0_0_1px_rgba(250,204,21,0.4)] items-center justify-center">
 <i className="lucide text-neutral-950 w-[20px] h-[20px]" data-lucide="play"></i>
@@ -227,14 +269,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     Toda tu organización, unificada y alineada en un solo panel.
                   </h2>
 </div>
-<div className="inline-flex gap-2 text-[11px] text-neutral-300 bg-neutral-950 rounded-full pt-1.5 pr-4 pb-1.5 pl-4 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex gap-2 text-[11px] text-neutral-300 bg-neutral-950 rounded-full pt-1.5 pr-4 pb-1.5 pl-4 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
 <span className="uppercase tracking-[0.2em] text-neutral-400">Últimos 30 días</span>
 </div>
 </div>
 
 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-<div className="flex flex-col bg-emerald-500/5 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-emerald-500/5 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-[11px] uppercase tracking-[0.22em] text-emerald-300">Iniciativas activas</p>
 <p className="mt-2 text-[20px] font-medium text-neutral-50">128</p>
 <div className="mt-2 flex items-center gap-1.5 text-[11px] text-emerald-300">
@@ -242,7 +284,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>+31% priorizadas con IA</span>
 </div>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Avance estratégico</p>
 <p className="mt-2 text-[20px] font-medium text-neutral-50">72%</p>
 <p className="mt-2 text-[11px] text-neutral-400">Objetivos clave en verde sin más reuniones inútiles.</p>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -440,6 +476,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -664,7 +706,7 @@ addUtilities({
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 relative spotlight-grid" id="specs-grid">
 
-<div className="group relative border-zinc-800 border-r border-b lg:border-b-0 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{-MouseX: '227px', -MouseY: '30.25px'}}>
+<div className="group relative border-zinc-800 border-r border-b lg:border-b-0 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{'--mouse-x': '227px', '--mouse-y': '30.25px'}}>
 
 <div className="pt-8 pr-8 pb-8 pl-8 h-full flex flex-col justify-between relative z-10">
 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
@@ -682,7 +724,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="group relative border-r border-b lg:border-b-0 border-zinc-800 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{-MouseX: '-273.25px', -MouseY: '30.25px'}}>
+<div className="group relative border-r border-b lg:border-b-0 border-zinc-800 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{'--mouse-x': '-273.25px', '--mouse-y': '30.25px'}}>
 <div className="pt-8 pr-8 pb-8 pl-8 h-full flex flex-col justify-between relative z-10">
 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div className="">
@@ -699,7 +741,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="group relative border-r border-b md:border-b-0 border-zinc-800 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{-MouseX: '-773.5px', -MouseY: '30.25px'}}>
+<div className="group relative border-r border-b md:border-b-0 border-zinc-800 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{'--mouse-x': '-773.5px', '--mouse-y': '30.25px'}}>
 <div className="pt-8 pr-8 pb-8 pl-8 h-full flex flex-col justify-between relative z-10">
 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div>
@@ -716,7 +758,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="group relative border-b md:border-b-0 border-zinc-800 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{-MouseX: '-1273.75px', -MouseY: '30.25px'}}>
+<div className="group relative border-b md:border-b-0 border-zinc-800 min-h-[320px] flex flex-col transition-colors z-10 bg-[#050505]/50 card-item spotlight-card" style={{'--mouse-x': '-1273.75px', '--mouse-y': '30.25px'}}>
 <div className="pt-8 pr-8 pb-8 pl-8 h-full flex flex-col justify-between relative z-10">
 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div>
@@ -778,7 +820,7 @@ addUtilities({
 
 <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-12 lg:pb-4 no-scrollbar lg:grid lg:grid-cols-3 perspective-1000" id="card-container">
 
-<div className="min-w-[85vw] md:min-w-[45vw] lg:min-w-0 snap-center group perspective-1000 relative h-[500px] select-card" data-model="vanguard" style={{-MouseX: '391.5px', -MouseY: '363.5px'}}>
+<div className="min-w-[85vw] md:min-w-[45vw] lg:min-w-0 snap-center group perspective-1000 relative h-[500px] select-card" data-model="vanguard" style={{'--mouse-x': '391.5px', '--mouse-y': '363.5px'}}>
 <div className="relative w-full h-full duration-500 preserve-3d transition-transform card-inner cursor-pointer rounded-2xl">
 
 <div className="absolute inset-0 backface-hidden bg-[#080808] border border-zinc-800 rounded-2xl p-8 flex flex-col shadow-2xl overflow-hidden group-hover:border-zinc-500 group-hover:shadow-[0_0_50px_rgba(234,88,12,0.15)] transition-all ease-out">
@@ -827,7 +869,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="min-w-[85vw] md:min-w-[45vw] lg:min-w-0 snap-center group perspective-1000 relative h-[500px] select-card" data-model="sentinel" style={{-MouseX: '103.5px', -MouseY: '316.5px'}}>
+<div className="min-w-[85vw] md:min-w-[45vw] lg:min-w-0 snap-center group perspective-1000 relative h-[500px] select-card" data-model="sentinel" style={{'--mouse-x': '103.5px', '--mouse-y': '316.5px'}}>
 <div className="relative w-full h-full duration-500 preserve-3d transition-transform card-inner cursor-pointer rounded-2xl">
 
 <div className="absolute inset-0 backface-hidden bg-[#080808] border border-zinc-800 rounded-2xl p-8 flex flex-col shadow-2xl overflow-hidden group-hover:border-zinc-500 group-hover:shadow-[0_0_50px_rgba(234,88,12,0.15)] transition-all ease-out">
@@ -875,7 +917,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="min-w-[85vw] md:min-w-[45vw] lg:min-w-0 snap-center group perspective-1000 relative h-[500px] select-card" data-model="goliath" style={{-MouseX: '70.5px', -MouseY: '494.5px'}}>
+<div className="min-w-[85vw] md:min-w-[45vw] lg:min-w-0 snap-center group perspective-1000 relative h-[500px] select-card" data-model="goliath" style={{'--mouse-x': '70.5px', '--mouse-y': '494.5px'}}>
 <div className="relative w-full h-full duration-500 preserve-3d transition-transform card-inner cursor-pointer rounded-2xl">
 
 <div className="absolute inset-0 backface-hidden bg-[#080808] border border-zinc-800 rounded-2xl p-8 flex flex-col shadow-2xl overflow-hidden group-hover:border-zinc-500 group-hover:shadow-[0_0_50px_rgba(234,88,12,0.15)] transition-all ease-out">

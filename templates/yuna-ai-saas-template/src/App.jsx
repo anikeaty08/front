@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -259,6 +295,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1149,19 +1191,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     }
   </style>
 
-<div className="w-24 relative border-t border-l border-r border-dashed border-white/10" style={{-H: '20%', animation: 'barOutlineAnim 6s ease-in-out infinite'}}>
+<div className="w-24 relative border-t border-l border-r border-dashed border-white/10" style={{'--h': '20%', animation: 'barOutlineAnim 6s ease-in-out infinite'}}>
 <div className="absolute bottom-0 left-0 w-full bg-white/[0.02]" style={{animation: 'barFillAnim 6s ease-in-out infinite'}}></div>
 </div>
 
-<div className="w-24 relative border-t border-l border-r border-dashed border-white/10" style={{-H: '40%', animation: 'barOutlineAnim 6s 0.1s ease-in-out infinite'}}>
+<div className="w-24 relative border-t border-l border-r border-dashed border-white/10" style={{'--h': '40%', animation: 'barOutlineAnim 6s 0.1s ease-in-out infinite'}}>
 <div className="absolute bottom-0 left-0 w-full bg-white/[0.02]" style={{animation: 'barFillAnim 6s 0.1s ease-in-out infinite'}}></div>
 </div>
 
-<div className="w-24 relative border-t border-l border-r border-dashed border-white/10" style={{-H: '60%', animation: 'barOutlineAnim 6s 0.2s ease-in-out infinite'}}>
+<div className="w-24 relative border-t border-l border-r border-dashed border-white/10" style={{'--h': '60%', animation: 'barOutlineAnim 6s 0.2s ease-in-out infinite'}}>
 <div className="absolute bottom-0 left-0 w-full bg-white/[0.02]" style={{animation: 'barFillAnim 6s 0.2s ease-in-out infinite'}}></div>
 </div>
 
-<div className="w-24 relative border-t border-l border-r border-dashed border-[#c6f91f]/30" style={{-H: '80%', animation: 'barOutlineAnim 6s 0.3s ease-in-out infinite'}}>
+<div className="w-24 relative border-t border-l border-r border-dashed border-[#c6f91f]/30" style={{'--h': '80%', animation: 'barOutlineAnim 6s 0.3s ease-in-out infinite'}}>
 <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[#c6f91f]">
 <svg fill="currentColor" height="24" stroke="none" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>

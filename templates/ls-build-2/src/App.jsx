@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -229,12 +265,18 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<main className="md:py-8 flex flex-col min-h-screen z-10 group/main cursor-pointer w-full max-w-6xl pt-8 pr-6 pb-8 pl-6 relative" role="button" style={{-MouseX: '739px', -MouseY: '1544px'}}>
+<main className="md:py-8 flex flex-col min-h-screen z-10 group/main cursor-pointer w-full max-w-6xl pt-8 pr-6 pb-8 pl-6 relative" role="button" style={{'--mouse-x': '739px', '--mouse-y': '1544px'}}>
 
 
 <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 main-flashlight transition-opacity duration-300"></div>
@@ -291,7 +333,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </header>
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-in d-3 relative z-10 mb-8">
 
-<div className="lg:col-span-4 p-5 space-y-6 glass-card rounded-xl" style={{-CardX: '715px', -CardY: '1299px'}}>
+<div className="lg:col-span-4 p-5 space-y-6 glass-card rounded-xl" style={{'--card-x': '715px', '--card-y': '1299px'}}>
 <div className="flex items-center gap-2 mb-1 pb-3 border-b border-white/5">
 <iconify-icon className="text-zinc-500" icon="solar:tuning-2-linear"></iconify-icon>
 <h2 className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wide">
@@ -347,7 +389,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
 
-<div className="md:col-span-2 glass-card rounded-xl p-6 relative overflow-hidden group" style={{-CardX: '345.34375px', -CardY: '1299px'}}>
+<div className="md:col-span-2 glass-card rounded-xl p-6 relative overflow-hidden group" style={{'--card-x': '345.34375px', '--card-y': '1299px'}}>
 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-3xl rounded-full pointer-events-none -mr-10 -mt-10"></div>
 <div className="relative z-10 flex justify-between items-end">
 <div>
@@ -370,7 +412,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glass-card p-4 rounded-lg" style={{-CardX: '345.34375px', -CardY: '1169px'}}>
+<div className="glass-card p-4 rounded-lg" style={{'--card-x': '345.34375px', '--card-y': '1169px'}}>
 <div className="flex items-center gap-2 mb-2 text-zinc-500">
 <iconify-icon icon="solar:fire-linear" width="16"></iconify-icon>
 <span className="text-[10px] font-semibold uppercase tracking-wider">
@@ -381,7 +423,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               $1,041.26
             </div>
 </div>
-<div className="glass-card p-4 rounded-lg" style={{-CardX: '-20.328125px', -CardY: '1169px'}}>
+<div className="glass-card p-4 rounded-lg" style={{'--card-x': '-20.328125px', '--card-y': '1169px'}}>
 <div className="flex items-center gap-2 mb-2 text-zinc-500">
 <iconify-icon icon="solar:user-linear" width="16"></iconify-icon>
 <span className="text-[10px] font-semibold uppercase tracking-wider">
@@ -393,7 +435,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </div>
 </div>
 
-<div className="md:col-span-2 glass-card p-4 rounded-lg flex flex-col justify-center" style={{-CardX: '345.34375px', -CardY: '1067px'}}>
+<div className="md:col-span-2 glass-card p-4 rounded-lg flex flex-col justify-center" style={{'--card-x': '345.34375px', '--card-y': '1067px'}}>
 <div className="flex justify-between items-center mb-2">
 <span className="text-[10px] font-medium text-zinc-400">
                 Fixed vs Variable Composition
@@ -439,7 +481,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-4 space-y-4">
 
-<div className="p-5 glass-card rounded-xl space-y-5" style={{-CardX: '715px', -CardY: '744px'}}>
+<div className="p-5 glass-card rounded-xl space-y-5" style={{'--card-x': '715px', '--card-y': '744px'}}>
 <div className="flex items-center justify-between border-b border-white/5 pb-3">
 <div className="flex items-center gap-2">
 <iconify-icon className="text-zinc-500" icon="solar:crown-linear"></iconify-icon>
@@ -537,7 +579,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 
-<div className="p-5 glass-card rounded-xl space-y-4" style={{-CardX: '715px', -CardY: '218px'}}>
+<div className="p-5 glass-card rounded-xl space-y-4" style={{'--card-x': '715px', '--card-y': '218px'}}>
 <div className="flex items-center gap-2 border-b border-white/5 pb-3 mb-2">
 <iconify-icon className="text-zinc-500" icon="solar:users-group-two-rounded-linear"></iconify-icon>
 <h2 className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wide">
@@ -611,7 +653,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="p-4 glass-card rounded-xl space-y-3" style={{-CardX: '715px', -CardY: '-230px'}}>
+<div className="p-4 glass-card rounded-xl space-y-3" style={{'--card-x': '715px', '--card-y': '-230px'}}>
 <div className="flex justify-between items-center">
 <h2 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wide">
                 Risk &amp; Retention
@@ -631,7 +673,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-8 space-y-4">
 
-<div className="glass-card rounded-xl p-8 relative overflow-hidden flex flex-col justify-center min-h-[180px] border border-indigo-500/20" style={{-CardX: '345.34375px', -CardY: '744px'}}>
+<div className="glass-card rounded-xl p-8 relative overflow-hidden flex flex-col justify-center min-h-[180px] border border-indigo-500/20" style={{'--card-x': '345.34375px', '--card-y': '744px'}}>
 <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 blur-3xl rounded-full pointer-events-none -mr-20 -mt-20"></div>
 <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
 <div>
@@ -670,7 +712,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="grid grid-cols-2 gap-4">
-<div className="glass-card p-5 rounded-xl border-l-2 border-l-indigo-500" style={{-CardX: '345.34375px', -CardY: '548px'}}>
+<div className="glass-card p-5 rounded-xl border-l-2 border-l-indigo-500" style={{'--card-x': '345.34375px', '--card-y': '548px'}}>
 <div className="flex justify-between items-start mb-2">
 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wide">
                   Personal Income
@@ -690,7 +732,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </span>
 </div>
 </div>
-<div className="glass-card p-5 rounded-xl border-l-2 border-l-emerald-500" style={{-CardX: '-20.328125px', -CardY: '548px'}}>
+<div className="glass-card p-5 rounded-xl border-l-2 border-l-emerald-500" style={{'--card-x': '-20.328125px', '--card-y': '548px'}}>
 <div className="flex justify-between items-start mb-2">
 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wide">
                   Override Income
@@ -710,7 +752,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glass-card rounded-xl p-5" style={{-CardX: '345.34375px', -CardY: '411px'}}>
+<div className="glass-card rounded-xl p-5" style={{'--card-x': '345.34375px', '--card-y': '411px'}}>
 <div className="flex items-center justify-between mb-4">
 <h3 className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wide">
                 Override Breakdown

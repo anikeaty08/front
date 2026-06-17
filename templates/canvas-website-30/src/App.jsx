@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -266,6 +302,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -444,7 +486,7 @@ addUtilities({
 
 <div className="flex xl:pt-0 xl:pb-0 sm:pl-4 sm:pr-4 sm:pt-20 sm:pb-0 w-screen h-1000 pt-20 pr-2 pb-40 pl-2 scale-100 rotate-x-5 items-center justify-center" id="terminal-aura-emkjg4pxs0ahwgw0" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 1%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 1%, transparent)'}}>
 
-<div className="relative w-full max-w-4xl bg-[#0a0a0a]/90 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl overflow-hidden font-mono text-sm md:text-base leading-relaxed text-slate-300 group perspective-none" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px -10px rgba(0,0,0,0.5)'}}>
+<div className="relative w-full max-w-4xl bg-[#0a0a0a]/90 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl overflow-hidden font-mono text-sm md:text-base leading-relaxed text-slate-300 group perspective-none" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.05), 0 20px 50px -10px rgba(0,0,0,0.5)'}}>
 
 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-70 z-20 shadow-[0_0_15px_rgba(59,130,246,0.5)]">
 </div>
@@ -870,36 +912,36 @@ addUtilities({
 <div className="relative">
 <img alt="Minimal Portfolio" className="group-hover:grayscale-0 transition-all duration-300 w-full h-[224px] object-cover grayscale" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/286dcc4a-3b11-43d3-af80-a7b1c3aaaad1_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Preview</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Preview</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Minimal Portfolio</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>For Designers</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Minimal Portfolio</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>For Designers</p>
 </div>
 </div>
 <div className="group overflow-hidden hover:ring-white/20 hover:shadow-xl transition ring-white/10 ring-1 rounded-2xl bg-zinc-900" style={{}}>
 <div className="relative">
 <img alt="SaaS Landing" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bb9b217e-05c2-4e6e-8f35-3fcb7f5b5e0c_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Preview</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Preview</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>SaaS Landing</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>For Startups</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>SaaS Landing</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>For Startups</p>
 </div>
 </div>
 <div className="group overflow-hidden hover:ring-white/20 hover:shadow-xl transition ring-white/10 ring-1 rounded-2xl bg-zinc-900" style={{}}>
 <div className="relative">
 <img alt="Agency Site" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a59cef23-182d-4015-9d64-9748fcf818c3_800w.webp" style={{}}/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>Preview</button>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\', sans-serif'}}>Preview</button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Agency Site</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>For Teams</p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Agency Site</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>For Teams</p>
 </div>
 </div>
 </div>

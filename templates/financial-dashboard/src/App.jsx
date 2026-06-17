@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -172,6 +208,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -192,10 +234,10 @@ addUtilities({
 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-1/2 bg-gradient-to-b from-[#70E1F5]/5 to-transparent blur-3xl"></div>
 </div>
 
-<nav className="fixed [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll md:left-0 md:right-0 md:mx-auto z-50 bg-gradient-to-b from-white/5 via-white/0 to-white/5 max-w-4xl rounded-full mr-auto ml-auto top-6 right-4 left-4 shadow-2xl backdrop-blur-xl animate" style={{-BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<nav className="fixed [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll md:left-0 md:right-0 md:mx-auto z-50 bg-gradient-to-b from-white/5 via-white/0 to-white/5 max-w-4xl rounded-full mr-auto ml-auto top-6 right-4 left-4 shadow-2xl backdrop-blur-xl animate" style={{'--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <div className="flex h-14 pr-4 pl-4 items-center justify-between">
 <div className="flex items-center gap-2.5">
-<div className="flex text-black bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex text-black bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg aria-hidden="true" className="w-[16px] h-[16px]" data-icon="solar:chart-square-bold-duotone" height="16" role="img" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M6.25 19a.75.75 0 0 0 1.32.488l6-7a.75.75 0 0 0 0-.976l-6-7A.75.75 0 0 0 6.25 5z" fill="#f8fafc" opacity=".5"></path><path clip-rule="evenodd" d="M10.512 19.57a.75.75 0 0 1-.081-1.058L16.012 12l-5.581-6.512a.75.75 0 1 1 1.139-.976l6 7a.75.75 0 0 1 0 .976l-6 7a.75.75 0 0 1-1.058.082" fill="#f8fafc" fill-rule="evenodd"></path></svg>
 </div>
 <span className="text-sm font-semibold tracking-tight text-white font-sans">FinTrax</span>
@@ -234,7 +276,7 @@ addUtilities({
 <div className="grid lg:grid-cols-2 z-10 max-w-6xl mr-auto mb-24 ml-auto pr-6 pl-6 relative gap-x-20 gap-y-20 items-center">
 
 <div className="max-w-2xl">
-<div className="inline-flex bg-gradient-to-br from-white/10 to-white/0 rounded-full mb-8 pt-1 pr-3 pb-1 pl-3 backdrop-blur-sm gap-x-2 gap-y-2 items-center [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll animate" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex bg-gradient-to-br from-white/10 to-white/0 rounded-full mb-8 pt-1 pr-3 pb-1 pl-3 backdrop-blur-sm gap-x-2 gap-y-2 items-center [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll animate" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <span className="relative flex h-2 w-2">
 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#70E1F5] opacity-75"></span>
 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#70E1F5]"></span>
@@ -252,7 +294,7 @@ addUtilities({
                 </p>
 <div className="flex flex-col sm:flex-row gap-6 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] animate-on-scroll animate mb-16 gap-x-6 gap-y-6 items-center">
 
-<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
 <style>
         @keyframes beam-spin { to { transform: rotate(360deg); } }
         @keyframes lines-slide { 
@@ -281,12 +323,12 @@ addUtilities({
 </button>
 
 <div className="inline-block group relative w-full sm:w-auto text-center sm:text-left">
-<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white text-sm font-medium text-white/80 tracking-tight bg-white/5 h-[54px] rounded-full pt-3 pr-6 pb-3 pl-6 relative backdrop-blur-xl gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="lucide lucide-play-circle w-[20px] h-[20px]" data-icon-replaced="true" data-icon-set="solar" data-solar="play-circle-bold-duotone" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '20px', height: '20px'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path className="" clip-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10" fill="#ffffff" fill-rule="evenodd" opacity=".5"></path><path d="m15.414 13.059l-4.72 2.787C9.934 16.294 9 15.71 9 14.786V9.214c0-.924.934-1.507 1.694-1.059l4.72 2.787c.781.462.781 1.656 0 2.118" fill="#ffffff"></path></svg>
 <span className="uppercase text-sm relative">Watch demo</span>
 <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(112,225,245,.55), rgba(112,225,245,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(112, 225, 245, .55), rgba(112, 225, 245, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 <div className="[animation:fadeSlideIn_0.8s_ease-out_0.8s_both] animate-on-scroll animate border-white/10 border-t pt-8">
@@ -330,7 +372,7 @@ addUtilities({
 
 <div className="px-5 pt-6 space-y-6">
 
-<div className="overflow-hidden group bg-[#70E1F5] w-full bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/88535185-ff8d-4faa-b0f0-816876a8ba7a_800w.webp)] bg-cover bg-center rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative shadow-[0_10px_40px_-10px_rgba(112,225,245,0.3)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="overflow-hidden group bg-[#70E1F5] w-full bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/88535185-ff8d-4faa-b0f0-816876a8ba7a_800w.webp)] bg-cover bg-center rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative shadow-[0_10px_40px_-10px_rgba(112,225,245,0.3)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 
 <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/20 rounded-full blur-3xl"></div>
 <div className="-left-10 bg-blue-500/20 w-32 h-32 rounded-full absolute bottom-0 blur-2xl"></div>
@@ -466,7 +508,7 @@ addUtilities({
 <button className="flex flex-col items-center gap-1 text-slate-500 hover:text-white transition-colors">
 <svg aria-hidden="true" data-icon="solar:chart-2-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.293 9.293C3 9.586 3 10.057 3 11v6c0 .943 0 1.414.293 1.707S4.057 19 5 19s1.414 0 1.707-.293S7 17.943 7 17v-6c0-.943 0-1.414-.293-1.707S5.943 9 5 9s-1.414 0-1.707.293" fill="currentColor"></path><path d="M17.293 2.293C17 2.586 17 3.057 17 4v13c0 .943 0 1.414.293 1.707S18.057 19 19 19s1.414 0 1.707-.293S21 17.943 21 17V4c0-.943 0-1.414-.293-1.707S19.943 2 19 2s-1.414 0-1.707.293" fill="currentColor" opacity=".4"></path><path d="M10 7c0-.943 0-1.414.293-1.707S11.057 5 12 5s1.414 0 1.707.293S14 6.057 14 7v10c0 .943 0 1.414-.293 1.707S12.943 19 12 19s-1.414 0-1.707-.293S10 17.943 10 17z" fill="currentColor" opacity=".7"></path><path d="M3 21.25a.75.75 0 0 0 0 1.5h18a.75.75 0 0 0 0-1.5z" fill="currentColor"></path></svg>
 </button>
-<div className="-mt-8 flex cursor-pointer hover:scale-105 transition-transform bg-center text-black bg-[#70E1F5] w-12 h-12 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3f6038cb-af1c-4483-97bc-dd58d89c36ef_320w.jpg)] bg-cover rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3))', -BorderRadiusBefore: '9999px'}}>
+<div className="-mt-8 flex cursor-pointer hover:scale-105 transition-transform bg-center text-black bg-[#70E1F5] w-12 h-12 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3f6038cb-af1c-4483-97bc-dd58d89c36ef_320w.jpg)] bg-cover rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3))', '--border-radius-before': '9999px'}}>
 <svg aria-hidden="true" className="text-slate-50 w-[16px] h-[16px]" data-icon="solar:add-circle-bold-duotone" data-icon-replaced="true" height="1em" role="img" strokeWidth="2" style={{width: '16px', height: '16px'}} viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10" fill="currentColor" opacity=".5"></path>
 <path className="" d="M12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25z" fill="currentColor"></path>
@@ -720,7 +762,7 @@ addUtilities({
 <span className="relative text-base font-sans">Watch demo</span>
 <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(112,225,245,.55), rgba(112,225,245,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(112, 225, 245, .55), rgba(112, 225, 245, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -140,6 +176,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2060,7 +2102,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 auto-rows-[120px] gap-4 grid-flow-dense">
 
-<div className="shiny-card col-span-2 row-span-2 group overflow-visible reveal-element" onclick="openModal('FinTech Ecosystem', 'Asset management, KYC, and transfers.', 'lucide:layout-dashboard')" style={{-GradientShine: '#818cf8', -GradientAngleOffset: '15deg', transitionDelay: '50ms'}}>
+<div className="shiny-card col-span-2 row-span-2 group overflow-visible reveal-element" onclick="openModal('FinTech Ecosystem', 'Asset management, KYC, and transfers.', 'lucide:layout-dashboard')" style={{'--gradient-shine': '#818cf8', '--gradient-angle-offset': '15deg', transitionDelay: '50ms'}}>
 <div className="card-content h-full p-6 flex flex-col justify-between relative overflow-hidden rounded-xl">
 <div className="absolute right-[-40px] top-[-20px] w-64 h-64 opacity-20 pointer-events-none iso-plane">
 <div className="w-full h-full bg-indigo-500/10 border border-indigo-500/30 rounded-lg grid grid-cols-2 gap-2 p-2">
@@ -2085,7 +2127,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-2 row-span-1 reveal-element" onclick="openModal('Logistics Chain', 'Real-time shipment tracking.', 'lucide:truck')" style={{-GradientShine: '#10b981', -GradientAngleOffset: '90deg', transitionDelay: '100ms'}}>
+<div className="shiny-card col-span-2 row-span-1 reveal-element" onclick="openModal('Logistics Chain', 'Real-time shipment tracking.', 'lucide:truck')" style={{'--gradient-shine': '#10b981', '--gradient-angle-offset': '90deg', transitionDelay: '100ms'}}>
 <div className="card-content h-full p-5 flex items-center justify-between relative overflow-hidden">
 <div className="absolute inset-0 flex items-center">
 <div className="w-full h-[1px] bg-emerald-500/10 border-t border-dashed border-emerald-500/30"></div>
@@ -2107,7 +2149,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-2 row-span-2 lg:col-span-2 reveal-element" onclick="openModal('CyberSecurity', 'Threat monitoring and data protection.', 'lucide:shield-check')" style={{-GradientShine: '#ef4444', -GradientAngleOffset: '45deg', transitionDelay: '150ms'}}>
+<div className="shiny-card col-span-2 row-span-2 lg:col-span-2 reveal-element" onclick="openModal('CyberSecurity', 'Threat monitoring and data protection.', 'lucide:shield-check')" style={{'--gradient-shine': '#ef4444', '--gradient-angle-offset': '45deg', transitionDelay: '150ms'}}>
 <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
 <div className="w-64 h-64 rounded-full border border-red-500/20 relative">
 <div className="absolute inset-0 rounded-full radar-scan"></div>
@@ -2127,7 +2169,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('HR Tech', 'Recruitment automation.', 'lucide:users-2')" style={{-GradientShine: '#f43f5e', -GradientAngleOffset: '45deg', transitionDelay: '200ms'}}>
+<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('HR Tech', 'Recruitment automation.', 'lucide:users-2')" style={{'--gradient-shine': '#f43f5e', '--gradient-angle-offset': '45deg', transitionDelay: '200ms'}}>
 <div className="card-content h-full p-4 flex flex-col justify-between">
 <svg aria-hidden="true" data-icon="lucide:users-2" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
@@ -2143,7 +2185,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('Crypto P2P', 'Crypto exchange and wallet.', 'lucide:bitcoin')" style={{-GradientShine: '#f59e0b', -GradientAngleOffset: '120deg', transitionDelay: '250ms'}}>
+<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('Crypto P2P', 'Crypto exchange and wallet.', 'lucide:bitcoin')" style={{'--gradient-shine': '#f59e0b', '--gradient-angle-offset': '120deg', transitionDelay: '250ms'}}>
 <div className="card-content h-full p-4 flex flex-col justify-between">
 <svg aria-hidden="true" data-icon="lucide:bitcoin" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042l-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893l-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042l.348-1.97M7.48 20.364l3.126-17.727" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -2155,7 +2197,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-2 row-span-2 reveal-element" onclick="openModal('PropTech OS', 'Property management system.', 'lucide:building-2')" style={{-GradientShine: '#38bdf8', -GradientAngleOffset: '300deg', transitionDelay: '300ms'}}>
+<div className="shiny-card col-span-2 row-span-2 reveal-element" onclick="openModal('PropTech OS', 'Property management system.', 'lucide:building-2')" style={{'--gradient-shine': '#38bdf8', '--gradient-angle-offset': '300deg', transitionDelay: '300ms'}}>
 <div className="card-content h-full p-6 flex flex-col justify-between overflow-hidden relative">
 <div className="absolute -right-8 top-8 w-32 h-40 opacity-30 pointer-events-none">
 <div className="w-full h-full bg-sky-500/20 border border-sky-400/30 rounded-lg absolute top-0 left-0 transform rotate-6 translate-x-4"></div>
@@ -2176,7 +2218,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-2 row-span-1 overflow-hidden reveal-element" onclick="openModal('AI Analytics', 'Predictive analytics.', 'lucide:brain-circuit')" style={{-GradientShine: '#a855f7', -GradientAngleOffset: '180deg', transitionDelay: '350ms'}}>
+<div className="shiny-card col-span-2 row-span-1 overflow-hidden reveal-element" onclick="openModal('AI Analytics', 'Predictive analytics.', 'lucide:brain-circuit')" style={{'--gradient-shine': '#a855f7', '--gradient-angle-offset': '180deg', transitionDelay: '350ms'}}>
 <div className="absolute inset-0 opacity-10 pointer-events-none p-2 font-mono text-[8px] leading-3 text-purple-400 overflow-hidden">
 <div className="scrolling-text">
                 010101001 SYSTEM INIT LOADING DATA... ANALYSIS COMPLETE
@@ -2204,7 +2246,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('MedTech CRM', 'Clinic CRM.', 'lucide:activity')" style={{-GradientShine: '#06b6d4', -GradientAngleOffset: '200deg', transitionDelay: '400ms'}}>
+<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('MedTech CRM', 'Clinic CRM.', 'lucide:activity')" style={{'--gradient-shine': '#06b6d4', '--gradient-angle-offset': '200deg', transitionDelay: '400ms'}}>
 <div className="card-content h-full p-4 flex flex-col justify-between">
 <svg aria-hidden="true" data-icon="lucide:activity" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -2216,7 +2258,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('Legal Tech', 'Lawyer knowledge base.', 'lucide:scale')" style={{-GradientShine: '#8b5cf6', -GradientAngleOffset: '280deg', transitionDelay: '450ms'}}>
+<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('Legal Tech', 'Lawyer knowledge base.', 'lucide:scale')" style={{'--gradient-shine': '#8b5cf6', '--gradient-angle-offset': '280deg', transitionDelay: '450ms'}}>
 <div className="card-content h-full p-4 flex flex-col justify-between">
 <svg aria-hidden="true" data-icon="lucide:scale" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
@@ -2231,7 +2273,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('EdTech LMS', 'Learning platform.', 'lucide:graduation-cap')" style={{-GradientShine: '#ec4899', -GradientAngleOffset: '10deg', transitionDelay: '500ms'}}>
+<div className="shiny-card col-span-1 row-span-1 reveal-element" onclick="openModal('EdTech LMS', 'Learning platform.', 'lucide:graduation-cap')" style={{'--gradient-shine': '#ec4899', '--gradient-angle-offset': '10deg', transitionDelay: '500ms'}}>
 <div className="card-content h-full p-4 flex flex-col justify-between">
 <svg aria-hidden="true" data-icon="lucide:graduation-cap" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">

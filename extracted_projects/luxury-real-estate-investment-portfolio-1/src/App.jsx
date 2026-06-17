@@ -241,7 +241,7 @@ function App() {
             Architecture as <br /> <span className="italic font-serif">Asset Class.</span>
           </h2>
         </div>
-        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg" className="w-full h-full object-cover" alt="Abstract Architecture" style={{ objectPosition: 'center', objectFit: 'cover' }} />
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg" className="w-full h-full object-cover" alt="Abstract Architecture" style={{objectPosition: 'center', objectFit: 'cover'}} />
       </div>
 
       {/* HORIZONTAL SCROLL: INTERIORS */}

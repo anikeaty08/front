@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -47,10 +89,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between h-16">
 <a className="flex items-center gap-3" href="#top">
 <div className="flex items-center justify-center size-9 rounded-md bg-white/5 border border-white/10">
-<span className="text-white font-semibold tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>CC</span>
+<span className="text-white font-semibold tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>CC</span>
 </div>
 <div className="flex flex-col leading-tight">
-<span className="text-base text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Compucut Signs</span>
+<span className="text-base text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Compucut Signs</span>
 <span className="text-[11px] text-slate-400">Premium Signage &amp; Branding</span>
 </div>
 </a>
@@ -69,42 +111,42 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="group/product flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" data-product="Light Boxes" href="#products">
 <i className="size-5 text-sky-400" data-lucide="square"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Light Boxes</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Light Boxes</div>
 <div className="text-slate-400 text-xs">Edge-lit, double-sided, custom</div>
 </div>
 </a>
 <a className="group/product flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" data-product="Fabricated Letters" href="#products">
 <i className="size-5 text-sky-400" data-lucide="type"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Fabricated Letters</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Fabricated Letters</div>
 <div className="text-slate-400 text-xs">Acrylic, stainless steel, halo-lit</div>
 </div>
 </a>
 <a className="group/product flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" data-product="Pylons &amp; Totems" href="#products">
 <i className="size-5 text-sky-400" data-lucide="landmark"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Pylons &amp; Totems</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Pylons &amp; Totems</div>
 <div className="text-slate-400 text-xs">Retail &amp; corporate wayfinding</div>
 </div>
 </a>
 <a className="group/product flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" data-product="LED Systems" href="#products">
 <i className="size-5 text-sky-400" data-lucide="lightbulb"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>LED Systems</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>LED Systems</div>
 <div className="text-slate-400 text-xs">Energy-efficient, outdoor-rated</div>
 </div>
 </a>
 <a className="group/product flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" data-product="Vinyl &amp; Graphics" href="#products">
 <i className="size-5 text-sky-400" data-lucide="layout"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Vinyl &amp; Graphics</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Vinyl &amp; Graphics</div>
 <div className="text-slate-400 text-xs">Fleet, walls, glazing, floor</div>
 </div>
 </a>
 <a className="group/product flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" data-product="CNC &amp; Routing" href="#products">
 <i className="size-5 text-sky-400" data-lucide="box"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>CNC &amp; Routing</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>CNC &amp; Routing</div>
 <div className="text-slate-400 text-xs">Precision-cut components</div>
 </div>
 </a>
@@ -131,28 +173,28 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" href="#services">
 <i className="size-5 text-sky-400" data-lucide="box"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>3D Renderings</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>3D Renderings</div>
 <div className="text-slate-400 text-xs">Visualize before we build</div>
 </div>
 </a>
 <a className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" href="#services">
 <i className="size-5 text-sky-400" data-lucide="image"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Artistic Impressions</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Artistic Impressions</div>
 <div className="text-slate-400 text-xs">Pitch-ready visuals</div>
 </div>
 </a>
 <a className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" href="#services">
 <i className="size-5 text-sky-400" data-lucide="map-pin"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Nationwide Installation</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Nationwide Installation</div>
 <div className="text-slate-400 text-xs">Certified crews across SA</div>
 </div>
 </a>
 <a className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition" href="#services">
 <i className="size-5 text-sky-400" data-lucide="wrench"></i>
 <div>
-<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Maintenance</div>
+<div className="text-slate-100 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Maintenance</div>
 <div className="text-slate-400 text-xs">Uptime, warranty, SLA options</div>
 </div>
 </a>
@@ -180,7 +222,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="fixed inset-y-0 right-0 w-[84%] max-w-sm translate-x-full transition-transform duration-300 z-50 bg-black/90 backdrop-blur-xl border-l border-white/10" id="mobileMenu">
 <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
-<span className="text-slate-200" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Menu</span>
+<span className="text-slate-200" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Menu</span>
 <button aria-label="Close menu" className="inline-flex items-center justify-center size-9 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 transition" id="closeMenu">
 <i className="size-5" data-lucide="x"></i>
 </button>
@@ -223,10 +265,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mx-auto max-w-7xl px-4">
 <div className="max-w-3xl">
-<h1 className="text-4xl md:text-6xl tracking-tight text-white font-semibold" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>
+<h1 className="text-4xl md:text-6xl tracking-tight text-white font-semibold" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>
           Premium Signage Solutions Since 1985
         </h1>
-<p className="mt-5 text-lg md:text-xl text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif'}}>
+<p className="mt-5 text-lg md:text-xl text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif'}}>
           Nearly three decades of craftsmanship, innovation, and nationwide delivery. Trusted by leading brands for quality, speed, and reliability.
         </p>
 <div className="mt-8 flex items-center gap-3">
@@ -248,34 +290,34 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-4 py-1 will-change-transform" id="logoMarquee">
 
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>AB</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>AB</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>DB</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>DB</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>WM</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>WM</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>SP</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>SP</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>MTN</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>MTN</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>SBK</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>SBK</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>VW</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>VW</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>BP</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>BP</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>NED</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>NED</span>
 </div>
 <div className="flex items-center justify-center rounded-md bg-white/5 border border-white/10 h-12 w-24 sm:w-28">
-<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>VOD</span>
+<span className="text-slate-300 font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>VOD</span>
 </div>
 </div>
 </div>
@@ -298,7 +340,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="size-5 text-sky-400" data-lucide="calendar"></i>
 </div>
 <div>
-<div className="text-slate-200 text-sm" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Est. 1985</div>
+<div className="text-slate-200 text-sm" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Est. 1985</div>
 <div className="text-slate-400 text-xs">Nearly 30 years of excellence</div>
 </div>
 </div>
@@ -306,21 +348,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div>
-<h2 className="text-3xl md:text-4xl tracking-tight text-white font-semibold" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Heritage, precision, and scale</h2>
-<p className="mt-4 text-slate-300" style={{fontFamily: '\'Inter\',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif'}}>
+<h2 className="text-3xl md:text-4xl tracking-tight text-white font-semibold" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Heritage, precision, and scale</h2>
+<p className="mt-4 text-slate-300" style={{fontFamily: '\'Inter\', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif'}}>
             From bespoke illuminated letters to nationwide rollouts, Compucut Signs blends master craftsmanship with modern manufacturing. Our process is engineered for quality, speed, and consistency.
           </p>
 <ul className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
 <li className="rounded-xl border border-white/10 bg-white/5 p-4">
-<div className="text-3xl font-semibold text-white tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>30+</div>
+<div className="text-3xl font-semibold text-white tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>30+</div>
 <div className="text-xs text-slate-400 mt-1">Years of experience</div>
 </li>
 <li className="rounded-xl border border-white/10 bg-white/5 p-4">
-<div className="text-3xl font-semibold text-white tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>1,200+</div>
+<div className="text-3xl font-semibold text-white tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>1,200+</div>
 <div className="text-xs text-slate-400 mt-1">Projects delivered</div>
 </li>
 <li className="rounded-xl border border-white/10 bg-white/5 p-4">
-<div className="text-3xl font-semibold text-white tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>100%</div>
+<div className="text-3xl font-semibold text-white tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>100%</div>
 <div className="text-xs text-slate-400 mt-1">Nationwide coverage</div>
 </li>
 </ul>
@@ -343,7 +385,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-7xl px-4">
 <div className="flex items-end justify-between">
 <div>
-<h2 className="text-3xl md:text-4xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Products</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Products</h2>
 <p className="mt-2 text-slate-400">Engineered for impact. Built to last.</p>
 </div>
 <a className="hidden md:inline-flex items-center gap-2 text-sm text-sky-300 hover:text-white transition" href="#contact">
@@ -360,7 +402,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Light Boxes</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Light Boxes</div>
 <div className="text-xs text-slate-300">Edge-lit, double-sided, tension fabric</div>
 </div>
 <div className="size-9 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center group-hover:translate-x-1 transition">
@@ -375,7 +417,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Fabricated Letters</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Fabricated Letters</div>
 <div className="text-xs text-slate-300">Acrylic, stainless steel, halo-lit</div>
 </div>
 <div className="size-9 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center group-hover:translate-x-1 transition">
@@ -390,7 +432,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Pylons &amp; Totems</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Pylons &amp; Totems</div>
 <div className="text-xs text-slate-300">Wayfinding &amp; brand presence</div>
 </div>
 <div className="size-9 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center group-hover:translate-x-1 transition">
@@ -405,7 +447,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>LED Systems</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>LED Systems</div>
 <div className="text-xs text-slate-300">High-efficiency modules</div>
 </div>
 <div className="size-9 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center group-hover:translate-x-1 transition">
@@ -420,7 +462,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Vinyl &amp; Graphics</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Vinyl &amp; Graphics</div>
 <div className="text-xs text-slate-300">Walls, glazing, vehicles</div>
 </div>
 <div className="size-9 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center group-hover:translate-x-1 transition">
@@ -435,7 +477,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>CNC &amp; Routing</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>CNC &amp; Routing</div>
 <div className="text-xs text-slate-300">Precision-cut components</div>
 </div>
 <div className="size-9 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center group-hover:translate-x-1 transition">
@@ -455,7 +497,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="size-8 rounded-md bg-sky-500/20 border border-sky-500/30 flex items-center justify-center">
 <i className="size-4 text-sky-300" data-lucide="layers"></i>
 </div>
-<div className="text-slate-100 text-sm" id="modalTitle" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Product</div>
+<div className="text-slate-100 text-sm" id="modalTitle" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Product</div>
 </div>
 <button className="inline-flex items-center justify-center size-9 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 transition" id="closeProductModal">
 <i className="size-5" data-lucide="x"></i>
@@ -477,7 +519,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="p-6 overflow-y-auto">
-<h3 className="text-xl font-semibold tracking-tight text-white" id="modalHeadline" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}></h3>
+<h3 className="text-xl font-semibold tracking-tight text-white" id="modalHeadline" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}></h3>
 <p className="mt-3 text-slate-300" id="modalDescription"></p>
 <div className="mt-6 grid grid-cols-2 gap-3">
 <div className="rounded-lg bg-white/5 border border-white/10 p-3">
@@ -517,7 +559,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-7xl px-4">
 <div className="flex items-end justify-between">
 <div>
-<h2 className="text-3xl md:text-4xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Services</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Services</h2>
 <p className="mt-2 text-slate-400">End-to-end capability, from concept to installation.</p>
 </div>
 <div className="hidden md:flex items-center gap-2">
@@ -537,7 +579,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="size-10 rounded-md bg-sky-500/15 border border-sky-500/30 flex items-center justify-center">
 <i className="size-5 text-sky-400" data-lucide="box"></i>
 </div>
-<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>3D Renderings</div>
+<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>3D Renderings</div>
 <p className="mt-2 text-sm text-slate-300">See your signage in context before fabrication—accelerate approvals.</p>
 </div>
 <div className="mt-4">
@@ -551,7 +593,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="size-10 rounded-md bg-sky-500/15 border border-sky-500/30 flex items-center justify-center">
 <i className="size-5 text-sky-400" data-lucide="image"></i>
 </div>
-<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Artistic Impressions</div>
+<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Artistic Impressions</div>
 <p className="mt-2 text-sm text-slate-300">Campaign-ready visuals, elevations, and branded mockups.</p>
 </div>
 <div className="mt-4">
@@ -565,7 +607,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="size-10 rounded-md bg-sky-500/15 border border-sky-500/30 flex items-center justify-center">
 <i className="size-5 text-sky-400" data-lucide="map-pin"></i>
 </div>
-<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Nationwide Installation</div>
+<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Nationwide Installation</div>
 <p className="mt-2 text-sm text-slate-300">Skilled crews, method statements, and H&amp;S documentation.</p>
 </div>
 <div className="mt-4">
@@ -579,7 +621,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="size-10 rounded-md bg-sky-500/15 border border-sky-500/30 flex items-center justify-center">
 <i className="size-5 text-sky-400" data-lucide="wrench"></i>
 </div>
-<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Maintenance</div>
+<div className="mt-4 text-lg text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Maintenance</div>
 <p className="mt-2 text-sm text-slate-300">Proactive servicing, cleaning, and LED replacements.</p>
 </div>
 <div className="mt-4">
@@ -597,7 +639,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-7xl px-4">
 <div className="flex items-end justify-between">
 <div>
-<h2 className="text-3xl md:text-4xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Featured Case Studies</h2>
+<h2 className="text-3xl md:text-4xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Featured Case Studies</h2>
 <p className="mt-2 text-slate-400">From corporate HQ to retail rollouts—high-impact signage at scale.</p>
 </div>
 <a className="hidden md:inline-flex items-center gap-2 text-sm text-sky-300 hover:text-white transition" href="#contact">
@@ -610,7 +652,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
 <div className="p-5 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Corporate Facade Upgrade</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Corporate Facade Upgrade</div>
 <div className="text-xs text-slate-400 mt-1">Fabricated letters with halo LED</div>
 </div>
 <div className="inline-flex items-center gap-2 text-xs text-sky-300">
@@ -634,7 +676,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
 <div className="p-5 flex items-center justify-between">
 <div>
-<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Retail Pylon Modernisation</div>
+<div className="text-white font-medium tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Retail Pylon Modernisation</div>
 <div className="text-xs text-slate-400 mt-1">LED retrofits, wayfinding refresh</div>
 </div>
 <div className="inline-flex items-center gap-2 text-xs text-sky-300">
@@ -661,21 +703,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative">
 <img alt="Interior wayfinding and brand wall" className="h-56 w-full object-cover group-hover:scale-[1.02] transition" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-<div className="absolute bottom-3 left-3 text-sm text-white" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Interior Wayfinding</div>
+<div className="absolute bottom-3 left-3 text-sm text-white" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Interior Wayfinding</div>
 </div>
 </div>
 <div className="group rounded-xl overflow-hidden border border-white/10">
 <div className="relative">
 <img alt="Shopping centre external signage" className="h-56 w-full object-cover group-hover:scale-[1.02] transition" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-<div className="absolute bottom-3 left-3 text-sm text-white" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Retail Exteriors</div>
+<div className="absolute bottom-3 left-3 text-sm text-white" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Retail Exteriors</div>
 </div>
 </div>
 <div className="group rounded-xl overflow-hidden border border-white/10">
 <div className="relative">
 <img alt="Office reception illuminated logo" className="h-56 w-full object-cover group-hover:scale-[1.02] transition" src="https://images.unsplash.com/photo-1519558260268-cde7e03a0152?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-<div className="absolute bottom-3 left-3 text-sm text-white" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Reception Logos</div>
+<div className="absolute bottom-3 left-3 text-sm text-white" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Reception Logos</div>
 </div>
 </div>
 </div>
@@ -686,7 +728,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="h-[42vh] bg-fixed bg-center bg-cover" style={{backgroundImage: 'url(\'https://images.unsplash.com/photo-1496302662116-35cc4f36df92?q=80&amp'}}>
 <div className="w-full h-full bg-black/60 flex items-center justify-center">
 <div className="text-center px-6">
-<h3 className="text-2xl md:text-3xl text-white font-semibold tracking-tight" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Built for scale. Delivered with care.</h3>
+<h3 className="text-2xl md:text-3xl text-white font-semibold tracking-tight" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Built for scale. Delivered with care.</h3>
 <p className="mt-2 text-slate-300">Complex rollouts, tight deadlines, consistent quality.</p>
 </div>
 </div>
@@ -700,7 +742,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
 <div className="flex items-center justify-between">
 <div>
-<h2 className="text-2xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\',\'Helvetica Neue\',Arial,sans-serif'}}>Request a Free Quote</h2>
+<h2 className="text-2xl tracking-tight font-semibold text-white" style={{fontFamily: '\'Montserrat\', \'Helvetica Neue\', Arial, sans-serif'}}>Request a Free Quote</h2>
 <p className="mt-1 text-slate-400 text-sm">We’ll reply within one business day.</p>
 </div>
 <div className="hidden md:flex items-center gap-2 text-xs text-sky-300">

@@ -10,7 +10,7 @@ import Analytics from './pages/Analytics';
 // Placeholders for less critical pages to ensure routing works
 const Placeholder = ({ title }) => (
   <div className="flex flex-col items-center justify-center h-full text-center p-8">
-    <iconify-icon icon="solar:settings-minimalistic-linear" width="48" style={{ color: '#5A5A5A', marginBottom: '16px' }}></iconify-icon>
+    <iconify-icon icon="solar:settings-minimalistic-linear" width="48" style={{color: '#5A5A5A', marginBottom: '16px'}}></iconify-icon>
     <h2 className="text-2xl font-semibold mb-2">{title}</h2>
     <p className="text-muted">Este módulo está em desenvolvimento.</p>
   </div>

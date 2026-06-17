@@ -8,6 +8,42 @@ function useIntersectionObserver(options = { threshold: 0.1, rootMargin: "0px" }
   const ref = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const currentRef = ref.current;
     if (!currentRef) return;
 
@@ -40,7 +76,7 @@ const RevealText = ({ text, className = "" }) => {
             className={`inline-block transition-all duration-700 ease-out will-change-[transform,opacity] ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-10 translate-y-4'
             }`}
-            style={{ transitionDelay: `${i * 12}ms` }}
+            style={{transitionDelay: `${i * 12}ms`}}
           >
             {word}&nbsp;
           </span>
@@ -68,14 +104,11 @@ const GlowCard = ({ children, className = "" }) => {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{
-        '--x': `${mousePos.x}px`,
-        '--y': `${mousePos.y}px`,
-      }}
+      style={{'--x': `${mousePos.x}px`, '--y': `${mousePos.y}px`}}
     >
       <div
         className="absolute inset-0 z-0 transition-opacity duration-300 pointer-events-none mix-blend-screen glow-card-bg"
-        style={{ opacity: isHovered ? 1 : 0 }}
+        style={{opacity: isHovered ? 1 : 0}}
       />
       {children}
     </div>
@@ -400,7 +433,7 @@ const Protocols = () => {
             className={`group border-b border-line hover:bg-surface transition-all duration-700 ease-out cursor-cell relative ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
             }`}
-            style={{ transitionDelay: `${idx * 120}ms` }}
+            style={{transitionDelay: `${idx * 120}ms`}}
           >
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent/0 group-hover:bg-accent transition-all duration-300"></div>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 py-10 px-6 md:px-12 items-start relative z-10">
@@ -646,7 +679,7 @@ const FootwearCollection = ({ onAddToCart, onQuickView }) => {
                         <button
                           key={c}
                           onClick={() => handleColorSelect(product.id, c)}
-                          style={{ backgroundColor: c }}
+                          style={{backgroundColor: c}}
                           className={`w-5 h-5 rounded-full border-2 transition-all ${
                             currentColor === c ? "border-accent scale-110" : "border-transparent"
                           }`}
@@ -866,7 +899,7 @@ const CartDrawer = ({ isOpen, onClose, cart, onRemove, onUpdateQty, onCheckout, 
                             <span>•</span>
                             <span className="flex items-center gap-1">
                               Color: 
-                              <span className="w-2.5 h-2.5 rounded-full border border-white/20" style={{ backgroundColor: item.color }} />
+                              <span className="w-2.5 h-2.5 rounded-full border border-white/20" style={{backgroundColor: item.color}} />
                             </span>
                           </div>
                         </div>

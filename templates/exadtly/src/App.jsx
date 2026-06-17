@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -74,6 +110,12 @@ document.addEventListener("DOMContentLoaded",()=>initInViewAnimations())
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -97,7 +139,7 @@ document.addEventListener("DOMContentLoaded",()=>initInViewAnimations())
 </a>
 <div className="hidden md:flex space-x-8 text-sm font-normal">
 </div>
-<button className="hidden md:block shiny-cta uppercase hover:shadow-[0_0_25px_-5px_rgba(16,185,129,0.4)] after:!bg-[linear-gradient(-50deg,transparent,#10b981,transparent)] transition-all text-sm font-medium tracking-wide rounded-full cursor-pointer" onclick="window.location.href='https://api.leadconnectorhq.com/widget/bookings/call-disco-diego'" role="button" style={{padding: '0.5rem 1rem', border: '1px solid transparent', -GradientShine: '#34d399', background: 'linear-gradient(#052e1f, #052e1f) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #10b981 5%, var(--gradient-shine) 15%, #10b981 30%, transparent 40%, transparent 100%) border-box', boxShadow: 'inset 0 0 0 1px rgba(16, 185, 129, 0.2)', color: '#d1fae5'}}>
+<button className="hidden md:block shiny-cta uppercase hover:shadow-[0_0_25px_-5px_rgba(16,185,129,0.4)] after:!bg-[linear-gradient(-50deg,transparent,#10b981,transparent)] transition-all text-sm font-medium tracking-wide rounded-full cursor-pointer" onclick="window.location.href='https://api.leadconnectorhq.com/widget/bookings/call-disco-diego'" role="button" style={{padding: '0.5rem 1rem', border: '1px solid transparent', '--gradient-shine': '#34d399', background: 'linear-gradient(#052e1f, #052e1f) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #10b981 5%, var(--gradient-shine) 15%, #10b981 30%, transparent 40%, transparent 100%) border-box', boxShadow: 'inset 0 0 0 1px rgba(16, 185, 129, 0.2)', color: '#d1fae5'}}>
 <span className="">BOOK A DEMO</span>
 </button>
 <button className="md:hidden">
@@ -445,7 +487,7 @@ document.addEventListener("DOMContentLoaded",()=>initInViewAnimations())
 </div>
 
 <div className="mt-12 flex justify-center relative z-20">
-<button className="shiny-cta uppercase hover:shadow-[0_0_25px_-5px_rgba(16,185,129,0.4)] after:!bg-[linear-gradient(-50deg,transparent,#10b981,transparent)] transition-all text-sm font-medium tracking-wide rounded-full pt-3.5 pr-8 pb-3.5 pl-8" onclick="window.location.href='https://api.leadconnectorhq.com/widget/bookings/call-disco-diego'" style={{border: '1px solid transparent', -GradientShine: '#34d399', background: 'linear-gradient(#052e1f, #052e1f) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #10b981 5%, var(--gradient-shine) 15%, #10b981 30%, transparent 40%, transparent 100%) border-box', boxShadow: 'inset 0 0 0 1px rgba(16, 185, 129, 0.2)', color: '#d1fae5'}}>
+<button className="shiny-cta uppercase hover:shadow-[0_0_25px_-5px_rgba(16,185,129,0.4)] after:!bg-[linear-gradient(-50deg,transparent,#10b981,transparent)] transition-all text-sm font-medium tracking-wide rounded-full pt-3.5 pr-8 pb-3.5 pl-8" onclick="window.location.href='https://api.leadconnectorhq.com/widget/bookings/call-disco-diego'" style={{border: '1px solid transparent', '--gradient-shine': '#34d399', background: 'linear-gradient(#052e1f, #052e1f) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #10b981 5%, var(--gradient-shine) 15%, #10b981 30%, transparent 40%, transparent 100%) border-box', boxShadow: 'inset 0 0 0 1px rgba(16, 185, 129, 0.2)', color: '#d1fae5'}}>
 <span className="">Book a Demo</span>
 </button>
 </div>
@@ -832,7 +874,7 @@ document.addEventListener("DOMContentLoaded",()=>initInViewAnimations())
 </div>
 <div className="flex sm:py-20 pt-12 pb-12 relative items-center justify-center" style={{minHeight: '450px'}}>
 <div className="container max-w-full" style={{position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.1),transparent)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: 'rgba(0,0,0,0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-10deg)'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-10deg)'}}>
 <div className="overflow-hidden text-zinc-900 bg-white ring-white/20 ring-1 rounded-xl absolute top-4 right-4 bottom-4 left-4 shadow-2xl">
 <div className="pt-6 pr-6 pb-6 pl-6">
 <div className="inline-flex bg-emerald-100 w-8 h-8 ring-emerald-200 ring-1 rounded-lg mb-4 items-center justify-center">
@@ -855,7 +897,7 @@ document.addEventListener("DOMContentLoaded",()=>initInViewAnimations())
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.08),transparent)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: 'rgba(0,0,0,0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-6deg)'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-6deg)'}}>
 <div className="overflow-hidden text-zinc-900 bg-white/90 ring-white/20 ring-1 rounded-xl absolute top-4 right-4 bottom-4 left-4 shadow-xl backdrop-blur">
 <div className="pt-6 pr-6 pb-6 pl-6">
 <div className="inline-flex bg-emerald-100 w-8 h-8 ring-emerald-200 ring-1 rounded-lg mb-4 items-center justify-center">
@@ -878,7 +920,7 @@ document.addEventListener("DOMContentLoaded",()=>initInViewAnimations())
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255,255,255,0.06),transparent)', border: '1px solid rgba(255,255,255,0.05)', boxShadow: 'rgba(0,0,0,0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(0deg)'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.06), transparent)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(0deg)'}}>
 <div className="overflow-hidden text-zinc-900 bg-white/80 ring-white/20 ring-1 rounded-xl absolute top-4 right-4 bottom-4 left-4 shadow-lg backdrop-blur">
 <div className="pt-6 pr-6 pb-6 pl-6">
 <div className="inline-flex bg-emerald-100 w-8 h-8 ring-emerald-200 ring-1 rounded-lg mb-4 items-center justify-center">
@@ -929,7 +971,7 @@ document.addEventListener("DOMContentLoaded",()=>initInViewAnimations())
 <svg className="lucide lucide-calendar" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path className="" d="M16 2v4"></path><rect className="" height="18" rx="2" width="18" x="3" y="4"></rect><path className="" d="M3 10h18"></path></svg>
 </div>
 </div>
-<button className="shiny-cta group flex gap-2 overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_-5px_rgba(16,185,129,0.4)] after:!bg-[linear-gradient(-50deg,transparent,#10b981,transparent)] text-sm font-semibold w-full h-12 rounded-full mb-6 relative gap-x-2 gap-y-2 items-center justify-center cursor-pointer" onclick="window.location.href='https://api.leadconnectorhq.com/widget/bookings/call-disco-diego'" role="button" style={{-GradientShine: '#34d399', background: 'linear-gradient(#052e1f, #052e1f) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #10b981 5%, var(--gradient-shine) 15%, #10b981 30%, transparent 40%, transparent 100%) border-box', color: '#ecfdf5', border: '1px solid transparent', boxShadow: 'inset 0 0 0 1px rgba(16, 185, 129, 0.2)'}}>
+<button className="shiny-cta group flex gap-2 overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_-5px_rgba(16,185,129,0.4)] after:!bg-[linear-gradient(-50deg,transparent,#10b981,transparent)] text-sm font-semibold w-full h-12 rounded-full mb-6 relative gap-x-2 gap-y-2 items-center justify-center cursor-pointer" onclick="window.location.href='https://api.leadconnectorhq.com/widget/bookings/call-disco-diego'" role="button" style={{'--gradient-shine': '#34d399', background: 'linear-gradient(#052e1f, #052e1f) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #10b981 5%, var(--gradient-shine) 15%, #10b981 30%, transparent 40%, transparent 100%) border-box', color: '#ecfdf5', border: '1px solid transparent', boxShadow: 'inset 0 0 0 1px rgba(16, 185, 129, 0.2)'}}>
 <span className="relative z-10">BOOK A DEMO</span>
 </button>
 <div className="text-center">

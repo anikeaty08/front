@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -220,6 +256,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -316,7 +358,7 @@ addUtilities({
 
 <div className="dental-card sm:w-[650px] aspect-[16/10] overflow-hidden cursor-pointer transition-all duration-500 ease-out will-change-transform bg-zinc-900 w-[85%] ring-white/10 ring-1 rounded-3xl absolute shadow-2xl" style={{opacity: '1', zIndex: '100', pointerEvents: 'auto', transform: 'translate3d(0px, 0px, 0px) scale(1)', filter: 'brightness(1) blur(0px)', border: '1px solid rgba(255, 255, 255, 0.2)'}}>
 <img alt="Orthodontics" className="absolute inset-0 w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500" src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&amp;w=2000&amp;auto=format&amp;fit=crop"/>
-<div className="bg-center bg-cover absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), transparent), url(\'https://images.unsplash.com/photo-1600170457229-43c2c8f00d3b?w=2160&amp'}}></div>
+<div className="bg-center bg-cover absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), transparent), url(\'https: //images.unsplash.com/photo-1600170457229-43c2c8f00d3b?w=2160&amp'}}></div>
 <div className="absolute bottom-0 left-0 p-8 sm:p-10 w-full">
 <div className="flex justify-between items-end">
 <div className="">

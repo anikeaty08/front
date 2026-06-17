@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -58,6 +94,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -141,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
   </p>
 <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row [animation:fadeSlideIn_1s_ease-out_0.5s_both]">
 
-<button aria-label="Generate a Song" className="group relative inline-flex items-center justify-center text-sm font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-transform active:scale-95" style={{borderRadius: '10px', padding: '.75rem 1.5rem', background: 'linear-gradient(336deg,#ffc420 0%,#fe4b08 39%,#fe4b08 57%,#ffc420 100%)', boxShadow: 'inset 12px 0 12px rgba(255,255,255,.25), inset -2px -4px 8px rgba(255,255,255,.25)'}}>
+<button aria-label="Generate a Song" className="group relative inline-flex items-center justify-center text-sm font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-transform active:scale-95" style={{borderRadius: '10px', padding: '.75rem 1.5rem', background: 'linear-gradient(336deg, #ffc420 0%, #fe4b08 39%, #fe4b08 57%, #ffc420 100%)', boxShadow: 'inset 12px 0 12px rgba(255, 255, 255, .25), inset -2px -4px 8px rgba(255,255,255,.25)'}}>
 <span className="pointer-events-none absolute inset-0 rounded-[10px] transition-all duration-300 will-change-filter opacity-100 blur-[5px] group-hover:opacity-0 group-hover:blur-0" style={{background: 'linear-gradient(to top, rgba(255,196,32,.53), transparent)', zIndex: '-1'}}></span>
       Generate a Song
     </button>

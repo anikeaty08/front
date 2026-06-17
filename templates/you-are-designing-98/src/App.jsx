@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -35,7 +77,7 @@ gtag('config', 'G-2M6V79H761');
 </nav>
 
 <header className="pt-32 pb-20 px-6 border-b border-[#0E2F26]/5 relative overflow-hidden">
-<div className="absolute top-0 right-0 w-[600px] h-[600px] opacity-[0.03] pointer-events-none" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg width=\\'100\\' height=\\'100\\' viewBox=\\'0 0 100 100\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M0 0h100v100H0z\\' fill=\\'none\\'/%3E%3Cpath d=\\'M10 50q20-30 40 0t40 0\\' stroke=\\'%23000000\\' fill=\\'none\\' strokeWidth=\\'1\\'/%3E%3Cpath d=\\'M0 30q25 20 50-10t50 10\\' stroke=\\'%23000000\\' fill=\\'none\\' strokeWidth=\\'1\\'/%3E%3Cpath d=\\'M10 80q30-20 40 10t40-10\\' stroke=\\'%23000000\\' fill=\\'none\\' strokeWidth=\\'1\\'/%3E%3C/svg%3E\')', maskImage: 'linear-gradient(to bottom, black, transparent)'}}></div>
+<div className="absolute top-0 right-0 w-[600px] h-[600px] opacity-[0.03] pointer-events-none" style={{backgroundImage: 'url(\'data:image/svg+xml, %3Csvg width=\\'100\\' height=\\'100\\' viewBox=\\'0 0 100 100\\' xmlns=\\'http: //www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M0 0h100v100H0z\\' fill=\\'none\\'/%3E%3Cpath d=\\'M10 50q20-30 40 0t40 0\\' stroke=\\'%23000000\\' fill=\\'none\\' strokeWidth=\\'1\\'/%3E%3Cpath d=\\'M0 30q25 20 50-10t50 10\\' stroke=\\'%23000000\\' fill=\\'none\\' strokeWidth=\\'1\\'/%3E%3Cpath d=\\'M10 80q30-20 40 10t40-10\\' stroke=\\'%23000000\\' fill=\\'none\\' strokeWidth=\\'1\\'/%3E%3C/svg%3E\')', maskImage: 'linear-gradient(to bottom, black, transparent)'}}></div>
 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10">
 <div className="space-y-8">
 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F5F5F4] text-[#0E2F26] text-xs font-medium tracking-wide">

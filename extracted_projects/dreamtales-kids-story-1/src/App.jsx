@@ -165,6 +165,42 @@ const Reader = () => {
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     window.scrollTo(0, 0);
   }, [currentPage]);
 
@@ -245,7 +281,7 @@ const Reader = () => {
           <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
             <div 
               className={clsx("h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r", story.color)}
-              style={{ width: `${progress}%` }}
+              style={{width: `${progress}%`}}
             ></div>
           </div>
           <p className="text-center text-xs font-semibold text-slate-400 mt-2 uppercase tracking-wider">

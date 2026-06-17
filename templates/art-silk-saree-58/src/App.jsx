@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -30,6 +66,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -68,11 +110,11 @@ gtag('config', 'G-2M6V79H761');
 </nav>
 <div className="flex items-center gap-3">
 <a className="hidden sm:inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#d1a850] to-[#f5e9d0] px-4 py-2 text-sm text-[#1a0f12] font-semibold shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:opacity-95 transition-opacity" href="https://wa.me/919999999999?text=Hello%20POPULAR%20SILK%2C%20I%27d%20like%20to%20enquire%20about%20wholesale%20art%20silk%20sarees." id="whatsappTop" style={{fontFamily: 'Inter, system-ui, sans-serif'}} target="_blank">
-<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
             WhatsApp
           </a>
 <button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-zinc-100 hover:bg-white/10 transition-colors" id="menuBtn">
-<iconify-icon height="20" icon="solar:hamburger-menu-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:hamburger-menu-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </button>
 </div>
 </div>
@@ -86,7 +128,7 @@ gtag('config', 'G-2M6V79H761');
 <a className="rounded-xl px-3 py-2 hover:bg-white/5 hover:text-[#f5e9d0] transition-colors" href="#order">Order</a>
 <a className="rounded-xl px-3 py-2 hover:bg-white/5 hover:text-[#f5e9d0] transition-colors" href="#contact">Contact</a>
 <a className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#d1a850] to-[#f5e9d0] px-4 py-2 text-sm text-[#1a0f12] font-semibold" href="https://wa.me/919999999999?text=Hello%20POPULAR%20SILK%2C%20I%27d%20like%20to%20enquire%20about%20wholesale%20art%20silk%20sarees." style={{fontFamily: 'Inter, system-ui, sans-serif'}} target="_blank">
-<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Order on WhatsApp
             </a>
 </div>
@@ -112,11 +154,11 @@ gtag('config', 'G-2M6V79H761');
           </p>
 <div className="mt-7 flex flex-col sm:flex-row gap-3">
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 px-5 py-3 text-sm text-zinc-100 hover:bg-white/10 transition-colors" href="#gallery" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
-<iconify-icon height="18" icon="solar:gallery-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:gallery-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               View Gallery
             </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#d1a850] to-[#f5e9d0] px-5 py-3 text-sm text-[#1a0f12] font-semibold shadow-[0_14px_40px_rgba(0,0,0,0.55)] hover:opacity-95 transition-opacity" href="#order" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
-<iconify-icon height="18" icon="solar:cart-2-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:cart-2-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Wholesale Enquiry
             </a>
 </div>
@@ -178,7 +220,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-xs text-zinc-200/70" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>For retailers &amp; resellers across India.</div>
 </div>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0b0608]/60 border border-white/10 px-4 py-2 text-xs text-zinc-100 hover:bg-[#0b0608]/80 transition-colors" href="#order" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
-<iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                     Get catalogue
                   </a>
 </div>
@@ -205,7 +247,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-start gap-3">
 <div className="mt-0.5 rounded-xl border border-[#d1a850]/30 bg-[#d1a850]/10 p-2 text-[#f5e9d0]">
-<iconify-icon height="18" icon="solar:shield-check-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:shield-check-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Reliable quality for repeat retail sales</div>
@@ -216,7 +258,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-start gap-3">
 <div className="mt-0.5 rounded-xl border border-[#d1a850]/30 bg-[#d1a850]/10 p-2 text-[#f5e9d0]">
-<iconify-icon height="18" icon="solar:box-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:box-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Wholesale-ready stock &amp; bulk handling</div>
@@ -227,7 +269,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-start gap-3">
 <div className="mt-0.5 rounded-xl border border-[#d1a850]/30 bg-[#d1a850]/10 p-2 text-[#f5e9d0]">
-<iconify-icon height="18" icon="solar:map-point-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:map-point-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Chickpet hub access</div>
@@ -266,7 +308,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Catalogue + pricing on WhatsApp</div>
 </div>
 <a className="inline-flex items-center justify-center rounded-xl border border-[#d1a850]/30 bg-[#d1a850]/10 px-3 py-2 text-xs text-[#f5e9d0] hover:bg-[#d1a850]/15 transition-colors" href="#order" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
-<iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </a>
 </div>
 </div>
@@ -289,7 +331,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 <a className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-100 hover:bg-white/10 transition-colors" href="#order" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
-<iconify-icon height="18" icon="solar:document-text-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:document-text-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
           Request Catalogue
         </a>
 </div>
@@ -297,7 +339,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="group rounded-[1.75rem] border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition-colors">
 <div className="flex items-start justify-between gap-4">
 <div className="rounded-2xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-3 text-[#f5e9d0]">
-<iconify-icon height="20" icon="solar:star-shine-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:star-shine-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <span className="text-xs text-zinc-200/60" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Core</span>
 </div>
@@ -307,13 +349,13 @@ gtag('config', 'G-2M6V79H761');
           </p>
 <div className="mt-4 inline-flex items-center gap-2 text-xs text-[#f5e9d0]/80" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
             Explore
-            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 <div className="group rounded-[1.75rem] border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition-colors">
 <div className="flex items-start justify-between gap-4">
 <div className="rounded-2xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-3 text-[#f5e9d0]">
-<iconify-icon height="20" icon="solar:pallete-2-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:pallete-2-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <span className="text-xs text-zinc-200/60" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Popular</span>
 </div>
@@ -323,13 +365,13 @@ gtag('config', 'G-2M6V79H761');
           </p>
 <div className="mt-4 inline-flex items-center gap-2 text-xs text-[#f5e9d0]/80" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
             Explore
-            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 <div className="group rounded-[1.75rem] border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition-colors">
 <div className="flex items-start justify-between gap-4">
 <div className="rounded-2xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-3 text-[#f5e9d0]">
-<iconify-icon height="20" icon="solar:box-minimalistic-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:box-minimalistic-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <span className="text-xs text-zinc-200/60" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Wholesale</span>
 </div>
@@ -339,13 +381,13 @@ gtag('config', 'G-2M6V79H761');
           </p>
 <div className="mt-4 inline-flex items-center gap-2 text-xs text-[#f5e9d0]/80" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
             Explore
-            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 <div className="group rounded-[1.75rem] border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition-colors">
 <div className="flex items-start justify-between gap-4">
 <div className="rounded-2xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-3 text-[#f5e9d0]">
-<iconify-icon height="20" icon="solar:sun-fog-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="solar:sun-fog-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <span className="text-xs text-zinc-200/60" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>New</span>
 </div>
@@ -355,7 +397,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 <div className="mt-4 inline-flex items-center gap-2 text-xs text-[#f5e9d0]/80" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
             Explore
-            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+            <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 </div>
@@ -372,7 +414,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 <div className="hidden lg:flex items-center gap-2 text-xs text-zinc-200/70" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
-<iconify-icon height="16" icon="solar:info-circle-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="solar:info-circle-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
           Images are representational
         </div>
 </div>
@@ -386,7 +428,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-base sm:text-lg font-semibold text-[#f5e9d0] tracking-tight" style={{fontFamily: 'Fraunces, serif'}}>Gold Highlight Borders</div>
 </div>
 <div className="rounded-xl border border-white/10 bg-[#0b0608]/50 backdrop-blur p-2 text-[#f5e9d0]">
-<iconify-icon height="18" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 </div>
 </a>
@@ -417,7 +459,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="hidden sm:flex items-center gap-2 text-xs text-zinc-200/70" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
                 Tap to enquire
-                <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+                <iconify-icon height="16" icon="solar:arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 </a>
@@ -490,18 +532,18 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 <div className="rounded-2xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-3 text-[#f5e9d0]">
-<iconify-icon height="22" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon height="22" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 </div>
 <div className="mt-5 grid gap-3">
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#d1a850] to-[#f5e9d0] px-5 py-3 text-sm text-[#1a0f12] font-semibold shadow-[0_18px_55px_rgba(0,0,0,0.55)] hover:opacity-95 transition-opacity" href="https://wa.me/919999999999?text=Hello%20POPULAR%20SILK%2C%20I%20want%20to%20place%20a%20wholesale%20order.%20Please%20share%20the%20latest%20catalogue%20%2B%20prices.%0A%0ACategory%3A%20Art%20Silk%20%2F%20Fancy%0AQuantity%3A%20%0ADelivery%20City%3A%20" id="whatsappOrder" style={{fontFamily: 'Inter, system-ui, sans-serif'}} target="_blank">
-<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Order on WhatsApp
                 </a>
 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
 <div className="flex items-center gap-3">
 <div className="rounded-xl border border-white/10 bg-[#0b0608]/40 p-2 text-zinc-200">
-<iconify-icon height="18" icon="solar:map-point-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:map-point-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div className="text-xs text-zinc-200/75" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
                       Visit us at Chickpet, Bengaluru for in-person selection.
@@ -531,7 +573,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
 <div className="flex items-start gap-3">
 <div className="rounded-xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-2 text-[#f5e9d0] mt-0.5">
-<iconify-icon height="18" icon="solar:map-point-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:map-point-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Address</div>
@@ -545,7 +587,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
 <div className="flex items-start gap-3">
 <div className="rounded-xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-2 text-[#f5e9d0] mt-0.5">
-<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div className="flex-1">
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>WhatsApp</div>
@@ -554,11 +596,11 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 <div className="mt-3 flex flex-col sm:flex-row gap-3">
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#d1a850] to-[#f5e9d0] px-5 py-3 text-sm text-[#1a0f12] font-semibold hover:opacity-95 transition-opacity" href="https://wa.me/919999999999?text=Hello%20POPULAR%20SILK%2C%20I%20need%20the%20latest%20wholesale%20catalogue%20and%20prices." style={{fontFamily: 'Inter, system-ui, sans-serif'}} target="_blank">
-<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                       Chat on WhatsApp
                     </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm text-zinc-100 hover:bg-white/10 transition-colors" href="#order" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
-<iconify-icon height="18" icon="solar:document-text-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:document-text-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                       Request Catalogue
                     </a>
 </div>
@@ -568,7 +610,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-5">
 <div className="flex items-start gap-3">
 <div className="rounded-xl border border-[#d1a850]/30 bg-[#0b0608]/40 p-2 text-[#f5e9d0] mt-0.5">
-<iconify-icon height="18" icon="solar:store-2-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:store-2-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Business</div>
@@ -589,7 +631,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-1 text-lg font-semibold text-[#f5e9d0] tracking-tight" style={{fontFamily: 'Fraunces, serif'}}>Chickpet, Bengaluru</div>
 </div>
 <a className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-100 hover:bg-white/10 transition-colors" href="https://www.google.com/maps/search/?api=1&amp;query=M.K.%20Market%20Avenue%20Road%20Chickpet%20Bengaluru%20560053" style={{fontFamily: 'Inter, system-ui, sans-serif'}} target="_blank">
-<iconify-icon height="18" icon="solar:map-arrow-right-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:map-arrow-right-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Open in Maps
                 </a>
 </div>
@@ -603,7 +645,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
 <div className="flex items-start gap-3">
 <div className="rounded-xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-2 text-[#f5e9d0] mt-0.5">
-<iconify-icon height="18" icon="solar:clock-circle-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:clock-circle-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Business hours</div>
@@ -614,7 +656,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
 <div className="flex items-start gap-3">
 <div className="rounded-xl border border-[#d1a850]/25 bg-[#d1a850]/10 p-2 text-[#f5e9d0] mt-0.5">
-<iconify-icon height="18" icon="solar:phone-rounded-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:phone-rounded-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold text-[#f5e9d0]" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Contact</div>
@@ -646,7 +688,7 @@ gtag('config', 'G-2M6V79H761');
 <a className="text-xs text-zinc-200/70 hover:text-[#f5e9d0] transition-colors" href="#home" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Back to top</a>
 <span className="hidden sm:inline text-xs text-zinc-200/25">•</span>
 <a className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs text-zinc-100 hover:bg-white/10 transition-colors" href="https://wa.me/919999999999?text=Hello%20POPULAR%20SILK%2C%20Please%20share%20the%20latest%20wholesale%20catalogue%20and%20prices." style={{fontFamily: 'Inter, system-ui, sans-serif'}} target="_blank">
-<iconify-icon height="16" icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
             WhatsApp Enquiry
           </a>
 </div>

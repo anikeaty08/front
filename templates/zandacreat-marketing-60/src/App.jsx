@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -219,6 +255,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -228,7 +270,7 @@ gtag('config', 'G-2M6V79H761');
 
 <nav className="fixed top-0 left-0 right-0 z-50 h-[72px] flex items-center" id="navbar" style={{backdropFilter: 'blur(20px)', background: 'rgba(248, 248, 245, 0.96)', borderBottom: '1px solid rgba(10, 23, 29, 0.06)', boxShadow: 'rgba(10, 23, 29, 0.06) 0px 4px 24px'}}>
 <div className="flex w-full items-center justify-between" style={{maxWidth: '1200px', margin: '0 auto', padding: '0 28px'}}>
-<a className="flex items-center gap-0 shrink-0" href="#" style={{fontSize: 'clamp(1rem,1.2vw,1.15rem)', fontWeight: '700', letterSpacing: '-0.04em', color: 'var(--onyx)'}}>
+<a className="flex items-center gap-0 shrink-0" href="#" style={{fontSize: 'clamp(1rem, 1.2vw, 1.15rem)', fontWeight: '700', letterSpacing: '-0.04em', color: 'var(--onyx)'}}>
           Zanda
           <span className="" style={{position: 'relative'}}>
             C
@@ -279,22 +321,22 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 <div className="flex flex-col gap-1 p-6 flex-1">
-<a className="mobile-link block py-3 font-semibold" href="#domu" style={{fontSize: 'clamp(1.1rem,3vw,1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
+<a className="mobile-link block py-3 font-semibold" href="#domu" style={{fontSize: 'clamp(1.1rem, 3vw, 1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
           Domů
         </a>
-<a className="mobile-link block py-3 font-semibold" href="#sluzby" style={{fontSize: 'clamp(1.1rem,3vw,1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
+<a className="mobile-link block py-3 font-semibold" href="#sluzby" style={{fontSize: 'clamp(1.1rem, 3vw, 1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
           Služby
         </a>
-<a className="mobile-link block py-3 font-semibold" href="#reference" style={{fontSize: 'clamp(1.1rem,3vw,1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
+<a className="mobile-link block py-3 font-semibold" href="#reference" style={{fontSize: 'clamp(1.1rem, 3vw, 1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
           Reference
         </a>
-<a className="mobile-link block py-3 font-semibold" href="#o-nas" style={{fontSize: 'clamp(1.1rem,3vw,1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
+<a className="mobile-link block py-3 font-semibold" href="#o-nas" style={{fontSize: 'clamp(1.1rem, 3vw, 1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
           O nás
         </a>
-<a className="mobile-link block py-3 font-semibold" href="#proces" style={{fontSize: 'clamp(1.1rem,3vw,1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
+<a className="mobile-link block py-3 font-semibold" href="#proces" style={{fontSize: 'clamp(1.1rem, 3vw, 1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)', borderBottom: '1px solid var(--line)'}}>
           Proces
         </a>
-<a className="mobile-link block py-3 font-semibold" href="#kontakt" style={{fontSize: 'clamp(1.1rem,3vw,1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<a className="mobile-link block py-3 font-semibold" href="#kontakt" style={{fontSize: 'clamp(1.1rem, 3vw, 1.3rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
           Kontakt
         </a>
 </div>
@@ -304,7 +346,7 @@ gtag('config', 'G-2M6V79H761');
         </a>
 </div>
 </div>
-<div className="fixed inset-0 z-[55] hidden" id="mobile-overlay" style={{background: 'rgba(10,23,29,0.3)', backdropFilter: 'blur(4px)'}}></div>
+<div className="fixed inset-0 z-[55] hidden" id="mobile-overlay" style={{background: 'rgba(10, 23, 29, 0.3)', backdropFilter: 'blur(4px)'}}></div>
 
 <section className="relative" id="domu" style={{paddingTop: '120px', paddingBottom: '100px'}}>
 <div className="" style={{maxWidth: '1200px', margin: '0 auto', padding: '0 28px'}}>
@@ -317,7 +359,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid gap-10 lg:gap-8 items-start" id="hero-grid" style={{gridTemplateColumns: '1fr'}}>
 <div className="">
 <h1 className="" id="hero-h1" style={{fontSize: 'clamp(40px, 6vw, 76px)', lineHeight: '1.05', letterSpacing: '-0.06em', fontWeight: '700', color: 'var(--onyx)', marginBottom: '28px', maxWidth: '900px'}}><span className="hero-word" style={{transitionDelay: '0s'}}>Obsah,</span> <span className="hero-word" style={{transitionDelay: '0.1s'}}>který</span> <span className="hero-word" style={{transitionDelay: '0.2s'}}>prodává</span> <span className="hero-word" style={{transitionDelay: '0.3s'}}>bez</span> <span className="hero-word" style={{transitionDelay: '0.4s'}}>toho,</span> <span className="hero-word" style={{transitionDelay: '0.5s'}}>aby</span> <span className="hero-word" style={{transitionDelay: '0.6s'}}>prodával.</span></h1>
-<p className="sr" style={{fontSize: 'clamp(1rem,1.2vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '600px', marginBottom: '36px'}}>
+<p className="sr" style={{fontSize: 'clamp(1rem, 1.2vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '600px', marginBottom: '36px'}}>
               Nejlepší marketing nepůsobí jako marketing. Buduje důvěru, mění
               přesvědčení a přitahuje správné klienty — dřív, než vůbec otevřou
               DM. To je Invisible Funnel. A tohle stavíme pro vaši značku.
@@ -333,14 +375,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="sr" style={{border: '1px solid var(--line)', borderRadius: '16px', padding: '24px 28px'}}>
 <div className="flex items-baseline gap-2 mb-2">
-<span className="font-bold stat-number" style={{fontSize: 'clamp(1.2rem,1.5vw,1.4rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<span className="font-bold stat-number" style={{fontSize: 'clamp(1.2rem, 1.5vw, 1.4rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
                   370M+ views
                 </span>
-<span className="font-light" style={{fontSize: 'clamp(0.78rem,0.88vw,0.88rem)', color: 'var(--soft)'}}>
+<span className="font-light" style={{fontSize: 'clamp(0.78rem, 0.88vw, 0.88rem)', color: 'var(--soft)'}}>
                   za 3 roky skrz naše střihy.
                 </span>
 </div>
-<p className="font-light" style={{fontSize: 'clamp(0.82rem,0.92vw,0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.82rem, 0.92vw, 0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
                 Pozornost umíme získat. Teď ji stavíme tak, aby měnila
                 přesvědčení — a přinášela poptávky.
               </p>
@@ -348,12 +390,12 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="sr hidden lg:flex">
 <div className="overflow-hidden flex flex-col float-anim w-full relative justify-end" style={{background: 'var(--oceanic)', borderRadius: '32px', minHeight: '440px', padding: '40px'}}>
-<div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none" style={{fontSize: 'clamp(180px,22vw,280px)', fontWeight: '800', letterSpacing: '-0.08em', color: 'rgba(255,255,255,0.04)', lineHeight: '1'}}>
+<div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none" style={{fontSize: 'clamp(180px, 22vw, 280px)', fontWeight: '800', letterSpacing: '-0.08em', color: 'rgba(255,255,255,0.04)', lineHeight: '1'}}>
                 ZC
               </div>
 <div className="relative z-10">
 <div className="mb-4" style={{width: '40px', height: '3px', background: 'var(--nectarine)', borderRadius: '2px'}}></div>
-<p className="" style={{fontSize: 'clamp(0.9rem,1.1vw,1.05rem)', fontWeight: '300', lineHeight: '1.65', color: 'rgba(255,255,255,0.7)'}}>
+<p className="" style={{fontSize: 'clamp(0.9rem, 1.1vw, 1.05rem)', fontWeight: '300', lineHeight: '1.65', color: 'rgba(255,255,255,0.7)'}}>
                   Obsah, který mění přesvědčení. Brand, který prodává bez tlaku.
                   Funnel, který funguje neviditelně.
                 </p>
@@ -613,7 +655,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<p className="sr font-light text-center" style={{fontSize: 'clamp(0.85rem,0.95vw,0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '560px', margin: '0 auto'}}>
+<p className="sr font-light text-center" style={{fontSize: 'clamp(0.85rem, 0.95vw, 0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '560px', margin: '0 auto'}}>
           Desítky až stovky výstupů. Reálné zkušenosti s tím, co na sociálních
           sítích funguje — na pozornost, brand i výkon.
         </p>
@@ -627,53 +669,53 @@ gtag('config', 'G-2M6V79H761');
             01 — Pozice
           </span>
 <div className="">
-<h2 className="" style={{fontSize: 'clamp(26px,3.8vw,46px)', fontWeight: '700', letterSpacing: '-0.05em', lineHeight: '1.1', color: 'var(--onyx)', marginBottom: '24px', maxWidth: '640px'}}>
+<h2 className="" style={{fontSize: 'clamp(26px, 3.8vw, 46px)', fontWeight: '700', letterSpacing: '-0.05em', lineHeight: '1.1', color: 'var(--onyx)', marginBottom: '24px', maxWidth: '640px'}}>
               Hezký content nestačí. Musí měnit přesvědčení.
             </h2>
-<p className="" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px', marginBottom: '20px'}}>
+<p className="" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px', marginBottom: '20px'}}>
               Mnoho značek platí za content, který vypadá dobře. Má views, má
               reach, má design. Ale objednávky nepřicházejí.
             </p>
-<p className="" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px', marginBottom: '20px'}}>
+<p className="" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px', marginBottom: '20px'}}>
               Problém není v algoritmu. Problém je v tom, že obsah nemění
               způsob, jakým lidé přemýšlejí — a bez toho nikdo nekoupí. Lidi
               nekupují službu. Nejdřív kupují nový pohled na realitu.
             </p>
-<p className="font-semibold" style={{fontSize: 'clamp(0.95rem,1.1vw,1.1rem)', lineHeight: '1.65', color: 'var(--onyx)', maxWidth: '640px', marginBottom: '48px'}}>
+<p className="font-semibold" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.1rem)', lineHeight: '1.65', color: 'var(--onyx)', maxWidth: '640px', marginBottom: '48px'}}>
               Invisible Funnel to řeší vrstva po vrstvě:
             </p>
 </div>
 </div>
 <div className="stagger-children">
 <div className="grid items-start gap-0" style={{gridTemplateColumns: '40px 1fr', borderTop: '1px solid var(--line)', padding: '20px 0'}}>
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)'}}>
               01
             </span>
-<span className="font-semibold" style={{fontSize: 'clamp(1rem,1.2vw,1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
+<span className="font-semibold" style={{fontSize: 'clamp(1rem, 1.2vw, 1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
               Content zastaví správného člověka
             </span>
 </div>
 <div className="grid items-start gap-0" style={{gridTemplateColumns: '40px 1fr', borderTop: '1px solid var(--line)', padding: '20px 0'}}>
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)'}}>
               02
             </span>
-<span className="font-semibold" style={{fontSize: 'clamp(1rem,1.2vw,1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
+<span className="font-semibold" style={{fontSize: 'clamp(1rem, 1.2vw, 1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
               Messaging rozbije starý způsob přemýšlení
             </span>
 </div>
 <div className="grid items-start gap-0" style={{gridTemplateColumns: '40px 1fr', borderTop: '1px solid var(--line)', padding: '20px 0'}}>
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)'}}>
               03
             </span>
-<span className="font-semibold" style={{fontSize: 'clamp(1rem,1.2vw,1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
+<span className="font-semibold" style={{fontSize: 'clamp(1rem, 1.2vw, 1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
               Brand buduje autoritu dřív, než zákazník zavolá
             </span>
 </div>
 <div className="grid items-start gap-0" style={{gridTemplateColumns: '40px 1fr', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', padding: '20px 0'}}>
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)'}}>
               04
             </span>
-<span className="font-semibold" style={{fontSize: 'clamp(1rem,1.2vw,1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
+<span className="font-semibold" style={{fontSize: 'clamp(1rem, 1.2vw, 1.15rem)', letterSpacing: '-0.02em', color: 'var(--onyx)'}}>
               Funnel vede k akci bez tlaku
             </span>
 </div>
@@ -687,85 +729,85 @@ gtag('config', 'G-2M6V79H761');
 <span className="uppercase font-bold block mb-6" style={{fontSize: '12px', letterSpacing: '0.08em', color: 'var(--soft)'}}>
             02 — Invisible Funnel
           </span>
-<h2 className="" style={{fontSize: 'clamp(36px,4.5vw,58px)', letterSpacing: '-0.06em', fontWeight: '700', lineHeight: '1.05', color: 'var(--onyx)', maxWidth: '700px'}}>
+<h2 className="" style={{fontSize: 'clamp(36px, 4.5vw, 58px)', letterSpacing: '-0.06em', fontWeight: '700', lineHeight: '1.05', color: 'var(--onyx)', maxWidth: '700px'}}>
             Invisible Funnel: 6 vrstev od pozornosti k touze.
           </h2>
 </div>
-<p className="sr mb-14" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px'}}>
+<p className="sr mb-14" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px'}}>
           Každý člověk prochází psychologickými fázemi, než nakoupí. Náš systém
           je navržený tak, aby váš obsah vedl člověka všemi vrstvami —
           nenápadně, přirozeně a efektivně.
         </p>
 <div className="stagger-children grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 <div className="funnel-step flex flex-col" style={{background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '22px', padding: '32px', boxShadow: 'var(--card-shadow)'}}>
-<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem,0.85vw,0.85rem)', color: 'var(--nectarine)'}}>
+<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem, 0.85vw, 0.85rem)', color: 'var(--nectarine)'}}>
               01
             </span>
-<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
               Pozornost
             </h3>
-<p className="font-light" style={{fontSize: 'clamp(0.82rem,0.92vw,0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.82rem, 0.92vw, 0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
               Nezastavujeme náhodně. Zastavujeme správného člověka ve správný
               moment — přes přesně mířený hook, napětí a relevantní problém.
             </p>
 </div>
 <div className="funnel-step flex flex-col" style={{background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '22px', padding: '32px', boxShadow: 'var(--card-shadow)'}}>
-<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem,0.85vw,0.85rem)', color: 'var(--nectarine)'}}>
+<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem, 0.85vw, 0.85rem)', color: 'var(--nectarine)'}}>
               02
             </span>
-<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
               Změna přesvědčení
             </h3>
-<p className="font-light" style={{fontSize: 'clamp(0.82rem,0.92vw,0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.82rem, 0.92vw, 0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
               Rozbíjíme starý způsob přemýšlení a nabídneme nový rámec. Dokud se
               přesvědčení nezmění, ke konverzi nedojde.
             </p>
 </div>
 <div className="funnel-step flex flex-col" style={{background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '22px', padding: '32px', boxShadow: 'var(--card-shadow)'}}>
-<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem,0.85vw,0.85rem)', color: 'var(--nectarine)'}}>
+<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem, 0.85vw, 0.85rem)', color: 'var(--nectarine)'}}>
               03
             </span>
-<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
               Signál autority
             </h3>
-<p className="font-light" style={{fontSize: 'clamp(0.82rem,0.92vw,0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.82rem, 0.92vw, 0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
               Konzistentní insighty, přesný jazyk a vlastní frameworky budují
               vnímanou kompetenci — ještě dřív, než zákazník zavolá.
             </p>
 </div>
 <div className="funnel-step flex flex-col" style={{background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '22px', padding: '32px', boxShadow: 'var(--card-shadow)'}}>
-<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem,0.85vw,0.85rem)', color: 'var(--nectarine)'}}>
+<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem, 0.85vw, 0.85rem)', color: 'var(--nectarine)'}}>
               04
             </span>
-<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
               Budování důvěry
             </h3>
-<p className="font-light" style={{fontSize: 'clamp(0.82rem,0.92vw,0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.82rem, 0.92vw, 0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
               Stories, zákulisí a lidský rozměr zkracují vzdálenost. Kombinace
               autority a blízkosti vytváří nejsilnější důvěru.
             </p>
 </div>
 <div className="funnel-step flex flex-col" style={{background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '22px', padding: '32px', boxShadow: 'var(--card-shadow)'}}>
-<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem,0.85vw,0.85rem)', color: 'var(--nectarine)'}}>
+<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem, 0.85vw, 0.85rem)', color: 'var(--nectarine)'}}>
               05
             </span>
-<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
               Touha
             </h3>
-<p className="font-light" style={{fontSize: 'clamp(0.82rem,0.92vw,0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.82rem, 0.92vw, 0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
               Ukazujeme žádoucí budoucnost — ne jen řešení problému, ale
               identitu, do které zákazník chce vstoupit. Touha prodává víc než
               argument.
             </p>
 </div>
 <div className="funnel-step flex flex-col" style={{background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '22px', padding: '32px', boxShadow: 'var(--card-shadow)'}}>
-<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem,0.85vw,0.85rem)', color: 'var(--nectarine)'}}>
+<span className="font-bold mb-4" style={{fontSize: 'clamp(0.75rem, 0.85vw, 0.85rem)', color: 'var(--nectarine)'}}>
               06
             </span>
-<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold mb-3" style={{fontSize: 'clamp(1.1rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
               Přirozená konverze
             </h3>
-<p className="font-light" style={{fontSize: 'clamp(0.82rem,0.92vw,0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.82rem, 0.92vw, 0.92rem)', lineHeight: '1.6', color: 'var(--soft)'}}>
               Žádný tlak. Zákazník sám pociťuje, že chce udělat krok. Proto jsou
               naše poptávky kvalitnější — lidé přicházejí předehřátí.
             </p>
@@ -1016,44 +1058,44 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 <div className="sr">
-<h2 className="mb-8" style={{fontSize: 'clamp(30px,4vw,50px)', letterSpacing: '-0.05em', fontWeight: '700', lineHeight: '1.08', color: 'var(--onyx)'}}>
+<h2 className="mb-8" style={{fontSize: 'clamp(30px, 4vw, 50px)', letterSpacing: '-0.05em', fontWeight: '700', lineHeight: '1.08', color: 'var(--onyx)'}}>
               Začínal jsem jako editor. Skončil jsem jako Brand Architect.
             </h2>
-<p className="mb-5" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
+<p className="mb-5" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
               Prvních několik let jsem pracoval jako editor. Střihal jsem pro
               tvůrce jako Tary, Flexybabka, Pan Čung, Geicha, Kuba Letenka nebo
               Kuba English. Za tu dobu naše střihy nasbíraly přes 370 milionů
               views.
             </p>
-<p className="mb-5" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
+<p className="mb-5" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
               Čísla vypadala dobře. Ale něco mi nesedelo. Viděl jsem, jak značky
               a tvůrci rostou na dosahu — a přesto bojují o klienty. Platili za
               reklamy, které tlačily. Za content, který křičel. Za funnely,
               které působily jako past. Algoritmus fungoval. Brand ne.
             </p>
-<p className="mb-5" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
+<p className="mb-5" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
               Začal jsem zkoumat, co skutečně přesvědčí člověka, aby chtěl — ne
               aby byl dotlačen. Jak vypadá obsah, který mění přesvědčení dřív,
               než někdo otevře DM. Jak brand buduje důvěru bez toho, aby
               prodával.
             </p>
-<p className="mb-5" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
+<p className="mb-5" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)'}}>
               Z toho vznikl Invisible Funnel. Ne jako buzzword. Jako systém —
               postavený na psychologii pozornosti, změně přesvědčení a brand
               positioningu. Systém, kde content neprodává křikem, ale přirozenou
               cestou, po které člověk dojde sám k tomu, že chce.
             </p>
-<p className="" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '400', lineHeight: '1.65', color: 'var(--onyx)'}}>
+<p className="" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '400', lineHeight: '1.65', color: 'var(--onyx)'}}>
               Dnes nejsem editor. Jsem Brand Architect. A ZandaCreative je
               místo, kde tenhle systém stavíme pro vaši značku.
             </p>
 </div>
 <div className="sr flex items-start justify-center lg:justify-end">
 <div className="w-full max-w-sm flex flex-col items-center justify-center text-center" style={{background: 'var(--wheat)', borderRadius: '22px', padding: '56px 40px', border: '1px solid rgba(10,23,29,0.05)'}}>
-<span style={{fontSize: 'clamp(56px,7vw,80px)', fontWeight: '800', letterSpacing: '-0.06em', color: 'var(--oceanic)', lineHeight: '1'}}>
+<span style={{fontSize: 'clamp(56px, 7vw, 80px)', fontWeight: '800', letterSpacing: '-0.06em', color: 'var(--oceanic)', lineHeight: '1'}}>
                 370M+
               </span>
-<span className="mt-3 font-light" style={{fontSize: 'clamp(0.9rem,1vw,1.05rem)', color: 'var(--soft)'}}>
+<span className="mt-3 font-light" style={{fontSize: 'clamp(0.9rem, 1vw, 1.05rem)', color: 'var(--soft)'}}>
                 views za poslední 3 roky
               </span>
 </div>
@@ -1068,7 +1110,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="uppercase font-bold block mb-6" style={{fontSize: '12px', letterSpacing: '0.08em', color: 'var(--soft)'}}>
             05 — Reference
           </span>
-<h2 className="" style={{fontSize: 'clamp(36px,4.5vw,58px)', letterSpacing: '-0.06em', fontWeight: '700', lineHeight: '1.05', color: 'var(--onyx)', maxWidth: '700px'}}>
+<h2 className="" style={{fontSize: 'clamp(36px, 4.5vw, 58px)', letterSpacing: '-0.06em', fontWeight: '700', lineHeight: '1.05', color: 'var(--onyx)', maxWidth: '700px'}}>
             Značky, pro které pozornost přinesla výsledky.
           </h2>
 </div>
@@ -1294,11 +1336,11 @@ gtag('config', 'G-2M6V79H761');
 <span className="uppercase font-bold block mb-6" style={{fontSize: '12px', letterSpacing: '0.08em', color: 'var(--soft)'}}>
             06 — Proces
           </span>
-<h2 className="" style={{fontSize: 'clamp(36px,4.5vw,58px)', letterSpacing: '-0.06em', fontWeight: '700', lineHeight: '1.05', color: 'var(--onyx)', maxWidth: '600px'}}>
+<h2 className="" style={{fontSize: 'clamp(36px, 4.5vw, 58px)', letterSpacing: '-0.06em', fontWeight: '700', lineHeight: '1.05', color: 'var(--onyx)', maxWidth: '600px'}}>
             Od prvního hovoru k funnel systému.
           </h2>
 </div>
-<p className="sr mb-14" style={{fontSize: 'clamp(0.95rem,1.1vw,1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px'}}>
+<p className="sr mb-14" style={{fontSize: 'clamp(0.95rem, 1.1vw, 1.19rem)', fontWeight: '300', lineHeight: '1.65', color: 'var(--soft)', maxWidth: '640px'}}>
           Přinášíme strukturu, ne chaos. Každý krok má účel a klient vždy ví,
           kde v procesu jsme a co přijde dál.
         </p>
@@ -1306,10 +1348,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="process-item cursor-pointer" onclick="toggleProcess(this)" style={{borderTop: '1px solid var(--line)'}}>
 <div className="flex items-center justify-between py-5">
 <div className="flex items-center gap-5">
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)', minWidth: '32px'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)', minWidth: '32px'}}>
                   01
                 </span>
-<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
                   Audit a cíl
                 </h3>
 </div>
@@ -1318,7 +1360,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="process-content" style={{paddingLeft: '52px'}}>
-<p className="font-light" style={{fontSize: 'clamp(0.85rem,0.95vw,0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.85rem, 0.95vw, 0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
                 Projdeme váš content, positioning, nabídku a prostor pro růst.
                 Identifikujeme, kde dnes funnel selhává.
               </p>
@@ -1327,10 +1369,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="process-item cursor-pointer" onclick="toggleProcess(this)" style={{borderTop: '1px solid var(--line)'}}>
 <div className="flex items-center justify-between py-5">
 <div className="flex items-center gap-5">
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)', minWidth: '32px'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)', minWidth: '32px'}}>
                   02
                 </span>
-<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
                   Strategie
                 </h3>
 </div>
@@ -1339,7 +1381,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="process-content" style={{paddingLeft: '52px'}}>
-<p className="font-light" style={{fontSize: 'clamp(0.85rem,0.95vw,0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.85rem, 0.95vw, 0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
                 Navrhujeme messaging, sekvenci změny přesvědčení a logiku
                 konverze — celý systém na papíře.
               </p>
@@ -1348,10 +1390,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="process-item cursor-pointer" onclick="toggleProcess(this)" style={{borderTop: '1px solid var(--line)'}}>
 <div className="flex items-center justify-between py-5">
 <div className="flex items-center gap-5">
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)', minWidth: '32px'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)', minWidth: '32px'}}>
                   03
                 </span>
-<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
                   Podklady
                 </h3>
 </div>
@@ -1360,7 +1402,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="process-content" style={{paddingLeft: '52px'}}>
-<p className="font-light" style={{fontSize: 'clamp(0.85rem,0.95vw,0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.85rem, 0.95vw, 0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
                 Řekneme vám přesně, co potřebujeme — nebo vytěžíme maximum z
                 toho, co již máte.
               </p>
@@ -1369,10 +1411,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="process-item cursor-pointer" onclick="toggleProcess(this)" style={{borderTop: '1px solid var(--line)'}}>
 <div className="flex items-center justify-between py-5">
 <div className="flex items-center gap-5">
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)', minWidth: '32px'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)', minWidth: '32px'}}>
                   04
                 </span>
-<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
                   Exekuce
                 </h3>
 </div>
@@ -1381,7 +1423,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="process-content" style={{paddingLeft: '52px'}}>
-<p className="font-light" style={{fontSize: 'clamp(0.85rem,0.95vw,0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.85rem, 0.95vw, 0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
                 Realizujeme výstupy s maximální péčí o tempo, messaging,
                 estetiku i funkci každého kusu v rámci funnelu.
               </p>
@@ -1390,10 +1432,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="process-item cursor-pointer" onclick="toggleProcess(this)" style={{borderTop: '1px solid var(--line)'}}>
 <div className="flex items-center justify-between py-5">
 <div className="flex items-center gap-5">
-<span className="font-bold" style={{fontSize: 'clamp(0.85rem,1vw,1rem)', color: 'var(--soft)', minWidth: '32px'}}>
+<span className="font-bold" style={{fontSize: 'clamp(0.85rem, 1vw, 1rem)', color: 'var(--soft)', minWidth: '32px'}}>
                   05
                 </span>
-<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem,1.25vw,1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
+<h3 className="font-semibold" style={{fontSize: 'clamp(1.05rem, 1.25vw, 1.25rem)', letterSpacing: '-0.03em', color: 'var(--onyx)'}}>
                   Optimalizace
                 </h3>
 </div>
@@ -1402,7 +1444,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="process-content" style={{paddingLeft: '52px'}}>
-<p className="font-light" style={{fontSize: 'clamp(0.85rem,0.95vw,0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
+<p className="font-light" style={{fontSize: 'clamp(0.85rem, 0.95vw, 0.95rem)', lineHeight: '1.6', color: 'var(--soft)', maxWidth: '540px'}}>
                 Sledujeme data a chování publika. Upravujeme detaily, hooky i
                 flow tak, aby funnel konvertoval s maximální a dlouhodobou
                 efektivitou.
@@ -1454,7 +1496,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<footer className="" style={{background: 'var(--onyx)', color: 'rgba(255,255,255,0.6)', padding: '80px 0 40px', borderTop: '1px solid rgba(255,255,255,0.05)'}}>
+<footer className="" style={{background: 'var(--onyx)', color: 'rgba(255, 255, 255, 0.6)', padding: '80px 0 40px', borderTop: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="" style={{maxWidth: '1200px', margin: '0 auto', padding: '0 28px'}}>
 <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-4 mb-16">
 <div className="md:col-span-5 flex flex-col items-start">

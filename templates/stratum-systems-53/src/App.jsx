@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -79,6 +115,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -120,7 +162,7 @@ gtag('config', 'G-2M6V79H761');
             Zaloguj się
           </button>
 
-<button className="relative px-6 py-2.5 rounded-full text-zinc-900 font-semibold text-xs flex items-center justify-center gap-2 group transition-transform duration-100 hover:brightness-105 active:scale-[0.98] font-outfit" style={{background: 'linear-gradient(180deg, #d4ff33 0%, #b3e600 100%)', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.8), 0 6px 12px -4px rgba(196, 255, 0, 0.4), 0 2px 4px -2px rgba(0,0,0,0.1)', border: '1px solid #99cc00'}}>
+<button className="relative px-6 py-2.5 rounded-full text-zinc-900 font-semibold text-xs flex items-center justify-center gap-2 group transition-transform duration-100 hover:brightness-105 active:scale-[0.98] font-outfit" style={{background: 'linear-gradient(180deg, #d4ff33 0%, #b3e600 100%)', boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 6px 12px -4px rgba(196, 255, 0, 0.4), 0 2px 4px -2px rgba(0,0,0,0.1)', border: '1px solid #99cc00'}}>
 <span className="relative z-10 flex items-center gap-1.5 font-outfit drop-shadow-sm">
               Dostęp do Konsoli
               <iconify-icon className="text-base opacity-70 group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear"></iconify-icon>
@@ -145,7 +187,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex flex-col sm:flex-row gap-4 pt-4">
 
-<button className="relative px-8 py-3.5 rounded-full text-zinc-900 font-semibold text-sm flex items-center justify-center gap-2 group transition-transform duration-100 hover:brightness-105 active:scale-[0.98]" style={{background: 'linear-gradient(180deg, #d4ff33 0%, #b3e600 100%)', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.8), 0 8px 16px -4px rgba(196, 255, 0, 0.4), 0 4px 8px -2px rgba(0,0,0,0.1)', border: '1px solid #99cc00'}}>
+<button className="relative px-8 py-3.5 rounded-full text-zinc-900 font-semibold text-sm flex items-center justify-center gap-2 group transition-transform duration-100 hover:brightness-105 active:scale-[0.98]" style={{background: 'linear-gradient(180deg, #d4ff33 0%, #b3e600 100%)', boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 8px 16px -4px rgba(196, 255, 0, 0.4), 0 4px 8px -2px rgba(0,0,0,0.1)', border: '1px solid #99cc00'}}>
 <span className="relative z-10 flex items-center gap-2 font-outfit drop-shadow-sm">
               Dostęp do Konsoli
               <iconify-icon className="text-lg opacity-80 group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear"></iconify-icon>
@@ -194,7 +236,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-xs font-medium text-zinc-500 uppercase tracking-widest font-outfit" style={{textShadow: '0 1px 0 #ffffff'}}>
                   Master
                 </div>
-<div className="relative w-3 h-3 rounded-full bg-[#c4ff00]" style={{boxShadow: '0 0 12px 2px rgba(196, 255, 0, 0.8), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 2px rgba(0,0,0,0.2)'}}>
+<div className="relative w-3 h-3 rounded-full bg-[#c4ff00]" style={{boxShadow: '0 0 12px 2px rgba(196, 255, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.9), inset 0 -1px 2px rgba(0,0,0,0.2)'}}>
 <div className="absolute inset-[2px] rounded-full bg-white opacity-80 blur-[0.5px]"></div>
 </div>
 </div>
@@ -246,7 +288,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-5 rounded-full border border-zinc-300/30 shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)]"></div>
 
 <div className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
-<div className="w-2.5 h-2.5 rounded-full bg-[#c4ff00] relative" style={{boxShadow: '0 0 10px rgba(196, 255, 0, 0.8), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 2px rgba(0,0,0,0.2)'}}>
+<div className="w-2.5 h-2.5 rounded-full bg-[#c4ff00] relative" style={{boxShadow: '0 0 10px rgba(196, 255, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.9), inset 0 -1px 2px rgba(0,0,0,0.2)'}}>
 <div className="absolute inset-[2px] rounded-full bg-white opacity-80 blur-[0.5px]"></div>
 </div>
 </div>
@@ -260,7 +302,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-3 gap-6 px-4">
 
 <div className="flex flex-col items-center gap-4">
-<div className="w-10 h-16 rounded-full relative bg-zinc-200 flex justify-center p-1 border border-zinc-300" style={{boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.15), inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px #ffffff'}}>
+<div className="w-10 h-16 rounded-full relative bg-zinc-200 flex justify-center p-1 border border-zinc-300" style={{boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px #ffffff'}}>
 
 <div className="w-8 h-8 rounded-full absolute top-1 cursor-pointer transition-transform hover:-translate-y-0.5 border border-zinc-300" style="background: linear-gradient(180deg, #ffffff 0%, #e4e4e7 100%);
                                             box-shadow: 0 6px 8px rgba(0,0,0,0.15),
@@ -279,7 +321,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex flex-col items-center gap-4">
-<div className="w-10 h-16 rounded-full relative bg-zinc-200 flex justify-center p-1 border border-zinc-300" style={{boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.15), inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px #ffffff'}}>
+<div className="w-10 h-16 rounded-full relative bg-zinc-200 flex justify-center p-1 border border-zinc-300" style={{boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px #ffffff'}}>
 
 <div className="w-8 h-8 rounded-full absolute bottom-1 cursor-pointer transition-transform hover:translate-y-0.5 border border-zinc-300" style="background: linear-gradient(180deg, #e4e4e7 0%, #d4d4d8 100%);
                                             box-shadow: 0 -2px 6px rgba(0,0,0,0.1),
@@ -298,7 +340,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex flex-col items-center gap-4">
-<div className="w-10 h-16 rounded-full relative bg-zinc-200 flex justify-center p-1 border border-zinc-300" style={{boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.15), inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px #ffffff'}}>
+<div className="w-10 h-16 rounded-full relative bg-zinc-200 flex justify-center p-1 border border-zinc-300" style={{boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px #ffffff'}}>
 <div className="w-8 h-8 rounded-full absolute top-1 cursor-pointer transition-transform hover:-translate-y-0.5 border border-zinc-300" style="background: linear-gradient(180deg, #ffffff 0%, #e4e4e7 100%);
                                             box-shadow: 0 6px 8px rgba(0,0,0,0.15), inset 0 2px 4px #ffffff, inset 0 -2px 4px rgba(0,0,0,0.05);">
 <div className="absolute inset-0 flex flex-col items-center justify-center gap-[2px] opacity-30">
@@ -348,7 +390,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-zinc-500">STAN:</span>
 <div className="flex items-center gap-1.5 ml-1">
 
-<div className="relative w-1.5 h-1.5 rounded-full bg-[#c4ff00] animate-pulse" style={{boxShadow: '0 0 8px 1px rgba(196, 255, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.8), inset 0 -1px 1px rgba(0,0,0,0.2)'}}>
+<div className="relative w-1.5 h-1.5 rounded-full bg-[#c4ff00] animate-pulse" style={{boxShadow: '0 0 8px 1px rgba(196, 255, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.8), inset 0 -1px 1px rgba(0,0,0,0.2)'}}>
 <div className="absolute inset-[1px] rounded-full bg-white opacity-80 blur-[0.5px]"></div>
 </div>
 <span className="text-zinc-800 font-bold">OPERACYJNY</span>

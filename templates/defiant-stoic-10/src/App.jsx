@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,12 +48,18 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<div className="fixed inset-0 pointer-events-none opacity-[0.045]" style={{backgroundImage: 'url(&quot', data: 'image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\' fillOpacity=\'1\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1\'/%3E%3Ccircle cx=\'43\' cy=\'33\' r=\'1\'/%3E%3Ccircle cx=\'93\' cy=\'73\' r=\'1\'/%3E%3Ccircle cx=\'133\' cy=\'123\' r=\'1\'/%3E%3Ccircle cx=\'123\' cy=\'23\' r=\'1\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&quot'}}></div>
+<div className="fixed inset-0 pointer-events-none opacity-[0.045]" style={{backgroundImage: 'url(&quot', data: 'image/svg+xml, %3Csvg xmlns=\'http: //www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\' fillOpacity=\'1\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'1\'/%3E%3Ccircle cx=\'43\' cy=\'33\' r=\'1\'/%3E%3Ccircle cx=\'93\' cy=\'73\' r=\'1\'/%3E%3Ccircle cx=\'133\' cy=\'123\' r=\'1\'/%3E%3Ccircle cx=\'123\' cy=\'23\' r=\'1\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&quot'}}></div>
 <div className="absolute top-0 inset-x-0 h-[40rem] pointer-events-none opacity-80" style={{background: 'radial-gradient(circle at 20% 10%, rgba(255,185,122,0.26), transparent 32%), radial-gradient(circle at 80% 0%, rgba(255,221,173,0.34), transparent 28%), linear-gradient(to bottom, rgba(255,255,255,0.32), transparent 65%)'}}></div>
 <header className="fixed top-0 inset-x-0 z-40 bg-[#f6f1e8]/80 border-b border-black/5 backdrop-blur-md">
 <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">

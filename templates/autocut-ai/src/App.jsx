@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -98,6 +134,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -126,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 <a className="relative inline-flex items-center justify-center transition uppercase text-sm font-semibold tracking-wide text-white rounded-full px-7 py-3 shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/20" href="#" style={{willChange: 'transform'}}>
 <span className="absolute -inset-4 rounded-[999px] pointer-events-none opacity-70 blur-2xl" style={{background: 'radial-gradient(65% 65% at 50% 50%, rgba(59,130,246,0.70) 0%, rgba(59,130,246,0.35) 40%, rgba(59,130,246,0) 70%)'}}></span>
-<span className="rounded-full absolute top-0 right-0 bottom-0 left-0" style={{background: 'linear-gradient(180deg, #6EB7FF 0%, #2B86FF 45%, #0B4ED1 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.45), inset 0 -12px 22px rgba(0,0,0,0.45), 0 10px 32px rgba(30,144,255,0.65)'}}></span>
+<span className="rounded-full absolute top-0 right-0 bottom-0 left-0" style={{background: 'linear-gradient(180deg, #6EB7FF 0%, #2B86FF 45%, #0B4ED1 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.45), inset 0 -12px 22px rgba(0, 0, 0, 0.45), 0 10px 32px rgba(30,144,255,0.65)'}}></span>
 <span className="absolute inset-0 rounded-full pointer-events-none" style={{background: 'radial-gradient(120% 140% at 50% -10%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.28) 28%, rgba(255,255,255,0.12) 40%, rgba(255,255,255,0) 60%)'}}></span>
 <span className="z-10 font-medium tracking-tight font-geist relative">Sign In</span>
 </a>
@@ -148,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <a className="inline-flex items-center justify-center transition-all uppercase focus:outline-none focus:ring-2 focus:ring-white/20 hover:scale-110 text-sm font-semibold text-white tracking-wide rounded-full mt-2 pt-3 pr-8 pb-3 pl-8 relative shadow-lg group" href="#" style={{willChange: 'transform', transitionDuration: '300ms', transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'}}>
 <span className="absolute -inset-4 rounded-[999px] pointer-events-none opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-70" style={{background: 'radial-gradient(65% 65% at 50% 50%, rgba(59,130,246,0.70) 0%, rgba(59,130,246,0.35) 40%, rgba(59,130,246,0) 70%)'}}></span>
 <span className="absolute -inset-6 rounded-[999px] pointer-events-none opacity-0 blur-3xl transition-all duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(70% 70% at 50% 50%, rgba(59,130,246,0.95) 0%, rgba(59,130,246,0.60) 35%, rgba(59,130,246,0) 70%)'}}></span>
-<span className="rounded-full absolute top-0 right-0 bottom-0 left-0" style={{background: 'linear-gradient(180deg, #6EB7FF 0%, #2B86FF 45%, #0B4ED1 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.45), inset 0 -12px 22px rgba(0,0,0,0.45), 0 10px 32px rgba(30,144,255,0.65)'}}></span>
+<span className="rounded-full absolute top-0 right-0 bottom-0 left-0" style={{background: 'linear-gradient(180deg, #6EB7FF 0%, #2B86FF 45%, #0B4ED1 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.45), inset 0 -12px 22px rgba(0, 0, 0, 0.45), 0 10px 32px rgba(30,144,255,0.65)'}}></span>
 <span className="absolute inset-0 rounded-full pointer-events-none" style={{background: 'radial-gradient(120% 140% at 50% -10%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.28) 28%, rgba(255,255,255,0.12) 40%, rgba(255,255,255,0) 60%)'}}></span>
 <span className="z-10 font-medium tracking-tight font-geist relative">Let AI Edit It</span>
 </a>
@@ -258,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="relative h-8 rounded bg-white/5 ring-1 ring-white/10 overflow-hidden flex items-center px-1 gap-1">
 <div className="bg-white/10 w-[15%] h-6 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/c6e27799-045b-419d-bb17-dc3bf93011d8_320w.webp)] bg-cover bg-center ring-white/15 ring-1 rounded"></div>
 <div className="bg-white/10 w-[20%] h-6 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/cfb4c204-a01b-4f6f-a46f-c884e5c4bae6_320w.webp)] bg-cover bg-center ring-white/15 ring-1 rounded"></div>
-<div className="bg-center bg-white/10 w-[18%] h-6 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/1a1b3502-c111-4d97-abb7-a443929652e6_320w.webp)] bg-cover ring-2 rounded" style={{-TwRingColor: '#FDE68A', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.35)'}}></div>
+<div className="bg-center bg-white/10 w-[18%] h-6 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/1a1b3502-c111-4d97-abb7-a443929652e6_320w.webp)] bg-cover ring-2 rounded" style={{'--tw-ring-color': '#FDE68A', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.35)'}}></div>
 </div>
 <div className="flex items-center justify-between px-1">
 <div className="flex items-center gap-1">
@@ -466,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="relative h-10 rounded bg-white/5 ring-1 ring-white/10 overflow-hidden">
 <div className="bg-white/10 w-[12%] h-8 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/c6e27799-045b-419d-bb17-dc3bf93011d8_320w.webp)] bg-cover bg-center ring-white/15 ring-1 rounded absolute top-1 left-[5%]"></div>
 <div className="bg-white/10 w-[18%] h-8 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/cfb4c204-a01b-4f6f-a46f-c884e5c4bae6_320w.webp)] bg-cover bg-center ring-white/15 ring-1 rounded absolute top-1 left-[20%]"></div>
-<div className="bg-center bg-white/10 w-[15%] h-8 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/1a1b3502-c111-4d97-abb7-a443929652e6_320w.webp)] bg-cover ring-2 rounded absolute top-1 left-[40%]" style={{-TwRingColor: '#FDE68A', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.35)'}}></div>
+<div className="bg-center bg-white/10 w-[15%] h-8 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/1a1b3502-c111-4d97-abb7-a443929652e6_320w.webp)] bg-cover ring-2 rounded absolute top-1 left-[40%]" style={{'--tw-ring-color': '#FDE68A', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.35)'}}></div>
 <div className="bg-white/10 w-[16%] h-8 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/383a13ae-42ed-4952-91bf-223920abf03c_320w.webp)] bg-cover bg-center ring-white/15 ring-1 rounded absolute top-1 left-[58%]"></div>
 <div className="bg-white/10 w-[12%] h-8 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/97e6a233-c087-4bb7-87bb-32d4fe9beba1_320w.webp)] bg-cover bg-center rounded ring-white/15 ring-1 absolute top-1 left-[76%]"></div>
 </div>

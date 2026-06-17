@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -150,6 +186,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -319,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="w-full mt-14 [animation:fadeSlideIn_0.8s_ease-out_0.7s_both]">
-<div className="sm:pr-4 sm:pl-4 bg-gradient-to-br from-black/10 to-black/0 max-w-5xl rounded-3xl mr-auto ml-auto pt-4 pr-2 pb-4 pl-2 relative shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px', maskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)'}}>
+<div className="sm:pr-4 sm:pl-4 bg-gradient-to-br from-black/10 to-black/0 max-w-5xl rounded-3xl mr-auto ml-auto pt-4 pr-2 pb-4 pl-2 relative shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur space-y-4" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px', maskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)'}}>
 
 <div className="flex bg-slate-900/80 rounded-2xl px-4 py-3 items-center justify-between">
 <div className="flex items-center space-x-2">
@@ -497,7 +539,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </section>
 
 <section className="flex flex-col lg:px-8 lg:pt-20 animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] max-w-6xl mr-auto ml-auto pt-16 pr-6 pl-6 items-center">
-<div className="overflow-hidden sm:px-8 sm:py-10 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="overflow-hidden sm:px-8 sm:py-10 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 
 <div className="flex border-slate-900 border-b pb-4 gap-x-4 gap-y-4 items-center justify-between">
 <span className="text-[11px] uppercase font-medium text-sky-300 tracking-[0.2em]" style={{fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
@@ -529,7 +571,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="grid md:grid-cols-3 mt-10 gap-x-4 gap-y-4 sm:gap-x-6 sm:gap-y-6">
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 
 <div className="flex items-center justify-between text-[10px] text-slate-400" style={{fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
 <span className="uppercase tracking-[0.16em] text-slate-300">
@@ -557,7 +599,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
               </div>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 <div className="flex items-center justify-between text-[10px] text-slate-400">
 <span className="uppercase tracking-[0.16em] text-slate-300">
                   ADVANCED ENGINE
@@ -584,7 +626,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </ul>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 <div className="flex items-center justify-between text-[10px] text-slate-400">
 <span className="uppercase tracking-[0.16em] text-slate-300">
                   REAL-TIME TRIGGERS
@@ -635,7 +677,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </section>
 <section className="flex flex-col lg:px-8 lg:pt-20 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="overflow-hidden sm:px-8 sm:py-10 bg-center bg-slate-950/95 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1ebff6d5-cc57-4279-972f-e83f6c19894e_1600w.jpg)] bg-cover rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="overflow-hidden sm:px-8 sm:py-10 bg-center bg-slate-950/95 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1ebff6d5-cc57-4279-972f-e83f6c19894e_1600w.jpg)] bg-cover rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 
 <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
 <span className="text-[11px] uppercase font-medium text-sky-300 tracking-[0.2em]" style={{fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
@@ -768,7 +810,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 <section className="flex flex-col lg:px-8 lg:pt-20 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 <div className="grid gap-6 sm:gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1.1fr)_minmax(0,1.1fr)] items-stretch">
 
 <div className="flex flex-col justify-between gap-8">
@@ -931,7 +973,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </section>
 
 <section className="flex flex-col lg:px-8 lg:pt-20 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 w-full rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 w-full rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 
 <footer className="text-[11px] uppercase font-medium text-sky-300 tracking-[0.2em] w-full">
 <div className="flex flex-col items-center">

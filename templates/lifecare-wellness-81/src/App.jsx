@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -418,6 +454,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -475,7 +517,7 @@ gtag('config', 'G-2M6V79H761');
 
 <main className="">
 
-<section className="section" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{alignItems: 'center', textAlign: 'center', background: 'transparent !important', -DarkreaderInlineBgimage: 'initial', -DarkreaderInlineBgcolor: 'transparent'}}>
+<section className="section" data-darkreader-inline-bgcolor="" data-darkreader-inline-bgimage="" style={{alignItems: 'center', textAlign: 'center', background: 'transparent !important', '--darkreader-inline-bgimage': 'initial', '--darkreader-inline-bgcolor': 'transparent'}}>
 <div className="hero-content" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
 <span className="label reveal active xl:bg-clip-text xl:text-transparent text-4xl font-semibold bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-[#ffffff] to-[#b9c7da]" style={{textAlign: 'center'}}>
             kynare modern healthcare
@@ -783,7 +825,7 @@ gtag('config', 'G-2M6V79H761');
                   </h3>
 </div>
 <button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110" id="trigger-modal-1" onclick="document.getElementById('modal-medical').classList.remove('hidden'); document.getElementById('modal-medical').classList.add('flex'); document.body.style.overflow='hidden';">
-<svg className="lucide lucide-plus w-[20px] h-[20px]" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '20px', height: '20px', color: 'rgb(0, 0, 0)', -DarkreaderInlineStroke: 'currentColor', -DarkreaderInlineColor: 'var(--darkreader-text-000000, #e8e6e3)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-plus w-[20px] h-[20px]" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '20px', height: '20px', color: 'rgb(0, 0, 0)', '--darkreader-inline-stroke': 'currentColor', '--darkreader-inline-color': 'var(--darkreader-text-000000, #e8e6e3)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
 <path d="M12 5v14"></path>
 </svg>
@@ -816,7 +858,7 @@ gtag('config', 'G-2M6V79H761');
                   </h3>
 </div>
 <button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110" onclick="document.getElementById('modal-movement').classList.remove('hidden'); document.getElementById('modal-movement').classList.add('flex'); document.body.style.overflow='hidden';">
-<svg className="lucide lucide-plus w-[20px] h-[20px]" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(0, 0, 0)', width: '20px', height: '20px', -DarkreaderInlineStroke: 'currentColor', -DarkreaderInlineColor: 'var(--darkreader-text-000000, #e8e6e3)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-plus w-[20px] h-[20px]" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(0, 0, 0)', width: '20px', height: '20px', '--darkreader-inline-stroke': 'currentColor', '--darkreader-inline-color': 'var(--darkreader-text-000000, #e8e6e3)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
 <path d="M12 5v14"></path>
 </svg>
@@ -841,7 +883,7 @@ gtag('config', 'G-2M6V79H761');
                   </h3>
 </div>
 <button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110" onclick="document.getElementById('modal-education').classList.remove('hidden'); document.getElementById('modal-education').classList.add('flex'); document.body.style.overflow='hidden';">
-<svg className="lucide lucide-plus w-[20px] h-[20px]" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(0, 0, 0)', width: '20px', height: '20px', -DarkreaderInlineStroke: 'currentColor', -DarkreaderInlineColor: 'var(--darkreader-text-000000, #e8e6e3)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-plus w-[20px] h-[20px]" data-darkreader-inline-color="" data-darkreader-inline-stroke="" data-icon-replaced="true" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(0, 0, 0)', width: '20px', height: '20px', '--darkreader-inline-stroke': 'currentColor', '--darkreader-inline-color': 'var(--darkreader-text-000000, #e8e6e3)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
 <path d="M12 5v14"></path>
 </svg>
@@ -877,7 +919,7 @@ gtag('config', 'G-2M6V79H761');
                   </h3>
 </div>
 <button className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-neutral-400 transition-all duration-300 group-hover:bg-white group-hover:text-black group-hover:scale-110" onclick="document.getElementById('modal-neuro').classList.remove('hidden'); document.getElementById('modal-neuro').classList.add('flex'); document.body.style.overflow='hidden';">
-<svg className="lucide lucide-plus" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg className="lucide lucide-plus" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
 <path d="M12 5v14"></path>
 </svg>
@@ -1162,7 +1204,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col gap-4 lg:gap-5 lg:col-span-5">
 
-<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-5 pb-4 pl-5 backdrop-blur-xl -translate-y-8 gap-x-4 gap-y-4" style={{-DarkreaderBgimg-BorderGradient: 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-5 pb-4 pl-5 backdrop-blur-xl -translate-y-8 gap-x-4 gap-y-4" style={{'--darkreader-bgimg--border-gradient': 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4">
 <img alt="Abstract Fluid Gradient Shape" className="object-cover rounded-full w-16 h-16" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cb4eb851-03b6-4e7a-8342-50c9f12e4f56_320w.png"/>
 <div className="">
@@ -1179,10 +1221,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="grid grid-cols-1 md:grid-cols-5 gap-4 -translate-y-8 gap-x-4 gap-y-4">
-<div className="md:col-span-3 flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl backdrop-blur-xl overflow-hidden p-0" style={{-DarkreaderBgimg-BorderGradient: 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="md:col-span-3 flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl backdrop-blur-xl overflow-hidden p-0" style={{'--darkreader-bgimg--border-gradient': 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', '--border-radius-before': '24px'}}>
 <img alt="Body Performance and Movement Quote Graphic" className="min-h-[240px] object-center w-full h-full object-cover rounded-3xl blur-none backdrop-blur-none brightness-200" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f6a258a7-a776-45eb-af82-2b00b1add1aa_800w.png"/>
 </div>
-<div className="flex flex-col md:col-span-2 bg-gradient-to-tl from-white/10 via-white/0 to-white/10 rounded-3xl pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl gap-x-2 gap-y-2" style={{-DarkreaderBgimg-BorderGradient: 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col md:col-span-2 bg-gradient-to-tl from-white/10 via-white/0 to-white/10 rounded-3xl pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl gap-x-2 gap-y-2" style={{'--darkreader-bgimg--border-gradient': 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', '--border-radius-before': '24px'}}>
 <div className="flex flex-col gap-2 text-xs text-slate-200">
 <button className="flex hover:bg-slate-800/80 transition text-2xl bg-slate-900/80 border-slate-700/80 border rounded-2xl px-3 py-2 items-center justify-between">
 <span className="">Disruption</span>
@@ -1220,14 +1262,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <button className="inline-flex hover:bg-slate-200 transition text-sm font-bold text-slate-950 bg-gradient-to-br from-[#b6a190] to-orange-600 rounded-2xl mt-2 pt-2 pr-3 pb-2 pl-3 items-center justify-between">
 <span className="">ECOSYSTEM FLOW</span>
-<svg className="lucide lucide-mail w-[16px] h-[16px]" data-darkreader-inline-color="" data-icon-replaced="true" data-icon-set="solar" data-solar="arrow-right-up-outline" height="16" strokeWidth="2" style={{width: '16px', height: '16px', -DarkreaderInlineColor: 'var(--darkreader-text-020617, #e0ddd9)', color: 'rgb(2, 6, 23)'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
-<path className="" clip-rule="evenodd" d="M9 6.75a.75.75 0 0 1 0-1.5h9a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-1.5 0V7.81L6.53 18.53a.75.75 0 0 1-1.06-1.06L16.19 6.75z" data-darkreader-inline-fill="" fill="#020617" fill-rule="evenodd" style={{-DarkreaderInlineFill: 'var(--darkreader-text-020617, #e0ddd9)'}}></path>
+<svg className="lucide lucide-mail w-[16px] h-[16px]" data-darkreader-inline-color="" data-icon-replaced="true" data-icon-set="solar" data-solar="arrow-right-up-outline" height="16" strokeWidth="2" style={{width: '16px', height: '16px', '--darkreader-inline-color': 'var(--darkreader-text-020617, #e0ddd9)', color: 'rgb(2, 6, 23)'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path className="" clip-rule="evenodd" d="M9 6.75a.75.75 0 0 1 0-1.5h9a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-1.5 0V7.81L6.53 18.53a.75.75 0 0 1-1.06-1.06L16.19 6.75z" data-darkreader-inline-fill="" fill="#020617" fill-rule="evenodd" style={{'--darkreader-inline-fill': 'var(--darkreader-text-020617, #e0ddd9)'}}></path>
 </svg>
 </button>
 </div>
 </div>
 
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl backdrop-blur-xl -translate-y-8 gap-x-3 gap-y-3 overflow-hidden pb-0" style={{-DarkreaderBgimg-BorderGradient: 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl backdrop-blur-xl -translate-y-8 gap-x-3 gap-y-3 overflow-hidden pb-0" style={{'--darkreader-bgimg--border-gradient': 'linear-gradient(135deg, var(--darkreader-background-ffffff1a, rgba(24, 26, 27, 0.1)), var(--darkreader-background-ffffff00, rgba(24, 26, 27, 0)))', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(24, 24, 27, 0.1), rgba(24, 24, 27, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between pt-5 px-5 relative z-10">
 <div className="flex items-center gap-2">
 <span className="uppercase text-xl font-extrabold text-[#f8401c] tracking-widest text-left">
@@ -1397,7 +1439,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4 md:p-8" id="modal-neuro" onclick="this.classList.add('hidden'); this.classList.remove('flex'); document.body.style.overflow='';">
 <div className="relative w-full max-w-[98vw] lg:max-w-[1400px] xl:max-w-[1800px] max-h-[98vh] overflow-y-auto bg-transparent p-2 md:p-6" onclick="event.stopPropagation();">
 <button aria-label="Close modal" className="absolute top-4 right-4 md:top-8 md:right-8 z-10 w-10 h-10 md:w-12 md:h-12 bg-black/50 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300" onclick="document.getElementById('modal-neuro').classList.add('hidden'); document.getElementById('modal-neuro').classList.remove('flex'); document.body.style.overflow='';">
-<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M18 6 6 18"></path>
 <path d="m6 6 12 12"></path>
 </svg>
@@ -1408,7 +1450,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4 md:p-8" id="modal-education" onclick="this.classList.add('hidden'); this.classList.remove('flex'); document.body.style.overflow='';">
 <div className="relative w-full max-w-[98vw] lg:max-w-[1400px] xl:max-w-[1800px] max-h-[98vh] overflow-y-auto bg-transparent p-2 md:p-6" onclick="event.stopPropagation();">
 <button aria-label="Close modal" className="absolute top-4 right-4 md:top-8 md:right-8 z-10 w-10 h-10 md:w-12 md:h-12 bg-black/50 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300" onclick="document.getElementById('modal-education').classList.add('hidden'); document.getElementById('modal-education').classList.remove('flex'); document.body.style.overflow='';">
-<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M18 6 6 18"></path>
 <path d="m6 6 12 12"></path>
 </svg>
@@ -1419,7 +1461,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4 md:p-8" id="modal-movement" onclick="this.classList.add('hidden'); this.classList.remove('flex'); document.body.style.overflow='';">
 <div className="relative w-full max-w-[98vw] lg:max-w-[1400px] xl:max-w-[1800px] max-h-[98vh] overflow-y-auto bg-transparent p-2 md:p-6" onclick="event.stopPropagation();">
 <button aria-label="Close modal" className="absolute top-4 right-4 md:top-8 md:right-8 z-10 w-10 h-10 md:w-12 md:h-12 bg-black/50 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300" onclick="document.getElementById('modal-movement').classList.add('hidden'); document.getElementById('modal-movement').classList.remove('flex'); document.body.style.overflow='';">
-<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M18 6 6 18"></path>
 <path d="m6 6 12 12"></path>
 </svg>
@@ -1430,7 +1472,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4 md:p-8" id="modal-medical" onclick="this.classList.add('hidden'); this.classList.remove('flex'); document.body.style.overflow='';">
 <div className="relative w-full max-w-[98vw] lg:max-w-[1400px] xl:max-w-[1800px] max-h-[98vh] overflow-y-auto bg-transparent p-2 md:p-6" onclick="event.stopPropagation();">
 <button aria-label="Close modal" className="absolute top-4 right-4 md:top-8 md:right-8 z-10 w-10 h-10 md:w-12 md:h-12 bg-black/50 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300" onclick="document.getElementById('modal-medical').classList.add('hidden'); document.getElementById('modal-medical').classList.remove('flex'); document.body.style.overflow='';">
-<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<svg data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M18 6 6 18"></path>
 <path d="m6 6 12 12"></path>
 </svg>

@@ -28,7 +28,7 @@ function App() {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-8 flex flex-col lg:flex-row justify-between items-center gap-16 lg:gap-8">
           {/* Left: Typography */}
           <div className="max-w-2xl text-white">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight leading-tight mb-8" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight leading-tight mb-8" style={{fontFamily: "'Cormorant Garamond', serif"}}>
               Technologies esthétiques premium pour les professionnels exigeants.
             </h1>
             <p className="text-base md:text-lg text-white/80 font-light mb-12 max-w-lg leading-relaxed">
@@ -89,7 +89,7 @@ function App() {
       {/* 2. Bloc “Pourquoi Deltanova” */}
       <section className="py-32 px-8 max-w-7xl mx-auto">
         <div className="mb-20 max-w-3xl">
-          <h2 className="text-4xl md:text-5xl tracking-tight leading-tight mb-6" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <h2 className="text-4xl md:text-5xl tracking-tight leading-tight mb-6" style={{fontFamily: "'Cormorant Garamond', serif"}}>
             L'exigence clinique appliquée<br />au développement de votre institut.
           </h2>
           <p className="text-base text-gray-500">Une approche globale qui sécurise votre investissement et pérennise vos résultats.</p>
@@ -98,7 +98,7 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
           {/* Card 1 */}
           <div className="relative group">
-            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{ fontFamily: "'Cormorant Garamond', serif" }}>01</div>
+            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{fontFamily: "'Cormorant Garamond', serif"}}>01</div>
             <h3 className="text-lg tracking-tight mb-4 border-b border-[#EBE9E4] pb-4">Technologies sélectionnées</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
               Des équipements audités pour leur efficacité clinique, leur fiabilité technique et leur rentabilité sur le marché français.
@@ -106,7 +106,7 @@ function App() {
           </div>
           {/* Card 2 */}
           <div className="relative group">
-            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{ fontFamily: "'Cormorant Garamond', serif" }}>02</div>
+            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{fontFamily: "'Cormorant Garamond', serif"}}>02</div>
             <h3 className="text-lg tracking-tight mb-4 border-b border-[#EBE9E4] pb-4">Accompagnement 360°</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
               De l'étude de zone de chalandise jusqu'à l'installation physique, nous structurons le projet à vos côtés.
@@ -114,7 +114,7 @@ function App() {
           </div>
           {/* Card 3 */}
           <div className="relative group">
-            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{ fontFamily: "'Cormorant Garamond', serif" }}>03</div>
+            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{fontFamily: "'Cormorant Garamond', serif"}}>03</div>
             <h3 className="text-lg tracking-tight mb-4 border-b border-[#EBE9E4] pb-4">Formation continue</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
               Montée en compétence théorique et pratique pour garantir des résultats constants et sécuriser vos protocoles.
@@ -122,7 +122,7 @@ function App() {
           </div>
           {/* Card 4 */}
           <div className="relative group">
-            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{ fontFamily: "'Cormorant Garamond', serif" }}>04</div>
+            <div className="text-4xl text-[#EBE9E4] mb-6 group-hover:text-[#BBA88E] transition-colors duration-500" style={{fontFamily: "'Cormorant Garamond', serif"}}>04</div>
             <h3 className="text-lg tracking-tight mb-4 border-b border-[#EBE9E4] pb-4">Suivi de performance</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
               Support marketing, maintenance préventive et points réguliers pour optimiser le taux de remplissage de la machine.
@@ -134,7 +134,7 @@ function App() {
       {/* 3. Bloc “Vos univers de traitement” */}
       <section className="bg-[#EBE9E4] py-32 px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl tracking-tight mb-16 text-center" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <h2 className="text-4xl tracking-tight mb-16 text-center" style={{fontFamily: "'Cormorant Garamond', serif"}}>
             Vos univers de traitement
           </h2>
           
@@ -146,7 +146,7 @@ function App() {
               <div className="absolute bottom-0 left-0 p-10 w-full text-white">
                 <div className="flex justify-between items-end">
                   <div>
-                    <h3 className="text-3xl tracking-tight mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Visage & Anti-âge</h3>
+                    <h3 className="text-3xl tracking-tight mb-3" style={{fontFamily: "'Cormorant Garamond', serif"}}>Visage & Anti-âge</h3>
                     <p className="text-sm text-white/70 font-light max-w-sm">Rajeunissement cellulaire, traitement des imperfections et protocoles signature.</p>
                   </div>
                   <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white group-hover:text-[#1A1A1A] transition-all duration-300">
@@ -163,7 +163,7 @@ function App() {
               <div className="absolute bottom-0 left-0 p-10 w-full text-white">
                 <div className="flex justify-between items-end">
                   <div>
-                    <h3 className="text-3xl tracking-tight mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Remodelage Corps</h3>
+                    <h3 className="text-3xl tracking-tight mb-3" style={{fontFamily: "'Cormorant Garamond', serif"}}>Remodelage Corps</h3>
                     <p className="text-sm text-white/70 font-light max-w-sm">Cryolipolyse, ondes électromagnétiques et réduction ciblée des volumes.</p>
                   </div>
                   <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white group-hover:text-[#1A1A1A] transition-all duration-300">
@@ -180,7 +180,7 @@ function App() {
               <div className="absolute bottom-0 left-0 p-10 w-full text-white">
                 <div className="flex justify-between items-end">
                   <div>
-                    <h3 className="text-3xl tracking-tight mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Épilation Définitive</h3>
+                    <h3 className="text-3xl tracking-tight mb-3" style={{fontFamily: "'Cormorant Garamond', serif"}}>Épilation Définitive</h3>
                     <p className="text-sm text-white/70 font-light max-w-sm">Laser diode haute puissance pour tous phototypes, rapide et indolore.</p>
                   </div>
                   <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white group-hover:text-[#1A1A1A] transition-all duration-300">
@@ -200,7 +200,7 @@ function App() {
               <div className="absolute bottom-0 left-0 p-10 w-full text-white">
                 <div className="flex justify-between items-end">
                   <div>
-                    <h3 className="text-3xl tracking-tight mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Diagnostic & IA</h3>
+                    <h3 className="text-3xl tracking-tight mb-3" style={{fontFamily: "'Cormorant Garamond', serif"}}>Diagnostic & IA</h3>
                     <p className="text-sm text-white/70 font-light max-w-sm">Analyse cutanée par intelligence artificielle pour prescrire avec précision.</p>
                   </div>
                   <div className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white group-hover:text-[#1A1A1A] transition-all duration-300">
@@ -216,7 +216,7 @@ function App() {
       {/* 4. Bloc “Pour qui ?” */}
       <section className="py-32 px-8 max-w-7xl mx-auto border-b border-[#EBE9E4]">
         <div className="text-center mb-20">
-          <h2 className="text-4xl tracking-tight mb-6" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <h2 className="text-4xl tracking-tight mb-6" style={{fontFamily: "'Cormorant Garamond', serif"}}>
             Une réponse technologique par profil
           </h2>
           <p className="text-sm uppercase tracking-widest text-gray-400">Choisissez votre domaine d'expertise</p>
@@ -228,7 +228,7 @@ function App() {
             <div className="w-12 h-12 bg-[#EBE9E4] rounded-full flex items-center justify-center mb-8">
               <iconify-icon icon="solar:shop-linear" className="text-2xl text-[#1A1A1A]"></iconify-icon>
             </div>
-            <h3 className="text-2xl tracking-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Instituts de beauté</h3>
+            <h3 className="text-2xl tracking-tight mb-4" style={{fontFamily: "'Cormorant Garamond', serif"}}>Instituts de beauté</h3>
             <p className="text-sm text-gray-500 mb-8 min-h-[4rem]">Différenciez-vous avec des soins High-Tech et fidélisez par des résultats visibles dès la première séance.</p>
             <ul className="space-y-3 mb-10 text-sm">
               <li className="flex items-center gap-3"><div className="w-1 h-1 bg-[#BBA88E] rounded-full"></div> Technologies mains-libres</li>
@@ -245,7 +245,7 @@ function App() {
             <div className="w-12 h-12 bg-[#EBE9E4] rounded-full flex items-center justify-center mb-8">
               <iconify-icon icon="solar:stethoscope-linear" className="text-2xl text-[#1A1A1A]"></iconify-icon>
             </div>
-            <h3 className="text-2xl tracking-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>IDE & Praticiens</h3>
+            <h3 className="text-2xl tracking-tight mb-4" style={{fontFamily: "'Cormorant Garamond', serif"}}>IDE & Praticiens</h3>
             <p className="text-sm text-gray-500 mb-8 min-h-[4rem]">Capitalisez sur votre expertise médicale pour proposer des protocoles esthétiques avancés en toute sécurité.</p>
             <ul className="space-y-3 mb-10 text-sm">
               <li className="flex items-center gap-3"><div className="w-1 h-1 bg-[#BBA88E] rounded-full"></div> Protocoles rigoureux</li>
@@ -262,7 +262,7 @@ function App() {
             <div className="w-12 h-12 bg-[#EBE9E4] rounded-full flex items-center justify-center mb-8">
               <iconify-icon icon="solar:health-linear" className="text-2xl text-[#1A1A1A]"></iconify-icon>
             </div>
-            <h3 className="text-2xl tracking-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Médecins esthétiques</h3>
+            <h3 className="text-2xl tracking-tight mb-4" style={{fontFamily: "'Cormorant Garamond', serif"}}>Médecins esthétiques</h3>
             <p className="text-sm text-gray-500 mb-8 min-h-[4rem]">Complétez votre offre d'injectables avec des plateformes multi-technologies pour une prise en charge globale.</p>
             <ul className="space-y-3 mb-10 text-sm">
               <li className="flex items-center gap-3"><div className="w-1 h-1 bg-[#BBA88E] rounded-full"></div> Synergie thérapeutique</li>
@@ -282,7 +282,7 @@ function App() {
           
           <div className="flex-1 space-y-12">
             <div>
-              <h2 className="text-4xl tracking-tight mb-6" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              <h2 className="text-4xl tracking-tight mb-6" style={{fontFamily: "'Cormorant Garamond', serif"}}>
                 Plus qu’un équipement,<br />un partenaire de croissance.
               </h2>
               <p className="text-base text-gray-500 max-w-md">
@@ -320,7 +320,7 @@ function App() {
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center mix-blend-luminosity opacity-40"></div>
               <div className="relative z-10 h-full flex flex-col justify-between">
                 <div className="self-end bg-white p-6 shadow-sm max-w-[200px]">
-                  <div className="text-3xl text-[#BBA88E] mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>+45%</div>
+                  <div className="text-3xl text-[#BBA88E] mb-1" style={{fontFamily: "'Cormorant Garamond', serif"}}>+45%</div>
                   <div className="text-xs text-gray-500 uppercase tracking-wider">Augmentation du ticket moyen observé</div>
                 </div>
                 <div className="bg-[#1A1A1A] p-6 shadow-sm max-w-[240px] text-white">
@@ -340,7 +340,7 @@ function App() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-16">
             <div>
-              <h2 className="text-4xl tracking-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              <h2 className="text-4xl tracking-tight mb-4" style={{fontFamily: "'Cormorant Garamond', serif"}}>
                 Excellence Technologique
               </h2>
               <p className="text-sm text-white/60 max-w-sm">Une sélection de nos équipements phares pour redéfinir les standards de la beauté.</p>
@@ -355,7 +355,7 @@ function App() {
             </div>
           </div>
 
-          <div className="flex gap-8 overflow-x-auto pb-8 snap-x scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex gap-8 overflow-x-auto pb-8 snap-x scrollbar-hide" style={{scrollbarWidth: 'none'}}>
             {/* Tech 1 */}
             <div className="min-w-[300px] md:min-w-[400px] snap-start group cursor-pointer">
               <div className="aspect-[3/4] bg-[#2A2A2A] relative mb-6 overflow-hidden flex items-center justify-center">
@@ -365,7 +365,7 @@ function App() {
               <div className="flex justify-between items-start">
                 <div>
                   <div className="text-xs text-[#BBA88E] uppercase tracking-widest mb-2">Soin Anti-âge Global</div>
-                  <h3 className="text-2xl tracking-tight mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Delta Lift</h3>
+                  <h3 className="text-2xl tracking-tight mb-1" style={{fontFamily: "'Cormorant Garamond', serif"}}>Delta Lift</h3>
                   <p className="text-sm text-white/50">Radiofréquence fractionnée</p>
                 </div>
                 <iconify-icon icon="solar:add-circle-linear" className="text-2xl text-white/30 group-hover:text-white transition-colors"></iconify-icon>
@@ -381,7 +381,7 @@ function App() {
               <div className="flex justify-between items-start">
                 <div>
                   <div className="text-xs text-[#BBA88E] uppercase tracking-widest mb-2">Nettoyage Profond</div>
-                  <h3 className="text-2xl tracking-tight mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Jetskin Pro</h3>
+                  <h3 className="text-2xl tracking-tight mb-1" style={{fontFamily: "'Cormorant Garamond', serif"}}>Jetskin Pro</h3>
                   <p className="text-sm text-white/50">Hydradermabrasion avancée</p>
                 </div>
                 <iconify-icon icon="solar:add-circle-linear" className="text-2xl text-white/30 group-hover:text-white transition-colors"></iconify-icon>
@@ -397,7 +397,7 @@ function App() {
               <div className="flex justify-between items-start">
                 <div>
                   <div className="text-xs text-[#BBA88E] uppercase tracking-widest mb-2">Remodelage Corporel</div>
-                  <h3 className="text-2xl tracking-tight mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Novashape</h3>
+                  <h3 className="text-2xl tracking-tight mb-1" style={{fontFamily: "'Cormorant Garamond', serif"}}>Novashape</h3>
                   <p className="text-sm text-white/50">Ondes électromagnétiques</p>
                 </div>
                 <iconify-icon icon="solar:add-circle-linear" className="text-2xl text-white/30 group-hover:text-white transition-colors"></iconify-icon>
@@ -413,7 +413,7 @@ function App() {
               <div className="flex justify-between items-start">
                 <div>
                   <div className="text-xs text-[#BBA88E] uppercase tracking-widest mb-2">Épilation Définitive</div>
-                  <h3 className="text-2xl tracking-tight mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Deltadiode+</h3>
+                  <h3 className="text-2xl tracking-tight mb-1" style={{fontFamily: "'Cormorant Garamond', serif"}}>Deltadiode+</h3>
                   <p className="text-sm text-white/50">Laser Diode 3 ondes</p>
                 </div>
                 <iconify-icon icon="solar:add-circle-linear" className="text-2xl text-white/30 group-hover:text-white transition-colors"></iconify-icon>
@@ -436,7 +436,7 @@ function App() {
           
           <div className="lg:w-1/3">
             <div className="sticky top-32">
-              <h2 className="text-4xl tracking-tight mb-6" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              <h2 className="text-4xl tracking-tight mb-6" style={{fontFamily: "'Cormorant Garamond', serif"}}>
                 L'Académie<br />Deltanova
               </h2>
               <p className="text-sm text-gray-500 mb-8 leading-relaxed">
@@ -456,7 +456,7 @@ function App() {
               </div>
               <div className="md:w-3/5 flex flex-col justify-center">
                 <div className="text-xs text-[#8F9A90] uppercase tracking-widest mb-3">Pour les Esthéticiennes</div>
-                <h3 className="text-2xl tracking-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Masterclass Beauty Expert</h3>
+                <h3 className="text-2xl tracking-tight mb-4" style={{fontFamily: "'Cormorant Garamond', serif"}}>Masterclass Beauty Expert</h3>
                 <p className="text-sm text-gray-500 mb-6">Deux jours en immersion pour devenir la référence anti-âge de votre région. Théorie cellulaire, pratique intensive et protocoles combinés.</p>
                 <div className="flex items-center gap-4 text-xs font-medium">
                   <span className="flex items-center gap-2 border border-[#EBE9E4] px-3 py-1.5 rounded-full"><iconify-icon icon="solar:calendar-linear"></iconify-icon> Paris, 12 Oct</span>
@@ -472,7 +472,7 @@ function App() {
               </div>
               <div className="md:w-3/5 flex flex-col justify-center">
                 <div className="text-xs text-[#8F9A90] uppercase tracking-widest mb-3">Pour les IDE & Praticiens</div>
-                <h3 className="text-2xl tracking-tight mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Masterclass Clinique</h3>
+                <h3 className="text-2xl tracking-tight mb-4" style={{fontFamily: "'Cormorant Garamond', serif"}}>Masterclass Clinique</h3>
                 <p className="text-sm text-gray-500 mb-6">Approfondissement des techniques lasers et radiofréquence médicale. Gestion des complications et optimisation des paramètres.</p>
                 <div className="flex items-center gap-4 text-xs font-medium">
                   <span className="flex items-center gap-2 border border-[#EBE9E4] px-3 py-1.5 rounded-full"><iconify-icon icon="solar:calendar-linear"></iconify-icon> Lyon, 24 Nov</span>
@@ -488,7 +488,7 @@ function App() {
       {/* 9. Final CTA */}
       <section className="py-40 px-8 bg-[#EBE9E4] text-center">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl tracking-tight mb-8" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <h2 className="text-4xl md:text-5xl tracking-tight mb-8" style={{fontFamily: "'Cormorant Garamond', serif"}}>
             Parlons de votre projet d'équipement.
           </h2>
           <p className="text-base text-gray-600 mb-12 font-light leading-relaxed">

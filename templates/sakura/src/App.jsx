@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -127,6 +163,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -496,7 +538,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 gap-x-6 gap-y-6" onmousemove="for(const card of this.children){const rect=card.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;card.style.setProperty('--mouse-x', x + 'px');card.style.setProperty('--mouse-y', y + 'px');}">
 
-<div className="delay-200 col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '284.3671875px', -MouseY: '223px'}}>
+<div className="delay-200 col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '284.3671875px', '--mouse-y': '223px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <div className="h-48 mb-8 relative flex items-center justify-center bg-black/20 rounded-sm border border-white/5 overflow-hidden z-10">
@@ -522,7 +564,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="delay-300 col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '-190.2109375px', -MouseY: '223px'}}>
+<div className="delay-300 col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '-190.2109375px', '--mouse-y': '223px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <div className="h-48 mb-8 relative flex items-center justify-center overflow-hidden z-10">
@@ -540,7 +582,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="delay-500 col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '-664.7890625px', -MouseY: '223px'}}>
+<div className="delay-500 col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '-664.7890625px', '--mouse-y': '223px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <div className="h-48 mb-8 relative flex items-center justify-center overflow-hidden z-10">
@@ -553,7 +595,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="delay-200 col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '284.3671875px', -MouseY: '-176.5px'}}>
+<div className="delay-200 col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '284.3671875px', '--mouse-y': '-176.5px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-50 transition-opacity z-10">
@@ -572,7 +614,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="delay-300 col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '-427.5px', -MouseY: '-176.5px'}}>
+<div className="delay-300 col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '-427.5px', '--mouse-y': '-176.5px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-50 transition-opacity z-10">
@@ -614,7 +656,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-7 flex flex-col gap-6 gap-x-6 gap-y-6">
 
-<div className="group hover:bg-white/[0.04] transition-all duration-500 border border-white/5 hover:border-white/10 rounded-sm backdrop-blur-lg p-10 lg:p-12 relative overflow-hidden flex flex-col justify-center min-h-[240px]" style={{-MouseX: '298.3671875px', -MouseY: '644.5px'}}>
+<div className="group hover:bg-white/[0.04] transition-all duration-500 border border-white/5 hover:border-white/10 rounded-sm backdrop-blur-lg p-10 lg:p-12 relative overflow-hidden flex flex-col justify-center min-h-[240px]" style={{'--mouse-x': '298.3671875px', '--mouse-y': '644.5px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
@@ -628,7 +670,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:h-[500px] overflow-hidden group h-[420px] border-white/5 hover:border-white/10 border rounded-sm relative backdrop-blur-lg transition-all duration-500 shadow-sm" style={{-MouseX: '298.3671875px', -MouseY: '380.5px'}}>
+<div className="lg:h-[500px] overflow-hidden group h-[420px] border-white/5 hover:border-white/10 border rounded-sm relative backdrop-blur-lg transition-all duration-500 shadow-sm" style={{'--mouse-x': '298.3671875px', '--mouse-y': '380.5px'}}>
 <img alt="Data Network Structure" className="transition-transform duration-1000 group-hover:scale-105 filter group-hover:saturate-100 w-full h-full object-cover absolute top-0 right-0 bottom-0 left-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b5326861-9214-4075-b2d4-dedfcf9cc3ea_1600w.webp"/>
 <div className="bg-gradient-to-t from-black/60 via-black/20 to-transparent absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="absolute bottom-10 right-10 text-right">
@@ -645,7 +687,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-5 flex flex-col gap-6">
 
-<div className="hover:bg-white/[0.04] text-white p-10 rounded-sm transform transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group h-full flex flex-col justify-between border border-white/5 hover:border-white/10 backdrop-blur-lg" style={{-MouseX: '-536.8046875px', -MouseY: '644.5px'}}>
+<div className="hover:bg-white/[0.04] text-white p-10 rounded-sm transform transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group h-full flex flex-col justify-between border border-white/5 hover:border-white/10 backdrop-blur-lg" style={{'--mouse-x': '-536.8046875px', '--mouse-y': '644.5px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
@@ -683,7 +725,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="hover:bg-white/[0.04] p-8 rounded-sm border border-white/5 hover:border-white/10 transform transition-all duration-500 hover:-translate-y-1 relative group text-white backdrop-blur-lg" style={{-MouseX: '-536.8046875px', -MouseY: '263.5px'}}>
+<div className="hover:bg-white/[0.04] p-8 rounded-sm border border-white/5 hover:border-white/10 transform transition-all duration-500 hover:-translate-y-1 relative group text-white backdrop-blur-lg" style={{'--mouse-x': '-536.8046875px', '--mouse-y': '263.5px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
@@ -716,7 +758,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="hover:bg-white/[0.04] p-8 rounded-sm border border-white/5 hover:border-white/10 transform transition-all duration-500 hover:-translate-y-1 relative group backdrop-blur-lg" style={{-MouseX: '-536.8046875px', -MouseY: '-25.5px'}}>
+<div className="hover:bg-white/[0.04] p-8 rounded-sm border border-white/5 hover:border-white/10 transform transition-all duration-500 hover:-translate-y-1 relative group backdrop-blur-lg" style={{'--mouse-x': '-536.8046875px', '--mouse-y': '-25.5px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
@@ -1139,7 +1181,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="overflow-hidden w-full rounded-sm mb-32 relative group" onmousemove="const rect=this.getBoundingClientRect(); const x=event.clientX - rect.left; const y=event.clientY - rect.top; this.style.setProperty('--mouse-x', x + 'px'); this.style.setProperty('--mouse-y', y + 'px');" style={{-MouseX: '1092.3671875px', -MouseY: '299px'}}>
+<div className="overflow-hidden w-full rounded-sm mb-32 relative group" onmousemove="const rect=this.getBoundingClientRect(); const x=event.clientX - rect.left; const y=event.clientY - rect.top; this.style.setProperty('--mouse-x', x + 'px'); this.style.setProperty('--mouse-y', y + 'px');" style={{'--mouse-x': '1092.3671875px', '--mouse-y': '299px'}}>
 
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-20 mix-blend-screen" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.15), transparent 40%)'}}></div>
 

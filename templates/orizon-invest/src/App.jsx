@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -220,6 +256,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -438,9 +480,9 @@ addUtilities({
 
 <circle cx="50" cy="50" fill="none" r="40" stroke="#1e293b" strokeWidth="12"></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="40" stroke="#3b82f6" stroke-dasharray="151 1000" strokeLinecap="butt" strokeWidth="12" style={{-Dash: '151', -Offset: '0'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="40" stroke="#3b82f6" stroke-dasharray="151 1000" strokeLinecap="butt" strokeWidth="12" style={{'--dash': '151', '--offset': '0'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="40" stroke="#1d4ed8" stroke-dasharray="100 1000" stroke-dashoffset="-151" strokeLinecap="butt" strokeWidth="12" style={{-Dash: '100', -Offset: '-151'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="40" stroke="#1d4ed8" stroke-dasharray="100 1000" stroke-dashoffset="-151" strokeLinecap="butt" strokeWidth="12" style={{'--dash': '100', '--offset': '-151'}}></circle>
 </svg>
 <div className="absolute inset-0 flex items-center justify-center flex-col">
 <span className="text-xl font-medium text-white">60%</span>
@@ -566,11 +608,11 @@ addUtilities({
 
 <circle cx="50" cy="50" fill="none" r="36" stroke="#f1f5f9" strokeWidth="18"></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#2563eb" stroke-dasharray="158.3 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '158.3', -Offset: '0'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#2563eb" stroke-dasharray="158.3 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '158.3', '--offset': '0'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#93c5fd" stroke-dasharray="45.2 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '45.2', -Offset: '-158.3'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#93c5fd" stroke-dasharray="45.2 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '45.2', '--offset': '-158.3'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#e2e8f0" stroke-dasharray="22.6 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '22.6', -Offset: '-203.5'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#e2e8f0" stroke-dasharray="22.6 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '22.6', '--offset': '-203.5'}}></circle>
 </g>
 
 <text className="font-semibold text-[5px] fill-white chart-label" dominant-baseline="central" text-anchor="middle" x="79" y="71">
@@ -625,13 +667,13 @@ addUtilities({
 <g transform="rotate(-90 50 50)">
 <circle cx="50" cy="50" fill="none" r="36" stroke="#1e293b" strokeWidth="18"></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#3b82f6" stroke-dasharray="101.8 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '101.8', -Offset: '0'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#3b82f6" stroke-dasharray="101.8 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '101.8', '--offset': '0'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#64748b" stroke-dasharray="67.9 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '67.9', -Offset: '-101.8'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#64748b" stroke-dasharray="67.9 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '67.9', '--offset': '-101.8'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#93c5fd" stroke-dasharray="33.9 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '33.9', -Offset: '-169.7'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#93c5fd" stroke-dasharray="33.9 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '33.9', '--offset': '-169.7'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#10b981" stroke-dasharray="22.6 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '22.6', -Offset: '-203.6'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#10b981" stroke-dasharray="22.6 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '22.6', '--offset': '-203.6'}}></circle>
 </g>
 
 <text className="font-semibold text-[5px] fill-white chart-label" dominant-baseline="central" text-anchor="middle" x="85.5" y="44.3">
@@ -692,13 +734,13 @@ addUtilities({
 <g transform="rotate(-90 50 50)">
 <circle cx="50" cy="50" fill="none" r="36" stroke="#f1f5f9" strokeWidth="18"></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#10b981" stroke-dasharray="124.4 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '124.4', -Offset: '0'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#10b981" stroke-dasharray="124.4 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '124.4', '--offset': '0'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#6ee7b7" stroke-dasharray="56.5 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '56.5', -Offset: '-124.4'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#6ee7b7" stroke-dasharray="56.5 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '56.5', '--offset': '-124.4'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#a7f3d0" stroke-dasharray="33.9 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '33.9', -Offset: '-180.9'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#a7f3d0" stroke-dasharray="33.9 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '33.9', '--offset': '-180.9'}}></circle>
 
-<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#cbd5e1" stroke-dasharray="11.3 1000" strokeLinecap="butt" strokeWidth="18" style={{-Dash: '11.3', -Offset: '-214.8'}}></circle>
+<circle className="donut-segment" cx="50" cy="50" fill="none" r="36" stroke="#cbd5e1" stroke-dasharray="11.3 1000" strokeLinecap="butt" strokeWidth="18" style={{'--dash': '11.3', '--offset': '-214.8'}}></circle>
 </g>
 
 <text className="font-semibold text-[5px] fill-white chart-label" dominant-baseline="central" text-anchor="middle" x="85.5" y="55.6">

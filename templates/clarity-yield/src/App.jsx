@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -100,6 +136,12 @@ showPanel("panel-1");
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -173,7 +215,7 @@ showPanel("panel-1");
 </div>
 <div className="relative space-y-4">
 <div className="flex items-center gap-3">
-<div className="flex bg-gradient-to-br from-blue-500/20 to-blue-500/0 w-10 h-10 rounded-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex bg-gradient-to-br from-blue-500/20 to-blue-500/0 w-10 h-10 rounded-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <svg className="text-sky-300" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
 </path>
@@ -193,15 +235,15 @@ showPanel("panel-1");
 </div>
 </div>
 <div className="grid grid-cols-3 gap-3 pt-2">
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <div className="text-xs text-slate-400 font-geist mb-1">Volume 24h</div>
 <div className="text-sm font-semibold text-slate-50 font-geist">$847M</div>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <div className="text-xs text-slate-400 font-geist mb-1">Networks</div>
 <div className="text-sm font-semibold text-slate-50 font-geist">12+</div>
 </div>
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <div className="text-xs text-slate-400 font-geist mb-1">Uptime</div>
 <div className="text-sm font-semibold text-slate-50 font-geist">99.9%</div>
 </div>
@@ -227,7 +269,7 @@ showPanel("panel-1");
           </p>
 </div>
 <div className="pt-4">
-<a aria-label="Schedule a demo" className="group inline-flex items-center gap-3 transition-colors duration-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 text-white/90 bg-gradient-to-b from-white/10 via-white/0 to-white/10 w-full max-w-fit rounded-[28px] pt-1 pr-1 pb-1 pl-1 relative" href="#" style={{boxShadow: 'inset 0 1px 0 rgba(56, 189, 248, 0.4)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '28px'}}>
+<a aria-label="Schedule a demo" className="group inline-flex items-center gap-3 transition-colors duration-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 text-white/90 bg-gradient-to-b from-white/10 via-white/0 to-white/10 w-full max-w-fit rounded-[28px] pt-1 pr-1 pb-1 pl-1 relative" href="#" style={{boxShadow: 'inset 0 1px 0 rgba(56, 189, 248, 0.4)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '28px'}}>
 <span aria-hidden="true" className="pointer-events-none absolute -inset-1 rounded-full opacity-0 blur-xl transition duration-500 group-hover:opacity-100" style={{background: 'radial-gradient(60% 60% at 50% 50%, rgba(56,189,248,.55), rgba(56,189,248,0) 70%)'}}></span>
 <span className="isolate inline-flex items-center gap-3 bg-gradient-to-br from-sky-500/0 via-sky-500/10 to-sky-500/0 rounded-3xl pt-3 pr-6 pb-3 pl-6 relative">
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[999px] opacity-70 [box-shadow:inset_0_1px_0_rgba(255,255,255,.08),inset_0_-6px_20px_rgba(0,0,0,.5)]"></span>
@@ -253,7 +295,7 @@ showPanel("panel-1");
 <div className="space-y-4">
 
 <article className="space-y-3">
-<button className="w-full flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-1" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '16px'}} type="button">
+<button className="w-full flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-1" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '16px'}} type="button">
 <div className="flex items-center gap-3">
 <div className="flex border-gradient bg-slate-800/70 w-8 h-8 rounded-full items-center justify-center transition-colors">
 <svg className="text-sky-200" fill="currentColor" height="16" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -300,7 +342,7 @@ showPanel("panel-1");
 </article>
 
 <article className="space-y-3">
-<button className="flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 w-full rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '16px'}} type="button">
+<button className="flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 w-full rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '16px'}} type="button">
 <div className="flex items-center gap-3">
 <div className="flex border-gradient bg-slate-800/70 w-8 h-8 rounded-full items-center justify-center transition-colors">
 <svg className="text-sky-200" fill="currentColor" height="16" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -347,7 +389,7 @@ showPanel("panel-1");
 </article>
 
 <article className="space-y-3">
-<button className="w-full flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '16px'}} type="button">
+<button className="w-full flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '16px'}} type="button">
 <div className="flex items-center gap-3">
 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800/70 border-gradient transition-colors">
 <svg className="text-sky-200" fill="currentColor" height="16" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -397,7 +439,7 @@ showPanel("panel-1");
 </article>
 
 <article className="space-y-3">
-<button className="w-full flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '16px'}} type="button">
+<button className="w-full flex sm:px-5 border-gradient border-gradient-card cursor-pointer hover:bg-slate-900/80 transition-all duration-200 bg-gradient-to-br from-black/60 to-black/25 rounded-2xl pt-3 pr-4 pb-3 pl-4 shadow-[5.7px_5.7px_8.6px_rgba(0,_0,_0,_0.07),_13.7px_13.7px_10.9px_rgba(0,_0,_0,_0.099),_25.7px_25.7px_20.5px_rgba(0,_0,_0,_0.123),_45.8px_45.8px_36.6px_rgba(0,_0,_0,_0.147),_85.8px_85.8px_68.5px_rgba(0,_0,_0,_0.176),_205px_205px_163.4px_rgba(0,_0,_0,_0.246)] backdrop-blur gap-x-3 gap-y-3 items-center justify-between" data-tab="" data-target="panel-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '16px'}} type="button">
 <div className="flex items-center gap-3">
 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800/70 border-gradient transition-colors">
 <svg className="text-sky-200 w-[16px] h-[16px]" data-icon-replaced="true" data-icon-set="solar" data-solar="notes-bold-duotone" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: 'rgb(186, 230, 253)', width: '16px', height: '16px'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -468,7 +510,7 @@ showPanel("panel-1");
 <div className="z-10 grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-center mt-20 relative gap-x-10 gap-y-10">
 
 <div className="space-y-8">
-<div className="inline-flex bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-full ring-sky-400/40 pt-1 pr-3 pb-1 pl-3 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-full ring-sky-400/40 pt-1 pr-3 pb-1 pl-3 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg aria-hidden="true" data-height="18" data-icon="solar:stars-bold-duotone" data-width="18" height="18" role="img" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M15.252 10.689c-.987-1.18-1.48-1.77-2.048-1.68c-.567.091-.832.803-1.362 2.227l-.138.368c-.15.405-.226.607-.373.756c-.146.149-.348.228-.75.386l-.367.143c-1.417.555-2.126.833-2.207 1.4s.52 1.049 1.721 2.011l.31.25c.342.273.513.41.611.597c.1.187.115.404.146.837l.029.394c.11 1.523.166 2.285.683 2.545s1.154-.155 2.427-.983l.329-.215c.362-.235.543-.353.75-.387c.208-.033.42.022.841.132l.385.1c1.485.386 2.228.58 2.629.173s.193-1.144-.221-2.62l-.108-.38c-.117-.42-.176-.63-.147-.837c.03-.208.145-.39.374-.756l.21-.332c.807-1.285 1.21-1.927.94-2.438c-.269-.511-1.033-.553-2.562-.635l-.396-.022c-.434-.023-.652-.035-.841-.13c-.19-.095-.33-.263-.61-.599z" fill="currentColor">
 </path>
@@ -492,13 +534,13 @@ showPanel("panel-1");
         </p>
 </div>
 <dl className="grid gap-4 sm:grid-cols-3">
-<div className="bg-gradient-to-br from-white/10 via-white/0 to-white/10 rounded-2xl ring-slate-700/70 pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 via-white/0 to-white/10 rounded-2xl ring-slate-700/70 pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '16px'}}>
 <dt className="flex uppercase text-xs font-medium text-slate-400 tracking-[0.18em] font-geist mb-1 gap-x-2 gap-y-2 items-center">Capital</dt>
 <dd className="text-lg font-semibold text-slate-50 font-geist">
             $4.7B
           </dd>
 </div>
-<div className="bg-gradient-to-br from-white/10 via-white/0 to-white/10 rounded-2xl ring-slate-700/70 pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 via-white/0 to-white/10 rounded-2xl ring-slate-700/70 pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '16px'}}>
 <dt className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-slate-400 font-geist">
 <svg aria-hidden="true" className="w-[16px] h-[16px]" data-height="16" data-icon="solar:users-group-rounded-bold-duotone" data-icon-replaced="true" data-width="16" height="16" role="img" strokeWidth="2" style={{color: 'rgb(148, 163, 184)', width: '16px', height: '16px'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
 <circle cx="15" cy="6" fill="currentColor" opacity=".4" r="3"></circle>
@@ -512,7 +554,7 @@ showPanel("panel-1");
             180+
           </dd>
 </div>
-<div className="bg-gradient-to-br from-white/10 via-white/0 to-white/10 rounded-2xl ring-slate-700/70 pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 via-white/0 to-white/10 rounded-2xl ring-slate-700/70 pt-4 pr-4 pb-4 pl-4 backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '16px'}}>
 <dt className="flex gap-2 uppercase text-xs font-medium text-slate-400 tracking-[0.18em] font-geist mb-1 gap-x-2 gap-y-2 items-center">Policy</dt>
 <dd className="text-lg font-semibold text-slate-50 font-geist">
   99.98%
@@ -524,7 +566,7 @@ showPanel("panel-1");
 <div className="relative">
 <div className="absolute -right-6 -top-6 hidden h-16 w-16 rounded-3xl bg-gradient-to-br from-sky-400/80 via-sky-500/30 to-transparent blur-xl sm:block">
 </div>
-<div className="bg-gradient-to-br from-white/80 to-white/30 rounded-3xl ring-sky-100/60 pt-5 pr-5 pb-5 pl-5 relative shadow-[4px_4px_6px_rgba(0,_0,_0,_0.049),_9.6px_9.6px_7.6px_rgba(0,_0,_0,_0.069),_18px_18px_14.3px_rgba(0,_0,_0,_0.086),_32px_32px_25.6px_rgba(0,_0,_0,_0.103),_60px_60px_47.8px_rgba(0,_0,_0,_0.123),_143px_143px_114.3px_rgba(0,_0,_0,_0.172)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="bg-gradient-to-br from-white/80 to-white/30 rounded-3xl ring-sky-100/60 pt-5 pr-5 pb-5 pl-5 relative shadow-[4px_4px_6px_rgba(0,_0,_0,_0.049),_9.6px_9.6px_7.6px_rgba(0,_0,_0,_0.069),_18px_18px_14.3px_rgba(0,_0,_0,_0.086),_32px_32px_25.6px_rgba(0,_0,_0,_0.103),_60px_60px_47.8px_rgba(0,_0,_0,_0.123),_143px_143px_114.3px_rgba(0,_0,_0,_0.172)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-start justify-between gap-4">
 <div className="space-y-2">
 <p className="text-base font-semibold tracking-tight text-slate-950 font-geist">

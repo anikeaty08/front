@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -556,6 +592,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -917,10 +959,10 @@ gtag('config', 'G-2M6V79H761');
         <span className="italic text-brand-gold">living geometry</span>
         .
       </h2>
-<div className="reveal w-full rounded-2xl overflow-hidden relative" style={{aspectRatio: '16/9', background: 'linear-gradient(180deg,#151515 0%,#050505 100%)', boxShadow: '0 1px 0 rgba(255,255,255,.08) inset,0 30px 60px -20px rgba(0,0,0,.8)'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl z-20" style={{padding: '1px', background: 'linear-gradient(135deg,rgba(197,166,124,.25),rgba(0,0,0,.2))', WebkitMask: 'linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
-<div className="absolute top-1/4 left-1/4 w-[50%] h-[50%] rounded-full pointer-events-none mix-blend-screen z-0" id="sq-fl1" style={{background: 'radial-gradient(circle,rgba(234,228,216,0.08) 0%,transparent 60%)', filter: 'blur(40px)'}}></div>
-<div className="absolute bottom-1/4 right-1/4 w-[60%] h-[60%] rounded-full pointer-events-none mix-blend-screen z-0" id="sq-fl2" style={{background: 'radial-gradient(circle,rgba(197,166,124,0.10) 0%,transparent 60%)', filter: 'blur(50px)'}}></div>
+<div className="reveal w-full rounded-2xl overflow-hidden relative" style={{aspectRatio: '16/9', background: 'linear-gradient(180deg, #151515 0%, #050505 100%)', boxShadow: '0 1px 0 rgba(255, 255, 255, .08) inset, 0 30px 60px -20px rgba(0,0,0,.8)'}}>
+<div className="pointer-events-none absolute inset-0 rounded-2xl z-20" style={{padding: '1px', background: 'linear-gradient(135deg, rgba(197, 166, 124, .25), rgba(0, 0, 0, .2))', WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
+<div className="absolute top-1/4 left-1/4 w-[50%] h-[50%] rounded-full pointer-events-none mix-blend-screen z-0" id="sq-fl1" style={{background: 'radial-gradient(circle, rgba(234, 228, 216, 0.08) 0%, transparent 60%)', filter: 'blur(40px)'}}></div>
+<div className="absolute bottom-1/4 right-1/4 w-[60%] h-[60%] rounded-full pointer-events-none mix-blend-screen z-0" id="sq-fl2" style={{background: 'radial-gradient(circle, rgba(197, 166, 124, 0.10) 0%, transparent 60%)', filter: 'blur(50px)'}}></div>
 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-0">
 <div className="font-serif text-[clamp(3rem,9vw,9rem)] tracking-tight text-brand-cream/5">
             SEQURA
@@ -928,7 +970,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <canvas className="absolute inset-0 w-full h-full block z-10" id="sq-scene"></canvas>
 <div className="absolute top-5 left-5 sm:top-7 sm:left-7 z-30">
-<div className="flex items-center gap-3 rounded-xl bg-brand-dark/80 backdrop-blur-md px-4 py-2.5 pr-5" style={{boxShadow: '0 1px 0 rgba(255,255,255,.08) inset,0 8px 24px -10px rgba(0,0,0,.6)', border: '1px solid rgba(255,255,255,.08)'}}>
+<div className="flex items-center gap-3 rounded-xl bg-brand-dark/80 backdrop-blur-md px-4 py-2.5 pr-5" style={{boxShadow: '0 1px 0 rgba(255, 255, 255, .08) inset, 0 8px 24px -10px rgba(0, 0, 0, .6)', border: '1px solid rgba(255,255,255,.08)'}}>
 <span className="grid place-items-center w-6 h-6 text-brand-gold">
 <iconify-icon height="18" icon="solar:widget-5-linear" width="18"></iconify-icon>
 </span>

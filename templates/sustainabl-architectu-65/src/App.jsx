@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -286,6 +322,12 @@ requestAnimationFrame(render);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -433,7 +475,7 @@ requestAnimationFrame(render);
 <h3 className="">Interior Architecture</h3>
 <p className="">Spatial design that flows naturally. We curate materials, lighting, and furniture to create interiors that are both functional and emotionally resonant.</p>
 </div>
-<div className="service-card reveal-child" style={{-MouseX: '43.27232103454367%', -MouseY: '99.3357605944279%'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '43.27232103454367%', '--mouse-y': '99.3357605944279%'}}>
 <div className="service-card-number">03</div>
 <div className="service-card-icon">
 <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:streets-map-point-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M21.89 7.172C22 8.433 22 10.006 22 12c0 4.134 0 6.455-.987 7.951L15.06 14zm-1.938 13.84L14 15.06l-6.828 6.83C8.433 22 10.006 22 12 22c4.134 0 6.456 0 7.952-.988" fill="currentColor"></path><path clip-rule="evenodd" d="M12 2c4.714 0 7.071 0 8.535 1.464c.504.504.835 1.114 1.052 1.889L5.353 21.587c-.775-.217-1.385-.548-1.889-1.052C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2M5.5 8.757c0 1.785 1.117 3.868 2.86 4.613c.406.173.874.173 1.28 0c1.743-.745 2.86-2.828 2.86-4.613C12.5 6.958 10.933 5.5 9 5.5S5.5 6.958 5.5 8.757" fill="currentColor" fill-rule="evenodd"></path><path d="M10.5 9a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0" fill="currentColor"></path></svg>
@@ -449,7 +491,7 @@ requestAnimationFrame(render);
 <h3>Sustainability Consulting</h3>
 <p>Expert guidance on LEED, Passive House, and Living Building Challenge certifications. We make green building both achievable and beautiful.</p>
 </div>
-<div className="service-card reveal-child" style={{-MouseX: '22.799406551687262%', -MouseY: '10.846603727975179%'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '22.799406551687262%', '--mouse-y': '10.846603727975179%'}}>
 <div className="service-card-number">05</div>
 <div className="service-card-icon">
 <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:ruler-angular-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8.25 2H6c-1.886 0-2.828 0-3.414.586S2 4.114 2 6v2.25h3a.75.75 0 0 1 0 1.5H2v1.5h2a.75.75 0 0 1 0 1.5H2v1.5h3a.75.75 0 0 1 0 1.5H2v1.5h2a.75.75 0 0 1 0 1.5H2c.001 1.24.02 1.888.337 2.361a2 2 0 0 0 .552.552C3.393 22 4.096 22 5.5 22s2.107 0 2.611-.337a2 2 0 0 0 .552-.552C9 20.607 9 19.904 9 18.5V11c0-.943 0-1.414.293-1.707S10.057 9 11 9h7.5c1.404 0 2.107 0 2.611-.337a2 2 0 0 0 .552-.552C22 7.607 22 6.904 22 5.5s0-2.107-.337-2.611a2 2 0 0 0-.552-.552c-.473-.316-1.121-.336-2.361-.337v2a.75.75 0 0 1-1.5 0V2h-1.5v3a.75.75 0 0 1-1.5 0V2h-1.5v2a.75.75 0 0 1-1.5 0V2h-1.5v3a.75.75 0 0 1-1.5 0z" fill="currentColor"></path></svg>
@@ -457,7 +499,7 @@ requestAnimationFrame(render);
 <h3>Renovation &amp; Retrofit</h3>
 <p>Breathing new life into existing structures. We transform dated buildings into energy-efficient, modern spaces while preserving their architectural DNA.</p>
 </div>
-<div className="service-card reveal-child" style={{-MouseX: '43.27232103454367%', -MouseY: '1.590827564415721%'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '43.27232103454367%', '--mouse-y': '1.590827564415721%'}}>
 <div className="service-card-number">06</div>
 <div className="service-card-icon">
 <svg aria-hidden="true" className="iconify iconify--solar" data-icon="solar:monitor-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M8 17c-2.828 0-4.243 0-5.121-.879c-.57-.569-.77-1.363-.84-2.621h19.923c-.07 1.258-.271 2.052-.84 2.621C20.241 17 18.827 17 16 17h-3.25v4H16a.75.75 0 0 1 0 1.5H8A.75.75 0 0 1 8 21h3.25v-4zm2-15h4c3.771 0 5.657 0 6.828 1.172S22 6.229 22 10v1q.002.827-.006 1.5H2.007Q1.998 11.827 2 11v-1c0-3.771 0-5.657 1.172-6.828S6.229 2 10 2" fill="currentColor"></path></svg>

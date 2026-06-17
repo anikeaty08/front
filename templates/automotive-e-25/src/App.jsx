@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -107,6 +143,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -114,7 +156,7 @@ gtag('config', 'G-2M6V79H761');
       
 
 <div className="fixed inset-0 overflow-hidden pointer-events-none select-none opacity-[0.04]">
-<div className="absolute -top-10 -left-10 text-zinc-900 leading-none" style={{fontFamily: '\'Archivo\',sans-serif', fontSize: '18vw', fontWeight: '800'}}>OEM<br/>YADAK<br/>PARTS<br/>ENGINE</div>
+<div className="absolute -top-10 -left-10 text-zinc-900 leading-none" style={{fontFamily: '\'Archivo\', sans-serif', fontSize: '18vw', fontWeight: '800'}}>OEM<br/>YADAK<br/>PARTS<br/>ENGINE</div>
 </div>
 
 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-3 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -122,7 +164,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center">
 <i className="h-5 w-5 text-lime-400" data-lucide="cog"></i>
 </div>
-<span className="text-base font-semibold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>OEM YADAK</span>
+<span className="text-base font-semibold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>OEM YADAK</span>
 </div>
 <div className="flex items-center gap-8 text-sm">
 <div>
@@ -144,7 +186,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="h-9 w-9 rounded-lg bg-lime-400 flex items-center justify-center">
 <i className="h-5 w-5 text-zinc-950" data-lucide="cog"></i>
 </div>
-<span className="text-white font-semibold tracking-tight text-base" style={{fontFamily: '\'Archivo\',sans-serif'}}>OEM YADAK</span>
+<span className="text-white font-semibold tracking-tight text-base" style={{fontFamily: '\'Archivo\', sans-serif'}}>OEM YADAK</span>
 </div>
 <div className="hidden lg:flex items-center gap-6 text-sm text-zinc-400">
 <a className="hover:text-white transition-colors duration-200" href="#">Engine Parts</a>
@@ -173,7 +215,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 opacity-20" style={{background: 'radial-gradient(ellipse at 50% 0%, rgba(163,230,53,0.35), transparent 60%)'}}></div>
 <div className="relative">
 <p className="text-sm uppercase tracking-[0.4em] text-lime-400 font-medium mb-3">Precision Engineered</p>
-<h1 className="text-white tracking-tight leading-[0.9]" style={{fontFamily: '\'Archivo\',sans-serif'}}>
+<h1 className="text-white tracking-tight leading-[0.9]" style={{fontFamily: '\'Archivo\', sans-serif'}}>
 <span className="block text-4xl sm:text-6xl lg:text-7xl font-extrabold">ENGINE &amp;</span>
 <span className="block text-5xl sm:text-7xl lg:text-8xl font-extrabold text-lime-400">GEARBOX</span>
 </h1>
@@ -234,7 +276,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <a className="group flex items-center gap-4 rounded-2xl bg-lime-400 hover:bg-lime-300 px-5 py-3.5 transition-colors duration-200 cursor-pointer shrink-0" href="#">
 <div>
-<p className="text-zinc-950 font-bold text-xl tracking-tight leading-none" style={{fontFamily: '\'Archivo\',sans-serif'}}>900+ NEW</p>
+<p className="text-zinc-950 font-bold text-xl tracking-tight leading-none" style={{fontFamily: '\'Archivo\', sans-serif'}}>900+ NEW</p>
 <p className="text-zinc-800 text-xs mt-1">Specialized parts just landed in catalog</p>
 </div>
 <div className="h-9 w-9 rounded-full bg-zinc-950 flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
@@ -248,28 +290,28 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-20 pb-14 text-center">
 <p className="text-sm uppercase tracking-[0.5em] text-zinc-500 mb-2">Sourcing</p>
-<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>PREMIUM BRANDS</h2>
+<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>PREMIUM BRANDS</h2>
 <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
 <a className="group cursor-pointer" href="#">
 <div className="relative h-56 rounded-2xl overflow-hidden bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950 flex items-center justify-center">
 <i className="h-20 w-20 text-zinc-700 group-hover:text-lime-400/70 group-hover:scale-110 transition-all duration-300" data-lucide="cog"></i>
 <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl"></div>
 </div>
-<p className="mt-3 font-semibold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>SKF</p>
+<p className="mt-3 font-semibold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>SKF</p>
 </a>
 <a className="group cursor-pointer" href="#">
 <div className="relative h-56 rounded-2xl overflow-hidden bg-gradient-to-br from-lime-900 via-zinc-900 to-zinc-950 flex items-center justify-center">
 <i className="h-20 w-20 text-zinc-700 group-hover:text-lime-400/70 group-hover:scale-110 transition-all duration-300" data-lucide="circle-dot"></i>
 <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl"></div>
 </div>
-<p className="mt-3 font-semibold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>MAHLE</p>
+<p className="mt-3 font-semibold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>MAHLE</p>
 </a>
 <a className="group cursor-pointer" href="#">
 <div className="relative h-56 rounded-2xl overflow-hidden bg-gradient-to-br from-zinc-700 via-zinc-900 to-zinc-950 flex items-center justify-center">
 <i className="h-20 w-20 text-zinc-600 group-hover:text-lime-400/70 group-hover:scale-110 transition-all duration-300" data-lucide="settings-2"></i>
 <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl"></div>
 </div>
-<p className="mt-3 font-semibold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>ZF · LUK</p>
+<p className="mt-3 font-semibold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>ZF · LUK</p>
 </a>
 </div>
 </section>
@@ -277,14 +319,14 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative -rotate-1 my-6">
 <div className="bg-zinc-950 py-3 overflow-hidden">
 <div className="flex whitespace-nowrap w-max" style={{animation: 'marquee 30s linear infinite'}}>
-<span className="text-white text-xl font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>SKF  |  MAHLE  |  INA  |  ZF  |  VALEO  |  LUK  |  GETRAG  |  BOSCH  |  </span>
-<span className="text-white text-xl font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>SKF  |  MAHLE  |  INA  |  ZF  |  VALEO  |  LUK  |  GETRAG  |  BOSCH  |  </span>
+<span className="text-white text-xl font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>SKF  |  MAHLE  |  INA  |  ZF  |  VALEO  |  LUK  |  GETRAG  |  BOSCH  |  </span>
+<span className="text-white text-xl font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>SKF  |  MAHLE  |  INA  |  ZF  |  VALEO  |  LUK  |  GETRAG  |  BOSCH  |  </span>
 </div>
 </div>
 <div className="bg-lime-400 py-2.5 overflow-hidden rotate-1 -mt-1">
 <div className="flex whitespace-nowrap w-max" style={{animation: 'marquee 24s linear infinite reverse'}}>
-<span className="text-zinc-950 text-base font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>ENGINE  |  GEARBOX  |  TIMING  |  CLUTCH  |  BEARINGS  |  GASKETS  |  CVT  |  OEM QUALITY  |  </span>
-<span className="text-zinc-950 text-base font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>ENGINE  |  GEARBOX  |  TIMING  |  CLUTCH  |  BEARINGS  |  GASKETS  |  CVT  |  OEM QUALITY  |  </span>
+<span className="text-zinc-950 text-base font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>ENGINE  |  GEARBOX  |  TIMING  |  CLUTCH  |  BEARINGS  |  GASKETS  |  CVT  |  OEM QUALITY  |  </span>
+<span className="text-zinc-950 text-base font-bold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>ENGINE  |  GEARBOX  |  TIMING  |  CLUTCH  |  BEARINGS  |  GASKETS  |  CVT  |  OEM QUALITY  |  </span>
 </div>
 </div>
 </div>
@@ -293,7 +335,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-end justify-between">
 <div>
 <p className="text-sm uppercase tracking-[0.5em] text-zinc-500 mb-1">Trending</p>
-<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>ENGINE PARTS</h2>
+<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>ENGINE PARTS</h2>
 <a className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-zinc-700 hover:text-zinc-950 transition-colors duration-200" href="#">All Store Products <i className="h-4 w-4" data-lucide="arrow-up-right"></i></a>
 </div>
 <div className="hidden sm:flex items-center gap-2">
@@ -310,7 +352,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="h-40 flex items-center justify-center"><i className="h-24 w-24 text-zinc-400 group-hover:text-zinc-700 group-hover:rotate-12 transition-all duration-300" data-lucide="cog"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight">Timing Chain Kit<br/>EF7 / TU5</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>4,850,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>4,850,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-zinc-400"><span className="h-2 w-2 rounded-full bg-emerald-500"></span> In Stock</div>
 </div>
 
@@ -322,7 +364,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="h-40 flex items-center justify-center relative"><i className="h-24 w-24 text-lime-400 group-hover:scale-110 transition-transform duration-300" data-lucide="circle-dot"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight text-white">Crankshaft Bearing Set<br/>EC5 Standard</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight text-lime-400" style={{fontFamily: '\'Archivo\',sans-serif'}}>3,200,000 <span className="text-xs font-medium text-zinc-400">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight text-lime-400" style={{fontFamily: '\'Archivo\', sans-serif'}}>3,200,000 <span className="text-xs font-medium text-zinc-400">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-zinc-400 relative"><span className="h-2 w-2 rounded-full bg-emerald-500"></span> In Stock</div>
 </div>
 
@@ -333,7 +375,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="h-40 flex items-center justify-center"><i className="h-24 w-24 text-zinc-400 group-hover:text-zinc-700 transition-colors duration-300" data-lucide="layers"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight">Full Gasket Set<br/>XU7 Plus</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>2,740,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>2,740,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-zinc-400"><span className="h-2 w-2 rounded-full bg-emerald-500"></span> In Stock</div>
 </div>
 
@@ -344,7 +386,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="h-40 flex items-center justify-center"><i className="h-24 w-24 text-zinc-400 group-hover:text-zinc-700 transition-colors duration-300" data-lucide="gauge"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight">Oil Pump Assembly<br/>K4M Renault</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>5,980,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>5,980,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-zinc-400"><span className="h-2 w-2 rounded-full bg-amber-500"></span> Limited Stock</div>
 </div>
 </div>
@@ -354,7 +396,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-end justify-between">
 <div>
 <p className="text-sm uppercase tracking-[0.5em] text-zinc-500 mb-1">Trending</p>
-<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>GEARBOX</h2>
+<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>GEARBOX</h2>
 <a className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-zinc-700 hover:text-zinc-950 transition-colors duration-200" href="#">All Store Products <i className="h-4 w-4" data-lucide="arrow-up-right"></i></a>
 </div>
 <div className="hidden sm:flex items-center gap-2">
@@ -366,26 +408,26 @@ gtag('config', 'G-2M6V79H761');
 <div className="group bg-zinc-100 rounded-2xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
 <div className="h-40 flex items-center justify-center"><i className="h-24 w-24 text-zinc-400 group-hover:text-zinc-700 group-hover:rotate-12 transition-all duration-300" data-lucide="settings-2"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight">Clutch Kit Complete<br/>AT6 Automatic</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>7,420,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>7,420,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-zinc-900"></span><span className="h-2.5 w-2.5 rounded-full bg-lime-500"></span><span className="h-2.5 w-2.5 rounded-full bg-zinc-400"></span></div>
 </div>
 <div className="group bg-zinc-100 rounded-2xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
 <div className="h-40 flex items-center justify-center"><i className="h-24 w-24 text-zinc-400 group-hover:text-zinc-700 transition-colors duration-300" data-lucide="disc"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight">CVT Belt &amp; Pulley Set<br/>JF015E</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>9,150,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>9,150,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-zinc-900"></span><span className="h-2.5 w-2.5 rounded-full bg-blue-500"></span></div>
 </div>
 <div className="group bg-zinc-100 rounded-2xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative">
 <span className="absolute top-5 left-5 text-xs font-semibold bg-red-500 text-white rounded-full px-2.5 py-1">SAVE 20%</span>
 <div className="h-40 flex items-center justify-center"><i className="h-24 w-24 text-zinc-400 group-hover:text-zinc-700 transition-colors duration-300" data-lucide="git-merge"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight">Synchronizer Ring Set<br/>BE3 5-Speed</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>1,890,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>1,890,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-zinc-900"></span><span className="h-2.5 w-2.5 rounded-full bg-amber-500"></span></div>
 </div>
 <div className="group bg-zinc-100 rounded-2xl p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
 <div className="h-40 flex items-center justify-center"><i className="h-24 w-24 text-zinc-400 group-hover:text-zinc-700 transition-colors duration-300" data-lucide="component"></i></div>
 <p className="text-center text-sm font-semibold uppercase tracking-tight">Valve Body Rebuilt<br/>DP0 / AL4</p>
-<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>12,300,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
+<p className="mt-2 text-center text-xl font-bold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>12,300,000 <span className="text-xs font-medium text-zinc-500">IRT</span></p>
 <div className="mt-3 flex items-center justify-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-zinc-900"></span><span className="h-2.5 w-2.5 rounded-full bg-emerald-500"></span></div>
 </div>
 </div>
@@ -394,14 +436,14 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative rotate-1 mt-20">
 <div className="bg-lime-400 py-3 overflow-hidden">
 <div className="flex whitespace-nowrap w-max" style={{animation: 'marquee 20s linear infinite'}}>
-<span className="text-zinc-950 text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  </span>
-<span className="text-zinc-950 text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  </span>
+<span className="text-zinc-950 text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  </span>
+<span className="text-zinc-950 text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  900+ NEW PARTS  |  </span>
 </div>
 </div>
 <div className="bg-zinc-950 py-3 overflow-hidden -rotate-1 -mt-1">
 <div className="flex whitespace-nowrap w-max" style={{animation: 'marquee 26s linear infinite reverse'}}>
-<span className="text-white text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  </span>
-<span className="text-white text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\',sans-serif'}}>OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  </span>
+<span className="text-white text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  </span>
+<span className="text-white text-2xl font-extrabold tracking-tight px-4" style={{fontFamily: '\'Archivo\', sans-serif'}}>OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  OEM GRADE QUALITY  |  </span>
 </div>
 </div>
 </div>
@@ -410,7 +452,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-end justify-between">
 <div>
 <p className="text-sm uppercase tracking-[0.5em] text-zinc-500 mb-1">Feeling</p>
-<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>THE TRUST</h2>
+<h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>THE TRUST</h2>
 </div>
 <div className="hidden sm:flex items-center gap-2">
 <button className="h-10 w-10 rounded-full border border-zinc-400 hover:bg-zinc-900 hover:text-white hover:border-zinc-900 flex items-center justify-center transition-all duration-200 cursor-pointer"><i className="h-4 w-4" data-lucide="arrow-left"></i></button>
@@ -462,7 +504,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24">
 <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
-<h2 className="text-5xl sm:text-7xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Catalog</h2>
+<h2 className="text-5xl sm:text-7xl font-extrabold tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Catalog</h2>
 <a className="group inline-flex items-center gap-3 text-sm font-medium cursor-pointer" href="#">
         Go To Catalog
         <span className="h-10 w-10 rounded-full bg-zinc-950 flex items-center justify-center text-lime-400 group-hover:rotate-45 transition-transform duration-300"><i className="h-4 w-4" data-lucide="arrow-up-right"></i></span>
@@ -487,7 +529,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative mt-24 -rotate-1">
 <div className="bg-zinc-950 py-8 text-center px-4">
 <p className="text-zinc-400 text-sm uppercase tracking-[0.4em]">We're more than just a <span className="text-white font-semibold">parts store</span></p>
-<p className="text-lime-400 text-4xl sm:text-6xl font-extrabold tracking-tight mt-2" style={{fontFamily: '\'Archivo\',sans-serif'}}>WE'RE SPECIALISTS</p>
+<p className="text-lime-400 text-4xl sm:text-6xl font-extrabold tracking-tight mt-2" style={{fontFamily: '\'Archivo\', sans-serif'}}>WE'RE SPECIALISTS</p>
 </div>
 </div>
 
@@ -497,7 +539,7 @@ gtag('config', 'G-2M6V79H761');
 <div>
 <div className="flex items-center gap-2.5">
 <div className="h-10 w-10 rounded-xl bg-lime-400 flex items-center justify-center"><i className="h-5 w-5 text-zinc-950" data-lucide="cog"></i></div>
-<span className="text-white font-semibold tracking-tight text-lg" style={{fontFamily: '\'Archivo\',sans-serif'}}>OEM YADAK</span>
+<span className="text-white font-semibold tracking-tight text-lg" style={{fontFamily: '\'Archivo\', sans-serif'}}>OEM YADAK</span>
 </div>
 <p className="mt-5 text-base text-zinc-400 leading-relaxed">Specialists in knowledge-based engine and gearbox parts. Precision sourcing, technical accuracy, and a catalog built for professionals.</p>
 <div className="mt-6 flex gap-2.5">

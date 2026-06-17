@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -80,7 +122,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
 <div className="lg:col-span-7">
 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-slate-100 ring-1 ring-white/15">
-<iconify-icon className="text-slate-100" icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-100" icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
             Parcours structurés • exercices concrets • progression guidée
           </div>
 <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
@@ -92,20 +134,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-white/50" href="#formations">
               Découvrir les formations
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/15 hover:bg-white/15 transition focus:outline-none focus:ring-2 focus:ring-white/30" href="#formulaire">
               Recevoir le programme
-              <iconify-icon icon="solar:file-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:file-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <div className="flex items-center gap-3 text-xs text-slate-300">
 <div className="flex items-center gap-1">
-<iconify-icon icon="solar:clock-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:clock-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                 Accès immédiat
               </div>
 <div className="h-3 w-px bg-white/15"></div>
 <div className="flex items-center gap-1">
-<iconify-icon icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                 Ressources + feedback
               </div>
 </div>
@@ -115,7 +157,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 hover:bg-white/7 transition">
 <div className="flex items-start gap-3">
 <div className="mt-0.5 grid h-9 w-9 place-items-center rounded-xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:chart-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:chart-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Excel</p>
@@ -126,7 +168,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 hover:bg-white/7 transition">
 <div className="flex items-start gap-3">
 <div className="mt-0.5 grid h-9 w-9 place-items-center rounded-xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:presentation-graph-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:presentation-graph-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">PowerPoint</p>
@@ -137,7 +179,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 hover:bg-white/7 transition">
 <div className="flex items-start gap-3">
 <div className="mt-0.5 grid h-9 w-9 place-items-center rounded-xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:document-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:document-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Word</p>
@@ -148,7 +190,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 hover:bg-white/7 transition">
 <div className="flex items-start gap-3">
 <div className="mt-0.5 grid h-9 w-9 place-items-center rounded-xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:calendar-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:calendar-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Outlook &amp; Teams</p>
@@ -160,19 +202,19 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="mt-10 flex flex-wrap items-center gap-2 text-xs text-slate-200">
 <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15">
-<iconify-icon icon="solar:map-point-wave-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:map-point-wave-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
               Parcours structurés
             </span>
 <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15">
-<iconify-icon icon="solar:clipboard-check-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:clipboard-check-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
               Exercices concrets
             </span>
 <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15">
-<iconify-icon icon="solar:list-check-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:list-check-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
               Checklists pro
             </span>
 <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15">
-<iconify-icon icon="solar:route-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:route-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
               Progression guidée
             </span>
 </div>
@@ -186,7 +228,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs text-slate-400">Dashboard productivité</span>
 </div>
 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-1 text-xs font-semibold text-emerald-200 ring-1 ring-emerald-300/20">
-<iconify-icon icon="solar:bolt-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:bolt-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                 Ultra concret
               </span>
 </div>
@@ -203,7 +245,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-3 grid grid-cols-12 gap-2">
 <div className="col-span-7 rounded-xl bg-white/10 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon icon="solar:table-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:table-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <p className="text-xs font-semibold">Tableau</p>
 </div>
 <div className="mt-2 space-y-2">
@@ -214,7 +256,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="col-span-5 rounded-xl bg-white/10 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon icon="solar:chart-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:chart-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <p className="text-xs font-semibold">Graphique</p>
 </div>
 <div className="mt-3 flex items-end justify-between gap-1">
@@ -230,7 +272,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
 <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon icon="solar:layers-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:layers-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <p className="text-xs font-semibold text-slate-200">Slides réutilisables</p>
 </div>
 <div className="mt-3 grid grid-cols-3 gap-2">
@@ -251,7 +293,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
-<iconify-icon icon="solar:inbox-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:inbox-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <p className="text-xs font-semibold text-slate-200">Organisation</p>
 </div>
 <p className="text-xs text-slate-400">Inbox + agenda</p>
@@ -324,25 +366,25 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-rose-400/10 ring-1 ring-rose-300/15">
-<iconify-icon icon="solar:danger-triangle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:danger-triangle-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h2 className="text-2xl font-semibold tracking-tight">Pourquoi la bureautique fait perdre un temps fou</h2>
 </div>
 <ul className="mt-5 space-y-3 text-sm text-slate-200">
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Excel utilisé à 10% de ses capacités
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Documents Word pas propres (styles, mises en page, tables)
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               PowerPoint chronophage et peu impactant
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-rose-200" icon="solar:close-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Outlook et Teams mal utilisés → surcharge et désorganisation
             </li>
 </ul>
@@ -350,40 +392,40 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-gradient-to-br from-emerald-400/10 to-cyan-400/10 p-6 ring-1 ring-white/10">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-400/10 ring-1 ring-emerald-300/15">
-<iconify-icon icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h2 className="text-2xl font-semibold tracking-tight">Ce que tu vas changer dès la première semaine</h2>
 </div>
 <ul className="mt-5 space-y-3 text-sm text-slate-100">
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Créer des fichiers propres, clairs et réutilisables
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Gagner du temps avec les bons raccourcis et méthodes
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Automatiser les tâches répétitives (Excel)
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Présenter mieux et plus vite (PowerPoint)
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Mieux organiser sa communication (Outlook/Teams)
             </li>
 </ul>
 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-white/50" href="#formulaire">
               Faire le diagnostic gratuit
-              <iconify-icon icon="solar:stethoscope-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:stethoscope-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/15 hover:bg-white/15 transition" href="#formations">
               Voir les parcours
-              <iconify-icon icon="solar:book-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:book-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 </div>
@@ -417,7 +459,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mt-1 text-xs text-slate-300">Productivité + analyse</p>
 </div>
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 group-hover:bg-white/15 transition">
-<iconify-icon icon="solar:chart-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:chart-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 </div>
 <p className="mt-4 text-sm text-slate-200">Formules essentielles, fonctions avancées, tableaux, graphiques, nettoyage de données, automatisations simples.</p>
@@ -428,7 +470,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-6">
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Voir le parcours Excel
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <p className="mt-2 text-xs text-slate-400">Conseil : idéal pour reporting, admin, RH, analyse.</p>
 </div>
@@ -440,7 +482,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mt-1 text-xs text-slate-300">Mise en page clean</p>
 </div>
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 group-hover:bg-white/15 transition">
-<iconify-icon icon="solar:document-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:document-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 </div>
 <p className="mt-4 text-sm text-slate-200">Styles, sommaire, sections, modèles, tableaux, export PDF, documents réutilisables.</p>
@@ -451,7 +493,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-6">
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Voir le parcours Word
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <p className="mt-2 text-xs text-slate-400">Pour rendre tes documents propres, cohérents, rapides.</p>
 </div>
@@ -463,7 +505,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mt-1 text-xs text-slate-300">Clair + efficace</p>
 </div>
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 group-hover:bg-white/15 transition">
-<iconify-icon icon="solar:presentation-graph-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:presentation-graph-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 </div>
 <p className="mt-4 text-sm text-slate-200">Structure, storytelling, slide system, masques, icônes, présentation pro rapide.</p>
@@ -474,7 +516,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-6">
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Voir le parcours PowerPoint
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <p className="mt-2 text-xs text-slate-400">Pour créer un deck pro sans y passer ta soirée.</p>
 </div>
@@ -486,7 +528,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mt-1 text-xs text-slate-300">Inbox zéro</p>
 </div>
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 group-hover:bg-white/15 transition">
-<iconify-icon icon="solar:inbox-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:inbox-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 </div>
 <p className="mt-4 text-sm text-slate-200">Gestion de mails, règles, catégories, calendrier, routines, méthodes anti-surcharge.</p>
@@ -497,7 +539,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-6">
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Voir le parcours Outlook
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <p className="mt-2 text-xs text-slate-400">Pour réduire la charge mentale et mieux prioriser.</p>
 </div>
@@ -509,7 +551,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mt-1 text-xs text-slate-300">Équipe fluide</p>
 </div>
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 group-hover:bg-white/15 transition">
-<iconify-icon icon="solar:users-group-rounded-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:users-group-rounded-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 </div>
 <p className="mt-4 text-sm text-slate-200">Canaux, fichiers, réunions, bonnes pratiques, organisation et communication.</p>
@@ -520,7 +562,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-6">
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Voir le parcours Teams
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <p className="mt-2 text-xs text-slate-400">Pour éviter le chaos : canaux, fichiers, réunions.</p>
 </div>
@@ -529,14 +571,14 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-start justify-between gap-4">
 <div>
 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-slate-100 ring-1 ring-white/15">
-<iconify-icon icon="solar:crown-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:crown-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                 Le plus demandé
               </div>
 <h3 className="mt-3 text-lg font-semibold tracking-tight">Pack Office 365 — Parcours complet</h3>
 <p className="mt-1 text-xs text-slate-200">Progression cohérente + exercices métier</p>
 </div>
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 group-hover:bg-white/15 transition">
-<iconify-icon icon="solar:boxes-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:boxes-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 </div>
 <p className="mt-4 text-sm text-slate-100">Excel + Word + PowerPoint + Outlook/Teams : progression cohérente avec exercices métier.</p>
@@ -547,7 +589,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-6">
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Voir le pack complet
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <p className="mt-2 text-xs text-slate-200/80">Recommandé si tu veux une montée en compétence globale.</p>
 </div>
@@ -563,11 +605,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="lg:col-span-4 flex flex-col gap-3 sm:flex-row lg:flex-col">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Faire le diagnostic gratuit
-              <iconify-icon icon="solar:stethoscope-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:stethoscope-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/15 hover:bg-white/15 transition" href="#formulaire">
               Recevoir le programme complet
-              <iconify-icon icon="solar:file-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:file-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 </div>
@@ -581,25 +623,25 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-indigo-400/10 ring-1 ring-indigo-300/15">
-<iconify-icon icon="solar:target-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:target-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h2 className="text-2xl font-semibold tracking-tight">Pourquoi STUDENS est plus efficace qu’un simple cours</h2>
 </div>
 <ul className="mt-5 space-y-3 text-sm text-slate-200">
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:route-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:route-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Progression guidée : tu sais quoi faire, dans quel ordre
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:case-round-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:case-round-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Exercices réalistes (cas admin, RH, gestion, reporting)
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:list-check-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:list-check-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Checklists pro : fichiers propres, réutilisables, rapides
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:bolt-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-indigo-200" icon="solar:bolt-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Objectif : autonomie + vitesse + qualité
             </li>
 </ul>
@@ -607,36 +649,36 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-400/10 ring-1 ring-emerald-300/15">
-<iconify-icon icon="solar:flag-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:flag-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h2 className="text-2xl font-semibold tracking-tight">Objectifs (format formation pro)</h2>
 </div>
 <ul className="mt-5 space-y-3 text-sm text-slate-200">
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Maîtriser les fonctions essentielles et les méthodes pro
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Créer des documents et présentations réutilisables
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Automatiser les tâches répétitives (Excel)
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Améliorer ton efficacité au quotidien (Outlook/Teams)
             </li>
 <li className="flex gap-3">
-<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-emerald-200" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Être à l’aise en contexte école / entreprise
             </li>
 </ul>
 <div className="mt-6">
 <a className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Recevoir le programme + diagnostic
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 </div>
@@ -661,14 +703,14 @@ gtag('config', 'G-2M6V79H761');
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:chart-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:chart-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Excel — progression</p>
 <p className="mt-1 text-xs text-slate-300">De la base au mini-projet reporting</p>
 </div>
 </div>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <ul className="mt-5 space-y-2 text-sm text-slate-200">
 <li className="flex gap-2"><span className="text-slate-400">•</span> Bases : formatage, tableaux, logique</li>
@@ -691,14 +733,14 @@ gtag('config', 'G-2M6V79H761');
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:document-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:document-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Word — documents pro</p>
 <p className="mt-1 text-xs text-slate-300">Des modèles propres, cohérents, rapides</p>
 </div>
 </div>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <ul className="mt-5 space-y-2 text-sm text-slate-200">
 <li className="flex gap-2"><span className="text-slate-400">•</span> Styles &amp; hiérarchie (propre et rapide)</li>
@@ -712,14 +754,14 @@ gtag('config', 'G-2M6V79H761');
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:presentation-graph-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:presentation-graph-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">PowerPoint — impact</p>
 <p className="mt-1 text-xs text-slate-300">Structure + système de slides réutilisable</p>
 </div>
 </div>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <ul className="mt-5 space-y-2 text-sm text-slate-200">
 <li className="flex gap-2"><span className="text-slate-400">•</span> Structure &amp; storytelling</li>
@@ -733,14 +775,14 @@ gtag('config', 'G-2M6V79H761');
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <div className="flex items-center gap-3">
 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:users-group-rounded-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:users-group-rounded-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Outlook &amp; Teams — organisation</p>
 <p className="mt-1 text-xs text-slate-300">Routines + règles + bonnes pratiques collaboration</p>
 </div>
 </div>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <ul className="mt-5 space-y-2 text-sm text-slate-200">
 <li className="flex gap-2"><span className="text-slate-400">•</span> Routines &amp; méthode anti-surcharge</li>
@@ -774,7 +816,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 hover:bg-white/7 transition">
 <div className="flex items-center gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:clock-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:clock-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-semibold tracking-tight">À ton rythme</h3>
 </div>
@@ -784,7 +826,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 hover:bg-white/7 transition">
 <div className="flex items-center gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:hammer-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:hammer-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-semibold tracking-tight">Très concret</h3>
 </div>
@@ -794,7 +836,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 hover:bg-white/7 transition">
 <div className="flex items-center gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:chat-round-line-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:chat-round-line-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-lg font-semibold tracking-tight">Support &amp; ressources</h3>
 </div>
@@ -816,7 +858,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:card-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:card-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <h3 className="text-lg font-semibold tracking-tight">Paiement en plusieurs fois</h3>
@@ -828,7 +870,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:buildings-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:buildings-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <h3 className="text-lg font-semibold tracking-tight">Formation entreprise / école</h3>
@@ -840,7 +882,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-gradient-to-br from-white/7 to-white/5 p-6 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-400/10 ring-1 ring-emerald-300/15">
-<iconify-icon icon="solar:shield-check-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:shield-check-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <h3 className="text-lg font-semibold tracking-tight">Accès immédiat + support</h3>
@@ -858,11 +900,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#formulaire">
               Demander un accès
-              <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/15 hover:bg-white/15 transition" href="#formulaire">
               Recevoir le programme
-              <iconify-icon icon="solar:file-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+              <iconify-icon icon="solar:file-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 </div>
@@ -875,11 +917,11 @@ gtag('config', 'G-2M6V79H761');
 <h3 className="mt-2 text-2xl font-semibold tracking-tight">Ce que les apprenants retiennent</h3>
 </div>
 <div className="hidden sm:flex items-center gap-1 text-amber-200">
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 </div>
 <div className="mt-6 grid gap-4">
@@ -887,11 +929,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center justify-between">
 <figcaption className="text-sm font-semibold tracking-tight">Sarah <span className="text-xs font-medium text-slate-400">— Assistante</span></figcaption>
 <div className="flex items-center gap-1 text-amber-200">
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 <blockquote className="mt-3 text-sm text-slate-200">“J’ai divisé par deux le temps sur mes tableaux Excel. Les méthodes sont ultra claires.”</blockquote>
@@ -900,11 +942,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center justify-between">
 <figcaption className="text-sm font-semibold tracking-tight">Mehdi <span className="text-xs font-medium text-slate-400">— Étudiant</span></figcaption>
 <div className="flex items-center gap-1 text-amber-200">
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 <blockquote className="mt-3 text-sm text-slate-200">“PowerPoint est devenu simple. J’ai un système de slides propre et réutilisable.”</blockquote>
@@ -913,11 +955,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center justify-between">
 <figcaption className="text-sm font-semibold tracking-tight">Julie <span className="text-xs font-medium text-slate-400">— RH</span></figcaption>
 <div className="flex items-center gap-1 text-amber-200">
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
-<iconify-icon icon="solar:star-linear" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
+<iconify-icon icon="solar:star-linear" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 <blockquote className="mt-3 text-sm text-slate-200">“Outlook/Teams mieux utilisés = moins de stress. Je suis beaucoup plus organisée.”</blockquote>
@@ -956,28 +998,28 @@ gtag('config', 'G-2M6V79H761');
 <details className="group rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 open:bg-white/7 transition">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <p className="text-sm font-semibold tracking-tight">Je pars de zéro, c’est possible ?</p>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <p className="mt-4 text-sm text-slate-200">Oui. Les parcours démarrent par les bases et montent progressivement, avec exercices guidés.</p>
 </details>
 <details className="group rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 open:bg-white/7 transition">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <p className="text-sm font-semibold tracking-tight">Je veux surtout Excel, je peux faire uniquement ça ?</p>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <p className="mt-4 text-sm text-slate-200">Oui. Tu peux suivre un parcours unique (Excel) ou un pack complet selon ton objectif.</p>
 </details>
 <details className="group rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 open:bg-white/7 transition">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <p className="text-sm font-semibold tracking-tight">Est-ce adapté au contexte entreprise ?</p>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <p className="mt-4 text-sm text-slate-200">Oui. Les exercices sont basés sur des cas réels : reporting, docs, présentations, organisation.</p>
 </details>
 <details className="group rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 open:bg-white/7 transition">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
 <p className="text-sm font-semibold tracking-tight">Combien de temps pour voir une différence ?</p>
-<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200 transition group-open:rotate-180" icon="solar:alt-arrow-down-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </summary>
 <p className="mt-4 text-sm text-slate-200">Dès la première semaine : méthodes + templates + automatisations simples.</p>
 </details>
@@ -996,7 +1038,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:download-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:download-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Ce que tu reçois</p>
@@ -1011,7 +1053,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="rounded-3xl bg-gradient-to-br from-indigo-500/15 to-cyan-400/10 p-6 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-<iconify-icon icon="solar:bolt-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:bolt-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <p className="text-sm font-semibold tracking-tight">Promesse simple</p>
@@ -1023,11 +1065,11 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col gap-3 sm:flex-row">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-100 transition" href="#lead-form">
                 Recevoir le programme
-                <iconify-icon icon="solar:file-text-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+                <iconify-icon icon="solar:file-text-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/15 hover:bg-white/15 transition" href="#lead-form">
                 Demander un accès
-                <iconify-icon icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+                <iconify-icon icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 </div>
@@ -1041,7 +1083,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mt-2 text-sm text-slate-600">Réponse rapide. Recommandation claire. Zéro blabla.</p>
 </div>
 <div className="hidden sm:grid h-11 w-11 place-items-center rounded-2xl bg-slate-950/5 ring-1 ring-black/5">
-<iconify-icon className="text-slate-800" icon="solar:paperclip-2-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-slate-800" icon="solar:paperclip-2-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 </div>
 <form className="mt-6 grid gap-4" onsubmit="event.preventDefault(); window.dispatchEvent(new CustomEvent('studens:lead', {detail: getLeadFormData()})); showToast('Merci ! Programme envoyé (simulation).'); this.reset();">
@@ -1091,11 +1133,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <button className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-900 transition focus:outline-none focus:ring-4 focus:ring-slate-950/20" type="submit">
                 Recevoir le programme
-                <iconify-icon className="text-white" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+                <iconify-icon className="text-white" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </button>
 <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-black/5">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-slate-700" icon="solar:lock-keyhole-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-slate-700" icon="solar:lock-keyhole-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <p className="text-xs font-semibold text-slate-700">Confidentialité</p>
 <p className="mt-1 text-xs text-slate-600">Tes infos servent uniquement à t’envoyer le programme et la recommandation.</p>

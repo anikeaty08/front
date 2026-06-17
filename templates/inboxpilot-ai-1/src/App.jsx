@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -62,7 +104,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="w-1.5 h-1.5 rounded-full bg-magenta inline-block"></span>
             Live Beta
           </span>
-<span className="tag-pill" style={{borderColor: 'rgba(240,237,232,0.2)', color: 'rgba(240,237,232,0.4)'}}>
+<span className="tag-pill" style={{borderColor: 'rgba(240, 237, 232, 0.2)', color: 'rgba(240,237,232,0.4)'}}>
             Outlook Integration
           </span>
 </div>
@@ -228,21 +270,21 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
 <span className="text-sm font-medium text-[#f0ede8]/70">Sarah — Updated Mockups</span>
 </div>
-<span className="tag-pill text-xs" style={{borderColor: 'rgba(240,237,232,0.2)', color: 'rgba(240,237,232,0.4)'}}>Needs Reply</span>
+<span className="tag-pill text-xs" style={{borderColor: 'rgba(240, 237, 232, 0.2)', color: 'rgba(240,237,232,0.4)'}}>Needs Reply</span>
 </div>
 <div className="flex items-center justify-between px-4 py-3.5 border border-white/8 opacity-30">
 <div className="flex items-center gap-3">
 <div className="w-2 h-2 bg-[#f0ede8]/30 rounded-full"></div>
 <span className="text-sm font-medium text-[#f0ede8]/40">Stripe — Payout confirmed</span>
 </div>
-<span className="tag-pill text-xs" style={{borderColor: 'rgba(240,237,232,0.1)', color: 'rgba(240,237,232,0.2)'}}>Finance</span>
+<span className="tag-pill text-xs" style={{borderColor: 'rgba(240, 237, 232, 0.1)', color: 'rgba(240,237,232,0.2)'}}>Finance</span>
 </div>
 <div className="flex items-center justify-between px-4 py-3.5 border border-white/8 opacity-15">
 <div className="flex items-center gap-3">
 <div className="w-2 h-2 bg-[#f0ede8]/20 rounded-full"></div>
 <span className="text-sm font-medium text-[#f0ede8]/30">Mailchimp — Weekly newsletter</span>
 </div>
-<span className="tag-pill text-xs" style={{borderColor: 'rgba(240,237,232,0.08)', color: 'rgba(240,237,232,0.15)'}}>Promo</span>
+<span className="tag-pill text-xs" style={{borderColor: 'rgba(240, 237, 232, 0.08)', color: 'rgba(240,237,232,0.15)'}}>Promo</span>
 </div>
 <div className="pt-4 flex items-center gap-2 text-xs text-[#f0ede8]/30 font-medium">
 <iconify-icon icon="solar:magic-stick-3-linear" style={{strokeWidth: '1.5', color: '#FF0080'}} width="14"></iconify-icon>

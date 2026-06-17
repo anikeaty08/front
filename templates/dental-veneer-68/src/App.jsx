@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -319,7 +355,7 @@ fadeInUp: {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {problems.map((item, index) => (
-                                <div key={index} className={`group relative p-8 rounded-2xl bg-slate-900/40 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 hover:-translate-y-1 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: `${index * 100}ms` }}>
+                                <div key={index} className={`group relative p-8 rounded-2xl bg-slate-900/40 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 hover:-translate-y-1 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{transitionDelay: `${index * 100}ms`}}>
                                     <div className="mb-5 text-cyan-400 p-3 bg-cyan-950/30 rounded-xl w-fit group-hover:bg-cyan-400 group-hover:text-slate-950 transition-colors duration-300">
                                         <item.icon size={24} />
                                     </div>
@@ -359,7 +395,7 @@ fadeInUp: {
                                             <span className="text-red-400">0.5mm - 2.0mm</span>
                                         </div>
                                         <div className="h-4 w-full bg-slate-800 rounded-full overflow-hidden">
-                                            <div className="h-full bg-red-900/50 rounded-full transition-all duration-1000 ease-out" style={{ width: isVisible ? '85%' : '0%' }} />
+                                            <div className="h-full bg-red-900/50 rounded-full transition-all duration-1000 ease-out" style={{width: isVisible ? '85%' : '0%'}} />
                                         </div>
                                     </div>
                                     <ul className="space-y-4 text-slate-500 text-sm">
@@ -386,7 +422,7 @@ fadeInUp: {
                                             <span className="text-cyan-400">0.0mm - 0.2mm</span>
                                         </div>
                                         <div className="h-4 w-full bg-slate-800 rounded-full overflow-hidden relative">
-                                            <div className="h-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] rounded-full transition-all duration-1000 delay-500 ease-out" style={{ width: isVisible ? '5%' : '0%' }} />
+                                            <div className="h-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] rounded-full transition-all duration-1000 delay-500 ease-out" style={{width: isVisible ? '5%' : '0%'}} />
                                         </div>
                                     </div>
                                     <ul className="space-y-4 text-slate-200 text-sm">
@@ -425,12 +461,12 @@ fadeInUp: {
                         <div className="relative pl-8 md:pl-0">
                             {/* Line */}
                             <div className="absolute left-[7px] md:left-1/2 top-0 bottom-0 w-px bg-slate-800 md:-ml-px">
-                                <div className="absolute top-0 left-0 w-full bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent transition-all duration-[2000ms] ease-linear" style={{ height: isVisible ? '100%' : '0%' }} />
+                                <div className="absolute top-0 left-0 w-full bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent transition-all duration-[2000ms] ease-linear" style={{height: isVisible ? '100%' : '0%'}} />
                             </div>
 
                             <div className="space-y-16">
                                 {steps.map((item, index) => (
-                                    <div key={index} className={`relative flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? "md:flex-row-reverse" : ""} transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: `${index * 200}ms` }}>
+                                    <div key={index} className={`relative flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? "md:flex-row-reverse" : ""} transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{transitionDelay: `${index * 200}ms`}}>
                                         <div className={`absolute left-0 md:left-1/2 top-0 w-[15px] h-[15px] rounded-full border-[3px] border-slate-950 bg-slate-800 md:-ml-[7.5px] z-10 transition-colors duration-500 delay-500 ${isVisible ? 'bg-cyan-400' : ''}`} />
                                         
                                         <div className="hidden md:block w-1/2" />
@@ -517,6 +553,12 @@ fadeInUp: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

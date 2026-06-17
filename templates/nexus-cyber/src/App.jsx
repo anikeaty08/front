@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -319,6 +355,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -559,7 +601,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-<div className="md:col-span-12 lg:col-span-5 p-8 relative overflow-hidden group glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
+<div className="md:col-span-12 lg:col-span-5 p-8 relative overflow-hidden group glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
 <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 11px)'}}></div>
 <div className="absolute top-0 right-0 w-64 h-64 bg-[#FF6D00]/5 blur-[80px] group-hover:bg-[#FF6D00]/10 transition-colors"></div>
 <div className="relative z-10">
@@ -608,7 +650,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="md:col-span-12 lg:col-span-7 p-8 relative overflow-hidden group glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
+<div className="md:col-span-12 lg:col-span-7 p-8 relative overflow-hidden group glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
 <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 11px)'}}></div>
 <div className="absolute top-1/2 right-1/4 w-64 h-64 bg-[#FF6D00]/5 blur-[80px] group-hover:bg-[#FF6D00]/10 transition-colors"></div>
 <div className="relative z-10 h-full flex flex-col">
@@ -649,7 +691,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="md:col-span-12 lg:col-span-7 p-8 relative overflow-hidden h-[350px] glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
+<div className="md:col-span-12 lg:col-span-7 p-8 relative overflow-hidden h-[350px] glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
 <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 11px)'}}></div>
 <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-[#FF6D00]/10 blur-[60px] rounded-full"></div>
 <div className="relative z-10 flex flex-col h-full justify-between">
@@ -667,7 +709,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="md:col-span-12 lg:col-span-5 p-8 relative overflow-hidden h-[350px] glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
+<div className="md:col-span-12 lg:col-span-5 p-8 relative overflow-hidden h-[350px] glow-card reveal" style={{background: 'linear-gradient(135deg, rgba(15, 26, 36, 0.95) 0%, rgba(10, 16, 24, 0.98) 100%)', boxShadow: '0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 171, 0, 0.05)', border: '1px solid rgba(255, 171, 0, 0.2)'}}>
 <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 11px)'}}></div>
 <div className="relative z-10 w-full md:w-2/3">
 <h3 className="text-xl tracking-widest mb-2 uppercase text-white font-jakarta font-medium">

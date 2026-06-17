@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -374,6 +410,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -383,7 +425,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
 <div className="absolute inset-0 bg-black"></div>
 
-<div className="anim-aurora absolute -top-24 -left-20 w-[60vw] h-[60vw] rounded-full blur-3xl opacity-[0.25]" style={{background: 'radial-gradient(45% 45% at 50% 50%, rgba(78,124,255,0.45), rgba(0,0,0,0))', animation: 'float6 9s ease-in-out infinite', filter: 'saturate(120%)'}}></div>
+<div className="anim-aurora absolute -top-24 -left-20 w-[60vw] h-[60vw] rounded-full blur-3xl opacity-[0.25]" style={{background: 'radial-gradient(45% 45% at 50% 50%, rgba(78, 124, 255, 0.45), rgba(0, 0, 0, 0))', animation: 'float6 9s ease-in-out infinite', filter: 'saturate(120%)'}}></div>
 <div className="anim-aurora absolute -bottom-24 -right-32 w-[55vw] h-[55vw] rounded-full blur-3xl opacity-[0.22]" style={{background: 'radial-gradient(40% 40% at 50% 50%, rgba(107,70,193,0.45), rgba(0,0,0,0))', animation: 'float6 10s ease-in-out infinite', animationDelay: '.6s'}}></div>
 <div className="anim-aurora absolute top-1/3 -left-10 w-[40vw] h-[40vw] rounded-full blur-3xl opacity-[0.18]" style={{background: 'radial-gradient(40% 40% at 50% 50%, rgba(16,185,129,0.35), rgba(0,0,0,0))', animation: 'float6 13s ease-in-out infinite', animationDelay: '1.2s'}}></div>
 
@@ -428,7 +470,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-4 h-4 text-white/70" data-lucide="globe"></i>
 <span className="text-white/80 text-sm" id="langLabel">中文</span>
 <i className="w-3.5 h-3.5 text-white/60" data-lucide="chevron-down"></i>
-<div className="absolute right-0 top-9 hidden min-w-[120px] rounded-lg p-1 bg-white/10 backdrop-blur-md" id="langMenu" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.08), 0 10px 40px rgba(0,0,0,.35)'}}>
+<div className="absolute right-0 top-9 hidden min-w-[120px] rounded-lg p-1 bg-white/10 backdrop-blur-md" id="langMenu" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, .08), 0 10px 40px rgba(0,0,0,.35)'}}>
 <button className="w-full text-left px-3 py-2 rounded-md text-white/85 hover:bg-white/10 text-sm" data-lang="zh">中文</button>
 <button className="w-full text-left px-3 py-2 rounded-md text-white/85 hover:bg-white/10 text-sm" data-lang="vi">Tiếng Việt</button>
 </div>
@@ -439,7 +481,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <main className="max-w-[920px] mx-auto px-5 pb-20 mt-6 grid grid-cols-1 lg:grid-cols-2 gap-5">
 
-<section className="anim-float rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 lg:sticky lg:top-6" id="inputCard" style={{animation: 'float6 6s ease-in-out infinite', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(78,124,255,0.25), 0 20px 60px rgba(78,124,255,0.08), 0 2px 0 rgba(255,255,255,0.04) inset'}}>
+<section className="anim-float rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 lg:sticky lg:top-6" id="inputCard" style={{animation: 'float6 6s ease-in-out infinite', boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(78, 124, 255, 0.25), 0 20px 60px rgba(78, 124, 255, 0.08), 0 2px 0 rgba(255,255,255,0.04) inset'}}>
 <div className="flex items-start justify-between gap-3">
 <div>
 <h1 className="text-[22px] md:text-[24px] font-semibold tracking-tight text-white" id="title">高情商回复生成器</h1>
@@ -505,7 +547,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="mt-5 flex items-center gap-3">
-<button className="relative inline-flex items-center justify-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-medium tracking-tight text-white bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-60" id="generateBtn" style={{boxShadow: '0 8px 30px rgba(78,124,255,.25), inset 0 0 0 1px rgba(255,255,255,.15)'}}>
+<button className="relative inline-flex items-center justify-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-medium tracking-tight text-white bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 disabled:opacity-60" id="generateBtn" style={{boxShadow: '0 8px 30px rgba(78, 124, 255, .25), inset 0 0 0 1px rgba(255,255,255,.15)'}}>
 <span className="flex" id="genIconWrap">
 <i className="w-4 h-4" data-lucide="sparkles"></i>
 </span>
@@ -523,7 +565,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="space-y-4" id="outputColumn">
 
-<div className="anim-float rounded-[14px] bg-white/6 backdrop-blur-2xl border border-white/10 p-6 text-center" id="emptyState" style={{animation: 'float6 6s ease-in-out infinite', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(107,70,193,0.2), 0 20px 60px rgba(107,70,193,0.07)'}}>
+<div className="anim-float rounded-[14px] bg-white/6 backdrop-blur-2xl border border-white/10 p-6 text-center" id="emptyState" style={{animation: 'float6 6s ease-in-out infinite', boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(107, 70, 193, 0.2), 0 20px 60px rgba(107,70,193,0.07)'}}>
 <div className="mx-auto w-11 h-11 rounded-full bg-white/5 flex items-center justify-center outline outline-1 outline-white/10">
 <i className="w-5 h-5 text-white/75" data-lucide="message-square"></i>
 </div>
@@ -533,7 +575,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="space-y-4 hidden" id="results">
 
-<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(78,124,255,0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
+<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(78, 124, 255, 0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="inline-flex items-center gap-1.5 text-[13px] px-2 py-1 rounded-md bg-white/10 outline outline-1 outline-white/10">
@@ -553,7 +595,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(78,124,255,0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
+<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(78, 124, 255, 0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="inline-flex items-center gap-1.5 text-[13px] px-2 py-1 rounded-md bg-white/10 outline outline-1 outline-white/10">
@@ -572,7 +614,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(78,124,255,0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
+<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(78, 124, 255, 0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="inline-flex items-center gap-1.5 text-[13px] px-2 py-1 rounded-md bg-white/10 outline outline-1 outline-white/10">
@@ -595,7 +637,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" id="explainCard" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(78,124,255,0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
+<div className="result-card rounded-[14px] bg-white/8 backdrop-blur-2xl border border-white/10 p-5 relative" id="explainCard" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(78, 124, 255, 0.22), 0 20px 60px rgba(78,124,255,0.07)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="inline-flex items-center gap-1.5 text-[13px] px-2 py-1 rounded-md bg-white/10 outline outline-1 outline-white/10">
@@ -622,7 +664,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="fixed top-5 right-5 z-50 space-y-2" id="toastStack"></div>
 
 <footer className="max-w-[920px] mx-auto px-5 pb-10">
-<div className="rounded-[14px] bg-white/6 backdrop-blur-2xl border border-white/10 p-4 flex items-center justify-between" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 0 0 1px rgba(255,255,255,0.12)'}}>
+<div className="rounded-[14px] bg-white/6 backdrop-blur-2xl border border-white/10 p-4 flex items-center justify-between" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 1px rgba(255,255,255,0.12)'}}>
 <div className="text-white/60 text-sm">
 <span id="footerMade">由</span> <span className="font-medium text-white/80 tracking-tight">HG</span> <span id="footerWith">构建 · 支持 i18n</span>
 </div>

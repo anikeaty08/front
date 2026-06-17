@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1012,6 +1048,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1365,7 +1407,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.16)] cursor-pointer group bg-neutral-50 w-[340px] z-20 border-slate-200/60 border rounded-[2rem] px-7 py-7 absolute top-14 left-0" style={{boxShadow: '0 24px 48px -12px rgba(15,23,42,0.14), 0 10px 20px -10px rgba(15,23,42,0.08), inset 0 2px 2px rgba(255,255,255,1), inset 0 -1px 2px rgba(0,0,0,0.03)', animation: 'cardSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards'}}>
+<div className="transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.16)] cursor-pointer group bg-neutral-50 w-[340px] z-20 border-slate-200/60 border rounded-[2rem] px-7 py-7 absolute top-14 left-0" style={{boxShadow: '0 24px 48px -12px rgba(15, 23, 42, 0.14), 0 10px 20px -10px rgba(15, 23, 42, 0.08), inset 0 2px 2px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(0, 0, 0, 0.03)', animation: 'cardSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards'}}>
 <div className="flex items-start justify-between mb-5">
 <div className="flex items-center gap-3">
 <div className="">
@@ -1928,7 +1970,7 @@ gtag('config', 'G-2M6V79H761');
                   inset 0 1px 1px rgba(255,255,255,0.8),
                   inset 0 -1px 1px rgba(148,163,184,0.2);
               ">
-<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '0.5s', boxShadow: '0 0 5px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}>
+<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '0.5s', boxShadow: '0 0 5px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}>
 </div>
 </div>
 <span className="text-slate-600 skeuo-text-raised group-hover:text-[#5B58F6] transition-colors">Logo Design</span>
@@ -1940,7 +1982,7 @@ gtag('config', 'G-2M6V79H761');
                   inset 0 1px 1px rgba(255,255,255,0.8),
                   inset 0 -1px 1px rgba(148,163,184,0.2);
               ">
-<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '1.2s', boxShadow: '0 0 5px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}>
+<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '1.2s', boxShadow: '0 0 5px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}>
 </div>
 </div>
 <span className="text-slate-600 skeuo-text-raised group-hover:text-[#5B58F6] transition-colors">Tone of Voice</span>
@@ -1952,7 +1994,7 @@ gtag('config', 'G-2M6V79H761');
                   inset 0 1px 1px rgba(255,255,255,0.8),
                   inset 0 -1px 1px rgba(148,163,184,0.2);
               ">
-<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '2.1s', boxShadow: '0 0 5px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}>
+<div className="w-2 h-2 rounded-full bg-[#10b981] animate-led-pulse" style={{animationDelay: '2.1s', boxShadow: '0 0 5px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255,255,255,0.55)'}}>
 </div>
 </div>
 <span className="text-slate-600 skeuo-text-raised group-hover:text-[#5B58F6] transition-colors">Guidelines</span>
@@ -2363,7 +2405,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="min-h-screen flex flex-col sm:p-8 antialiased selection:bg-indigo-100 selection:text-indigo-900 text-slate-800 pt-4 pr-4 pb-4 pl-4 items-center justify-center" id="core-engineering-section" style={{background: 'radial-gradient(circle at 50% -10%, #ffffff 0%, #f8fafc 100%)'}}>
 <div className="max-w-7xl w-full flex flex-col items-center text-center mb-12 lg:mb-16 z-20 mt-8 lg:mt-0">
-<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 text-xs text-indigo-700 bg-white/80 backdrop-blur-md" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,1), 0 4px 12px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0,0,0,0.04)', border: '1px solid rgba(255,255,255,0.9)'}}>
+<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 text-xs text-indigo-700 bg-white/80 backdrop-blur-md" style={{boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 1), 0 4px 12px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)', border: '1px solid rgba(255,255,255,0.9)'}}>
 <iconify-icon height="16" icon="solar:box-minimalistic-linear" strokeWidth="1.5" width="16"></iconify-icon>
 <span className="font-medium tracking-wide uppercase">Core Engineering</span>
 </div>
@@ -2373,9 +2415,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
 
-<div className="relative h-[36rem] bg-white rounded-[2rem] overflow-hidden flex flex-col group transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: 'inset 0 2px 4px rgba(255,255,255,1), inset 0 -1px 2px rgba(0,0,0,0.02), 0 20px 40px -10px rgba(99, 102, 241, 0.06), 0 10px 20px -5px rgba(0,0,0,0.03)', border: '1px solid rgba(226, 232, 240, 0.9)'}}>
+<div className="relative h-[36rem] bg-white rounded-[2rem] overflow-hidden flex flex-col group transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(0, 0, 0, 0.02), 0 20px 40px -10px rgba(99, 102, 241, 0.06), 0 10px 20px -5px rgba(0, 0, 0, 0.03)', border: '1px solid rgba(226, 232, 240, 0.9)'}}>
 <div className="px-8 pt-10 flex flex-col items-start relative z-30 pointer-events-none">
-<div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-slate-600 mb-6 bg-slate-50" style={{boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.03), inset 0 -1px 2px rgba(255,255,255,1)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
+<div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-slate-600 mb-6 bg-slate-50" style={{boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 -1px 2px rgba(255, 255, 255, 1)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
 <iconify-icon className="text-indigo-600" height="16" icon="solar:3d-cube-sphere-linear" strokeWidth="1.5" width="16"></iconify-icon>
 <span className="font-medium">Ideate</span>
 </div>
@@ -2401,9 +2443,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="relative h-[36rem] bg-white rounded-[2rem] flex flex-col overflow-hidden group transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: 'inset 0 2px 4px rgba(255,255,255,1), inset 0 -1px 2px rgba(0,0,0,0.02), 0 20px 40px -10px rgba(99, 102, 241, 0.06), 0 10px 20px -5px rgba(0,0,0,0.03)', border: '1px solid rgba(226, 232, 240, 0.9)'}}>
+<div className="relative h-[36rem] bg-white rounded-[2rem] flex flex-col overflow-hidden group transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(0, 0, 0, 0.02), 0 20px 40px -10px rgba(99, 102, 241, 0.06), 0 10px 20px -5px rgba(0, 0, 0, 0.03)', border: '1px solid rgba(226, 232, 240, 0.9)'}}>
 <div className="px-8 pt-10 flex flex-col items-start text-left relative z-30 pointer-events-none">
-<div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-slate-600 mb-6 bg-slate-50" style={{boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.03), inset 0 -1px 2px rgba(255,255,255,1)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
+<div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-slate-600 mb-6 bg-slate-50" style={{boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 -1px 2px rgba(255, 255, 255, 1)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
 <iconify-icon className="text-indigo-600" height="16" icon="solar:cpu-bolt-linear" strokeWidth="1.5" width="16"></iconify-icon>
 <span className="font-medium">Construct</span>
 </div>
@@ -2465,9 +2507,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="relative h-[36rem] bg-white rounded-[2rem] flex flex-col overflow-hidden group transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: 'inset 0 2px 4px rgba(255,255,255,1), inset 0 -1px 2px rgba(0,0,0,0.02), 0 20px 40px -10px rgba(99, 102, 241, 0.06), 0 10px 20px -5px rgba(0,0,0,0.03)', border: '1px solid rgba(226, 232, 240, 0.9)'}}>
+<div className="relative h-[36rem] bg-white rounded-[2rem] flex flex-col overflow-hidden group transition-transform duration-500 hover:-translate-y-1" style={{boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(0, 0, 0, 0.02), 0 20px 40px -10px rgba(99, 102, 241, 0.06), 0 10px 20px -5px rgba(0, 0, 0, 0.03)', border: '1px solid rgba(226, 232, 240, 0.9)'}}>
 <div className="px-8 pt-10 flex flex-col items-start relative z-20">
-<div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-slate-600 mb-6 bg-slate-50" style={{boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.03), inset 0 -1px 2px rgba(255,255,255,1)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
+<div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-slate-600 mb-6 bg-slate-50" style={{boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 -1px 2px rgba(255, 255, 255, 1)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
 <iconify-icon className="text-indigo-600" height="16" icon="solar:rocket-2-linear" strokeWidth="1.5" width="16"></iconify-icon>
 <span className="font-medium">Scale</span>
 </div>
@@ -2478,8 +2520,8 @@ gtag('config', 'G-2M6V79H761');
                 </p>
 </div>
 <div className="relative w-full flex-1 mt-6 flex flex-col items-center justify-center">
-<div className="relative w-48 h-48 rounded-full flex items-center justify-center bg-slate-50" style={{boxShadow: '-4px -4px 12px rgba(255,255,255,1), 4px 4px 12px rgba(0,0,0,0.03), inset -1px -1px 4px rgba(255,255,255,0.9), inset 1px 1px 4px rgba(0,0,0,0.02)'}}>
-<div className="absolute inset-4 rounded-full bg-[#f8fafc]" style={{boxShadow: 'inset 3px 3px 6px rgba(0,0,0,0.03), inset -3px -3px 6px rgba(255,255,255,0.9)'}}>
+<div className="relative w-48 h-48 rounded-full flex items-center justify-center bg-slate-50" style={{boxShadow: '-4px -4px 12px rgba(255, 255, 255, 1), 4px 4px 12px rgba(0, 0, 0, 0.03), inset -1px -1px 4px rgba(255, 255, 255, 0.9), inset 1px 1px 4px rgba(0,0,0,0.02)'}}>
+<div className="absolute inset-4 rounded-full bg-[#f8fafc]" style={{boxShadow: 'inset 3px 3px 6px rgba(0, 0, 0, 0.03), inset -3px -3px 6px rgba(255,255,255,0.9)'}}>
 </div>
 <svg className="w-[82%] h-[82%] absolute z-10 -rotate-90" style={{filter: 'drop-shadow(0 2px 8px rgba(99, 102, 241, 0.2))'}} viewbox="0 0 100 100">
 <defs>
@@ -2492,13 +2534,13 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="50" cy="50" fill="none" id="health-ring" r="46" stroke="url(#indigoGlowRing)" stroke-dasharray="289" stroke-dashoffset="289" strokeLinecap="round" strokeWidth="6">
 </circle>
 </svg>
-<div className="relative z-20 w-28 h-28 rounded-full bg-white flex flex-col items-center justify-center" style={{boxShadow: 'inset 1px 1px 3px rgba(0,0,0,0.01), inset -1px -1px 3px rgba(255,255,255,1), 0 2px 12px rgba(0,0,0,0.04)'}}>
+<div className="relative z-20 w-28 h-28 rounded-full bg-white flex flex-col items-center justify-center" style={{boxShadow: 'inset 1px 1px 3px rgba(0, 0, 0, 0.01), inset -1px -1px 3px rgba(255, 255, 255, 1), 0 2px 12px rgba(0,0,0,0.04)'}}>
 <span className="text-4xl font-medium tracking-tight text-slate-900 leading-none">100</span>
 <span className="text-[10px] font-medium text-emerald-500 mt-1 uppercase tracking-widest">Health</span>
 </div>
 </div>
 <div className="w-full px-8 mt-10 space-y-3 pb-8 relative z-20">
-<div className="flex items-center justify-between p-3 rounded-xl bg-white transition-colors hover:bg-slate-50" style={{boxShadow: '0 1px 3px rgba(0,0,0,0.02), inset 0 -1px 2px rgba(0,0,0,0.01)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
+<div className="flex items-center justify-between p-3 rounded-xl bg-white transition-colors hover:bg-slate-50" style={{boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02), inset 0 -1px 2px rgba(0, 0, 0, 0.01)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
 <div className="flex items-center gap-3">
 <div className="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 text-slate-500">
 <iconify-icon height="14" icon="solar:stopwatch-linear" strokeWidth="1.5" width="14"></iconify-icon>
@@ -2507,7 +2549,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">1.2s</span>
 </div>
-<div className="flex items-center justify-between p-3 rounded-xl bg-white transition-colors hover:bg-slate-50" style={{boxShadow: '0 1px 3px rgba(0,0,0,0.02), inset 0 -1px 2px rgba(0,0,0,0.01)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
+<div className="flex items-center justify-between p-3 rounded-xl bg-white transition-colors hover:bg-slate-50" style={{boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02), inset 0 -1px 2px rgba(0, 0, 0, 0.01)', border: '1px solid rgba(226, 232, 240, 0.7)'}}>
 <div className="flex items-center gap-3">
 <div className="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 text-slate-500">
 <iconify-icon height="14" icon="solar:cursor-square-linear" strokeWidth="1.5" width="14"></iconify-icon>
@@ -3254,7 +3296,7 @@ gtag('config', 'G-2M6V79H761');
             Most Popular
           </div>
 <div className="">
-<div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: 'inset 0 2px 2px rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.15), 0 4px 12px -2px rgba(139,92,246,0.4)', border: '1px solid #7c3aed'}}>
+<div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: 'inset 0 2px 2px rgba(255, 255, 255, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.15), 0 4px 12px -2px rgba(139,92,246,0.4)', border: '1px solid #7c3aed'}}>
 <iconify-icon className="text-white text-2xl drop-shadow-sm" icon="solar:bolt-linear"></iconify-icon>
 </div>
 <h3 className="text-xl font-medium tracking-tight text-slate-900 mb-2">
@@ -3286,7 +3328,7 @@ gtag('config', 'G-2M6V79H761');
               Auto-scaling instances
             </li>
 </ul>
-<button className="transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.98] text-sm font-medium text-white w-full rounded-xl pt-3.5 pb-3.5" style={{background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 10px -2px rgba(139,92,246,0.3)', border: '1px solid #6d28d9'}}>
+<button className="transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.98] text-sm font-medium text-white w-full rounded-xl pt-3.5 pb-3.5" style={{background: 'linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 4px 10px -2px rgba(139,92,246,0.3)', border: '1px solid #6d28d9'}}>
                 Activate Pro
               </button>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -552,6 +588,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1566,7 +1608,7 @@ gtag('config', 'G-2M6V79H761');
 </footer>
 
 
-<div id="red-cursor" style={{position: 'fixed', top: '0', left: '0', width: '26px', height: '26px', borderRadius: '9999px', background: 'radial-gradient(circle,rgba(225,6,44,0.55),rgba(225,6,44,0.18) 60%,transparent 75%)', pointerEvents: 'none', zIndex: '99999', transform: 'translate(-50%,-50%) scale(1)', opacity: '0', mixBlendMode: 'normal', willChange: 'transform,opacity', transition: 'opacity 0.3s ease'}}></div>
+<div id="red-cursor" style={{position: 'fixed', top: '0', left: '0', width: '26px', height: '26px', borderRadius: '9999px', background: 'radial-gradient(circle, rgba(225, 6, 44, 0.55), rgba(225, 6, 44, 0.18) 60%, transparent 75%)', pointerEvents: 'none', zIndex: '99999', transform: 'translate(-50%, -50%) scale(1)', opacity: '0', mixBlendMode: 'normal', willChange: 'transform, opacity', transition: 'opacity 0.3s ease'}}></div>
 
 
     </>

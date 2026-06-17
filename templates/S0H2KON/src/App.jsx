@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
   !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
@@ -166,6 +202,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -207,7 +249,7 @@ export default function App() {
 
 <div className="pointer-events-none absolute inset-0 -z-10">
 <div className="absolute inset-0" style={{background: 'radial-gradient(60% 60% at 50% 20%, rgba(17,24,39,0) 0%, rgba(2,6,23,0.4) 60%, rgba(0,0,0,0.7) 100%)'}}></div>
-<div className="absolute inset-x-0 top-1/2 h-1/2 opacity-60" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.04) 0%, rgba(0,0,0,0) 60%)', filter: 'blur(18px)'}}></div>
+<div className="absolute inset-x-0 top-1/2 h-1/2 opacity-60" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.04) 0%, rgba(0, 0, 0, 0) 60%)', filter: 'blur(18px)'}}></div>
 </div>
 
 <div className="relative mx-auto max-w-7xl px-6 md:px-8 pt-16 md:pt-24 lg:pt-28">
@@ -240,7 +282,7 @@ export default function App() {
 
 <div className="relative mx-auto mt-14 md:mt-20 h-[380px] sm:h-[420px] md:h-[460px] lg:h-[500px] max-w-5xl" id="cards-space">
 
-<div className="pointer-events-none absolute inset-0 -z-10" style={{background: 'radial-gradient(600px 300px at 50% 40%, rgba(12,210,255,0.10), rgba(0,0,0,0))', filter: 'blur(22px)'}}></div>
+<div className="pointer-events-none absolute inset-0 -z-10" style={{background: 'radial-gradient(600px 300px at 50% 40%, rgba(12, 210, 255, 0.10), rgba(0, 0, 0, 0))', filter: 'blur(22px)'}}></div>
 
 <div aria-label="Floating card: Workflow" className="card absolute left-1/2 top-1/2 w-[220px] sm:w-[240px] md:w-[260px] -translate-x-[160%] -translate-y-[70%] rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6),_0_0_30px_-10px_rgba(34,211,238,0.25)] ring-1 ring-white/10 will-change-transform transition-[transform,box-shadow] duration-300 ease-out hover:shadow-[0_22px_70px_-18px_rgba(0,0,0,0.65),_0_0_50px_-10px_rgba(34,211,238,0.35)]" data-depth="0.9" style={{transformStyle: 'preserve-3d'}} tabindex="0">
 <div className="relative overflow-hidden rounded-xl border border-white/5">
@@ -293,7 +335,7 @@ export default function App() {
 </div>
 </div>
 
-<div className="pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 hidden md:block" style={{width: '2px', height: '140px', background: 'linear-gradient(180deg, rgba(34,211,238,0), rgba(34,211,238,0.35), rgba(34,211,238,0))', filter: 'blur(0.3px)', opacity: '0.45'}}></div>
+<div className="pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 hidden md:block" style={{width: '2px', height: '140px', background: 'linear-gradient(180deg, rgba(34, 211, 238, 0), rgba(34, 211, 238, 0.35), rgba(34, 211, 238, 0))', filter: 'blur(0.3px)', opacity: '0.45'}}></div>
 </div>
 </div>
 </section>
@@ -423,7 +465,7 @@ export default function App() {
 </div>
 </div>
 <div className="relative">
-<div className="absolute -inset-4 -z-10 opacity-50" style={{background: 'radial-gradient(300px 180px at 60% 40%, rgba(12,210,255,0.10), rgba(0,0,0,0))', filter: 'blur(22px)'}}></div>
+<div className="absolute -inset-4 -z-10 opacity-50" style={{background: 'radial-gradient(300px 180px at 60% 40%, rgba(12, 210, 255, 0.10), rgba(0, 0, 0, 0))', filter: 'blur(22px)'}}></div>
 <img alt="Dashboard preview" className="w-full rounded-xl border border-white/10 object-cover" src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
 </div>
 </div>
@@ -639,7 +681,7 @@ export default function App() {
 <section className="relative">
 <div className="mx-auto max-w-7xl px-6 md:px-8 py-16">
 <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 md:p-12 backdrop-blur">
-<div className="absolute -inset-8 -z-10 opacity-50" style={{background: 'radial-gradient(500px 260px at 30% 40%, rgba(56,189,248,0.10), rgba(0,0,0,0))', filter: 'blur(24px)'}}></div>
+<div className="absolute -inset-8 -z-10 opacity-50" style={{background: 'radial-gradient(500px 260px at 30% 40%, rgba(56, 189, 248, 0.10), rgba(0, 0, 0, 0))', filter: 'blur(24px)'}}></div>
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
 <div className="lg:col-span-2">
 <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Ready to move faster?</h3>

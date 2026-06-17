@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,12 +139,18 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<header className="relative border-b border-neutral-800 overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-black" style={{backgroundImage: 'linear-gradient(to bottom right, rgba(23,23,23,0.85), rgba(10,10,10,0.9), rgba(0,0,0,0.95)), url(\'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<header className="relative border-b border-neutral-800 overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-black" style={{backgroundImage: 'linear-gradient(to bottom right, rgba(23,23,23,0.85), rgba(10,10,10,0.9), rgba(0,0,0,0.95)), url(\'https: //images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="relative max-w-5xl mx-auto px-6 py-24">
 <div className="pointer-events-none absolute inset-0 -z-0">
 <div className="absolute -top-24 -left-24 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl"></div>

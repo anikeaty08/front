@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -780,6 +816,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -789,9 +831,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <aside className="hidden lg:flex fixed inset-y-0 left-0 w-72 bg-[#0E0E0E] text-white flex-col border-r border-white/10">
 <div className="px-5 py-5 flex items-center gap-3">
 <button className="inline-flex items-center gap-2 group" onclick="navigateTo('/')">
-<span className="h-7 w-7 rounded-md bg-white text-black grid place-items-center" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600', letterSpacing: '-0.02em'}}>i</span>
+<span className="h-7 w-7 rounded-md bg-white text-black grid place-items-center" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600', letterSpacing: '-0.02em'}}>i</span>
 <div className="flex flex-col">
-<span className="text-[15px] leading-5" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600', letterSpacing: '-0.02em'}}>ireal</span>
+<span className="text-[15px] leading-5" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600', letterSpacing: '-0.02em'}}>ireal</span>
 <span className="text-xs text-white/60 -mt-0.5">Cuaderno de contenidos</span>
 </div>
 </button>
@@ -840,8 +882,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-sm">Menú</span>
 </button>
 <button className="inline-flex items-center gap-2" onclick="navigateTo('/')">
-<span className="h-7 w-7 rounded-md bg-black text-white grid place-items-center" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600', letterSpacing: '-0.02em'}}>i</span>
-<span className="text-sm" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600', letterSpacing: '-0.02em'}}>ireal</span>
+<span className="h-7 w-7 rounded-md bg-black text-white grid place-items-center" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600', letterSpacing: '-0.02em'}}>i</span>
+<span className="text-sm" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600', letterSpacing: '-0.02em'}}>ireal</span>
 </button>
 <button aria-label="Abrir ajustes" className="inline-flex items-center gap-2 px-2 py-1 rounded-md hover:bg-black/5 focus:outline-none focus:ring-1 focus:ring-black/10" onclick="toast('Ajustes')">
 <i className="h-5 w-5" data-lucide="settings"></i>
@@ -858,8 +900,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <header className="max-w-7xl mx-auto px-6 pt-8">
 <div className="flex items-start justify-between gap-6">
 <div>
-<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Tu página de hoy</h1>
-<p className="mt-1 text-black/70 text-sm md:text-base" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Convierte tu idea en un hechizo de contenido.</p>
+<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Tu página de hoy</h1>
+<p className="mt-1 text-black/70 text-sm md:text-base" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Convierte tu idea en un hechizo de contenido.</p>
 </div>
 <div className="hidden sm:flex items-center gap-3">
 <button className="group relative inline-flex items-center gap-2 rounded-md border border-[#E5E5E5] bg-white/60 px-3.5 py-2 text-sm hover:bg-[var(--ireal-accent-600)] hover:text-white hover:shadow-[0_0_0_6px_rgba(138,15,28,0.10)] hover:ring-1 hover:ring-[var(--ireal-accent-600)]/70 focus:outline-none focus:ring-1 focus:ring-black/20" onclick="handleCreatePlan()">
@@ -895,7 +937,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-2">
 <i aria-hidden="true" className="h-5 w-5" data-lucide="feather"></i>
-<h2 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Ideas</h2>
+<h2 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Ideas</h2>
 </div>
 <button className="text-sm underline decoration-black/20 underline-offset-4 hover:text-[var(--ireal-accent-600)] focus:outline-none focus:ring-1 focus:ring-black/20 rounded px-2 py-1" onclick="navigateTo('/ideas')">Ver todo</button>
 </div>
@@ -919,7 +961,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-2">
 <i aria-hidden="true" className="h-5 w-5" data-lucide="file-text"></i>
-<h2 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Planes</h2>
+<h2 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Planes</h2>
 </div>
 <button className="text-sm underline decoration-black/20 underline-offset-4 hover:text-[var(--ireal-accent-600)] focus:outline-none focus:ring-1 focus:ring-black/20 rounded px-2 py-1" onclick="navigateTo('/planes')">Ver todo</button>
 </div>
@@ -931,7 +973,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-2">
 <i aria-hidden="true" className="h-5 w-5" data-lucide="calendar-check-2"></i>
-<h2 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Publicaciones</h2>
+<h2 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Publicaciones</h2>
 </div>
 <button className="text-sm underline decoration-black/20 underline-offset-4 hover:text-[var(--ireal-accent-600)] focus:outline-none focus:ring-1 focus:ring-black/20 rounded px-2 py-1" onclick="navigateTo('/calendario?view=week&amp;focus=today')">Ver todo</button>
 </div>
@@ -950,14 +992,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="mt-6 rounded-xl border border-[#E5E5E5] bg-white/40 p-5 hover:shadow-sm">
 <div className="flex items-center justify-between">
-<h3 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Resumen 24–48 h</h3>
+<h3 className="text-lg tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Resumen 24–48 h</h3>
 <p className="text-sm text-black/60">Así va tu flujo en las próximas 24–48 h</p>
 </div>
 <div className="mt-4 grid md:grid-cols-3 gap-4">
 <div>
 <div className="flex items-center gap-2">
 <span className="h-2 w-2 rounded-full bg-black/60"></span>
-<h4 className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Ayer (Publicadas)</h4>
+<h4 className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Ayer (Publicadas)</h4>
 </div>
 <ul className="mt-2 space-y-1.5 text-sm" id="yesterdayList"></ul>
 <button className="hidden mt-2 text-xs underline underline-offset-4" id="yesterdayMore">Ver más</button>
@@ -965,7 +1007,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div>
 <div className="flex items-center gap-2">
 <span className="h-2 w-2 rounded-full bg-[var(--ireal-accent-600)]"></span>
-<h4 className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Hoy (Programadas)</h4>
+<h4 className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Hoy (Programadas)</h4>
 </div>
 <ul className="mt-2 space-y-1.5 text-sm" id="todayList"></ul>
 <button className="hidden mt-2 text-xs underline underline-offset-4" id="todayMore">Ver más</button>
@@ -973,7 +1015,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div>
 <div className="flex items-center gap-2">
 <span className="h-2 w-2 rounded-full bg-[var(--ireal-accent-400)]/70"></span>
-<h4 className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Mañana (Próximas)</h4>
+<h4 className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Mañana (Próximas)</h4>
 </div>
 <ul className="mt-2 space-y-1.5 text-sm" id="tomorrowList"></ul>
 <button className="hidden mt-2 text-xs underline underline-offset-4" id="tomorrowMore">Ver más</button>
@@ -987,8 +1029,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="max-w-7xl mx-auto px-6 py-8">
 <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
 <div>
-<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Ideas</h1>
-<p className="mt-1 text-black/70" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Apunta chispas. Convierte notas en planes cuando estés listo.</p>
+<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Ideas</h1>
+<p className="mt-1 text-black/70" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Apunta chispas. Convierte notas en planes cuando estés listo.</p>
 </div>
 <div className="flex flex-col sm:flex-row gap-3">
 <button className="group relative inline-flex items-center gap-2 rounded-md border border-[#E5E5E5] bg-white/60 px-3.5 py-2 text-sm hover:bg-[var(--ireal-accent-600)] hover:text-white hover:shadow-[0_0_0_6px_rgba(138,15,28,0.10)] hover:ring-1 hover:ring-[var(--ireal-accent-600)]/70 focus:outline-none focus:ring-1 focus:ring-black/20" onclick="navigateTo('/ideas/new')">
@@ -1059,7 +1101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="mt-8">
-<h1 aria-label="Título" aria-multiline="true" className="outline-none placeholder:text-black/40 w-full tracking-tight" contenteditable="true" id="ideaTitle" role="textbox" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600', fontSize: 'clamp(28px,5vw,44px)'}}>Escribe un título…</h1>
+<h1 aria-label="Título" aria-multiline="true" className="outline-none placeholder:text-black/40 w-full tracking-tight" contenteditable="true" id="ideaTitle" role="textbox" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600', fontSize: 'clamp(28px,5vw,44px)'}}>Escribe un título…</h1>
 <div className="mt-3 hidden flex-wrap gap-2" id="linkedPlansChips"></div>
 <div className="relative mt-6">
 <div aria-label="Notas" aria-multiline="true" className="max-w-3xl outline-none text-base leading-7 text-black bg-white/0 min-h-[40vh]" contenteditable="true" id="editorArea" role="textbox">
@@ -1096,8 +1138,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="max-w-7xl mx-auto px-6 py-8">
 <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
 <div>
-<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Planes de contenido</h1>
-<p className="mt-1 text-black/70" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Gestiona campañas y avanza con IA.</p>
+<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Planes de contenido</h1>
+<p className="mt-1 text-black/70" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Gestiona campañas y avanza con IA.</p>
 </div>
 <div className="flex flex-col sm:flex-row gap-3">
 <button className="group relative inline-flex items-center gap-2 rounded-md border border-[#E5E5E5] bg-white/60 px-3.5 py-2 text-sm hover:bg-[var(--ireal-accent-600)] hover:text-white hover:shadow-[0_0_0_6px_rgba(138,15,28,0.10)] hover:ring-1 hover:ring-[var(--ireal-accent-600)]/70 focus:outline-none focus:ring-1 focus:ring-black/20" onclick="handleCreatePlan()">
@@ -1130,8 +1172,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="max-w-7xl mx-auto px-6 py-8">
 <header className="flex items-center justify-between">
 <div>
-<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Calendario</h1>
-<p className="mt-1 text-black/70" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '400'}}>Vista semana — Próximamente drag &amp; drop.</p>
+<h1 className="text-3xl md:text-4xl tracking-tight" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Calendario</h1>
+<p className="mt-1 text-black/70" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '400'}}>Vista semana — Próximamente drag &amp; drop.</p>
 </div>
 <button className="inline-flex items-center gap-2 rounded-md border border-[#E5E5E5] bg-white/60 px-3 py-1.5 text-sm hover:bg-black/5 focus:outline-none focus:ring-1 focus:ring-black/20" onclick="navigateTo('/')">
 <i aria-hidden="true" className="h-4 w-4" data-lucide="corner-up-left"></i>
@@ -1144,7 +1186,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <template id="dayTemplate">
 <div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]">
 <div className="flex items-center justify-between">
-<span className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Lun</span>
+<span className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Lun</span>
 <span className="text-xs text-black/50">3 piezas</span>
 </div>
 <div className="mt-2 space-y-1">
@@ -1157,7 +1199,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </template>
 <div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px] ring-1 ring-[var(--ireal-accent-600)]/30">
 <div className="flex items-center justify-between">
-<span className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Hoy</span>
+<span className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Hoy</span>
 <span className="text-xs text-black/50">2 piezas</span>
 </div>
 <div className="mt-2 space-y-1">
@@ -1167,11 +1209,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-xs text-black/60">LI Post, IG Carrusel</div>
 </div>
 </div>
-<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Mar</div></div>
-<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Mié</div></div>
-<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Jue</div></div>
-<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Vie</div></div>
-<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\',sans-serif', fontWeight: '500'}}>Sáb</div></div>
+<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Mar</div></div>
+<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Mié</div></div>
+<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Jue</div></div>
+<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Vie</div></div>
+<div className="rounded-lg border border-[#E5E5E5] bg-white/70 p-3 min-h-[120px]"><div className="text-sm font-medium" style={{fontFamily: '\'Inter\', sans-serif', fontWeight: '500'}}>Sáb</div></div>
 </div>
 </div>
 </div>
@@ -1207,7 +1249,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative max-w-4xl mx-auto mt-16 rounded-2xl border border-[#E5E5E5] bg-white/70 shadow-lg">
 <div className="sticky top-0 z-10 flex items-center justify-between gap-4 px-5 py-4 border-b border-[#E5E5E5] bg-white/70 rounded-t-2xl">
 <div className="flex items-center gap-3">
-<h3 className="text-xl tracking-tight" id="dialog-title" style={{fontFamily: '\'Playfair Display\',serif', fontWeight: '600'}}>Agregar a…</h3>
+<h3 className="text-xl tracking-tight" id="dialog-title" style={{fontFamily: '\'Playfair Display\', serif', fontWeight: '600'}}>Agregar a…</h3>
 <div className="relative">
 <i aria-hidden="true" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-black/50" data-lucide="search"></i>
 <input className="w-64 rounded-md border border-[#E5E5E5] bg-transparent px-9 py-2 text-sm placeholder-black/40 focus:outline-none focus:ring-1 focus:ring-black/20" id="attachSearch" placeholder="Buscar (/)" type="text"/>

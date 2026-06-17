@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -124,6 +160,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -204,7 +246,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-400 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{-HoverGradient: 'linear-gradient(135deg, rgba(251, 113, 133, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)'}}>
+<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-400 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{'--hover-gradient': 'linear-gradient(135deg, rgba(251, 113, 133, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)'}}>
 <div className="relative z-10">
 <div className="flex items-start justify-between mb-6">
 <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
@@ -216,14 +258,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <circle className="progress-ring" cx="50" cy="50" fill="none" r="40" stroke="#fb7185" strokeLinecap="round" strokeWidth="4"></circle>
 </svg>
 <div className="absolute inset-0 flex items-center justify-center">
-<span className="text-xs font-medium text-white/80 number-digit group-hover:scale-125 transition-transform" style={{-DigitDelay: '1.3s'}}>75%</span>
+<span className="text-xs font-medium text-white/80 number-digit group-hover:scale-125 transition-transform" style={{'--digit-delay': '1.3s'}}>75%</span>
 </div>
 </div>
 </div>
 <div className="space-y-2">
 <p className="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors">Living Room</p>
 <p className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-orange-200 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
-<span className="number-digit" style={{-DigitDelay: '1s'}}>2</span><span className="number-digit" style={{-DigitDelay: '1.1s'}}>2</span><span className="number-digit" style={{-DigitDelay: '1.2s'}}>°</span><span className="number-digit" style={{-DigitDelay: '1.3s'}}>C</span>
+<span className="number-digit" style={{'--digit-delay': '1s'}}>2</span><span className="number-digit" style={{'--digit-delay': '1.1s'}}>2</span><span className="number-digit" style={{'--digit-delay': '1.2s'}}>°</span><span className="number-digit" style={{'--digit-delay': '1.3s'}}>C</span>
 </p>
 <div className="flex items-center space-x-2">
 <span className="text-xs text-white/50 group-hover:text-white/70 transition-colors">Target: 21°C</span>
@@ -237,7 +279,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-500 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{-HoverGradient: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%)'}}>
+<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-500 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{'--hover-gradient': 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%)'}}>
 <div className="relative z-10">
 <div className="flex items-start justify-between mb-6">
 <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
@@ -251,11 +293,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="space-y-4">
 <p className="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors">Energy Usage</p>
 <p className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
-<span className="number-digit" style={{-DigitDelay: '1s'}}>1</span><span className="number-digit" style={{-DigitDelay: '1.1s'}}>.</span><span className="number-digit" style={{-DigitDelay: '1.2s'}}>2</span><span className="number-digit" style={{-DigitDelay: '1.3s'}}>k</span><span className="number-digit" style={{-DigitDelay: '1.4s'}}>W</span>
+<span className="number-digit" style={{'--digit-delay': '1s'}}>1</span><span className="number-digit" style={{'--digit-delay': '1.1s'}}>.</span><span className="number-digit" style={{'--digit-delay': '1.2s'}}>2</span><span className="number-digit" style={{'--digit-delay': '1.3s'}}>k</span><span className="number-digit" style={{'--digit-delay': '1.4s'}}>W</span>
 </p>
 <div className="space-y-2 progress-hover">
 <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden group-hover:h-3 transition-all">
-<div className="progress-bar bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full animate-progress-fill group-hover:h-3 transition-all" style={{-ProgressWidth: '35%'}}></div>
+<div className="progress-bar bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full animate-progress-fill group-hover:h-3 transition-all" style={{'--progress-width': '35%'}}></div>
 </div>
 <div className="flex justify-between text-xs text-white/50 group-hover:text-white/70 transition-colors">
 <span>0kW</span>
@@ -266,7 +308,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-600 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{-HoverGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%)'}}>
+<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-600 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{'--hover-gradient': 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%)'}}>
 <div className="relative z-10">
 <div className="flex items-start justify-between mb-6">
 <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
@@ -274,7 +316,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center space-x-2 group-hover:scale-110 transition-transform">
 <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse group-hover:scale-125"></div>
-<span className="text-xs text-green-400 font-medium number-digit hover:text-green-300 transition-colors" style={{-DigitDelay: '1.2s'}}>ACTIVE</span>
+<span className="text-xs text-green-400 font-medium number-digit hover:text-green-300 transition-colors" style={{'--digit-delay': '1.2s'}}>ACTIVE</span>
 </div>
 </div>
 <div className="space-y-2">
@@ -284,13 +326,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center space-x-1 hover-lift cursor-pointer">
 <div className="w-1.5 h-1.5 bg-green-400 rounded-full group-hover:scale-150 transition-transform"></div>
 <span className="text-xs text-white/60 group-hover:text-white/80 transition-colors">
-<span className="number-digit" style={{-DigitDelay: '1.4s'}}>8</span> sensors
+<span className="number-digit" style={{'--digit-delay': '1.4s'}}>8</span> sensors
                     </span>
 </div>
 <div className="flex items-center space-x-1 hover-lift cursor-pointer">
 <div className="w-1.5 h-1.5 bg-blue-400 rounded-full group-hover:scale-150 transition-transform"></div>
 <span className="text-xs text-white/60 group-hover:text-white/80 transition-colors">
-<span className="number-digit" style={{-DigitDelay: '1.5s'}}>4</span> cameras
+<span className="number-digit" style={{'--digit-delay': '1.5s'}}>4</span> cameras
                     </span>
 </div>
 </div>
@@ -298,20 +340,20 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-700 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{-HoverGradient: 'linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%)'}}>
+<div className="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-700 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style={{'--hover-gradient': 'linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%)'}}>
 <div className="relative z-10">
 <div className="flex items-start justify-between mb-6">
 <div className="p-3 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
 <svg className="lucide lucide-lightbulb w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform" data-lucide="lightbulb" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
 </div>
 <span className="text-xs text-white/60 bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors group-hover:scale-110">
-<span className="number-digit" style={{-DigitDelay: '1.3s'}}>6</span> of <span className="number-digit" style={{-DigitDelay: '1.4s'}}>12</span> on
+<span className="number-digit" style={{'--digit-delay': '1.3s'}}>6</span> of <span className="number-digit" style={{'--digit-delay': '1.4s'}}>12</span> on
                 </span>
 </div>
 <div className="space-y-4">
 <p className="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors">Smart Lighting</p>
 <p className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
-<span className="number-digit" style={{-DigitDelay: '1s'}}>7</span><span className="number-digit" style={{-DigitDelay: '1.1s'}}>5</span><span className="number-digit" style={{-DigitDelay: '1.2s'}}>%</span>
+<span className="number-digit" style={{'--digit-delay': '1s'}}>7</span><span className="number-digit" style={{'--digit-delay': '1.1s'}}>5</span><span className="number-digit" style={{'--digit-delay': '1.2s'}}>%</span>
 </p>
 <div className="flex items-center space-x-2 mt-4">
 <div className="flex space-x-1 group-hover:scale-110 transition-transform">
@@ -349,7 +391,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div>
 <span className="font-semibold text-lg hover:text-purple-300 transition-colors cursor-pointer">Kitchen</span>
 <p className="text-xs text-white/60">
-<span className="number-digit" style={{-DigitDelay: '1.6s'}}>3</span> devices active
+<span className="number-digit" style={{'--digit-delay': '1.6s'}}>3</span> devices active
                         </p>
 </div>
 </div>
@@ -359,7 +401,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="space-y-2">
 <div className="w-full bg-white/10 rounded-full h-1 hover:h-2 transition-all">
-<div className="bg-gradient-to-r from-purple-400 to-pink-400 h-1 rounded-full animate-progress-fill delay-1400 hover:h-2 transition-all" style={{-ProgressWidth: '80%'}}></div>
+<div className="bg-gradient-to-r from-purple-400 to-pink-400 h-1 rounded-full animate-progress-fill delay-1400 hover:h-2 transition-all" style={{'--progress-width': '80%'}}></div>
 </div>
 <p className="text-xs text-white/50 hover:text-white/70 transition-colors">Cooking mode active</p>
 </div>
@@ -382,7 +424,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center space-x-3 hover-lift cursor-pointer group">
 <svg className="lucide lucide-moon w-4 h-4 text-blue-300 group-hover:scale-110 transition-transform" data-lucide="moon" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>
-<span className="text-xs text-white/60 group-hover:text-white/80 transition-colors">Night mode until <span className="number-digit" style={{-DigitDelay: '1.8s'}}>7</span>:00 AM</span>
+<span className="text-xs text-white/60 group-hover:text-white/80 transition-colors">Night mode until <span className="number-digit" style={{'--digit-delay': '1.8s'}}>7</span>:00 AM</span>
 </div>
 </div>
 
@@ -403,7 +445,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="space-y-2">
 <div className="w-full bg-white/10 rounded-full h-1 hover:h-2 transition-all">
-<div className="bg-gradient-to-r from-orange-400 to-red-400 h-1 rounded-full animate-progress-fill delay-1600 hover:h-2 transition-all" style={{-ProgressWidth: '60%'}}></div>
+<div className="bg-gradient-to-r from-orange-400 to-red-400 h-1 rounded-full animate-progress-fill delay-1600 hover:h-2 transition-all" style={{'--progress-width': '60%'}}></div>
 </div>
 <p className="text-xs text-white/50 hover:text-white/70 transition-colors">Movie night preset</p>
 </div>
@@ -441,7 +483,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center space-x-2 text-xs bg-green-500/20 text-green-400 px-3 py-2 rounded-xl hover:bg-green-500/30 hover:scale-105 transition-all cursor-pointer">
 <svg className="lucide lucide-trending-down w-3 h-3" data-lucide="trending-down" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
-<span className="font-semibold number-digit" style={{-DigitDelay: '2s'}}>-12%</span>
+<span className="font-semibold number-digit" style={{'--digit-delay': '2s'}}>-12%</span>
 </div>
 </div>
 <div className="h-40 mb-6 hover:scale-105 transition-transform">
@@ -449,9 +491,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="text-center space-y-3">
 <p className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent hover:scale-105 transition-transform cursor-default">
-<span className="number-digit" style={{-DigitDelay: '2.2s'}}>2</span><span className="number-digit" style={{-DigitDelay: '2.3s'}}>4</span><span className="number-digit" style={{-DigitDelay: '2.4s'}}>.</span><span className="number-digit" style={{-DigitDelay: '2.5s'}}>8</span> kWh
+<span className="number-digit" style={{'--digit-delay': '2.2s'}}>2</span><span className="number-digit" style={{'--digit-delay': '2.3s'}}>4</span><span className="number-digit" style={{'--digit-delay': '2.4s'}}>.</span><span className="number-digit" style={{'--digit-delay': '2.5s'}}>8</span> kWh
               </p>
-<p className="text-sm text-white/60 hover:text-white/80 transition-colors">vs <span className="number-digit" style={{-DigitDelay: '2.6s'}}>28.2</span> kWh yesterday</p>
+<p className="text-sm text-white/60 hover:text-white/80 transition-colors">vs <span className="number-digit" style={{'--digit-delay': '2.6s'}}>28.2</span> kWh yesterday</p>
 <div className="flex items-center justify-center space-x-4 text-xs">
 <div className="flex items-center space-x-2 hover-lift cursor-pointer group">
 <div className="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform"></div>

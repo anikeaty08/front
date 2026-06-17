@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,6 +139,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -132,13 +174,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </nav>
 
-<a className="md:hidden fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-zinc-100 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black" href="tel:6199422034" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.8), 0 10px 20px rgba(0,0,0,0.5)'}}>
+<a className="md:hidden fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-zinc-100 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.2)] text-black" href="tel:6199422034" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.8), 0 10px 20px rgba(0,0,0,0.5)'}}>
 <iconify-icon icon="solar:phone-calling-linear" strokeWidth="1.5" width="24"></iconify-icon>
 </a>
 
 <section className="relative h-[85vh] min-h-[600px] w-full flex flex-col justify-end items-center pb-28">
 
-<a className="chrome-btn hover:bg-zinc-900 transition-all flex text-sm font-medium text-zinc-200 bg-gradient-to-b from-zinc-800/80 via-black to-zinc-900/80 rounded-full pt-4 pr-8 pb-4 pl-8 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.5),0px_2px_4px_rgba(0,0,0,0.5),0px_8px_16px_rgba(0,0,0,0.5),_0px_0px_30px_rgba(161,161,170,0.15)] gap-x-3 items-center group relative overflow-hidden" href="tel:6199422034" style={{boxShadow: '0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(161, 161, 170, 0.2), rgba(255, 255, 255, 0.5))', -BorderRadiusBefore: '9999px'}}>
+<a className="chrome-btn hover:bg-zinc-900 transition-all flex text-sm font-medium text-zinc-200 bg-gradient-to-b from-zinc-800/80 via-black to-zinc-900/80 rounded-full pt-4 pr-8 pb-4 pl-8 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.5),0px_2px_4px_rgba(0,0,0,0.5),0px_8px_16px_rgba(0,0,0,0.5),_0px_0px_30px_rgba(161,161,170,0.15)] gap-x-3 items-center group relative overflow-hidden" href="tel:6199422034" style={{boxShadow: '0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(161, 161, 170, 0.2), rgba(255, 255, 255, 0.5))', '--border-radius-before': '9999px'}}>
 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
 <iconify-icon className="text-zinc-300 group-hover:text-white transition-colors" icon="solar:phone-linear" strokeWidth="1.5" width="18"></iconify-icon>
 <span className="text-base font-medium text-white tracking-tight drop-shadow-md">
@@ -448,7 +490,7 @@ gtag('config', 'G-2M6V79H761');
           Fast, reliable, and professional service across San Diego. Don't wait
           for a small leak to become a big problem.
         </p>
-<a className="chrome-btn inline-flex hover:bg-zinc-800 transition-all text-sm font-semibold text-white bg-gradient-to-b from-zinc-700 via-zinc-900 to-black rounded-full pt-4 pr-10 pb-4 pl-10 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.1),0px_8px_16px_rgba(0,0,0,0.8),_0px_0px_40px_rgba(255,255,255,0.1)] gap-x-3 items-center group relative overflow-hidden" href="tel:6199422034" style={{-BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(161, 161, 170, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<a className="chrome-btn inline-flex hover:bg-zinc-800 transition-all text-sm font-semibold text-white bg-gradient-to-b from-zinc-700 via-zinc-900 to-black rounded-full pt-4 pr-10 pb-4 pl-10 shadow-[0px_0px_0px_1px_rgba(255,255,255,0.1),0px_8px_16px_rgba(0,0,0,0.8),_0px_0px_40px_rgba(255,255,255,0.1)] gap-x-3 items-center group relative overflow-hidden" href="tel:6199422034" style={{'--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(161, 161, 170, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
 <iconify-icon className="text-white" icon="solar:phone-linear" strokeWidth="1.5" width="20"></iconify-icon>
 <span className="text-base tracking-tight drop-shadow-md">Call Now</span>

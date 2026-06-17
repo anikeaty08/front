@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -127,6 +163,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -212,17 +254,17 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="col-span-1 md:col-span-3 grid grid-cols-2 md:grid-cols-1 md:grid-rows-3 min-h-[auto] spotlight-group md:p-0 gap-4 md:gap-0 bg-[#020202] h-full pt-4 pr-4 pb-4 pl-4 gap-x-4 gap-y-4">
-<div className="spotlight-card md:border-0 md:border-b md:rounded-none md:bg-transparent row-span-1 md:p-8 flex flex-col reveal delay-100 active pt-6 pr-6 pb-6 pl-6 justify-center" style={{-MouseX: '303px', -MouseY: '61.5px'}}>
+<div className="spotlight-card md:border-0 md:border-b md:rounded-none md:bg-transparent row-span-1 md:p-8 flex flex-col reveal delay-100 active pt-6 pr-6 pb-6 pl-6 justify-center" style={{'--mouse-x': '303px', '--mouse-y': '61.5px'}}>
 <iconify-icon className="text-3xl text-zinc-600 mb-4 transition-colors z-10" icon="solar:graph-new-bold-duotone"></iconify-icon>
 <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1 font-sans z-10">ROI Lift</span>
 <span className="text-3xl text-white tracking-tight font-newsreader font-light z-10">340%</span>
 </div>
-<div className="spotlight-card md:border-0 md:border-b md:rounded-none md:bg-transparent row-span-1 p-6 md:p-8 flex flex-col justify-center reveal delay-200 active" style={{-MouseX: '303px', -MouseY: '-303.265625px'}}>
+<div className="spotlight-card md:border-0 md:border-b md:rounded-none md:bg-transparent row-span-1 p-6 md:p-8 flex flex-col justify-center reveal delay-200 active" style={{'--mouse-x': '303px', '--mouse-y': '-303.265625px'}}>
 <iconify-icon className="text-3xl text-zinc-600 mb-4 transition-colors z-10" icon="solar:users-group-two-rounded-bold-duotone"></iconify-icon>
 <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1 font-sans z-10">Active Users</span>
 <span className="text-3xl text-white tracking-tight font-newsreader font-light z-10">2.4M+</span>
 </div>
-<div className="spotlight-card md:border-0 md:rounded-none md:bg-transparent row-span-1 p-6 md:p-8 flex flex-col justify-center reveal delay-300 col-span-2 md:col-span-1 active" style={{-MouseX: '303px', -MouseY: '-668.03125px'}}>
+<div className="spotlight-card md:border-0 md:rounded-none md:bg-transparent row-span-1 p-6 md:p-8 flex flex-col justify-center reveal delay-300 col-span-2 md:col-span-1 active" style={{'--mouse-x': '303px', '--mouse-y': '-668.03125px'}}>
 <iconify-icon className="text-3xl text-zinc-600 mb-4 transition-colors z-10" icon="solar:server-square-bold-duotone"></iconify-icon>
 <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1 font-sans z-10">Data Points</span>
 <span className="text-3xl text-white tracking-tight font-newsreader font-light z-10">10B</span>

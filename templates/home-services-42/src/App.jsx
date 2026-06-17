@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -29,13 +71,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-600/20 blur-[100px] rounded-full"></div>
 
-<div className="star w-1 h-1 top-[20%] left-[10%]" style={{-Duration: '4s', -Delay: '0s'}}></div>
-<div className="star w-0.5 h-0.5 top-[30%] left-[20%]" style={{-Duration: '3s', -Delay: '1s'}}></div>
-<div className="star w-1 h-1 top-[15%] left-[80%]" style={{-Duration: '5s', -Delay: '2s'}}></div>
-<div className="star w-0.5 h-0.5 top-[40%] left-[90%]" style={{-Duration: '4s', -Delay: '0.5s'}}></div>
-<div className="star w-1 h-1 top-[60%] left-[15%]" style={{-Duration: '6s', -Delay: '1.5s'}}></div>
-<div className="star w-0.5 h-0.5 top-[70%] left-[85%]" style={{-Duration: '3s', -Delay: '0.2s'}}></div>
-<div className="star w-1 h-1 top-[85%] left-[30%]" style={{-Duration: '5s', -Delay: '2.5s'}}></div>
+<div className="star w-1 h-1 top-[20%] left-[10%]" style={{'--duration': '4s', '--delay': '0s'}}></div>
+<div className="star w-0.5 h-0.5 top-[30%] left-[20%]" style={{'--duration': '3s', '--delay': '1s'}}></div>
+<div className="star w-1 h-1 top-[15%] left-[80%]" style={{'--duration': '5s', '--delay': '2s'}}></div>
+<div className="star w-0.5 h-0.5 top-[40%] left-[90%]" style={{'--duration': '4s', '--delay': '0.5s'}}></div>
+<div className="star w-1 h-1 top-[60%] left-[15%]" style={{'--duration': '6s', '--delay': '1.5s'}}></div>
+<div className="star w-0.5 h-0.5 top-[70%] left-[85%]" style={{'--duration': '3s', '--delay': '0.2s'}}></div>
+<div className="star w-1 h-1 top-[85%] left-[30%]" style={{'--duration': '5s', '--delay': '2.5s'}}></div>
 
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]"></div>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -60,6 +96,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -100,7 +142,7 @@ gtag('config', 'G-2M6V79H761');
 </header>
 
 <main className="pt-20">
-<section className="hero-bg min-h-[85vh] flex overflow-hidden relative items-center" style={{backgroundColor: '#383b44', backgroundImage: 'linear-gradient(to right, rgba(23, 25, 29, 0.98) 0%, rgba(23, 25, 29, 0.9) 45%, rgba(23, 25, 29, 0.2) 75%, rgba(23, 25, 29, 0) 100%), url(\'https://interactone.com/wp-content/uploads/2026/02/young-asian-shopper.jpg\')', backgroundSize: 'cover', backgroundPosition: '0% 0%, calc(80% + 250px) center', backgroundRepeat: 'no-repeat'}}>
+<section className="hero-bg min-h-[85vh] flex overflow-hidden relative items-center" style={{backgroundColor: '#383b44', backgroundImage: 'linear-gradient(to right, rgba(23, 25, 29, 0.98) 0%, rgba(23, 25, 29, 0.9) 45%, rgba(23, 25, 29, 0.2) 75%, rgba(23, 25, 29, 0) 100%), url(\'https: //interactone.com/wp-content/uploads/2026/02/young-asian-shopper.jpg\')', backgroundSize: 'cover', backgroundPosition: '0% 0%, calc(80% + 250px) center', backgroundRepeat: 'no-repeat'}}>
 
 <div className="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'none\\' fill-rule=\\'evenodd\\'%3E%3Cg fill=\\'%23ffffff\\' fillOpacity=\\'0.4\\'%3E%3Cpath d=\\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')'}}>
 </div>

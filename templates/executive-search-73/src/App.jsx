@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -119,6 +155,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -180,7 +222,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="block">People Who Move</span>
 <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">Businesses Forward</span>
 </h1>
-<p className="mt-8 text-base md:text-lg text-white font-light max-w-3xl mx-auto leading-relaxed hero-anim hero-anim-2" style={{textShadow: '0px 4px 20px rgba(0,0,0,0.9), 0px 2px 6px rgba(0,0,0,0.9)'}}>
+<p className="mt-8 text-base md:text-lg text-white font-light max-w-3xl mx-auto leading-relaxed hero-anim hero-anim-2" style={{textShadow: '0px 4px 20px rgba(0, 0, 0, 0.9), 0px 2px 6px rgba(0,0,0,0.9)'}}>
                 Strategic executive search and senior talent solutions for organisations operating in high-growth and complex sectors. We partner with businesses to secure leadership talent that drives strategy, execution, and long-term growth.
             </p>
 <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full hero-anim hero-anim-3">
@@ -191,7 +233,7 @@ gtag('config', 'G-2M6V79H761');
                     Discuss a Leadership Mandate
                 </a>
 </div>
-<div className="mt-16 flex items-center justify-center gap-8 text-[0.65rem] uppercase tracking-[0.2em] text-white/90 hero-anim hero-anim-4 font-medium" style={{textShadow: '0px 4px 12px rgba(0,0,0,0.9), 0px 2px 4px rgba(0,0,0,0.9)'}}>
+<div className="mt-16 flex items-center justify-center gap-8 text-[0.65rem] uppercase tracking-[0.2em] text-white/90 hero-anim hero-anim-4 font-medium" style={{textShadow: '0px 4px 12px rgba(0, 0, 0, 0.9), 0px 2px 4px rgba(0,0,0,0.9)'}}>
 <span>Executive Search</span>
 <span className="w-1.5 h-1.5 rounded-full bg-white/60" style={{boxShadow: '0 2px 6px rgba(0,0,0,0.9)'}}></span>
 <span>Senior Appointments</span>

@@ -92,6 +92,42 @@ function useLocalStorage(key, initialValue) {
   });
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
 
@@ -668,15 +704,15 @@ function FlowingItem({ title, description, bgImage, link, isLight }) {
 
       <div
         className="pointer-events-none absolute inset-0 z-20 overflow-hidden bg-[#12312d] transition-transform duration-[600ms] ease-out"
-        style={{ transform: containerTransform }}
+        style={{transform: containerTransform}}
       >
         <div
           className="flex h-full w-fit transition-transform duration-[600ms] ease-out"
-          style={{ transform: innerTransform }}
+          style={{transform: innerTransform}}
         >
           <div
             className="animate-village-marquee flex shrink-0 items-center text-[#fff8e8]"
-            style={{ animationDuration: "12s" }}
+            style={{animationDuration: "12s"}}
           >
             {[...Array(8)].map((_, i) => (
               <Fragment key={i}>
@@ -685,7 +721,7 @@ function FlowingItem({ title, description, bgImage, link, isLight }) {
                 </span>
                 <div
                   className="mx-[1vw] my-[2vh] h-[6vh] w-[40vw] rounded-full bg-cover bg-center md:w-[16rem]"
-                  style={{ backgroundImage: `url('${bgImage}')` }}
+                  style={{backgroundImage: `url('${bgImage}')`}}
                 ></div>
               </Fragment>
             ))}
@@ -753,10 +789,7 @@ function VillageGreenResidences() {
         </nav>
         <div
           className="pointer-events-none absolute inset-0 z-0 opacity-30"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 18% 12%, rgba(255,255,255,0.7), transparent 24%), radial-gradient(circle at 72% 44%, rgba(255,255,255,0.28), transparent 18%)"
-          }}
+          style={{backgroundImage: "radial-gradient(circle at 18% 12%, rgba(255,255,255,0.7), transparent 24%), radial-gradient(circle at 72% 44%, rgba(255,255,255,0.28), transparent 18%)"}}
         ></div>
       </section>
 
@@ -771,12 +804,7 @@ function VillageGreenResidences() {
           <div className="village-reveal grid gap-4 translate-y-9 opacity-0 transition-all delay-100 duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] sm:grid-cols-3">
             <div
               className="rounded-3xl border border-[#102a27]/10 bg-white/70 p-6 shadow-sm"
-              style={{
-                backgroundImage:
-                  "linear-gradient(white, white), linear-gradient(135deg, rgba(16,42,39,0.18), rgba(255,255,255,0.24))",
-                backgroundOrigin: "border-box",
-                backgroundClip: "padding-box, border-box"
-              }}
+              style={{backgroundImage: "linear-gradient(white, white), linear-gradient(135deg, rgba(16,42,39,0.18), rgba(255,255,255,0.24))", backgroundOrigin: "border-box", backgroundClip: "padding-box, border-box"}}
             >
               <p className="text-4xl font-extralight tracking-tight text-[#102a27]">46</p>
               <p className="mt-3 text-sm font-light leading-6 text-[#52605c]">
@@ -785,12 +813,7 @@ function VillageGreenResidences() {
             </div>
             <div
               className="rounded-3xl border border-[#102a27]/10 bg-white/70 p-6 shadow-sm"
-              style={{
-                backgroundImage:
-                  "linear-gradient(white, white), linear-gradient(135deg, rgba(16,42,39,0.18), rgba(255,255,255,0.24))",
-                backgroundOrigin: "border-box",
-                backgroundClip: "padding-box, border-box"
-              }}
+              style={{backgroundImage: "linear-gradient(white, white), linear-gradient(135deg, rgba(16,42,39,0.18), rgba(255,255,255,0.24))", backgroundOrigin: "border-box", backgroundClip: "padding-box, border-box"}}
             >
               <p className="text-4xl font-extralight tracking-tight text-[#102a27]">14</p>
               <p className="mt-3 text-sm font-light leading-6 text-[#52605c]">
@@ -799,12 +822,7 @@ function VillageGreenResidences() {
             </div>
             <div
               className="rounded-3xl border border-[#102a27]/10 bg-white/70 p-6 shadow-sm"
-              style={{
-                backgroundImage:
-                  "linear-gradient(white, white), linear-gradient(135deg, rgba(16,42,39,0.18), rgba(255,255,255,0.24))",
-                backgroundOrigin: "border-box",
-                backgroundClip: "padding-box, border-box"
-              }}
+              style={{backgroundImage: "linear-gradient(white, white), linear-gradient(135deg, rgba(16,42,39,0.18), rgba(255,255,255,0.24))", backgroundOrigin: "border-box", backgroundClip: "padding-box, border-box"}}
             >
               <p className="text-4xl font-extralight tracking-tight text-[#102a27]">9</p>
               <p className="mt-3 text-sm font-light leading-6 text-[#52605c]">
@@ -818,12 +836,7 @@ function VillageGreenResidences() {
       <section id="contact" className="relative z-10 overflow-hidden bg-[#102a27] px-6 py-20 text-white sm:px-10 lg:px-12">
         <div
           className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              "url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fa51902b-c2a4-4c33-a96e-a8f1ef67edc6_1600w.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center"
-          }}
+          style={{backgroundImage: "url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fa51902b-c2a4-4c33-a96e-a8f1ef67edc6_1600w.jpg')", backgroundSize: "cover", backgroundPosition: "center"}}
         ></div>
         <div className="absolute inset-0 bg-[#102a27]/80"></div>
         <div className="village-reveal relative mx-auto flex max-w-7xl flex-col gap-8 translate-y-9 opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] md:flex-row md:items-center md:justify-between">
@@ -1139,10 +1152,7 @@ function InteractiveTestimonials() {
     <section className="bg-[#14392a] min-h-[800px] relative overflow-hidden flex items-center justify-center antialiased text-[#fff8e8] select-none">
       <div
         className="absolute inset-0 pointer-events-none opacity-10 mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(-45deg, rgba(217,154,49,0.2) 0px, rgba(217,154,49,0.2) 1px, transparent 1px, transparent 6px)"
-        }}
+        style={{backgroundImage: "repeating-linear-gradient(-45deg, rgba(217,154,49,0.2) 0px, rgba(217,154,49,0.2) 1px, transparent 1px, transparent 6px)"}}
       ></div>
 
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0 opacity-60 pointer-events-none" />
@@ -1160,7 +1170,7 @@ function InteractiveTestimonials() {
         </div>
       </div>
 
-      <main ref={sceneRef} className="relative w-full max-w-7xl h-[800px] flex items-center justify-center z-10" style={{ perspective: "1400px" }}>
+      <main ref={sceneRef} className="relative w-full max-w-7xl h-[800px] flex items-center justify-center z-10" style={{perspective: "1400px"}}>
         {/* Module 1: Left */}
         <article
           className="card-wrapper absolute top-1/2 left-1/2 opacity-0 z-10 transition-opacity duration-1000"

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -23,6 +59,12 @@ card.style.setProperty('--mouse-y', `${y}px`);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -62,7 +104,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 </nav>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 max-w-7xl xl:mx-auto z-10 rounded-[32px] mt-28 p-[1px]" style={{-MouseX: '986.5px', -MouseY: '-41px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 max-w-7xl xl:mx-auto z-10 rounded-[32px] mt-28 p-[1px]" style={{'--mouse-x': '986.5px', '--mouse-y': '-41px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col min-h-[800px] rounded-[32px] justify-center bg-[#050505] relative">
 
 <div className="absolute top-0 right-0 w-[600px] h-[600px] blur-[120px] rounded-full pointer-events-none mix-blend-screen bg-amber-600/10"></div>
@@ -164,7 +206,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto z-10 rounded-[32px] mt-4 p-[1px]" id="gallery" style={{-MouseX: '986.5px', -MouseY: '-859px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto z-10 rounded-[32px] mt-4 p-[1px]" id="gallery" style={{'--mouse-x': '986.5px', '--mouse-y': '-859px'}}>
 <div className="spotlight-inner lg:p-12 bg-[#050505] rounded-[32px] pt-8 pr-8 pb-8 pl-8">
 <div className="flex mb-8 items-center justify-between">
 <h2 className="text-2xl font-medium text-white">Photo Gallery</h2>
@@ -200,7 +242,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto z-10 rounded-[32px] mt-4 p-[1px]" id="dining" style={{-MouseX: '986.5px', -MouseY: '-1555px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto z-10 rounded-[32px] mt-4 p-[1px]" id="dining" style={{'--mouse-x': '986.5px', '--mouse-y': '-1555px'}}>
 <div className="spotlight-inner rounded-[32px] bg-[#050505] relative flex flex-col">
 <div className="p-6 sm:p-12">
 <div className="text-center mb-16">
@@ -249,7 +291,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto rounded-[32px] mt-4 p-[1px]" id="hotel" style={{-MouseX: '986.5px', -MouseY: '-2100px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto rounded-[32px] mt-4 p-[1px]" id="hotel" style={{'--mouse-x': '986.5px', '--mouse-y': '-2100px'}}>
 <div className="spotlight-inner rounded-[32px] bg-[#050505] p-8 lg:p-16 relative overflow-hidden">
 <div className="grid lg:grid-cols-12 gap-12 items-center">
 <div className="lg:col-span-5 relative z-10">
@@ -284,7 +326,7 @@ card.style.setProperty('--mouse-y', `${y}px`);
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto rounded-[32px] mt-4 p-[1px]" id="reviews" style={{-MouseX: '986.5px', -MouseY: '-2612.078125px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto rounded-[32px] mt-4 p-[1px]" id="reviews" style={{'--mouse-x': '986.5px', '--mouse-y': '-2612.078125px'}}>
 <div className="spotlight-inner lg:p-16 overflow-hidden bg-[#050505] rounded-[32px] pt-8 pr-8 pb-8 pl-8">
 <div className="flex items-center justify-between mb-12">
 <h2 className="text-2xl font-medium text-white">What Guests Say</h2>
@@ -338,7 +380,7 @@ Food: 5/5 | Service: 5/5 | Atmosphere: 5/5</p>
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto rounded-[32px] mt-4 p-[1px]" id="contact" style={{-MouseX: '986.5px', -MouseY: '-3221.328125px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 max-w-7xl xl:mx-auto rounded-[32px] mt-4 p-[1px]" id="contact" style={{'--mouse-x': '986.5px', '--mouse-y': '-3221.328125px'}}>
 <div className="spotlight-inner bg-[#050505] rounded-[32px] overflow-hidden flex flex-col">
 
 <div className="px-8 py-16 bg-[#030303]">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -113,7 +149,7 @@ gtag('config', 'G-2M6V79H761');
 
         // UI Components
         const Icon = ({ name, className }) => (
-            <iconify-icon icon={`solar:${name}`} class={className} style={{ strokeWidth: "1.5" }}></iconify-icon>
+            <iconify-icon icon={`solar:${name}`} class={className} style={{strokeWidth: "1.5"}}></iconify-icon>
         );
 
         const Toggle = ({ isToggled, onToggle }) => (
@@ -417,7 +453,7 @@ gtag('config', 'G-2M6V79H761');
                                                                         <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                                                                             <div 
                                                                                 className="bg-gradient-to-r from-indigo-400 to-cyan-400 h-1.5 rounded-full transition-all duration-1000 ease-out group-hover:shadow-[0_0_8px_rgba(99,102,241,0.6)]" 
-                                                                                style={{ width: `${skill.level}%` }}
+                                                                                style={{width: `${skill.level}%`}}
                                                                             ></div>
                                                                         </div>
                                                                     </div>
@@ -459,6 +495,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

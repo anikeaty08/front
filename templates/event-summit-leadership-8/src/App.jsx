@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -135,6 +171,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -154,7 +196,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="noise-overlay"></div>
 
-<div className="spotlight" id="spotlight" style={{-X: '1239px', -Y: '3px'}}></div>
+<div className="spotlight" id="spotlight" style={{'--x': '1239px', '--y': '3px'}}></div>
 
 <nav className="fixed top-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center transition-all duration-300 bg-gradient-to-b from-[#05080f]/90 to-transparent backdrop-blur-[2px]">
 <div className="magnetic-wrap" data-magnetic-strength="0.3">
@@ -230,7 +272,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="absolute top-6 right-6 md:top-8 md:right-8 z-20 flex items-center gap-2 bg-black/40 border border-white/5 px-3 py-1.5 rounded-full backdrop-blur-md">
-<svg className="text-slate-400" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+<svg className="text-slate-400" data-darkreader-inline-stroke="" fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
 <span className="text-slate-300 text-[10px] font-medium tracking-wider font-sans">14.2k</span>
 </div>
 
@@ -254,7 +296,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
 <span className="relative flex items-center justify-center gap-3 text-xs font-bold uppercase tracking-widest text-[#05080f]">
                                         Visit Now
-                                        <svg className="group-hover:translate-x-1 transition-transform" data-darkreader-inline-stroke="" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                        <svg className="group-hover:translate-x-1 transition-transform" data-darkreader-inline-stroke="" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </span>
 </button>
 </div>
@@ -280,10 +322,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex gap-4">
 <button className="w-14 h-14 rounded-full border border-white/10 hover:border-[#FFD400] hover:scale-110 transition-all duration-300 flex items-center justify-center cursor-none-target group magnetic-wrap">
-<svg aria-hidden="true" className="iconify iconify--lucide group-hover:text-[#FFD400] transition-colors" data-icon="lucide:arrow-left" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m12 19l-7-7l7-7m7 7H5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide group-hover:text-[#FFD400] transition-colors" data-icon="lucide:arrow-left" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m12 19l-7-7l7-7m7 7H5" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </button>
 <button className="w-14 h-14 rounded-full border border-white/10 hover:border-[#FFD400] hover:scale-110 transition-all duration-300 flex items-center justify-center cursor-none-target group magnetic-wrap">
-<svg aria-hidden="true" className="iconify iconify--lucide group-hover:text-[#FFD400] transition-colors" data-icon="lucide:arrow-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide group-hover:text-[#FFD400] transition-colors" data-icon="lucide:arrow-right" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </button>
 </div>
 </div>
@@ -297,7 +339,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="lg:col-span-7 p-8 md:p-16 flex flex-col justify-between relative bg-gradient-to-br from-white/[0.01] to-transparent">
 <div className="absolute top-8 right-8 text-white/5 group-hover:text-[#FFD400]/20 transition-colors duration-500 transform group-hover:rotate-12 transition-transform">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:quote" height="100" role="img" viewbox="0 0 24 24" width="100" xmlns="http://www.w3.org/2000/svg"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2zM5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:quote" height="100" role="img" viewbox="0 0 24 24" width="100" xmlns="http://www.w3.org/2000/svg"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2zM5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1a6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 <div>
 <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 border border-[#FFD400]/30 text-[#FFD400] text-[10px] tracking-[0.2em] uppercase rounded-full bg-[#FFD400]/5 font-sans backdrop-blur-sm">
@@ -314,7 +356,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                     "True leadership isn't about presence. It's about impact that resonates when you're absent."
                                 </p>
 <a className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#FFD400] hover:border-[#FFD400] hover:text-[#05080f] transition-all duration-300 cursor-none-target magnetic-wrap" href="#">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:arrow-up-right" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:arrow-up-right" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10M7 17L17 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </a>
 </div>
 </div>
@@ -340,7 +382,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                     Overseeing operational excellence and partnership growth across three continents.
                                 </p>
 <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#FFD400] group-hover:text-[#FFD400] transition-all">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:plus" height="14" role="img" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14m-7-7h14" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:plus" height="14" role="img" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14m-7-7h14" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 </div>
 </div>
@@ -363,7 +405,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                     Coordinating internal affairs, logistics, and ensuring the vision is executed flawlesly.
                                 </p>
 <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#FFD400] group-hover:text-[#FFD400] transition-all">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:plus" height="14" role="img" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14m-7-7h14" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:plus" height="14" role="img" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14m-7-7h14" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </div>
 </div>
 </div>
@@ -418,15 +460,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative group">
 <input className="bg-transparent border-b border-white/20 py-4 w-full md:w-96 text-sm placeholder-slate-600 focus:outline-none focus:border-[#FFD400] transition-all uppercase tracking-widest font-light text-white cursor-none-target" placeholder="ENTER EMAIL ADDRESS" type="email"/>
 <button className="absolute right-0 top-4 text-slate-500 group-focus-within:text-[#FFD400] hover:text-[#FFD400] transition-colors cursor-none-target">
-<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:arrow-right" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}}></path></svg>
+<svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:arrow-right" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-7-7l7 7l-7 7" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}}></path></svg>
 </button>
 </div>
 </div>
 <div className="text-right flex flex-col items-end gap-6">
 <div className="flex gap-6 text-slate-500">
-<a className="hover:text-[#FFD400] hover:-translate-y-1 transition-all duration-300 cursor-none-target magnetic-wrap" href="#"><svg className="feather feather-twitter" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
-<a className="hover:text-[#FFD400] hover:-translate-y-1 transition-all duration-300 cursor-none-target magnetic-wrap" href="#"><svg className="feather feather-instagram" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></a>
-<a className="hover:text-[#FFD400] hover:-translate-y-1 transition-all duration-300 cursor-none-target magnetic-wrap" href="#"><svg className="feather feather-linkedin" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect height="12" width="4" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+<a className="hover:text-[#FFD400] hover:-translate-y-1 transition-all duration-300 cursor-none-target magnetic-wrap" href="#"><svg className="feather feather-twitter" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+<a className="hover:text-[#FFD400] hover:-translate-y-1 transition-all duration-300 cursor-none-target magnetic-wrap" href="#"><svg className="feather feather-instagram" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg></a>
+<a className="hover:text-[#FFD400] hover:-translate-y-1 transition-all duration-300 cursor-none-target magnetic-wrap" href="#"><svg className="feather feather-linkedin" data-darkreader-inline-stroke="" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect height="12" width="4" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
 </div>
 <p className="text-slate-700 text-[10px] font-mono uppercase tracking-widest font-sans">© 2024 Nexus Organization. All Rights Reserved.</p>
 </div>

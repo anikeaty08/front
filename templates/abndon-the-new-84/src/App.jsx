@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -167,6 +203,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -178,7 +220,7 @@ gtag('config', 'G-2M6V79H761');
 
 </div></div>
 
-<div className="flashlight-bg" id="flashlight" style={{-MouseX: '218px', -MouseY: '5px'}}></div>
+<div className="flashlight-bg" id="flashlight" style={{'--mouse-x': '218px', '--mouse-y': '5px'}}></div>
 
 <nav className="fixed top-0 w-full z-50 transition-all duration-300 backdrop-blur-md border-b bg-slate-900/80 border-slate-800">
 <div className="md:px-6 flex w-full h-16 pr-4 pl-4 relative items-center justify-between">
@@ -237,9 +279,9 @@ gtag('config', 'G-2M6V79H761');
 <p className="md:text-xl text-sm font-medium font-montserrat mt-6 text-slate-300">致力于为全球顶尖科技公司提供先进产品与解决方案</p>
 <p className="md:text-base leading-relaxed text-sm font-light font-montserrat mt-4 text-slate-400">苏州东山精密制造股份有限公司(DSBJ)始建于1998年，于2010年在深交所上市。公司秉持"创建更互连互通的新世界"的使命，以"成为全球领先的智能互连方案解决商"为愿景，产品广泛应用于消费电子、新能源汽车等领域。</p>
 </div>
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-x-6 gap-y-6" style={{-BeamColor: 'rgba(59, 130, 246, 0.95)', -BeamDuration: '2.6s', -BeamWidth: '110px'}}>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-x-6 gap-y-6" style={{'--beam-color': 'rgba(59, 130, 246, 0.95)', '--beam-duration': '2.6s', '--beam-width': '110px'}}>
 
-<div className="reveal spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl border active bg-slate-800/50 border-slate-700" style={{-MouseXCard: '-70px', -MouseYCard: '684px'}}>
+<div className="reveal spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl border active bg-slate-800/50 border-slate-700" style={{'--mouse-x-card': '-70px', '--mouse-y-card': '684px'}}>
 <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl">
 <div className="absolute inset-0 rounded-2xl" style={{background: 'radial-gradient(circle, var(--beam-color) 0%, transparent 62%)', filter: 'blur(0.5px)', width: 'var(--beam-width)', height: 'var(--beam-width)', left: 'calc(var(--beam-width) * -1)', top: 'calc(var(--beam-width) * -1)', animation: 'beam-orbit var(--beam-duration) linear infinite'}}></div>
 <div className="absolute inset-[1px] rounded-[15px] bg-slate-900/95"></div>
@@ -259,7 +301,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="reveal delay-100 spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 border active bg-slate-800/50 border-slate-700" style={{-MouseXCard: '-352px', -MouseYCard: '684px'}}>
+<div className="reveal delay-100 spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 border active bg-slate-800/50 border-slate-700" style={{'--mouse-x-card': '-352px', '--mouse-y-card': '684px'}}>
 <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl">
 <div className="absolute inset-0 rounded-2xl" style={{background: 'radial-gradient(circle, var(--beam-color) 0%, transparent 62%)', filter: 'blur(0.5px)', width: 'var(--beam-width)', height: 'var(--beam-width)', left: 'calc(var(--beam-width) * -1)', top: 'calc(var(--beam-width) * -1)', animation: 'beam-orbit var(--beam-duration) linear infinite', animationDelay: '-0.65s'}}></div>
 <div className="absolute inset-[1px] rounded-[15px] bg-slate-900/95"></div>
@@ -270,7 +312,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="reveal delay-200 spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 border active bg-slate-800/50 border-slate-700" style={{-MouseXCard: '-634px', -MouseYCard: '684px'}}>
+<div className="reveal delay-200 spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 border active bg-slate-800/50 border-slate-700" style={{'--mouse-x-card': '-634px', '--mouse-y-card': '684px'}}>
 <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl">
 <div className="absolute inset-0 rounded-2xl" style={{background: 'radial-gradient(circle, var(--beam-color) 0%, transparent 62%)', filter: 'blur(0.5px)', width: 'var(--beam-width)', height: 'var(--beam-width)', left: 'calc(var(--beam-width) * -1)', top: 'calc(var(--beam-width) * -1)', animation: 'beam-orbit var(--beam-duration) linear infinite', animationDelay: '-1.3s'}}></div>
 <div className="absolute inset-[1px] rounded-[15px] bg-slate-900/95"></div>
@@ -281,7 +323,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="reveal delay-300 spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 border active bg-slate-800/50 border-slate-700" style={{-MouseXCard: '-916px', -MouseYCard: '684px'}}>
+<div className="reveal delay-300 spotlight-card group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-500 border active bg-slate-800/50 border-slate-700" style={{'--mouse-x-card': '-916px', '--mouse-y-card': '684px'}}>
 <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl">
 <div className="absolute inset-0 rounded-2xl" style={{background: 'radial-gradient(circle, var(--beam-color) 0%, transparent 62%)', filter: 'blur(0.5px)', width: 'var(--beam-width)', height: 'var(--beam-width)', left: 'calc(var(--beam-width) * -1)', top: 'calc(var(--beam-width) * -1)', animation: 'beam-orbit var(--beam-duration) linear infinite', animationDelay: '-1.95s'}}></div>
 <div className="absolute inset-[1px] rounded-[15px] bg-slate-900/95"></div>
@@ -295,7 +337,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="group overflow-hidden bg-center [--fx-filter:blur(10px)_liquid-glass(0,10)_saturate(1.25)_noise(0.5,1,0)] border-t pt-24 pb-24 relative saturate-100 bg-slate-900/0 border-slate-800" id="pricing" style={{-PricingParallax: '26.32px'}}>
+<section className="group overflow-hidden bg-center [--fx-filter:blur(10px)_liquid-glass(0,10)_saturate(1.25)_noise(0.5,1,0)] border-t pt-24 pb-24 relative saturate-100 bg-slate-900/0 border-slate-800" id="pricing" style={{'--pricing-parallax': '26.32px'}}>
 <style className="">
           /* Background motion retained */
           @keyframes unicorn-shift {
@@ -482,7 +524,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-3 text-base md:text-lg font-light font-montserrat center-copy text-slate-400"><span></span></div>
 </div>
 
-<div className="stack-card spotlight-card w-[22rem] max-w-[85vw] border rounded-3xl pt-8 pr-8 pb-8 pl-8 relative top-80 bg-slate-800/30 border-slate-700" data-i="1" style={{-MouseXCard: '-45.240966796875px', -MouseYCard: '47.03253173828125px', -BeamSize: '120px', -BeamDuration: '2.7s'}}>
+<div className="stack-card spotlight-card w-[22rem] max-w-[85vw] border rounded-3xl pt-8 pr-8 pb-8 pl-8 relative top-80 bg-slate-800/30 border-slate-700" data-i="1" style={{'--mouse-x-card': '-45.240966796875px', '--mouse-y-card': '47.03253173828125px', '--beam-size': '120px', '--beam-duration': '2.7s'}}>
 <span aria-hidden="true" className="beam-frame"></span>
 <div className="flex gap-6 relative gap-x-6 gap-y-6 items-start justify-between">
 <div className="">
@@ -493,7 +535,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="stack-card spotlight-card w-[22rem] max-w-[85vw] border rounded-3xl pt-8 pr-8 pb-8 pl-8 bg-slate-800/30 border-slate-700" data-i="2" style={{-MouseXCard: '-443.85498046875px', -MouseYCard: '111.15227508544922px', -BeamSize: '120px', -BeamDuration: '2.9s'}}>
+<div className="stack-card spotlight-card w-[22rem] max-w-[85vw] border rounded-3xl pt-8 pr-8 pb-8 pl-8 bg-slate-800/30 border-slate-700" data-i="2" style={{'--mouse-x-card': '-443.85498046875px', '--mouse-y-card': '111.15227508544922px', '--beam-size': '120px', '--beam-duration': '2.9s'}}>
 <span aria-hidden="true" className="beam-frame"></span>
 <div className="flex gap-6 relative gap-x-6 gap-y-6 items-start justify-between">
 <div className="">
@@ -504,7 +546,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="stack-card spotlight-card -multi w-[22rem] max-w-[85vw] border rounded-3xl pt-8 pr-8 pb-8 pl-8 absolute top-40 bg-slate-800/30 border-slate-700" data-i="3" style={{-MouseXCard: '-845.240966796875px', -MouseYCard: '47.03253173828125px', -BeamSize: '120px', -BeamDuration: '2.6s'}}>
+<div className="stack-card spotlight-card -multi w-[22rem] max-w-[85vw] border rounded-3xl pt-8 pr-8 pb-8 pl-8 absolute top-40 bg-slate-800/30 border-slate-700" data-i="3" style={{'--mouse-x-card': '-845.240966796875px', '--mouse-y-card': '47.03253173828125px', '--beam-size': '120px', '--beam-duration': '2.6s'}}>
 <span aria-hidden="true" className="beam-frame"></span>
 <div className="flex items-start justify-between gap-6 relative">
 <div className="">
@@ -515,7 +557,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="stack-card w-[22rem] max-w-[85vw] spotlight-card border rounded-3xl pt-8 pr-8 pb-8 pl-8 bg-slate-800/30 border-slate-700" data-i="4" style={{-MouseXCard: '-157.46725463867188px', -MouseYCard: '-313.426513671875px', -BeamSize: '120px', -BeamDuration: '3.05s'}}>
+<div className="stack-card w-[22rem] max-w-[85vw] spotlight-card border rounded-3xl pt-8 pr-8 pb-8 pl-8 bg-slate-800/30 border-slate-700" data-i="4" style={{'--mouse-x-card': '-157.46725463867188px', '--mouse-y-card': '-313.426513671875px', '--beam-size': '120px', '--beam-duration': '3.05s'}}>
 <span aria-hidden="true" className="beam-frame"></span>
 <div className="flex items-start justify-between gap-6 relative">
 <div className="">
@@ -526,7 +568,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="stack-card w-[22rem] max-w-[85vw] spotlight-card shadow-blue-500/10 border-blue-500/30 border rounded-3xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl bg-slate-800/30" data-i="5" style={{-MouseXCard: '-733.4672241210938px', -MouseYCard: '-313.426513671875px', -BeamSize: '120px', -BeamDuration: '2.75s'}}>
+<div className="stack-card w-[22rem] max-w-[85vw] spotlight-card shadow-blue-500/10 border-blue-500/30 border rounded-3xl pt-8 pr-8 pb-8 pl-8 relative shadow-2xl bg-slate-800/30" data-i="5" style={{'--mouse-x-card': '-733.4672241210938px', '--mouse-y-card': '-313.426513671875px', '--beam-size': '120px', '--beam-duration': '2.75s'}}>
 <span aria-hidden="true" className="beam-frame"></span>
 <div className="flex items-start justify-between gap-6 relative">
 <div className="">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -242,6 +278,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -256,7 +298,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl" style={{top: 'calc(0.75rem + env(safe-area-inset-top))'}}>
 <div className="rounded-2xl p-[1px] bg-gradient-to-r from-cyan-400/40 via-fuchsia-400/40 to-indigo-400/40">
-<div className="flex items-center justify-between rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 px-3 py-2" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 30px rgba(59,130,246,0.15)'}}>
+<div className="flex items-center justify-between rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 px-3 py-2" style={{boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 30px rgba(59,130,246,0.15)'}}>
 <div className="flex items-center gap-3">
 <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400/70 to-fuchsia-400/70 ring-1 ring-white/20 flex items-center justify-center" style={{boxShadow: '0 0 24px rgba(34, 211, 238, 0.35), inset 0 0 28px rgba(168, 85, 247, 0.18)'}}>
 <i className="w-3.5 h-3.5" data-lucide="sparkles"></i>
@@ -302,7 +344,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-3 sm:grid-cols-1 gap-4 sm:gap-6 w-full sm:w-24">
 <button className="group flex flex-col items-center focus:outline-none" onclick="openApp('browser-app')">
 <div className="w-16 h-16 rounded-2xl p-[1px] bg-gradient-to-br from-cyan-400/40 via-fuchsia-400/40 to-indigo-400/40 transition-transform group-hover:scale-105">
-<div className="w-full h-full rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 40px rgba(59,130,246,0.25), inset 0 0 80px rgba(34,211,238,0.15)'}}>
+<div className="w-full h-full rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 40px rgba(59, 130, 246, 0.25), inset 0 0 80px rgba(34,211,238,0.15)'}}>
 <i className="w-8 h-8 text-cyan-200" data-lucide="compass"></i>
 </div>
 </div>
@@ -310,7 +352,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </button>
 <button className="group flex flex-col items-center focus:outline-none" onclick="openApp('console-app')">
 <div className="w-16 h-16 rounded-2xl p-[1px] bg-gradient-to-br from-fuchsia-400/40 via-indigo-400/40 to-cyan-400/40 transition-transform group-hover:scale-105">
-<div className="w-full h-full rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 40px rgba(168,85,247,0.25), inset 0 0 80px rgba(99,102,241,0.15)'}}>
+<div className="w-full h-full rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 40px rgba(168, 85, 247, 0.25), inset 0 0 80px rgba(99,102,241,0.15)'}}>
 <i className="w-8 h-8 text-fuchsia-200" data-lucide="terminal"></i>
 </div>
 </div>
@@ -318,7 +360,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </button>
 <button className="group flex flex-col items-center focus:outline-none" onclick="openApp('settings-app')">
 <div className="w-16 h-16 rounded-2xl p-[1px] bg-gradient-to-br from-indigo-400/40 via-cyan-400/40 to-fuchsia-400/40 transition-transform group-hover:scale-105">
-<div className="w-full h-full rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 40px rgba(99,102,241,0.25), inset 0 0 80px rgba(34,211,238,0.15)'}}>
+<div className="w-full h-full rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 40px rgba(99, 102, 241, 0.25), inset 0 0 80px rgba(34,211,238,0.15)'}}>
 <i className="w-8 h-8 text-indigo-200" data-lucide="settings"></i>
 </div>
 </div>
@@ -332,7 +374,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="app-window hidden absolute left-1/2 top-24 sm:top-40 -translate-x-1/2 w-[94%] max-w-5xl h-[70vh] z-20" id="browser-app">
 <div className="p-[1px] rounded-[20px] bg-gradient-to-br from-cyan-400/50 via-fuchsia-400/50 to-indigo-400/50">
-<div className="rounded-[20px] overflow-hidden bg-white/10 backdrop-blur-xl border border-white/15" style={{boxShadow: '0 24px 80px rgba(30,41,59,0.6), 0 0 0 1px rgba(255,255,255,0.04) inset'}}>
+<div className="rounded-[20px] overflow-hidden bg-white/10 backdrop-blur-xl border border-white/15" style={{boxShadow: '0 24px 80px rgba(30, 41, 59, 0.6), 0 0 0 1px rgba(255,255,255,0.04) inset'}}>
 
 <div className="cursor-move flex items-center justify-between px-3 py-2 bg-white/5 border-b border-white/10" id="browser-header">
 <div className="flex items-center gap-2">
@@ -450,7 +492,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="app-window hidden absolute left-1/2 top-28 sm:top-52 -translate-x-1/2 w-[94%] max-w-3xl h-[54vh] z-30" id="console-app">
 <div className="p-[1px] rounded-[18px] bg-gradient-to-r from-fuchsia-400/50 via-indigo-400/50 to-cyan-400/50">
-<div className="rounded-[18px] overflow-hidden bg-black/55 backdrop-blur-xl border border-white/15" style={{boxShadow: '0 24px 80px rgba(30,41,59,0.55), inset 0 0 0 1px rgba(255,255,255,0.04)'}}>
+<div className="rounded-[18px] overflow-hidden bg-black/55 backdrop-blur-xl border border-white/15" style={{boxShadow: '0 24px 80px rgba(30, 41, 59, 0.55), inset 0 0 0 1px rgba(255,255,255,0.04)'}}>
 <div className="cursor-move flex items-center justify-between px-3 py-2 bg-white/5 border-b border-white/10" id="console-header">
 <div className="flex items-center gap-2">
 <span className="w-3 h-3 rounded-full bg-rose-400/90"></span>
@@ -500,7 +542,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="app-window hidden absolute left-1/2 top-32 sm:top-56 -translate-x-1/2 w-[94%] max-w-2xl h-[56vh] z-40" id="settings-app">
 <div className="p-[1px] rounded-[18px] bg-gradient-to-r from-cyan-400/50 via-indigo-400/50 to-fuchsia-400/50">
-<div className="rounded-[18px] overflow-hidden bg-white/10 backdrop-blur-xl border border-white/15" style={{boxShadow: '0 24px 80px rgba(30,41,59,0.5), inset 0 0 0 1px rgba(255,255,255,0.05)'}}>
+<div className="rounded-[18px] overflow-hidden bg-white/10 backdrop-blur-xl border border-white/15" style={{boxShadow: '0 24px 80px rgba(30, 41, 59, 0.5), inset 0 0 0 1px rgba(255,255,255,0.05)'}}>
 <div className="cursor-move flex items-center justify-between px-3 py-2 bg-white/5 border-b border-white/10" id="settings-header">
 <div className="flex items-center gap-2">
 <span className="w-3 h-3 rounded-full bg-rose-400/90"></span>
@@ -588,19 +630,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 flex gap-2" id="minimized-tray" style={{bottom: 'calc(6rem + env(safe-area-inset-bottom))'}}></div>
 
 <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" style={{bottom: 'calc(1rem + env(safe-area-inset-bottom))'}}>
-<div className="rounded-2xl px-2 py-2 bg-white/10 backdrop-blur-xl border border-white/15 flex items-center gap-2" style={{boxShadow: '0 18px 60px rgba(2,6,23,0.55), inset 0 1px 0 rgba(255,255,255,0.06)'}}>
+<div className="rounded-2xl px-2 py-2 bg-white/10 backdrop-blur-xl border border-white/15 flex items-center gap-2" style={{boxShadow: '0 18px 60px rgba(2, 6, 23, 0.55), inset 0 1px 0 rgba(255,255,255,0.06)'}}>
 <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl p-[1px] bg-gradient-to-br from-cyan-400/50 via-fuchsia-400/50 to-indigo-400/50 hover:scale-110 transition" onclick="openApp('browser-app')">
-<div className="w-full h-full rounded-xl bg-white/10 border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 24px rgba(34,211,238,0.25), inset 0 0 48px rgba(168,85,247,0.15)'}}>
+<div className="w-full h-full rounded-xl bg-white/10 border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 24px rgba(34, 211, 238, 0.25), inset 0 0 48px rgba(168,85,247,0.15)'}}>
 <i className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-200" data-lucide="compass"></i>
 </div>
 </button>
 <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl p-[1px] bg-gradient-to-br from-fuchsia-400/50 via-indigo-400/50 to-cyan-400/50 hover:scale-110 transition" onclick="openApp('console-app')">
-<div className="w-full h-full rounded-xl bg-white/10 border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 24px rgba(168,85,247,0.25), inset 0 0 48px rgba(99,102,241,0.15)'}}>
+<div className="w-full h-full rounded-xl bg-white/10 border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 24px rgba(168, 85, 247, 0.25), inset 0 0 48px rgba(99,102,241,0.15)'}}>
 <i className="w-5 h-5 sm:w-6 sm:h-6 text-fuchsia-200" data-lucide="terminal"></i>
 </div>
 </button>
 <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl p-[1px] bg-gradient-to-br from-indigo-400/50 via-cyan-400/50 to-fuchsia-400/50 hover:scale-110 transition" onclick="openApp('settings-app')">
-<div className="w-full h-full rounded-xl bg-white/10 border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 24px rgba(99,102,241,0.25), inset 0 0 48px rgba(34,211,238,0.15)'}}>
+<div className="w-full h-full rounded-xl bg-white/10 border border-white/15 flex items-center justify-center" style={{boxShadow: '0 0 24px rgba(99, 102, 241, 0.25), inset 0 0 48px rgba(34,211,238,0.15)'}}>
 <i className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-200" data-lucide="settings"></i>
 </div>
 </button>

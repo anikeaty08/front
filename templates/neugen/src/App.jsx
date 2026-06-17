@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -167,6 +203,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -463,7 +505,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="-translate-x-1/2 z-50 w-[90%] max-w-3xl absolute bottom-40 left-1/2 gap-x-3 gap-y-3">
-<div className="border-white/[0.05] flashlight-card flex flex-col gap-3 transition-all bg-[#0a0f1c]/80 w-full border rounded-sm pt-4 pr-4 pb-4 pl-4 relative shadow-[0_0_30px_rgba(59,130,246,0.1)] backdrop-blur-md gap-x-3 gap-y-3" style={{-MouseX: '458.5px', -MouseY: '88.5px'}}>
+<div className="border-white/[0.05] flashlight-card flex flex-col gap-3 transition-all bg-[#0a0f1c]/80 w-full border rounded-sm pt-4 pr-4 pb-4 pl-4 relative shadow-[0_0_30px_rgba(59,130,246,0.1)] backdrop-blur-md gap-x-3 gap-y-3" style={{'--mouse-x': '458.5px', '--mouse-y': '88.5px'}}>
 <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-amber-500"></div>
 <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-amber-500"></div>
 <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-amber-500"></div>
@@ -542,7 +584,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-on-scroll">
-<div className="group relative p-4 border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.02] transition-colors duration-300 rounded-sm overflow-hidden flex flex-col flashlight-card" style={{-MouseX: '25px', -MouseY: '115.5px'}}>
+<div className="group relative p-4 border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.02] transition-colors duration-300 rounded-sm overflow-hidden flex flex-col flashlight-card" style={{'--mouse-x': '25px', '--mouse-y': '115.5px'}}>
 <div className="relative h-48 md:h-64 mb-4 overflow-hidden rounded-sm">
 <img alt="Cyberpunk style" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 hue-rotate-180" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/139ed8b6-013c-4038-a14c-28d58cc7a1e3_800w.jpg"/>
 </div>
@@ -551,7 +593,7 @@ gtag('config', 'G-2M6V79H761');
                 --style cyberpunk
               </div>
 </div>
-<div className="group relative p-4 border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.02] transition-colors duration-300 rounded-sm overflow-hidden flex flex-col flashlight-card" style={{-MouseX: '269px', -MouseY: '59px'}}>
+<div className="group relative p-4 border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.02] transition-colors duration-300 rounded-sm overflow-hidden flex flex-col flashlight-card" style={{'--mouse-x': '269px', '--mouse-y': '59px'}}>
 <div className="relative h-48 md:h-64 mb-4 overflow-hidden rounded-sm">
 <img alt="Photorealism" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 saturate-50" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c9104c6d-9521-4057-b664-ed476bf3039e_800w.webp"/>
 </div>
@@ -595,7 +637,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-x-6 gap-y-6">
 
-<div className="relative p-8 border border-white/[0.05] bg-white/[0.01] flex flex-col hover:bg-white/[0.02] transition-colors animate-on-scroll flashlight-card rounded-sm" style={{-MouseX: '165px', -MouseY: '14.5px'}}>
+<div className="relative p-8 border border-white/[0.05] bg-white/[0.01] flex flex-col hover:bg-white/[0.02] transition-colors animate-on-scroll flashlight-card rounded-sm" style={{'--mouse-x': '165px', '--mouse-y': '14.5px'}}>
 <iconify-icon className="text-3xl mb-6 text-amber-400" icon="solar:text-field-focus-line-duotone"></iconify-icon>
 <h4 className="text-sm font-medium text-slate-200 uppercase tracking-wide mb-3">
                 Text to Image
@@ -610,7 +652,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 
-<div className="flex flex-col transform lg:-translate-y-4 lg:mt-0 animate-on-scroll group flashlight-card border-amber-500/30 border rounded-sm mt-4 pt-8 pr-8 pb-8 pl-8 relative shadow-[0_0_40px_rgba(59,130,246,0.1)]" style={{-MouseX: '84px', -MouseY: '24.5px'}}>
+<div className="flex flex-col transform lg:-translate-y-4 lg:mt-0 animate-on-scroll group flashlight-card border-amber-500/30 border rounded-sm mt-4 pt-8 pr-8 pb-8 pl-8 relative shadow-[0_0_40px_rgba(59,130,246,0.1)]" style={{'--mouse-x': '84px', '--mouse-y': '24.5px'}}>
 <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-amber-500"></div>
 <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-amber-500"></div>
 <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-amber-500"></div>
@@ -635,7 +677,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 
-<div className="relative p-8 border border-white/[0.05] bg-white/[0.01] flex flex-col hover:bg-white/[0.02] transition-colors mt-4 lg:mt-0 animate-on-scroll flashlight-card rounded-sm" style={{-MouseX: '57px', -MouseY: '37px'}}>
+<div className="relative p-8 border border-white/[0.05] bg-white/[0.01] flex flex-col hover:bg-white/[0.02] transition-colors mt-4 lg:mt-0 animate-on-scroll flashlight-card rounded-sm" style={{'--mouse-x': '57px', '--mouse-y': '37px'}}>
 <iconify-icon className="text-3xl mb-6 text-amber-400" icon="solar:maximize-square-line-duotone"></iconify-icon>
 <h4 className="text-sm font-medium text-slate-200 uppercase tracking-wide mb-3">
                 Outpainting
@@ -741,7 +783,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="md:py-32 border-white/[0.03] border-t pt-24 pb-24 relative">
 <div className="lg:px-12 max-w-[1400px] mr-auto ml-auto pr-6 pl-6">
-<div className="md:p-12 overflow-hidden border-white/[0.05] flashlight-card bg-[#050914] border rounded-sm relative shadow-2xl" style={{-MouseX: '330px', -MouseY: '480.75px'}}>
+<div className="md:p-12 overflow-hidden border-white/[0.05] flashlight-card bg-[#050914] border rounded-sm relative shadow-2xl" style={{'--mouse-x': '330px', '--mouse-y': '480.75px'}}>
 
 <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-amber-500/50"></div>
 <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-amber-500/50"></div>
@@ -931,7 +973,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="border-white/[0.03] bg-gradient-to-b from-white/[0.01] to-transparent border-t pt-24 pb-24 relative">
 <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
 <div className="grid lg:grid-cols-2 gap-16 items-center">
-<div className="relative rounded-sm overflow-hidden aspect-square border border-white/[0.05] group bg-[#0a0f1c] p-2 shadow-2xl flashlight-card" style={{-MouseX: '537px', -MouseY: '266.75px'}}>
+<div className="relative rounded-sm overflow-hidden aspect-square border border-white/[0.05] group bg-[#0a0f1c] p-2 shadow-2xl flashlight-card" style={{'--mouse-x': '537px', '--mouse-y': '266.75px'}}>
 <div className="w-full h-full relative overflow-hidden rounded-sm">
 <img className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 filter hue-rotate-180 saturate-50 contrast-125" id="version-display-image" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/variants/e41c2eba-a959-4377-8295-ac996393ebcd/1600w.png"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#050914] via-transparent to-transparent opacity-80"></div>

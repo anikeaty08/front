@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -92,6 +128,12 @@ reveal: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -105,7 +147,7 @@ reveal: {
 <main className="relative z-10 h-full w-full overflow-x-auto overflow-y-hidden whitespace-nowrap snap-x snap-mandatory no-scrollbar scroll-smooth flex" id="scroller">
 
 <section className="inline-flex snap-center shrink-0 w-full h-full p-4 lg:p-12 relative items-center justify-center">
-<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{-MouseX: '7290px', -MouseY: '-2px'}}>
+<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{'--mouse-x': '7290px', '--mouse-y': '-2px'}}>
 
 <div className="lg:p-14 flex flex-col lg:w-1/2 lg:h-full z-10 order-2 lg:order-1 custom-scroll overflow-y-auto w-full h-1/2 pt-6 pr-6 pb-6 pl-6 relative justify-between">
 <div className="mb-4 lg:mb-0">
@@ -173,7 +215,7 @@ reveal: {
 </section>
 
 <section className="h-full w-full inline-flex items-center justify-center snap-center shrink-0 p-4 lg:p-12 relative">
-<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{-MouseX: '5850px', -MouseY: '-2px'}}>
+<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{'--mouse-x': '5850px', '--mouse-y': '-2px'}}>
 <div className="w-full lg:w-5/12 h-1/3 lg:h-full relative overflow-hidden order-1 lg:order-2 border-b lg:border-l lg:border-b-0 border-slate-100">
 <img alt="Bus History" className="w-full h-full object-cover absolute top-0 right-0 bottom-0 left-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9b3cfd13-fcb4-4e4a-aa70-7a8b362d34e0_1600w.jpg"/>
 <div className="mix-blend-multiply absolute top-0 right-0 bottom-0 left-0"></div>
@@ -246,7 +288,7 @@ En este breve broshure presentamos algunos de nuestros más recientes productos,
 </section>
 
 <section className="inline-flex snap-center shrink-0 lg:p-12 w-full h-full pt-4 pr-4 pb-4 pl-4 relative items-center justify-center">
-<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{-MouseX: '4410px', -MouseY: '-2px'}}>
+<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{'--mouse-x': '4410px', '--mouse-y': '-2px'}}>
 <div className="flex flex-col lg:flex-row w-full h-full">
 
 <div className="lg:w-1/2 lg:p-16 flex flex-col custom-scroll overflow-y-auto lg:h-full w-full h-2/3 z-10 pt-6 pr-6 pb-6 pl-6 relative justify-center order-2 lg:order-1">
@@ -286,7 +328,7 @@ En este breve broshure presentamos algunos de nuestros más recientes productos,
 </section>
 
 <section className="h-full w-full inline-flex items-center justify-center snap-center shrink-0 p-4 lg:p-12 relative">
-<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col-reverse lg:flex-row animate-clip-reveal" style={{-MouseX: '2970px', -MouseY: '-2px'}}>
+<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col-reverse lg:flex-row animate-clip-reveal" style={{'--mouse-x': '2970px', '--mouse-y': '-2px'}}>
 
 <div className="w-full lg:w-1/2 h-1/2 lg:h-full border-t lg:border-t-0 lg:border-r border-slate-100 flex flex-row lg:flex-col">
 
@@ -325,7 +367,7 @@ En este breve broshure presentamos algunos de nuestros más recientes productos,
 </section>
 
 <section className="h-full w-full inline-flex items-center justify-center snap-center shrink-0 p-4 lg:p-12 relative">
-<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{-MouseX: '1530px', -MouseY: '-2px'}}>
+<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{'--mouse-x': '1530px', '--mouse-y': '-2px'}}>
 
 <div className="w-full lg:w-4/12 h-1/3 lg:h-full bg-brand-blue text-white p-6 lg:p-14 flex flex-col justify-center lg:justify-between relative overflow-hidden order-2 lg:order-1">
 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
@@ -376,7 +418,7 @@ En este breve broshure presentamos algunos de nuestros más recientes productos,
 </section>
 
 <section className="h-full w-full inline-flex items-center justify-center snap-center shrink-0 p-4 lg:p-12 relative">
-<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{-MouseX: '90px', -MouseY: '-2px'}}>
+<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col lg:flex-row animate-clip-reveal" style={{'--mouse-x': '90px', '--mouse-y': '-2px'}}>
 
 <div className="lg:w-5/12 lg:p-14 flex flex-col custom-scroll overflow-y-auto order-2 lg:order-1 lg:h-full gap-6 w-full h-2/3 pt-6 pr-6 pb-6 pl-6 relative justify-between">
 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-yellow to-brand-blue"></div>
@@ -437,7 +479,7 @@ En este breve broshure presentamos algunos de nuestros más recientes productos,
 </section>
 
 <section className="inline-flex snap-center shrink-0 w-full h-full p-4 lg:p-12 relative items-center justify-center">
-<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-brand-blue rounded-3xl shadow-2xl overflow-hidden flex items-center justify-center text-center p-4 lg:p-8 animate-clip-reveal" style={{-MouseX: '-1350px', -MouseY: '-2px'}}>
+<div className="flashlight-card relative w-full max-w-[1600px] h-full lg:aspect-video bg-brand-blue rounded-3xl shadow-2xl overflow-hidden flex items-center justify-center text-center p-4 lg:p-8 animate-clip-reveal" style={{'--mouse-x': '-1350px', '--mouse-y': '-2px'}}>
 <div className="flex flex-col custom-scroll overflow-y-auto w-full h-full max-w-5xl z-10 relative items-center justify-center">
 
 <div className="flex w-32 h-16 lg:w-64 lg:h-24 border-0 rounded-2xl mb-6 lg:mb-10 items-center justify-center shrink-0">

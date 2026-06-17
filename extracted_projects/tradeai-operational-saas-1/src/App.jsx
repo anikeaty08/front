@@ -64,7 +64,7 @@ function App() {
           </div>
 
           {/* Center Column: Floating UI Cards */}
-          <div className="lg:col-span-5 flex h-[500px] lg:h-auto relative perspective-[1200px] items-center justify-center animate-on-scroll" style={{ animationDelay: '0.2s' }}>
+          <div className="lg:col-span-5 flex h-[500px] lg:h-auto relative perspective-[1200px] items-center justify-center animate-on-scroll" style={{animationDelay: '0.2s'}}>
             
             {/* Centerpiece */}
             <div className="relative z-20 w-72 bg-neutral-950 border border-white/10 shadow-2xl rounded-2xl transform rotate-[-2deg] p-8 flex flex-col items-center text-center group glass">
@@ -118,8 +118,8 @@ function App() {
           </div>
 
           {/* Right Column: Stats */}
-          <div className="lg:col-span-2 flex flex-col relative z-20 lg:border-l lg:border-white/5 lg:pl-8 animate-on-scroll" style={{ animationDelay: '0.4s' }}>
-            <div className="hidden lg:block beam-border-v" style={{ left: '-1px' }}></div>
+          <div className="lg:col-span-2 flex flex-col relative z-20 lg:border-l lg:border-white/5 lg:pl-8 animate-on-scroll" style={{animationDelay: '0.4s'}}>
+            <div className="hidden lg:block beam-border-v" style={{left: '-1px'}}></div>
             
             <div className="flex flex-col justify-center h-full gap-12">
               <div className="group">
@@ -370,7 +370,7 @@ function App() {
           </div>
 
           {/* Marquee Images */}
-          <div className="relative mx-auto max-w-[100vw] overflow-hidden mask-image-linear-gradient" style={{ maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)' }}>
+          <div className="relative mx-auto max-w-[100vw] overflow-hidden mask-image-linear-gradient" style={{maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'}}>
             <div className="flex w-max animate-marquee gap-4 pr-4">
               {[
                 "https://images.unsplash.com/photo-1540569014015-19a7be504e3a",

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -148,6 +184,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -158,7 +200,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="noise-overlay"></div>
 
 <header className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
-<nav className="glass-panel flex items-center justify-between w-full max-w-5xl h-14 px-5 rounded-full shadow-2xl backdrop-blur-xl" style={{-MouseX: '-64px', -MouseY: '-21px'}}>
+<nav className="glass-panel flex items-center justify-between w-full max-w-5xl h-14 px-5 rounded-full shadow-2xl backdrop-blur-xl" style={{'--mouse-x': '-64px', '--mouse-y': '-21px'}}>
 
 <div className="flex items-center gap-3">
 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-white/20 to-white/5 border border-white/10 flex items-center justify-center text-xs font-semibold text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]">DT</div>
@@ -185,7 +227,7 @@ gtag('config', 'G-2M6V79H761');
 <main className="flex-grow relative z-10">
 
 <section className="sm:px-6 lg:px-8 max-w-7xl mr-auto ml-auto pt-36 pr-4 pb-20 pl-4 relative" id="about">
-<div className="glass-panel rounded-[40px] p-1 sm:p-1 animate-on-scroll is-visible overflow-hidden" style={{-MouseX: '48px', -MouseY: '-141px'}}>
+<div className="glass-panel rounded-[40px] p-1 sm:p-1 animate-on-scroll is-visible overflow-hidden" style={{'--mouse-x': '48px', '--mouse-y': '-141px'}}>
 <div className="relative bg-neutral-950/30 rounded-[38px] border border-white/5 backdrop-blur-sm overflow-hidden">
 
 <div className="absolute inset-0 grid grid-cols-2 opacity-20 pointer-events-none">
@@ -611,7 +653,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 <section className="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto mb-24" id="mission-control">
-<div className="glass-panel rounded-[32px] p-8 sm:p-12 animate-on-scroll relative overflow-hidden" style={{-MouseX: '32px', -MouseY: '-2141px'}}>
+<div className="glass-panel rounded-[32px] p-8 sm:p-12 animate-on-scroll relative overflow-hidden" style={{'--mouse-x': '32px', '--mouse-y': '-2141px'}}>
 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50"></div>
 <div className="text-center mb-10">
 <h2 className="text-3xl sm:text-4xl font-light text-white tracking-tight mb-3">

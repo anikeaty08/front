@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -88,6 +124,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -275,7 +317,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid lg:grid-cols-3 gap-8 items-start">
 
-<div className="glare-card-container min-h-[500px] w-full h-full" style={{-MX: '98.19121253452326%', -MY: '4.189999389648437%', -RX: '0deg', -RY: '0deg', -BgX: '62.04780313363082%', -BgY: '34.72666646321614%'}}>
+<div className="glare-card-container min-h-[500px] w-full h-full" style={{'--mx': '98.19121253452326%', '--my': '4.189999389648437%', '--rx': '0deg', '--ry': '0deg', '--bg-x': '62.04780313363082%', '--bg-y': '34.72666646321614%'}}>
 <div className="glare-card relative h-full w-full rounded-[2rem] border border-white/10 bg-neutral-950 overflow-hidden">
 
 <div className="relative z-10 p-8 flex flex-col h-full bg-neutral-800/85 backdrop-blur-mdborder border-white/10w-full&gt; &lt;h3 class=" font-medium="" mb-2"="" text-white="" text-xl="">Marketing &amp; Contenido
@@ -309,7 +351,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glare-card-container w-full h-full min-h-[500px]" style={{-MX: '1.0335956537291917%', -MY: '36.510003662109376%', -RX: '0deg', -RY: '0deg', -BgX: '37.758398913432295%', -BgY: '45.500001220703126%'}}>
+<div className="glare-card-container w-full h-full min-h-[500px]" style={{'--mx': '1.0335956537291917%', '--my': '36.510003662109376%', '--rx': '0deg', '--ry': '0deg', '--bg-x': '37.758398913432295%', '--bg-y': '45.500001220703126%'}}>
 <div className="glare-card relative h-full w-full rounded-[2rem] border border-white/10 bg-neutral-950 overflow-hidden">
 
 <div className="relative z-10 p-8 flex flex-col h-full bg-neutral-800/85 backdrop-blur-mdborder border-white/10w-full&gt; &lt;h3 class=">
@@ -338,7 +380,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="glare-card-container w-full h-full min-h-[500px]" style={{-MX: '5.167997982843326%', -MY: '1.6300018310546875%', -RX: '0deg', -RY: '0deg', -BgX: '38.79199949571083%', -BgY: '33.87333394368489%'}}>
+<div className="glare-card-container w-full h-full min-h-[500px]" style={{'--mx': '5.167997982843326%', '--my': '1.6300018310546875%', '--rx': '0deg', '--ry': '0deg', '--bg-x': '38.79199949571083%', '--bg-y': '33.87333394368489%'}}>
 <div className="glare-card relative h-full w-full rounded-[2rem] border border-white/10 bg-neutral-950 overflow-hidden">
 
 <div className="relative z-10 p-8 flex flex-col h-full bg-neutral-800/85 backdrop-blur-mdborder border-white/10w-full&gt; &lt;h3 class=">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,6 +48,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -45,7 +87,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="px-5 py-6 flex-1 flex flex-col">
 
 <section className="mb-8">
-<div className="bg-white rounded-[1.25rem] p-5 relative overflow-hidden group cursor-pointer transition-transform hover:scale-[1.01]" style={{boxShadow: '0 4px 20px -2px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.02)'}}>
+<div className="bg-white rounded-[1.25rem] p-5 relative overflow-hidden group cursor-pointer transition-transform hover:scale-[1.01]" style={{boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0,0,0,0.02)'}}>
 
 <div className="absolute -top-12 -right-12 w-40 h-40 bg-blue-400/10 rounded-full blur-3xl group-hover:bg-blue-400/20 transition-colors duration-500"></div>
 <div className="relative z-10 flex items-start space-x-4">

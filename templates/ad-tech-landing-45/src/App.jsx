@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -124,6 +160,12 @@ if (copyBtn) {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -366,22 +408,22 @@ if (copyBtn) {
 </div>
 </div>
 <div className="platform__features stagger-up">
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:zap" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>Auto-provision</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>Instant Access</div>
 </div>
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:banknote" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>Instant Top-ups</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>Zero delays</div>
 </div>
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:activity" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>Live Tracking</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>Real-time spend</div>
 </div>
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:rotate-ccw" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>One-click Appeals</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>Automated</div>

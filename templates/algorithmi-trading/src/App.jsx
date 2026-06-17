@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -355,6 +391,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1093,7 +1135,7 @@ gtag('config', 'G-2M6V79H761');
 </h2></div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="md:col-span-2 flex flex-col overflow-hidden spotlight-wrapper group bg-[#040814] h-[324px] border-white/5 border rounded-xl pt-6 pr-6 pb-6 pl-6 relative" style={{-MouseX: '759px', -MouseY: '169.75px'}}>
+<div className="md:col-span-2 flex flex-col overflow-hidden spotlight-wrapper group bg-[#040814] h-[324px] border-white/5 border rounded-xl pt-6 pr-6 pb-6 pl-6 relative" style={{'--mouse-x': '759px', '--mouse-y': '169.75px'}}>
 
 <div className="absolute top-0 left-0 w-full h-[2px] rounded-t-xl bg-gradient-to-r from-transparent via-[#38bdf8] to-transparent opacity-80 blur-[1px]"></div>
 
@@ -1131,7 +1173,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex flex-col gap-6 gap-x-6 gap-y-6">
 
-<div className="bg-[#060b18] border border-white/5 rounded-xl p-6 flex flex-col justify-between h-[150px] spotlight-wrapper reveal-item" style={{-MouseX: '107px', -MouseY: '14.75px'}}>
+<div className="bg-[#060b18] border border-white/5 rounded-xl p-6 flex flex-col justify-between h-[150px] spotlight-wrapper reveal-item" style={{'--mouse-x': '107px', '--mouse-y': '14.75px'}}>
 <span className="text-xs text-slate-400 uppercase tracking-widest font-mono">Execution Latency</span>
 <div className="">
 <div className="text-4xl font-light text-white tracking-tight flex items-baseline gap-1">
@@ -1143,7 +1185,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="bg-[#060b18] border border-white/5 rounded-xl p-6 flex flex-col justify-between h-[150px] spotlight-wrapper reveal-item" style={{-MouseX: '7px', -MouseY: '0.75px'}}>
+<div className="bg-[#060b18] border border-white/5 rounded-xl p-6 flex flex-col justify-between h-[150px] spotlight-wrapper reveal-item" style={{'--mouse-x': '7px', '--mouse-y': '0.75px'}}>
 <span className="text-xs text-slate-400 uppercase tracking-widest font-mono">Signal Confidence</span>
 <div className="flex items-center justify-between">
 <div className="text-3xl font-light text-white tracking-tight flex items-baseline gap-1">

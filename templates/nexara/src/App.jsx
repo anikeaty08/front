@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -202,6 +238,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -333,7 +375,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 gap-x-6 gap-y-6">
 
-<div className="group hover:bg-gray-100 hover:text-[#120824] hover:shadow-[0_20px_60px_-15px_rgba(6,182,212,0.3)] hover:-translate-y-4 hover:scale-[1.02] hover:z-20 transition-all duration-500 flex flex-col text-center bg-gradient-to-b rounded-3xl pt-8 pr-8 pb-8 pl-8 relative items-center border border-transparent animate-entry from-indigo-500/0 via-indigo-500/5 to-indigo-500/0" style={{animationDelay: '0.2s', position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.4))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-gray-100 hover:text-[#120824] hover:shadow-[0_20px_60px_-15px_rgba(6,182,212,0.3)] hover:-translate-y-4 hover:scale-[1.02] hover:z-20 transition-all duration-500 flex flex-col text-center bg-gradient-to-b rounded-3xl pt-8 pr-8 pb-8 pl-8 relative items-center border border-transparent animate-entry from-indigo-500/0 via-indigo-500/5 to-indigo-500/0" style={{animationDelay: '0.2s', position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.4))', '--border-radius-before': '24px'}}>
 <div className="w-20 h-20 group-hover:w-24 group-hover:h-24 rounded-full group-hover:bg-white flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(8,145,178,0.2)] group-hover:shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 bg-indigo-900/20">
 <svg aria-hidden="true" className="iconify text-4xl group-hover:text-5xl transition-all duration-500 iconify--solar text-indigo-400 group-hover:text-indigo-500" data-icon="solar:layers-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4.979 9.685C2.993 8.891 2 8.494 2 8s.993-.89 2.979-1.685l2.808-1.123C9.773 4.397 10.767 4 12 4s2.227.397 4.213 1.192l2.808 1.123C21.007 7.109 22 7.506 22 8s-.993.89-2.979 1.685l-2.808 1.124C14.227 11.603 13.233 12 12 12s-2.227-.397-4.213-1.191z" fill="currentColor"></path><path clip-rule="evenodd" d="M2 8c0 .494.993.89 2.979 1.685l2.808 1.124C9.773 11.603 10.767 12 12 12s2.227-.397 4.213-1.191l2.808-1.124C21.007 8.891 22 8.494 22 8s-.993-.89-2.979-1.685l-2.808-1.123C14.227 4.397 13.233 4 12 4s-2.227.397-4.213 1.192L4.98 6.315C2.993 7.109 2 7.506 2 8" fill="currentColor" fill-rule="evenodd"></path><path d="m5.766 10l-.787.315C2.993 11.109 2 11.507 2 12s.993.89 2.979 1.685l2.808 1.124C9.773 15.603 10.767 16 12 16s2.227-.397 4.213-1.191l2.808-1.124C21.007 12.891 22 12.493 22 12s-.993-.89-2.979-1.685L18.234 10l-2.021.809C14.227 11.603 13.233 12 12 12s-2.227-.397-4.213-1.191z" fill="currentColor" opacity=".7"></path><path d="m5.766 14l-.787.315C2.993 15.109 2 15.507 2 16s.993.89 2.979 1.685l2.808 1.124C9.773 19.603 10.767 20 12 20s2.227-.397 4.213-1.192l2.808-1.123C21.007 16.891 22 16.494 22 16c0-.493-.993-.89-2.979-1.685L18.234 14l-2.021.809C14.227 15.603 13.233 16 12 16s-2.227-.397-4.213-1.191z" fill="currentColor" opacity=".4"></path></svg>
 </div>
@@ -380,7 +422,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group hover:bg-gray-100 hover:text-[#120824] hover:shadow-[0_20px_60px_-15px_rgba(6,182,212,0.3)] hover:-translate-y-4 hover:scale-[1.02] hover:z-20 transition-all duration-500 flex flex-col text-center bg-gradient-to-b rounded-3xl pt-8 pr-8 pb-8 pl-8 relative items-center border border-transparent animate-entry from-indigo-500/0 via-indigo-500/5 to-indigo-500/0" style={{animationDelay: '0.4s', position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.4))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-gray-100 hover:text-[#120824] hover:shadow-[0_20px_60px_-15px_rgba(6,182,212,0.3)] hover:-translate-y-4 hover:scale-[1.02] hover:z-20 transition-all duration-500 flex flex-col text-center bg-gradient-to-b rounded-3xl pt-8 pr-8 pb-8 pl-8 relative items-center border border-transparent animate-entry from-indigo-500/0 via-indigo-500/5 to-indigo-500/0" style={{animationDelay: '0.4s', position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.4))', '--border-radius-before': '24px'}}>
 <div className="w-20 h-20 group-hover:w-24 group-hover:h-24 rounded-full group-hover:bg-white flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(8,145,178,0.2)] group-hover:shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 bg-indigo-900/20">
 <svg aria-hidden="true" className="iconify text-4xl group-hover:text-5xl transition-all duration-500 iconify--solar text-indigo-400 group-hover:text-indigo-500" data-icon="solar:magic-stick-3-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.845 3.845a2.883 2.883 0 0 0 0 4.077L5.432 9.51c.012-.014.555.503.568.49l4-4c.013-.013-.504-.556-.49-.568L7.922 3.845a2.883 2.883 0 0 0-4.077 0m1.288 11.462a.483.483 0 0 1 .9 0l.157.4a.48.48 0 0 0 .272.273l.398.157a.486.486 0 0 1 0 .903l-.398.158a.48.48 0 0 0-.272.273l-.157.4a.483.483 0 0 1-.9 0l-.157-.4a.48.48 0 0 0-.272-.273l-.398-.158a.486.486 0 0 1 0-.903l.398-.157a.48.48 0 0 0 .272-.274z" fill="currentColor" opacity=".5"></path><path d="M19.967 9.13a.483.483 0 0 1 .9 0l.156.399c.05.125.148.224.273.273l.398.158a.486.486 0 0 1 0 .902l-.398.158a.5.5 0 0 0-.273.273l-.156.4a.483.483 0 0 1-.9 0l-.157-.4a.5.5 0 0 0-.272-.273l-.398-.158a.486.486 0 0 1 0-.902l.398-.158a.5.5 0 0 0 .272-.273z" fill="currentColor" opacity=".2"></path><path d="M16.1 2.307a.483.483 0 0 1 .9 0l.43 1.095a.48.48 0 0 0 .272.274l1.091.432a.486.486 0 0 1 0 .903l-1.09.432a.5.5 0 0 0-.273.273L17 6.81a.483.483 0 0 1-.9 0l-.43-1.095a.5.5 0 0 0-.273-.273l-1.09-.432a.486.486 0 0 1 0-.903l1.09-.432a.5.5 0 0 0 .273-.274z" fill="currentColor" opacity=".7"></path><path d="M10.568 6.49c-.012.014-.555-.503-.568-.49l-4 4c-.013.013.504.556.49.568l9.588 9.587a2.883 2.883 0 1 0 4.078-4.077z" fill="currentColor"></path></svg>
 </div>
@@ -404,7 +446,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group hover:bg-gray-100 hover:text-[#120824] hover:shadow-[0_20px_60px_-15px_rgba(6,182,212,0.3)] hover:-translate-y-4 hover:scale-[1.02] hover:z-20 transition-all duration-500 flex flex-col text-center bg-gradient-to-b rounded-3xl pt-8 pr-8 pb-8 pl-8 relative items-center border border-transparent animate-entry from-indigo-500/0 via-indigo-500/5 to-indigo-500/0" style={{animationDelay: '0.5s', position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.4))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-gray-100 hover:text-[#120824] hover:shadow-[0_20px_60px_-15px_rgba(6,182,212,0.3)] hover:-translate-y-4 hover:scale-[1.02] hover:z-20 transition-all duration-500 flex flex-col text-center bg-gradient-to-b rounded-3xl pt-8 pr-8 pb-8 pl-8 relative items-center border border-transparent animate-entry from-indigo-500/0 via-indigo-500/5 to-indigo-500/0" style={{animationDelay: '0.5s', position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.4))', '--border-radius-before': '24px'}}>
 <div className="w-20 h-20 group-hover:w-24 group-hover:h-24 rounded-full group-hover:bg-white flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(8,145,178,0.2)] group-hover:shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 bg-indigo-900/20">
 <svg aria-hidden="true" className="iconify text-4xl group-hover:text-5xl transition-all duration-500 iconify--solar text-indigo-400 group-hover:text-indigo-500" data-icon="solar:star-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M18.483 16.767A8.5 8.5 0 0 1 8.118 7.081a1 1 0 0 1-.113.097c-.28.213-.63.292-1.33.45l-.635.144c-2.46.557-3.69.835-3.983 1.776c-.292.94.546 1.921 2.223 3.882l.434.507c.476.557.715.836.822 1.18c.107.345.071.717-.001 1.46l-.066.677c-.253 2.617-.38 3.925.386 4.506s1.918.052 4.22-1.009l.597-.274c.654-.302.981-.452 1.328-.452s.674.15 1.329.452l.595.274c2.303 1.06 3.455 1.59 4.22 1.01c.767-.582.64-1.89.387-4.507z" fill="currentColor"></path><path d="m9.153 5.408l-.328.588c-.36.646-.54.969-.82 1.182q.06-.045.113-.097a8.5 8.5 0 0 0 10.366 9.686l-.02-.19c-.071-.743-.107-1.115 0-1.46c.107-.344.345-.623.822-1.18l.434-.507c1.677-1.96 2.515-2.941 2.222-3.882c-.292-.941-1.522-1.22-3.982-1.776l-.636-.144c-.699-.158-1.049-.237-1.33-.45c-.28-.213-.46-.536-.82-1.182l-.327-.588C13.58 3.136 12.947 2 12 2s-1.58 1.136-2.847 3.408" fill="currentColor" opacity=".5"></path></svg>
 </div>
@@ -802,7 +844,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="m9 5l6 7l-6 7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
 </svg>
 </button>
-<button className="flex hover:bg-white/10 transition-colors group w-14 h-14 rounded-full items-center justify-center" onclick="navigateProject(1)" style={{position: 'relative', -BorderGradient: 'linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<button className="flex hover:bg-white/10 transition-colors group w-14 h-14 rounded-full items-center justify-center" onclick="navigateProject(1)" style={{position: 'relative', -BorderGradient: 'linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <svg aria-hidden="true" className="iconify iconify--solar text-xl w-[20px] h-[20px]" data-icon="solar:alt-arrow-right-linear" data-icon-replaced="true" data-icon-set="solar" data-solar="alt-arrow-left-linear" height="20" role="img" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '20px', height: '20px'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m15 5l-6 7l6 7" fill="none" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path></svg>
 </button>
 </div>

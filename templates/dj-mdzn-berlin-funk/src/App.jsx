@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -42,7 +84,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col gap-8 relative z-20">
 
-<div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-zinc-800/80 bg-zinc-900/50 backdrop-blur-md w-fit shadow-sm" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.5)'}}>
+<div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-zinc-800/80 bg-zinc-900/50 backdrop-blur-md w-fit shadow-sm" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.5)'}}>
 <div className="w-1.5 h-1.5 rounded-full bg-orange-500 relative" style={{boxShadow: '0 0 10px 1px #f97316'}}>
 <div className="absolute inset-0 rounded-full bg-white opacity-50 blur-[1px]"></div>
 </div>
@@ -71,14 +113,14 @@ gtag('config', 'G-2M6V79H761');
                 </p>
 </div>
 <div className="flex flex-col sm:flex-row gap-5 pt-4">
-<button className="relative px-8 py-4 rounded-xl text-zinc-100 font-normal text-sm flex items-center justify-center gap-3 group transition-transform duration-100 active:scale-[0.98]" style={{background: 'linear-gradient(180deg, #3f3f46 0%, #27272a 100%)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 12px 24px -6px rgba(0,0,0,0.8), 0 4px 8px -4px rgba(0,0,0,0.6)', border: '1px solid #18181b'}}>
+<button className="relative px-8 py-4 rounded-xl text-zinc-100 font-normal text-sm flex items-center justify-center gap-3 group transition-transform duration-100 active:scale-[0.98]" style={{background: 'linear-gradient(180deg, #3f3f46 0%, #27272a 100%)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 12px 24px -6px rgba(0, 0, 0, 0.8), 0 4px 8px -4px rgba(0,0,0,0.6)', border: '1px solid #18181b'}}>
 <span className="relative z-10 flex items-center gap-2" style={{textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
                         Listen to Sets
                         <iconify-icon className="text-lg opacity-70 group-hover:translate-x-1 transition-transform" icon="solar:arrow-right-linear"></iconify-icon>
 </span>
 <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
 </button>
-<button className="px-8 py-4 rounded-xl text-zinc-300 font-normal text-sm flex items-center justify-center transition-all duration-300 hover:text-white hover:bg-zinc-800/50" style={{background: 'rgba(39, 39, 42, 0.3)', backdropFilter: 'blur(8px)', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), inset 0 2px 4px rgba(0,0,0,0.2)'}}>
+<button className="px-8 py-4 rounded-xl text-zinc-300 font-normal text-sm flex items-center justify-center transition-all duration-300 hover:text-white hover:bg-zinc-800/50" style={{background: 'rgba(39, 39, 42, 0.3)', backdropFilter: 'blur(8px)', boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 2px 4px rgba(0,0,0,0.2)'}}>
                     Tour Schedule
                 </button>
 </div>
@@ -86,13 +128,13 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative w-full max-w-lg mx-auto flex items-center justify-center lg:justify-end">
 <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[85%] h-16 bg-black/80 blur-2xl rounded-[100%] z-0"></div>
-<div className="aspect-[4/4.5] md:p-10 z-10 w-full rounded-[2.5rem] pt-8 pr-8 pb-8 pl-8 relative" style={{background: 'linear-gradient(135deg, #2a2a2e 0%, #121214 100%)', boxShadow: '-16px -16px 40px rgba(63, 63, 70, 0.04), 32px 32px 80px rgba(0,0,0,0.9), inset 1px 1px 2px rgba(255,255,255,0.1), inset -1px -1px 4px rgba(0,0,0,0.8)', border: '1px solid #3f3f46'}}>
+<div className="aspect-[4/4.5] md:p-10 z-10 w-full rounded-[2.5rem] pt-8 pr-8 pb-8 pl-8 relative" style={{background: 'linear-gradient(135deg, #2a2a2e 0%, #121214 100%)', boxShadow: '-16px -16px 40px rgba(63, 63, 70, 0.04), 32px 32px 80px rgba(0, 0, 0, 0.9), inset 1px 1px 2px rgba(255, 255, 255, 0.1), inset -1px -1px 4px rgba(0,0,0,0.8)', border: '1px solid #3f3f46'}}>
 <div className="absolute inset-0 rounded-[2.5rem] opacity-[0.04] pointer-events-none mix-blend-screen" style={{backgroundImage: 'repeating-linear-gradient(90deg, #fff, #fff 1px, transparent 1px, transparent 4px)'}}></div>
 
-<div className="absolute top-6 left-6 w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #52525b 0%, #27272a 100%)', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.9)'}}>
+<div className="absolute top-6 left-6 w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #52525b 0%, #27272a 100%)', boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0,0,0,0.9)'}}>
 <div className="w-full h-[1.5px] bg-zinc-950 rotate-45 shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
-<div className="absolute top-6 right-6 w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #52525b 0%, #27272a 100%)', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.9)'}}>
+<div className="absolute top-6 right-6 w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #52525b 0%, #27272a 100%)', boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0,0,0,0.9)'}}>
 <div className="w-full h-[1.5px] bg-zinc-950 -rotate-12 shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 <div className="relative z-10 flex flex-col h-full justify-between pt-2">
@@ -109,7 +151,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative w-48 h-48 md:w-64 md:h-64 mx-auto flex items-center justify-center my-6 group">
 <div className="absolute inset-[-14px] rounded-full z-0" style={{background: 'conic-gradient(from 225deg, #18181b 0%, #18181b 75%, transparent 75%, transparent 100%)', maskImage: 'radial-gradient(transparent 68%, black 69%)', WebkitMaskImage: 'radial-gradient(transparent 68%, black 69%)'}}></div>
 <div className="absolute inset-[-14px] rounded-full z-10 transition-all duration-700 ease-out group-hover:opacity-100" style={{background: 'conic-gradient(from 225deg, #f97316 0%, #ea580c 45%, transparent 45%, transparent 100%)', maskImage: 'radial-gradient(transparent 68%, black 69%)', WebkitMaskImage: 'radial-gradient(transparent 68%, black 69%)', filter: 'drop-shadow(0 0 10px rgba(249, 115, 22, 0.7))'}}></div>
-<div className="relative w-[82%] h-[82%] rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center rotate-[30deg] transition-transform duration-700 ease-out group-hover:rotate-[140deg]" style={{background: 'conic-gradient(from 180deg at 50% 50%, #2a2a2e 0deg, #4b4b52 90deg, #18181b 180deg, #4b4b52 270deg, #2a2a2e 360deg)', boxShadow: '0 20px 30px -5px rgba(0,0,0,0.95), inset 0 2px 5px rgba(255,255,255,0.2)', border: '1px solid #18181b'}}>
+<div className="relative w-[82%] h-[82%] rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center rotate-[30deg] transition-transform duration-700 ease-out group-hover:rotate-[140deg]" style={{background: 'conic-gradient(from 180deg at 50% 50%, #2a2a2e 0deg, #4b4b52 90deg, #18181b 180deg, #4b4b52 270deg, #2a2a2e 360deg)', boxShadow: '0 20px 30px -5px rgba(0, 0, 0, 0.95), inset 0 2px 5px rgba(255,255,255,0.2)', border: '1px solid #18181b'}}>
 <div className="absolute top-4 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_12px_#f97316]"></div>
 <div className="w-[4.5rem] h-[4.5rem] rounded-full bg-zinc-900 flex items-center justify-center shadow-inner">
 <div className="w-4 h-4 rounded-full border border-zinc-800 opacity-50"></div>

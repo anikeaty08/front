@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -398,6 +434,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -410,7 +452,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div style={{position: 'fixed', bottom: '0', left: '0', width: '100%', height: '40%', zIndex: '1', pointerEvents: 'none', background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)'}}></div>
 
-<div id="aurora" style={{position: 'fixed', top: '-20%', left: '-10%', width: '120%', height: '50%', zIndex: '1', pointerEvents: 'none', opacity: '0.4', background: 'linear-gradient(135deg, rgba(0,200,255,0.2) 0%, rgba(120,0,255,0.15) 50%, rgba(0,100,255,0.1) 100%)', filter: 'blur(80px)', animation: 'auroraMove 12s ease-in-out infinite alternate'}}></div>
+<div id="aurora" style={{position: 'fixed', top: '-20%', left: '-10%', width: '120%', height: '50%', zIndex: '1', pointerEvents: 'none', opacity: '0.4', background: 'linear-gradient(135deg, rgba(0, 200, 255, 0.2) 0%, rgba(120, 0, 255, 0.15) 50%, rgba(0, 100, 255, 0.1) 100%)', filter: 'blur(80px)', animation: 'auroraMove 12s ease-in-out infinite alternate'}}></div>
 <style>
         @keyframes auroraMove {
             0% { transform: translateX(-5%) translateY(0%) rotate(0deg); }
@@ -529,7 +571,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             industries.
         </p>
 
-<button className="cta-button inline-flex items-center gap-3 rounded-full cursor-pointer" id="cta-btn" style={{padding: '0.85rem 2.25rem', background: 'linear-gradient(135deg, rgba(0,180,255,0.15) 0%, rgba(120,0,255,0.15) 100%)', border: '1px solid rgba(0,180,255,0.3)', color: '#fff', fontSize: '0.875rem', fontWeight: '500', letterSpacing: '0.01em'}}>
+<button className="cta-button inline-flex items-center gap-3 rounded-full cursor-pointer" id="cta-btn" style={{padding: '0.85rem 2.25rem', background: 'linear-gradient(135deg, rgba(0, 180, 255, 0.15) 0%, rgba(120, 0, 255, 0.15) 100%)', border: '1px solid rgba(0,180,255,0.3)', color: '#fff', fontSize: '0.875rem', fontWeight: '500', letterSpacing: '0.01em'}}>
 <span>Enter the Impact</span>
 <iconify-icon icon="solar:arrow-right-linear" style={{color: 'rgba(0,200,255,0.9)'}} width="18"></iconify-icon>
 </button>
@@ -554,7 +596,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
 <div className="glass-panel rounded-2xl p-6 group" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(10,10,30,0.35)'" onmouseover="this.style.borderColor='rgba(0,180,255,0.2)';this.style.background='rgba(10,10,30,0.5)'" style={{transition: '0.4s', cursor: 'pointer', borderColor: 'rgba(255, 255, 255, 0.08)', background: 'rgba(10, 10, 30, 0.35)'}}>
-<div className="mb-5" style={{width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg,rgba(0,180,255,0.15),rgba(0,180,255,0.05))', border: '1px solid rgba(0,180,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+<div className="mb-5" style={{width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, rgba(0, 180, 255, 0.15), rgba(0, 180, 255, 0.05))', border: '1px solid rgba(0,180,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 <iconify-icon icon="solar:cpu-bolt-linear" style={{color: 'rgba(0,200,255,0.8)'}} width="20"></iconify-icon>
 </div>
 <h3 className="font-medium text-base tracking-tight mb-2" style={{color: 'rgba(255,255,255,0.9)'}}>AI Engineering</h3>
@@ -562,7 +604,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="glass-panel rounded-2xl p-6" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(10,10,30,0.35)'" onmouseover="this.style.borderColor='rgba(120,0,255,0.2)';this.style.background='rgba(10,10,30,0.5)'" style={{transition: '0.4s', cursor: 'pointer'}}>
-<div className="mb-5" style={{width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg,rgba(120,0,255,0.15),rgba(120,0,255,0.05))', border: '1px solid rgba(120,0,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+<div className="mb-5" style={{width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, rgba(120, 0, 255, 0.15), rgba(120, 0, 255, 0.05))', border: '1px solid rgba(120,0,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 <iconify-icon icon="solar:code-square-linear" style={{color: 'rgba(150,80,255,0.8)'}} width="20"></iconify-icon>
 </div>
 <h3 className="font-medium text-base tracking-tight mb-2" style={{color: 'rgba(255,255,255,0.9)'}}>Digital Products</h3>
@@ -570,7 +612,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="glass-panel rounded-2xl p-6" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(10,10,30,0.35)'" onmouseover="this.style.borderColor='rgba(0,255,200,0.2)';this.style.background='rgba(10,10,30,0.5)'" style={{transition: '0.4s', cursor: 'pointer'}}>
-<div className="mb-5" style={{width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg,rgba(0,255,200,0.15),rgba(0,255,200,0.05))', border: '1px solid rgba(0,255,200,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+<div className="mb-5" style={{width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, rgba(0, 255, 200, 0.15), rgba(0, 255, 200, 0.05))', border: '1px solid rgba(0,255,200,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 <iconify-icon icon="solar:pallete-2-linear" style={{color: 'rgba(0,255,200,0.8)'}} width="20"></iconify-icon>
 </div>
 <h3 className="font-medium text-base tracking-tight mb-2" style={{color: 'rgba(255,255,255,0.9)'}}>Creative Strategy</h3>

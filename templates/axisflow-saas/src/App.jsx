@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -147,6 +183,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -180,7 +222,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="block text-5xl sm:text-6xl lg:text-6xl xl:text-7xl">
               AI Gives Teams
             </span>
-<span className="block sm:text-6xl lg:text-6xl xl:text-7xl text-5xl italic text-[#ff5a24] relative bg-gradient-to-r from-[#ff5a24] via-[#ff8a5c] to-[#ff5a24] bg-[length:200%_100%] bg-clip-text text-transparent motion-safe:animate-pulse" style={{textShadow: '0 0 24px rgba(255,90,36,0.24), 0 0 54px rgba(255,90,36,0.12)', willChange: 'opacity, filter, transform'}}>
+<span className="block sm:text-6xl lg:text-6xl xl:text-7xl text-5xl italic text-[#ff5a24] relative bg-gradient-to-r from-[#ff5a24] via-[#ff8a5c] to-[#ff5a24] bg-[length:200%_100%] bg-clip-text text-transparent motion-safe:animate-pulse" style={{textShadow: '0 0 24px rgba(255, 90, 36, 0.24), 0 0 54px rgba(255,90,36,0.12)', willChange: 'opacity, filter, transform'}}>
               A Clearer
             </span>
 <span className="block text-5xl sm:text-6xl lg:text-6xl xl:text-7xl">

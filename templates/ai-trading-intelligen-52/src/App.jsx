@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -142,6 +178,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -254,7 +296,7 @@ addUtilities({
 
 <div className="candle-3d animate-candle-1" style={{left: '60%', top: '25%', zIndex: '10'}}>
 <div className="wick" style={{height: '40px', top: '-40px'}}></div>
-<div className="cuboid candle-orange" style={{width: '24px', height: '160px', -Height: '160px'}}>
+<div className="cuboid candle-orange" style={{width: '24px', height: '160px', '--height': '160px'}}>
 <div className="cuboid__face cuboid__face--front"></div>
 <div className="cuboid__face cuboid__face--back"></div>
 <div className="cuboid__face cuboid__face--right"></div>
@@ -267,7 +309,7 @@ addUtilities({
 
 <div className="candle-3d animate-candle-2" style={{left: '45%', top: '45%', zIndex: '5', opacity: '0.9', transform: 'scale(0.9)'}}>
 <div className="wick" style={{height: '25px', top: '-25px'}}></div>
-<div className="cuboid candle-green" style={{width: '24px', height: '110px', -Height: '110px'}}>
+<div className="cuboid candle-green" style={{width: '24px', height: '110px', '--height': '110px'}}>
 <div className="cuboid__face cuboid__face--front"></div>
 <div className="cuboid__face cuboid__face--back"></div>
 <div className="cuboid__face cuboid__face--right"></div>
@@ -280,7 +322,7 @@ addUtilities({
 
 <div className="candle-3d animate-candle-1" style={{right: '5%', top: '10%', zIndex: '1', opacity: '0.4', animationDelay: '2s', transform: 'scale(0.6)'}}>
 <div className="wick" style={{height: '30px', top: '-30px'}}></div>
-<div className="cuboid candle-orange" style={{width: '24px', height: '120px', -Height: '120px'}}>
+<div className="cuboid candle-orange" style={{width: '24px', height: '120px', '--height': '120px'}}>
 <div className="cuboid__face cuboid__face--front"></div>
 <div className="cuboid__face cuboid__face--back"></div>
 <div className="cuboid__face cuboid__face--right"></div>

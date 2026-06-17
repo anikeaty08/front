@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -206,6 +242,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -276,7 +318,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       </p>
 
 <div className="flex flex-col sm:flex-row gap-4 scroll-item scroll-fade-up delay-300 mt-10 gap-x-4 gap-y-4 items-center" style={{animationPlayState: 'running'}}>
-<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<button className="group inline-flex overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] focus:outline-none sm:w-auto text-sm font-medium text-white w-full h-[54px] rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
 <style>
             @keyframes beam-spin { to { transform: rotate(360deg); } }
             @keyframes lines-slide {
@@ -979,7 +1021,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-[8rem] text-white/10 select-none font-oswald font-light tracking-tight flex">
 <span data-counter-suffix="%" data-counter-target="20">20%</span>
 </span>
-<div className="absolute top-1/2 left-0 h-[4px] bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_18px_rgba(59,130,246,0.6)] animate-width" style={{-TargetWidth: '100%'}}></div>
+<div className="absolute top-1/2 left-0 h-[4px] bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_18px_rgba(59,130,246,0.6)] animate-width" style={{'--target-width': '100%'}}></div>
 </div>
 </div>
 <div className="relative z-10">
@@ -1014,7 +1056,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       AAPL
                     </span>
 <div className="h-3 flex-1 rounded-full bg-white/5 overflow-hidden">
-<div className="h-full rounded-full bg-[#d946ef] animate-width" style={{-TargetWidth: '80%', animationDelay: '0.1s'}}></div>
+<div className="h-full rounded-full bg-[#d946ef] animate-width" style={{'--target-width': '80%', animationDelay: '0.1s'}}></div>
 </div>
 <span className="w-12 shrink-0 text-right text-sm text-white font-medium font-sans animate-fade-up" style={{animationDelay: '0.1s'}}>
                       $800
@@ -1025,7 +1067,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       TSLA
                     </span>
 <div className="h-3 flex-1 rounded-full bg-white/5 overflow-hidden">
-<div className="h-full rounded-full bg-[#22d3ee] animate-width" style={{-TargetWidth: '90%', animationDelay: '0.2s'}}></div>
+<div className="h-full rounded-full bg-[#22d3ee] animate-width" style={{'--target-width': '90%', animationDelay: '0.2s'}}></div>
 </div>
 <span className="w-12 shrink-0 text-right text-sm text-white font-medium font-sans animate-fade-up" style={{animationDelay: '0.2s'}}>
                       $85K
@@ -1036,7 +1078,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       BTC
                     </span>
 <div className="h-3 flex-1 rounded-full bg-white/5 overflow-hidden">
-<div className="h-full rounded-full bg-[#f87171] animate-width" style={{-TargetWidth: '85%', animationDelay: '0.3s'}}></div>
+<div className="h-full rounded-full bg-[#f87171] animate-width" style={{'--target-width': '85%', animationDelay: '0.3s'}}></div>
 </div>
 <span className="w-12 shrink-0 text-right text-sm text-white font-medium font-sans animate-fade-up" style={{animationDelay: '0.3s'}}>
                       $42K
@@ -1047,7 +1089,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       NVDA
                     </span>
 <div className="h-3 flex-1 rounded-full bg-white/5 overflow-hidden">
-<div className="h-full rounded-full bg-[#6366f1] animate-width" style={{-TargetWidth: '60%', animationDelay: '0.4s'}}></div>
+<div className="h-full rounded-full bg-[#6366f1] animate-width" style={{'--target-width': '60%', animationDelay: '0.4s'}}></div>
 </div>
 <span className="w-12 shrink-0 text-right text-sm text-white font-medium font-sans animate-fade-up" style={{animationDelay: '0.4s'}}>
                       120

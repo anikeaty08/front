@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -340,6 +376,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -468,7 +510,7 @@ addUtilities({
                   </p>
 </div>
 <div className="flex flex-col sm:flex-row gap-3 pt-2">
-<button className="hover:text-slate- transition-all flex text-sm font-medium bg-gradient-to-b rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] gap-x-2 gap-y-2 items-center hover:bg-slate-950 text-slate-400 from-white/10 via-white/20 to-white/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<button className="hover:text-slate- transition-all flex text-sm font-medium bg-gradient-to-b rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] gap-x-2 gap-y-2 items-center hover:bg-slate-950 text-slate-400 from-white/10 via-white/20 to-white/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <span className="text-sm font-medium text-white/60 tracking-tight">
                       View selected work
                     </span>
@@ -1016,7 +1058,7 @@ addUtilities({
 
 <div className="lg:col-span-5 flex flex-col gap-3">
 
-<div className="group relative overflow-hidden rounded-xl bg-panel/80 p-8 md:p-10 border border-border" data-step-nav="0" style={{-BorderGradient: 'linear-gradient(135deg, rgba(79, 107, 255, 0.55), rgba(79, 107, 255, 0))', -BorderRadiusBefore: '0.75rem', position: 'relative'}}><div className="absolute inset-0 pointer-events-none" style={{background: 'rgba(79, 107, 255, 0.06)'}}></div><div className="flex items-start justify-between w-full relative z-10"><div className="min-w-0"><h3 className="text-4xl md:text-5xl tracking-tight font-normal text-primary">Audit</h3><p className="mt-2 text-[11px] text-muted/80 font-geist tracking-tight">Deliverables: Findings, risks, opportunities</p></div><span className="text-sm font-medium mt-1 ml-2 font-mono text-accent">01</span></div></div>
+<div className="group relative overflow-hidden rounded-xl bg-panel/80 p-8 md:p-10 border border-border" data-step-nav="0" style={{'--border-gradient': 'linear-gradient(135deg, rgba(79, 107, 255, 0.55), rgba(79, 107, 255, 0))', '--border-radius-before': '0.75rem', position: 'relative'}}><div className="absolute inset-0 pointer-events-none" style={{background: 'rgba(79, 107, 255, 0.06)'}}></div><div className="flex items-start justify-between w-full relative z-10"><div className="min-w-0"><h3 className="text-4xl md:text-5xl tracking-tight font-normal text-primary">Audit</h3><p className="mt-2 text-[11px] text-muted/80 font-geist tracking-tight">Deliverables: Findings, risks, opportunities</p></div><span className="text-sm font-medium mt-1 ml-2 font-mono text-accent">01</span></div></div>
 
 <div className="group relative rounded-xl p-8 md:p-10 cursor-pointer transition-all duration-300 border border-border hover:bg-panel/60" data-step-nav="1" style={{}}><div className="flex items-start justify-between w-full"><div className="min-w-0"><h3 className="text-4xl md:text-5xl text-muted group-hover:text-primary tracking-tight font-normal transition-colors duration-300">Align</h3><p className="mt-2 text-[11px] text-muted/70 group-hover:text-muted font-geist tracking-tight transition-colors">Deliverables: Direction, priorities</p></div><span className="text-sm font-medium text-muted/70 group-hover:text-muted mt-1 ml-2 font-mono transition-colors">02</span></div></div>
 
@@ -1026,7 +1068,7 @@ addUtilities({
 </div>
 
 <div className="lg:col-span-7 flex flex-col gap-10 pt-2 lg:pt-0 lg:sticky lg:top-10">
-<div className="w-full aspect-[16/10] overflow-hidden rounded-xl relative group bg-panel border border-border" style={{-BorderGradient: 'linear-gradient(135deg, rgba(230, 233, 242, 0.12), rgba(230, 233, 242, 0))', -BorderRadiusBefore: '0.75rem', position: 'relative'}}>
+<div className="w-full aspect-[16/10] overflow-hidden rounded-xl relative group bg-panel border border-border" style={{'--border-gradient': 'linear-gradient(135deg, rgba(230, 233, 242, 0.12), rgba(230, 233, 242, 0))', '--border-radius-before': '0.75rem', position: 'relative'}}>
 <img alt="Abstract blooming visual" className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105" data-step-image="" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/40d52a45-f7ad-4bd2-bcf1-0017c94fb79c_3840w.webp" style={{opacity: '1'}}/>
 <div className="absolute inset-0 bg-gradient-to-tr from-page via-transparent to-transparent z-10"></div>
 <style>

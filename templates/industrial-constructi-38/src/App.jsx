@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,21 +139,27 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<div className="fixed top-0 left-0 h-0.5 z-[70] w-full origin-left" id="scrollProgress" style={{background: 'linear-gradient(90deg,#f59e0b,#fbbf24,#f59e0b)', transform: 'scaleX(0)'}}></div>
+<div className="fixed top-0 left-0 h-0.5 z-[70] w-full origin-left" id="scrollProgress" style={{background: 'linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b)', transform: 'scaleX(0)'}}></div>
 
 <div aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none">
 
 <div className="absolute inset-0 opacity-[0.35]" style={{backgroundImage: 'linear-gradient(rgba(245,158,11,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.05) 1px, transparent 1px)', backgroundSize: '64px 64px', animation: 'gridMove 14s linear infinite'}}></div>
 
-<div className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full" style={{background: 'radial-gradient(circle, rgba(245,158,11,0.13), transparent 65%)', filter: 'blur(40px)', animation: 'orbFloat1 18s ease-in-out infinite'}}></div>
-<div className="absolute top-1/3 -right-40 w-[40rem] h-[40rem] rounded-full" style={{background: 'radial-gradient(circle, rgba(245,158,11,0.09), transparent 65%)', filter: 'blur(50px)', animation: 'orbFloat2 22s ease-in-out infinite'}}></div>
-<div className="absolute bottom-0 left-1/4 w-[30rem] h-[30rem] rounded-full" style={{background: 'radial-gradient(circle, rgba(120,113,108,0.14), transparent 65%)', filter: 'blur(48px)', animation: 'orbFloat3 26s ease-in-out infinite'}}></div>
+<div className="absolute -top-32 -left-32 w-[34rem] h-[34rem] rounded-full" style={{background: 'radial-gradient(circle, rgba(245, 158, 11, 0.13), transparent 65%)', filter: 'blur(40px)', animation: 'orbFloat1 18s ease-in-out infinite'}}></div>
+<div className="absolute top-1/3 -right-40 w-[40rem] h-[40rem] rounded-full" style={{background: 'radial-gradient(circle, rgba(245, 158, 11, 0.09), transparent 65%)', filter: 'blur(50px)', animation: 'orbFloat2 22s ease-in-out infinite'}}></div>
+<div className="absolute bottom-0 left-1/4 w-[30rem] h-[30rem] rounded-full" style={{background: 'radial-gradient(circle, rgba(120, 113, 108, 0.14), transparent 65%)', filter: 'blur(48px)', animation: 'orbFloat3 26s ease-in-out infinite'}}></div>
 
 <canvas className="absolute inset-0 w-full h-full" id="particles"></canvas>
 
@@ -127,12 +169,12 @@ gtag('config', 'G-2M6V79H761');
 <header className="fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b border-transparent" id="siteHeader" style={{backdropFilter: 'blur(12px)', background: 'rgba(9,9,11,0.85)'}}>
 <nav aria-label="Hauptnavigation" className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16 sm:h-20">
 <a className="flex items-center gap-2.5 group" href="#start">
-<span className="relative flex items-center justify-center w-9 h-9 bg-amber-500 text-zinc-950 font-bold rounded-sm tracking-tighter text-sm overflow-hidden transition-transform duration-300 group-hover:rotate-[8deg] group-hover:scale-110" style={{fontFamily: '\'Archivo\',sans-serif'}}>
+<span className="relative flex items-center justify-center w-9 h-9 bg-amber-500 text-zinc-950 font-bold rounded-sm tracking-tighter text-sm overflow-hidden transition-transform duration-300 group-hover:rotate-[8deg] group-hover:scale-110" style={{fontFamily: '\'Archivo\', sans-serif'}}>
           KB
           <span className="absolute inset-0" style={{background: 'linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%)', backgroundSize: '200% 100%', animation: 'shimmer 3.5s linear infinite'}}></span>
 </span>
 <span className="leading-none">
-<span className="block text-zinc-100 font-semibold tracking-tight text-sm" style={{fontFamily: '\'Archivo\',sans-serif'}}>KRANNIK BAU</span>
+<span className="block text-zinc-100 font-semibold tracking-tight text-sm" style={{fontFamily: '\'Archivo\', sans-serif'}}>KRANNIK BAU</span>
 <span className="block text-zinc-500 text-xs mt-0.5 tracking-wide">Betonstahlverlegung</span>
 </span>
 </a>
@@ -204,7 +246,7 @@ gtag('config', 'G-2M6V79H761');
 </span>
             Kurzfristig einsatzbereit in NRW &amp; Niedersachsen
           </div>
-<h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-zinc-50 tracking-tight leading-[1.08]" id="heroTitle" style={{fontFamily: '\'Archivo\',sans-serif'}}>
+<h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-zinc-50 tracking-tight leading-[1.08]" id="heroTitle" style={{fontFamily: '\'Archivo\', sans-serif'}}>
 <span className="hero-word">Betonstahlverlegung,</span><br/>
 <span className="hero-word">auf</span> <span className="hero-word">die</span> <span className="hero-word">Sie</span>
 <span className="hero-word" style={{background: 'linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', animation: 'shimmer 4s linear infinite'}}>bauen</span>
@@ -288,22 +330,22 @@ gtag('config', 'G-2M6V79H761');
 <section aria-label="Kennzahlen" className="border-b border-zinc-800/70 bg-zinc-900/40 relative overflow-hidden">
 <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16 grid grid-cols-2 lg:grid-cols-4 gap-8">
 <div className="reveal group">
-<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\',sans-serif'}}><span className="counter" data-target="15">0</span><span className="text-amber-500">+</span></p>
+<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\', sans-serif'}}><span className="counter" data-target="15">0</span><span className="text-amber-500">+</span></p>
 <div className="h-0.5 bg-amber-500/60 mt-3 w-12 origin-left stat-bar" style={{transform: 'scaleX(0)'}}></div>
 <p className="text-sm text-zinc-500 mt-2">Jahre Erfahrung im Bewehrungsbau</p>
 </div>
 <div className="reveal group" style={{transitionDelay: '80ms'}}>
-<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\',sans-serif'}}><span className="counter" data-target="200">0</span><span className="text-amber-500">+</span></p>
+<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\', sans-serif'}}><span className="counter" data-target="200">0</span><span className="text-amber-500">+</span></p>
 <div className="h-0.5 bg-amber-500/60 mt-3 w-12 origin-left stat-bar" style={{transform: 'scaleX(0)'}}></div>
 <p className="text-sm text-zinc-500 mt-2">Abgeschlossene Projekte</p>
 </div>
 <div className="reveal group" style={{transitionDelay: '160ms'}}>
-<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\',sans-serif'}}><span className="counter" data-target="2">0</span></p>
+<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\', sans-serif'}}><span className="counter" data-target="2">0</span></p>
 <div className="h-0.5 bg-amber-500/60 mt-3 w-12 origin-left stat-bar" style={{transform: 'scaleX(0)'}}></div>
 <p className="text-sm text-zinc-500 mt-2">Bundesländer im Einsatzgebiet</p>
 </div>
 <div className="reveal group" style={{transitionDelay: '240ms'}}>
-<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\',sans-serif'}}><span className="counter" data-target="24">0</span><span className="text-amber-500">h</span></p>
+<p className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight transition-transform duration-300 group-hover:scale-110 origin-left" style={{fontFamily: '\'Archivo\', sans-serif'}}><span className="counter" data-target="24">0</span><span className="text-amber-500">h</span></p>
 <div className="h-0.5 bg-amber-500/60 mt-3 w-12 origin-left stat-bar" style={{transform: 'scaleX(0)'}}></div>
 <p className="text-sm text-zinc-500 mt-2">Rückmeldung auf Anfragen</p>
 </div>
@@ -316,7 +358,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-3">
 <span className="block w-8 h-px bg-amber-500/60"></span>Unsere Leistungen
           </p>
-<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Bewehrungsarbeiten aus einer Hand</h2>
+<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Bewehrungsarbeiten aus einer Hand</h2>
 <p className="text-zinc-400 mt-4 leading-relaxed">Vom Fundament bis zur Decke: Wir verlegen Betonstahl exakt nach Bewehrungsplan – für Bauunternehmen, Generalunternehmer und Projektleiter, die sich auf ihren Nachunternehmer verlassen müssen.</p>
 </div>
 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
@@ -386,7 +428,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 <section aria-label="Warum KRANNIK BAU" className="py-20 sm:py-28 bg-zinc-900/40 border-y border-zinc-800/70 relative overflow-hidden" id="warum">
-<div aria-hidden="true" className="absolute -left-24 top-1/4 w-72 h-72 rounded-full pointer-events-none" style={{background: 'radial-gradient(circle, rgba(245,158,11,0.08), transparent 70%)', filter: 'blur(30px)', animation: 'orbFloat2 16s ease-in-out infinite'}}></div>
+<div aria-hidden="true" className="absolute -left-24 top-1/4 w-72 h-72 rounded-full pointer-events-none" style={{background: 'radial-gradient(circle, rgba(245, 158, 11, 0.08), transparent 70%)', filter: 'blur(30px)', animation: 'orbFloat2 16s ease-in-out infinite'}}></div>
 <div className="max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative">
 <div className="reveal relative order-2 lg:order-1 group">
 <div aria-hidden="true" className="absolute -inset-3 rounded-md border border-amber-500/20 pointer-events-none" style={{animation: 'floatY 9s ease-in-out infinite'}}></div>
@@ -394,13 +436,13 @@ gtag('config', 'G-2M6V79H761');
 <img alt="Eisenflechter der KRANNIK BAU GmbH bei Bewehrungsarbeiten auf der Baustelle" className="w-full h-[420px] sm:h-[520px] object-cover transition-transform duration-700 group-hover:scale-105 will-change-transform" id="warumImg" src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=900&amp;q=80"/>
 </div>
 <div className="absolute -bottom-5 -right-3 sm:-right-5 bg-zinc-950 border border-zinc-800 rounded-md px-5 py-4 shadow-2xl" style={{animation: 'floatY2 7s ease-in-out infinite'}}>
-<p className="text-2xl font-semibold text-amber-500 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}><span className="counter" data-target="100">0</span>%</p>
+<p className="text-2xl font-semibold text-amber-500 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}><span className="counter" data-target="100">0</span>%</p>
 <p className="text-xs text-zinc-500 mt-1">Ausführung nach Bewehrungsplan</p>
 </div>
 </div>
 <div className="order-1 lg:order-2">
 <p className="reveal text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-3"><span className="block w-8 h-px bg-amber-500/60"></span>Warum KRANNIK BAU?</p>
-<h2 className="reveal text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Weil Ihre Betonage nicht warten kann.</h2>
+<h2 className="reveal text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Weil Ihre Betonage nicht warten kann.</h2>
 <p className="reveal text-zinc-400 mt-4 leading-relaxed">Verzögerungen in der Bewehrung kosten Geld, Takt und Nerven. Wir sorgen dafür, dass Ihre Abnahme planmäßig läuft – mit eingespielten Teams und klarer Kommunikation.</p>
 <ul className="mt-8 space-y-5">
 <li className="reveal flex gap-4 group/li hover:translate-x-1 transition-transform duration-300">
@@ -440,7 +482,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-7xl mx-auto px-5 sm:px-8">
 <div className="max-w-2xl mx-auto text-center reveal">
 <p className="text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3">Für wen arbeiten wir?</p>
-<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Ihr Partner im Rohbau</h2>
+<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Ihr Partner im Rohbau</h2>
 </div>
 <div className="grid sm:grid-cols-3 gap-5 mt-12">
 <div className="tilt reveal bg-zinc-900/60 border border-zinc-800 rounded-md p-7 text-center hover:border-amber-500/40 transition-colors duration-300 group">
@@ -466,7 +508,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-7xl mx-auto px-5 sm:px-8 relative">
 <div className="max-w-2xl reveal">
 <p className="text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-3"><span className="block w-8 h-px bg-amber-500/60"></span>So einfach geht's</p>
-<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Von der Anfrage zur Abnahme</h2>
+<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Von der Anfrage zur Abnahme</h2>
 </div>
 
 <div aria-hidden="true" className="hidden lg:block absolute left-8 right-8 top-[200px] h-px bg-zinc-800">
@@ -474,23 +516,23 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
 <div className="tilt reveal relative bg-zinc-950 border border-zinc-800 rounded-md p-7 hover:border-amber-500/40 transition-colors duration-300">
-<span className="text-4xl font-semibold text-zinc-800 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>01</span>
+<span className="text-4xl font-semibold text-zinc-800 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>01</span>
 <h3 className="text-zinc-100 font-semibold mt-4 tracking-tight">Anfrage senden</h3>
 <p className="text-sm text-zinc-500 mt-2 leading-relaxed">Pläne, Mengen oder Eckdaten an uns – per Formular, E-Mail oder Telefon.</p>
 </div>
 <div className="tilt reveal relative bg-zinc-950 border border-zinc-800 rounded-md p-7 hover:border-amber-500/40 transition-colors duration-300" style={{transitionDelay: '120ms'}}>
-<span className="text-4xl font-semibold text-zinc-800 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>02</span>
+<span className="text-4xl font-semibold text-zinc-800 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>02</span>
 <h3 className="text-zinc-100 font-semibold mt-4 tracking-tight">Rückmeldung in 24h</h3>
 <p className="text-sm text-zinc-500 mt-2 leading-relaxed">Wir prüfen Ihr Projekt und melden uns schnell mit Verfügbarkeit und Angebot.</p>
 </div>
 <div className="tilt reveal relative bg-zinc-950 border border-zinc-800 rounded-md p-7 hover:border-amber-500/40 transition-colors duration-300" style={{transitionDelay: '240ms'}}>
-<span className="text-4xl font-semibold text-zinc-800 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>03</span>
+<span className="text-4xl font-semibold text-zinc-800 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>03</span>
 <h3 className="text-zinc-100 font-semibold mt-4 tracking-tight">Ausführung nach Plan</h3>
 <p className="text-sm text-zinc-500 mt-2 leading-relaxed">Unsere Kolonne verlegt exakt nach Bewehrungsplan und Statik – im Takt Ihrer Baustelle.</p>
 </div>
 <div className="tilt reveal relative bg-zinc-950 border border-amber-500/30 rounded-md p-7 overflow-hidden" style={{transitionDelay: '360ms'}}>
 <div className="absolute inset-0 pointer-events-none" style={{background: 'linear-gradient(110deg, transparent 40%, rgba(245,158,11,0.07) 50%, transparent 60%)', backgroundSize: '200% 100%', animation: 'shimmer 3s linear infinite'}}></div>
-<span className="text-4xl font-semibold text-amber-500/30 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>04</span>
+<span className="text-4xl font-semibold text-amber-500/30 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>04</span>
 <h3 className="text-zinc-100 font-semibold mt-4 tracking-tight">Abnahmebereit</h3>
 <p className="text-sm text-zinc-500 mt-2 leading-relaxed">Saubere Übergabe zur Bewehrungsabnahme – bereit für die Betonage.</p>
 </div>
@@ -503,7 +545,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
 <div className="max-w-2xl">
 <p className="text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-3"><span className="block w-8 h-px bg-amber-500/60"></span>Projektgalerie</p>
-<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Einblicke in unsere Arbeit</h2>
+<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Einblicke in unsere Arbeit</h2>
 </div>
 <div aria-label="Galerie filtern" className="flex flex-wrap gap-2" role="tablist">
 <button className="filter-btn active text-xs font-medium px-4 py-2 rounded-full border border-amber-500 bg-amber-500 text-zinc-950 transition-all duration-200 hover:scale-105" data-filter="alle">Alle</button>
@@ -567,11 +609,11 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 <section aria-label="Einsatzgebiete" className="py-16 sm:py-20 bg-zinc-900/40 border-y border-zinc-800/70 relative overflow-hidden">
-<div aria-hidden="true" className="absolute right-0 top-0 w-80 h-80 rounded-full pointer-events-none" style={{background: 'radial-gradient(circle, rgba(245,158,11,0.07), transparent 70%)', filter: 'blur(30px)', animation: 'orbFloat1 14s ease-in-out infinite'}}></div>
+<div aria-hidden="true" className="absolute right-0 top-0 w-80 h-80 rounded-full pointer-events-none" style={{background: 'radial-gradient(circle, rgba(245, 158, 11, 0.07), transparent 70%)', filter: 'blur(30px)', animation: 'orbFloat1 14s ease-in-out infinite'}}></div>
 <div className="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col lg:flex-row items-start lg:items-center gap-8 lg:gap-16 relative">
 <div className="reveal max-w-xl">
 <p className="text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-3"><span className="block w-8 h-px bg-amber-500/60"></span>Einsatzgebiete</p>
-<h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Von Herford aus in ganz NRW &amp; Niedersachsen</h2>
+<h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Von Herford aus in ganz NRW &amp; Niedersachsen</h2>
 <p className="text-zinc-400 mt-4 text-sm leading-relaxed">Unser Standort in Herford liegt zentral in Ostwestfalen – ideal für schnelle Einsätze in Bielefeld, Osnabrück, Hannover, Münster, dem Ruhrgebiet und darüber hinaus. Auch überregionale Projekte nach Absprache.</p>
 </div>
 <div className="reveal flex flex-wrap gap-2.5" style={{transitionDelay: '120ms'}}>
@@ -591,7 +633,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-3xl mx-auto px-5 sm:px-8">
 <div className="text-center reveal">
 <p className="text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3">FAQ</p>
-<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Häufige Fragen</h2>
+<h2 className="text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Häufige Fragen</h2>
 </div>
 <div className="mt-10 space-y-3">
 <details className="faq-item reveal group bg-zinc-900/60 border border-zinc-800 rounded-md open:border-amber-500/30 transition-colors duration-300">
@@ -641,7 +683,7 @@ gtag('config', 'G-2M6V79H761');
 <div aria-hidden="true" className="absolute top-10 left-[10%] w-24 h-24 border border-amber-500/20 rounded-full pointer-events-none" style={{animation: 'floatY 8s ease-in-out infinite'}}></div>
 <div aria-hidden="true" className="absolute bottom-12 right-[12%] w-16 h-16 border border-amber-500/25 rounded-sm pointer-events-none" style={{animation: 'floatY2 10s ease-in-out infinite'}}></div>
 <div className="relative max-w-4xl mx-auto px-5 sm:px-8 py-20 sm:py-28 text-center">
-<h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-50 tracking-tight leading-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Ihr nächstes Projekt braucht<br className="hidden sm:block"/> eine <span style={{background: 'linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', animation: 'shimmer 4s linear infinite'}}>starke Bewehrung</span>?</h2>
+<h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-semibold text-zinc-50 tracking-tight leading-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Ihr nächstes Projekt braucht<br className="hidden sm:block"/> eine <span style={{background: 'linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', animation: 'shimmer 4s linear infinite'}}>starke Bewehrung</span>?</h2>
 <p className="reveal text-zinc-400 mt-5 max-w-xl mx-auto leading-relaxed" style={{transitionDelay: '100ms'}}>Senden Sie uns Ihre Pläne oder Eckdaten – wir melden uns schnell mit Verfügbarkeit und Angebot.</p>
 <div className="reveal flex flex-col sm:flex-row justify-center gap-3 mt-9" style={{transitionDelay: '200ms'}}>
 <a className="magnetic relative inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-semibold px-8 py-4 rounded-sm text-sm transition-all duration-200 hover:shadow-xl hover:shadow-amber-500/30 overflow-hidden" href="#kontakt">
@@ -658,11 +700,11 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 <section aria-label="Kontakt" className="py-20 sm:py-28 bg-zinc-900/40 border-t border-zinc-800/70 relative overflow-hidden" id="kontakt">
-<div aria-hidden="true" className="absolute -left-20 bottom-0 w-72 h-72 rounded-full pointer-events-none" style={{background: 'radial-gradient(circle, rgba(245,158,11,0.07), transparent 70%)', filter: 'blur(30px)', animation: 'orbFloat3 18s ease-in-out infinite'}}></div>
+<div aria-hidden="true" className="absolute -left-20 bottom-0 w-72 h-72 rounded-full pointer-events-none" style={{background: 'radial-gradient(circle, rgba(245, 158, 11, 0.07), transparent 70%)', filter: 'blur(30px)', animation: 'orbFloat3 18s ease-in-out infinite'}}></div>
 <div className="max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-5 gap-12 lg:gap-16 relative">
 <div className="lg:col-span-2">
 <p className="reveal text-amber-500 text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-3"><span className="block w-8 h-px bg-amber-500/60"></span>Kontakt</p>
-<h2 className="reveal text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\',sans-serif'}}>Projekt anfragen</h2>
+<h2 className="reveal text-3xl sm:text-4xl font-semibold text-zinc-50 tracking-tight" style={{fontFamily: '\'Archivo\', sans-serif'}}>Projekt anfragen</h2>
 <p className="reveal text-zinc-400 mt-4 text-sm leading-relaxed">Schnelle Rückmeldung garantiert: Wir antworten in der Regel innerhalb von 24 Stunden – auch bei kurzfristigen Anfragen.</p>
 <div className="mt-8 space-y-4">
 <a className="reveal flex items-center gap-4 bg-zinc-950 border border-zinc-800 rounded-md p-5 hover:border-amber-500/40 hover:-translate-y-1 transition-all duration-300 group" href="tel:+495221000000">
@@ -734,8 +776,8 @@ gtag('config', 'G-2M6V79H761');
 <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
 <div>
 <div className="flex items-center gap-2.5">
-<span className="flex items-center justify-center w-9 h-9 bg-amber-500 text-zinc-950 font-bold rounded-sm tracking-tighter text-sm" style={{fontFamily: '\'Archivo\',sans-serif'}}>KB</span>
-<span className="text-zinc-100 font-semibold tracking-tight text-sm" style={{fontFamily: '\'Archivo\',sans-serif'}}>KRANNIK BAU GmbH</span>
+<span className="flex items-center justify-center w-9 h-9 bg-amber-500 text-zinc-950 font-bold rounded-sm tracking-tighter text-sm" style={{fontFamily: '\'Archivo\', sans-serif'}}>KB</span>
+<span className="text-zinc-100 font-semibold tracking-tight text-sm" style={{fontFamily: '\'Archivo\', sans-serif'}}>KRANNIK BAU GmbH</span>
 </div>
 </div></div></footer>
     </>

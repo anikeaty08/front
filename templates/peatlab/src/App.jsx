@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -69,6 +105,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -141,7 +183,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full" data-animate-children="true">
 
 <div className="lg:col-span-2 overflow-hidden transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn bg-slate-900/60 border border-slate-800 hover:border-slate-700 rounded-2xl relative backdrop-blur [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] group">
-<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), 0 40px 120px rgba(6,182,212,0.1)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 40px 120px rgba(6,182,212,0.1)'}}></div>
 <div className="sm:p-6 p-5">
 <div className="flex items-center gap-3 mb-2">
 <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
@@ -192,7 +234,7 @@ Estimated time saved: <span className="text-emerald-400">40 hrs/wk</span>.</pre>
 </div>
 
 <div className="relative overflow-hidden rounded-2xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] group" style={{animationDelay: '.05s'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 24px 70px rgba(168,85,247,0.1)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 24px 70px rgba(168,85,247,0.1)'}}></div>
 <div className="p-5 h-full flex flex-col">
 <div className="flex items-center gap-3 mb-2">
 <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
@@ -235,7 +277,7 @@ Estimated time saved: <span className="text-emerald-400">40 hrs/wk</span>.</pre>
 </div>
 
 <div className="relative overflow-hidden rounded-2xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn [animation:fadeSlideIn_0.8s_ease-out_0.3s_both] group" style={{animationDelay: '.1s'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 30px 80px rgba(59,130,246,0.1)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(59,130,246,0.1)'}}></div>
 <div className="p-5 h-full flex flex-col">
 <div className="flex items-center gap-3 mb-2">
 <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
@@ -271,7 +313,7 @@ Estimated time saved: <span className="text-emerald-400">40 hrs/wk</span>.</pre>
 </div>
 
 <div className="lg:col-span-2 relative overflow-hidden rounded-2xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 animate-fadeSlideIn [animation:fadeSlideIn_0.8s_ease-out_0.4s_both] group" style={{animationDelay: '.15s'}}>
-<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), 0 30px 80px rgba(99,102,241,0.1)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(99,102,241,0.1)'}}></div>
 <div className="p-5 sm:p-6 h-full flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
 <div className="flex-1">
 <div className="flex items-center gap-3 mb-2">

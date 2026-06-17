@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -248,6 +284,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -347,7 +389,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex bg-slate-200/60 rounded-2xl mb-6 pt-1 pr-1 pb-1 pl-1" id="dashboard-tabs" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="flex bg-slate-200/60 rounded-2xl mb-6 pt-1 pr-1 pb-1 pl-1" id="dashboard-tabs" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1))', '--border-radius-before': '16px'}}>
 <button className="nav-tab flex-1 py-2.5 text-sm font-medium text-slate-500 transition-all duration-300 hover:text-slate-700 cursor-pointer">Rooms</button>
 <button className="nav-tab flex-1 transition-all duration-300 cursor-pointer text-sm font-semibold text-slate-900 bg-white rounded-xl pt-2.5 pb-2.5 shadow-sm">Devices</button>
 </div>
@@ -570,7 +612,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex mb-8 absolute right-20 bottom-72 left-20 items-center justify-center">
 <div className="relative">
-<div className="flex cursor-pointer hover:bg-slate-200 transition-all duration-200 active:scale-95 bg-slate-200/60 rounded-full pt-2.5 pr-6 pb-2.5 pl-6 gap-x-3 gap-y-3 items-center" id="room-dropdown-trigger" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex cursor-pointer hover:bg-slate-200 transition-all duration-200 active:scale-95 bg-slate-200/60 rounded-full pt-2.5 pr-6 pb-2.5 pl-6 gap-x-3 gap-y-3 items-center" id="room-dropdown-trigger" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', '--border-radius-before': '9999px'}}>
 <span className="text-sm font-medium text-slate-700">Living Room Unit</span>
 <iconify-icon className="text-slate-500 transition-transform duration-300" height="16" icon="lucide:chevron-down" id="room-dropdown-icon-v2" style={{strokeWidth: '2'}} width="16"></iconify-icon>
 </div>
@@ -625,22 +667,22 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex mt-8 pr-2 pl-2 items-center justify-between" id="action-bar">
 <div className="action-btn flex flex-col gap-2 cursor-pointer group items-center" data-action="fan">
-<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-gradient-to-r from-orange-400 to-rose-600 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-gradient-to-r from-orange-400 to-rose-600 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="" height="24" icon="solar:tuning-linear" style={{strokeWidth: '1.5', color: 'rgb(255, 255, 255)'}} width="24"></iconify-icon>
 </div>
 <span className="label uppercase transition-colors duration-300 text-xs font-semibold text-orange-600 tracking-wider">mode</span>
 </div><div className="action-btn flex flex-col gap-2 cursor-pointer group items-center" data-action="fan">
-<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-slate-50 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-slate-50 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="" height="24" icon="solar:wind-linear" style={{strokeWidth: '1.5', color: 'rgb(71, 85, 105)'}} width="24"></iconify-icon>
 </div>
 <span className="label text-xs font-semibold text-slate-400 uppercase tracking-wider group-hover:text-slate-600 transition-colors duration-300">Fan</span>
 </div><div className="action-btn flex flex-col gap-2 cursor-pointer group items-center" data-action="fan">
-<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-slate-50 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-slate-50 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="" height="24" icon="solar:clock-circle-linear" style={{strokeWidth: '1.5', color: 'rgb(71, 85, 105)'}} width="24"></iconify-icon>
 </div>
 <span className="label uppercase group-hover:text-slate-600 transition-colors duration-300 text-xs font-semibold text-slate-400 tracking-wider">Timer</span>
 </div><div className="action-btn flex flex-col gap-2 cursor-pointer group items-center" data-action="fan">
-<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-slate-50 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex border-[3px] transition-transform group-hover:scale-105 text-slate-400 bg-slate-50 w-16 h-16 rounded-full shadow-[-6px_-6px_16px_rgba(255,255,255,0.9),6px_6px_16px_rgba(209,213,219,0.4)] items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="" height="24" icon="solar:pulse-linear" style={{strokeWidth: '1.5', color: 'rgb(71, 85, 105)'}} width="24"></iconify-icon>
 </div>
 <span className="label uppercase group-hover:text-slate-600 transition-colors duration-300 text-xs font-semibold text-slate-400 tracking-wider">Data</span>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -49,6 +85,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -100,7 +142,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="container max-w-6xl mx-auto mb-32 px-6" id="services">
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-<div className="lg:col-span-7 flashlight-card group flex flex-col min-h-[480px] bg-zinc-950/80 backdrop-blur-md border border-white/10 rounded-3xl p-10 justify-between" style={{-MouseX: '305px', -MouseY: '426px'}}>
+<div className="lg:col-span-7 flashlight-card group flex flex-col min-h-[480px] bg-zinc-950/80 backdrop-blur-md border border-white/10 rounded-3xl p-10 justify-between" style={{'--mouse-x': '305px', '--mouse-y': '426px'}}>
 <div className="relative z-10">
 <div className="flex bg-white/5 text-white w-12 h-12 border border-white/10 rounded-xl mb-8 items-center justify-center">
 <iconify-icon icon="solar:global-linear" width="24"></iconify-icon>
@@ -134,7 +176,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="lg:col-span-5 flex flex-col gap-6">
 
-<div className="flex-1 border border-white/10 bg-zinc-950/80 backdrop-blur-md rounded-3xl p-8 flashlight-card relative overflow-hidden group" style={{-MouseX: '59.09375px', -MouseY: '276px'}}>
+<div className="flex-1 border border-white/10 bg-zinc-950/80 backdrop-blur-md rounded-3xl p-8 flashlight-card relative overflow-hidden group" style={{'--mouse-x': '59.09375px', '--mouse-y': '276px'}}>
 <div className="relative z-10">
 <div className="flex justify-between items-start mb-6">
 <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
@@ -148,7 +190,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col flashlight-card text-center bg-zinc-900/30 backdrop-blur-md border border-white/10 rounded-3xl p-8 items-center justify-center" style={{-MouseX: '91.09375px', -MouseY: '185px'}}>
+<div className="flex flex-col flashlight-card text-center bg-zinc-900/30 backdrop-blur-md border border-white/10 rounded-3xl p-8 items-center justify-center" style={{'--mouse-x': '91.09375px', '--mouse-y': '185px'}}>
 <h3 className="text-xl font-medium tracking-tight mb-2">¿Necesitas ideas para tu próxima campaña?</h3>
 <p className="text-zinc-500 font-normal text-xs mb-6">Nuestro equipo creativo está listo para ayudarte.</p>
 <a className="hover:bg-white/90 transition-colors flex items-center justify-center gap-2 text-sm font-medium text-black bg-white w-full rounded-xl py-3" href="#contact">

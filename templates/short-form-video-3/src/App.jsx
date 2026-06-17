@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -88,6 +124,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -302,7 +344,7 @@ gtag('config', 'G-2M6V79H761');
 <span>0%</span>
 </div>
 <div className="w-full h-2 rounded-full bg-white/[0.05] overflow-hidden">
-<div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 bar-animate" style={{-BarWidth: '5%'}}></div>
+<div className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 bar-animate" style={{'--bar-width': '5%'}}></div>
 </div>
 </div>
 </div>
@@ -321,7 +363,7 @@ gtag('config', 'G-2M6V79H761');
 <span>jusqu'à 3,5%</span>
 </div>
 <div className="w-full h-2 rounded-full bg-white/[0.05] overflow-hidden">
-<div className="h-full rounded-full bg-gradient-to-r from-orange-600 to-orange-400 bar-animate" style={{-BarWidth: '70%'}}></div>
+<div className="h-full rounded-full bg-gradient-to-r from-orange-600 to-orange-400 bar-animate" style={{'--bar-width': '70%'}}></div>
 </div>
 </div>
 </div>

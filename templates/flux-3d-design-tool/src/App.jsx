@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -400,6 +436,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -505,7 +547,7 @@ addUtilities({
 <path className="" d="m12 5 7 7-7 7"></path>
 </svg>
 </button>
-<div className="flex bg-white/5 rounded-full pt-3 pr-4 pb-3 pl-4 backdrop-blur-xl gap-x-4 gap-y-4 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex bg-white/5 rounded-full pt-3 pr-4 pb-3 pl-4 backdrop-blur-xl gap-x-4 gap-y-4 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <div className="flex -space-x-2">
 <div className="bg-neutral-700 w-6 h-6 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/90ec73f0-6fd3-4d0c-922c-fcc592c983df_320w.webp)] bg-cover bg-center border-[#050505] border rounded-full"></div>
 <div className="bg-neutral-600 w-6 h-6 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3e3e1091-f8e8-4022-a02a-fa37a35c59a5_320w.jpg)] bg-cover bg-center border-[#050505] border rounded-full"></div>
@@ -535,7 +577,7 @@ addUtilities({
 </div>
 <div className="flex-1 overflow-hidden bg-neutral-950 relative perspective-midrange">
 <iframe allowfullscreen="" className="absolute inset-0 w-full h-full border-none" data-container-bg="true" frameborder="0" loading="lazy" src="https://my.spline.design/genkubgreetingrobot-ojzcjWInavuKpZSt2luvgvjl/"></iframe>
-<div className="absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '50px 50px', transform: 'perspective(500px) rotateX(60deg) translateY(100px) scale(2)', opacity: '0.5'}}></div>
+<div className="absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', backgroundSize: '50px 50px', transform: 'perspective(500px) rotateX(60deg) translateY(100px) scale(2)', opacity: '0.5'}}></div>
 <div className="transform-style-preserve-3d animate-[spin-slow_10s_linear_infinite] w-32 h-32 absolute top-3/4 left-1/2" style={{marginLeft: '-4rem', marginTop: '-4rem'}}>
 <div className="backdrop-blur-[2px] bg-purple-500/10 border-purple-500/40 border absolute top-0 right-0 bottom-0 left-0" style={{transform: 'translateZ(4rem)'}}></div>
 <div className="absolute inset-0 border border-purple-500/40 bg-purple-500/10 backdrop-blur-[2px]" style={{transform: 'rotateY(180deg) translateZ(4rem)'}}></div>
@@ -693,19 +735,19 @@ addUtilities({
 <div className="mb-20 max-w-none">
 <h2 className="text-3xl md:text-5xl font-display font-normal leading-tight tracking-tight animate-on-scroll karaoke-trigger">
 
-<span className="block karaoke-line direction-left" style={{-Delay: '0s'}}>
+<span className="block karaoke-line direction-left" style={{'--delay': '0s'}}>
               Flux is the native engine for the spatial web.
             </span>
 
-<span className="block karaoke-line direction-left" style={{-Delay: '2.4s'}}>
+<span className="block karaoke-line direction-left" style={{'--delay': '2.4s'}}>
               Built for performance using WebGPU,
             </span>
 
-<span className="block karaoke-line direction-left" style={{-Delay: '4.8s'}}>
+<span className="block karaoke-line direction-left" style={{'--delay': '4.8s'}}>
               enabling designers to construct fidelity-first experiences
             </span>
 
-<span className="block karaoke-line direction-left" style={{-Delay: '7.2s'}}>
+<span className="block karaoke-line direction-left" style={{'--delay': '7.2s'}}>
               without writing a single line of shader code.
             </span>
 </h2>
@@ -1257,7 +1299,7 @@ addUtilities({
 </div>
 </div>
 <div className="grid grid-cols-1 gap-6 animate-on-scroll" style={{animationDelay: '200ms'}}>
-<div className="gradient-border-mask bg-gradient-to-bl from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="gradient-border-mask bg-gradient-to-bl from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex gap-1 mb-4 text-yellow-500">
 <svg className="lucide lucide-star w-4 h-4 fill-current" data-lucide="star" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
 <svg className="lucide lucide-star w-4 h-4 fill-current" data-lucide="star" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
@@ -1273,7 +1315,7 @@ addUtilities({
                 Sarah Chen, Lead DevOps
               </p>
 </div>
-<div className="gradient-border-mask md:translate-x-8 bg-gradient-to-l from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 translate-x-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="gradient-border-mask md:translate-x-8 bg-gradient-to-l from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 translate-x-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex gap-1 mb-4 text-yellow-500">
 <svg className="lucide lucide-star w-4 h-4 fill-current" data-lucide="star" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
 <svg className="lucide lucide-star w-4 h-4 fill-current" data-lucide="star" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
@@ -1319,7 +1361,7 @@ addUtilities({
 </div>
 <div className="grid gap-6 lg:grid-cols-3 mt-10 gap-x-6 gap-y-6">
 
-<div className="animate-on-scroll bg-[radial-gradient(circle_at_top_left,var(--tw-gradient-stops))] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-xl" style={{animation: 'fadeSlideIn 1.0s ease-out 0.3s both', position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="animate-on-scroll bg-[radial-gradient(circle_at_top_left,var(--tw-gradient-stops))] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-xl" style={{animation: 'fadeSlideIn 1.0s ease-out 0.3s both', position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between">
 <div className="">
 <div className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">
@@ -1415,7 +1457,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="animate-on-scroll bg-[radial-gradient(circle_at_top_left,var(--tw-gradient-stops))] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-xl" style={{animation: 'fadeSlideIn 1.0s ease-out 0.5s both', position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="animate-on-scroll bg-[radial-gradient(circle_at_top_left,var(--tw-gradient-stops))] from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-xl" style={{animation: 'fadeSlideIn 1.0s ease-out 0.5s both', position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between">
 <div className="">
 <div className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">

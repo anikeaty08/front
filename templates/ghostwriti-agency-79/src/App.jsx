@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -142,6 +178,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -418,7 +460,7 @@ addUtilities({
 <span>98%</span>
 </div>
 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-<div className="h-full bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full w-[98%] progress-fill" style={{-W: '98%'}}></div>
+<div className="h-full bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full w-[98%] progress-fill" style={{'--w': '98%'}}></div>
 </div>
 </div>
 
@@ -428,7 +470,7 @@ addUtilities({
 <span>100%</span>
 </div>
 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-<div className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full w-[100%] progress-fill" style={{-W: '100%'}}></div>
+<div className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full w-[100%] progress-fill" style={{'--w': '100%'}}></div>
 </div>
 </div>
 
@@ -438,7 +480,7 @@ addUtilities({
 <span>95%</span>
 </div>
 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-<div className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full w-[95%] progress-fill" style={{-W: '95%'}}></div>
+<div className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full w-[95%] progress-fill" style={{'--w': '95%'}}></div>
 </div>
 </div>
 </div>

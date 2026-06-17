@@ -8,6 +8,42 @@ function useIntersectionObserver(options = {}) {
   const ref = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setIsIntersecting(true);
@@ -48,7 +84,7 @@ const Reveal = ({ children, delay = 0, className = "", direction = "up" }) => {
         isVisible ? "opacity-100 translate-y-0 translate-x-0 scale-100" : `opacity-0 ${transforms[direction]}`,
         className
       )}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={{transitionDelay: `${delay}ms`}}
     >
       {children}
     </div>
@@ -268,7 +304,7 @@ const ParallaxQuote = () => {
     <section className="relative py-40 md:py-56 flex items-center justify-center px-6 overflow-hidden">
       <div 
         className="absolute inset-0 w-full h-full bg-fixed bg-center bg-no-repeat bg-cover" 
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000&auto=format&fit=crop')" }}
+        style={{backgroundImage: "url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000&auto=format&fit=crop')"}}
       ></div>
       <div className="absolute inset-0 bg-[#0A0A0A]/70 mix-blend-multiply"></div>
       

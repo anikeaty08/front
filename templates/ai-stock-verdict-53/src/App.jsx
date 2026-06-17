@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -248,6 +284,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -270,7 +312,7 @@ addUtilities({
 
 <div className="w-full h-full relative" id="carouselWrapper">
 
-<div className="carousel-slide spotlight-card rounded-[2rem] card-shadow border border-white/5 flex flex-col overflow-hidden bg-neutral-900/60 backdrop-blur-2xl" data-stock="UBER" style={{-MouseX: '-415.0999755859375px', -MouseY: '-239.8000030517578px'}}>
+<div className="carousel-slide spotlight-card rounded-[2rem] card-shadow border border-white/5 flex flex-col overflow-hidden bg-neutral-900/60 backdrop-blur-2xl" data-stock="UBER" style={{'--mouse-x': '-415.0999755859375px', '--mouse-y': '-239.8000030517578px'}}>
 
 <div className="bg-center text-center bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9946eb6e-f3c2-4237-882b-234490a4caa6_800w.webp)] bg-cover border-white/5 border-b pt-8 pr-8 pb-4 pl-8 relative">
 <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
@@ -322,7 +364,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="carousel-slide spotlight-card rounded-[2rem] card-shadow border border-white/5 flex flex-col overflow-hidden bg-neutral-900/60 backdrop-blur-2xl" data-stock="NVDA" style={{-MouseX: '-415.0999755859375px', -MouseY: '-239.8000030517578px'}}>
+<div className="carousel-slide spotlight-card rounded-[2rem] card-shadow border border-white/5 flex flex-col overflow-hidden bg-neutral-900/60 backdrop-blur-2xl" data-stock="NVDA" style={{'--mouse-x': '-415.0999755859375px', '--mouse-y': '-239.8000030517578px'}}>
 <div className="bg-center text-center bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&amp;w=800&amp;auto=format&amp;fit=crop')] bg-cover border-white/5 border-b pt-8 pr-8 pb-4 pl-8 relative">
 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
 <div className="relative z-10">
@@ -357,7 +399,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="carousel-slide spotlight-card rounded-[2rem] card-shadow border border-white/5 flex flex-col overflow-hidden bg-neutral-900/60 backdrop-blur-2xl" data-stock="TSLA" style={{-MouseX: '-415.0999755859375px', -MouseY: '-239.8000030517578px'}}>
+<div className="carousel-slide spotlight-card rounded-[2rem] card-shadow border border-white/5 flex flex-col overflow-hidden bg-neutral-900/60 backdrop-blur-2xl" data-stock="TSLA" style={{'--mouse-x': '-415.0999755859375px', '--mouse-y': '-239.8000030517578px'}}>
 <div className="bg-center text-center bg-[url('https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&amp;w=800&amp;auto=format&amp;fit=crop')] bg-cover border-white/5 border-b pt-8 pr-8 pb-4 pl-8 relative">
 <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 <div className="relative z-10">
@@ -429,7 +471,7 @@ addUtilities({
 <div className="opacity-30 z-0 absolute top-0 right-0 bottom-0 left-0 pointer-events-none">
 <div className="bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/40 via-purple-900/10 to-transparent w-[600px] h-[600px] absolute top-0 right-0 blur-3xl"></div>
 </div>
-<div className="z-10 aspect-[3/4] card-shadow flex flex-col bg-neutral-900/40 w-full max-w-sm border-blue-500/20 border rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-xl spotlight-card reveal-on-scroll" style={{-MouseX: '-405.5px', -MouseY: '-1186.5px'}}>
+<div className="z-10 aspect-[3/4] card-shadow flex flex-col bg-neutral-900/40 w-full max-w-sm border-blue-500/20 border rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-xl spotlight-card reveal-on-scroll" style={{'--mouse-x': '-405.5px', '--mouse-y': '-1186.5px'}}>
 <div className="flex mb-8 items-center justify-between reveal-on-scroll" style={{transitionDelay: '100ms'}}>
 <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg shadow-blue-900/20">
 <svg className="text-white" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
@@ -474,7 +516,7 @@ addUtilities({
 <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-900/40 via-green-900/10 to-transparent blur-3xl"></div>
 </div>
-<div className="aspect-[3/4] card-shadow flex flex-col bg-neutral-900/40 w-full max-w-sm z-10 border-emerald-500/20 border rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-xl spotlight-card reveal-on-scroll" style={{-MouseX: '-405.5px', -MouseY: '-2135.5px'}}>
+<div className="aspect-[3/4] card-shadow flex flex-col bg-neutral-900/40 w-full max-w-sm z-10 border-emerald-500/20 border rounded-[2rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-xl spotlight-card reveal-on-scroll" style={{'--mouse-x': '-405.5px', '--mouse-y': '-2135.5px'}}>
 <div className="flex items-center justify-between mb-8 reveal-on-scroll" style={{transitionDelay: '100ms'}}>
 <div className="p-3 bg-gradient-to-br from-emerald-500 to-green-700 rounded-2xl shadow-lg shadow-emerald-900/20">
 <svg className="text-white" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>

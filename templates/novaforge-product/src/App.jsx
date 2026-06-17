@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -124,6 +160,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -196,7 +238,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         NovaForge is a product studio for ambitious teams. We blend strategy, design, and engineering to launch delightful, scalable digital experiences.
       </p>
 <div className="flex flex-col gap-3 sm:flex-row slide-in-up animate-delay-600 mt-8 items-center justify-center" style={{animationPlayState: 'running'}}>
-<a className="button hover:from-violet-400 hover:to-indigo-400 shadow-violet-500/25 transition-colors sm:w-auto ring-white/10 ring-1 text-sm font-medium text-white w-full rounded-xl shadow-lg" href="#work" style={{-HButton: '48px', -WButton: '102px', -Round: '0.75rem', cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(223, 113, 255, 0.8) 0%, rgba(223, 113, 255, 0) 100%), linear-gradient(0deg, rgb(122, 90, 248), rgb(122, 90, 248))', borderRadius: 'var(--round)', border: 'none', padding: '12px 18px'}}>
+<a className="button hover:from-violet-400 hover:to-indigo-400 shadow-violet-500/25 transition-colors sm:w-auto ring-white/10 ring-1 text-sm font-medium text-white w-full rounded-xl shadow-lg" href="#work" style={{'--h-button': '48px', '--w-button': '102px', '--round': '0.75rem', cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(223, 113, 255, 0.8) 0%, rgba(223, 113, 255, 0) 100%), linear-gradient(0deg, rgb(122, 90, 248), rgb(122, 90, 248))', borderRadius: 'var(--round)', border: 'none', padding: '12px 18px'}}>
 <div className="fold" style={{zIndex: '1', position: 'absolute', top: '0px', right: '0px', height: '1rem', width: '1rem', display: 'inline-block', background: 'radial-gradient(100% 75% at 55% center, rgba(223, 113, 255, 0.8) 0%, rgba(223, 113, 255, 0) 100%)', boxShadow: 'black 0px 0px 3px', borderBottomLeftRadius: '0.5rem', borderTopRightRadius: 'var(--round)'}}></div>
 <div className="points_wrapper" style={{overflow: 'hidden', width: '100%', height: '100%', pointerEvents: 'none', position: 'absolute', zIndex: '1'}}>
 <div className="point" style={{bottom: '-10px', position: 'absolute', animation: 'floating-points infinite ease-in-out', pointerEvents: 'none', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '10%', opacity: '1', animationDuration: '2.35s', animationDelay: '0.2s'}}></div>
@@ -315,7 +357,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative overflow-hidden shadow-black/50 bg-white/5 border-white/10 border rounded-2xl sm:rounded-3xl shadow-2xl slide-in-left" style={{transform: 'perspective(1000px) rotateX(0deg)', animationPlayState: 'running'}}>
 <img alt="Team collaborating in modern studio" className="h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-[62vh] w-full max-h-full object-cover saturate-50" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/44cd4dc8-e179-4757-ab22-93db367d24e3_3840w.jpg" style={{}}/>
 <div className="pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-violet-600/10 via-transparent to-fuchsia-600/10 mix-blend-overlay"></div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 0 2px rgba(124,58,237,0.15), inset 0 40px 120px rgba(0,0,0,0.35)'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 0 2px rgba(124, 58, 237, 0.15), inset 0 40px 120px rgba(0,0,0,0.35)'}}></div>
 </div>
 </div>
 <div className="order-1 lg:order-2 h-full max-h-full relative">
@@ -692,7 +734,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             hello@novaforge.studio
             <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </a>
-<a className="button hover:from-violet-400 hover:to-indigo-400 shadow-violet-500/25 transition-colors sm:w-auto text-sm font-medium text-white w-full ring-white/10 ring-1 rounded-xl shadow-lg" href="#work" style={{-HButton: '48px', -WButton: '102px', -Round: '0.75rem', cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(223, 113, 255, 0.8) 0%, rgba(223, 113, 255, 0) 100%), linear-gradient(0deg, rgb(122, 90, 248), rgb(122, 90, 248))', borderRadius: 'var(--round)', border: 'none', padding: '12px 18px'}}>
+<a className="button hover:from-violet-400 hover:to-indigo-400 shadow-violet-500/25 transition-colors sm:w-auto text-sm font-medium text-white w-full ring-white/10 ring-1 rounded-xl shadow-lg" href="#work" style={{'--h-button': '48px', '--w-button': '102px', '--round': '0.75rem', cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(223, 113, 255, 0.8) 0%, rgba(223, 113, 255, 0) 100%), linear-gradient(0deg, rgb(122, 90, 248), rgb(122, 90, 248))', borderRadius: 'var(--round)', border: 'none', padding: '12px 18px'}}>
 <div className="fold" style={{zIndex: '1', position: 'absolute', top: '0px', right: '0px', height: '1rem', width: '1rem', display: 'inline-block', background: 'radial-gradient(100% 75% at 55% center, rgba(223, 113, 255, 0.8) 0%, rgba(223, 113, 255, 0) 100%)', boxShadow: 'black 0px 0px 3px', borderBottomLeftRadius: '0.5rem', borderTopRightRadius: 'var(--round)'}}></div>
 <div className="points_wrapper" style={{overflow: 'hidden', width: '100%', height: '100%', pointerEvents: 'none', position: 'absolute', zIndex: '1'}}>
 <div className="point" style={{bottom: '-10px', position: 'absolute', animation: 'floating-points infinite ease-in-out', pointerEvents: 'none', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '10%', opacity: '1', animationDuration: '2.35s', animationDelay: '0.2s'}}></div>

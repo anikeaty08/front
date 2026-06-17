@@ -75,7 +75,7 @@ export default function App() {
           <div className="flex justify-between items-end px-6 mb-4">
             <h2 className="text-xl font-medium tracking-tight text-slate-900">热门线路</h2>
             <a href="#" className="text-xs text-gray-500 flex items-center gap-1 hover:text-slate-800">
-              全部 <iconify-icon icon="solar:alt-arrow-right-linear" style={{ strokeWidth: "1.5" }}></iconify-icon>
+              全部 <iconify-icon icon="solar:alt-arrow-right-linear" style={{strokeWidth: "1.5"}}></iconify-icon>
             </a>
           </div>
           

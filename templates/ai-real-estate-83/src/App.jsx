@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -120,6 +156,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -154,17 +196,17 @@ gtag('config', 'G-2M6V79H761');
 </nav>
 
 <section className="relative overflow-hidden">
-<div className="absolute inset-0 -z-10" style={{background: 'radial-gradient(ellipse at top,rgba(99,102,241,0.12),transparent 60%)', backgroundImage: 'linear-gradient(135deg,rgba(17,24,39,0.55),rgba(30,27,75,0.35)),url(\'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+<div className="absolute inset-0 -z-10" style={{background: 'radial-gradient(ellipse at top,rgba(99,102,241,0.12),transparent 60%)', backgroundImage: 'linear-gradient(135deg,rgba(17,24,39,0.55),rgba(30,27,75,0.35)), url(\'https: //images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
 <div className="max-w-7xl mx-auto px-6 pt-20 pb-16">
 <div className="grid lg:grid-cols-2 gap-16 items-center">
 <div className="fade-up" style={{animationDelay: '0.1s'}}>
-<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 text-sm font-medium" style={{background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(255,255,255,0.6)', color: '#6366F1'}}>
+<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 text-sm font-medium" style={{background: 'rgba(255, 255, 255, 0.92)', border: '1px solid rgba(255,255,255,0.6)', color: '#6366F1'}}>
 <iconify-icon icon="solar:verified-check-linear" width="18"></iconify-icon>
               Trusted by Real Estate Professionals
             </div>
-<h1 className="font-bold tracking-tight leading-tight" style={{fontSize: 'clamp(2.75rem,5vw,4.5rem)', color: '#FFFFFF', textShadow: '0 2px 12px rgba(0,0,0,0.4)'}}>
+<h1 className="font-bold tracking-tight leading-tight" style={{fontSize: 'clamp(2.75rem, 5vw, 4.5rem)', color: '#FFFFFF', textShadow: '0 2px 12px rgba(0,0,0,0.4)'}}>
               Turn Every Property Listing Into a
-              <span style={{background: 'linear-gradient(135deg,#A5B4FC 0%,#67E8F9 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', textShadow: '0 2px 12px rgba(0,0,0,0.4)'}}>
+              <span style={{background: 'linear-gradient(135deg, #A5B4FC 0%, #67E8F9 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', textShadow: '0 2px 12px rgba(0,0,0,0.4)'}}>
                 Lead-Generating Video
               </span>
               in Minutes
@@ -203,7 +245,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="fade-up relative" style={{animationDelay: '0.3s'}}>
 <div className="absolute -inset-6 -z-10 rounded-3xl blur-2xl opacity-40" style={{background: 'linear-gradient(135deg,#6366F1,#06B6D4)'}}></div>
-<div className="rounded-3xl p-5 backdrop-blur-xl" style={{background: 'rgba(255,255,255,0.7)', border: '1px solid #E5E7EB', boxShadow: '0 30px 60px -20px rgba(99,102,241,0.3)'}}>
+<div className="rounded-3xl p-5 backdrop-blur-xl" style={{background: 'rgba(255, 255, 255, 0.7)', border: '1px solid #E5E7EB', boxShadow: '0 30px 60px -20px rgba(99,102,241,0.3)'}}>
 <div className="rounded-2xl overflow-hidden" style={{background: '#111827'}}>
 <div className="flex items-center gap-2 px-4 py-3" style={{borderBottom: '1px solid rgba(255,255,255,0.1)'}}>
 <span className="w-3 h-3 rounded-full" style={{background: '#ef4444'}}></span>
@@ -245,7 +287,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="absolute -bottom-6 -left-6 rounded-2xl p-4 backdrop-blur-xl hidden sm:block" style={{background: 'rgba(255,255,255,0.85)', border: '1px solid #E5E7EB', boxShadow: '0 20px 40px -15px rgba(0,0,0,0.15)'}}>
+<div className="absolute -bottom-6 -left-6 rounded-2xl p-4 backdrop-blur-xl hidden sm:block" style={{background: 'rgba(255, 255, 255, 0.85)', border: '1px solid #E5E7EB', boxShadow: '0 20px 40px -15px rgba(0,0,0,0.15)'}}>
 <div className="flex items-center gap-3">
 <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'linear-gradient(135deg,#6366F1,#8B5CF6)'}}>
 <iconify-icon icon="solar:share-linear" style={{color: 'white'}} width="20"></iconify-icon>
@@ -383,7 +425,7 @@ gtag('config', 'G-2M6V79H761');
               </li>
 </ul>
 </div>
-<div className="rounded-3xl p-8 fade-up text-white" style={{background: 'linear-gradient(135deg,#6366F1,#8B5CF6)', animationDelay: '0.2s', boxShadow: '0 30px 60px -20px rgba(99,102,241,0.5)'}}>
+<div className="rounded-3xl p-8 fade-up text-white" style={{background: 'linear-gradient(135deg, #6366F1, #8B5CF6)', animationDelay: '0.2s', boxShadow: '0 30px 60px -20px rgba(99,102,241,0.5)'}}>
 <p className="text-sm font-semibold mb-5" style={{color: 'rgba(255,255,255,0.8)'}}>
               AFTER REELTYGENIE
             </p>
@@ -694,25 +736,25 @@ gtag('config', 'G-2M6V79H761');
           Real Business Impact
         </h2>
 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)'}}>
 <p className="font-bold tracking-tight" style={{fontSize: '3rem', background: 'linear-gradient(135deg,#6366F1,#06B6D4)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>
               300%
             </p>
 <p className="mt-2 text-white">More Listing Visibility</p>
 </div>
-<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.1s'}}>
+<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.1s'}}>
 <p className="font-bold tracking-tight" style={{fontSize: '3rem', background: 'linear-gradient(135deg,#6366F1,#06B6D4)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>
               40%
             </p>
 <p className="mt-2 text-white">Faster Content Production</p>
 </div>
-<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.2s'}}>
+<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.2s'}}>
 <p className="font-bold tracking-tight" style={{fontSize: '3rem', background: 'linear-gradient(135deg,#6366F1,#06B6D4)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>
               25%
             </p>
 <p className="mt-2 text-white">More Qualified Inquiries</p>
 </div>
-<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.3s'}}>
+<div className="rounded-3xl p-8 fade-up" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', animationDelay: '0.3s'}}>
 <p className="font-bold tracking-tight" style={{fontSize: '3rem', background: 'linear-gradient(135deg,#6366F1,#06B6D4)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>
               60%
             </p>
@@ -867,7 +909,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="px-7 py-3.5 rounded-xl text-white font-semibold transition" style={{fontSize: '1rem', background: 'linear-gradient(135deg,#6366F1 0%,#8B5CF6 100%)'}}>
             Start Free Trial
           </button>
-<button className="px-7 py-3.5 rounded-xl font-semibold text-white transition" style={{fontSize: '1rem', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)'}}>
+<button className="px-7 py-3.5 rounded-xl font-semibold text-white transition" style={{fontSize: '1rem', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255,255,255,0.15)'}}>
             Schedule Demo
           </button>
 </div>

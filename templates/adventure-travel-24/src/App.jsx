@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -73,7 +115,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="z-0 absolute top-0 right-0 bottom-0 left-0">
 <img alt="Red Tuk Tuk on Sri Lanka Road with Temple" className="brightness-[0.60] w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s]" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/df139aa3-f4d1-47ed-80af-dc1c2e593f6e_3840w.png"/>
-<div className="brightness-[0.6] text-7xl absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to bottom, rgba(8,117,118,0.3), transparent, rgba(8,117,118,0.7)), url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/df139aa3-f4d1-47ed-80af-dc1c2e593f6e_3840w.png\')', backgroundSize: 'cover', backgroundPosition: 'center, 20% center', backgroundRepeat: 'no-repeat'}}></div>
+<div className="brightness-[0.6] text-7xl absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to bottom, rgba(8, 117, 118, 0.3), transparent, rgba(8, 117, 118, 0.7)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/df139aa3-f4d1-47ed-80af-dc1c2e593f6e_3840w.png\')', backgroundSize: 'cover', backgroundPosition: 'center, 20% center', backgroundRepeat: 'no-repeat'}}></div>
 </div>
 
 <div className="z-10 text-white text-center max-w-5xl mt-16 mr-auto ml-auto pr-6 pl-6 relative">

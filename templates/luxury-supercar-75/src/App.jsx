@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -31,9 +73,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="fixed inset-0 z-5 pointer-events-none overflow-hidden">
-<div className="absolute bottom-[20%] left-[10%] w-96 h-48 rounded-full opacity-30 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255,255,255,0.4) 0%, transparent 70%)', filter: 'blur(40px)', animationDuration: '3s'}}></div>
-<div className="absolute bottom-[18%] right-[15%] w-80 h-40 rounded-full opacity-25 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255,255,255,0.35) 0%, transparent 70%)', filter: 'blur(35px)', animationDuration: '4s'}}></div>
-<div className="absolute bottom-[22%] left-[40%] w-[500px] h-56 rounded-full opacity-20 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 65%)', filter: 'blur(50px)', animationDuration: '2.5s'}}></div>
+<div className="absolute bottom-[20%] left-[10%] w-96 h-48 rounded-full opacity-30 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.4) 0%, transparent 70%)', filter: 'blur(40px)', animationDuration: '3s'}}></div>
+<div className="absolute bottom-[18%] right-[15%] w-80 h-40 rounded-full opacity-25 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.35) 0%, transparent 70%)', filter: 'blur(35px)', animationDuration: '4s'}}></div>
+<div className="absolute bottom-[22%] left-[40%] w-[500px] h-56 rounded-full opacity-20 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.5) 0%, transparent 65%)', filter: 'blur(50px)', animationDuration: '2.5s'}}></div>
 </div>
 
 <div className="fixed inset-0 z-10 pointer-events-none">
@@ -41,45 +83,45 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute bottom-[22%] left-[8%] md:left-[12%]" style={{transform: 'rotate(-12deg) skewX(-5deg)'}}>
 <div className="relative">
 
-<div className="w-48 md:w-64 h-12 md:h-16 rounded-lg" style={{background: 'linear-gradient(135deg, #c0392b 0%, #e74c3c 40%, #ff6b6b 60%, #c0392b 100%)', clipPath: 'polygon(5% 100%, 0% 60%, 8% 30%, 25% 10%, 45% 0%, 70% 0%, 85% 10%, 95% 30%, 100% 60%, 98% 100%)', boxShadow: '0 8px 32px rgba(231,76,60,0.5), 0 0 60px rgba(231,76,60,0.2)'}}></div>
+<div className="w-48 md:w-64 h-12 md:h-16 rounded-lg" style={{background: 'linear-gradient(135deg, #c0392b 0%, #e74c3c 40%, #ff6b6b 60%, #c0392b 100%)', clipPath: 'polygon(5% 100%, 0% 60%, 8% 30%, 25% 10%, 45% 0%, 70% 0%, 85% 10%, 95% 30%, 100% 60%, 98% 100%)', boxShadow: '0 8px 32px rgba(231, 76, 60, 0.5), 0 0 60px rgba(231,76,60,0.2)'}}></div>
 
 <div className="absolute top-2 right-2 w-3 h-2 rounded-full" style={{background: '#fff', boxShadow: '0 0 15px #fff, 0 0 30px #ffeaa7, 0 0 45px #ffeaa7'}}></div>
 <div className="absolute top-3 right-6 w-2 h-1.5 rounded-full" style={{background: '#fff', boxShadow: '0 0 10px #fff, 0 0 20px #ffeaa7'}}></div>
 
-<div className="absolute top-full mt-1 w-48 md:w-64 h-8 opacity-30" style={{background: 'linear-gradient(180deg, rgba(231,76,60,0.4) 0%, transparent 100%)', filter: 'blur(8px)', transform: 'scaleY(-0.5)'}}></div>
+<div className="absolute top-full mt-1 w-48 md:w-64 h-8 opacity-30" style={{background: 'linear-gradient(180deg, rgba(231, 76, 60, 0.4) 0%, transparent 100%)', filter: 'blur(8px)', transform: 'scaleY(-0.5)'}}></div>
 </div>
 </div>
 
 <div className="absolute bottom-[18%] left-1/2 -translate-x-1/2" style={{transform: 'translateX(-50%) rotate(-3deg)'}}>
 <div className="relative">
 
-<div className="w-64 md:w-80 lg:w-96 h-16 md:h-20 lg:h-24 rounded-lg" style={{background: 'linear-gradient(135deg, #1e8449 0%, #27ae60 30%, #58d68d 50%, #2ecc71 70%, #1e8449 100%)', clipPath: 'polygon(3% 100%, 0% 55%, 5% 25%, 20% 5%, 40% 0%, 65% 0%, 82% 8%, 95% 28%, 100% 55%, 97% 100%)', boxShadow: '0 12px 48px rgba(46,204,113,0.5), 0 0 80px rgba(46,204,113,0.25), inset 0 -2px 4px rgba(0,0,0,0.3)'}}></div>
+<div className="w-64 md:w-80 lg:w-96 h-16 md:h-20 lg:h-24 rounded-lg" style={{background: 'linear-gradient(135deg, #1e8449 0%, #27ae60 30%, #58d68d 50%, #2ecc71 70%, #1e8449 100%)', clipPath: 'polygon(3% 100%, 0% 55%, 5% 25%, 20% 5%, 40% 0%, 65% 0%, 82% 8%, 95% 28%, 100% 55%, 97% 100%)', boxShadow: '0 12px 48px rgba(46, 204, 113, 0.5), 0 0 80px rgba(46, 204, 113, 0.25), inset 0 -2px 4px rgba(0,0,0,0.3)'}}></div>
 
 <div className="absolute top-1 left-[30%] w-[25%] h-[40%] rounded-sm" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)'}}></div>
 
 <div className="absolute top-3 right-2 w-4 h-2.5 rounded-full" style={{background: '#fff', boxShadow: '0 0 20px #fff, 0 0 40px #ffeaa7, 0 0 60px rgba(255,234,167,0.5)'}}></div>
 <div className="absolute top-4 right-7 w-3 h-2 rounded-full" style={{background: '#fff', boxShadow: '0 0 15px #fff, 0 0 30px #ffeaa7'}}></div>
 
-<div className="absolute top-2 right-1 w-8 h-6" style={{borderRight: '2px solid rgba(255,255,255,0.8)', borderBottom: '1px solid rgba(255,255,255,0.4)', filter: 'blur(1px)'}}></div>
+<div className="absolute top-2 right-1 w-8 h-6" style={{borderRight: '2px solid rgba(255, 255, 255, 0.8)', borderBottom: '1px solid rgba(255, 255, 255, 0.4)', filter: 'blur(1px)'}}></div>
 
-<div className="absolute top-full mt-2 w-64 md:w-80 lg:w-96 h-12 opacity-40" style={{background: 'linear-gradient(180deg, rgba(46,204,113,0.5) 0%, transparent 100%)', filter: 'blur(12px)', transform: 'scaleY(-0.5)'}}></div>
+<div className="absolute top-full mt-2 w-64 md:w-80 lg:w-96 h-12 opacity-40" style={{background: 'linear-gradient(180deg, rgba(46, 204, 113, 0.5) 0%, transparent 100%)', filter: 'blur(12px)', transform: 'scaleY(-0.5)'}}></div>
 
-<div className="absolute -bottom-8 -left-12 w-40 h-20 rounded-full opacity-40 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 70%)', filter: 'blur(20px)'}}></div>
-<div className="absolute -bottom-6 -right-8 w-32 h-16 rounded-full opacity-35 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 70%)', filter: 'blur(18px)', animationDelay: '0.5s'}}></div>
+<div className="absolute -bottom-8 -left-12 w-40 h-20 rounded-full opacity-40 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, transparent 70%)', filter: 'blur(20px)'}}></div>
+<div className="absolute -bottom-6 -right-8 w-32 h-16 rounded-full opacity-35 animate-pulse" style={{background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.5) 0%, transparent 70%)', filter: 'blur(18px)', animationDelay: '0.5s'}}></div>
 </div>
 </div>
 
 <div className="absolute bottom-[21%] right-[8%] md:right-[12%]" style={{transform: 'rotate(8deg) skewX(3deg)'}}>
 <div className="relative">
 
-<div className="w-48 md:w-64 h-12 md:h-16 rounded-lg" style={{background: 'linear-gradient(135deg, #1a237e 0%, #283593 30%, #3f51b5 50%, #5c6bc0 65%, #1a237e 100%)', clipPath: 'polygon(5% 100%, 0% 55%, 6% 25%, 22% 8%, 42% 0%, 68% 0%, 83% 10%, 94% 30%, 100% 58%, 97% 100%)', boxShadow: '0 8px 32px rgba(63,81,181,0.5), 0 0 60px rgba(63,81,181,0.2)'}}></div>
+<div className="w-48 md:w-64 h-12 md:h-16 rounded-lg" style={{background: 'linear-gradient(135deg, #1a237e 0%, #283593 30%, #3f51b5 50%, #5c6bc0 65%, #1a237e 100%)', clipPath: 'polygon(5% 100%, 0% 55%, 6% 25%, 22% 8%, 42% 0%, 68% 0%, 83% 10%, 94% 30%, 100% 58%, 97% 100%)', boxShadow: '0 8px 32px rgba(63, 81, 181, 0.5), 0 0 60px rgba(63,81,181,0.2)'}}></div>
 
 <div className="absolute top-0 left-[45%] w-1 h-full opacity-60" style={{background: 'linear-gradient(180deg, transparent 10%, rgba(200,200,220,0.5) 50%, transparent 90%)'}}></div>
 
 <div className="absolute top-2 left-2 w-3 h-2 rounded-full" style={{background: '#fff', boxShadow: '0 0 15px #fff, 0 0 30px #ffeaa7, 0 0 45px #ffeaa7'}}></div>
 <div className="absolute top-3 left-6 w-2 h-1.5 rounded-full" style={{background: '#fff', boxShadow: '0 0 10px #fff, 0 0 20px #ffeaa7'}}></div>
 
-<div className="absolute top-full mt-1 w-48 md:w-64 h-8 opacity-30" style={{background: 'linear-gradient(180deg, rgba(63,81,181,0.4) 0%, transparent 100%)', filter: 'blur(8px)', transform: 'scaleY(-0.5)'}}></div>
+<div className="absolute top-full mt-1 w-48 md:w-64 h-8 opacity-30" style={{background: 'linear-gradient(180deg, rgba(63, 81, 181, 0.4) 0%, transparent 100%)', filter: 'blur(8px)', transform: 'scaleY(-0.5)'}}></div>
 </div>
 </div>
 
@@ -98,7 +140,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between max-w-7xl mx-auto">
 
 <div className="flex items-center gap-2">
-<div className="w-8 h-8 rounded-sm flex items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="w-8 h-8 rounded-sm flex items-center justify-center" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)'}}>
 <span className="text-white font-semibold text-sm tracking-tighter">A</span>
 </div>
 <span className="text-white font-semibold text-base tracking-tighter">APEX MOTORS</span>
@@ -127,7 +169,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex-1 flex items-center justify-center pt-24 pb-8 px-6">
 <div className="text-center max-w-4xl mx-auto">
-<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{background: 'rgba(255, 255, 255, 0.08)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)'}}>
 <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
 <span className="text-xs font-medium text-white/80">3 NEW ARRIVALS — TRACK TESTED &amp; DELIVERY READY</span>
 </div>
@@ -143,7 +185,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>EXPLORE FLEET</span>
 <iconify-icon className="group-hover:translate-x-1 transition-transform" height="18" icon="solar:arrow-right-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
 </button>
-<button className="flex items-center gap-3 px-6 py-3 rounded-xl text-sm font-medium text-white/80 hover:text-white transition-colors" style={{background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)'}}>
+<button className="flex items-center gap-3 px-6 py-3 rounded-xl text-sm font-medium text-white/80 hover:text-white transition-colors" style={{background: 'rgba(255, 255, 255, 0.06)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)'}}>
 <iconify-icon height="18" icon="solar:play-circle-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
 <span>WATCH FILM</span>
 </button>
@@ -156,7 +198,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex flex-col gap-4 w-full lg:w-auto lg:max-w-sm">
 
-<div className="rounded-2xl p-5 relative overflow-hidden" style={{background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(30px) saturate(1.5)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="rounded-2xl p-5 relative overflow-hidden" style={{background: 'rgba(255, 255, 255, 0.07)', backdropFilter: 'blur(30px) saturate(1.5)', border: '1px solid rgba(255, 255, 255, 0.12)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 opacity-5" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%)'}}></div>
 <div className="relative">
 <div className="flex items-center justify-between mb-3">
@@ -166,7 +208,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <span className="text-xs font-semibold text-white/50 tracking-widest uppercase">Expert Verdict</span>
 </div>
-<div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{background: 'rgba(244,166,35,0.15)', border: '1px solid rgba(244,166,35,0.3)'}}>
+<div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{background: 'rgba(244, 166, 35, 0.15)', border: '1px solid rgba(244,166,35,0.3)'}}>
 <span className="text-xs font-bold" style={{color: '#f4a623'}}>10/10</span>
 </div>
 </div>
@@ -182,7 +224,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="rounded-2xl p-5 relative overflow-hidden" style={{background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(30px) saturate(1.5)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="rounded-2xl p-5 relative overflow-hidden" style={{background: 'rgba(255, 255, 255, 0.07)', backdropFilter: 'blur(30px) saturate(1.5)', border: '1px solid rgba(255, 255, 255, 0.12)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 opacity-5" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%)'}}></div>
 <div className="relative">
 <div className="flex items-center gap-2 mb-3">
@@ -236,7 +278,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="w-full lg:w-auto lg:max-w-sm">
-<div className="rounded-2xl p-6 relative overflow-hidden" style={{background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(30px) saturate(1.5)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="rounded-2xl p-6 relative overflow-hidden" style={{background: 'rgba(255, 255, 255, 0.07)', backdropFilter: 'blur(30px) saturate(1.5)', border: '1px solid rgba(255, 255, 255, 0.12)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="absolute inset-0 opacity-5" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%)'}}></div>
 <div className="relative">
 
@@ -245,7 +287,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <iconify-icon className="text-white/60" height="18" icon="solar:palette-linear" style={{strokeWidth: '1.5'}} width="18"></iconify-icon>
 <span className="text-xs font-semibold text-white/50 tracking-widest uppercase">Bespoke Configurator</span>
 </div>
-<div className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{background: 'rgba(46,204,113,0.15)', border: '1px solid rgba(46,204,113,0.3)'}}>
+<div className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{background: 'rgba(46, 204, 113, 0.15)', border: '1px solid rgba(46,204,113,0.3)'}}>
 <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
 <span className="text-xs text-green-400 font-medium">Live</span>
 </div>
@@ -258,7 +300,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="space-y-3 mb-5">
 
-<div className="flex items-center justify-between p-3 rounded-xl" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex items-center justify-between p-3 rounded-xl" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="flex items-center gap-3">
 <div className="w-6 h-6 rounded-full border-2 border-white/20" style={{background: 'linear-gradient(135deg, #27ae60, #58d68d)'}}></div>
 <div>
@@ -269,7 +311,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-xs font-medium" style={{color: '#f4a623'}}>+$18,000</span>
 </div>
 
-<div className="flex items-center justify-between p-3 rounded-xl" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex items-center justify-between p-3 rounded-xl" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="flex items-center gap-3">
 <div className="w-6 h-6 rounded-full border-2 border-white/20 flex items-center justify-center" style={{background: 'rgba(30,30,30,0.8)'}}>
 <iconify-icon className="text-white/60" height="12" icon="solar:settings-linear" style={{strokeWidth: '1.5'}} width="12"></iconify-icon>
@@ -282,7 +324,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-xs font-medium" style={{color: '#f4a623'}}>+$12,500</span>
 </div>
 
-<div className="flex items-center justify-between p-3 rounded-xl" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex items-center justify-between p-3 rounded-xl" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="flex items-center gap-3">
 <div className="w-6 h-6 rounded-full border-2 border-white/20" style={{background: 'linear-gradient(135deg, #2c3e50, #34495e)'}}></div>
 <div>
@@ -307,7 +349,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<button className="group w-full py-3.5 rounded-xl text-sm font-semibold text-black flex items-center justify-center gap-2 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #f4a623 0%, #e8871e 100%)', boxShadow: '0 8px 32px rgba(244,166,35,0.3), 0 0 60px rgba(244,166,35,0.1)'}}>
+<button className="group w-full py-3.5 rounded-xl text-sm font-semibold text-black flex items-center justify-center gap-2 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #f4a623 0%, #e8871e 100%)', boxShadow: '0 8px 32px rgba(244, 166, 35, 0.3), 0 0 60px rgba(244,166,35,0.1)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{background: 'linear-gradient(135deg, #ffd700 0%, #f4a623 100%)'}}></div>
 <span className="relative z-10">RESERVE NOW</span>
 <iconify-icon className="relative z-10 group-hover:translate-x-1 transition-transform" height="16" icon="solar:arrow-right-linear" style={{strokeWidth: '1.5'}} width="16"></iconify-icon>
@@ -322,15 +364,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="fixed inset-0 z-5 pointer-events-none">
 
-<div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[600px] h-[200px] opacity-10" style={{background: 'radial-gradient(ellipse, rgba(46,204,113,0.5) 0%, transparent 70%)', filter: 'blur(60px)'}}></div>
+<div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[600px] h-[200px] opacity-10" style={{background: 'radial-gradient(ellipse, rgba(46, 204, 113, 0.5) 0%, transparent 70%)', filter: 'blur(60px)'}}></div>
 
-<div className="absolute bottom-[12%] left-[15%] w-[300px] h-[150px] opacity-8" style={{background: 'radial-gradient(ellipse, rgba(231,76,60,0.4) 0%, transparent 70%)', filter: 'blur(50px)'}}></div>
+<div className="absolute bottom-[12%] left-[15%] w-[300px] h-[150px] opacity-8" style={{background: 'radial-gradient(ellipse, rgba(231, 76, 60, 0.4) 0%, transparent 70%)', filter: 'blur(50px)'}}></div>
 
-<div className="absolute bottom-[12%] right-[15%] w-[300px] h-[150px] opacity-8" style={{background: 'radial-gradient(ellipse, rgba(63,81,181,0.4) 0%, transparent 70%)', filter: 'blur(50px)'}}></div>
+<div className="absolute bottom-[12%] right-[15%] w-[300px] h-[150px] opacity-8" style={{background: 'radial-gradient(ellipse, rgba(63, 81, 181, 0.4) 0%, transparent 70%)', filter: 'blur(50px)'}}></div>
 </div>
 
-<div className="fixed top-[30%] left-[45%] w-32 h-32 pointer-events-none z-15 opacity-20" style={{background: 'radial-gradient(circle, rgba(244,166,35,0.4) 0%, transparent 70%)', filter: 'blur(20px)'}}></div>
-<div className="fixed top-[28%] left-[48%] w-4 h-4 pointer-events-none z-15 rounded-full" style={{background: 'rgba(255,255,255,0.3)', filter: 'blur(2px)'}}></div>
+<div className="fixed top-[30%] left-[45%] w-32 h-32 pointer-events-none z-15 opacity-20" style={{background: 'radial-gradient(circle, rgba(244, 166, 35, 0.4) 0%, transparent 70%)', filter: 'blur(20px)'}}></div>
+<div className="fixed top-[28%] left-[48%] w-4 h-4 pointer-events-none z-15 rounded-full" style={{background: 'rgba(255, 255, 255, 0.3)', filter: 'blur(2px)'}}></div>
 <style>
         * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
         body { -webkit-font-smoothing: antialiased; }

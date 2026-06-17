@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -86,6 +122,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -339,13 +381,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               Route, summarize, draft, and close—across email, chat, and tickets. Nebulae adapts to tone, SLAs, and your escalation rules.
             </p>
 <div className="mt-6 flex flex-col gap-4">
-<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 shadow-sm items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 shadow-sm items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-1 ring-white/10 rounded-xl">
 <svg className="lucide lucide-globe h-4.5 w-4.5 text-white/90" data-lucide="globe" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Context‑aware replies across channels and time zones.</span>
 </div>
-<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 shadow-sm items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 shadow-sm items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-1 ring-white/10 rounded-xl">
 <svg className="lucide lucide-thumbs-up h-4.5 w-4.5 text-white/90" data-lucide="thumbs-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg>
 </span>
@@ -406,13 +448,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   Type naturally: “Spin up a weekly ops review, assign owners, and post to Slack.” Nebulae understands goals and constraints—no special syntax.
                 </p>
 <div className="mt-6 flex flex-col gap-4">
-<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-1 ring-white/10 rounded-xl">
 <svg className="lucide lucide-mic h-4.5 w-4.5 text-white/90" data-lucide="mic" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 19v3"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><rect height="13" rx="3" width="6" x="9" y="2"></rect></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Works with text, voice, or existing tickets.</span>
 </div>
-<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 ring-1 ring-white/10 rounded-xl">
 <svg className="lucide lucide-target h-4.5 w-4.5 text-white/90" data-lucide="target" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
 </span>
@@ -458,13 +500,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   Nebulae assembles steps, pulls context from docs and systems, and executes—requesting approvals only when required.
                 </p>
 <div className="mt-6 flex flex-col gap-4">
-<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-xl ring-1 ring-white/10">
 <svg className="lucide lucide-list-checks h-4.5 w-4.5 text-white/90" data-lucide="list-checks" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Auto‑generated plan with dependencies and due dates.</span>
 </div>
-<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-sm text-slate-200 border border-white/10 rounded-2xl px-4 py-3 items-center gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-xl ring-1 ring-white/10">
 <svg className="lucide lucide-link-2 h-4.5 w-4.5 text-white/90" data-lucide="link-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><line x1="8" x2="16" y1="12" y2="12"></line></svg>
 </span>
@@ -517,13 +559,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   Receive clean outputs, approvals, and summaries—then publish to Slack, Notion, Jira, or your CRM in one click.
                 </p>
 <div className="mt-4 sm:mt-6 flex flex-col gap-3 sm:gap-4">
-<div className="inline-flex text-xs sm:text-sm text-slate-200 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 items-center gap-2 sm:gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-xs sm:text-sm text-slate-200 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 items-center gap-2 sm:gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl ring-1 ring-white/10">
 <svg className="lucide lucide-rocket h-4 w-4 sm:h-4.5 sm:w-4.5 text-white/90" data-lucide="rocket" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
 </span>
 <span className="font-medium tracking-[-0.01em]">Ship to production or stage with a toggle.</span>
 </div>
-<div className="inline-flex text-xs sm:text-sm text-slate-200 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 items-center gap-2 sm:gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="inline-flex text-xs sm:text-sm text-slate-200 border border-white/10 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 items-center gap-2 sm:gap-3" style={{boxShadow: 'inset 0 -12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <span className="inline-flex items-center justify-center shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl ring-1 ring-white/10">
 <svg className="lucide lucide-share-2 h-4 w-4 sm:h-4.5 sm:w-4.5 text-white/90" data-lucide="share-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
 </span>

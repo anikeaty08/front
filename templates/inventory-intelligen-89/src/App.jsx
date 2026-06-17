@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -258,6 +294,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -272,7 +314,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i data-lucide="boxes"></i>
 </div>
 <div className="leading-tight">
-<p className="text-sm" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>InventAgent</p>
+<p className="text-sm" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>InventAgent</p>
 <p className="text-xs text-gray-500">Inventario</p>
 </div>
 </div>
@@ -346,7 +388,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 relative z-0">
 <div className="pointer-events-none absolute inset-x-0 -top-4 h-20 bg-gradient-to-r from-blue-100/60 via-blue-50/20 to-transparent blur-2xl rounded-2xl -z-10"></div>
 <div>
-<h1 className="tracking-tight text-4xl" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>
+<h1 className="tracking-tight text-4xl" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>
                 Centro de Inteligencia de Inventario
               </h1>
 <p className="mt-1 text-sm text-gray-600 max-w-2xl">
@@ -424,7 +466,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="text-blue-500" data-lucide="gauge"></i>
 </div>
 <div className="mt-2 flex items-baseline gap-2">
-<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\',\'Geist Sans\',system-ui'}}>97.4%</p>
+<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\', \'Geist Sans\', system-ui'}}>97.4%</p>
 <span className="text-xs text-green-600">+0.8%</span>
 </div>
 <p className="text-xs text-gray-500 mt-1">Últimos 14 días</p>
@@ -437,7 +479,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="text-blue-500" data-lucide="alert-triangle"></i>
 </div>
 <div className="mt-2 flex items-baseline gap-2">
-<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\',\'Geist Sans\',system-ui'}}>42 SKUs</p>
+<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\', \'Geist Sans\', system-ui'}}>42 SKUs</p>
 <span className="text-xs text-amber-600">-15%</span>
 </div>
 <p className="text-xs text-gray-500 mt-1">Próximos 7 días</p>
@@ -450,7 +492,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="text-blue-500" data-lucide="layers"></i>
 </div>
 <div className="mt-2 flex items-baseline gap-2">
-<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\',\'Geist Sans\',system-ui'}}>$1.8M</p>
+<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\', \'Geist Sans\', system-ui'}}>$1.8M</p>
 <span className="text-xs text-red-600">+3%</span>
 </div>
 <p className="text-xs text-gray-500 mt-1">Costo de mantenimiento ajustado</p>
@@ -461,7 +503,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="text-blue-500" data-lucide="clock"></i>
 </div>
 <div className="mt-2 flex items-baseline gap-2">
-<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\',\'Geist Sans\',system-ui'}}>28</p>
+<p className="text-2xl tracking-tight" style={{fontFamily: '\'Geist Mono\', \'Geist Sans\', system-ui'}}>28</p>
 <span className="text-xs text-amber-600">+4</span>
 </div>
 <p className="text-xs text-gray-500 mt-1">En 6 proveedores</p>
@@ -476,7 +518,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="lg:col-span-2 p-4 rounded-lg border border-gray-200 shadow-sm bg-white">
 <div className="flex items-center justify-between">
-<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>Pulso de Operaciones</h2>
+<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>Pulso de Operaciones</h2>
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">Ver todo</button>
 </div>
 <ul className="mt-4 space-y-3">
@@ -535,7 +577,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="p-4 rounded-lg border border-gray-200 shadow-sm bg-white">
 <div className="flex items-center justify-between">
-<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>Mesa de Adquisiciones</h2>
+<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>Mesa de Adquisiciones</h2>
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">Ver todo</button>
 </div>
 <div className="mt-4 overflow-x-auto">
@@ -595,7 +637,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i data-lucide="bot"></i>
 </div>
 <div>
-<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>Asistente de Agente</h2>
+<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>Asistente de Agente</h2>
 <div className="flex items-center gap-2">
 <span className="h-1.5 w-1.5 rounded-full bg-green-500"></span>
 <span className="text-[11px] text-gray-500">En línea • <span className="text-gray-600">Inventario</span></span>
@@ -778,7 +820,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="p-4 rounded-lg border border-gray-200 shadow-sm bg-white">
 <div className="flex items-center justify-between">
-<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>Pulso de Operaciones</h2>
+<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>Pulso de Operaciones</h2>
 <div className="flex items-center gap-2">
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">Hoy</button>
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">7d</button>
@@ -950,7 +992,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="p-4 rounded-lg border border-gray-200 shadow-sm bg-white">
 <div className="flex items-center justify-between">
-<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>Pronóstico de Demanda</h2>
+<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>Pronóstico de Demanda</h2>
 <div className="flex items-center gap-2">
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">Semanal</button>
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">Mensual</button>
@@ -1039,7 +1081,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="p-4 rounded-lg border border-gray-200 shadow-sm bg-white">
 <div className="flex items-center justify-between">
-<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\',\'Geist Sans\',system-ui'}}>Mesa de Adquisiciones</h2>
+<h2 className="text-xl tracking-tight" style={{fontFamily: '\'Geist\', \'Geist Sans\', system-ui'}}>Mesa de Adquisiciones</h2>
 <div className="flex items-center gap-2">
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">Todas</button>
 <button className="text-xs px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50">En riesgo</button>

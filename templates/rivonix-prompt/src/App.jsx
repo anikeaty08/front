@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -70,6 +106,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -83,7 +125,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="gradient-animate absolute left-[5%] bottom-[10%] h-[35rem] w-[35rem] rounded-full blur-3xl" style={{background: 'radial-gradient(closest-side, rgba(255,58,90,0.1), transparent)', animationDelay: '4s'}}></div>
 </div>
 
-<header className="animate-on-scroll slide-up sticky top-0 z-50 backdrop-blur-2xl" style={{background: 'rgba(5,5,5,0.85)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
+<header className="animate-on-scroll slide-up sticky top-0 z-50 backdrop-blur-2xl" style={{background: 'rgba(5, 5, 5, 0.85)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
 <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 <div className="flex h-16 items-center justify-between">
 
@@ -95,7 +137,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<nav className="hidden md:flex items-center gap-1 rounded-full px-2 py-1.5" style={{background: 'rgba(39,39,42,0.5)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<nav className="hidden md:flex items-center gap-1 rounded-full px-2 py-1.5" style={{background: 'rgba(39, 39, 42, 0.5)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <a className="nav-link px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 hover:bg-white/5" href="#page-prompts" style={{color: '#d4d4d8'}}>Page</a>
 <a className="nav-link px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 hover:bg-white/5" href="#section-prompts" style={{color: '#d4d4d8'}}>Section</a>
 <a className="nav-link px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 hover:bg-white/5" href="#modular-prompts" style={{color: '#d4d4d8'}}>Modular</a>
@@ -108,7 +150,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="hidden md:hidden" id="mobileMenu" style={{background: 'rgba(5,5,5,0.95)', borderTop: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="hidden md:hidden" id="mobileMenu" style={{background: 'rgba(5, 5, 5, 0.95)', borderTop: '1px solid rgba(255,255,255,0.06)'}}>
 <div className="px-4 py-4 space-y-2">
 <a className="block px-4 py-2 rounded-lg text-sm transition-colors hover:bg-white/5" href="#page-prompts" style={{color: '#d4d4d8'}}>Page Prompts</a>
 <a className="block px-4 py-2 rounded-lg text-sm transition-colors hover:bg-white/5" href="#section-prompts" style={{color: '#d4d4d8'}}>Section Prompts</a>
@@ -132,22 +174,22 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
         </p>
 
 <div className="flex flex-wrap gap-2">
-<span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium" style={{background: 'rgba(39,39,42,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
+<span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium" style={{background: 'rgba(39, 39, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
 <span className="w-2 h-2 rounded-full" style={{background: '#e72543'}}></span>
             โทนเว็บ: Dark + Neon #e72543
           </span>
-<span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium" style={{background: 'rgba(39,39,42,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
+<span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium" style={{background: 'rgba(39, 39, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
 <span className="w-2 h-2 rounded-full" style={{background: 'linear-gradient(135deg, #e72543, #a855f7)'}}></span>
             ภาษา: ไทย + English
           </span>
-<span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium" style={{background: 'rgba(39,39,42,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
+<span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium" style={{background: 'rgba(39, 39, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
 <span className="w-2 h-2 rounded-full" style={{background: 'linear-gradient(135deg, #22c55e, #10b981)'}}></span>
             ใช้ซ้ำได้: Page / Section / Modular
           </span>
 </div>
 </div>
 
-<aside className="rounded-2xl p-6 backdrop-blur-md" style={{background: 'linear-gradient(145deg, rgba(231,37,67,0.08), rgba(9,9,11,0.9) 40%)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 25px 60px rgba(0,0,0,0.5)'}}>
+<aside className="rounded-2xl p-6 backdrop-blur-md" style={{background: 'linear-gradient(145deg, rgba(231, 37, 67, 0.08), rgba(9, 9, 11, 0.9) 40%)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 60px rgba(0,0,0,0.5)'}}>
 <div className="flex items-center gap-2 mb-5">
 <i className="w-4 h-4" data-lucide="zap" style={{color: '#e72543'}}></i>
 <span className="text-xs uppercase font-semibold tracking-widest" style={{color: '#71717a'}}>Quick Start</span>
@@ -157,11 +199,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>Page Prompts</span>
 <i className="w-4 h-4 transition-transform group-hover:translate-x-1" data-lucide="arrow-right"></i>
 </a>
-<a className="group flex items-center justify-between w-full rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:bg-white/10" href="#section-prompts" style={{background: 'rgba(39,39,42,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
+<a className="group flex items-center justify-between w-full rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:bg-white/10" href="#section-prompts" style={{background: 'rgba(39, 39, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
 <span>Section / Components</span>
 <i className="w-4 h-4 transition-transform group-hover:translate-x-1" data-lucide="arrow-right"></i>
 </a>
-<a className="group flex items-center justify-between w-full rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:bg-white/10" href="#modular-prompts" style={{background: 'rgba(39,39,42,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
+<a className="group flex items-center justify-between w-full rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 hover:bg-white/10" href="#modular-prompts" style={{background: 'rgba(39, 39, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#d4d4d8'}}>
 <span>Modular Fix / Add-on</span>
 <i className="w-4 h-4 transition-transform group-hover:translate-x-1" data-lucide="arrow-right"></i>
 </a>
@@ -178,7 +220,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="animate-on-scroll slide-up">
 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
 <div>
-<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(231,37,67,0.15)', border: '1px solid rgba(231,37,67,0.3)', color: '#ff6b8a'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(231, 37, 67, 0.15)', border: '1px solid rgba(231,37,67,0.3)', color: '#ff6b8a'}}>
 <i className="w-3 h-3" data-lucide="layers"></i>
               Page Level
             </div>
@@ -191,14 +233,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid gap-6 lg:grid-cols-2">
 
-<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex items-center justify-between flex-wrap gap-2">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(255,134,160,0.9), rgba(231,37,67,0.9))', color: 'white'}}>Page</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Base Layout</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Base Layout</span>
 </div>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.4)', color: '#6ee7b7'}}>✓ Tested</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16,185,129,0.4)', color: '#6ee7b7'}}>✓ Tested</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Page – Base Layout (Dark, TH/EN)</h3>
@@ -214,7 +256,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt (Copy &amp; paste into Aura)</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[200px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Create a responsive web page using semantic HTML + Tailwind CSS for **{{BRAND_NAME}}**.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[200px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Create a responsive web page using semantic HTML + Tailwind CSS for **{{BRAND_NAME}}**.
 
 Goal / เป้าหมาย:
 - EN: Build a premium dark-mode page for {{BRAND_NAME}} focused on {{PAGE_PURPOSE}}.
@@ -249,14 +291,14 @@ Now implement the following sections:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex items-center justify-between flex-wrap gap-2">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(255,134,160,0.9), rgba(231,37,67,0.9))', color: 'white'}}>Page</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Home</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Home</span>
 </div>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.4)', color: '#fcd34d'}}>★ Favorite</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(251, 191, 36, 0.15)', border: '1px solid rgba(251,191,36,0.4)', color: '#fcd34d'}}>★ Favorite</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Home – Update from rivonix26</h3>
@@ -272,7 +314,7 @@ Now implement the following sections:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt (Copy &amp; paste into Aura)</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[200px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>You are editing the existing **Rivonix Branding Studio** home page.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[200px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>You are editing the existing **Rivonix Branding Studio** home page.
 Use the current code in **rivonix26.html** as the base.
 
 Global:
@@ -303,12 +345,12 @@ Global:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex items-center justify-between flex-wrap gap-2">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(255,134,160,0.9), rgba(231,37,67,0.9))', color: 'white'}}>Page</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Projects</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Projects</span>
 </div>
 </div>
 <div>
@@ -324,7 +366,7 @@ Global:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt (Copy &amp; paste into Aura)</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[180px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Create a new **Projects** page for Rivonix Branding Studio.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[180px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Create a new **Projects** page for Rivonix Branding Studio.
 
 Page Structure:
 1) Hero Section
@@ -351,12 +393,12 @@ Global:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex items-center justify-between flex-wrap gap-2">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(255,134,160,0.9), rgba(231,37,67,0.9))', color: 'white'}}>Page</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Contact</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Contact</span>
 </div>
 </div>
 <div>
@@ -372,7 +414,7 @@ Global:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt (Copy &amp; paste into Aura)</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[180px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Create a **Contact** page for Rivonix Branding Studio.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[180px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Create a **Contact** page for Rivonix Branding Studio.
 
 Layout: Two columns on desktop, stacked on mobile.
 
@@ -406,7 +448,7 @@ Styling:
 <div className="animate-on-scroll slide-up">
 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
 <div>
-<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)', color: '#c4b5fd'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(168, 85, 247, 0.15)', border: '1px solid rgba(168,85,247,0.3)', color: '#c4b5fd'}}>
 <i className="w-3 h-3" data-lucide="layout-grid"></i>
               Section Level
             </div>
@@ -419,11 +461,11 @@ Styling:
 </div>
 <div className="grid gap-6 lg:grid-cols-2">
 
-<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(192,132,252,0.9), rgba(168,85,247,0.9))', color: 'white'}}>Section</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>FAQs</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>FAQs</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Section – FAQs (คำถามที่พบบ่อย)</h3>
@@ -438,7 +480,7 @@ Styling:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Add a dedicated **FAQs** section near the bottom of the page.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Add a dedicated **FAQs** section near the bottom of the page.
 
 Structure:
 - EN heading: "FAQs"
@@ -460,11 +502,11 @@ Styling:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(192,132,252,0.9), rgba(168,85,247,0.9))', color: 'white'}}>Section</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>About</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>About</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Section – About Rivonix</h3>
@@ -479,7 +521,7 @@ Styling:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Add a dedicated **About Rivonix** section to tell the studio story.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Add a dedicated **About Rivonix** section to tell the studio story.
 
 Structure:
 - EN heading: "About Rivonix"
@@ -504,11 +546,11 @@ Styling:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(192,132,252,0.9), rgba(168,85,247,0.9))', color: 'white'}}>Section</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Portfolio</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Portfolio</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Section – Portfolio Grid</h3>
@@ -523,7 +565,7 @@ Styling:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Create a **Portfolio** section showcasing Rivonix projects.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Create a **Portfolio** section showcasing Rivonix projects.
 
 Structure:
 - EN heading: "Our Work"
@@ -545,14 +587,14 @@ Styling:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex items-center justify-between flex-wrap gap-2">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(192,132,252,0.9), rgba(168,85,247,0.9))', color: 'white'}}>Section</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Stats</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Stats</span>
 </div>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.4)', color: '#fcd34d'}}>★ Favorite</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(251, 191, 36, 0.15)', border: '1px solid rgba(251,191,36,0.4)', color: '#fcd34d'}}>★ Favorite</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Section – Neon Stats Cards</h3>
@@ -567,7 +609,7 @@ Styling:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Create a **Neon Stats** section with glowing number cards.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Create a **Neon Stats** section with glowing number cards.
 
 Structure:
 - EN heading: "Branding for Thai Businesses"
@@ -598,7 +640,7 @@ Animation:
 <div className="animate-on-scroll slide-up">
 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
 <div>
-<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#86efac'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(34, 197, 94, 0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#86efac'}}>
 <i className="w-3 h-3" data-lucide="puzzle"></i>
               Modular
             </div>
@@ -611,11 +653,11 @@ Animation:
 </div>
 <div className="grid gap-6 lg:grid-cols-2">
 
-<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(134,239,172,0.9), rgba(34,197,94,0.9))', color: '#052e16'}}>Modular</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Copy Section</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Copy Section</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Mod – Copy Section from Old File</h3>
@@ -629,7 +671,7 @@ Animation:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Use the existing code in **{{TARGET_FILE}}** as the base layout.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Use the existing code in **{{TARGET_FILE}}** as the base layout.
 
 Now copy the entire **{{SECTION_NAME}}** section from **{{SOURCE_FILE}}** and insert it into this page:
 
@@ -644,11 +686,11 @@ Now copy the entire **{{SECTION_NAME}}** section from **{{SOURCE_FILE}}** and in
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(134,239,172,0.9), rgba(34,197,94,0.9))', color: '#052e16'}}>Modular</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Styling</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Styling</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Mod – Change Neon Card Color to Rivonix Theme</h3>
@@ -663,7 +705,7 @@ Now copy the entire **{{SECTION_NAME}}** section from **{{SOURCE_FILE}}** and in
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Update the styling of all **{{CARD_TYPE}}** to match the Rivonix neon theme.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Update the styling of all **{{CARD_TYPE}}** to match the Rivonix neon theme.
 
 Rules:
 - Use #e72543 as the primary neon accent color.
@@ -678,11 +720,11 @@ Rules:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(134,239,172,0.9), rgba(34,197,94,0.9))', color: '#052e16'}}>Modular</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Background</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Background</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Mod – Add Unicorn Aura Background</h3>
@@ -697,7 +739,7 @@ Rules:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Add a **Unicorn Aura** background effect to the page.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Add a **Unicorn Aura** background effect to the page.
 
 Implementation:
 - Create a fixed background layer (z-index: -1) behind all content.
@@ -718,11 +760,11 @@ Animation:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(134,239,172,0.9), rgba(34,197,94,0.9))', color: '#052e16'}}>Modular</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Animation</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Animation</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Mod – Global Animation / Motion Pack</h3>
@@ -737,7 +779,7 @@ Animation:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Add a **Global Animation Pack** to the page for scroll-based animations.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Add a **Global Animation Pack** to the page for scroll-based animations.
 
 CSS Keyframes to add:
 - fadeIn: opacity 0 → 1
@@ -767,7 +809,7 @@ Timing:
 <div className="animate-on-scroll slide-up">
 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
 <div>
-<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.3)', color: '#fcd34d'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs uppercase font-semibold tracking-widest mb-3" style={{background: 'rgba(251, 191, 36, 0.15)', border: '1px solid rgba(251,191,36,0.3)', color: '#fcd34d'}}>
 <i className="w-3 h-3" data-lucide="sparkles"></i>
               Hero / Visual
             </div>
@@ -780,14 +822,14 @@ Timing:
 </div>
 <div className="grid gap-6 lg:grid-cols-2">
 
-<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-100 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex items-center justify-between flex-wrap gap-2">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(253,224,71,0.9), rgba(251,191,36,0.9))', color: '#451a03'}}>Visual</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Hero Text</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Hero Text</span>
 </div>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.4)', color: '#fcd34d'}}>★ Favorite</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(251, 191, 36, 0.15)', border: '1px solid rgba(251,191,36,0.4)', color: '#fcd34d'}}>★ Favorite</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Hero – Gradient Text Animation "Design Studio"</h3>
@@ -802,7 +844,7 @@ Timing:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>You are editing the Hero section of the current homepage.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>You are editing the Hero section of the current homepage.
 
 Goal:
 - Keep the full heading "Digital Brand Design Studio".
@@ -831,11 +873,11 @@ CSS:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-200 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(253,224,71,0.9), rgba(251,191,36,0.9))', color: '#451a03'}}>Visual</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Scrolling Grid</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Scrolling Grid</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Scrolling Image Grid – Portrait 4:5</h3>
@@ -850,7 +892,7 @@ CSS:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Create a **Scrolling Image Grid** section with auto-scrolling marquee effect.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[160px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Create a **Scrolling Image Grid** section with auto-scrolling marquee effect.
 
 Structure:
 - Full-width section with overflow hidden
@@ -883,11 +925,11 @@ Styling:
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-300 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(253,224,71,0.9), rgba(251,191,36,0.9))', color: '#451a03'}}>Visual</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Button Effect</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Button Effect</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Button – Border Beam Animation</h3>
@@ -902,7 +944,7 @@ Styling:
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Add a **Border Beam** animation effect to buttons on hover.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Add a **Border Beam** animation effect to buttons on hover.
 
 Implementation:
 - Use a pseudo-element (::before or ::after) for the beam
@@ -927,11 +969,11 @@ Alternative (conic-gradient):
 </div>
 </article>
 
-<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9), rgba(9,9,11,0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
+<article className="animate-on-scroll slide-up delay-400 group rounded-2xl card-shine hover-glow" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9), rgba(9, 9, 11, 0.95))', border: '1px solid rgba(255,255,255,0.08)'}}>
 <div className="p-6 space-y-4">
 <div className="flex flex-wrap gap-2">
 <span className="px-2.5 py-1 rounded-full text-xs uppercase font-semibold tracking-wide" style={{background: 'linear-gradient(135deg, rgba(253,224,71,0.9), rgba(251,191,36,0.9))', color: '#451a03'}}>Visual</span>
-<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Glass Effect</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa'}}>Glass Effect</span>
 </div>
 <div>
 <h3 className="text-lg font-semibold mb-2" style={{color: '#fafafa'}}>Card – Glassmorphism Effect</h3>
@@ -946,7 +988,7 @@ Alternative (conic-gradient):
 <i className="w-3.5 h-3.5" data-lucide="copy"></i>
 <span>Prompt</span>
 </div>
-<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#e4e4e7', -TwRingColor: 'rgba(231,37,67,0.5)'}}>Apply **Glassmorphism** effect to all cards in {{SECTION_NAME}}.
+<textarea className="w-full rounded-xl p-4 text-xs font-mono resize-y min-h-[140px] focus:outline-none focus:ring-2 transition-all" readonly="" style={{background: 'rgba(0, 0, 0, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#e4e4e7', '--tw-ring-color': 'rgba(231,37,67,0.5)'}}>Apply **Glassmorphism** effect to all cards in {{SECTION_NAME}}.
 
 Card Styling:
 - Background: rgba(255,255,255,0.03) or rgba(0,0,0,0.4)
@@ -978,8 +1020,8 @@ Hover Effect:
 </section>
 
 <section className="animate-on-scroll fade-in delay-300">
-<div className="rounded-2xl p-6 flex items-start gap-4" style={{background: 'rgba(39,39,42,0.3)', border: '1px dashed rgba(255,255,255,0.15)'}}>
-<div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.3)'}}>
+<div className="rounded-2xl p-6 flex items-start gap-4" style={{background: 'rgba(39, 39, 42, 0.3)', border: '1px dashed rgba(255,255,255,0.15)'}}>
+<div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'rgba(251, 191, 36, 0.15)', border: '1px solid rgba(251,191,36,0.3)'}}>
 <i className="w-5 h-5" data-lucide="lightbulb" style={{color: '#fcd34d'}}></i>
 </div>
 <div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -95,6 +131,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -129,7 +171,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="w-full flex flex-col items-center p-8 rounded-2xl border border-white/5 bg-white/[0.02] gap-8 group/card hover:border-white/10 transition-colors">
 <div className="flex-1 flex items-center justify-center min-h-[80px]" id="demo-2">
-<button className="group hover:bg-white/5 transition-all flex text-sm font-medium text-zinc-200 bg-gradient-to-b from-white/5 via-white/10 to-white/5 rounded-full pt-3 pr-6 pb-3 pl-6 gap-x-2 items-center" style={{boxShadow: '0 10px 20px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.1)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '9999px', position: 'relative'}}>
+<button className="group hover:bg-white/5 transition-all flex text-sm font-medium text-zinc-200 bg-gradient-to-b from-white/5 via-white/10 to-white/5 rounded-full pt-3 pr-6 pb-3 pl-6 gap-x-2 items-center" style={{boxShadow: '0 10px 20px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.1)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.05))', '--border-radius-before': '9999px', position: 'relative'}}>
 <span className="dynamic-text text-zinc-200/90 tracking-tight">Insert Text</span>
 <svg className="text-zinc-400 group-hover:translate-x-0.5 transition-transform" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </button>
@@ -185,7 +227,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="w-full flex flex-col items-center p-8 rounded-2xl border border-white/5 bg-white/[0.02] gap-8 group/card hover:border-white/10 transition-colors">
 <div className="flex-1 flex items-center justify-center min-h-[80px]" id="demo-5">
-<a className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_8px_rgba(255,255,255,0.1)] rounded-full relative shadow-[0_8px_40px_rgba(0,0,0,0.5)]" href="#" style={{-Spread: '90deg', -ShimmerColor: 'rgba(255,255,255,0.6)', -Radius: '9999px', -Speed: '4s', -Cut: '1px', -Bg: 'rgba(20, 20, 20, 0.6)'}}>
+<a className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_8px_rgba(255,255,255,0.1)] rounded-full relative shadow-[0_8px_40px_rgba(0,0,0,0.5)]" href="#" style={{'--spread': '90deg', '--shimmer-color': 'rgba(255, 255, 255, 0.6)', '--radius': '9999px', '--speed': '4s', '--cut': '1px', '--bg': 'rgba(20, 20, 20, 0.6)'}}>
 <div className="absolute inset-0">
 <div className="absolute inset-[-200%] w-[400%] h-[400%] [animation:rotate-gradient_var(--speed)_linear_infinite]">
 <div className="absolute inset-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]"></div>

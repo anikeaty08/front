@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -32,6 +68,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -67,7 +109,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </nav>
 
-<section className="lg:pt-48 lg:pb-32 overflow-hidden flex min-h-[90vh] pt-48 pb-32 relative items-center" id="home" style={{backgroundImage: 'linear-gradient(to bottom, rgba(26,11,5,0.7), rgba(64,28,12,0.95)), url(\'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<section className="lg:pt-48 lg:pb-32 overflow-hidden flex min-h-[90vh] pt-48 pb-32 relative items-center" id="home" style={{backgroundImage: 'linear-gradient(to bottom, rgba(26,11,5,0.7), rgba(64,28,12,0.95)), url(\'https: //images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="z-10 flex flex-col text-center w-full max-w-7xl mr-auto ml-auto pr-6 pl-6 relative items-center">
 <span className="px-4 py-1.5 rounded-full bg-[#DFAA5E]/20 text-[#DFAA5E] border border-[#DFAA5E]/30 text-base mb-8 flex items-center gap-2 backdrop-blur-sm">
 <i className="w-4 h-4" data-lucide="coffee" strokeWidth="1.5"></i>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -259,6 +295,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -346,7 +388,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="sm:col-span-1">
 <label className="text-xs text-white/60">Your 3-digit guess</label>
 <div className="mt-1 flex items-center gap-2">
-<input className="w-full px-3 py-2 rounded-md bg-black/60 text-white placeholder-white/30 ring-1 ring-white/15 focus:outline-none focus:ring-2" id="guess" inputmode="numeric" maxlength="3" pattern="^[0-9]{3}$" placeholder="000" style={{caretColor: 'var(--brand)', borderColor: 'rgba(255,255,255,0.15)', outlineColor: 'transparent', boxShadow: '0 0 0 0 rgba(0,0,0,0)'}} type="text"/>
+<input className="w-full px-3 py-2 rounded-md bg-black/60 text-white placeholder-white/30 ring-1 ring-white/15 focus:outline-none focus:ring-2" id="guess" inputmode="numeric" maxlength="3" pattern="^[0-9]{3}$" placeholder="000" style={{caretColor: 'var(--brand)', borderColor: 'rgba(255, 255, 255, 0.15)', outlineColor: 'transparent', boxShadow: '0 0 0 0 rgba(0,0,0,0)'}} type="text"/>
 <button className="shrink-0 px-2.5 py-2 rounded-md ring-1 ring-white/15 bg-white/5 hover:bg-white/10 hover:ring-white/25 transition" id="random-guess" title="Random" type="button">
 <i className="w-4 h-4" data-lucide="shuffle" style={{strokeWidth: '1.5'}}></i>
 </button>

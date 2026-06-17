@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -387,6 +423,12 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -956,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div style={{fontSize: '10px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '.12em', color: 'rgba(255,255,255,0.5)', marginBottom: '4px'}}>NAJEM</div>
 <div style={{fontSize: '15px', fontWeight: '600', color: 'rgba(255,255,255,0.6)'}}>Długoterminowy</div>
 </div>
-<div style={{padding: '18px 24px', textAlign: 'center', borderLeft: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,196,192,0.15)'}}>
+<div style={{padding: '18px 24px', textAlign: 'center', borderLeft: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0,196,192,0.15)'}}>
 <div style={{fontSize: '11px', color: '#00c4c0', marginBottom: '4px'}}>NAJEM</div>
 <div style={{fontSize: '15px', fontWeight: '600', color: 'white'}}>Krótkoterminowy</div>
 <div style={{fontSize: '10px', color: '#00c4c0', fontWeight: '600', marginTop: '2px'}}>z BookingHost</div>
@@ -1453,7 +1495,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <h2 className="text-3xl font-semibold tracking-tight text-[#0f0f0f]">Oś czasu</h2>
 </div>
 <div className="overflow-x-auto">
-<svg style={{width: '100%', minWidth: '700px', fontFamily: 'Inter,sans-serif', fontSize: '13px'}} viewbox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+<svg style={{width: '100%', minWidth: '700px', fontFamily: 'Inter, sans-serif', fontSize: '13px'}} viewbox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
 
 <line stroke="#00c4c0" strokeWidth="3.5" x1="20" x2="880" y1="130" y2="130"></line>
 
@@ -1851,26 +1893,26 @@ document.addEventListener('DOMContentLoaded', function() {
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '12px', fontWeight: '600', padding: '4px 12px', borderRadius: '20px'}}>42 m²</span>
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '12px', fontWeight: '600', padding: '4px 12px', borderRadius: '20px'}}>Studio</span>
 </div>
-<h2 style={{fontFamily: '\'Inter\',sans-serif', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '800', color: '#0f0f0f', marginBottom: '20px', lineHeight: '1.3'}}>Śródmieście Warszawa – wzrost o 28% w pierwszym kwartale</h2>
+<h2 style={{fontFamily: '\'Inter\', sans-serif', fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: '800', color: '#0f0f0f', marginBottom: '20px', lineHeight: '1.3'}}>Śródmieście Warszawa – wzrost o 28% w pierwszym kwartale</h2>
 <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px'}}>
 <div style={{background: '#fff', border: '1px solid #ebebeb', borderRadius: '12px', padding: '16px'}}>
 <div style={{fontSize: '12px', color: '#4a4a4a', marginBottom: '4px'}}>Przed BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '22px', fontWeight: '800', color: '#4a4a4a', textDecoration: 'line-through'}}>3 600 zł/mies.</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '22px', fontWeight: '800', color: '#4a4a4a', textDecoration: 'line-through'}}>3 600 zł/mies.</div>
 </div>
 <div style={{background: '#f0fcfb', border: '1.5px solid #00c4c0', borderRadius: '12px', padding: '16px'}}>
 <div style={{fontSize: '12px', color: '#00c4c0', marginBottom: '4px'}}>Z BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '22px', fontWeight: '800', color: '#00c4c0'}}>4 600 zł/mies.</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '22px', fontWeight: '800', color: '#00c4c0'}}>4 600 zł/mies.</div>
 </div>
 </div>
 <div style={{background: '#00c4c0', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', textAlign: 'center'}}>
-<span style={{fontFamily: '\'Inter\',sans-serif', fontSize: '15px', fontWeight: '700', color: '#fff'}}>+1 000 zł więcej każdego miesiąca · +28% wzrost</span>
+<span style={{fontFamily: '\'Inter\', sans-serif', fontSize: '15px', fontWeight: '700', color: '#fff'}}>+1 000 zł więcej każdego miesiąca · +28% wzrost</span>
 </div>
 <p style={{fontSize: '14px', lineHeight: '1.7', color: '#1a1a1a', marginBottom: '16px', fontStyle: 'italic'}}>"Przekazałam mieszkanie BookingHost i po prostu przestałam się tym przejmować. Raz w miesiącu sprawdzam przelew na koncie."</p>
 <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-<div style={{width: '36px', height: '36px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\',sans-serif', fontWeight: '700', fontSize: '13px', color: '#00c4c0'}}>AK</div>
+<div style={{width: '36px', height: '36px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\', sans-serif', fontWeight: '700', fontSize: '13px', color: '#00c4c0'}}>AK</div>
 <div style={{fontSize: '13px', fontWeight: '600', color: '#0f0f0f'}}>Anna K. <span style={{color: '#4a4a4a', fontWeight: '400'}}>· właścicielka od 2023</span></div>
 </div>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'inline-block', marginTop: '20px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\',sans-serif', fontSize: '14px', fontWeight: '600', padding: '12px 24px', borderRadius: '50px', textDecoration: 'none'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'inline-block', marginTop: '20px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\', sans-serif', fontSize: '14px', fontWeight: '600', padding: '12px 24px', borderRadius: '50px', textDecoration: 'none'}}>
           Sprawdź swój zysk – bezpłatnie →
         </a>
 </div>
@@ -1886,25 +1928,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>Kraków</span>
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>55 m²</span>
 </div>
-<h3 style={{fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Kazimierz, Kraków – sezonowość pod kontrolą</h3>
+<h3 style={{fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Kazimierz, Kraków – sezonowość pod kontrolą</h3>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f8f8', borderRadius: '10px', marginBottom: '12px'}}>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#4a4a4a'}}>Przed</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>3 500 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>3 500 zł</div>
 </div>
 <svg fill="none" height="20" stroke="#00c4c0" strokeLinecap="round" strokeWidth="2.5" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#00c4c0'}}>Z BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>5 400 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>5 400 zł</div>
 </div>
 </div>
-<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\',sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+22% wzrost przychodów</div>
+<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\', sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+22% wzrost przychodów</div>
 <p style={{fontSize: '13px', lineHeight: '1.6', color: '#1a1a1a', marginTop: '14px', fontStyle: 'italic'}}>"Miałem obawy czy to w ogóle zadziała, ale po pierwszym miesiącu byłem mile zaskoczony. Obsługa gości jest naprawdę sprawna."</p>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px'}}>
-<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\',sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>TM</div>
+<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\', sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>TM</div>
 <span style={{fontSize: '12px', color: '#4a4a4a'}}>właściciel · Kraków</span>
 </div>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\',sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\', sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
             Sprawdź swój zysk →
           </a>
 </div>
@@ -1918,25 +1960,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>Gdańsk</span>
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>38 m²</span>
 </div>
-<h3 style={{fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Przymorze, Gdańsk – z najmu długiego na krótki</h3>
+<h3 style={{fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Przymorze, Gdańsk – z najmu długiego na krótki</h3>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f8f8', borderRadius: '10px', marginBottom: '12px'}}>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#4a4a4a'}}>Przed</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>2 400 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>2 400 zł</div>
 </div>
 <svg fill="none" height="20" stroke="#00c4c0" strokeLinecap="round" strokeWidth="2.5" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#00c4c0'}}>Z BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>4 100 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>4 100 zł</div>
 </div>
 </div>
-<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\',sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+35% wzrost przychodów</div>
+<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\', sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+35% wzrost przychodów</div>
 <p style={{fontSize: '13px', lineHeight: '1.6', color: '#1a1a1a', marginTop: '14px', fontStyle: 'italic'}}>"Najlepsza decyzja była taka żeby w ogóle nie zajmować się tym samemu. BookingHost przejął wszystko i spokojnie śpię."</p>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px'}}>
-<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\',sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>PS</div>
+<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\', sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>PS</div>
 <span style={{fontSize: '12px', color: '#4a4a4a'}}>właścicielka · Gdańsk</span>
 </div>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\',sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\', sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
             Sprawdź swój zysk →
           </a>
 </div>
@@ -1950,25 +1992,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>Wrocław</span>
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>48 m²</span>
 </div>
-<h3 style={{fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Stare Miasto, Wrocław – inwestor po raz pierwszy</h3>
+<h3 style={{fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Stare Miasto, Wrocław – inwestor po raz pierwszy</h3>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f8f8', borderRadius: '10px', marginBottom: '12px'}}>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#4a4a4a'}}>Przed</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>3 000 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>3 000 zł</div>
 </div>
 <svg fill="none" height="20" stroke="#00c4c0" strokeLinecap="round" strokeWidth="2.5" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#00c4c0'}}>Z BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>4 350 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>4 350 zł</div>
 </div>
 </div>
-<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\',sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+45% wzrost przychodów</div>
+<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\', sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+45% wzrost przychodów</div>
 <p style={{fontSize: '13px', lineHeight: '1.6', color: '#1a1a1a', marginTop: '14px', fontStyle: 'italic'}}>"Kupiłem mieszkanie pod inwestycję i od razu oddałem je BookingHost. Najlepsza decyzja finansowa w tym roku."</p>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px'}}>
-<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\',sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>MK</div>
+<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\', sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>MK</div>
 <span style={{fontSize: '12px', color: '#4a4a4a'}}>inwestor · Wrocław</span>
 </div>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\',sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\', sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
             Sprawdź swój zysk →
           </a>
 </div>
@@ -1982,25 +2024,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>Poznań</span>
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>62 m²</span>
 </div>
-<h3 style={{fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Centrum Poznania – mieszkanie 3-pokojowe</h3>
+<h3 style={{fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Centrum Poznania – mieszkanie 3-pokojowe</h3>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f8f8', borderRadius: '10px', marginBottom: '12px'}}>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#4a4a4a'}}>Przed</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>4 200 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>4 200 zł</div>
 </div>
 <svg fill="none" height="20" stroke="#00c4c0" strokeLinecap="round" strokeWidth="2.5" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#00c4c0'}}>Z BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>5 900 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>5 900 zł</div>
 </div>
 </div>
-<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\',sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+18% wzrost przychodów</div>
+<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\', sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+18% wzrost przychodów</div>
 <p style={{fontSize: '13px', lineHeight: '1.6', color: '#1a1a1a', marginTop: '14px', fontStyle: 'italic'}}>"Doceniam że mam jednego opiekuna z którym mogę porozmawiać. Nie muszę dzwonić na infolinię i tłumaczyć od nowa."</p>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px'}}>
-<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\',sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>RB</div>
+<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\', sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>RB</div>
 <span style={{fontSize: '12px', color: '#4a4a4a'}}>właściciel · Poznań</span>
 </div>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\',sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\', sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
             Sprawdź swój zysk →
           </a>
 </div>
@@ -2014,25 +2056,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>Katowice</span>
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>45 m²</span>
 </div>
-<h3 style={{fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Centrum, Katowice – apartament w centrum biznesowym</h3>
+<h3 style={{fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Centrum, Katowice – apartament w centrum biznesowym</h3>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f8f8', borderRadius: '10px', marginBottom: '12px'}}>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#4a4a4a'}}>Przed</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>2 900 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>2 900 zł</div>
 </div>
 <svg fill="none" height="20" stroke="#00c4c0" strokeLinecap="round" strokeWidth="2.5" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#00c4c0'}}>Z BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>5 100 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>5 100 zł</div>
 </div>
 </div>
-<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\',sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+41% wzrost przychodów</div>
+<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\', sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+41% wzrost przychodów</div>
 <p style={{fontSize: '13px', lineHeight: '1.6', color: '#1a1a1a', marginTop: '14px', fontStyle: 'italic'}}>"W miesiącach z targami i kongresami różnica w przychodach jest naprawdę widoczna. Warto było spróbować."</p>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px'}}>
-<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\',sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>EW</div>
+<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\', sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>EW</div>
 <span style={{fontSize: '12px', color: '#4a4a4a'}}>właścicielka · Katowice</span>
 </div>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\',sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\', sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
             Sprawdź swój zysk →
           </a>
 </div>
@@ -2046,25 +2088,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>Łódź</span>
 <span style={{background: '#f0fcfb', color: '#00c4c0', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '20px'}}>33 m²</span>
 </div>
-<h3 style={{fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Śródmieście Łódź – właściciel z zagranicy</h3>
+<h3 style={{fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '700', color: '#0f0f0f', marginBottom: '16px', lineHeight: '1.3'}}>Śródmieście Łódź – właściciel z zagranicy</h3>
 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8f8f8', borderRadius: '10px', marginBottom: '12px'}}>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#4a4a4a'}}>Przed</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>1 800 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '700', color: '#4a4a4a', textDecoration: 'line-through'}}>1 800 zł</div>
 </div>
 <svg fill="none" height="20" stroke="#00c4c0" strokeLinecap="round" strokeWidth="2.5" viewbox="0 0 24 24" width="20"><polyline points="9 18 15 12 9 6"></polyline></svg>
 <div style={{textAlign: 'center'}}>
 <div style={{fontSize: '11px', color: '#00c4c0'}}>Z BookingHost</div>
-<div style={{fontFamily: '\'Inter\',sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>2 950 zł</div>
+<div style={{fontFamily: '\'Inter\', sans-serif', fontSize: '18px', fontWeight: '800', color: '#00c4c0'}}>2 950 zł</div>
 </div>
 </div>
-<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\',sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+26% wzrost przychodów</div>
+<div style={{textAlign: 'center', background: '#f0fcfb', borderRadius: '8px', padding: '8px', fontFamily: '\'Inter\', sans-serif', fontSize: '14px', fontWeight: '700', color: '#00c4c0', border: '1.5px solid #00c4c0'}}>+26% wzrost przychodów</div>
 <p style={{fontSize: '13px', lineHeight: '1.6', color: '#1a1a1a', marginTop: '14px', fontStyle: 'italic'}}>"Mieszkam za granicą i nie mógłbym tego ogarnąć sam. Panel pokazuje mi wszystko — czuję że mam kontrolę."</p>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px'}}>
-<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\',sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>JN</div>
+<div style={{width: '30px', height: '30px', background: '#f0fcfb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '\'Inter\', sans-serif', fontWeight: '700', fontSize: '11px', color: '#00c4c0', flexShrink: '0'}}>JN</div>
 <span style={{fontSize: '12px', color: '#4a4a4a'}}>właściciel · Łódź</span>
 </div>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\',sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'block', marginTop: '14px', background: '#00c4c0', color: 'white', fontFamily: '\'Inter\', sans-serif', fontSize: '13px', fontWeight: '600', padding: '10px 16px', borderRadius: '50px', textDecoration: 'none', textAlign: 'center'}}>
             Sprawdź swój zysk →
           </a>
 </div>
@@ -2075,14 +2117,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <section style={{background: 'linear-gradient(135deg, #1a2e35 0%, #2a6678 60%, #00c4c0 100%)', padding: '80px 0', textAlign: 'center'}}>
 <div style={{maxWidth: '700px', margin: '0 auto', padding: '0 24px'}}>
-<h2 style={{fontFamily: '\'Inter\',sans-serif', fontSize: 'clamp(28px,3.5vw,40px)', fontWeight: '800', color: '#fff', marginBottom: '16px'}}>Dołącz do 2 000 właścicieli i zarabiaj więcej</h2>
+<h2 style={{fontFamily: '\'Inter\', sans-serif', fontSize: 'clamp(28px,3.5vw,40px)', fontWeight: '800', color: '#fff', marginBottom: '16px'}}>Dołącz do 2 000 właścicieli i zarabiaj więcej</h2>
 <p style={{fontSize: '18px', color: 'rgba(255,255,255,0.65)', marginBottom: '36px'}}>Sprawdź ile możesz zarobić – bezpłatna wycena w 24h, bez zobowiązań.</p>
 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap'}}>
-<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#00c4c0', color: '#fff', fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '700', padding: '16px 36px', borderRadius: '50px', textDecoration: 'none'}}>
+<a href="#" onclick="showPage('zapisz-sie');return false;" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#00c4c0', color: '#fff', fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '700', padding: '16px 36px', borderRadius: '50px', textDecoration: 'none'}}>
         Sprawdź swój zysk – bezpłatnie
         <svg fill="none" height="18" stroke="white" strokeLinecap="round" strokeWidth="2.5" viewbox="0 0 24 24" width="18"><polyline points="9 18 15 12 9 6"></polyline></svg>
 </a>
-<a href="tel:221131400" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: '#fff', fontFamily: '\'Inter\',sans-serif', fontSize: '17px', fontWeight: '600', padding: '16px 28px', borderRadius: '50px', textDecoration: 'none', border: '1.5px solid rgba(255,255,255,0.3)'}}>
+<a href="tel:221131400" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: '#fff', fontFamily: '\'Inter\', sans-serif', fontSize: '17px', fontWeight: '600', padding: '16px 28px', borderRadius: '50px', textDecoration: 'none', border: '1.5px solid rgba(255,255,255,0.3)'}}>
 <svg fill="white" height="18" viewbox="0 0 24 24" width="18"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"></path></svg>
         22 113 14 00
       </a>
@@ -2298,7 +2340,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div style={{fontSize: '22px', fontWeight: '700', color: 'rgba(255,255,255,0.4)', textDecoration: 'line-through'}}>2 800 zł</div>
 <div style={{fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '2px'}}>miesięcznie</div>
 </div>
-<div style={{background: 'rgba(0,196,192,0.15)', border: '1px solid rgba(0,196,192,0.3)', borderRadius: '12px', padding: '16px'}}>
+<div style={{background: 'rgba(0, 196, 192, 0.15)', border: '1px solid rgba(0,196,192,0.3)', borderRadius: '12px', padding: '16px'}}>
 <div style={{fontSize: '11px', color: '#00c4c0', marginBottom: '6px'}}>Z BookingHost</div>
 <div style={{fontSize: '22px', fontWeight: '700', color: '#00c4c0'}}>4 650 zł</div>
 <div style={{fontSize: '11px', color: 'rgba(0,196,192,0.7)', marginTop: '2px'}}>miesięcznie</div>
@@ -4765,7 +4807,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center'}}>
 <div>
 <div style={{display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f0fcfb', borderRadius: '20px', padding: '6px 16px', marginBottom: '20px', fontSize: '13px', fontWeight: '600', color: '#00c4c0'}}>Dla kogo?</div>
-<h2 style={{fontFamily: '\'Inter\',sans-serif', fontSize: 'clamp(24px,2.8vw,34px)', fontWeight: '600', color: '#0f0f0f', marginBottom: '20px', lineHeight: '1.2'}}>Twoje mieszkanie pracuje, Ty nie musisz</h2>
+<h2 style={{fontFamily: '\'Inter\', sans-serif', fontSize: 'clamp(24px,2.8vw,34px)', fontWeight: '600', color: '#0f0f0f', marginBottom: '20px', lineHeight: '1.2'}}>Twoje mieszkanie pracuje, Ty nie musisz</h2>
 <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
 <div style={{display: 'flex', gap: '14px', padding: '18px', background: '#f8f8f8', borderRadius: '12px', alignItems: 'flex-start'}}>
 <div style={{width: '36px', height: '36px', background: '#f0fcfb', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: '0'}}>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -34,6 +70,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -103,7 +145,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2 h-auto">
 
-<div className="card-spotlight group col-span-1 md:col-span-2 md:row-span-2 cursor-pointer" style={{-MouseX: '112px', -MouseY: '546.1666870117188px'}}>
+<div className="card-spotlight group col-span-1 md:col-span-2 md:row-span-2 cursor-pointer" style={{'--mouse-x': '112px', '--mouse-y': '546.1666870117188px'}}>
 <div className="card-content flex flex-col h-full pt-8 pr-8 pb-8 pl-8 justify-between">
 <div className="relative h-64 w-full overflow-hidden rounded-xl border border-white/5 bg-neutral-900 md:h-96">
 
@@ -141,7 +183,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="card-spotlight group col-span-1 cursor-pointer" style={{-MouseX: '20.6666259765625px', -MouseY: '104.83332824707031px'}}>
+<div className="card-spotlight group col-span-1 cursor-pointer" style={{'--mouse-x': '20.6666259765625px', '--mouse-y': '104.83332824707031px'}}>
 <div className="card-content flex h-full flex-col justify-between p-8">
 <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white transition-colors group-hover:bg-white/10">
 <iconify-icon className="" icon="lucide:zap" width="24"></iconify-icon>
@@ -175,7 +217,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="card-spotlight group col-span-1 md:col-span-3" style={{-MouseX: '82px', -MouseY: '221.8333282470703px'}}>
+<div className="card-spotlight group col-span-1 md:col-span-3" style={{'--mouse-x': '82px', '--mouse-y': '221.8333282470703px'}}>
 <div className="card-content grid grid-cols-1 gap-8 p-8 md:grid-cols-2 items-center">
 <div className="">
 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium text-neutral-300">
@@ -222,7 +264,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mx-auto mt-3 text-center text-sm text-neutral-400 max-w-md">Bridging the gap between design and engineering with a comprehensive skill set.</p>
 <div className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4">
 
-<div className="card-spotlight group p-6 text-center cursor-default" style={{-MouseX: '73px', -MouseY: '60.5px'}}>
+<div className="card-spotlight group p-6 text-center cursor-default" style={{'--mouse-x': '73px', '--mouse-y': '60.5px'}}>
 <div className="card-content">
 <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 text-blue-400 group-hover:text-blue-300 group-hover:bg-blue-500/20 transition-all">
 <iconify-icon icon="lucide:layout" width="20"></iconify-icon>
@@ -231,7 +273,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-xs text-neutral-500">Figma, Prototyping, Design Systems</p>
 </div>
 </div>
-<div className="card-spotlight group p-6 text-center cursor-default" style={{-MouseX: '136px', -MouseY: '57.5px'}}>
+<div className="card-spotlight group p-6 text-center cursor-default" style={{'--mouse-x': '136px', '--mouse-y': '57.5px'}}>
 <div className="card-content">
 <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-purple-500/10 text-purple-400 group-hover:text-purple-300 group-hover:bg-purple-500/20 transition-all">
 <iconify-icon icon="lucide:code" width="20"></iconify-icon>
@@ -240,7 +282,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-xs text-neutral-500">React, Vue, Tailwind, TypeScript</p>
 </div>
 </div>
-<div className="card-spotlight group p-6 text-center cursor-default" style={{-MouseX: '19px', -MouseY: '4.5px'}}>
+<div className="card-spotlight group p-6 text-center cursor-default" style={{'--mouse-x': '19px', '--mouse-y': '4.5px'}}>
 <div className="card-content">
 <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10 text-green-400 group-hover:text-green-300 group-hover:bg-green-500/20 transition-all">
 <iconify-icon icon="lucide:database" width="20"></iconify-icon>

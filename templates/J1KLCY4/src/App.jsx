@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -134,6 +170,12 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -305,7 +347,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Save up to 20%</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Vehicle Management</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Vehicle Management</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Track maintenance, compliance, and assignments for vans, jeepneys, trucks, and cars with effortless control.</p>
 <ul className="mt-3 text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
 <li className="inline-flex items-center gap-2"><i className="w-4 h-4 text-emerald-500" data-lucide="clipboard-check"></i> LTO, LTFRB, emission reminders</li>
@@ -321,7 +363,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">+30% utilization</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Smart Booking System</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Smart Booking System</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Real-time calendar with drag-and-drop scheduling for routes in Metro Manila, Cebu, and beyond.</p>
 <ul className="mt-3 text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
 <li className="inline-flex items-center gap-2"><i className="w-4 h-4 text-[#007BFF]" data-lucide="component"></i> Conflict detection</li>
@@ -337,7 +379,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Cut idle time</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Utilization Analytics</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Utilization Analytics</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">See fleet usage by city, branch, or vehicle type, and optimize dispatch across Philippine regions.</p>
 <ul className="mt-3 text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
 <li className="inline-flex items-center gap-2"><i className="w-4 h-4 text-[#007BFF]" data-lucide="pie-chart"></i> Utilization heatmaps</li>
@@ -353,7 +395,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Grow margins</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Revenue Tracking</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Revenue Tracking</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Link bookings to revenue per route, client, or branch—priced in PHP with taxes and surcharges.</p>
 <ul className="mt-3 text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
 <li className="inline-flex items-center gap-2"><i className="w-4 h-4 text-emerald-500" data-lucide="line-chart"></i> Revenue dashboards</li>
@@ -401,7 +443,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 </div>
 <div className="absolute -top-3 -right-3 rounded-md bg-white dark:bg-neutral-900 border border-slate-200/70 dark:border-white/10 px-2 py-1 text-xs shadow">
-<span className="font-medium tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>PH-Ready</span>
+<span className="font-medium tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>PH-Ready</span>
 </div>
 </div>
 </div>
@@ -413,7 +455,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
 <div className="flex items-end justify-between gap-6">
 <div>
-<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>See it in action: Real-time booking and revenue dashboard</h2>
+<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>See it in action: Real-time booking and revenue dashboard</h2>
 <p className="mt-2 text-slate-600 dark:text-slate-400">Drag trips on the calendar. Monitor revenue at a glance.</p>
 </div>
 <div className="hidden sm:flex items-center gap-3">
@@ -427,7 +469,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <i className="w-5 h-5 text-[#007BFF]" data-lucide="calendar"></i>
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Booking Calendar</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Booking Calendar</h3>
 </div>
 <div className="flex items-center gap-2 text-xs">
 <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Confirmed</span>
@@ -483,7 +525,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <i className="w-5 h-5 text-[#007BFF]" data-lucide="line-chart"></i>
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Revenue Overview</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Revenue Overview</h3>
 </div>
 <span className="text-xs text-slate-500 dark:text-slate-400">Last 6 months</span>
 </div>
@@ -499,11 +541,11 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="mt-4 grid grid-cols-2 gap-3">
 <div className="rounded-lg border border-slate-200/70 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-3">
 <div className="text-xs text-slate-500 dark:text-slate-400">Bookings Today</div>
-<div className="mt-1 text-xl font-semibold tracking-tight" id="bookingsToday" style={{fontFamily: '\'Aileron\',\'Inter\''}}>0</div>
+<div className="mt-1 text-xl font-semibold tracking-tight" id="bookingsToday" style={{fontFamily: '\'Aileron\', \'Inter\''}}>0</div>
 </div>
 <div className="rounded-lg border border-slate-200/70 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-3">
 <div className="text-xs text-slate-500 dark:text-slate-400">Projected Revenue (PHP)</div>
-<div className="mt-1 text-xl font-semibold tracking-tight" id="revenueToday" style={{fontFamily: '\'Aileron\',\'Inter\''}}>0</div>
+<div className="mt-1 text-xl font-semibold tracking-tight" id="revenueToday" style={{fontFamily: '\'Aileron\', \'Inter\''}}>0</div>
 </div>
 <div className="col-span-2 rounded-lg border border-slate-200/70 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-3">
 <div className="flex items-center justify-between">
@@ -524,7 +566,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
 <div className="flex items-end justify-between">
 <div>
-<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Trusted by forward-thinking Filipino businesses</h2>
+<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Trusted by forward-thinking Filipino businesses</h2>
 <p className="mt-2 text-slate-600 dark:text-slate-400">From Manila logistics to Cebu transport operators and Davao corporate fleets.</p>
 </div>
 <div className="hidden sm:flex items-center gap-3 text-xs">
@@ -535,7 +577,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
 <div className="rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-xl p-5">
 <div className="flex items-center gap-3">
-<div className="h-10 w-10 rounded-md bg-[#007BFF]/15 text-[#007BFF] flex items-center justify-center font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\'', letterSpacing: '-0.02em'}}>ME</div>
+<div className="h-10 w-10 rounded-md bg-[#007BFF]/15 text-[#007BFF] flex items-center justify-center font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\'', letterSpacing: '-0.02em'}}>ME</div>
 <div>
 <div className="font-medium">Manila Express Logistics</div>
 <div className="text-xs text-slate-500 dark:text-slate-400">Manila, NCR</div>
@@ -546,7 +588,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <div className="rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-xl p-5">
 <div className="flex items-center gap-3">
-<div className="h-10 w-10 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\'', letterSpacing: '-0.02em'}}>CT</div>
+<div className="h-10 w-10 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\'', letterSpacing: '-0.02em'}}>CT</div>
 <div>
 <div className="font-medium">Cebu City Transport Co.</div>
 <div className="text-xs text-slate-500 dark:text-slate-400">Cebu, Visayas</div>
@@ -557,7 +599,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <div className="rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-xl p-5">
 <div className="flex items-center gap-3">
-<div className="h-10 w-10 rounded-md bg-orange-500/15 text-orange-500 flex items-center justify-center font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\'', letterSpacing: '-0.02em'}}>DM</div>
+<div className="h-10 w-10 rounded-md bg-orange-500/15 text-orange-500 flex items-center justify-center font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\'', letterSpacing: '-0.02em'}}>DM</div>
 <div>
 <div className="font-medium">Davao Mobility Group</div>
 <div className="text-xs text-slate-500 dark:text-slate-400">Davao, Mindanao</div>
@@ -573,18 +615,18 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <section className="relative" id="pricing">
 <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
 <div className="text-center max-w-2xl mx-auto">
-<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Transparent pricing for PH businesses</h2>
+<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Transparent pricing for PH businesses</h2>
 <p className="mt-2 text-slate-600 dark:text-slate-400">Start free. Upgrade as your fleet grows.</p>
 </div>
 <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
 <div className="rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-xl p-6 flex flex-col">
 <div className="flex items-center justify-between">
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Small Fleet</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Small Fleet</h3>
 <span className="text-xs text-slate-500 dark:text-slate-400">1–20 vehicles</span>
 </div>
 <div className="mt-4">
-<div className="text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>PHP 4,990</div>
+<div className="text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>PHP 4,990</div>
 <div className="text-xs text-slate-500 dark:text-slate-400">per month</div>
 </div>
 <ul className="mt-4 text-sm text-slate-700 dark:text-slate-300 space-y-2">
@@ -607,11 +649,11 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="relative rounded-2xl border-2 border-[#007BFF] bg-white/80 dark:bg-neutral-900/70 backdrop-blur-xl p-6 flex flex-col shadow-xl shadow-[#007BFF]/10">
 <div className="absolute -top-3 right-4 inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#007BFF] text-white text-xs shadow">Most Popular</div>
 <div className="flex items-center justify-between">
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Growing Fleet</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Growing Fleet</h3>
 <span className="text-xs text-slate-500 dark:text-slate-400">21–100 vehicles</span>
 </div>
 <div className="mt-4">
-<div className="text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>PHP 14,990</div>
+<div className="text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>PHP 14,990</div>
 <div className="text-xs text-slate-500 dark:text-slate-400">per month</div>
 </div>
 <ul className="mt-4 text-sm text-slate-700 dark:text-slate-300 space-y-2">
@@ -634,11 +676,11 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 
 <div className="rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-xl p-6 flex flex-col">
 <div className="flex items-center justify-between">
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Enterprise</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Enterprise</h3>
 <span className="text-xs text-slate-500 dark:text-slate-400">100+ vehicles</span>
 </div>
 <div className="mt-4">
-<div className="text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Custom</div>
+<div className="text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Custom</div>
 <div className="text-xs text-slate-500 dark:text-slate-400">tailored to your ops</div>
 </div>
 <ul className="mt-4 text-sm text-slate-700 dark:text-slate-300 space-y-2">
@@ -666,7 +708,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-neutral-900/60 backdrop-blur-xl p-6 md:p-8">
 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 <div className="md:col-span-1">
-<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Frequently asked</h3>
+<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Frequently asked</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Answers for Philippine fleets.</p>
 </div>
 <div className="md:col-span-2 space-y-5">

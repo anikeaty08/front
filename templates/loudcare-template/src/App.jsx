@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -39,6 +75,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -79,7 +121,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </nav>
 
-<section className="spotlight-group min-h-[700px] overflow-hidden reveal-item bg-slate-50 w-full h-[85vh] max-w-[1500px] border-gray-100 border rounded-[32px] mt-20 relative is-visible" style={{-MouseX: '565px', -MouseY: '688px'}}>
+<section className="spotlight-group min-h-[700px] overflow-hidden reveal-item bg-slate-50 w-full h-[85vh] max-w-[1500px] border-gray-100 border rounded-[32px] mt-20 relative is-visible" style={{'--mouse-x': '565px', '--mouse-y': '688px'}}>
 
 <div className="z-0 absolute top-0 right-0 bottom-0 left-0">
 <img alt="Skin Care Model" className="filter grayscale-[10%] opacity-100 w-full h-full object-cover" src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&amp;w=2070&amp;auto=format&amp;fit=crop"/>
@@ -122,7 +164,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="w-full max-w-[1500px] grid grid-cols-1 md:grid-cols-3 gap-6 reveal-item is-visible">
 
-<div className="spotlight-group bg-white border border-gray-100 p-10 rounded-[24px] hover:border-rose-100 hover:shadow-xl hover:shadow-gray-100/50 transition-all shadow-sm" style={{-MouseX: '66px', -MouseY: '261.1015625px'}}>
+<div className="spotlight-group bg-white border border-gray-100 p-10 rounded-[24px] hover:border-rose-100 hover:shadow-xl hover:shadow-gray-100/50 transition-all shadow-sm" style={{'--mouse-x': '66px', '--mouse-y': '261.1015625px'}}>
 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center mb-6 border border-rose-100">
 <svg className="lucide lucide-heart-pulse w-6 h-6 text-rose-500" data-lucide="heart-pulse" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path><path d="M3.22 13H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"></path></svg>
 </div>
@@ -239,7 +281,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-<div className="spotlight-group group flex flex-col hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all md:col-span-2 md:flex-row md:items-center bg-white h-[320px] border-gray-100 border rounded-2xl pt-8 pr-8 pb-8 pl-8 shadow-sm justify-between" style={{-MouseX: '7px', -MouseY: '98.1015625px'}}>
+<div className="spotlight-group group flex flex-col hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all md:col-span-2 md:flex-row md:items-center bg-white h-[320px] border-gray-100 border rounded-2xl pt-8 pr-8 pb-8 pl-8 shadow-sm justify-between" style={{'--mouse-x': '7px', '--mouse-y': '98.1015625px'}}>
 <div className="absolute -top-24 -right-24 w-96 h-96 bg-rose-50/80 rounded-full blur-3xl pointer-events-none -z-10 transition-opacity opacity-0 group-hover:opacity-100"></div>
 <div className="absolute inset-0 bg-gradient-to-br from-white via-white/50 to-rose-50/20 opacity-0 group-hover:opacity-100 transition-opacity -z-10"></div>
 <div className="relative z-10 w-full h-full flex flex-col md:flex-row md:items-center justify-between gap-8">
@@ -264,7 +306,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-group group h-[320px] bg-white border border-gray-100 rounded-2xl p-8 flex flex-col justify-between hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all shadow-sm delay-100" style={{-MouseX: '121.3359375px', -MouseY: '294.1015625px'}}>
+<div className="spotlight-group group h-[320px] bg-white border border-gray-100 rounded-2xl p-8 flex flex-col justify-between hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all shadow-sm delay-100" style={{'--mouse-x': '121.3359375px', '--mouse-y': '294.1015625px'}}>
 <div className="absolute -top-24 -right-24 w-80 h-80 bg-rose-50/80 rounded-full blur-3xl pointer-events-none -z-10 transition-opacity opacity-0 group-hover:opacity-100"></div>
 <div className="absolute inset-0 bg-gradient-to-br from-white via-white/50 to-rose-50/20 opacity-0 group-hover:opacity-100 transition-opacity -z-10"></div>
 <div className="relative z-10 h-full flex flex-col justify-between">
@@ -289,7 +331,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-group group flex flex-col hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all delay-200 bg-white h-[320px] border-gray-100 border rounded-2xl pt-8 pr-8 pb-8 pl-8 shadow-sm justify-between" style={{-MouseX: '93px', -MouseY: '50.1015625px'}}>
+<div className="spotlight-group group flex flex-col hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all delay-200 bg-white h-[320px] border-gray-100 border rounded-2xl pt-8 pr-8 pb-8 pl-8 shadow-sm justify-between" style={{'--mouse-x': '93px', '--mouse-y': '50.1015625px'}}>
 <div className="absolute -top-24 -right-24 w-80 h-80 bg-rose-50/80 rounded-full blur-3xl pointer-events-none -z-10 transition-opacity opacity-0 group-hover:opacity-100"></div>
 <div className="absolute inset-0 bg-gradient-to-br from-white via-white/50 to-rose-50/20 opacity-0 group-hover:opacity-100 transition-opacity -z-10"></div>
 <div className="relative z-10 h-full flex flex-col justify-between">
@@ -317,7 +359,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-group group flex flex-col hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all delay-300 md:col-span-2 md:flex-row md:items-center bg-white h-[320px] border-gray-100 border rounded-2xl pt-8 pr-8 pb-8 pl-8 shadow-sm justify-between" style={{-MouseX: '118.671875px', -MouseY: '304.1015625px'}}>
+<div className="spotlight-group group flex flex-col hover:border-rose-200 hover:shadow-xl hover:shadow-gray-100 transition-all delay-300 md:col-span-2 md:flex-row md:items-center bg-white h-[320px] border-gray-100 border rounded-2xl pt-8 pr-8 pb-8 pl-8 shadow-sm justify-between" style={{'--mouse-x': '118.671875px', '--mouse-y': '304.1015625px'}}>
 <div className="absolute -top-24 -right-24 w-96 h-96 bg-rose-50/80 rounded-full blur-3xl pointer-events-none -z-10 transition-opacity opacity-0 group-hover:opacity-100"></div>
 <div className="absolute inset-0 bg-gradient-to-br from-white via-white/50 to-rose-50/20 opacity-0 group-hover:opacity-100 transition-opacity -z-10"></div>
 <div className="relative z-10 w-full h-full flex flex-col md:flex-row md:items-center justify-between gap-8">

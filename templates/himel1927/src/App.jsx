@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -235,6 +271,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -246,10 +288,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2 backdrop-blur-xl">
 
 <a className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-white/[0.06] hover:outline hover:outline-1 hover:outline-white/10 transition" href="#hero">
-<span className="text-sm text-white/80" data-element-id="aura-emfw3f9j9" style={{fontFamily: '\'Sora\',system-ui', fontWeight: '500'}}>Himel</span>
+<span className="text-sm text-white/80" data-element-id="aura-emfw3f9j9" style={{fontFamily: '\'Sora\', system-ui', fontWeight: '500'}}>Himel</span>
 </a>
 
-<nav className="hidden md:flex items-center gap-1" style={{fontFamily: '\'Inter\',system-ui'}}>
+<nav className="hidden md:flex items-center gap-1" style={{fontFamily: '\'Inter\', system-ui'}}>
 <a className="rounded-lg px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] hover:outline hover:outline-1 hover:outline-white/10 transition whitespace-nowrap" href="#about">About</a>
 <a className="rounded-lg px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] hover:outline hover:outline-1 hover:outline-white/10 transition whitespace-nowrap" href="#skills">Skills</a>
 <a className="rounded-lg px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] hover:outline hover:outline-1 hover:outline-white/10 transition whitespace-nowrap" href="#projects">Projects</a>
@@ -258,11 +300,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 
 <div className="flex items-center gap-2">
-<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-white/15 bg-white/[0.04] px-3 py-2 text-sm text-white hover:bg-white/[0.08] hover:outline hover:outline-1 hover:outline-white/10 transition" href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" rel="noopener" style={{fontFamily: '\'Inter\',system-ui', fontWeight: '500'}} target="_blank">
+<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-white/15 bg-white/[0.04] px-3 py-2 text-sm text-white hover:bg-white/[0.08] hover:outline hover:outline-1 hover:outline-white/10 transition" href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" rel="noopener" style={{fontFamily: '\'Inter\', system-ui', fontWeight: '500'}} target="_blank">
 <svg className="lucide lucide-download mr-2 h-4 w-4" data-lucide="download" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg>
               Download CV
             </a>
-<a className="hidden sm:inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-white text-black px-3 py-2 text-sm hover:bg-white/90 hover:outline hover:outline-2 hover:outline-white/10 transition" href="#connect" style={{fontFamily: '\'Inter\',system-ui', fontWeight: '600'}}>
+<a className="hidden sm:inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-white text-black px-3 py-2 text-sm hover:bg-white/90 hover:outline hover:outline-2 hover:outline-white/10 transition" href="#connect" style={{fontFamily: '\'Inter\', system-ui', fontWeight: '600'}}>
 <svg className="lucide lucide-send mr-2 h-4 w-4" data-lucide="send" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
               Contact
             </a>
@@ -288,7 +330,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </button>
 </div>
 </div>
-<nav className="px-4 py-3 grid grid-cols-2 gap-2" style={{fontFamily: '\'Inter\',system-ui'}}>
+<nav className="px-4 py-3 grid grid-cols-2 gap-2" style={{fontFamily: '\'Inter\', system-ui'}}>
 <a className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-white/85 hover:text-white hover:bg-white/[0.06] hover:outline hover:outline-1 hover:outline-white/10 transition" href="#about">
 <svg className="lucide lucide-user" data-lucide="user" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> About
             </a>
@@ -328,12 +370,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="relative pt-[108px]" id="hero">
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-<div className="lg:col-span-7 space-y-6" style={{fontFamily: '\'Sora\',system-ui'}}>
+<div className="lg:col-span-7 space-y-6" style={{fontFamily: '\'Sora\', system-ui'}}>
 <p className="text-xs uppercase tracking-widest text-white/60">Portfolio</p>
 <h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white" style={{fontWeight: '600', letterSpacing: '-0.02em'}}>
               Crafting delightful systems and interfaces
             </h1>
-<p className="text-base sm:text-lg text-white/70" style={{fontFamily: '\'Inter\',system-ui', fontWeight: '400'}}>
+<p className="text-base sm:text-lg text-white/70" style={{fontFamily: '\'Inter\', system-ui', fontWeight: '400'}}>
               I design and build products with performance, accessibility, and beauty in mind.
             </p>
 
@@ -353,15 +395,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="flex flex-wrap items-center gap-3">
-<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-white text-black px-5 py-3 text-sm hover:bg-white/90 hover:outline hover:outline-2 hover:outline-white/10 transition" href="#projects" style={{fontFamily: '\'Inter\',system-ui', fontWeight: '600'}}>
+<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-white text-black px-5 py-3 text-sm hover:bg-white/90 hover:outline hover:outline-2 hover:outline-white/10 transition" href="#projects" style={{fontFamily: '\'Inter\', system-ui', fontWeight: '600'}}>
 <svg className="lucide lucide-grid mr-2 h-4 w-4" data-lucide="grid" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path><path d="M3 15h18"></path><path d="M9 3v18"></path><path d="M15 3v18"></path></svg>
                 View Projects
               </a>
-<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm text-white hover:bg-white/[0.08] hover:outline hover:outline-2 hover:outline-white/10 transition" href="#connect" style={{fontFamily: '\'Inter\',system-ui', fontWeight: '500'}}>
+<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm text-white hover:bg-white/[0.08] hover:outline hover:outline-2 hover:outline-white/10 transition" href="#connect" style={{fontFamily: '\'Inter\', system-ui', fontWeight: '500'}}>
 <svg className="lucide lucide-message-square mr-2 h-4 w-4" data-lucide="message-square" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>
                 Get in Touch
               </a>
-<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm text-white hover:bg-white/[0.08] hover:outline hover:outline-2 hover:outline-white/10 transition" href="mailto:hello@example.com" style={{fontFamily: '\'Inter\',system-ui', fontWeight: '500'}}>
+<a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm text-white hover:bg-white/[0.08] hover:outline hover:outline-2 hover:outline-white/10 transition" href="mailto:hello@example.com" style={{fontFamily: '\'Inter\', system-ui', fontWeight: '500'}}>
 <svg className="lucide lucide-mail mr-2 h-4 w-4" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></svg>
                 hello@example.com
               </a>
@@ -395,7 +437,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/10 bg-black/50 backdrop-blur-md p-3" data-parallax="" data-speed="0.25">
 <div className="flex items-center gap-2">
 <svg className="lucide lucide-activity h-4 w-4 text-emerald-300" data-lucide="activity" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
-<p className="text-xs text-white/80" style={{fontFamily: '\'IBM Plex Mono\',monospace'}}>Live preview accelerated</p>
+<p className="text-xs text-white/80" style={{fontFamily: '\'IBM Plex Mono\', monospace'}}>Live preview accelerated</p>
 </div>
 </div>
 
@@ -426,8 +468,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="lg:col-span-7 space-y-6 reveal opacity-0 translate-y-6 blur-sm transition-all duration-700" data-reveal="" style={{fontFamily: '\'Inter\',system-ui'}}>
-<h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontFamily: '\'Sora\',system-ui', fontWeight: '600', letterSpacing: '-0.02em'}}>About Me</h2>
+<div className="lg:col-span-7 space-y-6 reveal opacity-0 translate-y-6 blur-sm transition-all duration-700" data-reveal="" style={{fontFamily: '\'Inter\', system-ui'}}>
+<h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontFamily: '\'Sora\', system-ui', fontWeight: '600', letterSpacing: '-0.02em'}}>About Me</h2>
 <p className="text-white/75">
               I’m a product-focused developer with a background in design systems and full-stack engineering. I care about clear UX, high performance, and clean interfaces.
             </p>
@@ -486,9 +528,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="flex flex-wrap gap-2">
-<span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70" style={{fontFamily: '\'IBM Plex Mono\',monospace'}}><svg className="lucide lucide-cpu h-4 w-4 text-emerald-300" data-lucide="cpu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect height="16" rx="2" width="16" x="4" y="4"></rect><rect height="8" rx="1" width="8" x="8" y="8"></rect></svg> Systems</span>
-<span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70" style={{fontFamily: '\'IBM Plex Mono\',monospace'}}><svg className="lucide lucide-palette h-4 w-4 text-fuchsia-300" data-lucide="palette" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle></svg> Design</span>
-<span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70" style={{fontFamily: '\'IBM Plex Mono\',monospace'}}><svg className="lucide lucide-bolt h-4 w-4 text-amber-300" data-lucide="bolt" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><circle cx="12" cy="12" r="4"></circle></svg> Performance</span>
+<span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70" style={{fontFamily: '\'IBM Plex Mono\', monospace'}}><svg className="lucide lucide-cpu h-4 w-4 text-emerald-300" data-lucide="cpu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect height="16" rx="2" width="16" x="4" y="4"></rect><rect height="8" rx="1" width="8" x="8" y="8"></rect></svg> Systems</span>
+<span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70" style={{fontFamily: '\'IBM Plex Mono\', monospace'}}><svg className="lucide lucide-palette h-4 w-4 text-fuchsia-300" data-lucide="palette" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle></svg> Design</span>
+<span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70" style={{fontFamily: '\'IBM Plex Mono\', monospace'}}><svg className="lucide lucide-bolt h-4 w-4 text-amber-300" data-lucide="bolt" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><circle cx="12" cy="12" r="4"></circle></svg> Performance</span>
 </div>
 <div className="grid gap-4 sm:grid-cols-2">
 <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
@@ -518,12 +560,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="relative py-16 sm:py-24" id="skills" style={{fontFamily: '\'Space Grotesk\',system-ui'}}>
+<section className="relative py-16 sm:py-24" id="skills" style={{fontFamily: '\'Space Grotesk\', system-ui'}}>
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mb-10 flex items-end justify-between">
 <div className="reveal opacity-0 translate-y-6 blur-sm transition-all duration-700" data-reveal="">
 <h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontWeight: '600', letterSpacing: '-0.02em'}}>Skills</h2>
-<p className="text-white/70 text-sm sm:text-base" style={{fontFamily: '\'Inter\',system-ui'}}>A concise map of languages, frameworks, tooling, and practices.</p>
+<p className="text-white/70 text-sm sm:text-base" style={{fontFamily: '\'Inter\', system-ui'}}>A concise map of languages, frameworks, tooling, and practices.</p>
 </div>
 <a className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-sm text-white hover:bg-white/[0.08] hover:outline hover:outline-1 hover:outline-white/10 transition" href="#projects">
 <svg className="lucide lucide-arrow-right mr-2 h-4 w-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
@@ -620,12 +662,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="relative py-16 sm:py-24" id="projects" style={{fontFamily: '\'Sora\',system-ui'}}>
+<section className="relative py-16 sm:py-24" id="projects" style={{fontFamily: '\'Sora\', system-ui'}}>
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mb-6 flex items-end justify-between">
 <div className="reveal opacity-0 translate-y-6 blur-sm transition-all duration-700" data-reveal="">
 <h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontWeight: '600', letterSpacing: '-0.02em'}}>Projects</h2>
-<p className="text-white/70 text-sm sm:text-base" style={{fontFamily: '\'Inter\',system-ui'}}>Swipe to explore selected work with key outcomes and links.</p>
+<p className="text-white/70 text-sm sm:text-base" style={{fontFamily: '\'Inter\', system-ui'}}>Swipe to explore selected work with key outcomes and links.</p>
 </div>
 <div className="flex items-center gap-2">
 <button aria-label="Previous" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:outline hover:outline-1 hover:outline-white/10 transition" id="projPrev">
@@ -774,8 +816,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mb-6 flex items-end justify-between">
 <div className="reveal opacity-0 translate-y-6 blur-sm transition-all duration-700" data-reveal="">
-<h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontFamily: '\'Sora\',system-ui', fontWeight: '600', letterSpacing: '-0.02em'}}>Testimonials</h2>
-<p className="text-white/70 text-sm sm:text-base" style={{fontFamily: '\'Inter\',system-ui'}}>Swipe, click arrows, or let it play automatically.</p>
+<h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontFamily: '\'Sora\', system-ui', fontWeight: '600', letterSpacing: '-0.02em'}}>Testimonials</h2>
+<p className="text-white/70 text-sm sm:text-base" style={{fontFamily: '\'Inter\', system-ui'}}>Swipe, click arrows, or let it play automatically.</p>
 </div>
 <div className="flex items-center gap-2">
 <button aria-label="Previous" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:outline hover:outline-1 hover:outline-white/10 transition" id="testPrev">
@@ -796,7 +838,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs text-white/60" style={{fontFamily: '\'IBM Plex Mono\''}}>PM, SaaS</p>
 </div>
 </div>
-<blockquote className="mt-4 text-white/80" style={{fontFamily: '\'DM Serif Display\',serif'}}>
+<blockquote className="mt-4 text-white/80" style={{fontFamily: '\'DM Serif Display\', serif'}}>
               “A remarkable blend of product sense and engineering depth. Ship speed without sacrificing quality.”
             </blockquote>
 </div>
@@ -808,7 +850,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs text-white/60" style={{fontFamily: '\'IBM Plex Mono\''}}>Lead Engineer</p>
 </div>
 </div>
-<blockquote className="mt-4 text-white/80" style={{fontFamily: '\'DM Serif Display\',serif'}}>
+<blockquote className="mt-4 text-white/80" style={{fontFamily: '\'DM Serif Display\', serif'}}>
               “Sets a high bar for accessibility and performance. Our users felt the difference immediately.”
             </blockquote>
 </div>
@@ -820,7 +862,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs text-white/60" style={{fontFamily: '\'IBM Plex Mono\''}}>Design Lead</p>
 </div>
 </div>
-<blockquote className="mt-4 text-white/80" style={{fontFamily: '\'DM Serif Display\',serif'}}>
+<blockquote className="mt-4 text-white/80" style={{fontFamily: '\'DM Serif Display\', serif'}}>
               “A partner who anticipates edge cases and smooths rough UX edges. Highly recommended.”
             </blockquote>
 </div>
@@ -829,10 +871,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="relative py-16 sm:py-24" id="connect" style={{fontFamily: '\'Inter\',system-ui'}}>
+<section className="relative py-16 sm:py-24" id="connect" style={{fontFamily: '\'Inter\', system-ui'}}>
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mb-10 reveal opacity-0 translate-y-6 blur-sm transition-all duration-700" data-reveal="">
-<h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontFamily: '\'Sora\',system-ui', fontWeight: '600', letterSpacing: '-0.02em'}}>Connect</h2>
+<h2 className="text-3xl sm:text-4xl tracking-tight text-white" style={{fontFamily: '\'Sora\', system-ui', fontWeight: '600', letterSpacing: '-0.02em'}}>Connect</h2>
 <p className="text-white/70 text-sm sm:text-base">Let’s build something great together.</p>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">

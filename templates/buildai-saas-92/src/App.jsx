@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -132,6 +168,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -305,7 +347,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style={{backgroundImage: 'radial-gradient(1200px 600px at 50% -10%, rgba(16,185,129,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '100% 100%, 22px 22px', backgroundPosition: 'center, center'}}>
 
-<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(16,185,129,0.06)'}}></div>
+<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 80px rgba(16,185,129,0.06)'}}></div>
 
 <div className="relative">
 <h3 className="text-xl font-semibold text-white mb-4">Smart Code Generation</h3>
@@ -334,7 +376,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style={{backgroundImage: 'radial-gradient(1200px 600px at 50% -10%, rgba(192,132,252,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '100% 100%, 22px 22px', backgroundPosition: 'center, center'}}>
 
-<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(192,132,252,0.06)'}}></div>
+<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 80px rgba(192,132,252,0.06)'}}></div>
 
 <div className="relative">
 <h3 className="text-xl font-semibold text-white mb-4">Beautiful UI Components</h3>
@@ -365,7 +407,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style={{backgroundImage: 'radial-gradient(1200px 600px at 50% -10%, rgba(244,114,182,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '100% 100%, 22px 22px', backgroundPosition: 'center, center'}}>
 
-<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(244,114,182,0.06)'}}></div>
+<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 80px rgba(244,114,182,0.06)'}}></div>
 
 <div className="relative">
 <h3 className="text-xl font-semibold text-white mb-4">Real-time Analytics</h3>
@@ -405,7 +447,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style={{backgroundImage: 'radial-gradient(1200px 600px at 50% -10%, rgba(52,211,153,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '100% 100%, 22px 22px', backgroundPosition: 'center, center'}}>
 
-<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(52,211,153,0.06)'}}></div>
+<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 80px rgba(52,211,153,0.06)'}}></div>
 
 <div className="relative">
 <h3 className="text-xl font-semibold text-white mb-4">Enterprise Security</h3>
@@ -454,7 +496,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style={{backgroundImage: 'radial-gradient(1200px 600px at 50% -10%, rgba(96,165,250,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '100% 100%, 22px 22px', backgroundPosition: 'center, center'}}>
 
-<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(96,165,250,0.06)'}}></div>
+<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 80px rgba(96,165,250,0.06)'}}></div>
 
 <div className="relative">
 <h3 className="text-xl font-semibold text-white mb-4">Version Control</h3>
@@ -501,7 +543,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style={{backgroundImage: 'radial-gradient(1200px 600px at 50% -10%, rgba(45,212,191,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '100% 100%, 22px 22px', backgroundPosition: 'center, center'}}>
 
-<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(45,212,191,0.06)'}}></div>
+<div className="absolute inset-0 pointer-events-none rounded-2xl" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 80px rgba(45,212,191,0.06)'}}></div>
 
 <div className="relative">
 <h3 className="text-xl font-semibold text-white mb-4">One-Click Deploy</h3>

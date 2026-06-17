@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -48,15 +90,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-lg font-semibold text-white tracking-tight">Ranklynk</span>
 </div>
 
-<div className="hidden shadow-black/20 md:flex bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-1 pb-1 pl-1 shadow-lg backdrop-blur-md gap-x-1 gap-y-1 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
-<a className="transition-all text-sm font-medium text-white bg-white/10 rounded-full pt-1.5 pr-4 pb-1.5 pl-4 shadow-sm" href="/#engine" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>Engine</a>
+<div className="hidden shadow-black/20 md:flex bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-1 pb-1 pl-1 shadow-lg backdrop-blur-md gap-x-1 gap-y-1 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
+<a className="transition-all text-sm font-medium text-white bg-white/10 rounded-full pt-1.5 pr-4 pb-1.5 pl-4 shadow-sm" href="/#engine" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>Engine</a>
 <a className="px-4 py-1.5 text-sm font-medium text-zinc-400 hover:text-white transition-colors" href="#">For Founders</a>
 <a className="px-4 py-1.5 text-sm font-medium text-zinc-400 hover:text-white transition-colors" href="#">For Agencies</a>
 <a className="hover:text-white transition-colors text-sm font-medium text-zinc-400 pt-1.5 pr-4 pb-1.5 pl-4" href="/#pricing">Pricing</a>
 <a className="px-4 py-1.5 text-sm font-medium text-zinc-400 hover:text-white transition-colors" href="/insights">Insights</a>
 </div>
 
-<button className="hidden sm:flex hover:from-emerald-500 hover:to-emerald-600 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex text-sm font-medium text-white bg-gradient-to-b from-emerald-600 to-emerald-700 rounded-full pt-2.5 pr-5 pb-2.5 pl-5 shadow-[0px_0px_0px_1px_rgba(5,150,105,1),inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm gap-x-2 gap-y-x-2 items-center" onclick="window.location.href='https://app.ranklynk.io/signup'" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<button className="hidden sm:flex hover:from-emerald-500 hover:to-emerald-600 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex text-sm font-medium text-white bg-gradient-to-b from-emerald-600 to-emerald-700 rounded-full pt-2.5 pr-5 pb-2.5 pl-5 shadow-[0px_0px_0px_1px_rgba(5,150,105,1),inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm gap-x-2 gap-y-x-2 items-center" onclick="window.location.href='https://app.ranklynk.io/signup'" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <span className="text-sm font-medium text-white tracking-tight">Start Ranking</span>
 <svg aria-hidden="true" className="lucide lucide-arrow-right w-4 h-4 text-emerald-100" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </button>

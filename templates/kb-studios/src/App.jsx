@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -345,6 +381,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -358,7 +400,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div id="scroll-container" style={{position: 'relative', zIndex: '2'}}>
 
-<nav style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: '50', backdropFilter: 'blur(20px)', background: 'rgba(2,4,8,0.6)', borderBottom: '1px solid rgba(0,240,255,0.1)'}}>
+<nav style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: '50', backdropFilter: 'blur(20px)', background: 'rgba(2, 4, 8, 0.6)', borderBottom: '1px solid rgba(0,240,255,0.1)'}}>
 <div className="max-w-7xl mx-auto flex items-center justify-between" style={{padding: '1.25rem 2rem'}}>
 <div className="tracking-tighter flex items-center gap-2" style={{fontFamily: '\'Space Grotesk\', sans-serif', fontWeight: '700', letterSpacing: '-0.05em', fontSize: '1.5rem'}}>
 <span style={{color: '#FFD700'}}>KB</span><span className="text-white/50 text-base font-light tracking-wide">STUDIOS</span>
@@ -377,7 +419,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section id="hero" style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'}}>
 <div className="text-center" style={{maxWidth: '900px', padding: '0 2rem'}}>
-<div id="hero-badge" style={{display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.375rem 1rem', border: '1px solid rgba(0,240,255,0.3)', background: 'rgba(0,240,255,0.05)', marginBottom: '2rem', opacity: '0', transform: 'translateY(20px)'}}>
+<div id="hero-badge" style={{display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.375rem 1rem', border: '1px solid rgba(0, 240, 255, 0.3)', background: 'rgba(0, 240, 255, 0.05)', marginBottom: '2rem', opacity: '0', transform: 'translateY(20px)'}}>
 <div style={{width: '6px', height: '6px', background: '#00F0FF', boxShadow: '0 0 10px #00F0FF', borderRadius: '50', animation: 'pulse 2s infinite'}}></div>
 <span className="text-xs" style={{color: '#00F0FF', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: '600'}}>The Gold Standard</span>
 </div>
@@ -386,7 +428,7 @@ gtag('config', 'G-2M6V79H761');
 <span style={{fontWeight: '600', color: '#FFD700', textShadow: '0 0 40px rgba(255,215,0,0.3)'}}>True</span>
 <span style={{fontWeight: '600', background: 'linear-gradient(to right, #ffffff, #00F0FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>Potential</span>
 </h1>
-<p className="text-sm sm:text-base" id="hero-sub" style={{color: 'rgba(238,242,255,0.6)', maxWidth: '500px', margin: '2rem auto 0', lineHeight: '1.7', fontWeight: '300', opacity: '0', transform: 'translateY(30px)'}}>
+<p className="text-sm sm:text-base" id="hero-sub" style={{color: 'rgba(238, 242, 255, 0.6)', maxWidth: '500px', margin: '2rem auto 0', lineHeight: '1.7', fontWeight: '300', opacity: '0', transform: 'translateY(30px)'}}>
                     We forge electric digital experiences with the precision of a master locksmith. Where luxury design meets cutting-edge engineering.
                 </p>
 </div>
@@ -407,7 +449,7 @@ gtag('config', 'G-2M6V79H761');
                         </h2>
 </div>
 
-<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(0,240,255,0.02)', backdropFilter: 'blur(40px)', border: '1px solid rgba(0,240,255,0.1)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 0 30px rgba(0,0,0,0.5)'}}>
+<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(0, 240, 255, 0.02)', backdropFilter: 'blur(40px)', border: '1px solid rgba(0, 240, 255, 0.1)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 0 30px rgba(0,0,0,0.5)'}}>
 <div>
 <div style={{width: '48px', height: '48px', border: '1px solid rgba(255,215,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
 <iconify-icon icon="solar:key-minimalistic-linear" style={{color: '#FFD700'}} width="24"></iconify-icon>
@@ -417,7 +459,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs" style={{color: 'rgba(238,242,255,0.5)', lineHeight: '1.8', fontWeight: '300'}}>Identifying the core value proposition. We find the unique key that unlocks your market potential.</p>
 </div>
 </div>
-<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(0,240,255,0.02)', backdropFilter: 'blur(40px)', border: '1px solid rgba(0,240,255,0.1)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 0 30px rgba(0,0,0,0.5)'}}>
+<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(0, 240, 255, 0.02)', backdropFilter: 'blur(40px)', border: '1px solid rgba(0, 240, 255, 0.1)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 0 30px rgba(0,0,0,0.5)'}}>
 <div>
 <div style={{width: '48px', height: '48px', border: '1px solid rgba(0,240,255,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
 <iconify-icon icon="solar:compass-linear" style={{color: '#00F0FF'}} width="24"></iconify-icon>
@@ -427,7 +469,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs" style={{color: 'rgba(238,242,255,0.5)', lineHeight: '1.8', fontWeight: '300'}}>Strategic mapping of the user journey. Navigating complex requirements with compass-like precision.</p>
 </div>
 </div>
-<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(0,240,255,0.02)', backdropFilter: 'blur(40px)', border: '1px solid rgba(0,240,255,0.1)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 0 30px rgba(0,0,0,0.5)'}}>
+<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(0, 240, 255, 0.02)', backdropFilter: 'blur(40px)', border: '1px solid rgba(0, 240, 255, 0.1)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 0 30px rgba(0,0,0,0.5)'}}>
 <div>
 <div style={{width: '48px', height: '48px', border: '1px solid rgba(255,215,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
 <iconify-icon icon="solar:bolt-linear" style={{color: '#FFD700'}} width="24"></iconify-icon>
@@ -696,16 +738,16 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div>
 <label className="text-xs" style={{color: 'rgba(238,242,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Name</label>
-<input onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" placeholder="Your name" style={{width: '100%', background: 'rgba(0,240,255,0.03)', border: '1px solid rgba(0,240,255,0.1)', padding: '0.875rem 1rem', color: '#eef2ff', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', boxSizing: 'border-box'}} type="text"/>
+<input onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" placeholder="Your name" style={{width: '100%', background: 'rgba(0, 240, 255, 0.03)', border: '1px solid rgba(0,240,255,0.1)', padding: '0.875rem 1rem', color: '#eef2ff', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', boxSizing: 'border-box'}} type="text"/>
 </div>
 <div>
 <label className="text-xs" style={{color: 'rgba(238,242,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Email</label>
-<input onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" placeholder="hello@company.com" style={{width: '100%', background: 'rgba(0,240,255,0.03)', border: '1px solid rgba(0,240,255,0.1)', padding: '0.875rem 1rem', color: '#eef2ff', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', boxSizing: 'border-box'}} type="email"/>
+<input onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" placeholder="hello@company.com" style={{width: '100%', background: 'rgba(0, 240, 255, 0.03)', border: '1px solid rgba(0,240,255,0.1)', padding: '0.875rem 1rem', color: '#eef2ff', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', boxSizing: 'border-box'}} type="email"/>
 </div>
 </div>
 <div>
 <label className="text-xs" style={{color: 'rgba(238,242,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Project Type</label>
-<select onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" style={{width: '100%', background: 'rgba(0,240,255,0.03)', border: '1px solid rgba(0,240,255,0.1)', padding: '0.875rem 1rem', color: 'rgba(238,242,255,0.5)', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', appearance: 'none', cursor: 'pointer', boxSizing: 'border-box'}}>
+<select onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" style={{width: '100%', background: 'rgba(0, 240, 255, 0.03)', border: '1px solid rgba(0, 240, 255, 0.1)', padding: '0.875rem 1rem', color: 'rgba(238,242,255,0.5)', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', appearance: 'none', cursor: 'pointer', boxSizing: 'border-box'}}>
 <option value="">Select a service</option>
 <option value="web">Web Experience</option>
 <option value="brand">Brand System</option>
@@ -715,7 +757,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div>
 <label className="text-xs" style={{color: 'rgba(238,242,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Message</label>
-<textarea onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" placeholder="Tell us about your vision..." rows="4" style={{width: '100%', background: 'rgba(0,240,255,0.03)', border: '1px solid rgba(0,240,255,0.1)', padding: '0.875rem 1rem', color: '#eef2ff', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', resize: 'vertical', boxSizing: 'border-box'}}></textarea>
+<textarea onblur="this.style.borderColor='rgba(0,240,255,0.1)'; this.style.boxShadow='none'" onfocus="this.style.borderColor='#FFD700'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.1)'" placeholder="Tell us about your vision..." rows="4" style={{width: '100%', background: 'rgba(0, 240, 255, 0.03)', border: '1px solid rgba(0,240,255,0.1)', padding: '0.875rem 1rem', color: '#eef2ff', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'all 0.3s', resize: 'vertical', boxSizing: 'border-box'}}></textarea>
 </div>
 <button onmouseout="this.style.boxShadow='0 0 20px rgba(255,215,0,0.2)'" onmouseover="this.style.boxShadow='0 0 30px rgba(255,215,0,0.5)'" style={{width: '100%', background: 'linear-gradient(135deg, #FFD700, #E5C100)', color: '#000', padding: '1rem', fontFamily: '\'Inter\', sans-serif', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', boxShadow: '0 0 20px rgba(255,215,0,0.2)'}} type="submit">
                         Send Message

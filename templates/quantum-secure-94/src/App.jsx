@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -151,6 +187,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -161,7 +203,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto flex items-center justify-between px-5 sm:px-8" style={{maxWidth: '1080px', height: '64px'}}>
 <a className="flex items-center gap-2.5" href="#">
 <img alt="QLAD HexLock" className="h-8 w-8" src="https://qlad.com/wp-content/uploads/2024/12/Solid_HexLock.svg" style={{filter: 'brightness(0) invert(1)'}}/>
-<span className="text-lg font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\',sans-serif', letterSpacing: '0.02em'}}>
+<span className="text-lg font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\', sans-serif', letterSpacing: '0.02em'}}>
             QLAD
           </span>
 </a>
@@ -204,10 +246,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="grid lg:grid-cols-12 gap-12 items-center">
 <div className="lg:col-span-7">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #444444', color: '#BBBBBB', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #444444', color: '#BBBBBB', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               Now in Private Preview
             </span>
-<h1 className="mt-6 font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(2rem,5vw,3.375rem)', lineHeight: '1.12'}}>
+<h1 className="mt-6 font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(2rem,5vw,3.375rem)', lineHeight: '1.12'}}>
               Your encryption has
               <br/>
               an expiry date.
@@ -224,7 +266,7 @@ gtag('config', 'G-2M6V79H761');
                 Request Early Access
                 <iconify-icon icon="solar:arrow-right-linear" strokeWidth="1.5" width="18"></iconify-icon>
 </a>
-<a className="inline-flex items-center gap-2 text-sm font-semibold uppercase px-6 py-3 text-white hover:bg-white hover:text-black" href="#how" style={{border: '1px solid #FFFFFF', letterSpacing: '0.06em', transition: 'background-color 300ms ease,color 300ms ease'}}>
+<a className="inline-flex items-center gap-2 text-sm font-semibold uppercase px-6 py-3 text-white hover:bg-white hover:text-black" href="#how" style={{border: '1px solid #FFFFFF', letterSpacing: '0.06em', transition: 'background-color 300ms ease, color 300ms ease'}}>
 <iconify-icon icon="solar:play-circle-linear" strokeWidth="1.5" width="18"></iconify-icon>
                 See How It Works
               </a>
@@ -247,7 +289,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="lg:col-span-5">
 <div style={{backgroundColor: '#0A0A0A', border: '1px solid #333333'}}>
 <div className="flex items-center justify-between px-5 py-3" style={{borderBottom: '1px solid #222222'}}>
-<span className="flex items-center gap-2 text-xs font-medium uppercase" style={{color: '#777777', letterSpacing: '0.08em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="flex items-center gap-2 text-xs font-medium uppercase" style={{color: '#777777', letterSpacing: '0.08em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
 <iconify-icon icon="solar:shield-check-linear" strokeWidth="1.5" width="16"></iconify-icon>
                   Live trust status
                 </span>
@@ -256,7 +298,7 @@ gtag('config', 'G-2M6V79H761');
 <span id="copyLabel">Copy</span>
 </button>
 </div>
-<pre className="px-5 py-4 text-xs overflow-x-auto" id="codeBlock" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace', lineHeight: '1.7', color: '#E5E5E5'}}><span style={{color: '#555555'}}># Quantum Readiness Report</span>
+<pre className="px-5 py-4 text-xs overflow-x-auto" id="codeBlock" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', lineHeight: '1.7', color: '#E5E5E5'}}><span style={{color: '#555555'}}># Quantum Readiness Report</span>
 
 <span style={{color: '#777777'}}>Encryption</span>       <span style={{color: '#FFFFFF'}}>Quantum-safe ✓</span>
 <span style={{color: '#777777'}}>Connections</span>      <span style={{color: '#FFFFFF'}}>1,284 protected</span>
@@ -277,10 +319,10 @@ gtag('config', 'G-2M6V79H761');
 <section id="platform" style={{padding: '56px 0'}}>
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="max-w-2xl">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
             Why QLAD
           </span>
-<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
+<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
             The quantum threat isn't coming.
             <span style={{color: '#888888'}}>It's already here.</span>
 </h2>
@@ -295,7 +337,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:shield-keyhole-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Quantum-Safe by Default
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -308,7 +350,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:cpu-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Nothing Trusted Until Proven
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -320,7 +362,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:routing-2-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Security on Autopilot
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -333,7 +375,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:box-minimalistic-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Works With What You Have
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -345,7 +387,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:eye-scan-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Catches Problems Instantly
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -357,7 +399,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:clipboard-check-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Audit-Ready, Always
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -379,20 +421,20 @@ gtag('config', 'G-2M6V79H761');
 <section id="how" style={{padding: '56px 0', backgroundColor: '#F7F7F7', marginTop: '60px'}}>
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="text-center max-w-2xl mx-auto">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
             How It Works
           </span>
-<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
+<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
             From exposed to
             <span style={{color: '#888888'}}>effortlessly protected</span>
 </h2>
 </div>
 <div className="grid md:grid-cols-3 gap-[30px]" style={{marginTop: '60px'}}>
 <div className="text-center px-4">
-<span className="inline-flex items-center justify-center w-12 h-12 text-base font-semibold text-white" style={{backgroundColor: '#000000', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center justify-center w-12 h-12 text-base font-semibold text-white" style={{backgroundColor: '#000000', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               1
             </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Deploy to Your Cluster
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -402,10 +444,10 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="text-center px-4">
-<span className="inline-flex items-center justify-center w-12 h-12 text-base font-semibold text-white" style={{backgroundColor: '#000000', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center justify-center w-12 h-12 text-base font-semibold text-white" style={{backgroundColor: '#000000', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               2
             </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Attest &amp; Issue
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -416,10 +458,10 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="text-center px-4">
-<span className="inline-flex items-center justify-center w-12 h-12 text-base font-semibold text-white" style={{backgroundColor: '#000000', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center justify-center w-12 h-12 text-base font-semibold text-white" style={{backgroundColor: '#000000', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               3
             </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Rotate &amp; Enforce
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -430,7 +472,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="mt-14 text-center">
-<div className="inline-flex items-center gap-3 px-6 py-4 text-xs sm:text-sm" style={{backgroundColor: '#000000', color: '#E5E5E5', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<div className="inline-flex items-center gap-3 px-6 py-4 text-xs sm:text-sm" style={{backgroundColor: '#000000', color: '#E5E5E5', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
 <span style={{color: '#777777'}}>$</span>
 <span>helm install qlad qlad/operator -n qlad-system</span>
 </div>
@@ -445,10 +487,10 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="grid lg:grid-cols-12 gap-12 items-center">
 <div className="lg:col-span-7">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #444444', color: '#BBBBBB', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #444444', color: '#BBBBBB', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               The Breakthrough
             </span>
-<h2 className="mt-5 font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2'}}>
+<h2 className="mt-5 font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2'}}>
               Trust orchestration,
               <span style={{color: '#888888'}}>quantum-secured</span>
 </h2>
@@ -486,20 +528,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="lg:col-span-5">
 <div style={{backgroundColor: '#0A0A0A', border: '1px solid #333333'}}>
 <div className="flex items-center justify-between px-5 py-3" style={{borderBottom: '1px solid #222222'}}>
-<span className="flex items-center gap-2 text-xs font-medium uppercase" style={{color: '#777777', letterSpacing: '0.08em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="flex items-center gap-2 text-xs font-medium uppercase" style={{color: '#777777', letterSpacing: '0.08em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
 <iconify-icon icon="solar:lock-keyhole-linear" strokeWidth="1.5" width="16"></iconify-icon>
                   Data protection coverage
                 </span>
 </div>
-<div className="flex items-center justify-between px-5 py-4 text-xs" style={{borderBottom: '1px solid #222222', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<div className="flex items-center justify-between px-5 py-4 text-xs" style={{borderBottom: '1px solid #222222', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
 <span style={{color: '#777777'}}>Data at rest</span>
 <span style={{color: '#FFFFFF'}}>Encrypted ✓</span>
 </div>
-<div className="flex items-center justify-between px-5 py-4 text-xs" style={{borderBottom: '1px solid #222222', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<div className="flex items-center justify-between px-5 py-4 text-xs" style={{borderBottom: '1px solid #222222', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
 <span style={{color: '#777777'}}>Data in transit</span>
 <span style={{color: '#FFFFFF'}}>Quantum-safe ✓</span>
 </div>
-<div className="flex items-center justify-between px-5 py-4 text-xs" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<div className="flex items-center justify-between px-5 py-4 text-xs" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
 <span style={{color: '#777777'}}>Data in use</span>
 <span style={{color: '#FFFFFF'}}>Enclave-protected ✓</span>
 </div>
@@ -515,10 +557,10 @@ gtag('config', 'G-2M6V79H761');
 <section id="usecases" style={{padding: '56px 0', marginTop: '60px'}}>
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="text-center max-w-2xl mx-auto">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
             Use Cases
           </span>
-<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
+<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
             Built for data
             <span style={{color: '#888888'}}>that can't afford to leak</span>
 </h2>
@@ -533,7 +575,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:wallet-money-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Financial Services
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -546,7 +588,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:health-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Healthcare &amp; Life Sciences
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -559,7 +601,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:shield-star-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Government &amp; Defense
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -572,7 +614,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:bolt-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Critical Infrastructure
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -585,7 +627,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:cpu-bolt-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               AI &amp; Model Protection
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -598,7 +640,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:cloud-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Multi-Tenant SaaS
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -613,10 +655,10 @@ gtag('config', 'G-2M6V79H761');
 <section id="action" style={{padding: '56px 0', backgroundColor: '#F7F7F7', marginTop: '60px'}}>
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="text-center max-w-2xl mx-auto">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
             Example Use Case
           </span>
-<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
+<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
             Route every prompt
             <span style={{color: '#888888'}}>to the right model, safely</span>
 </h2>
@@ -640,17 +682,17 @@ gtag('config', 'G-2M6V79H761');
 <animate attributename="opacity" begin="1.8s" dur="0.01s" fill="freeze" values="0;1"></animate>
 <animatemotion begin="1.8s" dur="3.6s" path="M190 230 L528 230 C580 230 575 324 620 324" repeatcount="indefinite"></animatemotion>
 </circle>
-<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace', letterSpacing: '0.08em'}} text-anchor="middle" x="592" y="150">
+<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', letterSpacing: '0.08em'}} text-anchor="middle" x="592" y="150">
               COMPLEX REASONING
             </text>
-<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace', letterSpacing: '0.08em'}} text-anchor="middle" x="572" y="296">
+<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', letterSpacing: '0.08em'}} text-anchor="middle" x="572" y="296">
               STANDARD REQUEST
             </text>
 <rect fill="#FFFFFF" height="60" stroke="#000000" strokeWidth="1.5" width="170" x="20" y="200"></rect>
-<text fill="#000000" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\',sans-serif'}} text-anchor="middle" x="105" y="226">
+<text fill="#000000" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\', sans-serif'}} text-anchor="middle" x="105" y="226">
               User Request
             </text>
-<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}} text-anchor="middle" x="105" y="245">
+<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}} text-anchor="middle" x="105" y="245">
               prompt → api
             </text>
 <rect fill="none" height="96" stroke="#000000" stroke-opacity="0.35" width="222" x="314" y="182">
@@ -658,28 +700,28 @@ gtag('config', 'G-2M6V79H761');
 </rect>
 <rect fill="#000000" height="80" width="206" x="322" y="190"></rect>
 <image height="36" href="https://qlad.com/wp-content/uploads/2024/12/Solid_HexLock.svg" style={{filter: 'brightness(0) invert(1)'}} width="36" x="338" y="212"/>
-<text fill="#FFFFFF" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\',sans-serif'}} x="386" y="226">
+<text fill="#FFFFFF" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\', sans-serif'}} x="386" y="226">
               QLAD Router
             </text>
-<text fill="#888888" fontSize="9" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}} x="386" y="246">
+<text fill="#888888" fontSize="9" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}} x="386" y="246">
               classify · route · attest
             </text>
 <rect fill="#FFFFFF" height="70" stroke="#000000" strokeWidth="1.5" width="200" x="650" y="70"></rect>
-<text fill="#000000" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\',sans-serif'}} text-anchor="middle" x="750" y="100">
+<text fill="#000000" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\', sans-serif'}} text-anchor="middle" x="750" y="100">
               Frontier Model
             </text>
-<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}} text-anchor="middle" x="750" y="119">
+<text fill="#999999" fontSize="10" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}} text-anchor="middle" x="750" y="119">
               fable-5 · premium · $$$
             </text>
 <rect fill="#FAFAFA" height="200" stroke="#999999" stroke-dasharray="6 4" strokeWidth="1" width="262" x="620" y="240"></rect>
-<text fill="#777777" fontSize="9" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace', letterSpacing: '0.06em'}} x="636" y="263">
+<text fill="#777777" fontSize="9" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', letterSpacing: '0.06em'}} x="636" y="263">
               ⎈ KUBERNETES CLUSTER · ns: qlad-system
             </text>
 <rect fill="#FFFFFF" height="98" stroke="#000000" strokeWidth="1.5" width="222" x="640" y="278"></rect>
-<text fill="#000000" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\',sans-serif'}} text-anchor="middle" x="751" y="302">
+<text fill="#000000" fontSize="14" font-weight="600" style={{fontFamily: '\'Inter Tight\', sans-serif'}} text-anchor="middle" x="751" y="302">
               DeepSeek V4
             </text>
-<text fill="#999999" fontSize="9" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}} text-anchor="middle" x="751" y="320">
+<text fill="#999999" fontSize="9" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}} text-anchor="middle" x="751" y="320">
               deployment · 3/3 replicas ready
             </text>
 <rect fill="#000000" height="16" width="22" x="710" y="332"></rect>
@@ -694,11 +736,11 @@ gtag('config', 'G-2M6V79H761');
 <text fill="#FFFFFF" fontSize="9" text-anchor="middle" x="781" y="344">
               ✓
             </text>
-<text fill="#999999" fontSize="8" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}} text-anchor="middle" x="751" y="364">
+<text fill="#999999" fontSize="8" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}} text-anchor="middle" x="751" y="364">
               qlad.io/enclave: required
             </text>
 <rect fill="#000000" height="28" width="178" x="662" y="394"></rect>
-<text fill="#FFFFFF" fontSize="9" style={{fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace', letterSpacing: '0.04em'}} text-anchor="middle" x="751" y="412">
+<text fill="#FFFFFF" fontSize="9" style={{fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', letterSpacing: '0.04em'}} text-anchor="middle" x="751" y="412">
               ⬡ QLAD ENCLAVE · ATTESTED ✓
             </text>
 </svg>
@@ -708,7 +750,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:cpu-bolt-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Intelligence when it's worth it
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -721,7 +763,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex items-center justify-center w-11 h-11" style={{border: '1px solid #000000', color: '#000000'}}>
 <iconify-icon icon="solar:shield-keyhole-linear" strokeWidth="1.5" width="22"></iconify-icon>
 </span>
-<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<h3 className="mt-5 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Open source, provably secure
             </h3>
 <p className="mt-2.5 text-sm" style={{lineHeight: '1.6', color: '#666666'}}>
@@ -738,10 +780,10 @@ gtag('config', 'G-2M6V79H761');
 <section id="team" style={{padding: '56px 0', backgroundColor: '#F7F7F7', marginTop: '60px'}}>
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="text-center max-w-2xl mx-auto">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
             The Team
           </span>
-<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
+<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
             Built by people who've
             <span style={{color: '#888888'}}>defended the hardest targets</span>
 </h2>
@@ -756,7 +798,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="flex items-center justify-center h-8" style={{color: '#000000'}}>
 <iconify-icon icon="simple-icons:meta" width="32"></iconify-icon>
 </span>
-<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Meta
             </p>
 <p className="mt-1.5 text-xs" style={{lineHeight: '1.5', color: '#999999'}}>
@@ -767,7 +809,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="flex items-center justify-center h-8" style={{color: '#000000'}}>
 <iconify-icon icon="simple-icons:sony" width="56"></iconify-icon>
 </span>
-<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Sony
             </p>
 <p className="mt-1.5 text-xs" style={{lineHeight: '1.5', color: '#999999'}}>
@@ -778,7 +820,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="flex items-center justify-center h-8" style={{color: '#000000'}}>
 <iconify-icon icon="solar:eye-scan-linear" strokeWidth="1.5" width="30"></iconify-icon>
 </span>
-<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Five Eyes
             </p>
 <p className="mt-1.5 text-xs" style={{lineHeight: '1.5', color: '#999999'}}>
@@ -789,7 +831,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="flex items-center justify-center h-8" style={{color: '#000000'}}>
 <iconify-icon icon="game-icons:trident" width="30"></iconify-icon>
 </span>
-<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Navy SEALs
             </p>
 <p className="mt-1.5 text-xs" style={{lineHeight: '1.5', color: '#999999'}}>
@@ -800,7 +842,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="flex items-center justify-center h-8" style={{color: '#000000'}}>
 <iconify-icon icon="simple-icons:palantir" width="28"></iconify-icon>
 </span>
-<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<p className="mt-3 text-base font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
               Palantir
             </p>
 <p className="mt-1.5 text-xs" style={{lineHeight: '1.5', color: '#999999'}}>
@@ -816,17 +858,17 @@ gtag('config', 'G-2M6V79H761');
 <section id="faq" style={{padding: '56px 0', marginTop: '60px'}}>
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '760px'}}>
 <div className="text-center">
-<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<span className="inline-flex items-center gap-2 text-xs font-medium uppercase px-3 py-1.5" style={{border: '1px solid #000000', color: '#000000', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
             FAQ
           </span>
-<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
+<h2 className="mt-5 font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2', color: '#000000'}}>
             Common questions
           </h2>
 </div>
 <div className="mt-12 divide-y" style={{borderTop: '1px solid #E6E6E6', borderBottom: '1px solid #E6E6E6'}}>
 <div className="faq-item" style={{borderColor: '#E6E6E6'}}>
 <button className="faq-trigger w-full flex items-center justify-between gap-4 text-left py-5 hover:text-[#666666]" style={{color: '#000000', transition: 'color 300ms ease'}}>
-<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\',sans-serif'}}>
+<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\', sans-serif'}}>
                 What does QLAD actually do?
               </span>
 <iconify-icon className="faq-chevron shrink-0" icon="solar:alt-arrow-down-linear" strokeWidth="1.5" style={{transition: 'transform 300ms ease'}} width="20"></iconify-icon>
@@ -843,7 +885,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{borderColor: '#E6E6E6'}}>
 <button className="faq-trigger w-full flex items-center justify-between gap-4 text-left py-5 hover:text-[#666666]" style={{color: '#000000', transition: 'color 300ms ease'}}>
-<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\',sans-serif'}}>
+<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\', sans-serif'}}>
                 Why should we care about quantum now?
               </span>
 <iconify-icon className="faq-chevron shrink-0" icon="solar:alt-arrow-down-linear" strokeWidth="1.5" style={{transition: 'transform 300ms ease'}} width="20"></iconify-icon>
@@ -860,7 +902,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{borderColor: '#E6E6E6'}}>
 <button className="faq-trigger w-full flex items-center justify-between gap-4 text-left py-5 hover:text-[#666666]" style={{color: '#000000', transition: 'color 300ms ease'}}>
-<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\',sans-serif'}}>
+<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\', sans-serif'}}>
                 Do we have to replace our existing tools?
               </span>
 <iconify-icon className="faq-chevron shrink-0" icon="solar:alt-arrow-down-linear" strokeWidth="1.5" style={{transition: 'transform 300ms ease'}} width="20"></iconify-icon>
@@ -876,7 +918,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="faq-item" style={{borderColor: '#E6E6E6'}}>
 <button className="faq-trigger w-full flex items-center justify-between gap-4 text-left py-5 hover:text-[#666666]" style={{color: '#000000', transition: 'color 300ms ease'}}>
-<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\',sans-serif'}}>
+<span className="text-base font-semibold" style={{fontFamily: '\'Inter Tight\', sans-serif'}}>
                 How long does it take to get started?
               </span>
 <iconify-icon className="faq-chevron shrink-0" icon="solar:alt-arrow-down-linear" strokeWidth="1.5" style={{transition: 'transform 300ms ease'}} width="20"></iconify-icon>
@@ -897,7 +939,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto px-5 sm:px-8" style={{maxWidth: '1080px'}}>
 <div className="text-center px-6 py-14 sm:py-16" style={{backgroundColor: '#000000'}}>
 <img alt="" className="mx-auto h-14 w-14" src="https://qlad.com/wp-content/uploads/2024/12/Solid_HexLock.svg" style={{filter: 'brightness(0) invert(1)'}}/>
-<h2 className="mt-6 font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\',sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2'}}>
+<h2 className="mt-6 font-semibold tracking-tight text-white" style={{fontFamily: '\'Inter Tight\', sans-serif', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', lineHeight: '1.2'}}>
             Be ready
             <span style={{color: '#888888'}}>before it matters</span>
 </h2>
@@ -910,7 +952,7 @@ gtag('config', 'G-2M6V79H761');
               Request Early Access
               <iconify-icon icon="solar:arrow-right-linear" strokeWidth="1.5" width="18"></iconify-icon>
 </a>
-<a className="inline-flex items-center gap-2 text-sm font-semibold uppercase px-6 py-3 text-white hover:bg-white hover:text-black" href="https://qlad-seed.vercel.app" style={{border: '1px solid #FFFFFF', letterSpacing: '0.06em', transition: 'background-color 300ms ease,color 300ms ease'}}>
+<a className="inline-flex items-center gap-2 text-sm font-semibold uppercase px-6 py-3 text-white hover:bg-white hover:text-black" href="https://qlad-seed.vercel.app" style={{border: '1px solid #FFFFFF', letterSpacing: '0.06em', transition: 'background-color 300ms ease, color 300ms ease'}}>
 <iconify-icon icon="solar:square-top-down-linear" strokeWidth="1.5" width="18"></iconify-icon>
               View the Preview Site
             </a>
@@ -925,7 +967,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="lg:col-span-2">
 <a className="flex items-center gap-2.5" href="#">
 <img alt="QLAD HexLock" className="h-8 w-8" src="https://qlad.com/wp-content/uploads/2024/12/Solid_HexLock.svg" style={{filter: 'brightness(0)'}}/>
-<span className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\',sans-serif', color: '#000000'}}>
+<span className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Inter Tight\', sans-serif', color: '#000000'}}>
                 QLAD
               </span>
 </a>
@@ -934,19 +976,19 @@ gtag('config', 'G-2M6V79H761');
               continuously, and without disruption.
             </p>
 <div className="mt-5 flex items-center gap-3">
-<a aria-label="GitHub" className="flex items-center justify-center w-9 h-9 hover:bg-black hover:text-white" href="#" style={{border: '1px solid #000000', color: '#000000', transition: 'background-color 300ms ease,color 300ms ease'}}>
+<a aria-label="GitHub" className="flex items-center justify-center w-9 h-9 hover:bg-black hover:text-white" href="#" style={{border: '1px solid #000000', color: '#000000', transition: 'background-color 300ms ease, color 300ms ease'}}>
 <iconify-icon icon="solar:code-circle-linear" strokeWidth="1.5" width="18"></iconify-icon>
 </a>
-<a aria-label="LinkedIn" className="flex items-center justify-center w-9 h-9 hover:bg-black hover:text-white" href="#" style={{border: '1px solid #000000', color: '#000000', transition: 'background-color 300ms ease,color 300ms ease'}}>
+<a aria-label="LinkedIn" className="flex items-center justify-center w-9 h-9 hover:bg-black hover:text-white" href="#" style={{border: '1px solid #000000', color: '#000000', transition: 'background-color 300ms ease, color 300ms ease'}}>
 <iconify-icon icon="solar:case-minimalistic-linear" strokeWidth="1.5" width="18"></iconify-icon>
 </a>
-<a aria-label="X" className="flex items-center justify-center w-9 h-9 hover:bg-black hover:text-white" href="#" style={{border: '1px solid #000000', color: '#000000', transition: 'background-color 300ms ease,color 300ms ease'}}>
+<a aria-label="X" className="flex items-center justify-center w-9 h-9 hover:bg-black hover:text-white" href="#" style={{border: '1px solid #000000', color: '#000000', transition: 'background-color 300ms ease, color 300ms ease'}}>
 <iconify-icon icon="solar:chat-round-line-linear" strokeWidth="1.5" width="18"></iconify-icon>
 </a>
 </div>
 </div>
 <div>
-<p className="text-xs font-medium uppercase" style={{color: '#999999', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<p className="text-xs font-medium uppercase" style={{color: '#999999', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               Product
             </p>
 <ul className="mt-4 space-y-2.5">
@@ -973,7 +1015,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 <div>
-<p className="text-xs font-medium uppercase" style={{color: '#999999', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<p className="text-xs font-medium uppercase" style={{color: '#999999', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               Resources
             </p>
 <ul className="mt-4 space-y-2.5">
@@ -1000,7 +1042,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 <div>
-<p className="text-xs font-medium uppercase" style={{color: '#999999', letterSpacing: '0.12em', fontFamily: 'ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace'}}>
+<p className="text-xs font-medium uppercase" style={{color: '#999999', letterSpacing: '0.12em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'}}>
               Company
             </p>
 <ul className="mt-4 space-y-2.5">

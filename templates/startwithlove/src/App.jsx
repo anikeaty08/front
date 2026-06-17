@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -202,6 +238,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -249,7 +291,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="shrink-0 flex items-center gap-2 text-slate-600">
 <button className="rounded-xl bg-white/60 ring-1 ring-black/5 px-3 py-2 text-xs font-medium hover:bg-white/80 transition shadow-sm" title="Infos" type="button">
 <span className="inline-flex items-center gap-2">
-<iconify-icon className="text-slate-700" height="18" icon="solar:info-circle-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-700" height="18" icon="solar:info-circle-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Détails
             </span>
 </button>
@@ -433,7 +475,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-4">
 <div className="flex items-center justify-between gap-3">
 <div className="flex items-center gap-2 text-sm font-medium" style={{color: '#303030'}}>
-<iconify-icon height="18" icon="solar:videocamera-record-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:videocamera-record-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <span>VIDEO SELFIE</span>
 </div>
 <span className="text-xs rounded-full bg-white/70 ring-1 ring-black/5 px-2.5 py-1 text-slate-700">1min</span>
@@ -447,7 +489,7 @@ gtag('config', 'G-2M6V79H761');
                     </div>
 <button aria-label="Lire la vidéo (démo)" className="absolute inset-0 grid place-items-center" data-video="claire-1" type="button">
 <span className="grid place-items-center h-14 w-14 rounded-full bg-white/75 ring-1 ring-black/10 shadow-md transition group-hover:scale-[1.02]">
-<iconify-icon className="text-slate-900" height="22" icon="solar:play-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-slate-900" height="22" icon="solar:play-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </span>
 </button>
 <div className="absolute bottom-3 right-3 rounded-full bg-black/55 px-2.5 py-1 text-xs text-white/90">
@@ -679,14 +721,14 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-4 rounded-xl bg-white/60 ring-1 ring-black/5 px-3 py-3">
 <div className="flex items-center justify-between gap-3">
 <div className="flex items-center gap-2 text-xs font-medium text-slate-700">
-<iconify-icon height="18" icon="solar:microphone-3-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:microphone-3-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Message audio
                   </div>
 <span className="text-xs text-slate-500">0:18</span>
 </div>
 <div className="mt-2 flex items-center gap-3">
 <button aria-label="Lire / Pause" className="audioBtn grid place-items-center h-10 w-10 rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/25 hover:bg-emerald-500/20 transition" data-audio="jl-1" type="button">
-<iconify-icon className="audioIcon text-emerald-800" height="18" icon="solar:play-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="audioIcon text-emerald-800" height="18" icon="solar:play-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </button>
 <div className="flex-1">
 <div aria-hidden="true" className="wave flex items-end justify-between gap-1 h-10 select-none">
@@ -898,7 +940,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="p-4">
 <div className="flex items-center justify-between gap-3">
 <div className="flex items-center gap-2 text-sm font-medium" style={{color: '#303030'}}>
-<iconify-icon height="18" icon="solar:videocamera-record-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="solar:videocamera-record-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <span>VIDEO SELFIE — Ensemble</span>
 </div>
 <span className="text-xs rounded-full bg-white/70 ring-1 ring-black/5 px-2.5 py-1 text-slate-700">1min30</span>
@@ -912,7 +954,7 @@ gtag('config', 'G-2M6V79H761');
                     </div>
 <button aria-label="Lire la vidéo (démo)" className="absolute inset-0 grid place-items-center" data-video="joint-1" type="button">
 <span className="grid place-items-center h-14 w-14 rounded-full bg-white/75 ring-1 ring-black/10 shadow-md transition group-hover:scale-[1.02]">
-<iconify-icon className="text-slate-900" height="22" icon="solar:play-linear" style={{-IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon className="text-slate-900" height="22" icon="solar:play-linear" style={{'--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </span>
 </button>
 <div className="absolute bottom-3 right-3 rounded-full bg-black/55 px-2.5 py-1 text-xs text-white/90">
@@ -1267,17 +1309,17 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto w-full max-w-[42.5rem] px-4 sm:px-6 py-3">
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-xl bg-emerald-500/10 ring-1 ring-emerald-500/20 grid place-items-center">
-<iconify-icon className="text-emerald-800" height="20" icon="solar:chat-round-dots-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-emerald-800" height="20" icon="solar:chat-round-dots-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div className="flex-1">
 <div className="flex items-center gap-2 rounded-2xl bg-white/70 ring-1 ring-black/5 px-4 py-3 shadow-sm">
-<iconify-icon className="text-slate-600" height="18" icon="solar:pen-new-square-linear" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-600" height="18" icon="solar:pen-new-square-linear" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <input className="w-full bg-transparent text-sm sm:text-base text-slate-700 placeholder:text-slate-500 focus:outline-none" disabled="" value="Le mouvement commence maintenant..."/>
 </div>
 <p className="mt-2 text-xs" style={{color: '#8696A0'}}>Champ désactivé — visuel uniquement</p>
 </div>
 <button className="hidden sm:inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-white/70 ring-1 ring-black/5 shadow-sm hover:bg-white/85 transition" title="Envoyer (désactivé)" type="button">
-<iconify-icon className="text-slate-700" height="20" icon="solar:paper-plane-linear" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-slate-700" height="20" icon="solar:paper-plane-linear" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </button>
 </div>
 </div>

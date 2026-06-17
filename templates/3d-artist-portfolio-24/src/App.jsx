@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -352,6 +388,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -451,7 +493,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span bis_size='{"x":320,"y":290,"w":783,"h":96,"abs_x":800,"abs_y":333}' className="block text-[10vw] sm:text-7xl lg:text-8xl">worlds</span>
 </h1>
 
-<p aria-label="Specializing in cinematic CGI, product visualization, and character design. Bringing imagination to life through cutting-edge 3D artistry." bis_size='{"x":328,"y":434,"w":768,"h":56,"abs_x":808,"abs_y":477}' className="max-w-3xl mx-auto text-lg md:text-xl text-white/80 type-words is-in" data-delay=".4s" data-duration="2s" data-ease="ease-in-out" data-stagger=".2s" style={{-Stagger: '0.2s', -Dur: '2s', -Ease: 'ease-in-out', -Delay: '0.4s'}}><span bis_size='{"x":360,"y":434,"w":119,"h":28,"abs_x":840,"abs_y":477}' className="w" style={{-I: '0'}}>Specializing </span><span bis_size='{"x":480,"y":434,"w":22,"h":28,"abs_x":960,"abs_y":477}' className="w" style={{-I: '1'}}>in </span><span bis_size='{"x":502,"y":434,"w":96,"h":28,"abs_x":982,"abs_y":477}' className="w" style={{-I: '2'}}>cinematic </span><span bis_size='{"x":599,"y":434,"w":46,"h":28,"abs_x":1079,"abs_y":477}' className="w" style={{-I: '3'}}>CGI, </span><span bis_size='{"x":645,"y":434,"w":79,"h":28,"abs_x":1125,"abs_y":477}' className="w" style={{-I: '4'}}>product </span><span bis_size='{"x":724,"y":434,"w":128,"h":28,"abs_x":1204,"abs_y":477}' className="w" style={{-I: '5'}}>visualization, </span><span bis_size='{"x":852,"y":434,"w":40,"h":28,"abs_x":1332,"abs_y":477}' className="w" style={{-I: '6'}}>and </span><span bis_size='{"x":893,"y":434,"w":95,"h":28,"abs_x":1373,"abs_y":477}' className="w" style={{-I: '7'}}>character </span><span bis_size='{"x":989,"y":434,"w":74,"h":28,"abs_x":1469,"abs_y":477}' className="w" style={{-I: '8'}}>design. </span><span bis_size='{"x":425,"y":462,"w":84,"h":28,"abs_x":905,"abs_y":505}' className="w" style={{-I: '9'}}>Bringing </span><span bis_size='{"x":510,"y":462,"w":114,"h":28,"abs_x":990,"abs_y":505}' className="w" style={{-I: '10'}}>imagination </span><span bis_size='{"x":624,"y":462,"w":23,"h":28,"abs_x":1104,"abs_y":505}' className="w" style={{-I: '11'}}>to </span><span bis_size='{"x":648,"y":462,"w":33,"h":28,"abs_x":1128,"abs_y":505}' className="w" style={{-I: '12'}}>life </span><span bis_size='{"x":682,"y":462,"w":79,"h":28,"abs_x":1162,"abs_y":505}' className="w" style={{-I: '13'}}>through </span><span bis_size='{"x":761,"y":462,"w":127,"h":28,"abs_x":1241,"abs_y":505}' className="w" style={{-I: '14'}}>cutting-edge </span><span bis_size='{"x":889,"y":462,"w":32,"h":28,"abs_x":1369,"abs_y":505}' className="w" style={{-I: '15'}}>3D </span><span bis_size='{"x":921,"y":462,"w":77,"h":28,"abs_x":1401,"abs_y":505}' className="w" style={{-I: '16'}}>artistry. </span></p>
+<p aria-label="Specializing in cinematic CGI, product visualization, and character design. Bringing imagination to life through cutting-edge 3D artistry." bis_size='{"x":328,"y":434,"w":768,"h":56,"abs_x":808,"abs_y":477}' className="max-w-3xl mx-auto text-lg md:text-xl text-white/80 type-words is-in" data-delay=".4s" data-duration="2s" data-ease="ease-in-out" data-stagger=".2s" style={{'--stagger': '0.2s', '--dur': '2s', '--ease': 'ease-in-out', '--delay': '0.4s'}}><span bis_size='{"x":360,"y":434,"w":119,"h":28,"abs_x":840,"abs_y":477}' className="w" style={{'--i': '0'}}>Specializing </span><span bis_size='{"x":480,"y":434,"w":22,"h":28,"abs_x":960,"abs_y":477}' className="w" style={{'--i': '1'}}>in </span><span bis_size='{"x":502,"y":434,"w":96,"h":28,"abs_x":982,"abs_y":477}' className="w" style={{'--i': '2'}}>cinematic </span><span bis_size='{"x":599,"y":434,"w":46,"h":28,"abs_x":1079,"abs_y":477}' className="w" style={{'--i': '3'}}>CGI, </span><span bis_size='{"x":645,"y":434,"w":79,"h":28,"abs_x":1125,"abs_y":477}' className="w" style={{'--i': '4'}}>product </span><span bis_size='{"x":724,"y":434,"w":128,"h":28,"abs_x":1204,"abs_y":477}' className="w" style={{'--i': '5'}}>visualization, </span><span bis_size='{"x":852,"y":434,"w":40,"h":28,"abs_x":1332,"abs_y":477}' className="w" style={{'--i': '6'}}>and </span><span bis_size='{"x":893,"y":434,"w":95,"h":28,"abs_x":1373,"abs_y":477}' className="w" style={{'--i': '7'}}>character </span><span bis_size='{"x":989,"y":434,"w":74,"h":28,"abs_x":1469,"abs_y":477}' className="w" style={{'--i': '8'}}>design. </span><span bis_size='{"x":425,"y":462,"w":84,"h":28,"abs_x":905,"abs_y":505}' className="w" style={{'--i': '9'}}>Bringing </span><span bis_size='{"x":510,"y":462,"w":114,"h":28,"abs_x":990,"abs_y":505}' className="w" style={{'--i': '10'}}>imagination </span><span bis_size='{"x":624,"y":462,"w":23,"h":28,"abs_x":1104,"abs_y":505}' className="w" style={{'--i': '11'}}>to </span><span bis_size='{"x":648,"y":462,"w":33,"h":28,"abs_x":1128,"abs_y":505}' className="w" style={{'--i': '12'}}>life </span><span bis_size='{"x":682,"y":462,"w":79,"h":28,"abs_x":1162,"abs_y":505}' className="w" style={{'--i': '13'}}>through </span><span bis_size='{"x":761,"y":462,"w":127,"h":28,"abs_x":1241,"abs_y":505}' className="w" style={{'--i': '14'}}>cutting-edge </span><span bis_size='{"x":889,"y":462,"w":32,"h":28,"abs_x":1369,"abs_y":505}' className="w" style={{'--i': '15'}}>3D </span><span bis_size='{"x":921,"y":462,"w":77,"h":28,"abs_x":1401,"abs_y":505}' className="w" style={{'--i': '16'}}>artistry. </span></p>
 
 <div bis_size='{"x":559,"y":530,"w":306,"h":48,"abs_x":1039,"abs_y":573}' className="mt-10 flex items-center justify-center gap-4">
 <span bis_size='{"x":559,"y":530,"w":150,"h":48,"abs_x":1039,"abs_y":573}' className="">
@@ -471,7 +513,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span bis_size='{"x":751,"y":544,"w":89,"h":20,"abs_x":1231,"abs_y":587}' className="relative">Start a project</span>
 <span aria-hidden="true" bis_size='{"x":746,"y":575,"w":98,"h":1,"abs_x":1226,"abs_y":618}' className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
-<span aria-hidden="true" bis_size='{"x":707,"y":564,"w":176,"h":24,"abs_x":1187,"abs_y":607}' className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139,92,246,.55), rgba(139,92,246,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" bis_size='{"x":707,"y":564,"w":176,"h":24,"abs_x":1187,"abs_y":607}' className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139, 92, 246, .55), rgba(139, 92, 246, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 <div bis_size='{"x":471,"y":610,"w":481,"h":208,"abs_x":951,"abs_y":653}' className="flex flex-wrap xl:py-24 text-xs text-white/60 mt-8 pt-24 pb-24 gap-x-6 gap-y-6 items-center justify-center" style={{animation: 'fadeSlideIn 0.5s ease-in-out 0.5s both'}}>

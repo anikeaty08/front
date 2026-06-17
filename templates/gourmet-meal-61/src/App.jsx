@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -284,6 +320,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -306,13 +348,13 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute -top-[2%] -left-[2%] w-[40vw] h-[3vh] bg-gradient-to-r from-white/40 via-white/10 to-transparent blur-[15px] origin-top-left" style={{animation: 'core-pulse 3s ease-in-out infinite', mixBlendMode: 'overlay'}}></div>
 <div className="absolute -top-[20%] left-1/2 -translate-x-1/2 w-[40vw] h-[70vh] bg-gradient-to-b from-white/5 via-white/[0.02] to-transparent blur-[80px] origin-top" style={{animation: 'center-beam 6s ease-in-out infinite'}}></div>
 </div>
-<div className="fixed top-[-10%] right-[10%] w-[60vw] h-[120vh] pointer-events-none z-[-1]" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(80px)', transformOrigin: 'top center'}}></div>
+<div className="fixed top-[-10%] right-[10%] w-[60vw] h-[120vh] pointer-events-none z-[-1]" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(80px)', transformOrigin: 'top center'}}></div>
 
-<header className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[90%] max-w-5xl z-50 rounded-full p-[1px]" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.02) 100%)', boxShadow: '0 16px 32px -8px rgba(0,0,0,0.8)'}}>
-<div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] backdrop-blur-2xl relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.15), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<header className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[90%] max-w-5xl z-50 rounded-full p-[1px]" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.02) 100%)', boxShadow: '0 16px 32px -8px rgba(0,0,0,0.8)'}}>
+<div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-gradient-to-b from-[#1c1c1c] to-[#0a0a0a] backdrop-blur-2xl relative overflow-hidden" style={{boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.15), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="flex items-center gap-3 relative z-10">
-<div className="w-8 h-8 rounded-full bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center border border-black" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 2px rgba(0,0,0,0.8), 0 2px 6px rgba(0,0,0,0.6)'}}>
+<div className="w-8 h-8 rounded-full bg-gradient-to-b from-[#333] to-[#111] flex items-center justify-center border border-black" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -1px 2px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0,0,0,0.6)'}}>
 <iconify-icon className="text-white/90" icon="solar:user-circle-linear" style={{filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))'}} width="16"></iconify-icon>
 </div>
 <span className="text-sm font-normal text-white tracking-tighter" style={{textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
@@ -336,7 +378,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex items-center gap-4 relative z-10">
 <div className="relative inline-flex group">
 <div className="absolute inset-0 rounded-full p-[1px] bg-gradient-to-b from-white/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
-<button className="relative px-5 py-1.5 rounded-full text-xs font-light text-white bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -1px 3px rgba(0,0,0,0.6), 0 4px 8px -2px rgba(0,0,0,0.6)', textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
+<button className="relative px-5 py-1.5 rounded-full text-xs font-light text-white bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 3px rgba(0, 0, 0, 0.6), 0 4px 8px -2px rgba(0, 0, 0, 0.6)', textShadow: '0 1px 2px rgba(0,0,0,0.8)'}}>
               Quick Add
             </button>
 </div>
@@ -358,7 +400,7 @@ gtag('config', 'G-2M6V79H761');
     Holding down the fort. Check this landing page to catch up with what I have planned so far. But first, enjoy the generative code art below.
   </p>
 
-<section className="w-full mb-10 rounded-2xl bg-gradient-to-b from-[#13131e] to-[#0c0c14] border border-[#2a2a3a] overflow-hidden" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.04)', fontFamily: '\'Courier New\', monospace'}}>
+<section className="w-full mb-10 rounded-2xl bg-gradient-to-b from-[#13131e] to-[#0c0c14] border border-[#2a2a3a] overflow-hidden" style={{boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255,255,255,0.04)', fontFamily: '\'Courier New\', monospace'}}>
 <div className="px-5 py-3 border-b border-[#2a2a3a] flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="w-2 h-2 rounded-full bg-[#7b7bcc]"></span>
@@ -468,7 +510,7 @@ for (let i = 0; i &lt; 600; i++)
 <div className="w-full lg:w-7/12 relative h-[500px] sm:h-[600px] lg:h-[650px] xl:h-[750px] flex items-center justify-center pointer-events-none" style={{perspective: '1200px', display: 'none'}}>
 <div className="relative w-full max-w-[600px] aspect-square" id="scene-container" style={{transformStyle: 'preserve-3d', transform: 'rotateY(-18deg) rotateX(12deg) rotateZ(4deg)'}}>
 
-<div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#181818] to-[#0a0a0a] overflow-hidden relative" style={{transform: 'translateZ(-100px) scale(1.1)', boxShadow: 'inset 0 2px 2px rgba(255,255,255,0.08), inset 0 -2px 12px rgba(0,0,0,0.9), 0 24px 48px -12px rgba(0,0,0,0.9)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#181818] to-[#0a0a0a] overflow-hidden relative" style={{transform: 'translateZ(-100px) scale(1.1)', boxShadow: 'inset 0 2px 2px rgba(255, 255, 255, 0.08), inset 0 -2px 12px rgba(0, 0, 0, 0.9), 0 24px 48px -12px rgba(0, 0, 0, 0.9)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '6px 6px'}}></div>
 <div className="h-16 border-b border-white/[0.04] flex items-center px-6 gap-4 opacity-50 relative z-10">
 <iconify-icon className="text-white/60" icon="solar:document-text-linear" width="14"></iconify-icon>
@@ -508,9 +550,9 @@ for (let i = 0; i &lt; 600; i++)
 
 <div className="absolute inset-0 flex flex-col items-center justify-center gap-6" style={{transform: 'translateZ(50px)'}}>
 
-<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-1" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)', transform: 'translateX(20px) translateY(-30px)'}}>
+<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-1" style={{boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.9)', transform: 'translateX(20px) translateY(-30px)'}}>
 <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.04] relative z-10" style={{boxShadow: '0 1px 2px rgba(0,0,0,0.2)'}}>
 <div className="flex items-center gap-2">
@@ -541,9 +583,9 @@ for (let i = 0; i &lt; 600; i++)
 </div>
 </div>
 
-<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-2" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)', transform: 'translateX(-30px) translateY(10px)'}}>
+<div className="w-[90%] sm:w-[420px] rounded-2xl bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative" id="card-2" style={{boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.9)', transform: 'translateX(-30px) translateY(10px)'}}>
 <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-2xl bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.04] relative z-10">
 <div className="flex items-center gap-2">
@@ -556,7 +598,7 @@ for (let i = 0; i &lt; 600; i++)
 </div>
 <div className="p-5 flex flex-col gap-4 relative z-10">
 <div className="flex items-center gap-3">
-<div className="px-2.5 py-1 rounded bg-gradient-to-b from-[#3a2d1d] to-[#241a10] text-[#f59e0b] text-[10px] font-normal tracking-wide border border-[#523d25]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.4)'}}>
+<div className="px-2.5 py-1 rounded bg-gradient-to-b from-[#3a2d1d] to-[#241a10] text-[#f59e0b] text-[10px] font-normal tracking-wide border border-[#523d25]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0,0,0,0.4)'}}>
                       Home Duty
                     </div>
 </div>
@@ -601,7 +643,7 @@ for (let i = 0; i &lt; 600; i++)
 
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col gap-6" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col gap-6" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="relative z-10 flex items-center gap-3 mb-2">
 <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
@@ -648,7 +690,7 @@ for (let i = 0; i &lt; 600; i++)
 
 <div className="rounded-[2rem] bg-gradient-to-b from-[#1e1e1e] to-[#121212] p-[1px] relative group transition-all duration-500 hover:-translate-y-1" style={{boxShadow: 'rgba(0, 0, 0, 0.9) 0px 24px 48px -12px'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col gap-6" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="w-full h-full rounded-[2rem] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden p-8 flex flex-col gap-6" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 <div className="relative z-10 flex items-center gap-3 mb-2">
 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#a855f7]/20 to-transparent border border-[#a855f7]/30 flex items-center justify-center">
@@ -698,7 +740,7 @@ for (let i = 0; i &lt; 600; i++)
 
 <div className="group bg-gradient-to-b from-[#1e1e1e] to-[#121212] w-full max-w-[1200px] rounded-[2rem] mr-auto ml-auto pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{boxShadow: '0 24px 48px -12px rgba(0,0,0,0.9)'}}>
 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/10 to-transparent opacity-50 pointer-events-none"></div>
-<div className="overflow-hidden flex flex-col bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] w-full rounded-[2rem] relative" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
+<div className="overflow-hidden flex flex-col bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] w-full rounded-[2rem] relative" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0,0,0,0.8)'}}>
 <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '4px 4px'}}></div>
 
 <div className="border-white/[0.04] flex z-20 bg-[#0a0a0a]/50 h-12 border-b pr-4 pl-4 relative backdrop-blur-md items-center">
@@ -717,7 +759,7 @@ for (let i = 0; i &lt; 600; i++)
 
 <div className="hidden md:flex border-white/[0.04] flex-col bg-[#0a0a0a] w-64 z-20 border-r pt-5 pr-5 pb-5 pl-5 relative backdrop-blur-md gap-x-6 gap-y-6">
 <div className="flex items-center gap-3 px-2">
-<div className="w-8 h-8 rounded-lg bg-[#50c878]/10 flex items-center justify-center text-[#50c878] border border-[#50c878]/20" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.5)'}}>
+<div className="w-8 h-8 rounded-lg bg-[#50c878]/10 flex items-center justify-center text-[#50c878] border border-[#50c878]/20" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0,0,0,0.5)'}}>
 <i className="w-[18px] h-[18px]" data-lucide="chef-hat"></i>
 </div>
 <span className="text-white text-sm font-light">Theo's Menu</span>
@@ -789,7 +831,7 @@ for (let i = 0; i &lt; 600; i++)
                   </h4>
 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
 
-<div className="border-white/[0.05] bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border rounded-xl pt-4 pr-4 pb-4 pl-4" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="border-white/[0.05] bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border rounded-xl pt-4 pr-4 pb-4 pl-4" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-[10px] text-white/40 mb-2 uppercase tracking-wide">
                         Monday
                       </div>
@@ -801,7 +843,7 @@ for (let i = 0; i &lt; 600; i++)
                       </div>
 </div>
 
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-[10px] text-white/40 mb-2 uppercase tracking-wide">
                         Tuesday
                       </div>
@@ -813,7 +855,7 @@ for (let i = 0; i &lt; 600; i++)
                       </div>
 </div>
 
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-[10px] text-white/40 mb-2 uppercase tracking-wide">
                         Wednesday
                       </div>
@@ -825,7 +867,7 @@ for (let i = 0; i &lt; 600; i++)
                       </div>
 </div>
 
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05]" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <div className="text-[10px] text-white/40 mb-2 uppercase tracking-wide">
                         Thursday
                       </div>
@@ -841,7 +883,7 @@ for (let i = 0; i &lt; 600; i++)
 <h4 className="text-xs font-light text-white/50 uppercase tracking-widest">
                     Grocery Checklist
                   </h4>
-<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] flex flex-col gap-3" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
+<div className="p-4 rounded-xl bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] border border-white/[0.05] flex flex-col gap-3" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0,0,0,0.3)'}}>
 <label className="flex items-center gap-3 cursor-pointer group">
 <div className="w-4 h-4 rounded border border-white/20 flex items-center justify-center bg-white/5 group-hover:border-white/40 transition-colors">
 <iconify-icon className="text-transparent" icon="solar:check-read-linear" width="10"></iconify-icon>

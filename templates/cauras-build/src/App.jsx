@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -250,6 +286,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -983,16 +1025,16 @@ addUtilities({
 <div className="relative">
 <img alt="Minimal Portfolio" className="group-hover:grayscale-0 transition-all duration-300 w-full h-[224px] object-cover grayscale" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/286dcc4a-3b11-43d3-af80-a7b1c3aaaad1_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\', sans-serif'}}>
                     Preview
                   </button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>
                   Minimal Portfolio
                 </h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>
                   For Designers
                 </p>
 </div>
@@ -1001,16 +1043,16 @@ addUtilities({
 <div className="relative">
 <img alt="SaaS Landing" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bb9b217e-05c2-4e6e-8f35-3fcb7f5b5e0c_800w.webp"/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\', sans-serif'}}>
                     Preview
                   </button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>
                   SaaS Landing
                 </h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>
                   For Startups
                 </p>
 </div>
@@ -1019,16 +1061,16 @@ addUtilities({
 <div className="relative">
 <img alt="Agency Site" className="w-full h-[224px] object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a59cef23-182d-4015-9d64-9748fcf818c3_800w.webp" style={{}}/>
 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition">
-<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<button className="px-3.5 py-1.5 rounded-full text-black text-xs bg-white hover:bg-slate-200" style={{fontFamily: '\'Inter\', sans-serif'}}>
                     Preview
                   </button>
 </div>
 </div>
 <div className="pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>
                   Agency Site
                 </h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>
                   For Teams
                 </p>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -49,6 +85,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -57,21 +99,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" id="parallax-container">
 
-<div className="parallax-item absolute left-[10%] top-[20%] opacity-40 blur-[2px] animate-float" data-speed="0.02" style={{-Rot: '-15deg'}}>
+<div className="parallax-item absolute left-[10%] top-[20%] opacity-40 blur-[2px] animate-float" data-speed="0.02" style={{'--rot': '-15deg'}}>
 <div className="w-32 h-32 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-300 border-4 border-emerald-200/50 shadow-xl flex items-center justify-center transform scale-75">
 <div className="absolute inset-2 rounded-full border border-emerald-400/30"></div>
 <span className="text-6xl font-serif font-semibold text-emerald-600/50">T</span>
 </div>
 </div>
 
-<div className="parallax-item absolute left-[85%] top-[15%] opacity-40 blur-[1px] animate-float" data-speed="-0.03" style={{-Rot: '15deg', animationDelay: '2s'}}>
+<div className="parallax-item absolute left-[85%] top-[15%] opacity-40 blur-[1px] animate-float" data-speed="-0.03" style={{'--rot': '15deg', animationDelay: '2s'}}>
 <div className="w-32 h-32 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-300 border-4 border-emerald-200/50 shadow-xl flex items-center justify-center transform scale-110">
 <div className="absolute inset-2 rounded-full border border-emerald-400/30"></div>
 <span className="text-6xl font-serif font-semibold text-emerald-600/50">T</span>
 </div>
 </div>
 
-<div className="parallax-item absolute left-[50%] top-[50%] opacity-30 blur-[4px] animate-float" data-speed="0.01" style={{-Rot: '5deg', animationDelay: '4s'}}>
+<div className="parallax-item absolute left-[50%] top-[50%] opacity-30 blur-[4px] animate-float" data-speed="0.01" style={{'--rot': '5deg', animationDelay: '4s'}}>
 <div className="w-32 h-32 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-300 border-4 border-emerald-200/50 shadow-xl flex items-center justify-center transform scale-50">
 <div className="absolute inset-2 rounded-full border border-emerald-400/30"></div>
 <span className="text-6xl font-serif font-semibold text-emerald-600/50">T</span>

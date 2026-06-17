@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -208,6 +244,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -448,7 +490,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex-1">
 <div className="relative">
 <svg className="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-neutral-500" data-lucide="search" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
-<input className="w-full rounded-lg border border-neutral-200 bg-white pl-9 pr-10 py-2 text-[14px] placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-offset-0" id="searchInput" placeholder="ค้นหา: สัญลักษณ์ / กองทุน / ประเภท" style={{-TwRingColor: '#0A6EE7'}} type="text"/>
+<input className="w-full rounded-lg border border-neutral-200 bg-white pl-9 pr-10 py-2 text-[14px] placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-offset-0" id="searchInput" placeholder="ค้นหา: สัญลักษณ์ / กองทุน / ประเภท" style={{'--tw-ring-color': '#0A6EE7'}} type="text"/>
 <button className="absolute right-1.5 top-1/2 -translate-y-1/2 h-7 px-2 rounded-md border border-neutral-200 text-[12px] bg-white hover:bg-neutral-50 flex items-center gap-1" id="openFilter">
 <svg className="lucide lucide-sliders-horizontal h-4 w-4" data-lucide="sliders-horizontal" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10 5H3"></path><path d="M12 19H3"></path><path d="M14 3v4"></path><path d="M16 17v4"></path><path d="M21 12h-9"></path><path d="M21 19h-5"></path><path d="M21 5h-7"></path><path d="M8 10v4"></path><path d="M8 12H3"></path></svg>
                   Filter
@@ -473,7 +515,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
 <div className="relative col-span-2 sm:col-span-1">
 <label className="block text-[12px] text-neutral-600 mb-1">Asset Type</label>
-<select className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:outline-none focus:ring-2" id="filterAsset" style={{-TwRingColor: '#0A6EE7'}}>
+<select className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:outline-none focus:ring-2" id="filterAsset" style={{'--tw-ring-color': '#0A6EE7'}}>
 <option value="all">All</option>
 <option value="thai_stock">Thai Stock</option>
 <option value="global_stock">Global Stock</option>
@@ -485,7 +527,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="relative">
 <label className="block text-[12px] text-neutral-600 mb-1">Account</label>
-<select className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:outline-none focus:ring-2" id="filterAccount" style={{-TwRingColor: '#0A6EE7'}}>
+<select className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:outline-none focus:ring-2" id="filterAccount" style={{'--tw-ring-color': '#0A6EE7'}}>
 <option value="all">All</option>
 <option value="cash_balance">Cash Balance</option>
 <option value="cash_account">Cash Account (T+2)</option>
@@ -495,7 +537,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="relative">
 <label className="block text-[12px] text-neutral-600 mb-1">Sort</label>
-<select className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:outline-none focus:ring-2" id="sortBy" style={{-TwRingColor: '#0A6EE7'}}>
+<select className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:outline-none focus:ring-2" id="sortBy" style={{'--tw-ring-color': '#0A6EE7'}}>
 <option value="value_desc">Market Value ↓</option>
 <option value="value_asc">Market Value ↑</option>
 <option value="pl_desc">P/L ↓</option>

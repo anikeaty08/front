@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -102,6 +138,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -143,7 +185,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
 
-<a className="hover:scale-[1.02] transition-all flex text-base font-normal text-white bg-blue-600 rounded-full pt-3.5 pr-8 pb-3.5 pl-8 shadow-[0px_0px_0px_1px_rgba(37,99,235,0.06),0px_1px_1px_-0.5px_rgba(37,99,235,0.06),0px_3px_3px_-1.5px_rgba(37,99,235,0.06),_0px_6px_6px_-3px_rgba(37,99,235,0.06),0px_12px_12px_-6px_rgba(37,99,235,0.06),0px_24px_24px_-12px_rgba(37,99,235,0.06)] gap-x-2.5 items-center w-full sm:w-auto justify-center" href="tel:6199859211" style={{boxShadow: '0 18px 35px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(37, 99, 235, 1)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<a className="hover:scale-[1.02] transition-all flex text-base font-normal text-white bg-blue-600 rounded-full pt-3.5 pr-8 pb-3.5 pl-8 shadow-[0px_0px_0px_1px_rgba(37,99,235,0.06),0px_1px_1px_-0.5px_rgba(37,99,235,0.06),0px_3px_3px_-1.5px_rgba(37,99,235,0.06),_0px_6px_6px_-3px_rgba(37,99,235,0.06),0px_12px_12px_-6px_rgba(37,99,235,0.06),0px_24px_24px_-12px_rgba(37,99,235,0.06)] gap-x-2.5 items-center w-full sm:w-auto justify-center" href="tel:6199859211" style={{boxShadow: '0 18px 35px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(37, 99, 235, 1)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="text-xl" icon="solar:phone-calling-linear"></iconify-icon>
 <span className="tracking-tight">Call Now: 619-985-9211</span>
 </a>
@@ -566,7 +608,7 @@ gtag('config', 'G-2M6V79H761');
                 Don't wait for the problem to get worse. Speak directly with our team and get your plumbing fixed by professionals today.
             </p>
 <div className="flex justify-center">
-<a className="hover:bg-blue-50 transition-all flex text-base font-normal text-blue-700 bg-white rounded-full pt-3.5 pr-8 pb-3.5 pl-8 shadow-xl gap-x-2 items-center" href="tel:6199859211" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.5))', -BorderRadiusBefore: '9999px'}}>
+<a className="hover:bg-blue-50 transition-all flex text-base font-normal text-blue-700 bg-white rounded-full pt-3.5 pr-8 pb-3.5 pl-8 shadow-xl gap-x-2 items-center" href="tel:6199859211" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.5))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="text-xl" icon="solar:phone-calling-linear"></iconify-icon>
 <span className="tracking-tight">Call Now for Fast, Reliable Plumbing</span>
 </a>

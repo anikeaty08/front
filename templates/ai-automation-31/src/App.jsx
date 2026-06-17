@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -54,6 +90,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -71,18 +113,18 @@ gtag('config', 'G-2M6V79H761');
 <div className="spotlight-overlay"></div>
 
 <div aria-hidden="true" className="laser-beam-container fixed inset-0 z-0 pointer-events-none overflow-hidden">
-<div className="energy-streak layer-far" style={{left: '2%', animationDuration: '13s', animationDelay: '-2s', -StreakOpacity: '0.08'}}></div>
-<div className="energy-streak layer-far hidden md:block" style={{left: '15%', animationDuration: '15s', animationDelay: '-10s', -StreakOpacity: '0.1'}}></div>
-<div className="energy-streak layer-mid" style={{left: '22%', animationDuration: '8s', animationDelay: '-5s', -StreakOpacity: '0.18'}}></div>
-<div className="energy-streak layer-mid" style={{left: '35%', animationDuration: '10s', animationDelay: '-1s', -StreakOpacity: '0.2'}}></div>
-<div className="energy-streak layer-near star hidden md:block" style={{left: '42%', animationDuration: '4s', animationDelay: '-3s', -StreakOpacity: '0.5'}}></div>
-<div className="energy-streak layer-far" style={{left: '50%', animationDuration: '14s', animationDelay: '-12s', -StreakOpacity: '0.09'}}></div>
-<div className="energy-streak layer-mid" style={{left: '60%', animationDuration: '8s', animationDelay: '-8s', -StreakOpacity: '0.19'}}></div>
-<div className="energy-streak layer-near" style={{left: '68%', animationDuration: '5s', animationDelay: '-4s', -StreakOpacity: '0.4'}}></div>
-<div className="energy-streak layer-far hidden md:block" style={{left: '75%', animationDuration: '15s', animationDelay: '-6s', -StreakOpacity: '0.1'}}></div>
-<div className="energy-streak layer-mid" style={{left: '82%', animationDuration: '9s', animationDelay: '-9s', -StreakOpacity: '0.22'}}></div>
-<div className="energy-streak layer-mid" style={{left: '90%', animationDuration: '7s', animationDelay: '-2s', -StreakOpacity: '0.25'}}></div>
-<div className="energy-streak layer-far hidden md:block" style={{left: '96%', animationDuration: '17s', animationDelay: '-10s', -StreakOpacity: '0.08'}}></div>
+<div className="energy-streak layer-far" style={{left: '2%', animationDuration: '13s', animationDelay: '-2s', '--streak-opacity': '0.08'}}></div>
+<div className="energy-streak layer-far hidden md:block" style={{left: '15%', animationDuration: '15s', animationDelay: '-10s', '--streak-opacity': '0.1'}}></div>
+<div className="energy-streak layer-mid" style={{left: '22%', animationDuration: '8s', animationDelay: '-5s', '--streak-opacity': '0.18'}}></div>
+<div className="energy-streak layer-mid" style={{left: '35%', animationDuration: '10s', animationDelay: '-1s', '--streak-opacity': '0.2'}}></div>
+<div className="energy-streak layer-near star hidden md:block" style={{left: '42%', animationDuration: '4s', animationDelay: '-3s', '--streak-opacity': '0.5'}}></div>
+<div className="energy-streak layer-far" style={{left: '50%', animationDuration: '14s', animationDelay: '-12s', '--streak-opacity': '0.09'}}></div>
+<div className="energy-streak layer-mid" style={{left: '60%', animationDuration: '8s', animationDelay: '-8s', '--streak-opacity': '0.19'}}></div>
+<div className="energy-streak layer-near" style={{left: '68%', animationDuration: '5s', animationDelay: '-4s', '--streak-opacity': '0.4'}}></div>
+<div className="energy-streak layer-far hidden md:block" style={{left: '75%', animationDuration: '15s', animationDelay: '-6s', '--streak-opacity': '0.1'}}></div>
+<div className="energy-streak layer-mid" style={{left: '82%', animationDuration: '9s', animationDelay: '-9s', '--streak-opacity': '0.22'}}></div>
+<div className="energy-streak layer-mid" style={{left: '90%', animationDuration: '7s', animationDelay: '-2s', '--streak-opacity': '0.25'}}></div>
+<div className="energy-streak layer-far hidden md:block" style={{left: '96%', animationDuration: '17s', animationDelay: '-10s', '--streak-opacity': '0.08'}}></div>
 </div>
 
 <div className="tech-grid bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)]"></div>

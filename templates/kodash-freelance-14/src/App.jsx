@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -262,6 +298,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1024,7 +1066,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col md:p-14 border-white/[0.08] overflow-hidden text-center border rounded-[28px] pt-10 pr-10 pb-10 pl-10 relative items-center grid-card-bg" style={{backgroundColor: 'rgba(13,13,16,0.98)', backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '32px 32px', backgroundPosition: 'center center', backdropFilter: 'blur(24px)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)'}}>
+<div className="flex flex-col md:p-14 border-white/[0.08] overflow-hidden text-center border rounded-[28px] pt-10 pr-10 pb-10 pl-10 relative items-center grid-card-bg" style={{backgroundColor: 'rgba(13, 13, 16, 0.98)', backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px)', backgroundSize: '32px 32px', backgroundPosition: 'center center', backdropFilter: 'blur(24px)', boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.06)'}}>
 
 <div className="absolute inset-0 pointer-events-none z-[1]" style={{background: 'radial-gradient(ellipse at 50% 0%, rgba(34,197,94,0.10) 0%, rgba(15,15,18,0.85) 55%)'}}></div>
 
@@ -1046,7 +1088,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute inset-0 opacity-[0.025] mix-blend-overlay pointer-events-none z-[2]" style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E\')'}}></div>
 
-<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[2]" style={{width: '500px', height: '250px', background: 'radial-gradient(ellipse, rgba(34,197,94,0.07) 0%, transparent 70%)', filter: 'blur(50px)'}}></div>
+<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[2]" style={{width: '500px', height: '250px', background: 'radial-gradient(ellipse, rgba(34, 197, 94, 0.07) 0%, transparent 70%)', filter: 'blur(50px)'}}></div>
 <div className="relative z-10 max-w-2xl flex flex-col items-center w-full">
 
 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/30 bg-green-500/10 backdrop-blur-sm mb-8">
@@ -1087,8 +1129,8 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex items-center justify-center gap-4">
 <div className="relative shrink-0">
-<div className="absolute inset-0 rounded-full" style={{background: 'conic-gradient(from 0deg, rgba(74,222,128,0.8), rgba(34,197,94,0.2), rgba(74,222,128,0.8))', padding: '2px', borderRadius: '9999px', filter: 'blur(1px)'}}></div>
-<div className="w-14 h-14 rounded-full p-[2px] relative" style={{background: 'linear-gradient(135deg, rgba(74,222,128,0.9), rgba(22,163,74,0.9))', boxShadow: '0 0 20px rgba(34,197,94,0.4), 0 0 40px rgba(34,197,94,0.15)'}}>
+<div className="absolute inset-0 rounded-full" style={{background: 'conic-gradient(from 0deg, rgba(74, 222, 128, 0.8), rgba(34, 197, 94, 0.2), rgba(74, 222, 128, 0.8))', padding: '2px', borderRadius: '9999px', filter: 'blur(1px)'}}></div>
+<div className="w-14 h-14 rounded-full p-[2px] relative" style={{background: 'linear-gradient(135deg, rgba(74, 222, 128, 0.9), rgba(22, 163, 74, 0.9))', boxShadow: '0 0 20px rgba(34, 197, 94, 0.4), 0 0 40px rgba(34,197,94,0.15)'}}>
 <div className="w-full h-full rounded-full bg-zinc-950 flex items-center justify-center overflow-hidden">
 <img alt="Founder" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ca3e93b8-f1d2-4554-ac5b-8dcbf399f996_320w.jpg"/>
 </div>
@@ -1139,7 +1181,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9) 0%, rgba(17,17,20,0.95) 100%)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 1px rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9) 0%, rgba(17, 17, 20, 0.95) 100%)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 1px rgba(255, 255, 255, 0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(34,197,94,0.08) 0%, transparent 70%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(34,197,94,0.4) 50%, transparent 100%)'}}></div>
 
@@ -1147,7 +1189,7 @@ gtag('config', 'G-2M6V79H761');
               01
             </div>
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(34,197,94,0.05) 100%)', border: '1px solid rgba(34,197,94,0.2)', boxShadow: '0 0 20px rgba(34,197,94,0.1)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)', border: '1px solid rgba(34, 197, 94, 0.2)', boxShadow: '0 0 20px rgba(34,197,94,0.1)'}}>
 <svg className="text-green-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <polyline points="16 18 22 12 16 6"></polyline>
 <polyline points="8 6 2 12 8 18"></polyline>
@@ -1155,13 +1197,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="w-px h-8 bg-white/[0.04]"></div>
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(34,197,94,0.2)', background: 'rgba(34,197,94,0.08)', color: 'rgba(74,222,128,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(34, 197, 94, 0.2)', background: 'rgba(34, 197, 94, 0.08)', color: 'rgba(74,222,128,0.9)'}}>
                   Full-stack
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Mobile
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Web3
                 </span>
 </div>
@@ -1182,14 +1224,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9) 0%, rgba(17,17,20,0.95) 100%)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 1px rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9) 0%, rgba(17, 17, 20, 0.95) 100%)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 1px rgba(255, 255, 255, 0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(168,85,247,0.08) 0%, transparent 70%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(168,85,247,0.4) 50%, transparent 100%)'}}></div>
 <div className="absolute top-5 right-6 text-[11px] font-sans font-medium text-zinc-700 tracking-widest select-none">
               02
             </div>
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0.05) 100%)', border: '1px solid rgba(168,85,247,0.2)', boxShadow: '0 0 20px rgba(168,85,247,0.1)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%)', border: '1px solid rgba(168, 85, 247, 0.2)', boxShadow: '0 0 20px rgba(168,85,247,0.1)'}}>
 <svg className="text-purple-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle>
 <circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle>
@@ -1200,13 +1242,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="w-px h-8 bg-white/[0.04]"></div>
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(168,85,247,0.2)', background: 'rgba(168,85,247,0.08)', color: 'rgba(192,132,252,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(168, 85, 247, 0.2)', background: 'rgba(168, 85, 247, 0.08)', color: 'rgba(192,132,252,0.9)'}}>
                   UI/UX
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Brand
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Motion
                 </span>
 </div>
@@ -1227,14 +1269,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9) 0%, rgba(17,17,20,0.95) 100%)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 1px rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9) 0%, rgba(17, 17, 20, 0.95) 100%)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 1px rgba(255, 255, 255, 0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(245,158,11,0.08) 0%, transparent 70%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(245,158,11,0.4) 50%, transparent 100%)'}}></div>
 <div className="absolute top-5 right-6 text-[11px] font-sans font-medium text-zinc-700 tracking-widest select-none">
               03
             </div>
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.05) 100%)', border: '1px solid rgba(245,158,11,0.2)', boxShadow: '0 0 20px rgba(245,158,11,0.1)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%)', border: '1px solid rgba(245, 158, 11, 0.2)', boxShadow: '0 0 20px rgba(245,158,11,0.1)'}}>
 <svg className="text-amber-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 20h9"></path>
 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
@@ -1242,13 +1284,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="w-px h-8 bg-white/[0.04]"></div>
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(245,158,11,0.2)', background: 'rgba(245,158,11,0.08)', color: 'rgba(251,191,36,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(245, 158, 11, 0.2)', background: 'rgba(245, 158, 11, 0.08)', color: 'rgba(251,191,36,0.9)'}}>
                   Copywriting
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   SEO
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Ghostwriting
                 </span>
 </div>
@@ -1269,14 +1311,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9) 0%, rgba(17,17,20,0.95) 100%)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 1px rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9) 0%, rgba(17, 17, 20, 0.95) 100%)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 1px rgba(255, 255, 255, 0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(59,130,246,0.08) 0%, transparent 70%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.4) 50%, transparent 100%)'}}></div>
 <div className="absolute top-5 right-6 text-[11px] font-sans font-medium text-zinc-700 tracking-widest select-none">
               04
             </div>
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%)', border: '1px solid rgba(59,130,246,0.2)', boxShadow: '0 0 20px rgba(59,130,246,0.1)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%)', border: '1px solid rgba(59, 130, 246, 0.2)', boxShadow: '0 0 20px rgba(59,130,246,0.1)'}}>
 <svg className="text-blue-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
 <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -1284,13 +1326,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="w-px h-8 bg-white/[0.04]"></div>
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(59,130,246,0.2)', background: 'rgba(59,130,246,0.08)', color: 'rgba(96,165,250,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(59, 130, 246, 0.2)', background: 'rgba(59, 130, 246, 0.08)', color: 'rgba(96,165,250,0.9)'}}>
                   Hiring
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Contractors
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Agencies
                 </span>
 </div>
@@ -1311,27 +1353,27 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9) 0%, rgba(17,17,20,0.95) 100%)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 1px rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9) 0%, rgba(17, 17, 20, 0.95) 100%)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 1px rgba(255, 255, 255, 0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(236,72,153,0.08) 0%, transparent 70%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(236,72,153,0.4) 50%, transparent 100%)'}}></div>
 <div className="absolute top-5 right-6 text-[11px] font-sans font-medium text-zinc-700 tracking-widest select-none">
               05
             </div>
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0.05) 100%)', border: '1px solid rgba(236,72,153,0.2)', boxShadow: '0 0 20px rgba(236,72,153,0.1)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%)', border: '1px solid rgba(236, 72, 153, 0.2)', boxShadow: '0 0 20px rgba(236,72,153,0.1)'}}>
 <svg className="text-pink-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
 </svg>
 </div>
 <div className="w-px h-8 bg-white/[0.04]"></div>
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(236,72,153,0.2)', background: 'rgba(236,72,153,0.08)', color: 'rgba(244,114,182,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(236, 72, 153, 0.2)', background: 'rgba(236, 72, 153, 0.08)', color: 'rgba(244,114,182,0.9)'}}>
                   Growth
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Ads
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Strategy
                 </span>
 </div>
@@ -1352,14 +1394,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9) 0%, rgba(17,17,20,0.95) 100%)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 1px rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9) 0%, rgba(17, 17, 20, 0.95) 100%)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 1px rgba(255, 255, 255, 0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(249,115,22,0.08) 0%, transparent 70%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.4) 50%, transparent 100%)'}}></div>
 <div className="absolute top-5 right-6 text-[11px] font-sans font-medium text-zinc-700 tracking-widest select-none">
               06
             </div>
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(249,115,22,0.15) 0%, rgba(249,115,22,0.05) 100%)', border: '1px solid rgba(249,115,22,0.2)', boxShadow: '0 0 20px rgba(249,115,22,0.1)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(249, 115, 22, 0.05) 100%)', border: '1px solid rgba(249, 115, 22, 0.2)', boxShadow: '0 0 20px rgba(249,115,22,0.1)'}}>
 <svg className="text-orange-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <polygon points="23 7 16 12 23 17 23 7"></polygon>
 <rect height="14" rx="2" ry="2" width="15" x="1" y="5"></rect>
@@ -1367,13 +1409,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="w-px h-8 bg-white/[0.04]"></div>
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(249,115,22,0.2)', background: 'rgba(249,115,22,0.08)', color: 'rgba(251,146,60,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(249, 115, 22, 0.2)', background: 'rgba(249, 115, 22, 0.08)', color: 'rgba(251,146,60,0.9)'}}>
                   Video
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Podcast
                 </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                   Music
                 </span>
 </div>
@@ -1394,7 +1436,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500 sm:col-span-1 lg:col-span-2" style={{background: 'linear-gradient(145deg, rgba(24,24,27,0.9) 0%, rgba(17,17,20,0.95) 100%)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 1px 1px rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500 sm:col-span-1 lg:col-span-2" style={{background: 'linear-gradient(145deg, rgba(24, 24, 27, 0.9) 0%, rgba(17, 17, 20, 0.95) 100%)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 1px rgba(255, 255, 255, 0.03) inset, 0 20px 40px rgba(0,0,0,0.4)'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(20,184,166,0.08) 0%, transparent 70%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(20,184,166,0.4) 50%, transparent 100%)'}}></div>
 <div className="absolute top-5 right-6 text-[11px] font-sans font-medium text-zinc-700 tracking-widest select-none">
@@ -1402,7 +1444,7 @@ gtag('config', 'G-2M6V79H761');
             </div>
 <div className="flex flex-col md:flex-row md:items-start gap-6">
 <div className="flex flex-col gap-4 shrink-0">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(20,184,166,0.15) 0%, rgba(20,184,166,0.05) 100%)', border: '1px solid rgba(20,184,166,0.2)', boxShadow: '0 0 20px rgba(20,184,166,0.1)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%)', border: '1px solid rgba(20, 184, 166, 0.2)', boxShadow: '0 0 20px rgba(20,184,166,0.1)'}}>
 <svg className="text-teal-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
 <circle cx="9" cy="7" r="4"></circle>
@@ -1423,16 +1465,16 @@ gtag('config', 'G-2M6V79H761');
                 </p>
 <div className="flex items-center gap-3 flex-wrap">
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(20,184,166,0.2)', background: 'rgba(20,184,166,0.08)', color: 'rgba(45,212,191,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(20, 184, 166, 0.2)', background: 'rgba(20, 184, 166, 0.08)', color: 'rgba(45,212,191,0.9)'}}>
                       Retainers
                     </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                       Strategy
                     </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                       Finance
                     </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                       HR
                     </span>
 </div>
@@ -1447,13 +1489,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(17,24,19,0.95) 0%, rgba(12,18,14,0.98) 100%)', border: '1px solid rgba(34,197,94,0.12)', boxShadow: '0 1px 1px rgba(74,222,128,0.04) inset, 0 20px 50px rgba(0,0,0,0.5), 0 0 60px rgba(34,197,94,0.05)'}}>
+<div className="group relative flex flex-col p-6 rounded-2xl overflow-hidden transition-all duration-500" style={{background: 'linear-gradient(145deg, rgba(17, 24, 19, 0.95) 0%, rgba(12, 18, 14, 0.98) 100%)', border: '1px solid rgba(34, 197, 94, 0.12)', boxShadow: '0 1px 1px rgba(74, 222, 128, 0.04) inset, 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(34,197,94,0.05)'}}>
 <div className="absolute inset-0 opacity-60 pointer-events-none" style={{background: 'radial-gradient(ellipse at 10% 10%, rgba(34,197,94,0.07) 0%, transparent 60%)'}}></div>
 <div className="absolute top-0 left-0 right-0 h-px pointer-events-none" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(74,222,128,0.3) 50%, transparent 100%)'}}></div>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(ellipse at 0% 0%, rgba(34,197,94,0.1) 0%, transparent 70%)'}}></div>
 <div className="flex flex-col md:flex-row md:items-start gap-6">
 <div className="flex flex-col gap-4 shrink-0">
-<div className="w-10 h-10 rounded-xl flex items-center justify-center relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(34,197,94,0.2) 0%, rgba(34,197,94,0.08) 100%)', border: '1px solid rgba(34,197,94,0.25)', boxShadow: '0 0 24px rgba(34,197,94,0.15)'}}>
+<div className="w-10 h-10 rounded-xl flex items-center justify-center relative z-10 transition-all duration-500 group-hover:scale-110" style={{background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.08) 100%)', border: '1px solid rgba(34, 197, 94, 0.25)', boxShadow: '0 0 24px rgba(34,197,94,0.15)'}}>
 <svg className="text-green-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <rect height="14" rx="2" ry="2" width="20" x="2" y="7"></rect>
 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
@@ -1465,7 +1507,7 @@ gtag('config', 'G-2M6V79H761');
 <h3 className="text-base font-manrope font-semibold tracking-tight text-zinc-100">
                     Enterprise &amp; Growing Teams
                   </h3>
-<span className="text-[10px] font-sans font-semibold tracking-tight px-2.5 py-1 rounded-full" style={{border: '1px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.12)', color: 'rgba(74,222,128,1)', boxShadow: '0 0 12px rgba(34,197,94,0.15)'}}>
+<span className="text-[10px] font-sans font-semibold tracking-tight px-2.5 py-1 rounded-full" style={{border: '1px solid rgba(34, 197, 94, 0.3)', background: 'rgba(34, 197, 94, 0.12)', color: 'rgba(74, 222, 128, 1)', boxShadow: '0 0 12px rgba(34,197,94,0.15)'}}>
                     Most Popular
                   </span>
 </div>
@@ -1476,16 +1518,16 @@ gtag('config', 'G-2M6V79H761');
                   or manual wire transfer.
                 </p>
 <div className="flex flex-wrap gap-1.5">
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(34,197,94,0.2)', background: 'rgba(34,197,94,0.08)', color: 'rgba(74,222,128,0.9)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(34, 197, 94, 0.2)', background: 'rgba(34, 197, 94, 0.08)', color: 'rgba(74,222,128,0.9)'}}>
                     Multi-contractor
                   </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                     Audit Trails
                   </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                     Bulk Payouts
                   </span>
-<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)', color: 'rgba(161,161,170,0.8)'}}>
+<span className="text-[10px] font-sans font-medium tracking-tight px-2 py-0.5 rounded-full" style={{border: '1px solid rgba(255, 255, 255, 0.06)', background: 'rgba(255, 255, 255, 0.03)', color: 'rgba(161,161,170,0.8)'}}>
                     Finance API
                   </span>
 </div>
@@ -1692,7 +1734,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 <div className="flex flex-col gap-4">
-<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{-MouseX: '50%', -MouseY: '50%'}}>
+<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{'--mouse-x': '50%', '--mouse-y': '50%'}}>
 <div className="faq-glow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 rounded-[24px]" style={{background: 'radial-gradient(400px circle at 50% 50%, rgba(34,197,94,0.12), transparent 70%)'}}></div>
 <h3 className="text-lg md:text-xl font-manrope font-medium tracking-tight mb-3 text-zinc-100 relative z-10">
               How does the escrow work?
@@ -1705,7 +1747,7 @@ gtag('config', 'G-2M6V79H761');
               quality for the client.
             </p>
 </div>
-<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{-MouseX: '50%', -MouseY: '50%'}}>
+<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{'--mouse-x': '50%', '--mouse-y': '50%'}}>
 <div className="faq-glow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 rounded-[24px]" style={{background: 'radial-gradient(400px circle at 50% 50%, rgba(34,197,94,0.12), transparent 70%)'}}></div>
 <h3 className="text-lg md:text-xl font-manrope font-medium tracking-tight mb-3 text-zinc-100 relative z-10">
               What happens if there's a dispute?
@@ -1717,7 +1759,7 @@ gtag('config', 'G-2M6V79H761');
               the funds should be distributed.
             </p>
 </div>
-<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{-MouseX: '50%', -MouseY: '50%'}}>
+<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{'--mouse-x': '50%', '--mouse-y': '50%'}}>
 <div className="faq-glow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 rounded-[24px]" style={{background: 'radial-gradient(400px circle at 50% 50%, rgba(34,197,94,0.12), transparent 70%)'}}></div>
 <h3 className="text-lg md:text-xl font-manrope font-medium tracking-tight mb-3 text-zinc-100 relative z-10">
               Are there any fees?
@@ -1728,7 +1770,7 @@ gtag('config', 'G-2M6V79H761');
               both parties during the contract setup phase.
             </p>
 </div>
-<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{-MouseX: '50%', -MouseY: '50%'}}>
+<div className="faq-card border border-white/[0.05] rounded-[24px] p-6 md:p-8 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02),0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-white/10 relative overflow-hidden" style={{'--mouse-x': '50%', '--mouse-y': '50%'}}>
 <div className="faq-glow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 rounded-[24px]" style={{background: 'radial-gradient(400px circle at 50% 50%, rgba(34,197,94,0.12), transparent 70%)'}}></div>
 <h3 className="text-lg md:text-xl font-manrope font-medium tracking-tight mb-3 text-zinc-100 relative z-10">
               Which payment methods are supported?

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -92,7 +128,7 @@ gtag('config', 'G-2M6V79H761');
                         </div>
                         
                         <div className="flex-1 min-w-0 pr-4">
-                            <h3 className="text-sm md:text-base tracking-tight font-medium text-neutral-200 truncate" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            <h3 className="text-sm md:text-base tracking-tight font-medium text-neutral-200 truncate" style={{fontFamily: "'Space Grotesk', sans-serif"}}>
                                 {track.title}
                             </h3>
                             <div className="flex items-center gap-2 mt-0.5">
@@ -118,7 +154,7 @@ gtag('config', 'G-2M6V79H761');
             };
 
             return (
-                <div className="min-h-screen flex flex-col relative" style={{ backgroundImage: 'radial-gradient(circle at 50% -10%, #170d05 0%, transparent 60%)' }}>
+                <div className="min-h-screen flex flex-col relative" style={{backgroundImage: 'radial-gradient(circle at 50% -10%, #170d05 0%, transparent 60%)'}}>
                     <audio 
                         ref={audioRef} 
                         onEnded={() => setIsPlaying(false)} 
@@ -127,7 +163,7 @@ gtag('config', 'G-2M6V79H761');
                     
                     {/* Header */}
                     <header className="px-6 py-5 flex items-center justify-between border-b border-neutral-900/50 bg-black/40 backdrop-blur-md sticky top-0 z-40">
-                        <div className="text-xl tracking-tighter font-semibold text-neutral-100" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        <div className="text-xl tracking-tighter font-semibold text-neutral-100" style={{fontFamily: "'Space Grotesk', sans-serif"}}>
                             CHOAM
                         </div>
                         <nav className="hidden md:flex gap-8 text-xs text-neutral-500 font-mono uppercase tracking-widest">
@@ -148,7 +184,7 @@ gtag('config', 'G-2M6V79H761');
                                 <iconify-icon icon="solar:radar-linear" stroke-width="1.5" class="text-amber-600/70"></iconify-icon>
                                 DEEP DESERT SENSORS ACTIVE
                             </div>
-                            <h1 className="text-4xl md:text-6xl tracking-tighter font-medium text-neutral-100 mb-6 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                            <h1 className="text-4xl md:text-6xl tracking-tighter font-medium text-neutral-100 mb-6 leading-tight" style={{fontFamily: "'Space Grotesk', sans-serif"}}>
                                 Extracted Frequencies from the <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-800 to-amber-500">Deep Sands</span>
                             </h1>
                             <p className="text-sm text-neutral-500 max-w-xl mx-auto leading-relaxed">
@@ -169,7 +205,7 @@ gtag('config', 'G-2M6V79H761');
                                 width="100%"
                                 itemSize={96}
                                 itemCount={tracks.length}
-                                style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+                                style={{msOverflowStyle: 'none', scrollbarWidth: 'none'}}
                             >
                                 {Row}
                             </FixedSizeList>
@@ -186,7 +222,7 @@ gtag('config', 'G-2M6V79H761');
                                         <img src={activeTrack.cover} alt="cover" className="object-cover w-full h-full opacity-60" />
                                     </div>
                                     <div className="min-w-0">
-                                        <h4 className="text-xs md:text-sm tracking-tight font-medium text-neutral-200 truncate" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{activeTrack.title}</h4>
+                                        <h4 className="text-xs md:text-sm tracking-tight font-medium text-neutral-200 truncate" style={{fontFamily: "'Space Grotesk', sans-serif"}}>{activeTrack.title}</h4>
                                         <p className="text-xs text-amber-700/70 font-mono truncate">{activeTrack.artist}</p>
                                     </div>
                                 </div>
@@ -206,7 +242,7 @@ gtag('config', 'G-2M6V79H761');
                                     <div className="w-full hidden md:flex items-center gap-3 text-xs font-mono text-neutral-600">
                                         <span>00:00</span>
                                         <div className="flex-1 h-1 bg-neutral-900 rounded-full overflow-hidden relative cursor-pointer">
-                                            <div className="absolute top-0 left-0 h-full bg-amber-700/80 transition-all duration-100 ease-linear" style={{ width: `${progress}%` }}></div>
+                                            <div className="absolute top-0 left-0 h-full bg-amber-700/80 transition-all duration-100 ease-linear" style={{width: `${progress}%`}}></div>
                                         </div>
                                         <span>{activeTrack.duration}</span>
                                     </div>
@@ -236,6 +272,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

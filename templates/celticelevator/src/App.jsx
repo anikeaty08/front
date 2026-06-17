@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwindConfig = {
@@ -50,13 +86,19 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar" style={{background: 'rgba(27,94,32,0.97)', backdropFilter: 'blur(12px)'}}>
+<header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar" style={{background: 'rgba(27, 94, 32, 0.97)', backdropFilter: 'blur(12px)'}}>
 <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-[72px]">
 <a className="flex items-center gap-2.5 shrink-0" href="#">
 <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg flex items-center justify-center bg-white/15">
@@ -103,7 +145,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-16 md:pb-28 w-full">
 <div className="max-w-3xl">
-<div className="animate-fade-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-[0.15em] uppercase mb-6 md:mb-8" style={{color: '#C8A951', border: '1px solid rgba(200,169,81,0.35)', background: 'rgba(200,169,81,0.1)'}}>
+<div className="animate-fade-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-[0.15em] uppercase mb-6 md:mb-8" style={{color: '#C8A951', border: '1px solid rgba(200, 169, 81, 0.35)', background: 'rgba(200,169,81,0.1)'}}>
         Elevator Installation · Maintenance · Modernisation
       </div>
 <h1 className="animate-fade-up delay-100 font-heading text-[28px] sm:text-4xl md:text-[44px] lg:text-[48px] font-bold text-white leading-[1.12] tracking-tight mb-5 md:mb-6">
@@ -123,28 +165,28 @@ gtag('config', 'G-2M6V79H761');
         </a>
 </div>
 <div className="animate-fade-up delay-400 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)'}}>
+<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)'}}>
 <svg fill="none" height="22" stroke="#C8A951" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><rect height="20" rx="2" ry="2" width="16" x="4" y="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
 <div>
 <div className="font-heading text-lg md:text-xl font-bold text-white leading-none">700+</div>
 <div className="text-[10px] md:text-xs text-white/60 mt-0.5">Elevators Installed</div>
 </div>
 </div>
-<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)'}}>
+<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)'}}>
 <svg fill="none" height="22" stroke="#C8A951" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
 <div>
 <div className="font-heading text-lg md:text-xl font-bold text-white leading-none">4.9 ★</div>
 <div className="text-[10px] md:text-xs text-white/60 mt-0.5">Google Rating</div>
 </div>
 </div>
-<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)'}}>
+<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)'}}>
 <svg fill="none" height="22" stroke="#C8A951" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
 <div>
 <div className="font-heading text-lg md:text-xl font-bold text-white leading-none">15+</div>
 <div className="text-[10px] md:text-xs text-white/60 mt-0.5">Years Experience</div>
 </div>
 </div>
-<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)'}}>
+<div className="flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/15" style={{background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)'}}>
 <svg fill="none" height="22" stroke="#C8A951" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
 <div>
 <div className="font-heading text-lg md:text-xl font-bold text-white leading-none tracking-tight">AZ ROC</div>

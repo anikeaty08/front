@@ -38,7 +38,7 @@ const Logo = () => (
       {/* Inner skin layer illustration representation */}
       <div className="relative w-20 h-20 bg-gradient-to-b from-orange-200 via-red-200 to-purple-300 rounded-xl shadow-inner overflow-hidden transform rotate-12 flex items-center justify-center">
          <div className="absolute top-0 w-full h-1/4 bg-yellow-100/50"></div>
-         <iconify-icon icon="solar:layers-minimalistic-bold-duotone" width="40" style={{ color: '#7b3e8c' }}></iconify-icon>
+         <iconify-icon icon="solar:layers-minimalistic-bold-duotone" width="40" style={{color: '#7b3e8c'}}></iconify-icon>
       </div>
     </div>
     <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] uppercase">
@@ -57,6 +57,42 @@ const LearnerDropdown = ({ selected, onSelect }) => {
   ];
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -112,7 +148,7 @@ const PathwayCard = ({ title, icon, image, description }) => (
     {/* Background Image */}
     <div
       className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110"
-      style={{ backgroundImage: `url(${image})` }}
+      style={{backgroundImage: `url(${image})`}}
     />
     
     {/* Default Gradient Overlay */}
@@ -145,7 +181,7 @@ const RubyCard = () => (
     {/* Background Image */}
     <div
       className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
-      style={{ backgroundImage: `url("https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/user-files/2bbe3005-a21b-42a1-8b90-841129bad372/f68e117b-d893-489e-8de0-e8275a849aca-image-7.png?v=1777407959068")` }}
+      style={{backgroundImage: `url("https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/user-files/2bbe3005-a21b-42a1-8b90-841129bad372/f68e117b-d893-489e-8de0-e8275a849aca-image-7.png?v=1777407959068")`}}
     />
     
     {/* Dark gradient overlay for contrast */}
@@ -284,9 +320,7 @@ export default function App() {
       {/* Requested Abstract Background Image */}
       <div 
         className="fixed inset-0 -z-20 bg-cover bg-center"
-        style={{
-          backgroundImage: 'url("https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/user-files/2bbe3005-a21b-42a1-8b90-841129bad372/4d7b88d2-d55a-473b-8a5e-17b2d01181b7-image-3.png?v=1777407054275")',
-        }}
+        style={{backgroundImage: 'url("https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/user-files/2bbe3005-a21b-42a1-8b90-841129bad372/4d7b88d2-d55a-473b-8a5e-17b2d01181b7-image-3.png?v=1777407054275")'}}
       ></div>
 
       <AdminBar />
@@ -328,7 +362,7 @@ export default function App() {
               {/* Clinician Pathway Cards */}
               {selectedLearner === 'Clinician' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
-                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{ animationDelay: '0ms', animationFillMode: 'both' }}>
+                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{animationDelay: '0ms', animationFillMode: 'both'}}>
                     <PathwayCard
                       title="Basal Cell Carcinoma"
                       icon="https://catalyst-skincancers.com/wp-content/uploads/2021/01/fav.png"
@@ -336,7 +370,7 @@ export default function App() {
                       description="Basal cell carcinoma (BCC), particularly advanced BCC, can be associated with complex management and poor outcomes. However, therapeutic advancements have enhanced strategies for patient-specific care."
                     />
                   </div>
-                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{ animationDelay: '100ms', animationFillMode: 'both' }}>
+                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{animationDelay: '100ms', animationFillMode: 'both'}}>
                     <PathwayCard
                       title="Cutaneous Squamous Cell Carcinoma"
                       icon="https://catalyst-skincancers.com/wp-content/uploads/2021/01/fav.png"
@@ -344,7 +378,7 @@ export default function App() {
                       description="Cutaneous squamous cell carcinoma (cSCC), particularly advanced cSCC, can be associated with complex management and poor outcomes. However, therapeutic advancements have enhanced strategies for patient-specific care."
                     />
                   </div>
-                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
+                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{animationDelay: '200ms', animationFillMode: 'both'}}>
                     <RubyCard />
                   </div>
                 </div>
@@ -353,7 +387,7 @@ export default function App() {
               {/* Patient Pathway Cards */}
               {selectedLearner === 'Patient or Caregiver' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
-                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{ animationDelay: '0ms', animationFillMode: 'both' }}>
+                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{animationDelay: '0ms', animationFillMode: 'both'}}>
                     <PathwayCard
                       title="Basal Cell Carcinoma"
                       icon="https://catalyst-skincancers.com/wp-content/uploads/2021/01/fav.png"
@@ -361,7 +395,7 @@ export default function App() {
                       description="As a patient, it is essential to take charge of your treatment journey for basal cell carcinoma (BCC). Active involvement in the process ensures that you fully understand your condition and treatment options, enables you to feel more in control and potentially improves outcomes."
                     />
                   </div>
-                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
+                  <div className="animate-in fade-in slide-in-from-bottom-4" style={{animationDelay: '150ms', animationFillMode: 'both'}}>
                     <PathwayCard
                       title="Cutaneous Squamous Cell Carcinoma"
                       icon="https://catalyst-skincancers.com/wp-content/uploads/2021/01/fav.png"

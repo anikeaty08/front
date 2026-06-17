@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       // Lucide icons with 1.5 stroke width
@@ -74,6 +110,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -82,13 +124,13 @@ export default function App() {
 
 <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
 
-<div className="absolute left-1/2 top-1/2 h-[120vmax] w-[120vmax] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.08] blur-3xl will-change-transform animate-spin" style={{background: 'conic-gradient(from 0deg, rgba(99,102,241,0.65), rgba(236,72,153,0.65), rgba(56,189,248,0.65), rgba(99,102,241,0.65))', animationDuration: '60s', animationTimingFunction: 'linear', animationIterationCount: 'infinite', maskImage: 'radial-gradient(circle at center, black 55%, transparent 70%)'}}></div>
+<div className="absolute left-1/2 top-1/2 h-[120vmax] w-[120vmax] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.08] blur-3xl will-change-transform animate-spin" style={{background: 'conic-gradient(from 0deg, rgba(99, 102, 241, 0.65), rgba(236, 72, 153, 0.65), rgba(56, 189, 248, 0.65), rgba(99, 102, 241, 0.65))', animationDuration: '60s', animationTimingFunction: 'linear', animationIterationCount: 'infinite', maskImage: 'radial-gradient(circle at center, black 55%, transparent 70%)'}}></div>
 
 <div className="absolute -top-24 -left-24 h-[40rem] w-[40rem] rounded-full blur-3xl opacity-25 animate-pulse" style={{background: 'radial-gradient(35rem 35rem at 30% 30%, rgba(99,102,241,0.7), transparent 60%)', animationDuration: '4.5s'}}></div>
 <div className="absolute -bottom-24 -right-24 h-[40rem] w-[40rem] rounded-full blur-3xl opacity-25 animate-pulse" style={{background: 'radial-gradient(35rem 35rem at 70% 70%, rgba(236,72,153,0.6), transparent 60%)', animationDuration: '5.5s'}}></div>
 
 <div className="absolute inset-0 opacity-[0.11]">
-<div className="absolute inset-0" style={{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(ellipse at 50% 40%, black 50%, transparent 90%)'}}></div>
+<div className="absolute inset-0" style={{backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px)', backgroundSize: '40px 40px', maskImage: 'radial-gradient(ellipse at 50% 40%, black 50%, transparent 90%)'}}></div>
 </div>
 
 <div className="absolute inset-0 opacity-[0.06]" style={{backgroundImage: 'url(\'data:image/svg+xml', svg xmlns='http: '//www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'&gt', backgroundSize: '220px 220px'}}></div>

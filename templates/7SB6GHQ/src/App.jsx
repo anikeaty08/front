@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Utilities
@@ -742,6 +778,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -754,11 +796,11 @@ export default function App() {
 </div>
 
 <div className="relative mx-auto my-4 sm:my-8 max-w-[1400px] 2xl:max-w-[1600px] h-[calc(100vh-2rem)] sm:h-[calc(100vh-4rem)]" id="root">
-<div className="relative flex h-full overflow-hidden rounded-2xl shadow-2xl" style={{background: 'rgba(18,18,18,0.25)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)', -PrimaryColor: '#5E8CFF', -SecondaryColor: '#FF8356', -TertiaryColor: '#C96BFF', -InfoColor: '#62CCFF', -Bg: '#0D0D0D', -Card: 'rgba(18,18,18,0.25)', -Border: 'rgba(255,255,255,0.08)', -HoverShade: '#16233F', -ActiveShade: '#1B2A4D', -PanelShadow: '0 20px 60px rgba(4, 51, 163, 0.20)'}}>
+<div className="relative flex h-full overflow-hidden rounded-2xl shadow-2xl" style={{background: 'rgba(18, 18, 18, 0.25)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', '--primary-color': '#5E8CFF', '--secondary-color': '#FF8356', '--tertiary-color': '#C96BFF', '--info-color': '#62CCFF', '--bg': '#0D0D0D', '--card': 'rgba(18, 18, 18, 0.25)', '--border': 'rgba(255, 255, 255, 0.08)', '--hover-shade': '#16233F', '--active-shade': '#1B2A4D', '--panel-shadow': '0 20px 60px rgba(4, 51, 163, 0.20)'}}>
 
-<aside aria-label="Spaces and Agents" className="hidden md:flex md:w-[300px] lg:w-[320px] xl:w-[340px] flex-col border-r border-white/10" id="sidebar" style={{background: 'rgba(18,18,18,0.25)', backdropFilter: 'blur(16px)'}}>
+<aside aria-label="Spaces and Agents" className="hidden md:flex md:w-[300px] lg:w-[320px] xl:w-[340px] flex-col border-r border-white/10" id="sidebar" style={{background: 'rgba(18, 18, 18, 0.25)', backdropFilter: 'blur(16px)'}}>
 
-<div className="sticky top-0 z-10 px-4 sm:px-5 py-3 flex items-center justify-between border-b border-white/10" style={{background: 'rgba(18,18,18,0.35)', backdropFilter: 'blur(16px)'}}>
+<div className="sticky top-0 z-10 px-4 sm:px-5 py-3 flex items-center justify-between border-b border-white/10" style={{background: 'rgba(18, 18, 18, 0.35)', backdropFilter: 'blur(16px)'}}>
 <div className="flex items-center gap-2">
 <div className="h-8 w-8 rounded-xl flex items-center justify-center ring-1 ring-white/10" style={{background: 'linear-gradient(145deg, rgba(94,140,255,0.22), rgba(16,185,129,0.12))'}}>
 <svg className="w-[18px] h-[18px] text-sky-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v3m0 12v3M3 12h3m12 0h3"></path><circle cx="12" cy="12" r="4"></circle></svg>
@@ -782,7 +824,7 @@ export default function App() {
 
 <main className="relative flex-1 flex flex-col" id="main">
 
-<div className="sticky top-0 z-20 border-b border-white/10" style={{background: 'rgba(18,18,18,0.35)', backdropFilter: 'blur(16px)'}}>
+<div className="sticky top-0 z-20 border-b border-white/10" style={{background: 'rgba(18, 18, 18, 0.35)', backdropFilter: 'blur(16px)'}}>
 <div className="px-4 sm:px-6 py-3 flex items-center justify-between">
 <div className="flex items-center gap-2 md:gap-3">
 
@@ -804,7 +846,7 @@ export default function App() {
 <span className="text-neutral-200" id="modelLabel">gpt-4o</span>
 <svg className="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
 </button>
-<div className="hidden absolute right-0 mt-2 w-48 rounded-xl ring-1 ring-white/10 overflow-hidden" id="modelMenu" role="listbox" style={{background: 'rgba(18,18,18,0.85)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}>
+<div className="hidden absolute right-0 mt-2 w-48 rounded-xl ring-1 ring-white/10 overflow-hidden" id="modelMenu" role="listbox" style={{background: 'rgba(18, 18, 18, 0.85)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}>
 <button className="w-full text-left px-3 py-2 text-sm hover:bg-white/5" data-value="gpt-4o" role="option">gpt-4o</button>
 <button className="w-full text-left px-3 py-2 text-sm hover:bg-white/5" data-value="gpt-4-mini" role="option">gpt-4-mini</button>
 <button className="w-full text-left px-3 py-2 text-sm hover:bg-white/5" data-value="claude-3.5" role="option">claude-3.5</button>
@@ -826,9 +868,9 @@ export default function App() {
 
 <div className="absolute inset-0" id="nodesLayer"></div>
 
-<div className="hidden absolute min-w-[220px] max-w-[320px] p-3 rounded-xl ring-1 ring-white/10 text-sm" id="nodePreview" style={{background: 'rgba(18,18,18,0.7)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}></div>
+<div className="hidden absolute min-w-[220px] max-w-[320px] p-3 rounded-xl ring-1 ring-white/10 text-sm" id="nodePreview" style={{background: 'rgba(18, 18, 18, 0.7)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}></div>
 
-<div className="hidden absolute w-44 rounded-xl overflow-hidden ring-1 ring-white/10" id="ctxMenu" style={{background: 'rgba(18,18,18,0.85)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}>
+<div className="hidden absolute w-44 rounded-xl overflow-hidden ring-1 ring-white/10" id="ctxMenu" style={{background: 'rgba(18, 18, 18, 0.85)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}>
 <button className="w-full text-left px-3 py-2 text-sm hover:bg-white/5 flex items-center gap-2" data-action="duplicate">
 <svg className="w-4.5 h-4.5 text-neutral-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect height="8" rx="2" width="8" x="8" y="8"></rect><path d="M4 16V6a2 2 0 0 1 2-2h10"></path></svg>
                 Duplicate
@@ -849,7 +891,7 @@ export default function App() {
 </div>
 </div>
 
-<div className="sticky bottom-0 z-20 border-t border-white/10" style={{background: 'rgba(18,18,18,0.35)', backdropFilter: 'blur(16px)'}}>
+<div className="sticky bottom-0 z-20 border-t border-white/10" style={{background: 'rgba(18, 18, 18, 0.35)', backdropFilter: 'blur(16px)'}}>
 <div className="px-4 sm:px-6 py-3 space-y-2">
 
 <div className="flex flex-wrap items-center gap-2" id="personaChips">
@@ -868,7 +910,7 @@ export default function App() {
 <span className="text-neutral-300" id="composerModelLabel">Auto</span>
 <svg className="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
 </button>
-<div className="hidden absolute left-0 mt-2 w-36 rounded-xl ring-1 ring-white/10 overflow-hidden" id="composerModelMenu" role="listbox" style={{background: 'rgba(18,18,18,0.85)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}>
+<div className="hidden absolute left-0 mt-2 w-36 rounded-xl ring-1 ring-white/10 overflow-hidden" id="composerModelMenu" role="listbox" style={{background: 'rgba(18, 18, 18, 0.85)', backdropFilter: 'blur(16px)', boxShadow: 'var(--panel-shadow)'}}>
 <button className="w-full text-left px-3 py-2 text-sm hover:bg-white/5" data-value="Auto" role="option">Auto</button>
 <button className="w-full text-left px-3 py-2 text-sm hover:bg-white/5" data-value="Reasoning" role="option">Reasoning</button>
 <button className="w-full text-left px-3 py-2 text-sm hover:bg-white/5" data-value="Fast" role="option">Fast</button>
@@ -892,7 +934,7 @@ export default function App() {
 </main>
 
 <aside aria-label="Inspector panel" className="pointer-events-none absolute top-0 right-0 h-full w-[360px] md:w-[380px] translate-x-full transition-transform duration-200 ease-in-out" id="inspector">
-<div className="pointer-events-auto h-full flex flex-col ring-1 ring-white/10" style={{background: 'rgba(18,18,18,0.35)', backdropFilter: 'blur(16px)'}}>
+<div className="pointer-events-auto h-full flex flex-col ring-1 ring-white/10" style={{background: 'rgba(18, 18, 18, 0.35)', backdropFilter: 'blur(16px)'}}>
 <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
 <div className="flex items-center gap-2">
 <span className="h-2.5 w-2.5 rounded-full" id="inspectorColor" style={{background: 'var(--primary-color)'}}></span>

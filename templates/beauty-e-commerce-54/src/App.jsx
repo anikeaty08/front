@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -58,7 +100,7 @@ gtag('config', 'G-2M6V79H761');
 <img alt="Editorial Fashion Beauty" className="object-cover w-full h-full object-center md:object-top" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&amp;w=2000&amp;auto=format&amp;fit=crop"/>
 
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,249,246,0.95)_0%,rgba(250,249,246,0.7)_40%,transparent_100%)]"></div>
-<div className="backdrop-blur-[2px] bg-[#FAF9F6]/30 absolute top-0 right-0 bottom-0 left-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(rgba(250, 249, 246, 0.3), rgba(250, 249, 246, 0.3)), url(\'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&amp'}}></div>
+<div className="backdrop-blur-[2px] bg-[#FAF9F6]/30 absolute top-0 right-0 bottom-0 left-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(rgba(250, 249, 246, 0.3), rgba(250, 249, 246, 0.3)), url(\'https: //images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&amp'}}></div>
 </div>
 
 <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full flex-grow justify-center mt-12 md:mt-0">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -108,6 +144,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -239,7 +281,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="relative flex-1 w-full h-full overflow-hidden min-h-[500px] lg:min-h-0 flex flex-col justify-between group" style={{WebkitMaskImage: 'url(&quot', data: 'image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1 1\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M 0 0.3 C 0 0.18, 0.05 0.18, 0.15 0.18 L 0.38 0.18 C 0.45 0.18, 0.45 0.04, 0.52 0.04 L 0.85 0.04 C 0.95 0.04, 1 0.1, 1 0.2 L 1 0.75 C 1 0.85, 0.85 0.85, 0.85 0.95 L 0.85 1 L 0.1 1 C 0.04 1, 0 0.96, 0 0.9 Z\' fill=\'black\'/%3E%3C/svg%3E&quot', maskImage: 'url(&quot', data: 'image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1 1\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M 0 0.3 C 0 0.18, 0.05 0.18, 0.15 0.18 L 0.38 0.18 C 0.45 0.18, 0.45 0.04, 0.52 0.04 L 0.85 0.04 C 0.95 0.04, 1 0.1, 1 0.2 L 1 0.75 C 1 0.85, 0.85 0.85, 0.85 0.95 L 0.85 1 L 0.1 1 C 0.04 1, 0 0.96, 0 0.9 Z\' fill=\'black\'/%3E%3C/svg%3E&quot', WebkitMaskSize: '100% 100%', maskSize: '100% 100%', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center'}}>
+<div className="relative flex-1 w-full h-full overflow-hidden min-h-[500px] lg:min-h-0 flex flex-col justify-between group" style={{WebkitMaskImage: 'url(&quot', data: 'image/svg+xml, %3Csvg xmlns=\'http: //www.w3.org/2000/svg\' viewBox=\'0 0 1 1\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M 0 0.3 C 0 0.18, 0.05 0.18, 0.15 0.18 L 0.38 0.18 C 0.45 0.18, 0.45 0.04, 0.52 0.04 L 0.85 0.04 C 0.95 0.04, 1 0.1, 1 0.2 L 1 0.75 C 1 0.85, 0.85 0.85, 0.85 0.95 L 0.85 1 L 0.1 1 C 0.04 1, 0 0.96, 0 0.9 Z\' fill=\'black\'/%3E%3C/svg%3E&quot', maskImage: 'url(&quot', data: 'image/svg+xml, %3Csvg xmlns=\'http: //www.w3.org/2000/svg\' viewBox=\'0 0 1 1\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M 0 0.3 C 0 0.18, 0.05 0.18, 0.15 0.18 L 0.38 0.18 C 0.45 0.18, 0.45 0.04, 0.52 0.04 L 0.85 0.04 C 0.95 0.04, 1 0.1, 1 0.2 L 1 0.75 C 1 0.85, 0.85 0.85, 0.85 0.95 L 0.85 1 L 0.1 1 C 0.04 1, 0 0.96, 0 0.9 Z\' fill=\'black\'/%3E%3C/svg%3E&quot', WebkitMaskSize: '100% 100%', maskSize: '100% 100%', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center'}}>
 
 <img alt="Electric Car" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" src="https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&amp;fit=crop&amp;q=80&amp;w=2071"/>
 

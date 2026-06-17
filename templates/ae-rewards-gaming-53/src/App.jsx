@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -400,6 +436,12 @@ let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -487,25 +529,25 @@ let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>
 <div aria-hidden="true" className="py-2 overflow-hidden border-y border-white/[0.04]"><div className="marquee-track" id="marqueeTrack"><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-xs font-semibold text-white">E</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Emma W.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xs font-semibold text-white">D</div><span className="text-xs text-gray-400"><span className="text-white font-medium">David K.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-xs font-semibold text-white">L</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Lisa T.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-xs font-semibold text-white">R</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Ryan P.</span> won <span className="text-amber-400 font-medium">$50 Bonus</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-xs font-semibold text-white">O</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Olivia M.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-400 to-blue-500 flex items-center justify-center text-xs font-semibold text-white">J</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Jake B.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-xs font-semibold text-white">E</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Emma W.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xs font-semibold text-white">D</div><span className="text-xs text-gray-400"><span className="text-white font-medium">David K.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-xs font-semibold text-white">L</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Lisa T.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-xs font-semibold text-white">R</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Ryan P.</span> won <span className="text-amber-400 font-medium">$50 Bonus</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-xs font-semibold text-white">O</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Olivia M.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div><div className="flex items-center gap-2 mx-4 flex-shrink-0"><div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-400 to-blue-500 flex items-center justify-center text-xs font-semibold text-white">J</div><span className="text-xs text-gray-400"><span className="text-white font-medium">Jake B.</span> won <span className="text-amber-400 font-medium">$100 AE Card</span></span></div></div></div>
 <div className="px-4 pt-4 pb-2">
 <div className="grid grid-cols-4 gap-2">
-<button className="game-tab active flex flex-col items-center gap-1 py-2 rounded-xl" data-game="flip" onclick="switchGame('flip')" style={{-TabColor: '#a855f7', -TabBg: 'rgba(168,85,247,.15)', -TabBorder: 'rgba(168,85,247,.3)', -TabText: '#c084fc'}}>
+<button className="game-tab active flex flex-col items-center gap-1 py-2 rounded-xl" data-game="flip" onclick="switchGame('flip')" style={{'--tab-color': '#a855f7', '--tab-bg': 'rgba(168, 85, 247, .15)', '--tab-border': 'rgba(168,85,247,.3)', '--tab-text': '#c084fc'}}>
 <div className="tab-icon-wrap w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center transition-all">
 <iconify-icon className="text-purple-400" height="1em" icon="solar:layers-minimalistic-linear" style={{strokeWidth: '1.5'}} width="1em"></iconify-icon>
 </div>
 <span className="tab-label text-xs font-semibold text-purple-300 transition-colors">Flip</span>
 </button>
-<button className="game-tab flex flex-col items-center gap-1 py-2 rounded-xl" data-game="spin" onclick="switchGame('spin')" style={{-TabColor: '#f59e0b', -TabBg: 'rgba(245,158,11,.15)', -TabBorder: 'rgba(245,158,11,.3)', -TabText: '#fbbf24'}}>
+<button className="game-tab flex flex-col items-center gap-1 py-2 rounded-xl" data-game="spin" onclick="switchGame('spin')" style={{'--tab-color': '#f59e0b', '--tab-bg': 'rgba(245, 158, 11, .15)', '--tab-border': 'rgba(245,158,11,.3)', '--tab-text': '#fbbf24'}}>
 <div className="tab-icon-wrap w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all">
 <iconify-icon className="text-gray-400" height="1em" icon="solar:refresh-linear" style={{strokeWidth: '1.5'}} width="1em"></iconify-icon>
 </div>
 <span className="tab-label text-xs font-semibold text-gray-500 transition-colors">Spin</span>
 </button>
-<button className="game-tab flex flex-col items-center gap-1 py-2 rounded-xl" data-game="boxes" onclick="switchGame('boxes')" style={{-TabColor: '#22c55e', -TabBg: 'rgba(34,197,94,.15)', -TabBorder: 'rgba(34,197,94,.3)', -TabText: '#4ade80'}}>
+<button className="game-tab flex flex-col items-center gap-1 py-2 rounded-xl" data-game="boxes" onclick="switchGame('boxes')" style={{'--tab-color': '#22c55e', '--tab-bg': 'rgba(34, 197, 94, .15)', '--tab-border': 'rgba(34,197,94,.3)', '--tab-text': '#4ade80'}}>
 <div className="tab-icon-wrap w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all">
 <iconify-icon className="text-gray-400" height="1em" icon="solar:box-linear" style={{strokeWidth: '1.5'}} width="1em"></iconify-icon>
 </div>
 <span className="tab-label text-xs font-semibold text-gray-500 transition-colors">Boxes</span>
 </button>
-<button className="game-tab flex flex-col items-center gap-1 py-2 rounded-xl" data-game="scratch" onclick="switchGame('scratch')" style={{-TabColor: '#eab308', -TabBg: 'rgba(234,179,8,.15)', -TabBorder: 'rgba(234,179,8,.3)', -TabText: '#facc15'}}>
+<button className="game-tab flex flex-col items-center gap-1 py-2 rounded-xl" data-game="scratch" onclick="switchGame('scratch')" style={{'--tab-color': '#eab308', '--tab-bg': 'rgba(234, 179, 8, .15)', '--tab-border': 'rgba(234,179,8,.3)', '--tab-text': '#facc15'}}>
 <div className="tab-icon-wrap w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all">
 <iconify-icon className="text-gray-400" height="1em" icon="solar:card-linear" style={{strokeWidth: '1.5'}} width="1em"></iconify-icon>
 </div>

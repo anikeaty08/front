@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -562,6 +598,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1176,7 +1218,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid md:grid-cols-2 gap-6 lg:gap-8 gap-x-6 gap-y-6">
 
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 <iconify-icon className="text-2xl text-indigo-400" icon="lucide:arrow-up-right"></iconify-icon>
 </div>
@@ -1225,7 +1267,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 <iconify-icon className="text-2xl text-indigo-400" icon="lucide:arrow-up-right"></iconify-icon>
 </div>
@@ -1272,7 +1314,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 <iconify-icon className="text-2xl text-indigo-400" icon="lucide:arrow-up-right"></iconify-icon>
 </div>
@@ -1319,7 +1361,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:shadow-indigo-500/10 hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 <iconify-icon className="text-2xl text-indigo-400" icon="lucide:arrow-up-right"></iconify-icon>
 </div>
@@ -1935,7 +1977,7 @@ gtag('config', 'G-2M6V79H761');
         </h2>
 <div className="columns-1 md:columns-3 space-y-6 gap-x-6 gap-y-6">
 
-<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <p className="text-gray-600 text-sm leading-relaxed mb-6">
               "Aether completely changed how we prototype gameplay mechanics.
               The physics engine is incredibly robust yet performant enough for
@@ -1956,7 +1998,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <p className="text-gray-600 text-sm leading-relaxed mb-6">
               "The editor is a breath of fresh air. It feels intuitive and
               powerful, letting us focus on level design instead of fighting the
@@ -1973,7 +2015,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="hover:shadow-lg transition-all group hover:border-indigo-100 hover:shadow-indigo-500/5 rounded-2xl pt-6 pr-6 pb-6 pl-6 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <p className="text-gray-600 text-sm leading-relaxed mb-6">
               "We shipped our game 3 weeks early because we didn't have to write
               custom shaders for every material. Aether handles the hard

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -24,6 +60,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -59,7 +101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </header>
 
 <section className="hero-overlay relative min-h-[600px] lg:min-h-[700px] flex items-center">
-<div 100\"="" 100px="" 100px;"="" 10h20v2h10zm40="" 10h20v2h40zm70="" 10h20v2h70z\"="" background-size:="" className="absolute inset-0 opacity-[0.08]" d='\"M10' fill="\&quot;%23FFC400\&quot;/%3E%3C/svg%3E');" height='\"100\"' style={{backgroundImage: 'url(\'data:image/svg+xml,%3Csvg width=\'}} xmlns='\"http://www.w3.org/2000/svg\"%3E%3Cpath'></div>
+<div 100\"="" 100px="" 100px;"="" 10h20v2h10zm40="" 10h20v2h40zm70="" 10h20v2h70z\"="" background-size:="" className="absolute inset-0 opacity-[0.08]" d='\"M10' fill="\&quot;%23FFC400\&quot;/%3E%3C/svg%3E');" height='\"100\"' style={{backgroundImage: 'url(\'data:image/svg+xml, %3Csvg width=\'}} xmlns='\"http://www.w3.org/2000/svg\"%3E%3Cpath'></div>
 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
 <div className="max-w-3xl">
 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white mb-6 tracking-tight leading-[1.1]">

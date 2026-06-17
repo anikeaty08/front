@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -581,6 +617,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -672,7 +714,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-<div className="absolute inset-0 rounded-full pointer-events-none" style={{padding: '1.5px', background: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.05) 60%, rgba(255,255,255,0.2) 100%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
+<div className="absolute inset-0 rounded-full pointer-events-none" style={{padding: '1.5px', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.05) 60%, rgba(255, 255, 255, 0.2) 100%)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
 
 <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-500" style={{background: 'radial-gradient(circle at center, rgba(59, 91, 219, 0.2) 0%, transparent 70%)'}}></div>
 
@@ -1161,27 +1203,27 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="rounded-lg border border-white/[0.03] flex items-center justify-around px-5" style={{background: 'rgba(0,0,0,0.2)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'}}>
+<div className="rounded-lg border border-white/[0.03] flex items-center justify-around px-5" style={{background: 'rgba(0, 0, 0, 0.2)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'}}>
 <div className="flex flex-col items-center gap-2.5">
-<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
 <div className="joystick w-9 h-9 rounded-full cursor-grab active:cursor-grabbing transition-transform" data-id="1" style={{backgroundColor: 'rgb(59, 91, 219)', boxShadow: 'rgba(0, 0, 0, 0.4) 0px 4px 8px, rgba(255, 255, 255, 0.3) 0px 1px 2px inset'}}></div>
 </div>
 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-medium">Tempo</span>
 </div>
 <div className="flex flex-col items-center gap-2.5">
-<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
 <div className="w-9 h-9 rounded-full joystick cursor-grab active:cursor-grabbing transition-transform" data-id="2" style={{backgroundColor: 'rgb(212, 160, 53)', boxShadow: 'rgba(0, 0, 0, 0.4) 0px 4px 8px, rgba(255, 255, 255, 0.3) 0px 1px 2px inset'}}></div>
 </div>
 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-medium">Tone</span>
 </div>
 <div className="flex flex-col items-center gap-2.5">
-<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
 <div className="w-9 h-9 rounded-full joystick cursor-grab active:cursor-grabbing transition-transform" data-id="3" style={{backgroundColor: 'rgb(102, 102, 102)', boxShadow: 'rgba(0, 0, 0, 0.4) 0px 4px 8px, rgba(255, 255, 255, 0.3) 0px 1px 2px inset'}}></div>
 </div>
 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-medium">Depth</span>
 </div>
 <div className="flex flex-col items-center gap-2.5">
-<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
 <div className="w-9 h-9 rounded-full joystick cursor-grab active:cursor-grabbing transition-transform" data-id="4" style={{backgroundColor: 'rgb(255, 72, 0)', boxShadow: 'rgba(0, 0, 0, 0.4) 0px 4px 8px, rgba(255, 255, 255, 0.3) 0px 1px 2px inset'}}></div>
 </div>
 <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-medium">Drive</span>
@@ -1189,7 +1231,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex flex-col items-center justify-center gap-2.5" style={{borderLeft: '1px solid rgba(0,0,0,0.3)', paddingLeft: '14px'}}>
-<div className="w-16 h-16 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
+<div className="w-16 h-16 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(145deg, #1f1f1f, #2a2a2a)', boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255,255,255,0.05)'}}>
 <div className="w-10 h-10 rounded-full joystick cursor-grab active:cursor-grabbing transition-transform" data-id="5" style={{backgroundColor: 'rgb(224, 224, 226)', boxShadow: 'rgba(0, 0, 0, 0.4) 0px 4px 8px, rgba(255, 255, 255, 0.3) 0px 1px 2px inset'}}></div>
 </div>
 <span className="text-[9px] font-mono text-orange-500 font-semibold uppercase tracking-[0.2em]">
@@ -1235,7 +1277,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '15%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '15%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>
@@ -1245,7 +1287,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="w-6 h-6 rounded bg-zinc-800 border border-zinc-900 relative shadow-[0_2px_0_#111] active:translate-y-px transition-all"></button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '55%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '55%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>
@@ -1255,7 +1297,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="w-6 h-6 rounded bg-zinc-800 border border-zinc-900 relative shadow-[0_2px_0_#111] active:translate-y-px transition-all"></button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '25%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '25%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>
@@ -1265,7 +1307,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="w-6 h-6 rounded bg-zinc-800 border border-zinc-900 relative shadow-[0_2px_0_#111] active:translate-y-px transition-all"></button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '70%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '70%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>
@@ -1275,7 +1317,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="w-6 h-6 rounded bg-zinc-800 border border-zinc-900 relative shadow-[0_2px_0_#111] active:translate-y-px transition-all"></button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '35%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '35%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>
@@ -1287,7 +1329,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '65%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '65%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>
@@ -1297,7 +1339,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="w-6 h-6 rounded bg-zinc-800 border border-zinc-900 relative shadow-[0_2px_0_#111] active:translate-y-px transition-all"></button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '8%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '8%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>
@@ -1307,7 +1349,7 @@ gtag('config', 'G-2M6V79H761');
 <button className="w-6 h-6 rounded bg-zinc-800 border border-zinc-900 relative shadow-[0_2px_0_#111] active:translate-y-px transition-all"></button>
 <div className="w-5 flex-1 rounded-xl relative flex justify-center bg-[#151515] shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
 <div className="absolute top-3 bottom-3 w-px bg-white/5"></div>
-<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '85%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="fader-cap absolute w-10 rounded-sm cursor-grab active:cursor-grabbing z-10 flex items-center justify-center" style={{height: '44px', bottom: '85%', background: 'linear-gradient(180deg, #333, #222)', border: '1px solid #444', borderBottomColor: '#111', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="w-full h-px bg-black shadow-[0_1px_0_rgba(255,255,255,0.1)]"></div>
 </div>
 </div>

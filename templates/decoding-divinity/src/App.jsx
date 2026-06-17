@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -63,6 +99,12 @@ function toggleMenu() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -98,7 +140,7 @@ function toggleMenu() {
       </div>
 <h1>45 Days <em>Mindful Meditation</em><br/>for Inner Transformation</h1>
 <h1 style={{marginTop: '0.2rem', marginBottom: '2rem'}}>In the divine presence of
-        <span style={{fontFamily: '\'Cormorant Garamond\',serif', fontWeight: '400', color: 'var(--gold-light)', letterSpacing: '0.02em', textShadow: '0 0 24px rgba(232,197,109,0.45)'}}>Deepali Didi</span>
+        <span style={{fontFamily: '\'Cormorant Garamond\', serif', fontWeight: '400', color: 'var(--gold-light)', letterSpacing: '0.02em', textShadow: '0 0 24px rgba(232,197,109,0.45)'}}>Deepali Didi</span>
 </h1>
 <p style={{marginTop: '-1rem'}}>5 Phases · 9 Days Each · One Powerful Shift.</p>
 <a className="btn-primary" href="#register">
@@ -144,38 +186,38 @@ function toggleMenu() {
 
 <div className="reveal" style={{textAlign: 'center', marginBottom: '48px'}}>
 <span style={{fontSize: '0.68rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--green-bright)', fontWeight: '600'}}>✦ Program At a Glance</span>
-<h2 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: '300', color: '#e8f8ee', marginTop: '10px', letterSpacing: '-0.02em'}}>
+<h2 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: '300', color: '#e8f8ee', marginTop: '10px', letterSpacing: '-0.02em'}}>
           Everything You Need to Know</h2>
 </div>
 
 <div className="reveal" style={{display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '20px', marginBottom: '20px'}}>
 
-<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
+<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
 <div style={{width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(62,169,107,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem'}}>
             🗓️</div>
 <p style={{fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontWeight: '500'}}>
             Start Date</p>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.7rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.1', marginBottom: '6px'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.7rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.1', marginBottom: '6px'}}>
             19th March</p>
 <p style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)'}}>2026</p>
 </div>
 
-<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
+<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
 <div style={{width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(62,169,107,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem'}}>
             🏁</div>
 <p style={{fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontWeight: '500'}}>
             End Date</p>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.7rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.1', marginBottom: '6px'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.7rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.1', marginBottom: '6px'}}>
             2nd May</p>
 <p style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)'}}>2026</p>
 </div>
 
-<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
+<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
 <div style={{width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(62,169,107,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem'}}>
             ⏳</div>
 <p style={{fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontWeight: '500'}}>
             Duration</p>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.7rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.1', marginBottom: '6px'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.7rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.1', marginBottom: '6px'}}>
             45 Days</p>
 <p style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginBottom: '14px'}}>5 Phases · 9 Days Each</p>
 <a href="#program" onmouseout="this.style.color='var(--green-bright)';this.style.borderColor='rgba(62,169,107,0.3)'" onmouseover="this.style.color='var(--gold-light)';this.style.borderColor='rgba(232,197,109,0.4)'" style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', color: 'var(--green-bright)', textDecoration: 'none', letterSpacing: '0.1em', fontWeight: '500', borderBottom: '1px solid rgba(62,169,107,0.3)', paddingBottom: '2px', transition: 'color 0.3s'}}>
@@ -186,22 +228,22 @@ function toggleMenu() {
 
 <div className="reveal" style={{display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '20px', maxWidth: '680px', margin: '0 auto'}}>
 
-<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
+<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
 <div style={{width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(62,169,107,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem'}}>
             📱</div>
 <p style={{fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontWeight: '500'}}>
             Platform</p>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.4rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.2', marginBottom: '6px'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.4rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.2', marginBottom: '6px'}}>
             WhatsApp<br/>Voice Call</p>
 <p style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)'}}>Join from anywhere</p>
 </div>
 
-<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
+<div onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'" onmouseover="this.style.background='rgba(62,169,107,0.1)'; this.style.transform='translateY(-4px)'" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: '32px 28px', position: 'relative', overflow: 'hidden', transition: 'transform 0.3s, background 0.3s'}}>
 <div style={{width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(62,169,107,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', fontSize: '1.4rem'}}>
             🕐</div>
 <p style={{fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '8px', fontWeight: '500'}}>
             Daily Time Slots</p>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.4rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.3', marginBottom: '6px'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.4rem', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.3', marginBottom: '6px'}}>
             5:00 AM<br/>&amp; 7:00 PM</p>
 <p style={{fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)'}}>Morning &amp; Evening Sessions</p>
 </div>
@@ -271,8 +313,8 @@ function toggleMenu() {
 <span className="guide-desc" style={{fontSize: '0.85rem'}}>Connect ancient wisdom with modern life</span>
 </div>
 </div>
-<div style={{padding: '16px 20px', background: 'rgba(62,169,107,0.1)', borderLeft: '3px solid var(--green-bright)', borderRadius: '0 10px 10px 0'}}>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1rem', color: 'rgba(255,255,255,0.7)', fontStyle: 'italic', lineHeight: '1.6'}}>
+<div style={{padding: '16px 20px', background: 'rgba(62, 169, 107, 0.1)', borderLeft: '3px solid var(--green-bright)', borderRadius: '0 10px 10px 0'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1rem', color: 'rgba(255,255,255,0.7)', fontStyle: 'italic', lineHeight: '1.6'}}>
             "Deepali Didi simply helps people decode what is already there — making spirituality simple, practical,
             understandable, and relevant today."
           </p>
@@ -297,7 +339,7 @@ function toggleMenu() {
 <div>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px'}}>
 <span style={{fontSize: '0.65rem', fontWeight: '600', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--green-bright)'}}>01</span>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
                   Thoughts Become Quiet</h3>
 </div>
 <p style={{fontSize: '0.88rem', color: 'var(--text-soft)', lineHeight: '1.7'}}>Slowly the mind moves towards
@@ -314,7 +356,7 @@ function toggleMenu() {
 <div>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px'}}>
 <span style={{fontSize: '0.65rem', fontWeight: '600', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--green-bright)'}}>02</span>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
                   Emotional Balance Develops</h3>
 </div>
 <p style={{fontSize: '0.88rem', color: 'var(--text-soft)', lineHeight: '1.7'}}>Even in stress, anxiety, or
@@ -331,7 +373,7 @@ function toggleMenu() {
 <div>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px'}}>
 <span style={{fontSize: '0.65rem', fontWeight: '600', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--green-bright)'}}>03</span>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
                   Intuition Awakens</h3>
 </div>
 <p style={{fontSize: '0.88rem', color: 'var(--text-soft)', lineHeight: '1.7'}}>Your sixth sense or
@@ -348,7 +390,7 @@ function toggleMenu() {
 <div>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px'}}>
 <span style={{fontSize: '0.65rem', fontWeight: '600', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--green-bright)'}}>04</span>
-<h3 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
+<h3 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.25rem', fontWeight: '400', color: 'var(--text-dark)'}}>
                   Mental Clarity Increases</h3>
 </div>
 <p style={{fontSize: '0.88rem', color: 'var(--text-soft)', lineHeight: '1.7'}}>The confusion of
@@ -368,12 +410,12 @@ function toggleMenu() {
 </div>
 <div className="reveal" style={{maxWidth: '860px', margin: '0 auto', textAlign: 'center'}}>
 <div style={{fontSize: '2.5rem', marginBottom: '1.2rem', opacity: '0.4'}}>❝</div>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(1.3rem,3vw,1.9rem)', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.6', marginBottom: '1.6rem', letterSpacing: '0.01em'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(1.3rem,3vw,1.9rem)', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.6', marginBottom: '1.6rem', letterSpacing: '0.01em'}}>
         Meditation doesn't change the world around you —<br/>
       it changes the <em style={{color: 'var(--gold-light)'}}>way you experience it.</em>
 </p>
 <div style={{width: '48px', height: '1px', background: 'rgba(184,147,42,0.4)', margin: '0 auto 1.6rem'}}></div>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', fontWeight: '300', color: 'rgba(255,255,255,0.6)', lineHeight: '1.6', fontStyle: 'italic'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', fontWeight: '300', color: 'rgba(255,255,255,0.6)', lineHeight: '1.6', fontStyle: 'italic'}}>
         Meditation upgrades your brain from
         <strong style={{color: 'var(--green-bright)', fontStyle: 'normal', fontWeight: '500'}}>reactive mode</strong> to
         <strong style={{color: 'var(--gold-light)', fontStyle: 'normal', fontWeight: '500'}}>responsive mode.</strong>
@@ -426,7 +468,7 @@ function toggleMenu() {
 </div>
 </div>
 <div style={{marginTop: '2rem', padding: '18px 22px', background: 'var(--green-deep)', borderRadius: '14px', borderLeft: '3px solid var(--gold)'}}>
-<p style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1.1rem', color: '#e8f8ee', fontStyle: 'italic', lineHeight: '1.5'}}>
+<p style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1.1rem', color: '#e8f8ee', fontStyle: 'italic', lineHeight: '1.5'}}>
             "Aapka Brain Badlega, Aur Brain Aapki Life Badlega."
           </p>
 </div>
@@ -526,7 +568,7 @@ function toggleMenu() {
 </div>
 <div style={{flexShrink: '0', textAlign: 'center', minWidth: '160px'}}>
 <div style={{fontSize: '5rem', lineHeight: '1', marginBottom: '0.5rem'}}>🪷</div>
-<div style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: '1rem', color: 'var(--gold)', fontStyle: 'italic'}}>
+<div style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: '1rem', color: 'var(--gold)', fontStyle: 'italic'}}>
                 Atma Sakshatkar</div>
 <div style={{fontSize: '0.72rem', color: 'var(--text-soft)', marginTop: '4px', letterSpacing: '0.1em'}}>
                 Self-Realization</div>
@@ -548,7 +590,7 @@ function toggleMenu() {
 <div style={{fontSize: '2.5rem', marginBottom: '1rem'}}>🌊🪷🔥</div>
 <p style={{fontSize: '0.65rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--gold-light)', fontWeight: '600', marginBottom: '1rem'}}>
         ✦ Sacred Closing · 3rd May 2026 · Goa</p>
-<h2 style={{fontFamily: '\'Cormorant Garamond\',serif', fontSize: 'clamp(1.8rem,4vw,3rem)', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.3', marginBottom: '1.2rem'}}>
+<h2 style={{fontFamily: '\'Cormorant Garamond\', serif', fontSize: 'clamp(1.8rem,4vw,3rem)', fontWeight: '300', color: '#e8f8ee', lineHeight: '1.3', marginBottom: '1.2rem'}}>
         Anushthan &amp; Havan in Goa —<br/>
 <em style={{color: 'var(--gold-light)'}}>in the presence of Deepali Didi</em>
 </h2>
@@ -557,7 +599,7 @@ function toggleMenu() {
         The 45-day journey culminates in a sacred gathering — a divine Anushthan and Havan on the shores of Goa, in the
         blessed presence of Deepali Didi.
       </p>
-<a href="#register" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 24px rgba(184,147,42,0.25)'" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 14px 32px rgba(184,147,42,0.35)'" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg,var(--gold),#c8a040)', color: '#0f2d1f', textDecoration: 'none', padding: '13px 30px', borderRadius: '100px', fontSize: '0.83rem', fontWeight: '600', letterSpacing: '0.08em', transition: 'all 0.3s', boxShadow: '0 8px 24px rgba(184,147,42,0.25)'}}>
+<a href="#register" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 24px rgba(184,147,42,0.25)'" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 14px 32px rgba(184,147,42,0.35)'" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, var(--gold), #c8a040)', color: '#0f2d1f', textDecoration: 'none', padding: '13px 30px', borderRadius: '100px', fontSize: '0.83rem', fontWeight: '600', letterSpacing: '0.08em', transition: 'all 0.3s', boxShadow: '0 8px 24px rgba(184,147,42,0.25)'}}>
         Click to Apply →
       </a>
 </div>

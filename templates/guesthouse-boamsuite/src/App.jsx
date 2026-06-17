@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -340,6 +376,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -348,7 +390,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="" id="scrollProgress" style={{width: '100%'}}></div>
 
 
-<header className="fixed z-[9999] transition-all duration-300 top-0 right-0 left-0" id="siteHeader" style={{background: 'rgba(253, 251, 247, 0.97)', boxShadow: '0 10px 30px rgba(0,0,0,0.08)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(159, 57, 38, 0.15)'}}>
+<header className="fixed z-[9999] transition-all duration-300 top-0 right-0 left-0" id="siteHeader" style={{background: 'rgba(253, 251, 247, 0.97)', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.08)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(159, 57, 38, 0.15)'}}>
 <div className="mx-auto max-w-[75rem] px-4 sm:px-6">
 <div className="flex h-16 items-center justify-between">
 <a className="flex items-center gap-3" href="/">
@@ -972,10 +1014,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 gap-x-10 gap-y-10 items-start">
 <div className="flex flex-col text-center space-y-3 items-start reveal-left" id="stepTabs">
-<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="0" style={{background: 'linear-gradient(to right bottom, rgba(107, 45, 62, 0.1), rgba(107, 45, 62, 0.05))', border: '1px solid rgba(107, 45, 62, 0.2)'}}><div className="relative z-10"><div className="flex items-center justify-between mb-2"><span className="text-lg font-medium text-[#6B2D3E]" style={{fontFamily: 'Cormorant Garamond,serif'}}>L'Écrin</span><span className="text-sm font-semibold text-[#A8D5D0]">01</span></div><div className="h-1 w-12 rounded-full bg-[#6B2D3E]/30 mt-2"><div className="h-full rounded-full bg-[#6B2D3E]" style={{width: '100%', transition: 'width 0.5s'}}></div></div></div></button>
-<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="1" style={{border: '1px solid rgb(232, 224, 216)', background: 'transparent'}}><div className="relative z-10"><div className="flex items-center justify-between"><span className="text-lg font-medium text-[#6B5B4E] group-hover:text-[#6B2D3E] transition-colors" style={{fontFamily: 'Cormorant Garamond,serif'}}>Massage</span><span className="text-sm font-semibold text-[#A8D5D0]/60 group-hover:text-[#A8D5D0] transition-colors">02</span></div></div></button>
-<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="2" style={{border: '1px solid rgb(232, 224, 216)', background: 'transparent'}}><div className="relative z-10"><div className="flex items-center justify-between"><span className="text-lg font-medium text-[#6B5B4E] group-hover:text-[#6B2D3E] transition-colors" style={{fontFamily: 'Cormorant Garamond,serif'}}>Confort</span><span className="text-sm font-semibold text-[#A8D5D0]/60 group-hover:text-[#A8D5D0] transition-colors">03</span></div></div></button>
-<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="3" style={{border: '1px solid rgb(232, 224, 216)', background: 'transparent'}}><div className="relative z-10"><div className="flex items-center justify-between"><span className="text-lg font-medium text-[#6B5B4E] group-hover:text-[#6B2D3E] transition-colors" style={{fontFamily: 'Cormorant Garamond,serif'}}>Hygiène</span><span className="text-sm font-semibold text-[#A8D5D0]/60 group-hover:text-[#A8D5D0] transition-colors">04</span></div></div></button>
+<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="0" style={{background: 'linear-gradient(to right bottom, rgba(107, 45, 62, 0.1), rgba(107, 45, 62, 0.05))', border: '1px solid rgba(107, 45, 62, 0.2)'}}><div className="relative z-10"><div className="flex items-center justify-between mb-2"><span className="text-lg font-medium text-[#6B2D3E]" style={{fontFamily: 'Cormorant Garamond, serif'}}>L'Écrin</span><span className="text-sm font-semibold text-[#A8D5D0]">01</span></div><div className="h-1 w-12 rounded-full bg-[#6B2D3E]/30 mt-2"><div className="h-full rounded-full bg-[#6B2D3E]" style={{width: '100%', transition: 'width 0.5s'}}></div></div></div></button>
+<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="1" style={{border: '1px solid rgb(232, 224, 216)', background: 'transparent'}}><div className="relative z-10"><div className="flex items-center justify-between"><span className="text-lg font-medium text-[#6B5B4E] group-hover:text-[#6B2D3E] transition-colors" style={{fontFamily: 'Cormorant Garamond, serif'}}>Massage</span><span className="text-sm font-semibold text-[#A8D5D0]/60 group-hover:text-[#A8D5D0] transition-colors">02</span></div></div></button>
+<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="2" style={{border: '1px solid rgb(232, 224, 216)', background: 'transparent'}}><div className="relative z-10"><div className="flex items-center justify-between"><span className="text-lg font-medium text-[#6B5B4E] group-hover:text-[#6B2D3E] transition-colors" style={{fontFamily: 'Cormorant Garamond, serif'}}>Confort</span><span className="text-sm font-semibold text-[#A8D5D0]/60 group-hover:text-[#A8D5D0] transition-colors">03</span></div></div></button>
+<button className="step-tab group w-full text-left rounded-2xl p-6 transition-all duration-300 cursor-pointer" data-step="3" style={{border: '1px solid rgb(232, 224, 216)', background: 'transparent'}}><div className="relative z-10"><div className="flex items-center justify-between"><span className="text-lg font-medium text-[#6B5B4E] group-hover:text-[#6B2D3E] transition-colors" style={{fontFamily: 'Cormorant Garamond, serif'}}>Hygiène</span><span className="text-sm font-semibold text-[#A8D5D0]/60 group-hover:text-[#A8D5D0] transition-colors">04</span></div></div></button>
 </div>
 <div className="lg:sticky lg:top-24 reveal-right">
 <div className="overflow-hidden border-[#A8D5D0]/20 bg-[#F5EDE3] shadow-lg rounded-t-[3rem] rounded-b-lg border-double border-4 reveal-left map-animate">
@@ -2127,7 +2169,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative h-full w-full sm:w-96 sm:ml-auto flex flex-col bg-gradient-to-br from-[#2C1A12] via-[#3D2519] to-[#2C1A12] transform translate-x-full transition-transform duration-500 ease-out overflow-y-auto" id="boamMenuPanel">
 <div className="flex items-center justify-between px-6 pt-5 pb-4 relative z-10">
 <div className="menu-logo flex items-center gap-3">
-<span className="text-2xl font-semibold text-[#FDFBF7] tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>
+<span className="text-2xl font-semibold text-[#FDFBF7] tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>
               BOAM SUITE
             </span>
 <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold tracking-[0.15em] uppercase text-[#D4AF37] border border-[#D4AF37]/30 rounded-tr-lg rounded-bl-lg">
@@ -2149,7 +2191,7 @@ gtag('config', 'G-2M6V79H761');
 <path d="M12 15v3" strokeLinecap="round"></path>
 </svg>
 </span>
-<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>
+<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>
               Accueil
             </span>
 <svg className="ml-auto opacity-0 group-hover:opacity-60 transition-opacity" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
@@ -2166,7 +2208,7 @@ gtag('config', 'G-2M6V79H761');
 <path d="m2 14.5l1.752-1.533a2.3 2.3 0 0 1 3.14.105l4.29 4.29a2 2 0 0 0 2.564.222l.299-.21a3 3 0 0 1 3.731.225L21 20.5" strokeLinecap="round"></path>
 </svg>
 </span>
-<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>
+<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>
               La Suite
             </span>
 <svg className="ml-auto opacity-0 group-hover:opacity-60 transition-opacity" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
@@ -2181,7 +2223,7 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="8.607" cy="8.879" r="2" transform="rotate(-45 8.607 8.879)"></circle>
 </svg>
 </span>
-<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>
+<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>
               Tarifs
             </span>
 <svg className="ml-auto opacity-0 group-hover:opacity-60 transition-opacity" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
@@ -2197,7 +2239,7 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="12" cy="16" fill="#FDFBF7" r="1"></circle>
 </svg>
 </span>
-<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>
+<span className="text-3xl font-medium tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>
               FAQ
             </span>
 <svg className="ml-auto opacity-0 group-hover:opacity-60 transition-opacity" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
@@ -2212,7 +2254,7 @@ gtag('config', 'G-2M6V79H761');
 <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22Z"></path>
 </svg>
 </span>
-<span className="text-3xl font-medium tracking-tight text-[#D4AF37]" style={{fontFamily: '\'Cormorant Garamond\',serif'}}>
+<span className="text-3xl font-medium tracking-tight text-[#D4AF37]" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>
               Contact
             </span>
 <svg className="ml-auto opacity-60 transition-opacity" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
@@ -2262,7 +2304,7 @@ gtag('config', 'G-2M6V79H761');
 </a>
 </div>
 <div className="menu-footer text-center">
-<p className="text-xs text-[#FDFBF7]/40" style={{fontFamily: '\'Nunito\',sans-serif'}}>
+<p className="text-xs text-[#FDFBF7]/40" style={{fontFamily: '\'Nunito\', sans-serif'}}>
               +32 479 97 54 79 · Hyon (Mons), Belgique
             </p>
 </div>

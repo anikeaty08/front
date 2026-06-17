@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -248,6 +284,12 @@ cursorBlink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0' } }
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -256,7 +298,7 @@ cursorBlink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0' } }
 
 <div className="fixed top-0 left-0 h-[2px] bg-gold z-[100] transition-all duration-100 w-0" id="scroll-progress"></div>
 
-<div className="spotlight-overlay fixed inset-0 w-full h-full mix-blend-screen" id="spotlight" style={{-X: '50%', -Y: '50%'}}></div>
+<div className="spotlight-overlay fixed inset-0 w-full h-full mix-blend-screen" id="spotlight" style={{'--x': '50%', '--y': '50%'}}></div>
 
 <div className="fixed inset-0 bg-obsidian z-[9999] flex items-center justify-center" id="preloader">
 <div className="loader-dot w-2 h-2 bg-gold rounded-full box-content border-2 border-gold/50 shadow-[0_0_20px_rgba(255,184,77,0.8)]"></div>

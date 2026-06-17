@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -133,6 +169,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -467,7 +509,7 @@ gtag('config', 'G-2M6V79H761');
             </h2>
 </div>
 
-<div className="md:p-10 reveal group overflow-hidden bg-[#101010] w-full max-w-[800px] z-10 border-[#C8A97E]/15 border rounded-3xl mr-auto mb-20 ml-auto pt-8 pr-8 pb-8 pl-8 relative shadow-2xl" id="google-reviews-widget" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="md:p-10 reveal group overflow-hidden bg-[#101010] w-full max-w-[800px] z-10 border-[#C8A97E]/15 border rounded-3xl mr-auto mb-20 ml-auto pt-8 pr-8 pb-8 pl-8 relative shadow-2xl" id="google-reviews-widget" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-[#FBBF24]/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
 <span className="leading-none tabular-nums text-3xl font-bold tracking-tight font-ibm-mono bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-neutral-400 via-neutral-600 to-neutral-400 md:text-[6rem] bg-clip-text text-transparent">4.9</span>

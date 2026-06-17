@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 {
@@ -34,6 +70,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -118,7 +160,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="bg-[#051125] relative flex flex-col justify-center p-8 md:p-12 overflow-hidden rounded-none border-b-4 border-[#163875]">
 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1565514020125-998396f9c47e?q=80&amp;w=2500&amp;auto=format&amp;fit=crop')] bg-cover bg-center opacity-30">
 </div>
-<div className="absolute top-0 right-0 bottom-0 left-0 bg-cover bg-center" style={{backgroundImage: 'linear-gradient(to right, #051125, rgba(5, 17, 37, 0.9), rgba(5, 17, 37, 0)), url(\'https://images.unsplash.com/photo-1591685625550-c7918f629c46?q=80&amp'}}>
+<div className="absolute top-0 right-0 bottom-0 left-0 bg-cover bg-center" style={{backgroundImage: 'linear-gradient(to right, #051125, rgba(5, 17, 37, 0.9), rgba(5, 17, 37, 0)), url(\'https: //images.unsplash.com/photo-1591685625550-c7918f629c46?q=80&amp'}}>
 </div>
 <div className="relative z-10 max-w-3xl">
 <h1 className="md:text-5xl text-4xl font-semibold text-white tracking-tight mb-4">Hydraulic Power Systems &amp;

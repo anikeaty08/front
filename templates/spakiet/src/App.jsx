@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -304,6 +340,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1678,7 +1720,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="lightning-gradient"></div>
 <div className="lightning-gradient-2"></div>
 </div>
-<div className="absolute inset-0 opacity-40 mix-blend-screen rounded-[24px] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 0 0,rgba(16,185,129,0.15),transparent 55%), radial-gradient(circle at 100% 100%,rgba(16,185,129,0.15),transparent 55%)', transform: 'translateZ(0)'}}></div>
+<div className="absolute inset-0 opacity-40 mix-blend-screen rounded-[24px] pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 0 0, rgba(16, 185, 129, 0.15), transparent 55%), radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.15), transparent 55%)', transform: 'translateZ(0)'}}></div>
 </div>
 <div className="relative z-10">
 <div className="flex items-center justify-between mb-3">

@@ -2,11 +2,53 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -23,7 +65,7 @@ export default function App() {
 
 <div className="absolute inset-0" style={{background: 'radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.08), rgba(0,0,0,0) 55%), radial-gradient(800px 500px at 80% 80%, rgba(217,70,239,0.06), rgba(0,0,0,0) 60%)'}}></div>
 
-<div className="absolute bottom-0 left-0 right-0 h-48 opacity-25" style={{background: 'repeating-linear-gradient(90deg, rgba(147,51,234,0.15) 0px, rgba(56,189,248,0.15) 2px, transparent 2px, transparent 80px)', maskImage: 'linear-gradient(to top, black, transparent)'}}></div>
+<div className="absolute bottom-0 left-0 right-0 h-48 opacity-25" style={{background: 'repeating-linear-gradient(90deg, rgba(147, 51, 234, 0.15) 0px, rgba(56, 189, 248, 0.15) 2px, transparent 2px, transparent 80px)', maskImage: 'linear-gradient(to top, black, transparent)'}}></div>
 </div>
 
 <header className="fixed top-0 inset-x-0 z-20 backdrop-blur-xl">
@@ -42,7 +84,7 @@ export default function App() {
 <a className="hover:text-white transition-colors font-geist" href="#projects">Projects</a>
 <a className="hover:text-white transition-colors font-geist" href="#footer">Contact</a>
 </nav>
-<a className="hidden sm:inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium tracking-tight text-white ring-1 ring-white/15 hover:ring-white/30 transition-all hover:-translate-y-0.5" href="#projects" style={{background: 'linear-gradient(135deg, rgba(168,85,247,.35), rgba(56,189,248,.35))', boxShadow: '0 0 24px rgba(147,51,234,.28), inset 0 0 0 1px rgba(255,255,255,.05)'}}>
+<a className="hidden sm:inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium tracking-tight text-white ring-1 ring-white/15 hover:ring-white/30 transition-all hover:-translate-y-0.5" href="#projects" style={{background: 'linear-gradient(135deg, rgba(168, 85, 247, .35), rgba(56, 189, 248, .35))', boxShadow: '0 0 24px rgba(147, 51, 234, .28), inset 0 0 0 1px rgba(255,255,255,.05)'}}>
 <span className="font-geist">Explore</span>
 
 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +104,7 @@ export default function App() {
 <div className="absolute -top-24 -left-32 w-[75vw] h-[75vw] rounded-full blur-3xl opacity-30 mix-blend-screen" style={{background: 'conic-gradient(from 90deg, rgba(168,85,247,.25), rgba(59,130,246,.18), rgba(236,72,153,.22), transparent 60%)'}}></div>
 <div className="absolute -bottom-40 -right-24 w-[70vw] h-[70vw] rounded-full blur-3xl opacity-25 mix-blend-screen" style={{background: 'conic-gradient(from 0deg, rgba(59,130,246,.22), rgba(14,165,233,.18), rgba(217,70,239,.22), transparent 55%)'}}></div>
 <div className="absolute inset-0" style={{background: 'radial-gradient(900px 400px at 50% 18%, rgba(255,255,255,0.06), rgba(0,0,0,0) 55%)'}}></div>
-<div className="absolute inset-x-0 -bottom-16 h-32 opacity-20" style={{background: 'repeating-linear-gradient(90deg, rgba(147,51,234,0.18) 0px, rgba(56,189,248,0.18) 2px, transparent 2px, transparent 80px)', maskImage: 'linear-gradient(to top, black, transparent)'}}></div>
+<div className="absolute inset-x-0 -bottom-16 h-32 opacity-20" style={{background: 'repeating-linear-gradient(90deg, rgba(147, 51, 234, 0.18) 0px, rgba(56, 189, 248, 0.18) 2px, transparent 2px, transparent 80px)', maskImage: 'linear-gradient(to top, black, transparent)'}}></div>
 </div>
 <div className="inline-flex items-center gap-2 rounded-full px- py-1.5 text-[11px] font-medium text-white/80 ring-1 ring-white/15 mb-6 font-geist" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))'}}>
 
@@ -78,7 +120,7 @@ export default function App() {
     We are a creative design studio crafting digital experiences and visuals that inspire.
   </p>
 <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
-<a className="group relative inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold tracking-tight text-white transition-all:-translate-y-0.5 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-400" href="#projects" style={{background: 'linear-gradient(135deg, rgba(168,85,247,1), rgba(56,189,248,1))', boxShadow: '0 10px 35px rgba(147,51,234,.35), 0 2px 10px rgba(56,189,248,.25'}}>
+<a className="group relative inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold tracking-tight text-white transition-all:-translate-y-0.5 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-400" href="#projects" style={{background: 'linear-gradient(135deg, rgba(168, 85, 247, 1), rgba(56, 189, 248, 1))', boxShadow: '0 10px 35px rgba(147,51,234,.35), 0 2px 10px rgba(56, 189, 248, .25'}}>
 <span className="relative z-10 font-geist">Explore Our Work</span>
 <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" style={{background: 'radial-gradient(120px 120px at 30% 30%, rgba(255,255,255,.25), rgba(255,255,255,0))'}}></span>
 </a>
@@ -314,7 +356,7 @@ export default function App() {
 <footer className="relative pt-20 pb-10" id="footer">
 
 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-<div className="absolute inset-x-0 -top-10 h-32 opacity-30" style={{background: 'repeating-linear-gradient(90deg, rgba(168,85,247,.14) 0px, rgba(56,189,248,.14) 2px, transparent 2px, transparent 80px)', maskImage: 'linear-gradient(to bottom, black 20%, transparent)'}}></div>
+<div className="absolute inset-x-0 -top-10 h-32 opacity-30" style={{background: 'repeating-linear-gradient(90deg, rgba(168, 85, 247, .14) 0px, rgba(56, 189, 248, .14) 2px, transparent 2px, transparent 80px)', maskImage: 'linear-gradient(to bottom, black 20%, transparent)'}}></div>
 <div className="mx-auto max-w-7xl px-6 lg:px-8">
 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 <div className="col-span-2">

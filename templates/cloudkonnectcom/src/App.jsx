@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -103,6 +139,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -133,7 +175,7 @@ gtag('config', 'G-2M6V79H761');
 </header>
 <main>
 <section className="relative isolate overflow-hidden bg-white">
-<div className="absolute inset-0 -z-10" style={{background: 'radial-gradient(circle at 75% 20%, rgba(232,119,34,0.16), transparent 34%), linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%)'}}></div>
+<div className="absolute inset-0 -z-10" style={{background: 'radial-gradient(circle at 75% 20%, rgba(232, 119, 34, 0.16), transparent 34%), linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%)'}}></div>
 <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:px-8 lg:py-24">
 <div className="max-w-2xl">
 <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#e87722]/20 bg-white px-4 py-2 text-xs font-semibold text-[#c45e10] shadow-sm">
@@ -501,7 +543,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 <section className="bg-white px-5 py-20 sm:px-6 lg:px-8">
-<div className="mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-[#2b2b2b] p-8 text-center shadow-2xl shadow-[#2b2b2b]/15 sm:p-12 lg:p-16" style={{background: 'radial-gradient(circle at 20% 10%, rgba(232,119,34,0.45), transparent 30%), linear-gradient(135deg, #2b2b2b 0%, #1f1f1f 100%)'}}>
+<div className="mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-[#2b2b2b] p-8 text-center shadow-2xl shadow-[#2b2b2b]/15 sm:p-12 lg:p-16" style={{background: 'radial-gradient(circle at 20% 10%, rgba(232, 119, 34, 0.45), transparent 30%), linear-gradient(135deg, #2b2b2b 0%, #1f1f1f 100%)'}}>
 <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
           Build a business that works without you.
         </h2>

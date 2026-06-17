@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -500,6 +536,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -586,10 +628,10 @@ gtag('config', 'G-2M6V79H761');
             dynamically.
           </p>
 <div className="flex gap-x-4 gap-y-4 items-center">
-<button className="inline-flex transition-all duration-300 overflow-hidden group text-sm text-white rounded-full pt-3 pr-6 pb-3 pl-6 relative gap-x-2 items-center" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; const centerX = rect.width / 2; const centerY = rect.height / 2; const rotateX = ((y - centerY) / centerY) * -12; const rotateY = ((x - centerX) / centerX) * 12; this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`; this.style.setProperty('--x', ((x / rect.width) * 100) + '%'); this.style.setProperty('--y', ((y / rect.height) * 100) + '%');" onmouseout="this.style.boxShadow='0 8px 32px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.3)'; this.querySelector('.glow-layer').style.opacity='0.2'; this.querySelector('.light-sweep').style.transform='translate(-150%, 150%) rotate(45deg)';" onmouseover="this.style.boxShadow='0 20px 60px rgba(16, 185, 129, 0.3), inset 0 2px 8px rgba(255, 255, 255, 0.5)'; this.querySelector('.glow-layer').style.opacity='0.6'; this.querySelector('.light-sweep').style.transform='translate(150%, -150%) rotate(45deg)';" style={{-X: '65.8311322655902%', -Y: '55.329221903883194%', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 100%)', border: '1px solid rgba(255, 255, 255, 0.3)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(255, 255, 255, 0.4) 0px 2px 4px inset, rgba(0, 0, 0, 0.2) 0px -2px 4px inset, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset', backdropFilter: 'blur(20px)', transformStyle: 'preserve-3d', transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1)', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(15px)'}}>
+<button className="inline-flex transition-all duration-300 overflow-hidden group text-sm text-white rounded-full pt-3 pr-6 pb-3 pl-6 relative gap-x-2 items-center" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; const centerX = rect.width / 2; const centerY = rect.height / 2; const rotateX = ((y - centerY) / centerY) * -12; const rotateY = ((x - centerX) / centerX) * 12; this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`; this.style.setProperty('--x', ((x / rect.width) * 100) + '%'); this.style.setProperty('--y', ((y / rect.height) * 100) + '%');" onmouseout="this.style.boxShadow='0 8px 32px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.3)'; this.querySelector('.glow-layer').style.opacity='0.2'; this.querySelector('.light-sweep').style.transform='translate(-150%, 150%) rotate(45deg)';" onmouseover="this.style.boxShadow='0 20px 60px rgba(16, 185, 129, 0.3), inset 0 2px 8px rgba(255, 255, 255, 0.5)'; this.querySelector('.glow-layer').style.opacity='0.6'; this.querySelector('.light-sweep').style.transform='translate(150%, -150%) rotate(45deg)';" style={{'--x': '65.8311322655902%', '--y': '55.329221903883194%', background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 100%)', border: '1px solid rgba(255, 255, 255, 0.3)', boxShadow: 'rgba(0, 0, 0, 0.3) 0px 8px 32px, rgba(255, 255, 255, 0.4) 0px 2px 4px inset, rgba(0, 0, 0, 0.2) 0px -2px 4px inset, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset', backdropFilter: 'blur(20px)', transformStyle: 'preserve-3d', transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1)', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(15px)'}}>
 <div className="absolute inset-0 rounded-full" style={{background: 'radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.4) 0%, transparent 60%)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div className="glow-layer absolute inset-0 rounded-full transition-opacity duration-500" style={{background: 'radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 40%, transparent 70%)', opacity: '0.6', transition: 'opacity 0.5s', pointerEvents: 'none', zIndex: '2'}}></div>
-<div className="light-sweep absolute inset-0 rounded-full transition-transform duration-700 ease-in-out" style={{background: 'radial-gradient(ellipse at var(--x) var(--y), rgba(244,63,94,0.4) 0%, rgba(251,113,133,0.2) 30%, transparent 60%)', opacity: '0.4', transition: 'opacity 0.5s', pointerEvents: 'none', filter: 'blur(8px)', zIndex: '3'}}></div>
+<div className="light-sweep absolute inset-0 rounded-full transition-transform duration-700 ease-in-out" style={{background: 'radial-gradient(ellipse at var(--x) var(--y), rgba(244, 63, 94, 0.4) 0%, rgba(251, 113, 133, 0.2) 30%, transparent 60%)', opacity: '0.4', transition: 'opacity 0.5s', pointerEvents: 'none', filter: 'blur(8px)', zIndex: '3'}}></div>
 <span className="iconify text-lg relative z-10" data-icon="solar:check-read-linear" style={{filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))'}}></span>
 <span className="z-10 relative font-medium tracking-wide" style={{textShadow: '0 2px 4px rgba(0,0,0,0.2)'}}>
                 Activate System

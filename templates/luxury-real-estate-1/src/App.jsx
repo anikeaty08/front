@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -616,6 +652,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1435,12 +1477,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </footer>
 
-<div className="fixed inset-0 z-50 hidden flex items-center justify-center" id="project-modal" style={{background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(20px)'}}>
+<div className="fixed inset-0 z-50 hidden flex items-center justify-center" id="project-modal" style={{background: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(20px)'}}>
 <button className="fixed top-6 right-6 z-[60] flex items-center gap-3 px-6 py-3 bg-black/50 backdrop-blur-md border border-white/20 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-black transition-all rounded-full group uppercase tracking-widest text-[10px] font-semibold cursor-pointer hover-trigger" onclick="closeProjectModal()">
 <iconify-icon className="group-hover:rotate-90 transition-transform duration-300" icon="solar:close-circle-linear" width="16"></iconify-icon>
 <span>Close</span>
 </button>
-<div className="w-[95vw] md:w-[70vw] max-w-[1200px] h-[90vh] md:h-[80vh] bg-[#0A0A0A] border border-white/10 rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-2xl relative" id="modal-container" style={{boxShadow: '0 0 80px rgba(212,175,55,0.08), 0 25px 50px rgba(0,0,0,0.5)'}}>
+<div className="w-[95vw] md:w-[70vw] max-w-[1200px] h-[90vh] md:h-[80vh] bg-[#0A0A0A] border border-white/10 rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-2xl relative" id="modal-container" style={{boxShadow: '0 0 80px rgba(212, 175, 55, 0.08), 0 25px 50px rgba(0,0,0,0.5)'}}>
 
 <div className="w-full md:w-[60%] h-[40%] md:h-full bg-[#111] overflow-hidden relative">
 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0A0A0A]/30 z-10 pointer-events-none hidden md:block"></div>
@@ -1458,19 +1500,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="font-light leading-relaxed text-sm text-white/60 mb-6 max-w-md" id="modal-desc" style={{fontFamily: '\'Montserrat\', sans-serif'}}></div>
 
 <div className="space-y-2.5 mb-6" id="modal-extras">
-<div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/20" style={{background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)'}}>
+<div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/20" style={{background: 'rgba(255, 255, 255, 0.04)', backdropFilter: 'blur(10px)'}}>
 <iconify-icon className="text-[#D4AF37] shrink-0" icon="solar:shield-check-bold" width="18"></iconify-icon>
 <span className="text-xs text-white/80 font-light" data-i18n="modal_extra_visa" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
                   We issue Golden Visas immediately.
                 </span>
 </div>
-<div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/20" style={{background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)'}}>
+<div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/20" style={{background: 'rgba(255, 255, 255, 0.04)', backdropFilter: 'blur(10px)'}}>
 <iconify-icon className="text-[#D4AF37] shrink-0" icon="solar:lock-keyhole-minimalistic-bold" width="18"></iconify-icon>
 <span className="text-xs text-white/80 font-light" data-i18n="modal_extra_units" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
                   We have private units available for sale.
                 </span>
 </div>
-<div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/20" style={{background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)'}}>
+<div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#D4AF37]/20" style={{background: 'rgba(255, 255, 255, 0.04)', backdropFilter: 'blur(10px)'}}>
 <iconify-icon className="text-[#D4AF37] shrink-0" icon="solar:star-bold" width="18"></iconify-icon>
 <span className="text-xs text-white/80 font-light" data-i18n="modal_extra_pricing" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
                   We offer competitive pricing and more views.
@@ -1519,12 +1561,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="fixed inset-0 z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-500" id="booking-modal" style={{background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(24px)'}}>
+<div className="fixed inset-0 z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-500" id="booking-modal" style={{background: 'rgba(0, 0, 0, 0.9)', backdropFilter: 'blur(24px)'}}>
 <button className="fixed top-6 right-6 z-[60] flex items-center gap-3 px-6 py-3 bg-black/50 backdrop-blur-md border border-white/20 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-black transition-all rounded-full group uppercase tracking-widest text-[10px] font-semibold cursor-pointer hover-trigger" onclick="closeBooking()">
 <iconify-icon className="group-hover:rotate-90 transition-transform duration-300" icon="solar:close-circle-linear" width="16"></iconify-icon>
 <span>Close</span>
 </button>
-<div className="w-[95vw] md:w-[70vw] max-w-[1200px] h-auto max-h-[90vh] bg-[#0A0A0A] border border-white/10 rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-2xl relative" id="booking-container" style={{boxShadow: '0 0 80px rgba(212,175,55,0.08), 0 25px 50px rgba(0,0,0,0.5)'}}>
+<div className="w-[95vw] md:w-[70vw] max-w-[1200px] h-auto max-h-[90vh] bg-[#0A0A0A] border border-white/10 rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-2xl relative" id="booking-container" style={{boxShadow: '0 0 80px rgba(212, 175, 55, 0.08), 0 25px 50px rgba(0,0,0,0.5)'}}>
 
 <div className="hidden md:block md:w-[60%] h-full bg-[#111] overflow-hidden relative">
 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0A0A0A]/50 z-10 pointer-events-none"></div>
@@ -1532,7 +1574,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Luxury Architecture" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8d95c271-f60d-4895-bd42-47a5f0f6f91a_3840w.png" style={{minHeight: '100%'}}/>
 
 <div className="absolute bottom-10 left-10 z-20">
-<span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.3em] block mb-2 font-medium" style={{fontFamily: '\'Montserrat\',sans-serif'}}>
+<span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.3em] block mb-2 font-medium" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
               Nur Elite Properties
             </span>
 <h3 className="font-serif text-3xl text-white/90 tracking-tight leading-tight">
@@ -1546,7 +1588,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-full md:w-[40%] flex flex-col justify-between px-8 md:px-10 py-10 md:py-12 bg-[#0A0A0A] overflow-y-auto hide-scrollbar relative">
 <div className="flex flex-col">
 
-<span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.25em] mb-3 block font-medium" data-i18n="modal_consult_sub" style={{fontFamily: '\'Montserrat\',sans-serif'}}>
+<span className="text-[#D4AF37] text-[10px] uppercase tracking-[0.25em] mb-3 block font-medium" data-i18n="modal_consult_sub" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
               With Alina Nureeva
             </span>
 <h2 className="font-serif text-3xl md:text-4xl text-white mb-2 tracking-tight leading-tight" data-i18n="modal_consult_title">
@@ -1556,57 +1598,57 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <form className="flex flex-col gap-6" id="booking-form" onsubmit="event.preventDefault(); closeBooking();">
 
 <div className="relative">
-<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2 block" data-i18n="form_name" style={{fontFamily: '\'Montserrat\',sans-serif'}}>
+<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2 block" data-i18n="form_name" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
                   Full Name
                 </label>
-<input className="w-full bg-transparent border-b border-white/15 hover:border-white/30 focus:border-[#D4AF37] px-0 py-3 text-sm text-white outline-none transition-colors placeholder-white/20" placeholder="Your Full Name" required="" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="text"/>
+<input className="w-full bg-transparent border-b border-white/15 hover:border-white/30 focus:border-[#D4AF37] px-0 py-3 text-sm text-white outline-none transition-colors placeholder-white/20" placeholder="Your Full Name" required="" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="text"/>
 </div>
 
 <div className="relative">
-<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2 block" data-i18n="form_phone" style={{fontFamily: '\'Montserrat\',sans-serif'}}>
+<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2 block" data-i18n="form_phone" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
                   Phone Number
                 </label>
-<input className="w-full bg-transparent border-b border-white/15 hover:border-white/30 focus:border-[#D4AF37] px-0 py-3 text-sm text-white outline-none transition-colors placeholder-white/20" placeholder="+971 50 000 0000" required="" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="tel"/>
+<input className="w-full bg-transparent border-b border-white/15 hover:border-white/30 focus:border-[#D4AF37] px-0 py-3 text-sm text-white outline-none transition-colors placeholder-white/20" placeholder="+971 50 000 0000" required="" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="tel"/>
 </div>
 
 <div className="relative">
-<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2 flex items-center gap-2" style={{fontFamily: '\'Montserrat\',sans-serif'}}>
+<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-2 flex items-center gap-2" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
 <span data-i18n="form_email">Email Address</span>
 <span className="text-white/25 text-[9px] italic normal-case tracking-normal font-light">
                     Optional
                   </span>
 </label>
-<input className="w-full bg-transparent border-b border-white/15 hover:border-white/30 focus:border-[#D4AF37] px-0 py-3 text-sm text-white outline-none transition-colors placeholder-white/20" placeholder="email@example.com" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="email"/>
+<input className="w-full bg-transparent border-b border-white/15 hover:border-white/30 focus:border-[#D4AF37] px-0 py-3 text-sm text-white outline-none transition-colors placeholder-white/20" placeholder="email@example.com" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="email"/>
 </div>
 
 <div>
-<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-4 block" data-i18n="form_service" style={{fontFamily: '\'Montserrat\',sans-serif'}}>
+<label className="text-[10px] uppercase tracking-[0.15em] text-white/40 mb-4 block" data-i18n="form_service" style={{fontFamily: '\'Montserrat\', sans-serif'}}>
                   Service Interest
                 </label>
 <div className="flex flex-wrap gap-2" id="service-tags">
-<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_1_title" data-value="Transactions" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="button">
+<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_1_title" data-value="Transactions" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="button">
                     Real Estate Transactions
                   </button>
-<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_2_title" data-value="Investment" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="button">
+<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_2_title" data-value="Investment" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="button">
                     Investment Solutions
                   </button>
-<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_3_title" data-value="Legal" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="button">
+<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_3_title" data-value="Legal" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="button">
                     Legal Support
                   </button>
-<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_4_title" data-value="Mortgage" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="button">
+<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_4_title" data-value="Mortgage" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="button">
                     Mortgage Brokerage
                   </button>
-<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_5_title" data-value="Visa" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="button">
+<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_5_title" data-value="Visa" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="button">
                     Visa Support
                   </button>
-<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_6_title" data-value="Banking" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="button">
+<button className="service-tag px-4 py-2 border border-[#D4AF37]/30 rounded-full text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/60 transition-all duration-300 cursor-pointer" data-i18n="service_card_6_title" data-value="Banking" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="button">
                     Banking Services
                   </button>
 </div>
 <input id="selected-service" name="service" type="hidden"/>
 </div>
 
-<button className="w-full mt-4 py-4 border border-[#D4AF37] text-white text-[10px] uppercase tracking-[0.25em] font-medium transition-all duration-500 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] hover:bg-[#D4AF37]/10 rounded-lg cursor-pointer" data-i18n="modal_confirm" style={{fontFamily: '\'Montserrat\',sans-serif'}} type="submit">
+<button className="w-full mt-4 py-4 border border-[#D4AF37] text-white text-[10px] uppercase tracking-[0.25em] font-medium transition-all duration-500 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] hover:bg-[#D4AF37]/10 rounded-lg cursor-pointer" data-i18n="modal_confirm" style={{fontFamily: '\'Montserrat\', sans-serif'}} type="submit">
                 Request Private Consultation
               </button>
 </form>

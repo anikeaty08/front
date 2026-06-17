@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -256,6 +292,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -530,12 +572,12 @@ gtag('config', 'G-2M6V79H761');
 <path d="M33.5558 5.24464C33.4504 5.35006 33.345 5.48184 33.2528 5.57408L28.9701 9.84359C28.9174 9.8963 28.891 9.92266 28.8646 9.94901C28.7592 10.0808 28.7592 10.2126 28.891 10.3839C29.9716 12.2155 30.6436 14.1658 30.8808 16.261C31.342 20.5305 30.2615 24.3784 27.5864 27.7518C25.2936 30.6377 22.3023 32.443 18.7312 33.2336C17.084 33.5894 15.4104 33.6158 13.7369 33.4445C10.9828 33.1546 8.50542 32.1531 6.2916 30.5059C3.10264 28.134 1.11284 24.9977 0.295835 21.084C-0.00724719 19.6476 -0.0599576 18.1718 0.0586399 16.7354C0.361722 13.362 1.65312 10.3707 3.946 7.82743C6.13347 5.37642 8.8085 3.78194 11.9843 3.05718C13.5524 2.70139 15.1337 2.56961 16.7545 2.71456C19.0738 2.9254 21.2349 3.59746 23.251 4.7439C23.5146 4.90203 23.6068 4.79661 23.765 4.63848L28.0081 0.382147C28.1135 0.276727 28.219 0.144952 28.3375 0C30.077 1.76578 31.8032 3.49204 33.5558 5.24464ZM23.8967 18.3826C24.0285 13.4147 20.1148 9.80406 15.7003 9.67228C10.7324 9.54051 7.01636 13.6651 7.01636 18.1191C7.01636 22.6785 10.851 26.6185 15.4631 26.5395C20.0094 26.5922 23.7913 22.863 23.8967 18.3826ZM30.4196 52.7891C30.446 56.9663 30.4196 61.1568 30.4196 65.334V65.9007H22.948V65.3867C22.948 61.0118 22.9743 56.6237 22.948 52.2488C22.948 49.9559 22.1441 47.9529 20.4706 46.3453C19.3637 45.2911 18.0196 44.6717 16.4778 44.4609C14.4748 44.171 12.6431 44.6717 11.0223 45.8709C9.40149 47.1096 8.43953 48.7831 8.13645 50.7597C7.97832 51.7085 7.95196 52.6968 7.95196 53.6719C7.92561 57.5593 7.95196 61.4203 7.95196 65.3209V65.8611H0.533031V65.3867C0.533031 60.6692 0.48032 55.9385 0.559385 51.2209C0.612095 48.7172 1.40274 46.3584 2.72049 44.1841C4.90796 40.5735 8.03103 38.2543 12.1161 37.3055C13.4074 37.0156 14.7384 36.897 16.0561 36.9497C20.1543 37.1342 23.6595 38.755 26.44 41.8122C28.4298 44.026 29.6817 46.6088 30.1165 49.5606C30.3142 50.6543 30.4196 51.7349 30.4196 52.7891Z" fill="currentColor"></path>
 </svg>
 </div>
-<div className="glass-panel flex hover:grayscale-0 transition-all duration-500 spotlight-card bg-neutral-50 h-24 rounded-2xl grayscale items-center justify-center w-28" onmousemove="handleSpotlight(event)" style={{-MouseX: '85px', -MouseY: '78px'}}>
+<div className="glass-panel flex hover:grayscale-0 transition-all duration-500 spotlight-card bg-neutral-50 h-24 rounded-2xl grayscale items-center justify-center w-28" onmousemove="handleSpotlight(event)" style={{'--mouse-x': '85px', '--mouse-y': '78px'}}>
 <svg className="opacity-80 w-[64px] h-[48px]" data-icon-replaced="true" fill="none" height="43" strokeWidth="2" style={{color: 'rgb(23, 23, 23)', width: '64px', height: '48px'}} viewbox="0 0 64 43" width="64" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M63.8994 0V28.04C63.8994 28.04 51 42.9951 32.0059 42.9951C13.03 42.9949 0.024763 28.0685 0 28.04V0H63.8994ZM11.5098 4.21973C11.2554 5.3211 10.55 9.9989 10.5459 10.0264C10.5175 10.0264 9.69531 4.24805 9.69531 4.24805H5.07422L8.24902 23.792H12.2471L13.2959 17.5889C13.3258 17.6551 14.3164 23.792 14.3164 23.792H18.4268L20.5527 10.4795V23.792L27.8672 23.8203C28.5759 23.8486 29.1713 23.5371 29.7383 23.1689C30.9006 22.3476 31.212 20.7609 31.127 19.3447V8.12891C31.127 7.59084 31.0704 6.9961 30.8721 6.48633C30.4468 5.24009 29.2562 4.33302 28.0088 4.21973H17.123L16.0742 10.168L15.1387 4.21973H11.5098ZM55.4229 4.21973C54.1756 4.0498 52.4746 3.85166 50.377 4.58789C49.0445 5.18269 48.2219 6.42952 48.0518 7.8457L48.0234 16.1445H46.8896V4.24805H41.8438L36.2305 16.3994V20.3926H42.3535V23.792H46.9463V20.3926H48.1084C48.6754 22.2619 50.4903 23.6504 52.333 23.8203C53.637 23.7354 55.0262 23.9903 56.1885 23.5088C57.6059 22.8857 58.7685 21.384 58.8252 19.7412L58.7969 8.15723C58.7969 7.59084 58.711 7.05273 58.5693 6.54297C58.1441 5.18343 56.812 4.27637 55.4229 4.21973ZM53.3252 7.22266C53.5518 7.19439 53.7216 7.25106 53.8916 7.36426L54.0342 7.64746V20.251C53.9492 20.4208 53.7784 20.5342 53.6934 20.6475C53.4099 20.7324 53.0694 20.6475 52.9561 20.3643L52.8994 19.9395V7.59082C52.9561 7.42088 53.1267 7.25098 53.3252 7.22266ZM25.3438 8.04395C25.6272 8.01562 26.0243 8.24216 26.1377 8.46875L26.1943 8.69531V19.4297C26.166 19.628 25.6272 19.9111 25.4287 19.9395H25.3438V8.04395ZM31.8643 12.0371V16.3711H35.4365V12.0371H31.8643ZM42.3252 12.8867V16.3428H40.5674V16.2578L42.2686 12.8584L42.3252 12.8867Z" fill="currentColor"></path>
 </svg>
 </div>
-<div className="glass-panel flex hover:grayscale-0 transition-all duration-500 spotlight-card bg-neutral-50 h-24 rounded-2xl grayscale items-center justify-center w-40" onmousemove="handleSpotlight(event)" style={{-MouseX: '20px', -MouseY: '74.6015625px'}}>
+<div className="glass-panel flex hover:grayscale-0 transition-all duration-500 spotlight-card bg-neutral-50 h-24 rounded-2xl grayscale items-center justify-center w-40" onmousemove="handleSpotlight(event)" style={{'--mouse-x': '20px', '--mouse-y': '74.6015625px'}}>
 <svg className="opacity-80 w-auto text-neutral-900 h-10" fill="none" height="34" viewbox="0 0 85 34" width="85" xmlns="http://www.w3.org/2000/svg">
 <path clip-rule="evenodd" d="M21.0693 18.0368C21.0693 18.769 20.4785 19.3626 19.75 19.3626C19.0215 19.3626 18.4307 18.769 18.4307 18.0368C18.4307 17.3046 19.0215 16.7111 19.75 16.7111C20.4785 16.7111 21.0693 17.3046 21.0693 18.0368Z" fill="currentColor" fill-rule="evenodd"></path>
 <path clip-rule="evenodd" d="M26.3228 23.3163C26.3228 24.0495 25.7321 24.6421 25.0035 24.6421C24.275 24.6421 23.6843 24.0485 23.6843 23.3163C23.6843 22.5841 24.275 21.9915 25.0035 21.9915C25.7321 21.9915 26.3228 22.585 26.3228 23.3163Z" fill="currentColor" fill-rule="evenodd"></path>
@@ -547,7 +589,7 @@ gtag('config', 'G-2M6V79H761');
 <path d="M4.9571 19.7193C3.40027 18.1893 3.31244 15.6627 3.30412 15.2125V0.422491C3.30412 0.18952 3.1146 0 2.88163 0L0.422491 0C0.18952 0 0 0.18952 0 0.422491L0 15.7727C0 16.4513 0.0647141 19.3588 2.32416 21.8318C3.98362 23.6521 5.96572 24.216 7.00485 24.4222C7.26 24.4731 7.49205 24.2724 7.49205 24.0117V21.4564C7.49205 21.266 7.36817 21.0977 7.18605 21.0414C6.61101 20.862 5.74662 20.4941 4.9571 19.7193V19.7193Z" fill="currentColor"></path>
 </svg>
 </div>
-<div className="glass-panel flex hover:grayscale-0 transition-all duration-500 spotlight-card bg-neutral-50 h-24 rounded-2xl grayscale items-center justify-center w-24" onmousemove="handleSpotlight(event)" style={{-MouseX: '19px', -MouseY: '75.6015625px'}}>
+<div className="glass-panel flex hover:grayscale-0 transition-all duration-500 spotlight-card bg-neutral-50 h-24 rounded-2xl grayscale items-center justify-center w-24" onmousemove="handleSpotlight(event)" style={{'--mouse-x': '19px', '--mouse-y': '75.6015625px'}}>
 <svg className="opacity-80 w-auto text-neutral-900 h-12" fill="none" height="56" viewbox="0 0 56 56" width="56" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M56 0V56H0V0H56ZM8.20703 39.7998H11.7402L12.8105 34.7852H19.9053L17.8281 44.8008H7.18262L6.48828 48.3428H20.6396L24.1729 31.2344H10.0107L8.20703 39.7998ZM31.8389 48.3428H47.7422V31.2344H31.8389V48.3428ZM44.2031 44.8008H35.3604V34.7852H44.2031V44.8008ZM10.0107 11.2021H17.0889V21.2354H8.25781V24.752H24.1729V21.2354H20.6396V7.66211H10.0107V11.2021ZM31.8389 24.752H47.7422V21.2354H31.8389V24.752ZM33.5967 11.2021H45.9844V7.66211H33.5967V11.2021Z" fill="currentColor"></path>
 </svg>
@@ -1082,7 +1124,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative w-[280px] md:w-[320px] transform translate-y-8 lg:translate-y-16">
 
-<div className="bg-zinc-800 rounded-[2.5rem] pt-3 pr-3 pb-3 pl-3 relative shadow-2xl" style={{boxShadow: '0 50px 100px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="bg-zinc-800 rounded-[2.5rem] pt-3 pr-3 pb-3 pl-3 relative shadow-2xl" style={{boxShadow: '0 50px 100px -20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 
 
 <div className="relative bg-white rounded-[2rem] overflow-hidden">

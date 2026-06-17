@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -119,6 +155,12 @@ Thanks,
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -156,10 +198,10 @@ Thanks,
 </nav>
 <div className="flex items-center gap-2">
 <button aria-label="Open menu" className="md:hidden inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 p-2 hover:bg-white/10 transition" id="menuBtn">
-<iconify-icon className="text-white/80" height="20" icon="lucide:menu" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-white/80" height="20" icon="lucide:menu" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </button>
 <a className="hidden sm:inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-white/90 hover:bg-white/10 transition" href="#contact">
-<iconify-icon height="18" icon="lucide:send" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:send" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
             Contact
           </a>
 </div>
@@ -198,15 +240,15 @@ Thanks,
           </p>
 <div className="mt-6 flex flex-wrap items-center gap-3">
 <a className="inline-flex items-center gap-2 rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-white/90 transition" href="#projects">
-<iconify-icon height="18" icon="lucide:briefcase" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:briefcase" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               View projects
             </a>
 <a className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 hover:bg-white/10 transition" href="#contact">
-<iconify-icon height="18" icon="lucide:calendar" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:calendar" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Book a chat
             </a>
 <button aria-label="Copy email" className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 hover:bg-white/10 transition" id="copyEmailTop">
-<iconify-icon height="18" icon="lucide:copy" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:copy" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Copy email
             </button>
 </div>
@@ -237,7 +279,7 @@ Thanks,
 <div className="mt-1 text-xs text-white/60">A quick, readable view of what I enjoy doing.</div>
 </div>
 <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/70">
-<iconify-icon height="16" icon="lucide:activity" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="lucide:activity" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                 Always learning
               </div>
 </div>
@@ -245,7 +287,7 @@ Thanks,
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:bar-chart-3" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:bar-chart-3" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     KPI design &amp; measurement
                   </div>
 <span className="text-xs text-white/60">North-star metrics</span>
@@ -257,7 +299,7 @@ Thanks,
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:database" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:database" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Data modeling &amp; quality
                   </div>
 <span className="text-xs text-white/60">Reliable tables</span>
@@ -269,7 +311,7 @@ Thanks,
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:line-chart" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:line-chart" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Forecasting &amp; trend analysis
                   </div>
 <span className="text-xs text-white/60">Planning-ready</span>
@@ -281,7 +323,7 @@ Thanks,
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:message-square-text" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:message-square-text" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Storytelling &amp; stakeholder sync
                   </div>
 <span className="text-xs text-white/60">Actionable</span>
@@ -312,14 +354,14 @@ Thanks,
 </div>
 <a className="hidden sm:inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition" href="#contact">
 <span>Let’s collaborate</span>
-<iconify-icon height="18" icon="lucide:arrow-right" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:arrow-right" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </a>
 </div>
 <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3iF=" lg:grid-cols-3"="">
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-3">
 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
-<iconify-icon height="20" icon="lucide:layout-dashboard" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="lucide:layout-dashboard" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight">Executive dashboards</div>
@@ -334,7 +376,7 @@ Thanks,
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-3">
 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
-<iconify-icon height="20" icon="lucide:shield-check" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="lucide:shield-check" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight">Data reliability</div>
@@ -349,7 +391,7 @@ Thanks,
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-3">
 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
-<iconify-icon height="20" icon="lucide:target" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="lucide:target" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-semibold tracking-tight">Experimentation mindset</div>
@@ -378,7 +420,7 @@ Thanks,
 <div className="grid gap-4 sm:grid-cols-2">
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:terminal" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:terminal" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                 Analytics &amp; Querying
               </div>
 <ul className="mt-4 space-y-2 text-sm text-white/70">
@@ -398,7 +440,7 @@ Thanks,
 </div>
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:pie-chart" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:pie-chart" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                 BI &amp; Reporting
               </div>
 <ul className="mt-4 space-y-2 text-sm text-white/70">
@@ -418,7 +460,7 @@ Thanks,
 </div>
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:workflow" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:workflow" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                 Data Prep &amp; Pipelines
               </div>
 <ul className="mt-4 space-y-2 text-sm text-white/70">
@@ -438,7 +480,7 @@ Thanks,
 </div>
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:brain" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:brain" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                 Thinking &amp; Communication
               </div>
 <ul className="mt-4 space-y-2 text-sm text-white/70">
@@ -473,7 +515,7 @@ Thanks,
 <article className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center justify-between gap-3">
 <div className="inline-flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:shopping-cart" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:shopping-cart" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Revenue &amp; retention dashboard
             </div>
 <span className="text-xs text-white/50">BI</span>
@@ -491,7 +533,7 @@ Thanks,
 <article className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center justify-between gap-3">
 <div className="inline-flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:route" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:route" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Funnel instrumentation audit
             </div>
 <span className="text-xs text-white/50">Product</span>
@@ -509,7 +551,7 @@ Thanks,
 <article className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center justify-between gap-3">
 <div className="inline-flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:truck" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:truck" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Operations SLA insights
             </div>
 <span className="text-xs text-white/50">Ops</span>
@@ -539,7 +581,7 @@ Thanks,
 <div className="mt-1 text-xs text-white/60">Data Analyst • Bangalore</div>
 </div>
 <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/70">
-<iconify-icon height="16" icon="lucide:clock" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="lucide:clock" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                 2019 — Present (6+ yrs)
               </div>
 </div>
@@ -550,7 +592,7 @@ Thanks,
 <div className="mt-5 space-y-3">
 <div className="flex gap-3">
 <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl border border-white/15 bg-white/5">
-<iconify-icon height="18" icon="lucide:check-circle-2" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:check-circle-2" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-medium text-white/90">Stakeholder partnership</div>
@@ -559,7 +601,7 @@ Thanks,
 </div>
 <div className="flex gap-3">
 <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl border border-white/15 bg-white/5">
-<iconify-icon height="18" icon="lucide:check-circle-2" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:check-circle-2" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-medium text-white/90">Strong fundamentals</div>
@@ -568,7 +610,7 @@ Thanks,
 </div>
 <div className="flex gap-3">
 <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl border border-white/15 bg-white/5">
-<iconify-icon height="18" icon="lucide:check-circle-2" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:check-circle-2" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <div>
 <div className="text-sm font-medium text-white/90">Bias for action</div>
@@ -594,14 +636,14 @@ Thanks,
 <div className="mt-1 text-xs text-white/60">Examples of outcomes I typically drive.</div>
 </div>
 <div className="hidden sm:inline-flex items-center gap-2 text-xs text-white/60">
-<iconify-icon height="16" icon="lucide:info" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="lucide:info" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                 Tailored per team &amp; domain
               </div>
 </div>
 <div className="mt-5 grid gap-4 sm:grid-cols-2">
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:trending-up" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:trending-up" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   KPI alignment
                 </div>
 <p className="mt-2 text-sm text-white/70 leading-relaxed">
@@ -610,7 +652,7 @@ Thanks,
 </div>
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:search" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:search" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Root cause analysis
                 </div>
 <p className="mt-2 text-sm text-white/70 leading-relaxed">
@@ -619,7 +661,7 @@ Thanks,
 </div>
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:layers" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:layers" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Data modeling
                 </div>
 <p className="mt-2 text-sm text-white/70 leading-relaxed">
@@ -628,7 +670,7 @@ Thanks,
 </div>
 <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex items-center gap-2 text-sm font-medium text-white/90">
-<iconify-icon height="18" icon="lucide:bell" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:bell" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Monitoring &amp; alerts
                 </div>
 <p className="mt-2 text-sm text-white/70 leading-relaxed">
@@ -643,7 +685,7 @@ Thanks,
 <div className="mt-1 text-xs text-white/60">I can share it via email.</div>
 </div>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-white/90 transition" href="mailto:sk524722@gmail.com?subject=Resume%20request%20—%20Sunny%20Singh">
-<iconify-icon height="18" icon="lucide:download" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:download" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Request resume
                 </a>
 </div>
@@ -666,40 +708,40 @@ Thanks,
 <div className="mt-6 space-y-3">
 <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
-<iconify-icon height="20" icon="lucide:mail" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="lucide:mail" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div className="min-w-0">
 <div className="text-xs text-white/60">Email</div>
 <a className="text-sm font-medium text-white/90 hover:text-white transition break-all" href="mailto:sk524722@gmail.com">sk524722@gmail.com</a>
 </div>
 <button className="ml-auto inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 hover:bg-white/10 transition" id="copyEmail">
-<iconify-icon height="16" icon="lucide:copy" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="lucide:copy" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                   Copy
                 </button>
 </div>
 <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
-<iconify-icon height="20" icon="lucide:phone" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="lucide:phone" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div className="min-w-0">
 <div className="text-xs text-white/60">Phone</div>
 <a className="text-sm font-medium text-white/90 hover:text-white transition" href="tel:+919087860399">+91 9087860399</a>
 </div>
 <button className="ml-auto inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 hover:bg-white/10 transition" id="copyPhone">
-<iconify-icon height="16" icon="lucide:copy" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="lucide:copy" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                   Copy
                 </button>
 </div>
 <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
-<iconify-icon height="20" icon="lucide:map-pin" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon height="20" icon="lucide:map-pin" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div className="min-w-0">
 <div className="text-xs text-white/60">Location</div>
 <div className="text-sm font-medium text-white/90">Bangalore, India</div>
 </div>
 <a className="ml-auto inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 hover:bg-white/10 transition" href="https://www.google.com/maps/search/?api=1&amp;query=Bangalore" rel="noreferrer" target="_blank">
-<iconify-icon height="16" icon="lucide:external-link" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="lucide:external-link" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
                   Map
                 </a>
 </div>
@@ -736,11 +778,11 @@ Thanks,
 </label>
 <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3">
 <button className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-white/90 transition" type="submit">
-<iconify-icon height="18" icon="lucide:send" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:send" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Send email
                 </button>
 <button className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 hover:bg-white/10 transition" id="fillSample" type="button">
-<iconify-icon height="18" icon="lucide:sparkles" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:sparkles" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Fill sample
                 </button>
 <p className="text-xs text-white/50 sm:ml-auto">
@@ -751,7 +793,7 @@ Thanks,
 <div className="mt-4 grid gap-4 sm:grid-cols-2">
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:focus" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:focus" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   What I’m looking for
                 </div>
 <p className="mt-3 text-sm text-white/70 leading-relaxed">
@@ -761,7 +803,7 @@ Thanks,
 </div>
 <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
 <div className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-<iconify-icon height="18" icon="lucide:handshake" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon height="18" icon="lucide:handshake" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   How I like to work
                 </div>
 <p className="mt-3 text-sm text-white/70 leading-relaxed">
@@ -778,7 +820,7 @@ Thanks,
           </div>
 <div className="flex items-center gap-4 text-xs text-white/60">
 <a className="hover:text-white transition inline-flex items-center gap-2" href="#top">
-<iconify-icon height="16" icon="lucide:arrow-up" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon height="16" icon="lucide:arrow-up" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
               Back to top
             </a>
 <span className="hidden sm:inline text-white/20">•</span>

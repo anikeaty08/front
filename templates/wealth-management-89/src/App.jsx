@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -209,6 +245,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -646,7 +688,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="bg-gradient-to-b from-[#0a0a0a] to-[#050505] py-40 relative z-10 border-t border-white/5 reveal">
 
-<div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(circle at center, black, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 70%)'}}></div>
+<div className="absolute inset-0 pointer-events-none" style={{backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px)', backgroundSize: '80px 80px', maskImage: 'radial-gradient(circle at center, black, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 70%)'}}></div>
 <div className="mx-auto w-[92%] max-w-[40rem] text-center relative z-10">
 <h2 className="font-display font-semibold text-5xl md:text-7xl tracking-tighter mb-6 text-white">Scale Aggressively.</h2>
 <p className="text-[#888] text-lg mb-12 font-light">Capacity is strictly limited to ensure alpha generation is not diluted. Request an audit of your current portfolio architecture.</p>

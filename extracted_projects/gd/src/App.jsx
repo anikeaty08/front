@@ -14,12 +14,12 @@ function App() {
           <div className="absolute top-0 left-0 h-full w-[200vw] flex animate-scroll-bg">
             <div 
               className="w-[100vw] h-full bg-cover bg-center" 
-              style={{ backgroundImage: `url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0400cdd2-8c47-4563-9cca-3f6300fbacd1_1600w.png')` }}
+              style={{backgroundImage: `url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0400cdd2-8c47-4563-9cca-3f6300fbacd1_1600w.png')`}}
             />
             {/* Flipped duplicate to create a perfectly seamless repeating loop */}
             <div 
               className="w-[100vw] h-full bg-cover bg-center transform -scale-x-100" 
-              style={{ backgroundImage: `url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0400cdd2-8c47-4563-9cca-3f6300fbacd1_1600w.png')` }}
+              style={{backgroundImage: `url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0400cdd2-8c47-4563-9cca-3f6300fbacd1_1600w.png')`}}
             />
           </div>
           {/* Subtle darkening overlay for better game contrast and mood */}

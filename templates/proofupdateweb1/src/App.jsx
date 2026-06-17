@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -132,6 +168,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -176,7 +218,7 @@ gtag('config', 'G-2M6V79H761');
 <a className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-4 text-xs font-semibold uppercase tracking-[0.08rem] text-white transition hover:bg-white/[0.08] focus:outline-none focus:ring-2 focus:ring-[#0038ff]" href="#apply" style={{fontFamily: 'InterCustom, system-ui, sans-serif'}}>
             Login
           </a>
-<a className="gradient-button relative isolate overflow-hidden rounded-full bg-[#0038ff] px-6 py-4 text-xs font-semibold uppercase tracking-[0.08rem] text-white transition focus:outline-none focus:ring-2 focus:ring-[#0038ff]" href="#apply" onmousemove="this.style.setProperty('--mx', event.offsetX + 'px'); this.style.setProperty('--my', event.offsetY + 'px');" style={{fontFamily: 'InterCustom, system-ui, sans-serif', -Mx: '98px', -My: '25px'}}>
+<a className="gradient-button relative isolate overflow-hidden rounded-full bg-[#0038ff] px-6 py-4 text-xs font-semibold uppercase tracking-[0.08rem] text-white transition focus:outline-none focus:ring-2 focus:ring-[#0038ff]" href="#apply" onmousemove="this.style.setProperty('--mx', event.offsetX + 'px'); this.style.setProperty('--my', event.offsetY + 'px');" style={{fontFamily: 'InterCustom, system-ui, sans-serif', '--mx': '98px', '--my': '25px'}}>
 <span className="relative z-10">Apply for incubation</span>
 </a>
 </div>
@@ -218,7 +260,7 @@ gtag('config', 'G-2M6V79H761');
             </span></h1>
 <p className="leading-[1.8] sm:text-lg text-base text-[#c3c6cd] max-w-[46rem] mt-8 mr-auto ml-auto">Full-stack incubation for serious founders. GTM Strategy, content, community building, and a loyal community of investors ready to back your launch from day one. We're empowering the next generation of Web3 founders.</p>
 <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-<a className="gradient-button relative isolate inline-flex min-h-16 items-center justify-center overflow-hidden rounded-full bg-[#0038ff] px-8 text-sm font-semibold uppercase tracking-[0.08rem] text-white transition focus:outline-none focus:ring-2 focus:ring-[#0038ff]" href="#apply" onmousemove="this.style.setProperty('--mx', event.offsetX + 'px'); this.style.setProperty('--my', event.offsetY + 'px');" style={{fontFamily: 'InterCustom, system-ui, sans-serif', -Mx: '0px', -My: '16px'}}>
+<a className="gradient-button relative isolate inline-flex min-h-16 items-center justify-center overflow-hidden rounded-full bg-[#0038ff] px-8 text-sm font-semibold uppercase tracking-[0.08rem] text-white transition focus:outline-none focus:ring-2 focus:ring-[#0038ff]" href="#apply" onmousemove="this.style.setProperty('--mx', event.offsetX + 'px'); this.style.setProperty('--my', event.offsetY + 'px');" style={{fontFamily: 'InterCustom, system-ui, sans-serif', '--mx': '0px', '--my': '16px'}}>
 <span className="relative z-10 flex items-center gap-3">
                 Apply for incubation
                 <iconify-icon className="" height="20" icon="solar:arrow-right-linear" strokeWidth="1.5" width="20"></iconify-icon>

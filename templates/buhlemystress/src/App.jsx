@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -77,7 +113,7 @@ xxs: '0.65rem',
       // ==========================================
 
       const Icon = memo(({ name, className, size = 24 }) => {
-        return <iconify-icon icon={`solar:${name}-linear`} width={size} height={size} class={className} style={{ strokeWidth: '1.5px' }}></iconify-icon>;
+        return <iconify-icon icon={`solar:${name}-linear`} width={size} height={size} class={className} style={{strokeWidth: '1.5px'}}></iconify-icon>;
       });
 
       const EditModal = ({ isOpen, onClose, memories, setMemories, texts, setTexts }) => {
@@ -258,7 +294,7 @@ xxs: '0.65rem',
                   }}
                   transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.5 }}
                   className="bg-white/60 backdrop-blur-md text-rose-900 border border-rose-200/80 px-10 py-5 rounded-full text-xl font-light hover:bg-white/80 hover:border-rose-300 transition-colors shadow-sm cursor-pointer z-50 whitespace-nowrap hardware-accel select-none"
-                  style={{ touchAction: 'none' }}
+                  style={{touchAction: 'none'}}
               >
                   No
               </motion.button>
@@ -293,7 +329,7 @@ xxs: '0.65rem',
           return (
               <motion.div
                   ref={ref}
-                  style={{ perspective: 1000, rotateX, rotateY }}
+                  style={{perspective: 1000, rotateX, rotateY}}
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleMouseLeave}
                   onClick={() => onClick({ url, caption })}
@@ -618,6 +654,12 @@ xxs: '0.65rem',
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

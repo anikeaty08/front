@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -58,6 +94,12 @@ surface: '#111111'
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -84,7 +126,7 @@ surface: '#111111'
 
 <div className="spotlight-card relative group rounded-3xl bg-neutral-900/50 border border-neutral-800 p-6 overflow-hidden reveal">
 <div className="spotlight-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%)'}}></div>
-<div className="spotlight-border absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.3), transparent 40%)', maskImage: 'linear-gradient(black, black) content-box, linear-gradient(black, black)', maskComposite: 'exclude', padding: '1px'}}></div>
+<div className="spotlight-border absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255, 255, 255, 0.3), transparent 40%)', maskImage: 'linear-gradient(black, black) content-box, linear-gradient(black, black)', maskComposite: 'exclude', padding: '1px'}}></div>
 <span className="iconify text-neutral-200 text-3xl mb-4" data-icon="solar:bolt-circle-linear"></span>
 <h3 className="text-white text-xl font-medium mb-2">Instant Sync</h3>
 <p className="text-neutral-400 text-lg">Real-time data propagation across all nodes without latency.</p>
@@ -92,7 +134,7 @@ surface: '#111111'
 
 <div className="spotlight-card relative group rounded-3xl bg-neutral-900/50 border border-neutral-800 p-6 overflow-hidden reveal">
 <div className="spotlight-overlay absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%)'}}></div>
-<div className="spotlight-border absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.3), transparent 40%)', maskImage: 'linear-gradient(black, black) content-box, linear-gradient(black, black)', maskComposite: 'exclude', padding: '1px'}}></div>
+<div className="spotlight-border absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255, 255, 255, 0.3), transparent 40%)', maskImage: 'linear-gradient(black, black) content-box, linear-gradient(black, black)', maskComposite: 'exclude', padding: '1px'}}></div>
 <span className="iconify text-neutral-200 text-3xl mb-4" data-icon="solar:shield-check-linear"></span>
 <h3 className="text-white text-xl font-medium mb-2">Alpha Masking</h3>
 <p className="text-neutral-400 text-lg">Secure containment fields for sensitive user data.</p>

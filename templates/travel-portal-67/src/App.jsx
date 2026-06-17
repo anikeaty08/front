@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -518,6 +554,12 @@ blob: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -636,7 +678,7 @@ blob: {
 
 <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-between group cursor-none h-full min-h-[400px] [animation:fadeInUp_0.8s_ease-out_0.1s_both] animate-on-scroll" style={{-MouseX: '310px', -MouseY: '2627.33349609375px'}}>
+<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-between group cursor-none h-full min-h-[400px] [animation:fadeInUp_0.8s_ease-out_0.1s_both] animate-on-scroll" style={{'--mouse-x': '310px', '--mouse-y': '2627.33349609375px'}}>
 <div className="absolute right-0 rtl:right-auto rtl:left-0 top-0 p-10 opacity-10 transition-transform duration-700 group-hover:scale-110 group-hover:rotate-12">
 <iconify-icon className="text-[12rem] text-white" icon="solar:calendar-linear"></iconify-icon>
 </div>
@@ -656,7 +698,7 @@ blob: {
 
 <div className="flex flex-col gap-6">
 
-<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-center group cursor-none min-h-[220px] [animation:fadeInUp_0.8s_ease-out_0.2s_both] animate-on-scroll" style={{-MouseX: '-86px', -MouseY: '2627.33349609375px'}}>
+<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-center group cursor-none min-h-[220px] [animation:fadeInUp_0.8s_ease-out_0.2s_both] animate-on-scroll" style={{'--mouse-x': '-86px', '--mouse-y': '2627.33349609375px'}}>
 <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
 <div className="relative z-10 text-start">
 <div className="flex items-baseline gap-3 mb-2">
@@ -670,7 +712,7 @@ blob: {
 </div>
 </div>
 
-<div className="spotlight-card rounded-[2rem] p-10 flex-1 min-h-[240px] flex flex-col justify-end group cursor-none [animation:fadeInUp_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{-MouseX: '-86px', -MouseY: '2383.33349609375px'}}>
+<div className="spotlight-card rounded-[2rem] p-10 flex-1 min-h-[240px] flex flex-col justify-end group cursor-none [animation:fadeInUp_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{'--mouse-x': '-86px', '--mouse-y': '2383.33349609375px'}}>
 <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-1000">
 <svg className="w-full h-full object-cover" preserveaspectratio="xMidYMid slice" viewbox="0 0 400 200">
 <path className="group-hover:animate-pulse" d="M50,100 Q100,50 150,100 T250,100 T350,100" fill="none" stroke="white" stroke-dasharray="4 4" strokeWidth="0.5"></path>
@@ -726,7 +768,7 @@ blob: {
 </div>
 <div className="flex gap-16 px-24 pl-[20vw] rtl:pr-[20vw] rtl:pl-24 items-center h-full w-max" id="cards-track">
 
-<a className="spotlight-card shrink-0 flex overflow-hidden cursor-pointer group bg-[#050507] w-[70vw] h-[65vh] max-w-[900px] border-white/10 border rounded-[2.5rem] pt-16 pr-16 pb-16 pl-16 relative" href="/travel" style={{-MouseX: '1200.70166015625px', -MouseY: '-62.85417175292969px'}}>
+<a className="spotlight-card shrink-0 flex overflow-hidden cursor-pointer group bg-[#050507] w-[70vw] h-[65vh] max-w-[900px] border-white/10 border rounded-[2.5rem] pt-16 pr-16 pb-16 pl-16 relative" href="/travel" style={{'--mouse-x': '1200.70166015625px', '--mouse-y': '-62.85417175292969px'}}>
 <div className="w-5/12 flex flex-col justify-between relative z-10 h-full text-start">
 <div className="">
 <div className="inline-flex p-4 rounded-2xl bg-white/5 border border-white/10 mb-10 shadow-xl backdrop-blur-md group-hover:bg-white/10 transition-colors">
@@ -760,7 +802,7 @@ blob: {
 </div>
 </a>
 
-<a className="spotlight-card shrink-0 flex overflow-hidden cursor-pointer group bg-[#050507] w-[70vw] h-[65vh] max-w-[900px] border-white/10 border rounded-[2.5rem] pt-16 pr-16 pb-16 pl-16 relative" href="/sharehub" style={{-MouseX: '13.872222900390625px', -MouseY: '197.70895385742188px'}}>
+<a className="spotlight-card shrink-0 flex overflow-hidden cursor-pointer group bg-[#050507] w-[70vw] h-[65vh] max-w-[900px] border-white/10 border rounded-[2.5rem] pt-16 pr-16 pb-16 pl-16 relative" href="/sharehub" style={{'--mouse-x': '13.872222900390625px', '--mouse-y': '197.70895385742188px'}}>
 <div className="w-5/12 flex flex-col justify-between relative z-10 h-full text-start">
 <div className="">
 <div className="inline-flex p-4 rounded-2xl bg-white/5 border border-white/10 mb-10 shadow-xl backdrop-blur-md group-hover:bg-white/10 transition-colors">
@@ -793,7 +835,7 @@ blob: {
 </div>
 </a>
 
-<a className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507] cursor-pointer group" href="#trustee" style={{-MouseX: '-645.54833984375px', -MouseY: '-62.85417175292969px'}}>
+<a className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507] cursor-pointer group" href="#trustee" style={{'--mouse-x': '-645.54833984375px', '--mouse-y': '-62.85417175292969px'}}>
 <div className="w-5/12 flex flex-col justify-between relative z-10 h-full text-start">
 <div>
 <div className="inline-flex p-4 rounded-2xl bg-white/5 border border-white/10 mb-10 shadow-xl backdrop-blur-md group-hover:bg-white/10 transition-colors">
@@ -834,15 +876,15 @@ blob: {
 
 <section className="block lg:hidden px-6 py-20 space-y-8 bg-luxota-bg">
 <span className="text-xs text-luxota-accent font-mono mb-2 block tracking-widest" data-i18n="arch_label">[ 02 — ARCHITECTURE ]</span>
-<a className="spotlight-card rounded-3xl p-8 border border-white/10 block [animation:fadeInUp_0.8s_ease-out_both] animate-on-scroll" href="#" style={{-MouseX: '730px', -MouseY: '76px'}}>
+<a className="spotlight-card rounded-3xl p-8 border border-white/10 block [animation:fadeInUp_0.8s_ease-out_both] animate-on-scroll" href="#" style={{'--mouse-x': '730px', '--mouse-y': '76px'}}>
 <h3 className="text-2xl text-white font-medium mb-2" data-i18n="card_travel_title">Travel Portal</h3>
 <p className="text-sm text-luxota-dim" data-i18n="card_travel_desc">The front-end engine. Deploy white-label booking sites in minutes. Completely headless architecture allows for infinite customization.</p>
 </a>
-<a className="spotlight-card rounded-3xl p-8 border border-white/10 block [animation:fadeInUp_0.8s_ease-out_0.1s_both] animate-on-scroll" href="#" style={{-MouseX: '730px', -MouseY: '76px'}}>
+<a className="spotlight-card rounded-3xl p-8 border border-white/10 block [animation:fadeInUp_0.8s_ease-out_0.1s_both] animate-on-scroll" href="#" style={{'--mouse-x': '730px', '--mouse-y': '76px'}}>
 <h3 className="text-2xl text-white font-medium mb-2" data-i18n="card_sharehub_title">ShareHub</h3>
 <p className="text-sm text-luxota-dim" data-i18n="card_sharehub_desc">The liquidity layer. Connect seamlessly with suppliers and other agencies. Inventory flows like water through a unified API.</p>
 </a>
-<a className="spotlight-card rounded-3xl p-8 border border-white/10 block [animation:fadeInUp_0.8s_ease-out_0.2s_both] animate-on-scroll" href="#" style={{-MouseX: '730px', -MouseY: '76px'}}>
+<a className="spotlight-card rounded-3xl p-8 border border-white/10 block [animation:fadeInUp_0.8s_ease-out_0.2s_both] animate-on-scroll" href="#" style={{'--mouse-x': '730px', '--mouse-y': '76px'}}>
 <h3 className="text-2xl text-white font-medium mb-2" data-i18n="card_trustee_title">Trustee</h3>
 <p className="text-sm text-luxota-dim" data-i18n="card_trustee_desc">The governance sentinel. Automated compliance, payment reconciliation, and security auditing running in the background.</p>
 </a>

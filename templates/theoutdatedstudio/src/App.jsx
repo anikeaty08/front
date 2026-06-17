@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -243,6 +279,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -385,7 +427,7 @@ addUtilities({
 </div>
 <div className="flex flex-col gap-8 max-w-5xl mx-auto relative" id="project-container">
 
-<div className="project-card group sticky top-24 spotlight-card bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_2px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500" data-category="branding" style={{-MouseX: '877px', -MouseY: '140px'}}>
+<div className="project-card group sticky top-24 spotlight-card bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_2px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500" data-category="branding" style={{'--mouse-x': '877px', '--mouse-y': '140px'}}>
 <div className="relative z-10">
 <div className="flex justify-between items-start mb-12">
 <div className="flex gap-2">
@@ -418,7 +460,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="project-card group sticky top-32 spotlight-card bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_2px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500" data-category="print" style={{-MouseX: '889px', -MouseY: '86px'}}>
+<div className="project-card group sticky top-32 spotlight-card bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_2px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500" data-category="print" style={{'--mouse-x': '889px', '--mouse-y': '86px'}}>
 <div className="relative z-10">
 <div className="flex justify-between items-start mb-12">
 <div className="flex gap-2">
@@ -452,7 +494,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="project-card group sticky top-40 spotlight-card bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_2px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500" data-category="branding" style={{-MouseX: '903px', -MouseY: '5px'}}>
+<div className="project-card group sticky top-40 spotlight-card bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_2px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500" data-category="branding" style={{'--mouse-x': '903px', '--mouse-y': '5px'}}>
 <div className="relative z-10">
 <div className="flex justify-between items-start mb-12">
 <div className="flex gap-2">
@@ -543,7 +585,7 @@ addUtilities({
             </h2>
 <div className="grid md:grid-cols-2 gap-6">
 
-<div className="spotlight-card group bg-white rounded-2xl p-8 border border-gray-100 hover:border-gray-200 shadow-sm transition-all h-full flex flex-col justify-between" style={{-MouseX: '497px', -MouseY: '231px'}}>
+<div className="spotlight-card group bg-white rounded-2xl p-8 border border-gray-100 hover:border-gray-200 shadow-sm transition-all h-full flex flex-col justify-between" style={{'--mouse-x': '497px', '--mouse-y': '231px'}}>
 <div className="relative z-10">
 <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center mb-6 text-gray-900 group-hover:bg-rose-500 group-hover:text-white transition-colors duration-300">
 <svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m12 19 7-7 3 3-7 7-3-3z"></path><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="m2 2 7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>

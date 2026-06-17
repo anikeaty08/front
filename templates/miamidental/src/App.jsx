@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -31,6 +67,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -104,7 +146,7 @@ gtag('config', 'G-2M6V79H761');
                   Swipe to compare
                 </span>
 </div>
-<div className="aspect-[4/3] sm:aspect-video md:aspect-[4/3] overflow-hidden before-after-slider group cursor-ew-resize select-none bg-zinc-900 w-full border-zinc-200 border rounded-[32px] relative shadow-sm" style={{-Position: '49.14383561643836%'}}>
+<div className="aspect-[4/3] sm:aspect-video md:aspect-[4/3] overflow-hidden before-after-slider group cursor-ew-resize select-none bg-zinc-900 w-full border-zinc-200 border rounded-[32px] relative shadow-sm" style={{'--position': '49.14383561643836%'}}>
 <img alt="Macro Close-up of Healthy Human Smile" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3d0bb2d0-6fc8-48bd-85fe-f9bf6f7bdaae_1600w.png"/>
 <div className="absolute inset-0 w-full h-full image-before border-r border-white/50 group-hover:border-white transition-colors pointer-events-none">
 <img alt="Macro View of Discolored Teeth and Diastema" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/131d686c-50ac-4005-bdcb-0783bfc07028_1600w.png"/>
@@ -284,7 +326,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 <div className="flex flex-col gap-4">
-<div className="aspect-[4/3] overflow-hidden before-after-slider group cursor-ew-resize select-none bg-zinc-900 w-full border-zinc-200 border rounded-[32px] relative shadow-sm" style={{-Position: '50.086286471083994%'}}>
+<div className="aspect-[4/3] overflow-hidden before-after-slider group cursor-ew-resize select-none bg-zinc-900 w-full border-zinc-200 border rounded-[32px] relative shadow-sm" style={{'--position': '50.086286471083994%'}}>
 <img alt="Macro View of a Healthy Smile and Teeth" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0219e3ae-0c4d-4bf6-b11a-c7aef59ec7d5_800w.png"/>
 <div className="absolute inset-0 w-full h-full image-before border-r border-white/50 group-hover:border-white transition-colors pointer-events-none">
 <img alt="Screenshot of teeth before" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4f1f324f-c40e-4cb5-8726-4201a821cc66_800w.png"/>
@@ -303,7 +345,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="flex flex-col gap-4">
-<div className="aspect-[4/3] overflow-hidden before-after-slider group cursor-ew-resize select-none bg-zinc-900 w-full border-zinc-200 border rounded-[32px] relative shadow-sm" style={{-Position: '50.77154610213705%'}}>
+<div className="aspect-[4/3] overflow-hidden before-after-slider group cursor-ew-resize select-none bg-zinc-900 w-full border-zinc-200 border rounded-[32px] relative shadow-sm" style={{'--position': '50.77154610213705%'}}>
 <img alt="Macro View of a Healthy Male Smile" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6334a9d5-eb96-4097-aae1-09790c760e60_800w.png"/>
 <div className="absolute inset-0 w-full h-full image-before border-r border-white/50 group-hover:border-white transition-colors pointer-events-none">
 <img alt="Extreme Close-up of Man Smiling Showing Teeth Before" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/96ad6cdb-c9a4-4981-ace0-8a02c4c51f0b_800w.jpg"/>
@@ -322,7 +364,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="flex flex-col gap-4 hidden lg:flex">
-<div className="relative w-full aspect-[4/3] bg-zinc-900 rounded-[32px] overflow-hidden shadow-sm border border-zinc-200 before-after-slider group cursor-ew-resize select-none" style={{-Position: '50%'}}>
+<div className="relative w-full aspect-[4/3] bg-zinc-900 rounded-[32px] overflow-hidden shadow-sm border border-zinc-200 before-after-slider group cursor-ew-resize select-none" style={{'--position': '50%'}}>
 <img alt="Extreme Close-up of Healthy White Teeth and Smile" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8e07a0da-6a93-480f-84d8-e9cb64ccda6c_800w.png"/>
 <div className="absolute inset-0 w-full h-full image-before border-r border-white/50 group-hover:border-white transition-colors pointer-events-none">
 <img alt="Extreme Close-up of Yellowed Teeth and Gums" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b1272e19-5be7-4c12-beb6-0d6c19b4a5f4_800w.png"/>

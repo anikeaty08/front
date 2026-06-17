@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     lucide.createIcons();
@@ -18,6 +54,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -26,8 +68,8 @@ export default function App() {
 <div className="w-full max-w-5xl mx-auto">
 
 <header className="text-center">
-<h1 className="text-5xl tracking-tight font-semibold text-white mb-3" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Powerful Features</h1>
-<p className="text-lg text-zinc-400 max-w-xl mx-auto" style={{fontFamily: '\'Manrope\',sans-serif'}}>
+<h1 className="text-5xl tracking-tight font-semibold text-white mb-3" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Powerful Features</h1>
+<p className="text-lg text-zinc-400 max-w-xl mx-auto" style={{fontFamily: '\'Manrope\', sans-serif'}}>
         Everything you need to build, scale, and innovate—without compromise.
       </p>
 </header>
@@ -40,43 +82,43 @@ export default function App() {
 <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-indigo-500/15 mb-4">
 <i className="text-indigo-400" data-lucide="cpu"></i>
 </div>
-<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>High Performance</h3>
-<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\',sans-serif'}}>Optimized algorithms ensure lightning-fast load times and fluid interactions.</p>
+<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>High Performance</h3>
+<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\', sans-serif'}}>Optimized algorithms ensure lightning-fast load times and fluid interactions.</p>
 </article>
 <article aria-label="Secure by Design" className="feature-card opacity-0 translate-y-4 transition-all duration-700 ease-out bg-zinc-800/60 p-6 rounded-2xl border border-zinc-700/40 hover:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 group" role="button" tabindex="0">
 <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-indigo-500/15 mb-4">
 <i className="text-indigo-400" data-lucide="shield-check"></i>
 </div>
-<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Secure by Design</h3>
-<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\',sans-serif'}}>Industry-standard encryption and best practices keep your data protected.</p>
+<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Secure by Design</h3>
+<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\', sans-serif'}}>Industry-standard encryption and best practices keep your data protected.</p>
 </article>
 <article aria-label="Real-time Insights" className="feature-card opacity-0 translate-y-4 transition-all duration-700 ease-out bg-zinc-800/60 p-6 rounded-2xl border border-zinc-700/40 hover:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 group" role="button" tabindex="0">
 <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-indigo-500/15 mb-4">
 <i className="text-indigo-400" data-lucide="activity"></i>
 </div>
-<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Real-time Insights</h3>
-<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\',sans-serif'}}>Live dashboards let you act on trends the moment they emerge.</p>
+<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Real-time Insights</h3>
+<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\', sans-serif'}}>Live dashboards let you act on trends the moment they emerge.</p>
 </article>
 <article aria-label="Intuitive Dashboard" className="feature-card opacity-0 translate-y-4 transition-all duration-700 ease-out bg-zinc-800/60 p-6 rounded-2xl border border-zinc-700/40 hover:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 group" role="button" tabindex="0">
 <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-indigo-500/15 mb-4">
 <i className="text-indigo-400" data-lucide="layout-dashboard"></i>
 </div>
-<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Intuitive Dashboard</h3>
-<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\',sans-serif'}}>A clean interface that keeps essential tools right at your fingertips.</p>
+<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Intuitive Dashboard</h3>
+<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\', sans-serif'}}>A clean interface that keeps essential tools right at your fingertips.</p>
 </article>
 <article aria-label="Modular Architecture" className="feature-card opacity-0 translate-y-4 transition-all duration-700 ease-out bg-zinc-800/60 p-6 rounded-2xl border border-zinc-700/40 hover:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 group" role="button" tabindex="0">
 <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-indigo-500/15 mb-4">
 <i className="text-indigo-400" data-lucide="layers"></i>
 </div>
-<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Modular Architecture</h3>
-<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\',sans-serif'}}>Swap components in or out to tailor workflows to your needs.</p>
+<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Modular Architecture</h3>
+<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\', sans-serif'}}>Swap components in or out to tailor workflows to your needs.</p>
 </article>
 <article aria-label="Blazing Deployment" className="feature-card opacity-0 translate-y-4 transition-all duration-700 ease-out bg-zinc-800/60 p-6 rounded-2xl border border-zinc-700/40 hover:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 group" role="button" tabindex="0">
 <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-indigo-500/15 mb-4">
 <i className="text-indigo-400" data-lucide="zap"></i>
 </div>
-<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\',sans-serif'}}>Blazing Deployment</h3>
-<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\',sans-serif'}}>Push updates in seconds with zero downtime and instant rollbacks.</p>
+<h3 className="text-xl font-semibold text-white tracking-tight mb-1" style={{fontFamily: '\'Plus Jakarta Sans\', sans-serif'}}>Blazing Deployment</h3>
+<p className="text-sm text-zinc-400" style={{fontFamily: '\'Manrope\', sans-serif'}}>Push updates in seconds with zero downtime and instant rollbacks.</p>
 </article>
 </section>
 </div>

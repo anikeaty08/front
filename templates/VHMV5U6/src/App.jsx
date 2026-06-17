@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -21,6 +57,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -31,7 +73,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <video autoplay="" className="w-full h-full object-cover" loop="" muted="" playsinline="" src="https://cdn.midjourney.com/video/349c53fd-c486-4c6a-967c-26c51833e4a6/1.mp4"></video>
 </div>
 
-<div aria-hidden="true" className="pointer-events-none fixed inset-0 opacity-10" style={{backgroundSize: '64px 64px', backgroundImage: 'linear-gradient(to right,#0001 1px,transparent 1px),linear-gradient(to bottom,#0001 1px,transparent 1px)'}}></div>
+<div aria-hidden="true" className="pointer-events-none fixed inset-0 opacity-10" style={{backgroundSize: '64px 64px', backgroundImage: 'linear-gradient(to right, #0001 1px, transparent 1px), linear-gradient(to bottom,#0001 1px,transparent 1px)'}}></div>
 
 <div className="relative lg:mx-0 w-full max-w-4xl bg-black/80 border-slate-800 border rounded-3xl mr-4 ml-4 shadow-md backdrop-blur-sm">
 

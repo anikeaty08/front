@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -240,6 +276,12 @@ blob: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -452,7 +494,7 @@ blob: {
             </span>
 </div>
 <div className="grid md:grid-cols-3 gap-6" id="cards-container">
-<div className="spotlight-card group p-8 rounded-3xl cursor-default transition-all duration-500 hover:-translate-y-2" style={{-MouseX: '485px', -MouseY: '78px'}}>
+<div className="spotlight-card group p-8 rounded-3xl cursor-default transition-all duration-500 hover:-translate-y-2" style={{'--mouse-x': '485px', '--mouse-y': '78px'}}>
 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-zinc-200 group-hover:bg-white/10 transition-colors duration-500">
 <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:box" data-strokeWidth="1.5" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7l8.7 5l8.7-5M12 22V12"></path></g></svg>
 </div>
@@ -465,7 +507,7 @@ blob: {
                 dimensions.
               </p>
 </div>
-<div className="spotlight-card group p-8 rounded-3xl cursor-default transition-all duration-500 hover:-translate-y-2" style={{-MouseX: '218.34375px', -MouseY: '78px'}}>
+<div className="spotlight-card group p-8 rounded-3xl cursor-default transition-all duration-500 hover:-translate-y-2" style={{'--mouse-x': '218.34375px', '--mouse-y': '78px'}}>
 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-zinc-200 group-hover:bg-white/10 transition-colors duration-500">
 <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:circle" data-strokeWidth="1.5" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" fill="none" r="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></circle></svg>
 </div>
@@ -478,7 +520,7 @@ blob: {
                 and planets.
               </p>
 </div>
-<div className="spotlight-card group p-8 rounded-3xl cursor-default transition-all duration-500 hover:-translate-y-2" style={{-MouseX: '-48.328125px', -MouseY: '78px'}}>
+<div className="spotlight-card group p-8 rounded-3xl cursor-default transition-all duration-500 hover:-translate-y-2" style={{'--mouse-x': '-48.328125px', '--mouse-y': '78px'}}>
 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-zinc-200 group-hover:bg-white/10 transition-colors duration-500">
 <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:triangle" data-strokeWidth="1.5" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M13.73 4a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
 </div>

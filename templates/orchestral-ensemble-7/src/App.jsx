@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -43,10 +85,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex gap-2 fade-up delay-100 justify-center w-full lg:w-auto">
 <a className="hover:bg-stone-900 hover:text-[#F4F1EA] flex items-center justify-center transition-all duration-300 group bg-white/40 w-12 h-12 border-stone-900/10 border rounded-full shadow-sm" href="#">
-<svg className="lucide lucide-mail w-5 h-5" data-darkreader-inline-stroke="" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></svg>
+<svg className="lucide lucide-mail w-5 h-5" data-darkreader-inline-stroke="" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect height="16" rx="2" width="20" x="2" y="4"></rect></svg>
 </a>
 <a className="hover:bg-stone-900 hover:text-[#F4F1EA] flex items-center justify-center transition-all duration-300 group bg-white/40 w-12 h-12 border-stone-900/10 border rounded-full shadow-sm" href="#">
-<svg className="lucide lucide-music w-5 h-5" data-darkreader-inline-stroke="" data-lucide="music" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+<svg className="lucide lucide-music w-5 h-5" data-darkreader-inline-stroke="" data-lucide="music" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
 </a>
 <a className="group inline-flex items-center justify-center overflow-hidden transition duration-300 ease-out hover:bg-stone-900 hover:text-[#F4F1EA] font-semibold text-stone-900 bg-white/40 h-12 border-stone-900/10 border rounded-full pr-6 pl-6 relative shadow-sm" href="#">
 <span className="text-base tracking-wide">Sign Up</span>
@@ -100,7 +142,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xl font-serif">嘉義親子藝術節</p>
 </div>
 <div className="h-10 w-10 bg-[#F4F1EA] rounded-full flex items-center justify-center text-stone-900">
-<svg className="lucide lucide-arrow-up-right w-5 h-5" data-darkreader-inline-stroke="" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+<svg className="lucide lucide-arrow-up-right w-5 h-5" data-darkreader-inline-stroke="" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
 </div>
 </div>
 </div>
@@ -146,10 +188,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="leading-relaxed hidden lg:block text-xl font-light text-right max-w-sm ml-auto">音樂讓人相遇，也為生活增添溫度。</p>
 <div className="flex gap-3 self-end">
 <button className="flex hover:bg-stone-900 hover:text-[#F4F1EA] transition-colors group bg-white/40 w-14 h-14 border-stone-900/10 border rounded-full items-center justify-center">
-<svg className="lucide lucide-arrow-left stroke-1 w-[24px] h-[24px]" data-darkreader-inline-stroke="" data-icon-replaced="true" data-lucide="arrow-left" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px', -DarkreaderInlineStroke: 'currentColor', color: 'rgb(71, 85, 105)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+<svg className="lucide lucide-arrow-left stroke-1 w-[24px] h-[24px]" data-darkreader-inline-stroke="" data-icon-replaced="true" data-lucide="arrow-left" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px', '--darkreader-inline-stroke': 'currentColor', color: 'rgb(71, 85, 105)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
 </button>
 <button className="w-14 h-14 rounded-full border border-stone-900/10 flex items-center justify-center hover:bg-stone-900 hover:text-[#F4F1EA] transition-colors group bg-white/40">
-<svg className="lucide lucide-arrow-right stroke-1 w-[24px] h-[24px] text-slate-600" data-darkreader-inline-stroke="" data-icon-replaced="true" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px', -DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+<svg className="lucide lucide-arrow-right stroke-1 w-[24px] h-[24px] text-slate-600" data-darkreader-inline-stroke="" data-icon-replaced="true" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px', '--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </button>
 </div>
 </div>
@@ -220,7 +262,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                              View All Projects
                          </button>
 <div className="w-16 h-[58px] rounded-r-full border border-stone-900 flex items-center justify-center hover:bg-stone-900 hover:text-[#F4F1EA] transition-colors bg-transparent -ml-[1px]">
-<svg className="lucide lucide-arrow-up-right w-6 h-6 stroke-1 group-hover:rotate-45 transition-transform duration-300" data-darkreader-inline-stroke="" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+<svg className="lucide lucide-arrow-up-right w-6 h-6 stroke-1 group-hover:rotate-45 transition-transform duration-300" data-darkreader-inline-stroke="" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
 </div>
 </div>
 
@@ -248,7 +290,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex justify-between items-start relative z-10">
 <h3 className="font-serif text-4xl tracking-wider bg-[conic-gradient(from_180deg,var(--tw-gradient-stops))] from-black to-black/50 xl:bg-clip-text xl:text-transparent">樂齡學程</h3>
 <div className="w-10 h-10 rounded-full border border-stone-200 flex items-center justify-center group-hover:bg-stone-900 group-hover:text-white transition-colors bg-white/40 backdrop-blur-sm">
-<svg className="lucide lucide-graduation-cap w-5 h-5" data-darkreader-inline-stroke="" data-lucide="graduation-cap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+<svg className="lucide lucide-graduation-cap w-5 h-5" data-darkreader-inline-stroke="" data-lucide="graduation-cap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
 </div>
 </div>
 <p className="z-10 text-base font-light text-slate-900 tracking-normal relative">西洋樂器 | 國樂 | 音樂理論 | 音樂鑑賞</p>
@@ -286,7 +328,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                             Get Consultation
                         </button>
 <button className="h-14 w-14 border border-stone-700 rounded-full flex items-center justify-center text-[#F4F1EA] hover:bg-stone-800 transition-colors">
-<svg className="lucide lucide-arrow-right w-6 h-6" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{-DarkreaderInlineStroke: 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+<svg className="lucide lucide-arrow-right w-6 h-6" data-darkreader-inline-stroke="" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{'--darkreader-inline-stroke': 'currentColor'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </button>
 </div>
 </div>

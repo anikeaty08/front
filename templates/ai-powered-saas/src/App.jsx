@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -37,6 +73,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -378,7 +420,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-[#030014]"></div>
 
 <div className="absolute top-[450px] w-[200vw] h-[450px] border-t border-[#c084fc]/10" style={{perspective: '1000px', left: '-50vw'}}>
-<div className="w-full h-full" style={{transformOrigin: 'top', backgroundImage: 'linear-gradient(to right, rgba(192,132,252,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(192,132,252,0.06) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)'}}></div>
+<div className="w-full h-full" style={{transformOrigin: 'top', backgroundImage: 'linear-gradient(to right, rgba(192, 132, 252, 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(192, 132, 252, 0.06) 1px, transparent 1px)', backgroundSize: '60px 60px', maskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 70%)'}}></div>
 </div>
 
 <div className="absolute top-[450px] w-[800px] h-[350px] flex justify-center" style={{perspective: '1000px'}}>
@@ -1202,11 +1244,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 
-<div className="slice-panel" style={{clipPath: 'inset(0 90% 0 0)', -StartY: '60px', -Delay: '0.5s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 90% 0 0)', '--start-y': '60px', '--delay': '0.5s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1221,14 +1263,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1239,7 +1281,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1278,11 +1320,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 80% 0 10%)', -StartY: '100px', -Delay: '0.4s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 80% 0 10%)', '--start-y': '100px', '--delay': '0.4s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1297,14 +1339,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1315,7 +1357,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1354,11 +1396,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 70% 0 20%)', -StartY: '70px', -Delay: '0.3s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 70% 0 20%)', '--start-y': '70px', '--delay': '0.3s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1373,14 +1415,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1391,7 +1433,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1428,11 +1470,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 60% 0 30%)', -StartY: '120px', -Delay: '0.2s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 60% 0 30%)', '--start-y': '120px', '--delay': '0.2s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1447,14 +1489,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1465,7 +1507,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1504,11 +1546,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 50% 0 40%)', -StartY: '80px', -Delay: '0.1s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 50% 0 40%)', '--start-y': '80px', '--delay': '0.1s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1523,14 +1565,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1541,7 +1583,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1580,11 +1622,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 40% 0 50%)', -StartY: '110px', -Delay: '0.15s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 40% 0 50%)', '--start-y': '110px', '--delay': '0.15s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1599,14 +1641,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1617,7 +1659,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1656,11 +1698,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 30% 0 60%)', -StartY: '70px', -Delay: '0.25s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 30% 0 60%)', '--start-y': '70px', '--delay': '0.25s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1675,14 +1717,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1693,7 +1735,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1732,11 +1774,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 20% 0 70%)', -StartY: '100px', -Delay: '0.35s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 20% 0 70%)', '--start-y': '100px', '--delay': '0.35s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1751,14 +1793,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1769,7 +1811,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1808,11 +1850,11 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 10% 0 80%)', -StartY: '60px', -Delay: '0.45s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 10% 0 80%)', '--start-y': '60px', '--delay': '0.45s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden">
 <div className="absolute inset-0 w-[200%] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent sweep-anim pointer-events-none z-20"></div>
 <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center text-left">
-<div className="inner-reveal" style={{-InnerDelay: '1.2s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.2s'}}>
 <h3 className="text-white text-xl font-medium mb-6">
                   Tue, November 14th, 2023
                 </h3>
@@ -1827,14 +1869,14 @@ gtag('config', 'G-2M6V79H761');
                   </p>
 </div>
 </div>
-<div className="inner-reveal mt-10 space-y-4" style={{-InnerDelay: '1.4s'}}>
+<div className="inner-reveal mt-10 space-y-4" style={{'--inner-delay': '1.4s'}}>
 <div className="h-1.5 w-3/4 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-1/2 bg-white/5 rounded-full"></div>
 <div className="h-1.5 w-5/6 bg-white/5 rounded-full"></div>
 </div>
 </div>
 <div className="w-full md:w-[380px] border-t md:border-t-0 md:border-l border-white/5 bg-white/[0.01] p-8 md:p-12 relative z-10 flex flex-col justify-center">
-<div className="inner-reveal flex justify-between items-center mb-8" style={{-InnerDelay: '1.3s'}}>
+<div className="inner-reveal flex justify-between items-center mb-8" style={{'--inner-delay': '1.3s'}}>
 <h3 className="text-white font-medium text-base">November 2023</h3>
 <div className="flex gap-2">
 <div className="w-7 h-7 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/50">
@@ -1845,7 +1887,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="inner-reveal" style={{-InnerDelay: '1.5s'}}>
+<div className="inner-reveal" style={{'--inner-delay': '1.5s'}}>
 <div className="grid grid-cols-7 gap-y-5 gap-x-2 text-center text-sm">
 <div className="text-xs text-white/30 font-medium">Mo</div>
 <div className="text-xs text-white/30 font-medium">Tu</div>
@@ -1884,7 +1926,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="slice-panel" style={{clipPath: 'inset(0 0 0 90%)', -StartY: '90px', -Delay: '0.55s'}}>
+<div className="slice-panel" style={{clipPath: 'inset(0 0 0 90%)', '--start-y': '90px', '--delay': '0.55s'}}>
 <div className="w-full h-full flex flex-col md:flex-row bg-[#060410]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(147,130,255,0.15)] overflow-hidden"></div>
 </div>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -185,6 +221,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -237,7 +279,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>──────</span>
 </div>
 <div className="flex flex-col sm:flex-row items-center gap-3 mt-8">
-<button className="w-full sm:w-auto text-xs font-semibold px-8 py-3.5 rounded-lg transition-all hover:brightness-110 hover:scale-105 uppercase tracking-wider border border-amber-500/30" style={{background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.15))', color: '#fbbf24', boxShadow: '0 0 40px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(251,191,36,0.1)'}}>
+<button className="w-full sm:w-auto text-xs font-semibold px-8 py-3.5 rounded-lg transition-all hover:brightness-110 hover:scale-105 uppercase tracking-wider border border-amber-500/30" style={{background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.15))', color: '#fbbf24', boxShadow: '0 0 40px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(251,191,36,0.1)'}}>
 <span className="flex items-center gap-2 justify-center">
 <iconify-icon icon="solar:play-bold" width="14"></iconify-icon>
                     Activate Pass — $14.99
@@ -347,7 +389,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="relative z-10 px-6 md:px-12 lg:px-20 py-20">
-<div className="rounded-xl border border-amber-500/10 overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(245,158,11,0.02), rgba(0,0,0,0.6))', backdropFilter: 'blur(10px)'}}>
+<div className="rounded-xl border border-amber-500/10 overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.02), rgba(0, 0, 0, 0.6))', backdropFilter: 'blur(10px)'}}>
 <div className="p-8 md:p-12 lg:p-16">
 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
 <div className="flex-1">
@@ -388,7 +430,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                             </button>
 </div>
 
-<div className="flex-1 lg:w-72 rounded-lg border border-amber-500/30 p-6 relative overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(245,158,11,0.06), rgba(0,0,0,0.4))', backdropFilter: 'blur(10px)'}}>
+<div className="flex-1 lg:w-72 rounded-lg border border-amber-500/30 p-6 relative overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.06), rgba(0, 0, 0, 0.4))', backdropFilter: 'blur(10px)'}}>
 <div className="absolute top-3 right-3 text-[9px] font-bold text-black bg-amber-400 px-2 py-0.5 rounded uppercase tracking-wider" style={{fontFamily: '\'Share Tech Mono\', monospace'}}>REC</div>
 <div className="text-xs font-medium text-amber-300/80 uppercase tracking-wider">Premium Pass</div>
 <div className="text-2xl font-bold tracking-tight mt-2 text-amber-400" style={{fontFamily: '\'Share Tech Mono\', monospace'}}>$14.99</div>
@@ -415,7 +457,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                     Karambit Fade Knife
                                 </div>
 </div>
-<button className="w-full mt-6 text-[10px] font-semibold px-4 py-2.5 rounded-lg transition-all hover:brightness-110 uppercase tracking-wider border border-amber-500/40" style={{background: 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(217,119,6,0.2))', color: '#fbbf24', boxShadow: '0 0 30px rgba(245, 158, 11, 0.1)'}}>
+<button className="w-full mt-6 text-[10px] font-semibold px-4 py-2.5 rounded-lg transition-all hover:brightness-110 uppercase tracking-wider border border-amber-500/40" style={{background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.2))', color: '#fbbf24', boxShadow: '0 0 30px rgba(245, 158, 11, 0.1)'}}>
                                 Upgrade Now
                             </button>
 </div>
@@ -480,7 +522,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative h-2 rounded-full overflow-hidden" style={{background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.1)'}}>
+<div className="relative h-2 rounded-full overflow-hidden" style={{background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245,158,11,0.1)'}}>
 <div className="h-full rounded-full relative" style={{width: '34%', background: 'linear-gradient(90deg, #b45309, #f59e0b, #fbbf24)'}}>
 <div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)', animation: 'shimmer 2s infinite'}}></div>
 </div>
@@ -534,7 +576,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-neutral-500 mt-6 max-w-lg mx-auto text-xs relative">
                 Join millions of players already earning exclusive rewards. Activate your Battle Pass today.
             </p>
-<button className="relative mt-10 text-xs font-semibold px-10 py-4 rounded-lg transition-all hover:brightness-110 hover:scale-105 uppercase tracking-wider border border-amber-500/30" style={{background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.15))', color: '#fbbf24', boxShadow: '0 0 60px rgba(245, 158, 11, 0.15)'}}>
+<button className="relative mt-10 text-xs font-semibold px-10 py-4 rounded-lg transition-all hover:brightness-110 hover:scale-105 uppercase tracking-wider border border-amber-500/30" style={{background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.15))', color: '#fbbf24', boxShadow: '0 0 60px rgba(245, 158, 11, 0.15)'}}>
 <span className="flex items-center gap-2">
 <iconify-icon icon="solar:rocket-2-linear" style={{strokeWidth: '1.5'}} width="16"></iconify-icon>
                     Get Battle Pass — $14.99

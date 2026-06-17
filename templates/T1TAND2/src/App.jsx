@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -229,6 +265,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -303,7 +345,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="animate-[slideUp_0.7s_ease-out_0.15s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
 <div className="flex items-start gap-3">
-<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37,99,235,0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37, 99, 235, 0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
 <svg className="lucide lucide-goal h-5 w-5" data-lucide="goal" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 13V2l8 4-8 4"></path><path d="M20.561 10.222a9 9 0 1 1-12.55-5.29"></path><path d="M8.002 9.997a5 5 0 1 0 8.9 2.02"></path></svg>
 </div>
 <div className="">
@@ -315,7 +357,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="animate-[slideUp_0.7s_ease-out_0.2s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
 <div className="flex items-start gap-3">
-<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37,99,235,0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37, 99, 235, 0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
 <svg className="lucide lucide-trending-up h-5 w-5" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
 </div>
 <div className="">
@@ -327,7 +369,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="animate-[slideUp_0.7s_ease-out_0.25s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
 <div className="flex items-start gap-3">
-<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37,99,235,0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37, 99, 235, 0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
 <svg className="lucide lucide-inbox h-5 w-5" data-lucide="inbox" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
 </div>
 <div className="">
@@ -339,7 +381,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="animate-[slideUp_0.7s_ease-out_0.3s_both] rounded-2xl border p-5 sm:p-6 border-white/10 bg-[#1f2937]">
 <div className="flex items-start gap-3">
-<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(245,158,11,0.15)', color: '#f59e0b', ringColor: 'rgba(245,158,11,0.20)'}}>
+<div className="h-9 w-9 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', ringColor: 'rgba(245,158,11,0.20)'}}>
 <svg className="lucide lucide-binoculars h-5 w-5" data-lucide="binoculars" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10 10h4"></path><path d="M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3"></path><path d="M20 21a2 2 0 0 0 2-2v-3.851c0-1.39-2-2.962-2-4.829V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2z"></path><path d="M 22 16 L 2 16"></path><path d="M4 21a2 2 0 0 1-2-2v-3.851c0-1.39 2-2.962 2-4.829V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2z"></path><path d="M9 7V4a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3"></path></svg>
 </div>
 <div className="">
@@ -377,7 +419,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <li className="flex items-center gap-2"><svg className="lucide lucide-megaphone h-4 w-4" data-lucide="megaphone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: '#2563eb'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path><path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14"></path><path d="M8 6v8"></path></svg> Meta Ad Campaign</li>
 <li className="flex items-center gap-2"><svg className="lucide lucide-notebook-tabs h-4 w-4" data-lucide="notebook-tabs" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: '#2563eb'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><rect height="20" rx="2" width="16" x="4" y="2"></rect><path d="M15 2v20"></path><path d="M15 7h5"></path><path d="M15 12h5"></path><path d="M15 17h5"></path></svg> Notion Workspace</li>
 </ul>
-<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: 'rgba(37,99,235,0.30)', backgroundColor: 'rgba(37,99,235,0.10)', color: '#c7d2fe'}}>
+<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: 'rgba(37, 99, 235, 0.30)', backgroundColor: 'rgba(37,99,235,0.10)', color: '#c7d2fe'}}>
               Our immediate priority is to build the machine that captures new business.
             </div>
 </article>
@@ -394,7 +436,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <li className="flex items-center gap-2"><svg className="lucide lucide-layout-dashboard h-4 w-4" data-lucide="layout-dashboard" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: '#2563eb'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="9" rx="1" width="7" x="3" y="3"></rect><rect height="5" rx="1" width="7" x="14" y="3"></rect><rect height="9" rx="1" width="7" x="14" y="12"></rect><rect height="5" rx="1" width="7" x="3" y="16"></rect></svg> Creative + offer testing</li>
 <li className="flex items-center gap-2"><svg className="lucide lucide-layers h-4 w-4" data-lucide="layers" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: '#2563eb'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg> Retargeting &amp; nurture flows</li>
 </ul>
-<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: 'rgba(255,255,255,0.10)', backgroundColor: 'rgba(255,255,255,0.05)', color: '#e5e7eb'}}>
+<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: 'rgba(255, 255, 255, 0.10)', backgroundColor: 'rgba(255,255,255,0.05)', color: '#e5e7eb'}}>
               Each new install represents <span style={{color: '#2563eb'}}>$25k+</span> per deal, compounding the ROI.
             </div>
 </article>
@@ -410,7 +452,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <li className="flex items-center gap-2"><svg className="lucide lucide-bot h-4 w-4" data-lucide="bot" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: '#2563eb'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg> AI-Powered Lead Qualification</li>
 <li className="flex items-center gap-2"><svg className="lucide lucide-sparkles h-4 w-4" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: '#2563eb'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg> Scale winning campaigns</li>
 </ul>
-<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: 'rgba(37,99,235,0.30)', backgroundColor: 'rgba(37,99,235,0.10)', color: '#c7d2fe'}}>
+<div className="mt-4 rounded-lg border p-4 text-sm" style={{borderColor: 'rgba(37, 99, 235, 0.30)', backgroundColor: 'rgba(37,99,235,0.10)', color: '#c7d2fe'}}>
               Rentals create recurring revenue while sales deliver big-ticket installs.
             </div>
 </article>
@@ -428,7 +470,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-8 items-stretch" id="aura-emfbjfx5s">
 
 <div className="bg-[#1f2937]/60 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 h-full flex flex-col">
-<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37,99,235,0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
+<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37, 99, 235, 0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
 <svg className="lucide lucide-calendar-check h-5 w-5" data-lucide="calendar-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>
 </div>
 <h3 className="mt-4 text-lg font-medium tracking-tight text-white">Checkpoints</h3>
@@ -436,7 +478,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="bg-[#1f2937]/60 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 h-full flex flex-col" id="aura-emfbjfuac">
-<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37,99,235,0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
+<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37, 99, 235, 0.15)', color: '#2563eb', ringColor: 'rgba(37,99,235,0.20)'}}>
 <svg className="lucide lucide-gauge h-5 w-5" data-lucide="gauge" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>
 </div>
 <h3 className="mt-4 text-lg font-medium tracking-tight text-white">Transparency</h3>
@@ -452,7 +494,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="scroll-mt-24 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 mb-16" id="thank-you">
 <div className="sm:p-10 bg-[#1f2937]/60 border-white/10 border rounded-3xl pt-6 pr-6 pb-6 pl-6">
 <div className="text-center">
-<div className="inline-flex h-12 w-12 items-center justify-center rounded-xl ring-1" style={{backgroundColor: 'rgba(37,99,235,0.15)', color: '#60a5fa', ringColor: 'rgba(37,99,235,0.25)'}}>
+<div className="inline-flex h-12 w-12 items-center justify-center rounded-xl ring-1" style={{backgroundColor: 'rgba(37, 99, 235, 0.15)', color: '#60a5fa', ringColor: 'rgba(37,99,235,0.25)'}}>
 <svg className="lucide lucide-mail-check h-6 w-6" data-lucide="mail-check" fill="none" height="28" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"></path><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path><path d="m16 19 2 2 4-4"></path></svg>
 </div>
 <h2 className="mt-5 text-3xl sm:text-5xl font-light tracking-tighter text-white">Thank you for approving Phase 1</h2>
@@ -490,7 +532,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-x h-4.5 w-4.5" data-lucide="x" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
 </button>
 <div className="flex items-center gap-3">
-<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37,99,235,0.15)', color: '#60a5fa', ringColor: 'rgba(37,99,235,0.25)'}}>
+<div className="h-10 w-10 rounded-lg ring-1 flex items-center justify-center" style={{backgroundColor: 'rgba(37, 99, 235, 0.15)', color: '#60a5fa', ringColor: 'rgba(37,99,235,0.25)'}}>
 <svg className="lucide lucide-party-popper h-5 w-5" data-lucide="party-popper" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 11.3 2 22l10.7-3.79"></path><path d="M4 3h.01"></path><path d="M22 8h.01"></path><path d="M15 2h.01"></path><path d="M22 20h.01"></path><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"></path><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17"></path><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"></path><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"></path></svg>
 </div>
 <div>

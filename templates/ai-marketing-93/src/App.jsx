@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -261,6 +297,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -591,7 +633,7 @@ addUtilities({
 
 <div className="absolute top-0 right-10 w-64 bg-[#0B0F19]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl floating-element z-20 parallax-element" data-speed="0.05">
 <div className="flex items-center gap-4 mb-4">
-<div className="w-10 h-10 rounded-full avatar-sphere relative" style={{-SphereColor: '#ec4899'}}></div>
+<div className="w-10 h-10 rounded-full avatar-sphere relative" style={{'--sphere-color': '#ec4899'}}></div>
 <div>
 <div className="h-2 w-20 bg-white/20 rounded-full mb-1"></div>
 <div className="h-2 w-12 bg-white/10 rounded-full"></div>
@@ -606,7 +648,7 @@ addUtilities({
 
 <div className="absolute bottom-10 left-10 w-64 bg-[#0B0F19]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl floating-element-delay z-30 parallax-element" data-speed="0.1">
 <div className="flex items-center gap-4 mb-4">
-<div className="w-10 h-10 rounded-full avatar-sphere relative" style={{-SphereColor: '#3b82f6'}}></div>
+<div className="w-10 h-10 rounded-full avatar-sphere relative" style={{'--sphere-color': '#3b82f6'}}></div>
 <div>
 <div className="h-2 w-24 bg-white/20 rounded-full mb-1"></div>
 <div className="h-2 w-16 bg-white/10 rounded-full"></div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -139,12 +175,18 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<header className="fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl -translate-x-1/2 px-6 py-3 header-pill glass-panel" style={{-PanelRadius: '9999px'}}>
+<header className="fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl -translate-x-1/2 px-6 py-3 header-pill glass-panel" style={{'--panel-radius': '9999px'}}>
 <nav className="flex transition-all duration-500 max-w-5xl mx-auto items-center justify-between" style={{}}>
 <a aria-label="Donovan Apps home" className="group flex items-center gap-3" href="#hero">
 <span className="text-base tracking-tighter text-[#F2F0EB] font-medium uppercase">
@@ -165,7 +207,7 @@ gtag('config', 'G-2M6V79H761');
             Offer
           </a>
 </div>
-<a className="group hidden md:flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-medium text-[#F2F0EB] transition-all duration-500 hover:scale-[1.03] hide-on-scroll bg-gradient-to-b from-blue-500/10 via-blue-500/20 to-blue-500/10" href="#apply" style={{boxShadow: '0 18px 35px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(59, 130, 246, 0.8), rgba(0, 0, 0, 0.4), rgba(59, 130, 246, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<a className="group hidden md:flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-medium text-[#F2F0EB] transition-all duration-500 hover:scale-[1.03] hide-on-scroll bg-gradient-to-b from-blue-500/10 via-blue-500/20 to-blue-500/10" href="#apply" style={{boxShadow: '0 18px 35px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(59, 130, 246, 0.8), rgba(0, 0, 0, 0.4), rgba(59, 130, 246, 0.8))', '--border-radius-before': '9999px'}}>
           Apply to build
           <iconify-icon aria-hidden="true" className="text-sm transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" icon="solar:arrow-right-up-linear"></iconify-icon>
 </a>
@@ -240,8 +282,8 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="relative overflow-hidden bg-[#0A0A0A] px-4 py-24 sm:px-6 md:py-32 lg:px-12 border-t border-[#F2F0EB]/5" id="credibility">
 <div className="mx-auto max-w-3xl">
-<div className="reveal p-4 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', -PanelRadius: '24px', -Highlight: '#22c55e'}}>
-<div className="rounded-2xl p-6 text-[#F2F0EB] sm:p-10 bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '1rem'}}>
+<div className="reveal p-4 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', '--panel-radius': '24px', '--highlight': '#22c55e'}}>
+<div className="rounded-2xl p-6 text-[#F2F0EB] sm:p-10 bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '1rem'}}>
 <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
 <div>
 <p className="text-xs font-medium uppercase tracking-widest text-[#A8A29E]">
@@ -252,13 +294,13 @@ gtag('config', 'G-2M6V79H761');
                     software as a teenager.
                   </p>
 </div>
-<span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <iconify-icon aria-hidden="true" className="text-3xl" icon="solar:user-circle-linear"></iconify-icon>
 </span>
 </div>
 <div className="mt-10 grid gap-4 sm:grid-cols-2">
 <div className="flex flex-col gap-4 rounded-2xl border border-[#F2F0EB]/5 bg-[#050505]/55 p-6" style={{background: 'linear-gradient(135deg, rgba(34,197,94,0.12), rgba(255,255,255,0.04))'}}>
-<span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <iconify-icon aria-hidden="true" className="text-2xl text-[#F2F0EB]" icon="solar:magnifer-linear"></iconify-icon>
 </span>
 <div>
@@ -269,7 +311,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="flex flex-col gap-4 rounded-2xl border border-[#F2F0EB]/5 bg-[#050505]/55 p-6" style={{background: 'linear-gradient(135deg, rgba(34,197,94,0.12), rgba(255,255,255,0.04))'}}>
-<span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <iconify-icon aria-hidden="true" className="text-2xl text-[#F2F0EB]" icon="solar:code-square-linear"></iconify-icon>
 </span>
 <div>
@@ -282,13 +324,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="mt-4 grid grid-cols-2 gap-4 text-center">
-<div className="rounded-2xl p-6 bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '1rem'}}>
+<div className="rounded-2xl p-6 bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '1rem'}}>
 <p className="text-xl tracking-tight font-medium">Zach Donovan</p>
 <p className="mt-1 text-sm text-[#F2F0EB]/45">
                   Lead Engineer &amp; Strategist
                 </p>
 </div>
-<div className="rounded-2xl p-6 bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '1rem'}}>
+<div className="rounded-2xl p-6 bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '1rem'}}>
 <p className="text-xl tracking-tight font-medium">Product Focus</p>
 <p className="mt-1 text-sm text-[#F2F0EB]/45">Audience to Asset</p>
 </div>
@@ -317,8 +359,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid gap-4 md:grid-cols-3">
-<article className="reveal group p-8 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', -PanelRadius: '24px', -Highlight: '#3b82f6'}}>
-<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<article className="reveal group p-8 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', '--panel-radius': '24px', '--highlight': '#3b82f6'}}>
+<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <iconify-icon aria-hidden="true" className="text-2xl" icon="solar:users-group-two-rounded-linear"></iconify-icon>
 </div>
 <h3 className="text-xl tracking-tight font-medium">
@@ -330,8 +372,8 @@ gtag('config', 'G-2M6V79H761');
                 zero.
               </p>
 </article>
-<article className="reveal group p-8 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms', -PanelRadius: '24px', -Highlight: '#ef4444'}}>
-<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<article className="reveal group p-8 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms', '--panel-radius': '24px', '--highlight': '#ef4444'}}>
+<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <iconify-icon aria-hidden="true" className="text-2xl" icon="solar:layers-linear"></iconify-icon>
 </div>
 <h3 className="text-xl tracking-tight font-medium">
@@ -343,8 +385,8 @@ gtag('config', 'G-2M6V79H761');
                 handle all of it.
               </p>
 </article>
-<article className="reveal group p-8 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms', -PanelRadius: '24px', -Highlight: '#22c55e'}}>
-<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<article className="reveal group p-8 transition-all duration-700 hover:-translate-y-2 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms', '--panel-radius': '24px', '--highlight': '#22c55e'}}>
+<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full text-[#F2F0EB] bg-gradient-to-b from-black/10 via-black/20 to-black/10" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <iconify-icon aria-hidden="true" className="text-2xl" icon="solar:chart-square-linear"></iconify-icon>
 </div>
 <h3 className="text-xl tracking-tight font-medium">
@@ -360,7 +402,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 <section className="relative overflow-hidden bg-[#050505] px-4 py-24 sm:px-6 md:py-32 lg:px-12 border-t border-[#F2F0EB]/5" id="process">
-<div className="mx-auto max-w-7xl" style={{-Highlight: 'rgba(242,240,235,0.9)'}}>
+<div className="mx-auto max-w-7xl" style={{'--highlight': 'rgba(242,240,235,0.9)'}}>
 <div className="reveal mx-auto mb-20 max-w-2xl text-center" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <p className="text-xs font-medium uppercase tracking-widest text-[#A8A29E]">
               // The Blueprint
@@ -372,7 +414,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative grid gap-8 md:grid-cols-4">
 <div className="absolute top-1/2 left-0 right-0 hidden h-[1px] bg-gradient-to-r from-transparent via-[#F2F0EB]/10 to-transparent md:block -translate-y-1/2"></div>
 <div className="reveal relative z-10 flex flex-col items-center text-center" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)'}}>
-<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <span className="text-xs font-medium uppercase tracking-widest">
                   01
                 </span>
@@ -386,7 +428,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 <div className="reveal relative z-10 flex flex-col items-center text-center" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
-<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <span className="text-xs font-medium uppercase tracking-widest">
                   02
                 </span>
@@ -398,7 +440,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 <div className="reveal relative z-10 flex flex-col items-center text-center" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
-<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <span className="text-xs font-medium uppercase tracking-widest">
                   03
                 </span>
@@ -410,7 +452,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 <div className="reveal relative z-10 flex flex-col items-center text-center" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '300ms'}}>
-<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <span className="text-xs font-medium uppercase tracking-widest">
                   04
                 </span>
@@ -437,7 +479,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="grid gap-6 md:grid-cols-2">
-<div className="reveal p-8 sm:p-10 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', -PanelRadius: '32px', -Highlight: '#22c55e'}}>
+<div className="reveal p-8 sm:p-10 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', '--panel-radius': '32px', '--highlight': '#22c55e'}}>
 <div className="mb-6 flex items-center gap-3 text-white">
 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10" style={{background: 'rgba(34,197,94,0.14)'}}>
 <iconify-icon aria-hidden="true" className="text-lg" icon="solar:check-circle-linear"></iconify-icon>
@@ -479,7 +521,7 @@ gtag('config', 'G-2M6V79H761');
                 </li>
 </ul>
 </div>
-<div className="reveal p-8 sm:p-10 opacity-70 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '150ms', -PanelRadius: '32px', -Highlight: '#ef4444'}}>
+<div className="reveal p-8 sm:p-10 opacity-70 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '150ms', '--panel-radius': '32px', '--highlight': '#ef4444'}}>
 <div className="mb-6 flex items-center gap-3 text-[#A8A29E]">
 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1C1917]" style={{background: 'rgba(239,68,68,0.14)'}}>
 <iconify-icon aria-hidden="true" className="text-lg" icon="solar:close-circle-linear"></iconify-icon>
@@ -538,7 +580,7 @@ gtag('config', 'G-2M6V79H761');
               monetizable software asset. No bloat, just execution.
             </p>
 </div>
-<div className="reveal mt-12 p-8 text-left glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms', -PanelRadius: '32px'}}>
+<div className="reveal mt-12 p-8 text-left glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms', '--panel-radius': '32px'}}>
 <div className="grid gap-8 md:grid-cols-2">
 <div>
 <h3 className="text-lg font-medium text-white mb-6 border-b border-[#F2F0EB]/10 pb-4">
@@ -612,7 +654,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 </div>
-<form className="reveal p-6 lg:col-span-7 md:p-10 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '150ms', -PanelRadius: '32px', -Highlight: '#3b82f6'}}>
+<form className="reveal p-6 lg:col-span-7 md:p-10 glass-panel" style={{opacity: '0', transform: 'translateY(2rem)', transition: 'all 1s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '150ms', '--panel-radius': '32px', '--highlight': '#3b82f6'}}>
 <div className="grid gap-6 sm:grid-cols-2">
 <label className="group block">
 <span className="mb-2 block text-xs font-medium uppercase tracking-widest text-[#A8A29E]">
@@ -655,7 +697,7 @@ gtag('config', 'G-2M6V79H761');
               </span>
 <textarea className="w-full resize-none rounded-xl border border-[#F2F0EB]/10 bg-[#050505]/70 px-4 py-3.5 text-sm outline-none transition-all duration-300 placeholder:text-[#A8A29E]/50 focus:border-[#F2F0EB]/30 focus:bg-[#050505]" placeholder="Briefly describe the pain point or the app idea..." rows="4"></textarea>
 </label>
-<button className="group mt-8 flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 text-sm font-medium transition-all duration-500 hover:scale-[1.01] bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}} type="button">
+<button className="group mt-8 flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 text-sm font-medium transition-all duration-500 hover:scale-[1.01] bg-gradient-to-b from-black/10 via-black/20 to-black/10 text-[#F2F0EB]" style={{boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}} type="button">
               Submit Application
               <iconify-icon aria-hidden="true" className="text-lg transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" icon="solar:arrow-right-up-linear"></iconify-icon>
 </button>

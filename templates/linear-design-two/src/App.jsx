@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -281,14 +323,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <td className="px-5 py-3"><code className="text-xs text-[#9da1f5] font-mono">gray-950</code></td>
 <td className="px-5 py-3"><span className="text-xs text-white/40 font-mono">240 6% 4%</span></td>
 <td className="px-5 py-3"><span className="text-xs text-white/40 font-mono">#0A0A0B</span></td>
-<td className="px-5 py-3 hidden sm:table-cell"><div className="w-8 h-5 rounded" style={{background: 'hsl(240,6%,4%)', border: '1px solid rgba(255,255,255,0.1)'}}></div></td>
+<td className="px-5 py-3 hidden sm:table-cell"><div className="w-8 h-5 rounded" style={{background: 'hsl(240, 6%, 4%)', border: '1px solid rgba(255,255,255,0.1)'}}></div></td>
 <td className="px-5 py-3 hidden md:table-cell"><span className="text-xs text-white/30">App background</span></td>
 </tr>
 <tr className="border-b border-white/[0.04] hover:bg-white/[0.02]">
 <td className="px-5 py-3"><code className="text-xs text-[#9da1f5] font-mono">gray-900</code></td>
 <td className="px-5 py-3"><span className="text-xs text-white/40 font-mono">240 6% 7%</span></td>
 <td className="px-5 py-3"><span className="text-xs text-white/40 font-mono">#111113</span></td>
-<td className="px-5 py-3 hidden sm:table-cell"><div className="w-8 h-5 rounded" style={{background: 'hsl(240,6%,7%)', border: '1px solid rgba(255,255,255,0.1)'}}></div></td>
+<td className="px-5 py-3 hidden sm:table-cell"><div className="w-8 h-5 rounded" style={{background: 'hsl(240, 6%, 7%)', border: '1px solid rgba(255,255,255,0.1)'}}></div></td>
 <td className="px-5 py-3 hidden md:table-cell"><span className="text-xs text-white/30">Card surface</span></td>
 </tr>
 <tr className="border-b border-white/[0.04] hover:bg-white/[0.02]">
@@ -1007,7 +1049,7 @@ Base: rgba(255,255,255,0.06) · border-radius: 4px</code>
 <code className="text-xs text-white/25 font-mono">0 8px 30px black/50%</code>
 </div>
 <div className="rounded-xl border border-white/[0.08] p-6 text-center">
-<div className="w-20 h-20 mx-auto rounded-xl bg-[#151518] border border-white/[0.08] mb-4" style={{boxShadow: '0 16px 50px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.4)'}}></div>
+<div className="w-20 h-20 mx-auto rounded-xl bg-[#151518] border border-white/[0.08] mb-4" style={{boxShadow: '0 16px 50px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0,0,0,0.4)'}}></div>
 <p className="text-xs font-medium mb-1">Shadow XL</p>
 <code className="text-xs text-white/25 font-mono">Layered composite</code>
 </div>

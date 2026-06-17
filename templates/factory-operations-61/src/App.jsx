@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -116,7 +152,7 @@ gtag('config', 'G-2M6V79H761');
             const offset = circumference - (progress / 100) * circumference;
 
             return (
-                <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+                <div className="relative flex items-center justify-center" style={{width: size, height: size}}>
                     <svg className="transform -rotate-90" width={size} height={size}>
                         <circle cx={size/2} cy={size/2} r={radius} fill="transparent" stroke="#e5e7eb" strokeWidth={strokeWidth} />
                         <motion.circle
@@ -158,7 +194,7 @@ gtag('config', 'G-2M6V79H761');
                         <motion.div
                             key={p.id}
                             className="absolute rounded-sm"
-                            style={{ left: `${p.x}%`, width: p.size, height: p.size, backgroundColor: p.color, top: -20 }}
+                            style={{left: `${p.x}%`, width: p.size, height: p.size, backgroundColor: p.color, top: -20}}
                             initial={{ y: 0, rotate: p.rotation, opacity: 1 }}
                             animate={{ y: '110vh', rotate: p.rotation + 720, opacity: [1, 1, 0] }}
                             transition={{ duration: p.duration, delay: p.delay, ease: "linear" }}
@@ -349,7 +385,7 @@ gtag('config', 'G-2M6V79H761');
                                                     <div className="bg-gray-50 rounded-xl p-3 flex items-center gap-4 border border-gray-100 mt-2">
                                                         <div className="flex -space-x-3 shrink-0">
                                                             {order.products.slice(0, 3).map((p, i) => (
-                                                                <img key={p.id} src={p.imageUrl} className="h-10 w-10 rounded-lg border-2 border-white object-cover shadow-sm relative" style={{ zIndex: 3-i }} />
+                                                                <img key={p.id} src={p.imageUrl} className="h-10 w-10 rounded-lg border-2 border-white object-cover shadow-sm relative" style={{zIndex: 3-i}} />
                                                             ))}
                                                             {order.products.length > 3 && (
                                                                 <div className="h-10 w-10 rounded-lg border-2 border-white bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 relative z-0">
@@ -1025,6 +1061,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -55,6 +91,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -108,7 +150,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon icon="solar:bolt-bold" style={{fontSize: '1.2rem'}}></iconify-icon>
               Start Training
             </a>
-<a className="px-8 py-4 rounded-xl text-base font-semibold text-white condensed tracking-widest uppercase inline-flex items-center gap-2 justify-center border" href="#programs" style={{borderColor: 'rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)'}}>
+<a className="px-8 py-4 rounded-xl text-base font-semibold text-white condensed tracking-widest uppercase inline-flex items-center gap-2 justify-center border" href="#programs" style={{borderColor: 'rgba(255, 255, 255, 0.12)', background: 'rgba(255,255,255,0.04)'}}>
 <iconify-icon icon="solar:play-circle-linear" style={{fontSize: '1.2rem', strokeWidth: '1.5'}}></iconify-icon>
               View Programs
             </a>
@@ -182,7 +224,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="mb-5 p-3 rounded-xl" style={{background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="mb-5 p-3 rounded-xl" style={{background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.06)'}}>
 <div className="flex justify-between mb-2">
 <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Intensity Level</span>
 <span className="text-xs font-bold text-gold condensed">BEAST MODE</span>
@@ -194,7 +236,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex items-center gap-4 p-3 rounded-xl" style={{background: 'rgba(245,197,24,0.06)', border: '1px solid rgba(245,197,24,0.12)'}}>
+<div className="flex items-center gap-4 p-3 rounded-xl" style={{background: 'rgba(245, 197, 24, 0.06)', border: '1px solid rgba(245,197,24,0.12)'}}>
 <div className="relative w-14 h-14 flex-shrink-0">
 <svg className="w-full h-full -rotate-90" viewbox="0 0 56 56">
 <circle cx="28" cy="28" fill="none" r="22" stroke="rgba(245,197,24,0.1)" strokeWidth="5"></circle>
@@ -295,7 +337,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-hover rounded-2xl overflow-hidden relative" style={{background: 'linear-gradient(135deg, rgba(245,197,24,0.1), rgba(255,107,0,0.05))', border: '1px solid rgba(245,197,24,0.3)'}}>
+<div className="card-hover rounded-2xl overflow-hidden relative" style={{background: 'linear-gradient(135deg, rgba(245, 197, 24, 0.1), rgba(255, 107, 0, 0.05))', border: '1px solid rgba(245,197,24,0.3)'}}>
 <div className="absolute top-4 right-4 bg-gold text-black text-xs font-bold px-2 py-1 rounded-full condensed tracking-wider uppercase">Popular</div>
 <div className="h-2 bg-gold"></div>
 <div className="p-6">
@@ -446,7 +488,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="card-hover group relative bg-mid rounded-2xl overflow-hidden border" style={{borderColor: 'rgba(255,255,255,0.06)'}}>
 <div className="h-48 flex items-center justify-center relative overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(255,107,0,0.15), rgba(245,197,24,0.08))'}}>
-<div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl" style={{background: 'rgba(255,107,0,0.2)', border: '2px solid rgba(255,107,0,0.4)'}}>
+<div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl" style={{background: 'rgba(255, 107, 0, 0.2)', border: '2px solid rgba(255,107,0,0.4)'}}>
               🏋️
             </div>
 <div className="absolute bottom-0 left-0 right-0 h-px" style={{background: 'linear-gradient(90deg, transparent, #FF6B00, transparent)'}}></div>
@@ -479,7 +521,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="card-hover group relative bg-mid rounded-2xl overflow-hidden border" style={{borderColor: 'rgba(245,197,24,0.2)'}}>
 <div className="h-48 flex items-center justify-center relative overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(245,197,24,0.15), rgba(232,255,0,0.05))'}}>
-<div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl" style={{background: 'rgba(245,197,24,0.2)', border: '2px solid rgba(245,197,24,0.4)'}}>
+<div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl" style={{background: 'rgba(245, 197, 24, 0.2)', border: '2px solid rgba(245,197,24,0.4)'}}>
               ⚡
             </div>
 <div className="absolute top-3 right-3 bg-gold text-black text-xs font-bold px-2 py-0.5 rounded-full condensed">HEAD COACH</div>
@@ -513,7 +555,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="card-hover group relative bg-mid rounded-2xl overflow-hidden border" style={{borderColor: 'rgba(255,255,255,0.06)'}}>
 <div className="h-48 flex items-center justify-center relative overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(232,255,0,0.1), rgba(245,197,24,0.05))'}}>
-<div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl" style={{background: 'rgba(232,255,0,0.15)', border: '2px solid rgba(232,255,0,0.3)'}}>
+<div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl" style={{background: 'rgba(232, 255, 0, 0.15)', border: '2px solid rgba(232,255,0,0.3)'}}>
               🥊
             </div>
 <div className="absolute bottom-0 left-0 right-0 h-px" style={{background: 'linear-gradient(90deg, transparent, #E8FF00, transparent)'}}></div>
@@ -679,7 +721,7 @@ gtag('config', 'G-2M6V79H761');
           </a>
 </div>
 
-<div className="plan-card relative bg-mid rounded-2xl p-6 border glow-gold" style={{borderColor: 'rgba(245,197,24,0.4)', transform: 'scale(1.03)'}}>
+<div className="plan-card relative bg-mid rounded-2xl p-6 border glow-gold" style={{borderColor: 'rgba(245, 197, 24, 0.4)', transform: 'scale(1.03)'}}>
 <div className="absolute -top-3 left-1/2 -translate-x-1/2 btn-primary px-4 py-1 rounded-full text-xs font-bold text-black condensed tracking-widest uppercase">Most Popular</div>
 <p className="condensed font-bold uppercase tracking-widest text-gold text-xs mb-3">Elite</p>
 <div className="condensed font-extrabold text-white tracking-tight mb-1" style={{fontSize: '2.5rem'}}>$89<span className="text-base font-semibold text-gray-500">/mo</span></div>
@@ -738,7 +780,7 @@ gtag('config', 'G-2M6V79H761');
               Priority class booking
             </li>
 </ul>
-<a className="w-full py-3 rounded-xl text-sm font-bold condensed tracking-wider uppercase flex items-center justify-center transition-all" href="#" style={{background: 'rgba(255,107,0,0.12)', color: '#FF6B00', border: '1px solid rgba(255,107,0,0.3)'}}>
+<a className="w-full py-3 rounded-xl text-sm font-bold condensed tracking-wider uppercase flex items-center justify-center transition-all" href="#" style={{background: 'rgba(255, 107, 0, 0.12)', color: '#FF6B00', border: '1px solid rgba(255,107,0,0.3)'}}>
             Go Ultimate
           </a>
 </div>
@@ -762,7 +804,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon icon="solar:bolt-bold" style={{fontSize: '1.2rem'}}></iconify-icon>
           Claim Your Spot
         </a>
-<a className="px-10 py-4 rounded-xl text-base font-semibold text-white condensed tracking-widest uppercase inline-flex items-center gap-2 border" href="tel:+18005550100" style={{borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)'}}>
+<a className="px-10 py-4 rounded-xl text-base font-semibold text-white condensed tracking-widest uppercase inline-flex items-center gap-2 border" href="tel:+18005550100" style={{borderColor: 'rgba(255, 255, 255, 0.1)', background: 'rgba(255,255,255,0.04)'}}>
 <iconify-icon icon="solar:phone-calling-linear" style={{strokeWidth: '1.5', fontSize: '1.1rem'}}></iconify-icon>
           Call Us Now
         </a>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -19,7 +61,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h1 className="fade-in max-w-4xl md:text-6xl lg:text-7xl leading-tight text-4xl font-light tracking-tight font-geist mb-8" id="aura-emcq060z5" style={{animationDelay: '0.1s', animationPlayState: 'running'}}>
     Build stunning websites<br className="hidden md:block"/> with a canvas you already<br className="hidden md:block"/> master.
   </h1>
-<button className="slide-up group inline-flex gap-2 transition-transform duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 focus:ring-opacity-50 font-medium text-white font-geist mt-10 shadow-xl items-center" style={{animationDelay: '0.3s', animationPlayState: 'running', transform: 'scale(1)', -FancyButtonGradient-0: '#8d49fd', -FancyButtonGradient-50: '#7f56f3', -FancyButtonGradient-100: '#5691f3', -FancyButtonInnerShadowTop: 'rgba(233, 209, 255, 0.2)', -FancyButtonInnerShadowTopLg: 'rgba(9, 12, 60, 0.1)', -FancyButtonInnerShadowBottom: 'rgba(137, 222, 246, 0.3)', -FancyButtonShineTop: '#e9d1ff', -FancyButtonShineBottom: '#adfff9', fontWeight: '500', fontSize: '15px', lineHeight: '21px', textShadow: 'rgba(0, 0, 0, 0.2) 0px 0.5px 0.5px', padding: '0px', margin: '0px', appearance: 'none', border: 'medium', overflow: 'hidden', position: 'relative', cursor: 'pointer', zIndex: '1', color: 'rgb(255, 255, 255)', backgroundImage: 'linear-gradient(to bottom, var(--fancy-button-gradient-0) 0%, var(--fancy-button-gradient-50) 50%, var(--fancy-button-gradient-100) 100%)', boxShadow: '0px 4px 12px rgba(9, 12, 60, 0.15), 0px 2px 8px rgba(9, 12, 60, 0.15), 0px 1px 3px var(--fancy-button-inner-shadow-top-lg), inset 0px 1px 1px var(--fancy-button-inner-shadow-top), inset 0px -1px 3px var(--fancy-button-inner-shadow-bottom)', borderRadius: '25px'}}>
+<button className="slide-up group inline-flex gap-2 transition-transform duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 focus:ring-opacity-50 font-medium text-white font-geist mt-10 shadow-xl items-center" style={{animationDelay: '0.3s', animationPlayState: 'running', transform: 'scale(1)', '--fancy-button-gradient-0': '#8d49fd', '--fancy-button-gradient-50': '#7f56f3', '--fancy-button-gradient-100': '#5691f3', '--fancy-button-inner-shadow-top': 'rgba(233, 209, 255, 0.2)', '--fancy-button-inner-shadow-top-lg': 'rgba(9, 12, 60, 0.1)', '--fancy-button-inner-shadow-bottom': 'rgba(137, 222, 246, 0.3)', '--fancy-button-shine-top': '#e9d1ff', '--fancy-button-shine-bottom': '#adfff9', fontWeight: '500', fontSize: '15px', lineHeight: '21px', textShadow: 'rgba(0, 0, 0, 0.2) 0px 0.5px 0.5px', padding: '0px', margin: '0px', appearance: 'none', border: 'medium', overflow: 'hidden', position: 'relative', cursor: 'pointer', zIndex: '1', color: 'rgb(255, 255, 255)', backgroundImage: 'linear-gradient(to bottom, var(--fancy-button-gradient-0) 0%, var(--fancy-button-gradient-50) 50%, var(--fancy-button-gradient-100) 100%)', boxShadow: '0px 4px 12px rgba(9, 12, 60, 0.15), 0px 2px 8px rgba(9, 12, 60, 0.15), 0px 1px 3px var(--fancy-button-inner-shadow-top-lg), inset 0px 1px 1px var(--fancy-button-inner-shadow-top), inset 0px -1px 3px var(--fancy-button-inner-shadow-bottom)', borderRadius: '25px'}}>
 <span className="block relative overflow-hidden rounded-[inherit]" style={{display: 'block', padding: '12px 24px', backgroundImage: 'linear-gradient(to bottom, var(--fancy-button-shine-top), transparent 8px)', backgroundPosition: '0 -6px', backgroundRepeat: 'no-repeat', zIndex: '1'}}>
     Get Started
     <svg className="w-5 h-5 inline-block ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>

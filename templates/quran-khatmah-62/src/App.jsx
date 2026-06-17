@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -254,6 +290,12 @@ boxShadow: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -280,7 +322,7 @@ boxShadow: {
 </nav>
 <div className="hidden md:flex items-center gap-3">
 <button className="px-3 py-1.5 text-xs font-medium rounded-md text-gray-300 hover:text-white transition-colors">Log in</button>
-<button className="liquid-glass-button relative inline-flex h-9 cursor-pointer outline-none overflow-hidden transition-all duration-300 ease-out text-xs font-semibold uppercase tracking-wide text-brand-gold bg-gradient-to-r from-white/10 to-white/5 border-white/10 border rounded-full pr-5 pl-5 shadow-lg backdrop-blur-xl items-center justify-center hover:bg-gradient-to-r hover:from-white/15 hover:to-white/10 hover:border-brand-gold/30 hover:shadow-brand-gold/20" style={{boxShadow: '0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.2), inset -3px -3px 0.5px -3px rgba(255,255,255,0.1), inset 1px 1px 1px -0.5px rgba(255,255,255,0.3), inset -1px -1px 1px -0.5px rgba(255,255,255,0.15), inset 0 0 6px 6px rgba(255,255,255,0.05), inset 0 0 2px 2px rgba(255,255,255,0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
+<button className="liquid-glass-button relative inline-flex h-9 cursor-pointer outline-none overflow-hidden transition-all duration-300 ease-out text-xs font-semibold uppercase tracking-wide text-brand-gold bg-gradient-to-r from-white/10 to-white/5 border-white/10 border rounded-full pr-5 pl-5 shadow-lg backdrop-blur-xl items-center justify-center hover:bg-gradient-to-r hover:from-white/15 hover:to-white/10 hover:border-brand-gold/30 hover:shadow-brand-gold/20" style={{boxShadow: '0 0 6px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.08), inset 3px 3px 0.5px -3px rgba(255, 255, 255, 0.2), inset -3px -3px 0.5px -3px rgba(255, 255, 255, 0.1), inset 1px 1px 1px -0.5px rgba(255, 255, 255, 0.3), inset -1px -1px 1px -0.5px rgba(255, 255, 255, 0.15), inset 0 0 6px 6px rgba(255, 255, 255, 0.05), inset 0 0 2px 2px rgba(255, 255, 255, 0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
 <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-brand-gold/5"></div>
 </div>

@@ -29,6 +29,42 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleScroll = () => setScrolled(window.scrollY > 80)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -38,7 +74,7 @@ export default function App() {
   const closeModal = () => setIsModalOpen(false)
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: '#0B2D72' }}>
+    <div style={{fontFamily: "'Inter', sans-serif", background: '#0B2D72'}}>
       <StickyHeader scrolled={scrolled} onOpenModal={openModal} />
       <main>
         <HeroSection onOpenModal={openModal} />

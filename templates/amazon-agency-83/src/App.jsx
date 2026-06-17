@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -68,7 +110,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
 
-<a className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-normal text-white bg-orange-500 rounded-full px-8 py-3.5 relative shadow-lg inline-flex items-center justify-center text-base" href="#leistungen" style={{boxShadow: '0 18px 40px -15px rgba(234,88,12,0.85), inset 0 2px 4px rgba(255,247,237,0.9)', borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', -BorderRadiusBefore: '9999px'}}>
+<a className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-normal text-white bg-orange-500 rounded-full px-8 py-3.5 relative shadow-lg inline-flex items-center justify-center text-base" href="#leistungen" style={{boxShadow: '0 18px 40px -15px rgba(234,88,12,0.85), inset 0 2px 4px rgba(255,247,237,0.9)', borderRadius: '9999px', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', '--border-radius-before': '9999px'}}>
 <div className="group-hover:translate-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full rounded-full"></div>
 <span className="flex items-center gap-2 relative z-10">
                             Kostenlose Potenzialanalyse 

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -371,6 +407,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -529,7 +571,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
 
-<div className="flashlight-card md:col-span-2 flex flex-col group reveal-element rounded-2xl pt-8 pr-8 pb-8 pl-8 justify-between" style={{-MouseX: '899px', -MouseY: '966.5px'}}>
+<div className="flashlight-card md:col-span-2 flex flex-col group reveal-element rounded-2xl pt-8 pr-8 pb-8 pl-8 justify-between" style={{'--mouse-x': '899px', '--mouse-y': '966.5px'}}>
 <div className="flex items-start justify-between">
 <div className="p-3 bg-white/5 rounded-lg border border-white/10 group-hover:border-[#1E6BFF]/50 transition-colors">
 <iconify-icon className="text-[#4DA3FF] group-hover:scale-110 transition-transform duration-300" height="24" icon="solar:database-linear" strokeWidth="1.5" width="24"></iconify-icon>
@@ -548,7 +590,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute right-0 bottom-0 w-64 h-64 bg-[#1E6BFF]/10 blur-[80px] rounded-full pointer-events-none"></div>
 </div>
 
-<div className="flashlight-card rounded-2xl p-8 flex flex-col justify-between group reveal-element" style={{-MouseX: '248.3359375px', -MouseY: '966.5px'}}>
+<div className="flashlight-card rounded-2xl p-8 flex flex-col justify-between group reveal-element" style={{'--mouse-x': '248.3359375px', '--mouse-y': '966.5px'}}>
 <div className="flex justify-between items-start">
 <div className="p-3 bg-white/5 rounded-lg border border-white/10 group-hover:border-[#1E6BFF]/50 transition-colors">
 <iconify-icon className="text-[#4DA3FF] group-hover:scale-110 transition-transform duration-300" height="24" icon="solar:settings-linear" strokeWidth="1.5" width="24"></iconify-icon>
@@ -565,7 +607,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flashlight-card rounded-2xl p-8 flex flex-col justify-between group reveal-element" style={{-MouseX: '899px', -MouseY: '642.5px'}}>
+<div className="flashlight-card rounded-2xl p-8 flex flex-col justify-between group reveal-element" style={{'--mouse-x': '899px', '--mouse-y': '642.5px'}}>
 <div className="flex justify-between items-start">
 <div className="p-3 bg-white/5 rounded-lg border border-white/10 group-hover:border-[#1E6BFF]/50 transition-colors">
 <iconify-icon className="text-[#4DA3FF] group-hover:scale-110 transition-transform duration-300" height="24" icon="solar:eye-linear" strokeWidth="1.5" width="24"></iconify-icon>
@@ -582,7 +624,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flashlight-card md:col-span-2 rounded-2xl p-8 relative overflow-hidden group reveal-element" style={{-MouseX: '573.671875px', -MouseY: '642.5px'}}>
+<div className="flashlight-card md:col-span-2 rounded-2xl p-8 relative overflow-hidden group reveal-element" style={{'--mouse-x': '573.671875px', '--mouse-y': '642.5px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-[#0F3D91]/30 to-black z-0"></div>
 <div className="relative z-10 h-full flex flex-col justify-end">
 <h3 className="text-2xl font-semibold text-white mb-2 tracking-tight">
@@ -765,7 +807,7 @@ gtag('config', 'G-2M6V79H761');
 <p>© 2024 OptimizeAI. Todos los derechos reservados.</p>
 </footer>
 
-<div aria-hidden="true" className="fixed inset-0 z-[9999] flex items-center justify-center" id="premium-booking-modal" style={{opacity: '0', pointerEvents: 'none', visibility: 'hidden', perspective: '1000px', transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)'}}>
+<div aria-hidden="true" className="fixed inset-0 z-[9999] flex items-center justify-center" id="premium-booking-modal" style={{opacity: '0', pointerEvents: 'none', visibility: 'hidden', perspective: '1000px', transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s', background: 'rgba(0, 0, 0, 0.8)', backdropFilter: 'blur(10px)'}}>
 <div className="relative w-[90%] max-w-[1000px] h-[650px] bg-[#050505] rounded-[24px] border border-[#3C82F6]/30 overflow-hidden flex flex-col" id="premium-modal-card" style={{transform: 'scale(0.94) translateY(10px)', transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(60, 130, 246, 0.2)'}}>
 <button className="absolute top-5 right-5 z-20 p-2 text-gray-400 hover:text-white bg-black/50 hover:bg-white/20 rounded-full transition-all duration-300 hover:rotate-90 border border-white/10 group" id="premium-modal-close">
 <iconify-icon className="group-hover:scale-110 transition-transform" height="24" icon="solar:close-circle-linear" width="24"></iconify-icon>

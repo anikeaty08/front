@@ -4,6 +4,42 @@ function App() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -76,7 +112,7 @@ function App() {
         <div className="max-w-[1600px] w-full mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 items-center relative z-20">
           
           {/* Text Column */}
-          <div className="flex flex-col items-start text-left max-w-xl mx-auto lg:mx-0 animate-reveal-up" style={{ animationDelay: '0.1s' }}>
+          <div className="flex flex-col items-start text-left max-w-xl mx-auto lg:mx-0 animate-reveal-up" style={{animationDelay: '0.1s'}}>
             <span className="text-xs font-medium text-dustypink tracking-widest uppercase mb-4">
               Tên thương hiệu: Peacoré
             </span>
@@ -96,7 +132,7 @@ function App() {
           </div>
 
           {/* Visual Elements (Split Image Concept) */}
-          <div className="relative w-full aspect-square md:aspect-[4/3] lg:aspect-square animate-reveal-up" style={{ animationDelay: '0.3s' }}>
+          <div className="relative w-full aspect-square md:aspect-[4/3] lg:aspect-square animate-reveal-up" style={{animationDelay: '0.3s'}}>
             <div className="absolute inset-0 grid grid-cols-2 gap-4">
               {/* Left: AI Smartphone */}
               <div className="relative rounded-3xl overflow-hidden border border-charcoal bg-charcoal/50">
@@ -104,7 +140,7 @@ function App() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                 {/* AR Overlay Graphic */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 aspect-square border border-rosegold/50 rounded-full animate-float"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 aspect-square border border-dashed border-rosegold/30 rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 aspect-square border border-dashed border-rosegold/30 rounded-full animate-float" style={{animationDelay: '1s'}}></div>
                 <div className="absolute bottom-6 left-6 right-6">
                   <div className="h-2 w-full bg-charcoal rounded-full overflow-hidden">
                     <div className="h-full bg-rosegold w-[75%] rounded-full"></div>
@@ -142,7 +178,7 @@ function App() {
               </p>
             </div>
 
-            <div className="bg-charcoal border border-rosegold rounded-2xl p-8 floating-card reveal-on-scroll" style={{ animationDelay: '0.1s' }}>
+            <div className="bg-charcoal border border-rosegold rounded-2xl p-8 floating-card reveal-on-scroll" style={{animationDelay: '0.1s'}}>
               <iconify-icon icon="solar:clock-circle-linear" className="text-rosegold text-4xl mb-6 block" stroke-width="1.5"></iconify-icon>
               <h3 className="text-xl font-semibold tracking-tight text-dustypink mb-4">
                 Tiết kiệm & Tiện lợi <span className="text-rosegold inline-block translate-y-1 ml-1"><iconify-icon icon="solar:sparkles-linear"></iconify-icon></span>
@@ -152,7 +188,7 @@ function App() {
               </p>
             </div>
 
-            <div className="bg-charcoal border border-rosegold rounded-2xl p-8 floating-card reveal-on-scroll" style={{ animationDelay: '0.2s' }}>
+            <div className="bg-charcoal border border-rosegold rounded-2xl p-8 floating-card reveal-on-scroll" style={{animationDelay: '0.2s'}}>
               <iconify-icon icon="solar:heart-pulse-linear" className="text-rosegold text-4xl mb-6 block" stroke-width="1.5"></iconify-icon>
               <h3 className="text-xl font-semibold tracking-tight text-dustypink mb-4">
                 Chăm sóc kép <span className="text-rosegold inline-block translate-y-1 ml-1"><iconify-icon icon="solar:sparkles-linear"></iconify-icon></span>
@@ -273,7 +309,7 @@ function App() {
             </div>
 
             {/* Product 2 */}
-            <div className="bg-charcoal border border-rosegold rounded-2xl overflow-hidden flex flex-col floating-card reveal-on-scroll" style={{ animationDelay: '0.1s' }}>
+            <div className="bg-charcoal border border-rosegold rounded-2xl overflow-hidden flex flex-col floating-card reveal-on-scroll" style={{animationDelay: '0.1s'}}>
               <div className="aspect-square bg-black relative p-8 flex items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-charcoal/50"></div>
                  <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=800&auto=format&fit=crop" alt="Color Box" className="w-2/3 object-contain relative z-10 filter sepia-[.3] hue-rotate-[-30deg] saturate-50 opacity-90 border-b border-rosegold/30 pb-4" />
@@ -291,7 +327,7 @@ function App() {
             </div>
 
             {/* Product 3 */}
-            <div className="bg-charcoal border border-rosegold rounded-2xl overflow-hidden flex flex-col floating-card reveal-on-scroll" style={{ animationDelay: '0.2s' }}>
+            <div className="bg-charcoal border border-rosegold rounded-2xl overflow-hidden flex flex-col floating-card reveal-on-scroll" style={{animationDelay: '0.2s'}}>
               <div className="aspect-square bg-black relative p-8 flex items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-charcoal/50"></div>
                  <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&auto=format&fit=crop" alt="Shampoo Combo" className="w-2/3 object-contain relative z-10 filter grayscale mix-blend-screen opacity-70 border-b border-rosegold/30 pb-4" />
@@ -401,7 +437,7 @@ function App() {
             </div>
 
             {/* Visual */}
-            <div className="flex gap-4 reveal-on-scroll" style={{ animationDelay: '0.2s' }}>
+            <div className="flex gap-4 reveal-on-scroll" style={{animationDelay: '0.2s'}}>
               <div className="w-1/2 flex flex-col">
                 <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-rosegold mb-3">
                   <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=600&auto=format&fit=crop" alt="Before" className="w-full h-full object-cover filter grayscale contrast-125" />

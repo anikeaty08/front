@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -307,34 +349,34 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </a>
 <nav className="hidden items-center gap-2 sm:flex">
 <a className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-200 ring-1 ring-white/10 hover:bg-white/5" href="?view=browse">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:compass" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:compass" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
             Browse
           </a>
 <a className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-200 ring-1 ring-white/10 hover:bg-white/5" href="?view=browse&amp;type=tv">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:tv" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:tv" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
             TV
           </a>
 <a className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-200 ring-1 ring-white/10 hover:bg-white/5" href="?view=browse&amp;type=movie">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:clapperboard" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:clapperboard" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
             Movies
           </a>
 </nav>
 <div className="flex items-center gap-2">
 <?php if ($user): ?>
 <div className="hidden items-center gap-2 rounded-xl bg-white/5 px-3 py-2 ring-1 ring-white/10 sm:flex">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:user" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:user" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div className="text-xs">
 <div className="font-medium text-slate-100"><?php echo esc($user['name'] ?? 'User'); ?></div>
 <div className="text-slate-300/80">Connected</div>
 </div>
 </div>
 <a className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-xs font-medium text-slate-100 ring-1 ring-white/10 hover:bg-white/10" href="?logout=1">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:log-out" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:log-out" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Logout
             </a>
 <?php else: ?>
 <a className="inline-flex items-center gap-2 rounded-xl bg-indigo-500/20 px-3 py-2 text-xs font-medium text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/25" href="?login=1">
-<iconify-icon className="text-indigo-200" height="18" icon="lucide:shield-check" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-indigo-200" height="18" icon="lucide:shield-check" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
               Connect MAL
             </a>
 <?php endif; ?>
@@ -345,7 +387,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <?php if ($error): ?>
 <div className="mb-6 rounded-2xl bg-rose-500/10 p-4 ring-1 ring-rose-400/20">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-rose-200" height="18" icon="lucide:triangle-alert" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-rose-200" height="18" icon="lucide:triangle-alert" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <div className="text-sm font-medium tracking-tight text-rose-100">Error</div>
 <div className="mt-1 text-xs text-rose-100/80"><?php echo esc($error); ?></div>
@@ -356,7 +398,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <?php if ($notice): ?>
 <div className="mb-6 rounded-2xl bg-sky-500/10 p-4 ring-1 ring-sky-400/20">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-sky-200" height="18" icon="lucide:info" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-sky-200" height="18" icon="lucide:info" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <div className="text-sm font-medium tracking-tight text-sky-100">Notice</div>
 <div className="mt-1 text-xs text-sky-100/80"><?php echo esc($notice); ?></div>
@@ -369,7 +411,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="lg:col-span-7">
 <div className="rounded-3xl bg-white/5 p-6 ring-1 ring-white/10 backdrop-blur">
 <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:sparkles" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:sparkles" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <span className="text-xs font-medium text-slate-200">Anime TV &amp; Movie discovery</span>
 </div>
 <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-50" style={{fontFamily: 'DM Sans, Inter, system-ui'}}>
@@ -380,12 +422,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </p>
 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-500/20 px-4 py-3 text-sm font-medium text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/25" href="?view=browse">
-<iconify-icon className="text-indigo-200" height="18" icon="lucide:compass" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-indigo-200" height="18" icon="lucide:compass" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Start browsing
                 </a>
 <?php if (!$user): ?>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-medium text-slate-100 ring-1 ring-white/10 hover:bg-white/10" href="?login=1">
-<iconify-icon className="text-slate-200" height="18" icon="lucide:shield-check" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-200" height="18" icon="lucide:shield-check" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Connect account (optional)
                   </a>
 <?php endif; ?>
@@ -393,21 +435,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-6 grid gap-3 sm:grid-cols-3">
 <div className="rounded-2xl bg-slate-900/40 p-4 ring-1 ring-white/10">
 <div className="flex items-center gap-2 text-xs font-medium text-slate-200">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:search" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:search" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Search
                   </div>
 <div className="mt-2 text-xs text-slate-300/80">Cari TV atau movie berdasarkan judul.</div>
 </div>
 <div className="rounded-2xl bg-slate-900/40 p-4 ring-1 ring-white/10">
 <div className="flex items-center gap-2 text-xs font-medium text-slate-200">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:calendar" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:calendar" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Seasonal
                   </div>
 <div className="mt-2 text-xs text-slate-300/80">Filter anime per season &amp; year.</div>
 </div>
 <div className="rounded-2xl bg-slate-900/40 p-4 ring-1 ring-white/10">
 <div className="flex items-center gap-2 text-xs font-medium text-slate-200">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:play-circle" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:play-circle" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Watch
                   </div>
 <div className="mt-2 text-xs text-slate-300/80">Embed player via provider pilihanmu.</div>
@@ -421,7 +463,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-1 text-xs text-slate-300/80">Contoh: “Frieren”, “One Piece”, “Your Name”.</div>
 </div>
 <a className="hidden items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-xs font-medium text-slate-100 ring-1 ring-white/10 hover:bg-white/10 sm:inline-flex" href="?view=browse">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:arrow-right" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:arrow-right" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Browse
                 </a>
 </div>
@@ -430,12 +472,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
 <div className="relative flex-1">
 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-<iconify-icon className="text-slate-400" height="18" icon="lucide:search" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-400" height="18" icon="lucide:search" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <input className="w-full rounded-2xl bg-slate-900/50 py-3 pl-10 pr-3 text-sm text-slate-100 placeholder:text-slate-500 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-400/30" name="q" placeholder="Search anime title…" value=""/>
 </div>
 <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-500/20 px-4 py-3 text-sm font-medium text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/25">
-<iconify-icon className="text-indigo-200" height="18" icon="lucide:sparkles" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-indigo-200" height="18" icon="lucide:sparkles" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Search
                   </button>
 </div>
@@ -449,7 +491,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm font-semibold tracking-tight text-slate-100" style={{fontFamily: 'DM Sans, Inter, system-ui'}}>Seasonal browse</div>
 <div className="mt-1 text-xs text-slate-300/80">Ambil data dari endpoint season.</div>
 </div>
-<iconify-icon className="text-slate-300" height="20" icon="lucide:calendar-days" style={{-IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="text-slate-300" height="20" icon="lucide:calendar-days" style={{'--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <form action="" className="mt-4 grid gap-3 sm:grid-cols-2" method="get">
 <input name="view" type="hidden" value="browse"/>
@@ -469,14 +511,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="sm:col-span-2">
 <button className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-medium text-slate-100 ring-1 ring-white/10 hover:bg-white/10">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:filter" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:filter" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Browse season
                   </button>
 </div>
 </form>
 <div className="mt-5 rounded-2xl bg-slate-900/40 p-4 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:lock" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:lock" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <div className="text-xs font-medium text-slate-200">Catatan penting</div>
 <div className="mt-1 text-xs text-slate-300/80">
@@ -500,7 +542,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <input name="view" type="hidden" value="browse"/>
 <div className="relative">
 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-<iconify-icon className="text-slate-400" height="18" icon="lucide:search" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-400" height="18" icon="lucide:search" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 <input className="w-full rounded-2xl bg-slate-900/50 py-2.5 pl-10 pr-3 text-sm text-slate-100 placeholder:text-slate-500 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 sm:w-64" name="q" placeholder="Search…" value="&lt;?php echo esc($q); ?&gt;"/>
 </div>
@@ -510,7 +552,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <option $type="=='movie'?'selected':'';" <?php="" ?="" echo="" value="movie">&gt;Movie</option>
 </select>
 <button className="inline-flex items-center gap-2 rounded-2xl bg-indigo-500/20 px-3 py-2.5 text-sm font-medium text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/25">
-<iconify-icon className="text-indigo-200" height="18" icon="lucide:arrow-right" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-indigo-200" height="18" icon="lucide:arrow-right" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Go
                 </button>
 </form>
@@ -521,7 +563,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <?php if (!$browseItems): ?>
 <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4 rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:inbox" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:inbox" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <div className="text-sm font-medium tracking-tight text-slate-100">No results</div>
 <div className="mt-1 text-xs text-slate-300/80">Coba kata kunci lain atau buka halaman browse tanpa search untuk ranking.</div>
@@ -549,12 +591,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-x-0 bottom-0 p-3" style={{background: 'linear-gradient(to top, rgba(2,6,23,0.92), rgba(2,6,23,0))'}}>
 <div className="flex items-center justify-between gap-2">
 <div className="inline-flex items-center gap-2 rounded-full bg-slate-950/50 px-2.5 py-1 text-xs text-slate-200 ring-1 ring-white/10 backdrop-blur">
-<iconify-icon className="text-slate-300" height="16" icon="lucide:clapperboard" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon className="text-slate-300" height="16" icon="lucide:clapperboard" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <?php echo esc($media ?: 'ANIME'); ?>
 </div>
 <?php if ($mean): ?>
 <div className="inline-flex items-center gap-1 rounded-full bg-slate-950/50 px-2.5 py-1 text-xs text-slate-200 ring-1 ring-white/10 backdrop-blur">
-<iconify-icon className="text-amber-200" height="16" icon="lucide:star" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon className="text-amber-200" height="16" icon="lucide:star" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <?php echo esc(number_format((float)$mean, 2)); ?>
 </div>
 <?php endif; ?>
@@ -571,7 +613,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="inline-flex items-center gap-2 text-xs font-medium text-slate-200">
                     View
-                    <iconify-icon className="text-slate-300" height="16" icon="lucide:arrow-right" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+                    <iconify-icon className="text-slate-300" height="16" icon="lucide:arrow-right" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 </div>
 </div>
 </div>
@@ -605,12 +647,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="p-4">
 <div className="flex flex-wrap items-center gap-2">
 <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 ring-1 ring-white/10">
-<iconify-icon className="text-slate-300" height="16" icon="lucide:clapperboard" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon className="text-slate-300" height="16" icon="lucide:clapperboard" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <?php echo esc($media ?: 'ANIME'); ?>
 </span>
 <?php if ($eps): ?>
 <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 ring-1 ring-white/10">
-<iconify-icon className="text-slate-300" height="16" icon="lucide:list-video" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon className="text-slate-300" height="16" icon="lucide:list-video" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <?php echo esc($eps . ' eps'); ?>
 </span>
 <?php endif; ?>
@@ -631,11 +673,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 flex flex-col gap-2">
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-500/20 px-4 py-3 text-sm font-medium text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/25" href="?view=watch&amp;id=&lt;?php echo esc($detail['id']); ?&gt;">
-<iconify-icon className="text-indigo-200" height="18" icon="lucide:play" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-indigo-200" height="18" icon="lucide:play" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Watch
                   </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-medium text-slate-100 ring-1 ring-white/10 hover:bg-white/10" href="?view=browse">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:arrow-left" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:arrow-left" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                     Back to browse
                   </a>
 </div>
@@ -648,7 +690,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-3 flex flex-wrap gap-2">
 <?php if ($status): ?>
 <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 ring-1 ring-white/10">
-<iconify-icon className="text-slate-300" height="16" icon="lucide:activity" style={{-IconifyStrokeWidth: '1.5'}} width="16"></iconify-icon>
+<iconify-icon className="text-slate-300" height="16" icon="lucide:activity" style={{'--iconify-stroke-width': '1.5'}} width="16"></iconify-icon>
 <?php echo esc(ucwords(str_replace('_',' ', $status))); ?>
 </span>
 <?php endif; ?>
@@ -696,7 +738,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="min-w-0">
 <div className="flex items-center gap-3">
 <a className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-xs font-medium text-slate-100 ring-1 ring-white/10 hover:bg-white/10" href="?view=detail&amp;id=&lt;?php echo esc($detail['id']); ?&gt;">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:arrow-left" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:arrow-left" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Detail
                 </a>
 <div className="text-xs text-slate-300/80">Watch</div>
@@ -716,7 +758,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex h-full w-full items-center justify-center p-8 text-center">
 <div className="max-w-md">
 <div className="mx-auto inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-slate-200 ring-1 ring-white/10">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:play-circle" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:play-circle" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                         No embed selected
                       </div>
 <div className="mt-4 text-sm text-slate-200/80">
@@ -729,7 +771,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-4 rounded-3xl bg-white/5 p-5 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:info" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:info" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <div className="text-xs font-medium text-slate-200">Tips</div>
 <div className="mt-1 text-xs text-slate-300/80">
@@ -764,14 +806,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="text-sm font-medium tracking-tight text-slate-100"><?php echo esc($p['name']); ?></div>
 <div className="mt-1 text-xs text-slate-300/80"><?php echo esc($p['note']); ?></div>
 </div>
-<iconify-icon className="&lt;?php echo $active ? 'text-indigo-200' : 'text-slate-300'; ?&gt;" height="18" icon="lucide:external-link" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="&lt;?php echo $active ? 'text-indigo-200' : 'text-slate-300'; ?&gt;" height="18" icon="lucide:external-link" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 </div>
 </a>
 <?php endforeach; ?>
 </div>
 <div className="mt-5 rounded-2xl bg-amber-500/10 p-4 ring-1 ring-amber-400/20">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-amber-200" height="18" icon="lucide:shield-alert" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-amber-200" height="18" icon="lucide:shield-alert" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <div className="text-xs font-medium text-amber-100">Legal &amp; safety</div>
 <div className="mt-1 text-xs text-amber-100/80">
@@ -786,13 +828,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <?php else: ?>
 <div className="rounded-3xl bg-white/5 p-8 ring-1 ring-white/10">
 <div className="flex items-start gap-3">
-<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:route-off" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="mt-0.5 text-slate-300" height="18" icon="lucide:route-off" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
 <div>
 <div className="text-sm font-medium tracking-tight text-slate-100">Page not found</div>
 <div className="mt-1 text-xs text-slate-300/80">Coba kembali ke browse.</div>
 <div className="mt-4">
 <a className="inline-flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-sm font-medium text-slate-100 ring-1 ring-white/10 hover:bg-white/10" href="?view=browse">
-<iconify-icon className="text-slate-300" height="18" icon="lucide:compass" style={{-IconifyStrokeWidth: '1.5'}} width="18"></iconify-icon>
+<iconify-icon className="text-slate-300" height="18" icon="lucide:compass" style={{'--iconify-stroke-width': '1.5'}} width="18"></iconify-icon>
                   Browse
                 </a>
 </div>

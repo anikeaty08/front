@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -172,6 +208,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -193,7 +235,7 @@ addUtilities({
 </div>
 
 <div className="fixed flex z-50 w-full pt-6 pr-4 pl-4 top-0 left-0 justify-center">
-<nav className="shadow-black/50 flex md:gap-12 md:w-auto bg-black/60 w-full max-w-5xl rounded-full pt-2 pr-2 pb-2 pl-6 shadow-2xl backdrop-blur-xl gap-x-8 gap-y-8 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<nav className="shadow-black/50 flex md:gap-12 md:w-auto bg-black/60 w-full max-w-5xl rounded-full pt-2 pr-2 pb-2 pl-6 shadow-2xl backdrop-blur-xl gap-x-8 gap-y-8 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
 <div className="flex gap-2 shrink-0 gap-x-2 gap-y-2 items-center cursor-pointer" onclick="window.location.href='/home'" role="button">
 <span className="text-base font-medium text-white tracking-tight">Nebula</span>
 </div>
@@ -257,7 +299,7 @@ addUtilities({
 
 <div className="text-center max-w-5xl z-10 mt-24 mr-auto mb-24 ml-auto pr-6 pl-6 relative">
 
-<div className="[animation:fadeSlideIn_1s_ease-out_0.8s_both] animate-on-scroll inline-flex transition-transform hover:scale-105 cursor-pointer group animate bg-gradient-to-br from-white/10 to-white/0 rounded-full mb-10 pt-1.5 pr-3 pb-1.5 pl-3 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<div className="[animation:fadeSlideIn_1s_ease-out_0.8s_both] animate-on-scroll inline-flex transition-transform hover:scale-105 cursor-pointer group animate bg-gradient-to-br from-white/10 to-white/0 rounded-full mb-10 pt-1.5 pr-3 pb-1.5 pl-3 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <span className="flex h-1.5 w-1.5 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)] group-hover:animate-pulse"></span>
 <span className="text-xs font-medium text-orange-100/80 tracking-wide group-hover:text-white transition-colors font-sans">New release: Nebula Protocol v2.0</span>
 </div>
@@ -453,7 +495,7 @@ addUtilities({
 </div>
 </section><section className="z-20 w-full max-w-7xl mt-24 mr-auto mb-24 ml-auto pt-10 pr-2 pb-32 pl-2 relative">
 
-<div className="group overflow-hidden bg-gradient-to-br from-white/10 to-white/0 z-10 rounded-[2.5rem] mb-6 relative backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group overflow-hidden bg-gradient-to-br from-white/10 to-white/0 z-10 rounded-[2.5rem] mb-6 relative backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 
 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent opacity-40 pointer-events-none"></div>
 <div className="grid lg:grid-cols-2 gap-0 gap-x-0 gap-y-0">
@@ -610,7 +652,7 @@ addUtilities({
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-6 gap-y-6">
 
-<div className="group overflow-hidden flex flex-col hover:border-white/20 transition-colors duration-500 bg-gradient-to-br from-white/5 to-white/0 rounded-[2rem] backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2rem'}}>
+<div className="group overflow-hidden flex flex-col hover:border-white/20 transition-colors duration-500 bg-gradient-to-br from-white/5 to-white/0 rounded-[2rem] backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2rem'}}>
 
 <div className="flex overflow-hidden bg-gradient-to-b from-white/[0.03] to-transparent h-64 relative items-center justify-center" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 90%, transparent)'}}>
 <div className="overflow-hidden bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/[0.07] via-transparent to-transparent opacity-50 absolute top-0 right-0 bottom-0 left-0">
@@ -702,7 +744,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="group overflow-hidden flex flex-col hover:border-white/20 transition-colors duration-500 bg-gradient-to-br from-white/5 to-white/0 rounded-[2rem] backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2rem'}}>
+<div className="group overflow-hidden flex flex-col hover:border-white/20 transition-colors duration-500 bg-gradient-to-br from-white/5 to-white/0 rounded-[2rem] backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2rem'}}>
 
 <div className="flex overflow-hidden bg-gradient-to-b from-white/[0.03] to-transparent h-64 relative items-center justify-center" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 85%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 85%, transparent)'}}>
 
@@ -816,14 +858,14 @@ addUtilities({
 <div className="flex flex-col z-10 bg-gradient-to-b from-zinc-900 to-black w-full h-full pt-16 pr-6 pl-6 relative">
 
 <div className="flex z-10 mb-8 relative items-center justify-between">
-<button className="flex hover:bg-white/10 transition-colors text-white/70 bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full backdrop-blur-sm items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="flex hover:bg-white/10 transition-colors text-white/70 bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full backdrop-blur-sm items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="lucide lucide-arrow-left" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path className="" d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
 </button>
 <div className="flex items-center gap-2">
 <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse"></div>
 <span className="text-sm font-semibold text-white tracking-wide">Nebula Core</span>
 </div>
-<button className="flex hover:bg-white/10 transition-colors text-white/70 bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full backdrop-blur-sm items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="flex hover:bg-white/10 transition-colors text-white/70 bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full backdrop-blur-sm items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="lucide lucide-more-horizontal" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
 </button>
 </div>
@@ -879,13 +921,13 @@ addUtilities({
 <span className="text-[10px] font-medium text-zinc-400 group-hover:text-white transition-colors">Deposit</span>
 </button>
 <button className="flex flex-col items-center gap-2 group">
-<div className="flex transition-all hover:bg-zinc-800 group-active:scale-95 text-white bg-gradient-to-br from-white/10 to-white/0 w-12 h-12 rounded-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex transition-all hover:bg-zinc-800 group-active:scale-95 text-white bg-gradient-to-br from-white/10 to-white/0 w-12 h-12 rounded-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <svg className="lucide lucide-arrow-left-right w-[18px] h-[18px]" data-icon-replaced="true" data-icon-set="solar" data-solar="sort-horizontal-bold-duotone" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '18px', height: '18px'}} viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M10.875 4a.75.75 0 0 0-1.272-.538l-4.125 4a.75.75 0 0 0 0 1.076l4.125 4A.75.75 0 0 0 10.875 12V8.75H18a.75.75 0 0 0 0-1.5h-7.125z" fill="#ffffff"></path><path d="M13.125 12a.75.75 0 0 1 1.272-.538l4.125 4a.75.75 0 0 1 0 1.076l-4.125 4A.75.75 0 0 1 13.125 20v-3.25H6a.75.75 0 0 1 0-1.5h7.125z" fill="#ffffff" opacity=".5"></path></svg>
 </div>
 <span className="text-[10px] font-medium text-zinc-400 group-hover:text-white transition-colors">Swap</span>
 </button>
 <button className="flex flex-col items-center gap-2 group">
-<div className="flex transition-all hover:bg-zinc-800 group-active:scale-95 text-white bg-gradient-to-br from-white/10 to-white/0 w-12 h-12 rounded-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex transition-all hover:bg-zinc-800 group-active:scale-95 text-white bg-gradient-to-br from-white/10 to-white/0 w-12 h-12 rounded-xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <svg className="lucide lucide-send w-[18px] h-[18px]" data-icon-replaced="true" data-icon-set="solar" data-solar="file-send-bold-duotone" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(255, 255, 255)', width: '18px', height: '18px'}} viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path className="" clip-rule="evenodd" d="M10 22h4c3.771 0 5.657 0 6.828-1.172S22 17.771 22 14v-.437c0-.873 0-1.529-.043-2.063h-4.052c-1.097 0-2.067 0-2.848-.105c-.847-.114-1.694-.375-2.385-1.066c-.692-.692-.953-1.539-1.067-2.386c-.105-.781-.105-1.75-.105-2.848l.01-2.834q0-.124.02-.244C11.121 2 10.636 2 10.03 2C6.239 2 4.343 2 3.172 3.172C2 4.343 2 6.229 2 10v4c0 3.771 0 5.657 1.172 6.828S6.229 22 10 22" fill="#ffffff" fill-rule="evenodd" opacity=".5"></path><path d="M7.987 12.953a.75.75 0 0 1 1.026 0l2 1.875a.75.75 0 0 1-1.026 1.094l-.737-.69V18.5a.75.75 0 0 1-1.5 0v-3.269l-.737.691a.75.75 0 0 1-1.026-1.094zM11.51 2.26l-.01 2.835c0 1.097 0 2.066.105 2.848c.114.847.375 1.694 1.067 2.385c.69.691 1.538.953 2.385 1.067c.781.105 1.751.105 2.848.105h4.052q.02.232.028.5H22c0-.268 0-.402-.01-.56a5.3 5.3 0 0 0-.958-2.641c-.094-.128-.158-.204-.285-.357C19.954 7.494 18.91 6.312 18 5.5c-.81-.724-1.921-1.515-2.89-2.161c-.832-.556-1.248-.834-1.819-1.04a6 6 0 0 0-.506-.154c-.384-.095-.758-.128-1.285-.14z" fill="#ffffff"></path></svg>
 </div>
 <span className="text-[10px] font-medium text-zinc-400 group-hover:text-white transition-colors">Send</span>
@@ -901,7 +943,7 @@ addUtilities({
 </div>
 </div>
 <div className="space-y-3">
-<div className="flex hover:bg-white/[0.04] transition-colors cursor-pointer group bg-gradient-to-br from-white/10 to-white/0 rounded-xl px-3 py-3 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex hover:bg-white/[0.04] transition-colors cursor-pointer group bg-gradient-to-br from-white/10 to-white/0 rounded-xl px-3 py-3 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="flex items-center gap-3">
 <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center p-1.5 border border-indigo-500/20 group-hover:border-indigo-500/40 transition-colors">
 <svg aria-hidden="true" className="text-indigo-400" data-icon="simple-icons:ethereum" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -941,7 +983,7 @@ addUtilities({
 
 <div className="lg:col-span-4 flex flex-col gap-5 lg:items-end order-3 justify-center relative z-10">
 
-<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-2xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-2xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4 mb-6">
 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 p-0.5 shadow-lg shadow-orange-500/20">
 <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
@@ -957,39 +999,39 @@ addUtilities({
 </div>
 </div>
 <div className="flex justify-between gap-2 mb-5">
-<div className="flex flex-col flex-1 transition-colors hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col flex-1 transition-colors hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <span className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1 font-sans">Uptime</span>
 <span className="text-sm font-semibold text-white font-geist">99.99%</span>
 </div>
-<div className="flex flex-col flex-1 transition-colors hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col flex-1 transition-colors hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <span className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1 font-sans">Latency</span>
 <span className="text-sm font-semibold text-white font-geist">14ms</span>
 </div>
-<div className="flex flex-col flex-1 transition-colors hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col flex-1 transition-colors hover:bg-white/10 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <span className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1 font-sans">Reqs</span>
 <span className="text-sm font-semibold text-white font-geist">2.4M</span>
 </div>
 </div>
-<button className="hover:bg-white/10 transition-colors duration-300 flex gap-2 group text-xs font-medium text-white bg-gradient-to-br from-white/10 to-white/0 w-full rounded-full pt-2.5 pb-2.5 gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="hover:bg-white/10 transition-colors duration-300 flex gap-2 group text-xs font-medium text-white bg-gradient-to-br from-white/10 to-white/0 w-full rounded-full pt-2.5 pb-2.5 gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <span className="">View Analytics</span>
 <svg className="group-hover:translate-x-0.5 transition-transform" fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </button>
 </div>
 
-<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-5 pr-5 pb-5 pl-5 shadow-xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 <p className="text-sm text-zinc-400 leading-relaxed mb-4 font-sans">
             Enterprise-grade infrastructure with automated scaling and zero-knowledge security proofs built-in.
         </p>
 <div className="flex flex-wrap gap-2 mb-4">
-<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-zinc-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-2.5 pb-1 pl-2.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-zinc-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-2.5 pb-1 pl-2.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="" fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 zk-SNARKs
             </span>
-<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-zinc-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-2.5 pb-1 pl-2.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-zinc-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-2.5 pb-1 pl-2.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="" fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
                 Auto-scale
             </span>
-<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-zinc-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-2.5 pb-1 pl-2.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-zinc-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1 pr-2.5 pb-1 pl-2.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="" fill="none" height="10" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><line x1="3" x2="21" y1="9" y2="9"></line><path d="m9 16 3-3 3 3"></path></svg>
                 CLI Access
             </span>
@@ -1006,7 +1048,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-4 pr-4 pb-4 pl-4 shadow-xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="transition-transform duration-500 hover:scale-[1.01] text-left bg-gradient-to-br from-white/10 to-white/0 w-full max-w-sm rounded-3xl pt-4 pr-4 pb-4 pl-4 shadow-xl backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between mb-3">
 <div className="flex items-center gap-2">
 <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 font-sans">Live Logs</span>
@@ -1116,7 +1158,7 @@ addUtilities({
 
 <div className="lg:col-span-7 flex flex-col gap-6">
 
-<div className="group hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-bl from-blue-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0">
 </div>
 <div className="relative z-10">
@@ -1153,7 +1195,7 @@ addUtilities({
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 gap-x-6 gap-y-6">
 
-<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group hover:bg-zinc-900/60 transition-all duration-500 flex flex-col bg-zinc-900/40 rounded-[2.5rem] pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="relative z-10">
 <svg aria-hidden="true" className="iconify text-3xl text-zinc-700 mb-4 iconify--solar" data-icon="solar:chat-square-like-bold-duotone" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="m13.629 20.472l-.542.916c-.483.816-1.69.816-2.174 0l-.542-.916c-.42-.71-.63-1.066-.968-1.262c-.338-.197-.763-.204-1.613-.219c-1.256-.021-2.043-.098-2.703-.372a5 5 0 0 1-2.706-2.706C2 14.995 2 13.83 2 11.5v-1c0-3.273 0-4.91.737-6.112a5 5 0 0 1 1.65-1.651C5.59 2 7.228 2 10.5 2h3c3.273 0 4.91 0 6.113.737a5 5 0 0 1 1.65 1.65C22 5.59 22 7.228 22 10.5v1c0 2.33 0 3.495-.38 4.413a5 5 0 0 1-2.707 2.706c-.66.274-1.447.35-2.703.372c-.85.015-1.275.022-1.613.219c-.338.196-.548.551-.968 1.262" fill="currentColor" opacity=".5"></path>
@@ -1219,7 +1261,7 @@ addUtilities({
 
 <div className="lg:col-span-5 carousel-container relative">
 
-<div className="carousel-card group flex flex-col hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm justify-between animate-carousel" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem', animationDelay: '0s', opacity: '0'}}>
+<div className="carousel-card group flex flex-col hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm justify-between animate-carousel" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem', animationDelay: '0s', opacity: '0'}}>
 
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0">
 </div>
@@ -1254,7 +1296,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="carousel-card group flex flex-col hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm justify-between animate-carousel" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem', animationDelay: '5s', opacity: '0'}}>
+<div className="carousel-card group flex flex-col hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm justify-between animate-carousel" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem', animationDelay: '5s', opacity: '0'}}>
 
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0">
 </div>
@@ -1289,7 +1331,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="carousel-card group flex flex-col hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm justify-between animate-carousel" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem', animationDelay: '10s', opacity: '0'}}>
+<div className="carousel-card group flex flex-col hover:bg-zinc-900/60 transition-all duration-500 bg-zinc-900/40 rounded-[2.5rem] pt-10 pr-10 pb-10 pl-10 relative backdrop-blur-sm justify-between animate-carousel" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem', animationDelay: '10s', opacity: '0'}}>
 
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0">
 </div>
@@ -1618,7 +1660,7 @@ addUtilities({
 <div className="relative z-10">
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-<article className="group rounded-[2.5rem] bg-zinc-900/40 hover:bg-zinc-900/60 transition-all duration-500 relative backdrop-blur-sm overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<article className="group rounded-[2.5rem] bg-zinc-900/40 hover:bg-zinc-900/60 transition-all duration-500 relative backdrop-blur-sm overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="relative">
 <div className="aspect-[16/10] bg-gradient-to-br from-white/10 to-white/0 overflow-hidden">
@@ -1666,7 +1708,7 @@ addUtilities({
 </div>
 </article>
 
-<article className="group rounded-[2.5rem] bg-zinc-900/40 hover:bg-zinc-900/60 transition-all duration-500 relative backdrop-blur-sm overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<article className="group rounded-[2.5rem] bg-zinc-900/40 hover:bg-zinc-900/60 transition-all duration-500 relative backdrop-blur-sm overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="relative">
 <div className="aspect-[16/10] bg-gradient-to-br from-white/10 to-white/0 overflow-hidden">
@@ -1713,7 +1755,7 @@ addUtilities({
 </div>
 </article>
 
-<article className="group hover:bg-zinc-900/60 transition-all duration-500 backdrop-blur-sm-hidden overflow-hidden bg-zinc-900/40 z-10 rounded-[2.5rem] relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<article className="group hover:bg-zinc-900/60 transition-all duration-500 backdrop-blur-sm-hidden overflow-hidden bg-zinc-900/40 z-10 rounded-[2.5rem] relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="relative">
 <div className="aspect-[16/10] bg-gradient-to-br from-white/10 to-white/0 overflow-hidden">
@@ -1759,7 +1801,7 @@ addUtilities({
 </div>
 </article>
 
-<article className="group rounded-[2.5rem] bg-zinc-900/40 hover:bg-zinc-900/60 transition-all duration-500 relative backdrop-blur-sm overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<article className="group rounded-[2.5rem] bg-zinc-900/40 hover:bg-zinc-900/60 transition-all duration-500 relative backdrop-blur-sm overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 rounded-[2.5rem] absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="relative">
 <div className="aspect-[16/10] bg-gradient-to-br from-white/10 to-white/0 overflow-hidden">
@@ -1849,7 +1891,7 @@ addUtilities({
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
 
 <div className="lg:col-span-5">
-<div className="group rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-sm pt-8 pr-6 pb-8 pl-6 sm:pt-10 sm:pr-10 sm:pb-10 sm:pl-10 relative overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0), rgba(255,255,255,0.1))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="group rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-sm pt-8 pr-6 pb-8 pl-6 sm:pt-10 sm:pr-10 sm:pb-10 sm:pl-10 relative overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0), rgba(255,255,255,0.1))', '--border-radius-before': '2.5rem'}}>
 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
 <div className="absolute -top-20 -right-24 w-72 h-72 rounded-full bg-orange-500/10 blur-[80px] pointer-events-none"></div>
 <div className="relative z-10">

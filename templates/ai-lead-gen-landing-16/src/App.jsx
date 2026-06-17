@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -52,6 +88,12 @@ cursor.style.opacity = '1';
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -237,7 +279,7 @@ cursor.style.opacity = '1';
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
 
-<div className="glass-card flex flex-col rounded-2xl pt-8 pr-8 pb-8 pl-8" style={{-MouseX: '148px', -MouseY: '833.25px'}}>
+<div className="glass-card flex flex-col rounded-2xl pt-8 pr-8 pb-8 pl-8" style={{'--mouse-x': '148px', '--mouse-y': '833.25px'}}>
 <div className="text-xs text-blue-400 font-mono mb-4 relative z-10">
               01. AI SYSTEMS
             </div>
@@ -314,7 +356,7 @@ cursor.style.opacity = '1';
 </button>
 </div>
 
-<div className="glass-card flex flex-col rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{-MouseX: '-244px', -MouseY: '833.25px'}}>
+<div className="glass-card flex flex-col rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{'--mouse-x': '-244px', '--mouse-y': '833.25px'}}>
 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full mix-blend-screen"></div>
 <div className="text-xs text-blue-400 font-mono mb-4 relative z-10">
               02. LEADS DONE FOR YOU
@@ -411,7 +453,7 @@ cursor.style.opacity = '1';
 </button>
 </div>
 
-<div className="glass-card flex flex-col rounded-2xl pt-8 pr-8 pb-8 pl-8" style={{-MouseX: '-636px', -MouseY: '833.25px'}}>
+<div className="glass-card flex flex-col rounded-2xl pt-8 pr-8 pb-8 pl-8" style={{'--mouse-x': '-636px', '--mouse-y': '833.25px'}}>
 <div className="text-xs text-blue-400 font-mono mb-4 relative z-10">
               03. AI APPS WE BUILD
             </div>
@@ -500,7 +542,7 @@ cursor.style.opacity = '1';
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-<div className="glass-card flex flex-col p-6 rounded-2xl group relative overflow-hidden" style={{-MouseX: '148px', -MouseY: '-65.75px'}}>
+<div className="glass-card flex flex-col p-6 rounded-2xl group relative overflow-hidden" style={{'--mouse-x': '148px', '--mouse-y': '-65.75px'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-b from-blue-500/10 to-transparent"></div>
 <div className="absolute bottom-0 right-0 w-48 h-40 opacity-20 pointer-events-none group-hover:opacity-60 transition-opacity duration-500 overflow-hidden" style={{WebkitMaskImage: 'linear-gradient(to top left, black 40%, transparent 100%)', maskImage: 'linear-gradient(to top left, black 40%, transparent 100%)'}}>
 <style>
@@ -584,7 +626,7 @@ cursor.style.opacity = '1';
 </div>
 </div>
 
-<div className="glass-card flex flex-col pt-6 pr-6 pb-6 pl-6 rounded-2xl group relative overflow-hidden" style={{-MouseX: '-146px', -MouseY: '-63.75px'}}>
+<div className="glass-card flex flex-col pt-6 pr-6 pb-6 pl-6 rounded-2xl group relative overflow-hidden" style={{'--mouse-x': '-146px', '--mouse-y': '-63.75px'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-b from-blue-500/10 to-transparent"></div>
 <div className="absolute bottom-0 right-0 w-64 h-56 opacity-10 pointer-events-none group-hover:opacity-40 transition-opacity duration-500 overflow-hidden">
 <style>
@@ -639,7 +681,7 @@ cursor.style.opacity = '1';
 </div>
 </div>
 
-<div className="glass-card flex flex-col pt-6 pr-6 pb-6 pl-6 rounded-2xl group relative overflow-hidden" style={{-MouseX: '-440px', -MouseY: '-65.75px'}}>
+<div className="glass-card flex flex-col pt-6 pr-6 pb-6 pl-6 rounded-2xl group relative overflow-hidden" style={{'--mouse-x': '-440px', '--mouse-y': '-65.75px'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-b from-blue-500/10 to-transparent"></div>
 <div className="absolute bottom-0 right-0 w-full h-full opacity-10 pointer-events-none group-hover:opacity-40 transition-opacity duration-500 overflow-hidden">
 <style>
@@ -719,7 +761,7 @@ cursor.style.opacity = '1';
 </div>
 </div>
 
-<div className="glass-card flex flex-col pt-6 pr-6 pb-6 pl-6 rounded-2xl group relative overflow-hidden" style={{-MouseX: '-734px', -MouseY: '-65.75px'}}>
+<div className="glass-card flex flex-col pt-6 pr-6 pb-6 pl-6 rounded-2xl group relative overflow-hidden" style={{'--mouse-x': '-734px', '--mouse-y': '-65.75px'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-b from-blue-500/10 to-transparent"></div>
 <div className="absolute bottom-0 right-0 w-full h-full opacity-20 pointer-events-none group-hover:opacity-60 transition-opacity duration-500 overflow-hidden">
 <style>
@@ -847,7 +889,7 @@ cursor.style.opacity = '1';
             dashboard. Optimized for desktop command and mobile response.
           </p>
 </div>
-<div className="glass-card flex flex-col group select-none lg:h-[750px] overflow-hidden bg-[#0B1120] w-full h-auto rounded-xl relative shadow-2xl" style={{-MouseX: '188px', -MouseY: '-801px'}}>
+<div className="glass-card flex flex-col group select-none lg:h-[750px] overflow-hidden bg-[#0B1120] w-full h-auto rounded-xl relative shadow-2xl" style={{'--mouse-x': '188px', '--mouse-y': '-801px'}}>
 <div className="min-h-[750px] flex flex-col z-30 bg-[#0B1120] w-full h-full pt-12 pr-4 pb-12 pl-4 relative gap-y-12 items-center justify-center">
 
 <div className="flex flex-col lg:flex-row gap-8 z-10 w-full perspective-[1000px] gap-x-8 gap-y-8 items-center justify-center">

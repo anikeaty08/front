@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -256,6 +292,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -984,10 +1026,10 @@ addUtilities({
 
 <div className="z-10 grid md:grid-cols-2 gap-6 relative gap-x-6 gap-y-6">
 
-<div className="group spotlight-card overflow-hidden md:p-10 bg-gradient-to-br from-[#121214] to-[#000000]/0 border-white/5 border rounded-[32px] px-8 py-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)]" style={{-MouseX: '571px', -MouseY: '236.5px'}}>
+<div className="group spotlight-card overflow-hidden md:p-10 bg-gradient-to-br from-[#121214] to-[#000000]/0 border-white/5 border rounded-[32px] px-8 py-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)]" style={{'--mouse-x': '571px', '--mouse-y': '236.5px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none"></div>
 <div className="max-w-sm z-10 relative">
 <h3 className="text-2xl font-medium text-white tracking-tight font-geist">
@@ -1049,10 +1091,10 @@ addUtilities({
 </div>
 </div>
 
-<div className="group spotlight-card overflow-hidden md:p-10 bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{-MouseX: '8px', -MouseY: '274.5px'}}>
+<div className="group spotlight-card overflow-hidden md:p-10 bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{'--mouse-x': '8px', '--mouse-y': '274.5px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none"></div>
 <div className="max-w-xs z-10 relative">
 <h3 className="text-2xl font-medium text-white tracking-tight font-geist">
@@ -1084,10 +1126,10 @@ addUtilities({
 </div>
 </div>
 
-<div className="group spotlight-card relative overflow-hidden rounded-[32px] border border-white/5 bg-[#0A0A0A] p-8 md:p-10 shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{-MouseX: '590px', -MouseY: '81.5px'}}>
+<div className="group spotlight-card relative overflow-hidden rounded-[32px] border border-white/5 bg-[#0A0A0A] p-8 md:p-10 shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{'--mouse-x': '590px', '--mouse-y': '81.5px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none"></div>
 <div className="max-w-sm z-10 relative">
 <h3 className="text-2xl font-medium text-white tracking-tight font-geist">
@@ -1141,10 +1183,10 @@ addUtilities({
 </div>
 </div>
 
-<div className="group spotlight-card overflow-hidden md:p-10 transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E] bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl" style={{-MouseX: '45px', -MouseY: '290.5px'}}>
+<div className="group spotlight-card overflow-hidden md:p-10 transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E] bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl" style={{'--mouse-x': '45px', '--mouse-y': '290.5px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none">
 </div>
 <div className="max-w-xs z-10 relative">
@@ -1731,10 +1773,10 @@ addUtilities({
     }
   </style>
 
-<article className="testimonial-card card-1 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{-MouseX: '371px', -MouseY: '162.10000610351562px'}}>
+<article className="testimonial-card card-1 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{'--mouse-x': '371px', '--mouse-y': '162.10000610351562px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black_60%,transparent_100%)] pointer-events-none z-0"></div>
 <div className="relative z-10">
 <div className="mb-3 text-3xl leading-none text-white font-jakarta font-medium">“</div>
@@ -1751,10 +1793,10 @@ addUtilities({
 </div>
 </article>
 
-<article className="testimonial-card card-2 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{-MouseX: '377.20001220703125px', -MouseY: '133.10000610351562px'}}>
+<article className="testimonial-card card-2 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{'--mouse-x': '377.20001220703125px', '--mouse-y': '133.10000610351562px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black_60%,transparent_100%)] pointer-events-none z-0"></div>
 <div className="relative z-10">
 <div className="mb-3 text-3xl leading-none text-white font-jakarta font-medium">“</div>
@@ -1771,10 +1813,10 @@ addUtilities({
 </div>
 </article>
 
-<article className="testimonial-card card-3 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{-MouseX: '158.800048828125px', -MouseY: '188.10000610351562px'}}>
+<article className="testimonial-card card-3 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{'--mouse-x': '158.800048828125px', '--mouse-y': '188.10000610351562px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black_60%,transparent_100%)] pointer-events-none z-0"></div>
 <div className="relative z-10">
 <div className="mb-3 text-3xl leading-none text-white font-jakarta font-medium">“</div>
@@ -1791,10 +1833,10 @@ addUtilities({
 </div>
 </article>
 
-<article className="testimonial-card card-4 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{-MouseX: '261.20001220703125px', -MouseY: '4.899993896484375px'}}>
+<article className="testimonial-card card-4 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{'--mouse-x': '261.20001220703125px', '--mouse-y': '4.899993896484375px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black_60%,transparent_100%)] pointer-events-none z-0"></div>
 <div className="relative z-10">
 <div className="mb-3 text-3xl leading-none text-white font-jakarta font-medium">“</div>
@@ -1811,10 +1853,10 @@ addUtilities({
 </div>
 </article>
 
-<article className="testimonial-card card-5 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{-MouseX: '13.800048828125px', -MouseY: '214.70468139648438px'}}>
+<article className="testimonial-card card-5 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{'--mouse-x': '13.800048828125px', '--mouse-y': '214.70468139648438px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black_60%,transparent_100%)] pointer-events-none z-0"></div>
 <div className="relative z-10">
 <div className="mb-3 text-3xl leading-none text-white font-jakarta font-medium">“</div>
@@ -1831,10 +1873,10 @@ addUtilities({
 </div>
 </article>
 
-<article className="testimonial-card card-6 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{-MouseX: '0px', -MouseY: '51.100006103515625px'}}>
+<article className="testimonial-card card-6 group/card w-full max-w-sm rounded-2xl bg-[#0A0A0A] border border-white/5 px-6 py-5 text-left relative overflow-hidden" style={{'--mouse-x': '0px', '--mouse-y': '51.100006103515625px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black_60%,transparent_100%)] pointer-events-none z-0"></div>
 <div className="relative z-10">
 <div className="mb-3 text-3xl leading-none text-white font-jakarta font-medium">“</div>
@@ -1888,11 +1930,11 @@ addUtilities({
 
           ---
 
-          <div className="group spotlight-card overflow-hidden overflow-x-auto shadow-black/50 [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-[#0A0A0A] w-full border-white/5 border rounded-[32px] mt-8 shadow-2xl relative" style={{-MouseX: '0px', -MouseY: '0px'}}>
+          <div className="group spotlight-card overflow-hidden overflow-x-auto shadow-black/50 [animation:fadeSlideIn_0.8s_ease-out_0.2s_both] animate-on-scroll bg-[#0A0A0A] w-full border-white/5 border rounded-[32px] mt-8 shadow-2xl relative" style={{'--mouse-x': '0px', '--mouse-y': '0px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding bg-[linearGradient(rgba(255,255,255,0.03)_1px,transparent_1px),linearGradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size: '40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none z-0'}}></div>
-<div className="min-w-[800px] grid grid-cols-4 divide-x divide-white/5 z-10 text-sm relative group" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{-X: '1147px', -Y: '259.3046875px'}}>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding bg-[linearGradient(rgba(255, 255, 255, 0.03)_1px, transparent_1px), linearGradient(90deg, rgba(255, 255, 255, 0.03)_1px, transparent_1px)] bg-[size: '40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none z-0'}}></div>
+<div className="min-w-[800px] grid grid-cols-4 divide-x divide-white/5 z-10 text-sm relative group" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{'--x': '1147px', '--y': '259.3046875px'}}>
 
 <div className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255, 255, 255, 0.03), transparent 40%)'}}></div>
 

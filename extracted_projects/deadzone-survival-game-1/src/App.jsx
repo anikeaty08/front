@@ -87,6 +87,42 @@ export default function App() {
 
   // ---------- Input ----------
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const down = (e) => {
       const k = e.key.toLowerCase();
       if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) e.preventDefault();
@@ -469,7 +505,7 @@ export default function App() {
                   <div className="w-44 h-3 rounded-full bg-black/60 border border-white/10 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-200 ${hud.hp > 50 ? "bg-emerald-400" : hud.hp > 25 ? "bg-amber-400" : "bg-red-500"}`}
-                      style={{ width: `${(hud.hp / hud.maxHp) * 100}%` }}
+                      style={{width: `${(hud.hp / hud.maxHp) * 100}%`}}
                     />
                   </div>
                   <span className="text-xs text-zinc-300 w-8">{hud.hp}</span>

@@ -37,7 +37,7 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="max-w-2xl">
               <div className="inline-flex items-center rounded-full bg-[#f4ece7] px-4 py-1.5 text-sm font-semibold text-[#d99f98] ring-1 ring-inset ring-[#d99f98]/20 mb-8 uppercase tracking-wide">
-                <iconify-icon icon="lucide:sparkles" className="w-4 h-4 mr-2" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                <iconify-icon icon="lucide:sparkles" className="w-4 h-4 mr-2" style={{strokeWidth: 1.5}}></iconify-icon>
                 NO BRA NURSING PADS
               </div>
               <h1 className="text-5xl lg:text-7xl font-semibold tracking-tight text-[#5c504a] leading-[1.1] mb-8">
@@ -53,7 +53,7 @@ export default function App() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <a href="#shop" className="inline-flex items-center justify-center rounded-full bg-[#d99f98] px-8 py-4 text-lg font-medium text-white hover:bg-[#c98e87] transition-all shadow-sm hover:shadow-md">
                   Shop Skinsnugs
-                  <iconify-icon icon="lucide:arrow-right" className="w-5 h-5 ml-2" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                  <iconify-icon icon="lucide:arrow-right" className="w-5 h-5 ml-2" style={{strokeWidth: 1.5}}></iconify-icon>
                 </a>
                 <a href="#how-it-works" className="inline-flex items-center justify-center rounded-full bg-white border border-[#f4ece7] px-8 py-4 text-lg font-medium text-[#5c504a] hover:bg-[#fdfbf9] transition-colors">
                   How it works
@@ -114,22 +114,22 @@ export default function App() {
               </p>
               <ul className="space-y-4 mb-10 text-lg text-[#8a7f7a]">
                 <li className="flex items-center gap-3">
-                  <iconify-icon icon="lucide:check" className="w-5 h-5 text-[#d99f98]" style={{ strokeWidth: 2 }}></iconify-icon>
+                  <iconify-icon icon="lucide:check" className="w-5 h-5 text-[#d99f98]" style={{strokeWidth: 2}}></iconify-icon>
                   Braless overnight comfort
                 </li>
                 <li className="flex items-center gap-3">
-                  <iconify-icon icon="lucide:check" className="w-5 h-5 text-[#d99f98]" style={{ strokeWidth: 2 }}></iconify-icon>
+                  <iconify-icon icon="lucide:check" className="w-5 h-5 text-[#d99f98]" style={{strokeWidth: 2}}></iconify-icon>
                   Gentle, skin-friendly adhesive
                 </li>
                 <li className="flex items-center gap-3">
-                  <iconify-icon icon="lucide:check" className="w-5 h-5 text-[#d99f98]" style={{ strokeWidth: 2 }}></iconify-icon>
+                  <iconify-icon icon="lucide:check" className="w-5 h-5 text-[#d99f98]" style={{strokeWidth: 2}}></iconify-icon>
                   Leak-proof absorbent core
                 </li>
               </ul>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a href="https://www.amazon.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full bg-[#d99f98] px-10 py-4 text-lg font-medium text-white hover:bg-[#c98e87] transition-all shadow-sm hover:shadow-md w-full sm:w-auto">
                   Get it from Amazon
-                  <iconify-icon icon="lucide:shopping-cart" className="w-5 h-5 ml-2" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                  <iconify-icon icon="lucide:shopping-cart" className="w-5 h-5 ml-2" style={{strokeWidth: 1.5}}></iconify-icon>
                 </a>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function App() {
             {/* Feature 1 */}
             <div className="bg-[#fdfbf9] rounded-3xl p-8 shadow-sm border border-white">
               <div className="w-14 h-14 rounded-2xl bg-[#f4ece7] flex items-center justify-center mb-8">
-                <iconify-icon icon="lucide:moon" className="w-7 h-7 text-[#d99f98]" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                <iconify-icon icon="lucide:moon" className="w-7 h-7 text-[#d99f98]" style={{strokeWidth: 1.5}}></iconify-icon>
               </div>
               <h3 className="text-2xl font-semibold tracking-tight text-[#5c504a] mb-4">
                 Sleep Braless
@@ -169,7 +169,7 @@ export default function App() {
             {/* Feature 2 */}
             <div className="bg-[#fdfbf9] rounded-3xl p-8 shadow-sm border border-white">
               <div className="w-14 h-14 rounded-2xl bg-[#f4ece7] flex items-center justify-center mb-8">
-                <iconify-icon icon="lucide:droplets" className="w-7 h-7 text-[#d99f98]" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                <iconify-icon icon="lucide:droplets" className="w-7 h-7 text-[#d99f98]" style={{strokeWidth: 1.5}}></iconify-icon>
               </div>
               <h3 className="text-2xl font-semibold tracking-tight text-[#5c504a] mb-4">
                 No More Leaks
@@ -184,7 +184,7 @@ export default function App() {
             {/* Feature 3 */}
             <div className="bg-[#fdfbf9] rounded-3xl p-8 shadow-sm border border-white">
               <div className="w-14 h-14 rounded-2xl bg-[#f4ece7] flex items-center justify-center mb-8">
-                <iconify-icon icon="lucide:heart" className="w-7 h-7 text-[#d99f98]" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                <iconify-icon icon="lucide:heart" className="w-7 h-7 text-[#d99f98]" style={{strokeWidth: 1.5}}></iconify-icon>
               </div>
               <h3 className="text-2xl font-semibold tracking-tight text-[#5c504a] mb-4">
                 Gentle Adhesive
@@ -345,7 +345,7 @@ export default function App() {
           </p>
           <a href="#shop" className="inline-flex items-center justify-center rounded-full bg-white px-10 py-5 text-xl font-medium text-[#d99f98] hover:bg-[#fdfbf9] transition-colors shadow-lg">
             Shop Now
-            <iconify-icon icon="lucide:arrow-right" className="w-6 h-6 ml-3" style={{ strokeWidth: 1.5 }}></iconify-icon>
+            <iconify-icon icon="lucide:arrow-right" className="w-6 h-6 ml-3" style={{strokeWidth: 1.5}}></iconify-icon>
           </a>
         </div>
       </section>

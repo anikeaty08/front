@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -452,7 +494,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <article className="flex flex-col rounded-2xl border border-slate-200 bg-white/90 overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:shadow-emerald-500/20 transition-all">
 <div className="relative h-40 bg-gradient-to-tr from-[#2ECC71] via-[#F1C40F] to-[#E67E22]">
-<div className="absolute inset-3 rounded-xl bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.5), rgba(15,23,42,0)), url(\'https://images.pexels.com/photos/1181565/pexels-photo-1181565.jpeg?auto=compress&amp'}}></div>
+<div className="absolute inset-3 rounded-xl bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.5), rgba(15,23,42,0)), url(\'https: //images.pexels.com/photos/1181565/pexels-photo-1181565.jpeg?auto=compress&amp'}}></div>
 <div className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[0.7rem] font-medium text-white">
 
 <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -488,7 +530,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </article>
 <article className="flex flex-col rounded-2xl border border-slate-200 bg-white/90 overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:shadow-orange-500/20 transition-all">
 <div className="relative h-40 bg-gradient-to-br from-[#E67E22] via-[#F1C40F] to-[#2ECC71]">
-<div className="absolute inset-3 rounded-xl bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.55), rgba(15,23,42,0)), url(\'https://images.pexels.com/photos/3699635/pexels-photo-3699635.jpeg?auto=compress&amp'}}></div>
+<div className="absolute inset-3 rounded-xl bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.55), rgba(15,23,42,0)), url(\'https: //images.pexels.com/photos/3699635/pexels-photo-3699635.jpeg?auto=compress&amp'}}></div>
 <div className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[0.7rem] font-medium text-white">
 
 <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -524,7 +566,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </article>
 <article className="flex flex-col rounded-2xl border border-slate-200 bg-white/90 overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:shadow-emerald-500/20 transition-all">
 <div className="relative h-40 bg-gradient-to-tr from-[#2ECC71] via-slate-900 to-[#F1C40F]">
-<div className="absolute inset-3 rounded-xl bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.6), rgba(15,23,42,0)), url(\'https://images.pexels.com/photos/8101524/pexels-photo-8101524.jpeg?auto=compress&amp'}}></div>
+<div className="absolute inset-3 rounded-xl bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.6), rgba(15,23,42,0)), url(\'https: //images.pexels.com/photos/8101524/pexels-photo-8101524.jpeg?auto=compress&amp'}}></div>
 <div className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[0.7rem] font-medium text-white">
 
 <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -611,7 +653,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <article className="group rounded-3xl overflow-hidden border border-slate-200 bg-white/90 shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-500/20 transition-all">
 <div className="relative h-52 sm:h-64 bg-gradient-to-r from-[#2ECC71] via-[#F1C40F] to-[#E67E22]">
-<div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.6), rgba(15,23,42,0.1)), url(\'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&amp'}}></div>
+<div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'linear-gradient(to top, rgba(15,23,42,0.6), rgba(15,23,42,0.1)), url(\'https: //images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&amp'}}></div>
 <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-black/70 px-3 py-1 text-[0.7rem] font-medium text-white">
 
 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

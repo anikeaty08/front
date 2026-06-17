@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -290,6 +326,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -463,19 +505,19 @@ gtag('config', 'G-2M6V79H761');
             Bain panoramique avec vue sur la mer, rituels spa premium et vastes
             salles de massage.
           </div>
-<div className="service-card reveal-child" style={{-MouseX: '395px', -MouseY: '241.21875px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '395px', '--mouse-y': '241.21875px'}}>
             Piscines à débordement chauffées toute l’année à l’eau de mer,
             entourées d’espaces lounge.
           </div>
-<div className="service-card reveal-child" style={{-MouseX: '5px', -MouseY: '207.21875px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '5px', '--mouse-y': '207.21875px'}}>
             Cuisine d’auteur, cave à vins et club cigare privé exclusivement
             réservé aux résidents.
           </div>
-<div className="service-card reveal-child" style={{-MouseX: '433px', -MouseY: '224px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '433px', '--mouse-y': '224px'}}>
             Programmes de bien-être avancés et diagnostics premium sur des
             équipements modernes.
           </div>
-<div className="service-card reveal-child" style={{-MouseX: '193px', -MouseY: '217px'}}>
+<div className="service-card reveal-child" style={{'--mouse-x': '193px', '--mouse-y': '217px'}}>
             Clubs de fitness, courts de tennis, espaces de yoga et école de surf
             professionnelle.
           </div>

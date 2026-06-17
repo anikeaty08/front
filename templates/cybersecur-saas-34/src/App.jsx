@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -59,7 +101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative rounded-3xl border border-white/10 bg-neutral-900/60 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/ee9b32bb-e72d-47cb-a983-ddf26a66cef2_1600w.jpg)] bg-cover backdrop-blur-sm px-4 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-12">
 
 <div aria-hidden="true" className="pointer-events-none select-none absolute -bottom-4 left-6" style={{letterSpacing: '-0.06em'}}>
-<span className="block leading-none" style={{fontWeight: '600', fontSize: 'min(22vw,260px)', lineHeight: '0.8', color: 'rgba(56,189,248,0.28)'}}>WESEE</span>
+<span className="block leading-none" style={{fontWeight: '600', fontSize: 'min(22vw, 260px)', lineHeight: '0.8', color: 'rgba(56,189,248,0.28)'}}>WESEE</span>
 </div>
 <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-start">
 
@@ -87,7 +129,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                         Book a security workshop
                       </span>
 </a>
-<a href="#cases" onmouseout="this.style.background='rgba(15,23,42,0.75)'" onmouseover="this.style.background='rgba(31,41,55,0.9)'" style={{alignItems: 'center', background: 'rgba(15,23,42,0.75)', border: '1px solid rgba(148,163,184,0.45)', borderRadius: '0.75rem', boxShadow: 'rgba(15,23,42,0.75) 0 1px 0 inset', boxSizing: 'border-box', color: 'rgb(249,250,251)', display: 'inline-flex', fontSize: '0.875rem', justifyContent: 'center', lineHeight: '1', padding: '0.75rem 1.25rem', textDecoration: 'none', userSelect: 'none', touchAction: 'manipulation', whiteSpace: 'nowrap', cursor: 'pointer', height: '3.25rem'}}>
+<a href="#cases" onmouseout="this.style.background='rgba(15,23,42,0.75)'" onmouseover="this.style.background='rgba(31,41,55,0.9)'" style={{alignItems: 'center', background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(148, 163, 184, 0.45)', borderRadius: '0.75rem', boxShadow: 'rgba(15, 23, 42, 0.75) 0 1px 0 inset', boxSizing: 'border-box', color: 'rgb(249,250,251)', display: 'inline-flex', fontSize: '0.875rem', justifyContent: 'center', lineHeight: '1', padding: '0.75rem 1.25rem', textDecoration: 'none', userSelect: 'none', touchAction: 'manipulation', whiteSpace: 'nowrap', cursor: 'pointer', height: '3.25rem'}}>
 <span className="flex items-center gap-2">
                         View breach simulations
                         <i className="lucide-arrow-right h-4 w-4"></i>

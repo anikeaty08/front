@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -190,6 +226,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -197,7 +239,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       
 
 <header className="fixed inset-x-0 top-0 z-50">
-<div className="backdrop-blur-sm" style={{backgroundColor: 'rgba(247,247,245,0.90)', borderBottom: '1px solid rgba(198,200,202,0.18)'}}>
+<div className="backdrop-blur-sm" style={{backgroundColor: 'rgba(247, 247, 245, 0.90)', borderBottom: '1px solid rgba(198,200,202,0.18)'}}>
 <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
 <div className="flex items-center justify-between">
 
@@ -297,7 +339,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-2xl overflow-hidden shadow-xl">
 <img alt="charter bus" className="w-full h-[420px] object-cover" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
 
-<div className="absolute top-5 left-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
+<div className="absolute top-5 left-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
 <div className="flex items-center gap-3">
 <svg className="w-4 h-4" fill="none" height="18" stroke="#0F2F55" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18">
 <path d="M12 20V10"></path><path d="M5 12l7-7 7 7"></path>
@@ -308,7 +350,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="absolute bottom-5 right-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
+<div className="absolute bottom-5 right-5 rounded-lg p-3 shadow" style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(6px)', border: '1px solid rgba(15,47,85,0.06)'}}>
 <div className="flex items-center gap-3">
 <svg className="w-4 h-4" fill="none" height="18" stroke="#0F2F55" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="18">
 <path d="M3 13h18"></path><path d="M6 21h.01"></path><path d="M18 21h.01"></path><rect height="7" rx="2" width="20" x="2" y="6"></rect>
@@ -426,7 +468,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </div>
 <div>
-<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>25+ Years of Experience</h4>
+<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>25+ Years of Experience</h4>
 <p className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>We’ve been helping groups travel safely and comfortably since 2000.</p>
 </div>
 </div>
@@ -442,7 +484,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </div>
 <div>
-<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Bilingual, Professional Drivers</h4>
+<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Bilingual, Professional Drivers</h4>
 <p className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Every driver is certified, experienced, and ready to assist — in English or Spanish.</p>
 </div>
 </div>
@@ -457,7 +499,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </div>
 <div>
-<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>On-Time, Every Time</h4>
+<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>On-Time, Every Time</h4>
 <p className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>We show up when we say we will. Reliability is part of our reputation.</p>
 </div>
 </div>
@@ -475,7 +517,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </div>
 <div>
-<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Clean, Comfortable Buses</h4>
+<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Clean, Comfortable Buses</h4>
 <p className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Our fleet is regularly maintained and designed for comfort on long or short trips.</p>
 </div>
 </div>
@@ -490,7 +532,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </div>
 <div>
-<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Custom Trip Options</h4>
+<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Custom Trip Options</h4>
 <p className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>From local events to out-of-state routes, we’ll help you plan the perfect itinerary.</p>
 </div>
 </div>
@@ -505,7 +547,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </div>
 <div>
-<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Trusted by Schools &amp; Organizations</h4>
+<h4 className="text-sm font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Trusted by Schools &amp; Organizations</h4>
 <p className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>We proudly serve school districts, churches, companies, and community groups.</p>
 </div>
 </div>
@@ -616,14 +658,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="faq-item rounded-lg border border-slate-100 overflow-hidden" style={{backgroundColor: '#fff'}}>
 <button aria-controls="faq1" aria-expanded="false" className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none" style={{fontFamily: '\'Source Sans Pro\', system-ui'}} type="button">
 <div>
-<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui'}}>How far in advance should I book a charter?</div>
+<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui'}}>How far in advance should I book a charter?</div>
 <div className="mt-1 text-xs text-slate-500">Typical guidance for planning</div>
 </div>
 <svg aria-hidden="" className="faq-chevron w-5 h-5 text-slate-500" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20">
 <path d="M6 9l6 6 6-6"></path>
 </svg>
 </button>
-<div className="faq-answer px-5 pb-4" id="faq1" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2,0.9,0.2,1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
+<div className="faq-answer px-5 pb-4" id="faq1" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
 <div className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>
                 For most standard charters we recommend booking 2–4 weeks in advance. For peak travel dates, large groups, or special requests, secure your booking as early as possible to ensure availability.
               </div>
@@ -633,14 +675,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="faq-item rounded-lg border border-slate-100 overflow-hidden" style={{backgroundColor: '#fff'}}>
 <button aria-controls="faq2" aria-expanded="false" className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none" style={{fontFamily: '\'Source Sans Pro\', system-ui'}} type="button">
 <div>
-<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui'}}>Are your vehicles ADA accessible?</div>
+<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui'}}>Are your vehicles ADA accessible?</div>
 <div className="mt-1 text-xs text-slate-500">Accessibility options</div>
 </div>
 <svg aria-hidden="" className="faq-chevron w-5 h-5 text-slate-500" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20">
 <path d="M6 9l6 6 6-6"></path>
 </svg>
 </button>
-<div className="faq-answer px-5 pb-4" id="faq2" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2,0.9,0.2,1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
+<div className="faq-answer px-5 pb-4" id="faq2" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
 <div className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>
                 Yes — we operate ADA-compliant vehicles with wheelchair lifts and securement systems. Please request accessible vehicles when you request a quote so we can assign the appropriate coach and trained staff.
               </div>
@@ -650,14 +692,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="faq-item rounded-lg border border-slate-100 overflow-hidden" style={{backgroundColor: '#fff'}}>
 <button aria-controls="faq3" aria-expanded="false" className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none" style={{fontFamily: '\'Source Sans Pro\', system-ui'}} type="button">
 <div>
-<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui'}}>Can I make last-minute changes to my reservation?</div>
+<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui'}}>Can I make last-minute changes to my reservation?</div>
 <div className="mt-1 text-xs text-slate-500">Changes and cancellations</div>
 </div>
 <svg aria-hidden="" className="faq-chevron w-5 h-5 text-slate-500" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20">
 <path d="M6 9l6 6 6-6"></path>
 </svg>
 </button>
-<div className="faq-answer px-5 pb-4" id="faq3" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2,0.9,0.2,1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
+<div className="faq-answer px-5 pb-4" id="faq3" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
 <div className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>
                 We offer 24/7 dispatch and can often accommodate reasonable last-minute changes. Depending on timing and resources there may be additional fees — contact our operations team as soon as possible and we’ll do our best to help.
               </div>
@@ -667,14 +709,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="faq-item rounded-lg border border-slate-100 overflow-hidden" style={{backgroundColor: '#fff'}}>
 <button aria-controls="faq4" aria-expanded="false" className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none" style={{fontFamily: '\'Source Sans Pro\', system-ui'}} type="button">
 <div>
-<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui'}}>What is included in the quote?</div>
+<div className="text-sm text-slate-900 font-medium" style={{fontWeight: '600', fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui'}}>What is included in the quote?</div>
 <div className="mt-1 text-xs text-slate-500">Pricing and inclusions</div>
 </div>
 <svg aria-hidden="" className="faq-chevron w-5 h-5 text-slate-500" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="20">
 <path d="M6 9l6 6 6-6"></path>
 </svg>
 </button>
-<div className="faq-answer px-5 pb-4" id="faq4" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2,0.9,0.2,1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
+<div className="faq-answer px-5 pb-4" id="faq4" style={{maxHeight: '0px', overflow: 'hidden', transition: 'max-height 420ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 320ms ease, transform 320ms ease', opacity: '0', transform: 'translateY(6px)'}}>
 <div className="mt-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>
                 Quotes typically include vehicle, driver, fuel surcharges, and standard insurance. Special requests (extras, extended wait times, cross-border fees) are quoted separately and noted in your estimate.
               </div>
@@ -728,7 +770,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
 </svg>
 </button>
-<div className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Or call <span className="font-medium text-slate-900" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui'}}>1 (800) 555-0199</span></div>
+<div className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Or call <span className="font-medium text-slate-900" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui'}}>1 (800) 555-0199</span></div>
 </div>
 </form>
 </div>
@@ -747,12 +789,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="M7 16v3"></path><path d="M17 16v3"></path>
 </svg>
 </div>
-<span className="text-lg" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Texas Bus Services</span>
+<span className="text-lg" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Texas Bus Services</span>
 </div>
 <p className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>Safe, punctual group travel. Insured, licensed, and experienced drivers serving events, schools, and organizations nationwide.</p>
 </div>
 <div>
-<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Services</h4>
+<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Services</h4>
 <ul className="space-y-2 text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>
 <li><a className="hover:text-[#0F2F55]" href="#services">Hourly Charters</a></li>
 <li><a className="hover:text-[#0F2F55]" href="#fleet">Fleet Options</a></li>
@@ -761,7 +803,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </ul>
 </div>
 <div>
-<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\',\'Source Sans Pro\', system-ui', fontWeight: '600'}}>Contact</h4>
+<h4 className="text-sm font-medium mb-3" style={{fontFamily: '\'Gotham\', \'Source Sans Pro\', system-ui', fontWeight: '600'}}>Contact</h4>
 <p className="text-sm text-slate-600" style={{fontFamily: '\'Source Sans Pro\', system-ui'}}>1 (800) 555-0199<br/>hello@texasbusservices.example</p>
 <div className="mt-4 flex items-center gap-3">
 <a className="text-slate-600 hover:text-[#0F2F55]" href="#">

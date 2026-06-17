@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -64,6 +100,12 @@ window.addEventListener('load', disableHashLinks);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -116,7 +158,7 @@ window.addEventListener('load', disableHashLinks);
 <div className="absolute top-1/3 left-1/3 h-16 w-16 rounded-full bg-orange-500/30 blur-2xl animate-[floatY_12s_ease-in-out_infinite]"></div>
 </div>
 <div className="grid lg:grid-cols-2 gap-10 items-center">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white">
             Empowering Identity, Fueling Communities
           </h1>
@@ -134,22 +176,22 @@ window.addEventListener('load', disableHashLinks);
 </a>
 </div>
 <div className="mt-10 grid grid-cols-3 max-w-md gap-4">
-<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{-Delay: '.15s'}}>
+<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{'--delay': '.15s'}}>
 <div className="text-2xl font-semibold text-white">250+</div>
 <div className="text-xs text-slate-400">Programs Funded</div>
 </div>
-<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{-Delay: '.25s'}}>
+<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{'--delay': '.25s'}}>
 <div className="text-2xl font-semibold text-white">100k+</div>
 <div className="text-xs text-slate-400">Caps Delivered</div>
 </div>
-<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{-Delay: '.35s'}}>
+<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{'--delay': '.35s'}}>
 <div className="text-2xl font-semibold text-white">$1.2M</div>
 <div className="text-xs text-slate-400">Raised for Youth</div>
 </div>
 </div>
 </div>
 
-<div className="relative reveal-right" style={{-Delay: '.2s'}}>
+<div className="relative reveal-right" style={{'--delay': '.2s'}}>
 <div className="relative rounded-3xl bg-white/5 border border-white/10 p-2 md:p-3 backdrop-blur-2xl overflow-hidden">
 <div className="aspect-[5/4] rounded-2xl overflow-hidden bg-black/30 ring-1 ring-white/10 relative">
 <img alt="Custom cap" className="h-full w-full object-cover opacity-90" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
@@ -185,13 +227,13 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="mission">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Mission, Vision &amp; Impact</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">We craft custom headwear that amplifies identity and powers community causes.</p>
 </div>
 <div className="mt-6 grid md:grid-cols-3 gap-4">
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-left" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-left" style={{'--delay': '.05s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <svg className="lucide lucide-flag" data-lucide="flag" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528"></path></svg>
@@ -203,7 +245,7 @@ window.addEventListener('load', disableHashLinks);
           </p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal" style={{'--delay': '.15s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <svg className="lucide lucide-radar" data-lucide="radar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"></path><path d="M4 6h.01"></path><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"></path><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67"></path><path d="M12 18h.01"></path><path d="M17.99 11.66A6 6 0 0 1 15.77 16.67"></path><circle cx="12" cy="12" r="2"></circle><path d="m13.41 10.59 5.66-5.66"></path></svg>
@@ -215,7 +257,7 @@ window.addEventListener('load', disableHashLinks);
           </p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-right" style={{-Delay: '.25s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-right" style={{'--delay': '.25s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-purple-500/30 ring-1 ring-purple-400/40 flex items-center justify-center">
 <svg className="lucide lucide-heart-handshake" data-lucide="heart-handshake" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"></path></svg>
@@ -230,7 +272,7 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="catalog">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <div className="flex items-end justify-between gap-4">
 <div>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Product Showcase</h2>
@@ -343,40 +385,40 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="configure">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Customization Features</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">Choose embroidery styles, patches, fabrics, closures, and accessories to make it yours.</p>
 </div>
 <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{'--delay': '.05s'}}>
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="needle"></i>
 </div>
 <div className="mt-4 font-medium text-white">Embroidery</div>
 <p className="text-sm text-slate-300 mt-1">Flat, 3D puff, metallic, applique.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{-Delay: '.1s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{'--delay': '.1s'}}>
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <svg className="lucide lucide-badge" data-lucide="badge" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path></svg>
 </div>
 <div className="mt-4 font-medium text-white">Patches</div>
 <p className="text-sm text-slate-300 mt-1">Woven, leather, PVC, chenille.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{'--delay': '.15s'}}>
 <div className="h-10 w-10 rounded-lg bg-purple-500/30 ring-1 ring-purple-400/40 flex items-center justify-center">
 <svg className="lucide lucide-layers" data-lucide="layers" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
 </div>
 <div className="mt-4 font-medium text-white">Fabrics</div>
 <p className="text-sm text-slate-300 mt-1">Twill, wool, nylon, eco cotton.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{-Delay: '.2s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{'--delay': '.2s'}}>
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <svg className="lucide lucide-link" data-lucide="link" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
 </div>
 <div className="mt-4 font-medium text-white">Closures</div>
 <p className="text-sm text-slate-300 mt-1">Snapback, strapback, flex-fit.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{-Delay: '.25s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{'--delay': '.25s'}}>
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <svg className="lucide lucide-sparkle" data-lucide="sparkle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path></svg>
 </div>
@@ -387,13 +429,13 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="pricing">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Pricing &amp; Volume Discounts</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">Per-unit cost drops as you scale. Transparent, no surprises.</p>
 </div>
 <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{'--delay': '.05s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">48 Units</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-lime-400/20 text-lime-300 border border-lime-300/40">Save 10%</span>
@@ -413,7 +455,7 @@ window.addEventListener('load', disableHashLinks);
           </a>
 </div>
 
-<div className="hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal bg-white/5 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-xl" style={{-Delay: '.1s'}}>
+<div className="hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal bg-white/5 border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-xl" style={{'--delay': '.1s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">144 Units</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-orange-400/20 text-orange-300 border border-orange-300/40">Save 18%</span>
@@ -433,7 +475,7 @@ window.addEventListener('load', disableHashLinks);
           </a>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{'--delay': '.15s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">576 Units</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-300/40">Save 23%</span>
@@ -453,7 +495,7 @@ window.addEventListener('load', disableHashLinks);
           </a>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-cyan400/50 hover:shadow-[0_20px_60px_-20px_rgba(34,211,238,0.6)] transition reveal" style={{-Delay: '.2s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-cyan400/50 hover:shadow-[0_20px_60px_-20px_rgba(34,211,238,0.6)] transition reveal" style={{'--delay': '.2s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">1008 Units</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-cyan-400/20 text-cyan-300 border border-cyan-300/40">Save 28%</span>
@@ -482,7 +524,7 @@ window.addEventListener('load', disableHashLinks);
           </a>
 </div>
 
-<div className="rounded-2xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-emerald-400/50 hover:shadow-[0_24px_80px_-20px_rgba(16,185,129,0.65)] transition reveal ring-1 ring-white/5" style={{-Delay: '.25s'}}>
+<div className="rounded-2xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-emerald-400/50 hover:shadow-[0_24px_80px_-20px_rgba(16,185,129,0.65)] transition reveal ring-1 ring-white/5" style={{'--delay': '.25s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">2016 Units</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-emerald-400/20 text-emerald-300 border border-emerald-300/40">Best value • 35% off</span>
@@ -515,33 +557,33 @@ window.addEventListener('load', disableHashLinks);
 </p="mt-4></section>
 
 <section className="mt-24" id="how">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">How It Works</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">Fast, simple, fundraising-ready. Launch in days, not months.</p>
 </div>
 <div className="mt-6 grid md:grid-cols-4 sm:grid-cols-2 gap-4">
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-lime-400/50 transition" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-lime-400/50 transition" style={{'--delay': '.05s'}}>
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M3 7h18"></path><path d="M21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7"></path><path d="m7 7 5-5 5 5"></path></svg>
 </div>
 <div className="mt-4 text-white font-medium">1) Upload or Design</div>
 <p className="text-sm text-slate-300 mt-1">Share your logo or sketch in our configurator. We’ll proof it same day.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-orange-400/50 transition" style={{-Delay: '.1s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-orange-400/50 transition" style={{'--delay': '.1s'}}>
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16"></path><path d="M10 6v14"></path><path d="M14 6v14"></path><path d="M2 20h20"></path></svg>
 </div>
 <div className="mt-4 text-white font-medium">2) Pick Materials</div>
 <p className="text-sm text-slate-300 mt-1">Choose silhouettes, fabrics, and finishes. We guide best practices.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-purple-400/50 transition" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-purple-400/50 transition" style={{'--delay': '.15s'}}>
 <div className="h-10 w-10 rounded-lg bg-purple-500/30 ring-1 ring-purple-400/40 flex items-center justify-center">
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="22" xmlns="http://www.w3.org/2000/svg"><path d="m3 7 9 6 9-6"></path><path d="M21 10v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8"></path></svg>
 </div>
 <div className="mt-4 text-white font-medium">3) Approve &amp; Launch</div>
 <p className="text-sm text-slate-300 mt-1">Approve your digital sample, open orders, and share your storefront link.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-lime-400/50 transition" style={{-Delay: '.2s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-lime-400/50 transition" style={{'--delay': '.2s'}}>
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="22" xmlns="http://www.w3.org/2000/svg"><path d="m21 15-5-5L5 21"></path><path d="M5 11V5h6"></path></svg>
 </div>
@@ -553,7 +595,7 @@ window.addEventListener('load', disableHashLinks);
 
 <section className="mt-24" id="impact">
 <div className="grid md:grid-cols-3 gap-4">
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-lime-400/50 transition" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-lime-400/50 transition" style={{'--delay': '.05s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -562,7 +604,7 @@ window.addEventListener('load', disableHashLinks);
 </div>
 <p className="mt-3 text-slate-300 text-sm">Returns $5–$8 back to your program. Track earnings in real time.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-orange-400/50 transition" style={{-Delay: '.1s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-orange-400/50 transition" style={{'--delay': '.1s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M3 3h18v6H3z"></path><path d="M3 9v12h18V9"></path><path d="M3 13h18"></path></svg>
@@ -571,7 +613,7 @@ window.addEventListener('load', disableHashLinks);
 </div>
 <p className="mt-3 text-slate-300 text-sm">We handle production, storefront, and fulfillment. You focus on sales.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-purple-400/50 transition" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-purple-400/50 transition" style={{'--delay': '.15s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-purple-500/30 ring-1 ring-purple-400/40 flex items-center justify-center">
 <svg fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M20 7H4"></path><path d="M10 11H4"></path><path d="M20 15H4"></path><path d="M10 19H4"></path></svg>
@@ -584,20 +626,20 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="shipping">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Shipping &amp; Timelines</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">Reliable production windows with options for rush and split shipments.</p>
 </div>
 <div className="mt-6 grid md:grid-cols-3 gap-4">
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-lime-400/50 transition" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-lime-400/50 transition" style={{'--delay': '.05s'}}>
 <div className="text-white font-medium">Standard Production</div>
 <p className="text-sm text-slate-300 mt-2">3–4 weeks from approval. Ground shipping included in pricing tiers.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-orange-400/50 transition" style={{-Delay: '.1s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-orange-400/50 transition" style={{'--delay': '.1s'}}>
 <div className="text-white font-medium">Rush Options</div>
 <p className="text-sm text-slate-300 mt-2">As fast as 10–14 days. Subject to material availability and queue.</p>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-purple-400/50 transition" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal hover:border-purple-400/50 transition" style={{'--delay': '.15s'}}>
 <div className="text-white font-medium">Split Deliveries</div>
 <p className="text-sm text-slate-300 mt-2">Ship to multiple locations by roster. Individual bagging and labeling available.</p>
 </div>
@@ -606,7 +648,7 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="about">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">About OPM Gear</h2>
 <p className="mt-2 text-slate-300 max-w-3xl">We’re a team of makers and former coaches who believe merchandise can both represent identity and fund opportunity. From design to doorstep, we obsess over details so your community wears the story proudly.</p>
 </div>
@@ -627,7 +669,7 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="voices">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Community Voices</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">Real stories from programs raising funds and pride with OPM Gear.</p>
 </div>
@@ -667,7 +709,7 @@ window.addEventListener('load', disableHashLinks);
 
 <section className="mt-24 mb-16" id="contact">
 <div className="grid lg:grid-cols-2 gap-8 items-start">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Let’s build your cap</h2>
 <p className="mt-2 text-slate-300">Tell us about your program and timeline—we’ll reply within one business day.</p>
 <form className="mt-6 space-y-4 rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl">
@@ -709,7 +751,7 @@ window.addEventListener('load', disableHashLinks);
             </button>
 </form>
 </div>
-<aside className="reveal" style={{-Delay: '.15s'}}>
+<aside className="reveal" style={{'--delay': '.15s'}}>
 <div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl">
 <div className="text-white font-medium">Contact</div>
 <ul className="mt-3 space-y-2 text-sm text-slate-300">

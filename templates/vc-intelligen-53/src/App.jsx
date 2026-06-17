@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -398,6 +434,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -412,7 +454,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="fixed inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen" id="canvas-container"><canvas height="2138" style={{display: 'block', width: '460px', height: '1069px'}} width="920"></canvas><canvas height="2138" style={{display: 'block', width: '460px', height: '1069px'}} width="920"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas><canvas height="1418" style={{display: 'block', width: '790px', height: '709px'}} width="1580"></canvas></div>
-<div className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-300 opacity-30 mix-blend-screen" id="global-flashlight" style={{background: 'radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.08), transparent 40%)', -MouseX: '73.0379746835443%', -MouseY: '1.8335684062059237%'}}></div>
+<div className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-300 opacity-30 mix-blend-screen" id="global-flashlight" style={{background: 'radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.08), transparent 40%)', '--mouse-x': '73.0379746835443%', '--mouse-y': '1.8335684062059237%'}}></div>
 
 <nav className="fixed top-0 w-full z-50 border-b bg-[#050505]/50 backdrop-blur-md border-white/5">
 <div className="flex h-16 max-w-7xl mr-auto ml-auto pr-6 pl-6 items-center justify-between">
@@ -646,7 +688,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative w-full h-[450px] md:h-[400px] flex items-center justify-center perspective-1000 my-12" id="carousel-container">
 
-<div className="carousel-card absolute w-full max-w-[450px] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] spotlight-wrapper rounded-3xl group cursor-pointer z-30 translate-x-0 scale-100 opacity-100" data-index="0" style={{-MouseX: '331px', -MouseY: '15.5px'}}>
+<div className="carousel-card absolute w-full max-w-[450px] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] spotlight-wrapper rounded-3xl group cursor-pointer z-30 translate-x-0 scale-100 opacity-100" data-index="0" style={{'--mouse-x': '331px', '--mouse-y': '15.5px'}}>
 <div className="spotlight-border absolute -inset-[1px] rounded-[25px] opacity-0 group-hover:opacity-100 transition duration-500 z-0 pointer-events-none"></div>
 <div className="absolute inset-[1px] rounded-3xl bg-[#0a0a0a] z-0 pointer-events-none"></div>
 <div className="absolute inset-0 bg-grid-pattern opacity-10 z-0 rounded-3xl"></div>

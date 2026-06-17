@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -116,7 +158,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <button className="flex flex-col items-center gap-1 p-2">
 <svg className="lucide lucide-home w-6 h-6 text-gray-500" data-lucide="home" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
 </button>
-<div className="flex flex-col items-center gap-1" style={{-Radius: '20px', -Bg: '#2c3238', position: 'relative'}}>
+<div className="flex flex-col items-center gap-1" style={{'--radius': '20px', '--bg': '#2c3238', position: 'relative'}}>
 <div className="wrap" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '50px', height: '50px'}}>
 <div style={{content: '\'\'', position: 'absolute', width: '150px', height: '2000px', borderRadius: '50px', backgroundColor: 'rgba(255, 255, 255, 0.05)', filter: 'blur(40px)', transform: 'skewY(-20deg)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div style={{content: '\'\'', position: 'absolute', width: '100%', height: '100%', borderRadius: '50px', backgroundColor: 'rgba(0, 0, 0, 0.5)', filter: 'blur(20px)', zIndex: '2'}}></div>
@@ -200,7 +242,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="pr-8 pb-8 pl-8">
 <div className="flex gap-4 items-center justify-center">
-<button className="wrap" style={{-Radius: '20px', -Bg: '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '50px', height: '50px'}}>
+<button className="wrap" style={{'--radius': '20px', '--bg': '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '50px', height: '50px'}}>
 <div style={{content: '\'\'', position: 'absolute', width: '150px', height: '2000px', borderRadius: '50px', backgroundColor: 'rgba(255, 255, 255, 0.05)', filter: 'blur(40px)', transform: 'skewY(-20deg)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div className="" style={{content: '\'\'', position: 'absolute', width: '100%', height: '100%', borderRadius: '50px', backgroundColor: 'rgba(0, 0, 0, 0.5)', filter: 'blur(20px)', zIndex: '2'}}></div>
 <div className="button" style={{position: 'relative', overflow: 'hidden', width: '44px', height: '44px', backgroundColor: 'var(--bg)', zIndex: '10', border: 'transparent', borderRadius: 'var(--radius)', boxShadow: 'inset 0 1px 1px rgb(255 255 255 / 40%), inset 0 -6px 1px -4px #000000, inset 0 -15px 6px -8px #000000', transition: 'all 0.3s ease'}}>
@@ -208,7 +250,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-shuffle w-[18px] h-[18px]" data-lucide="shuffle" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: '20', width: '18px', height: '18px', color: 'rgb(156, 163, 175)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg>
 </div>
 </button>
-<button className="wrap" style={{-Radius: '25px', -Bg: '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '65px', height: '65px'}}>
+<button className="wrap" style={{'--radius': '25px', '--bg': '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '65px', height: '65px'}}>
 <div style={{content: '\'\'', position: 'absolute', width: '200px', height: '2500px', borderRadius: '50px', backgroundColor: 'rgba(255, 255, 255, 0.05)', filter: 'blur(50px)', transform: 'skewY(-20deg)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div className="" style={{content: '\'\'', position: 'absolute', width: '100%', height: '100%', borderRadius: '50px', backgroundColor: 'rgba(0, 0, 0, 0.5)', filter: 'blur(25px)', zIndex: '2'}}></div>
 <div className="button" style={{position: 'relative', overflow: 'hidden', width: '56px', height: '56px', backgroundColor: 'var(--bg)', zIndex: '10', border: 'transparent', borderRadius: 'var(--radius)', boxShadow: 'inset 0 1px 1px rgb(255 255 255 / 40%), inset 0 -6px 1px -4px #000000, inset 0 -15px 6px -8px #000000', transition: 'all 0.3s ease'}}>
@@ -216,7 +258,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-skip-back lucide-shuffle w-[20px] h-[20px]" data-lucide="skip-back" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: '20', width: '20px', height: '20px', color: 'rgb(156, 163, 175)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z"></path><path d="M3 20V4"></path></svg>
 </div>
 </button>
-<button className="wrap" style={{-Radius: '30px', -Bg: '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '80px', height: '80px'}}>
+<button className="wrap" style={{'--radius': '30px', '--bg': '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '80px', height: '80px'}}>
 <div style={{content: '\'\'', position: 'absolute', width: '250px', height: '3000px', borderRadius: '50px', backgroundColor: 'rgba(255, 255, 255, 0.05)', filter: 'blur(60px)', transform: 'skewY(-20deg)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div style={{content: '\'\'', position: 'absolute', width: '100%', height: '100%', borderRadius: '50px', backgroundColor: 'rgba(0, 0, 0, 0.5)', filter: 'blur(30px)', zIndex: '2'}}></div>
 <div className="button" style={{position: 'relative', overflow: 'hidden', width: '70px', height: '70px', backgroundColor: 'var(--bg)', zIndex: '10', border: 'transparent', borderRadius: 'var(--radius)', boxShadow: 'inset 0 1px 1px rgb(255 255 255 / 40%), inset 0 -6px 1px -4px #0084ff, inset 0 -15px 6px -8px #003cff', transition: 'all 0.3s ease'}}>
@@ -230,7 +272,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </button>
-<button className="wrap" style={{-Radius: '25px', -Bg: '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '65px', height: '65px'}}>
+<button className="wrap" style={{'--radius': '25px', '--bg': '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '65px', height: '65px'}}>
 <div style={{content: '\'\'', position: 'absolute', width: '200px', height: '2500px', borderRadius: '50px', backgroundColor: 'rgba(255, 255, 255, 0.05)', filter: 'blur(50px)', transform: 'skewY(-20deg)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div className="" style={{content: '\'\'', position: 'absolute', width: '100%', height: '100%', borderRadius: '50px', backgroundColor: 'rgba(0, 0, 0, 0.5)', filter: 'blur(25px)', zIndex: '2'}}></div>
 <div className="button" style={{position: 'relative', overflow: 'hidden', width: '56px', height: '56px', backgroundColor: 'var(--bg)', zIndex: '10', border: 'transparent', borderRadius: 'var(--radius)', boxShadow: 'inset 0 1px 1px rgb(255 255 255 / 40%), inset 0 -6px 1px -4px #000000, inset 0 -15px 6px -8px #000000', transition: 'all 0.3s ease'}}>
@@ -238,7 +280,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-skip-forward lucide-skip-back lucide-shuffle w-[20px] h-[20px]" data-lucide="skip-forward" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: '20', width: '20px', height: '20px', color: 'rgb(156, 163, 175)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4v16"></path><path d="M6.029 4.285A2 2 0 0 0 3 6v12a2 2 0 0 0 3.029 1.715l9.997-5.998a2 2 0 0 0 .003-3.432z"></path></svg>
 </div>
 </button>
-<button className="wrap" style={{-Radius: '20px', -Bg: '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '50px', height: '50px'}}>
+<button className="wrap" style={{'--radius': '20px', '--bg': '#2c3238', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '50px', height: '50px'}}>
 <div style={{content: '\'\'', position: 'absolute', width: '150px', height: '2000px', borderRadius: '50px', backgroundColor: 'rgba(255, 255, 255, 0.05)', filter: 'blur(40px)', transform: 'skewY(-20deg)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div className="" style={{content: '\'\'', position: 'absolute', width: '100%', height: '100%', borderRadius: '50px', backgroundColor: 'rgba(0, 0, 0, 0.5)', filter: 'blur(20px)', zIndex: '2'}}></div>
 <div className="button" style={{position: 'relative', overflow: 'hidden', width: '44px', height: '44px', backgroundColor: 'var(--bg)', zIndex: '10', border: 'transparent', borderRadius: 'var(--radius)', boxShadow: 'inset 0 1px 1px rgb(255 255 255 / 40%), inset 0 -6px 1px -4px #000000, inset 0 -15px 6px -8px #000000', transition: 'all 0.3s ease'}}>
@@ -382,7 +424,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <button className="flex flex-col items-center gap-1 p-2">
 <svg className="lucide lucide-search w-6 h-6 text-gray-500" data-lucide="search" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
 </button>
-<div className="flex flex-col items-center gap-1" style={{-Radius: '20px', -Bg: '#2c3238', position: 'relative'}}>
+<div className="flex flex-col items-center gap-1" style={{'--radius': '20px', '--bg': '#2c3238', position: 'relative'}}>
 <div className="wrap" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', position: 'relative', width: '50px', height: '50px'}}>
 <div style={{content: '\'\'', position: 'absolute', width: '150px', height: '2000px', borderRadius: '50px', backgroundColor: 'rgba(255, 255, 255, 0.05)', filter: 'blur(40px)', transform: 'skewY(-20deg)', pointerEvents: 'none', zIndex: '1'}}></div>
 <div style={{content: '\'\'', position: 'absolute', width: '100%', height: '100%', borderRadius: '50px', backgroundColor: 'rgba(0, 0, 0, 0.5)', filter: 'blur(20px)', zIndex: '2'}}></div>

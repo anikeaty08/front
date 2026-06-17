@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -53,20 +89,11 @@ gtag('config', 'G-2M6V79H761');
           <div
             aria-hidden="true"
             class="pointer-events-none fixed inset-0 z-[1] opacity-[0.18] mix-blend-soft-light"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 12% 18%, rgba(34,211,238,0.25), transparent 35%), radial-gradient(circle at 82% 12%, rgba(168,85,247,0.25), transparent 40%), radial-gradient(circle at 60% 78%, rgba(59,130,246,0.22), transparent 45%)",
-              filter: "blur(0.02rem)",
-            }}
+            style={{backgroundImage: "radial-gradient(circle at 12% 18%, rgba(34, 211, 238, 0.25), transparent 35%), radial-gradient(circle at 82% 12%, rgba(168, 85, 247, 0.25), transparent 40%), radial-gradient(circle at 60% 78%, rgba(59, 130, 246, 0.22), transparent 45%)", filter: "blur(0.02rem)"}}
           >
             <div
               class="absolute inset-0 opacity-[0.25]"
-              style={{
-                backgroundImage:
-                  "url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%22220%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22220%22 height=%22220%22 filter=%22url(%23n)%22 opacity=%220.45%22/%3E%3C/svg%3E')",
-                backgroundRepeat: "repeat",
-                backgroundSize: "14rem 14rem",
-              }}
+              style={{backgroundImage: "url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%22220%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22220%22 height=%22220%22 filter=%22url(%23n)%22 opacity=%220.45%22/%3E%3C/svg%3E')", backgroundRepeat: "repeat", backgroundSize: "14rem 14rem"}}
             />
           </div>
         )
@@ -77,12 +104,7 @@ gtag('config', 'G-2M6V79H761');
           <div aria-hidden="true" class="pointer-events-none fixed inset-x-0 top-0 z-[2]">
             <div
               class="h-24 w-full"
-              style={{
-                background:
-                  "linear-gradient(to bottom, rgba(34,211,238,0.10), rgba(168,85,247,0.06), rgba(5,7,18,0))",
-                opacity: glow,
-                filter: "blur(0.06rem)",
-              }}
+              style={{background: "linear-gradient(to bottom, rgba(34, 211, 238, 0.10), rgba(168, 85, 247, 0.06), rgba(5, 7, 18, 0))", opacity: glow, filter: "blur(0.06rem)"}}
             />
           </div>
         )
@@ -97,15 +119,13 @@ gtag('config', 'G-2M6V79H761');
                   "mt-4 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl",
                   "shadow-[0_0_0.75rem_rgba(34,211,238,0.08)]"
                 )}
-                style={{
-                  boxShadow: `0 0 1.4rem rgba(34,211,238,${0.06 + glow * 0.08}), 0 0 2.2rem rgba(168,85,247,${0.04 + glow * 0.07})`,
-                }}
+                style={{boxShadow: `0 0 1.4rem rgba(34, 211, 238, ${0.06 + glow * 0.08}), 0 0 2.2rem rgba(168,85,247,${0.04 + glow * 0.07})`}}
               >
                 <div class="flex items-center gap-3 px-4 py-3 sm:px-5">
                   <div class="flex items-baseline gap-2">
                     <span
                       class="text-sm font-semibold tracking-tight"
-                      style={{ fontFamily: "Space Grotesk, Inter, system-ui" }}
+                      style={{fontFamily: "Space Grotesk, Inter, system-ui"}}
                     >
                       NX
                     </span>
@@ -137,14 +157,9 @@ gtag('config', 'G-2M6V79H761');
                             "absolute inset-0 rounded-xl border transition",
                             isActive ? "border-white/14" : "border-transparent"
                           )}
-                          style={{
-                            background: isActive
-                              ? "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))"
-                              : "transparent",
-                            boxShadow: isActive
-                              ? `0 0 1.2rem rgba(34,211,238,${0.10 + glow * 0.10}), 0 0 1.8rem rgba(168,85,247,${0.08 + glow * 0.10})`
-                              : "none",
-                          }}
+                          style={{background: isActive
+                              ? "linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))": "transparent", boxShadow: isActive
+                              ? `0 0 1.2rem rgba(34, 211, 238, ${0.10 + glow * 0.10}), 0 0 1.8rem rgba(168,85,247,${0.08 + glow * 0.10})`: "none"}}
                         />
                       </button>
                     )
@@ -159,9 +174,7 @@ gtag('config', 'G-2M6V79H761');
                       onNav("contact")
                     }}
                     class="group inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-white/75 backdrop-blur transition hover:border-white/15 hover:text-white"
-                    style={{
-                      boxShadow: `0 0 1.2rem rgba(59,130,246,${0.05 + glow * 0.08})`,
-                    }}
+                    style={{boxShadow: `0 0 1.2rem rgba(59,130,246,${0.05 + glow * 0.08})`}}
                   >
                     <iconify-icon
                       icon="solar:chat-round-line-linear"
@@ -276,10 +289,8 @@ gtag('config', 'G-2M6V79H761');
           <div class="absolute inset-0 -z-10">
             <motion.div
               class="absolute inset-0"
-              style={{
-                y: parallaxY,
-                filter: "drop-shadow(0 0 2.4rem rgba(34,211,238,0.12)) drop-shadow(0 0 3.2rem rgba(168,85,247,0.10))",
-              }}
+              style={{y: parallaxY,
+                filter: "drop-shadow(0 0 2.4rem rgba(34,211,238,0.12)) drop-shadow(0 0 3.2rem rgba(168,85,247,0.10))"}}
             >
               <Canvas
                 dpr={[1, 1.75]}
@@ -306,12 +317,7 @@ gtag('config', 'G-2M6V79H761');
             <div
               aria-hidden="true"
               class="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(circle at 55% 45%, rgba(59,130,246,0.18), transparent 52%), radial-gradient(circle at 62% 55%, rgba(34,211,238,0.12), transparent 48%), radial-gradient(circle at 35% 25%, rgba(168,85,247,0.14), transparent 42%)",
-                filter: "blur(0.18rem)",
-                opacity: 0.95,
-              }}
+              style={{background: "radial-gradient(circle at 55% 45%, rgba(59, 130, 246, 0.18), transparent 52%), radial-gradient(circle at 62% 55%, rgba(34, 211, 238, 0.12), transparent 48%), radial-gradient(circle at 35% 25%, rgba(168, 85, 247, 0.14), transparent 42%)", filter: "blur(0.18rem)", opacity: 0.95}}
             />
           </div>
         )
@@ -352,25 +358,17 @@ gtag('config', 'G-2M6V79H761');
               "transition will-change-transform",
               className
             )}
-            style={{
-              boxShadow: `0 0 1.8rem rgba(34,211,238,${0.05 + glow * 0.08}), 0 0 2.6rem rgba(168,85,247,${0.04 + glow * 0.08})`,
-            }}
+            style={{boxShadow: `0 0 1.8rem rgba(34, 211, 238, ${0.05 + glow * 0.08}), 0 0 2.6rem rgba(168,85,247,${0.04 + glow * 0.08})`}}
           >
             <div
               aria-hidden="true"
               class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition group-hover:opacity-100"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(34,211,238,0.10), rgba(168,85,247,0.08), rgba(59,130,246,0.06))",
-                filter: "blur(0.12rem)",
-              }}
+              style={{background: "linear-gradient(135deg, rgba(34, 211, 238, 0.10), rgba(168, 85, 247, 0.08), rgba(59, 130, 246, 0.06))", filter: "blur(0.12rem)"}}
             />
             <div
               aria-hidden="true"
               class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition group-hover:opacity-100"
-              style={{
-                boxShadow: "inset 0 0 0.06rem rgba(255,255,255,0.14), 0 0 2.4rem rgba(34,211,238,0.10)",
-              }}
+              style={{boxShadow: "inset 0 0 0.06rem rgba(255, 255, 255, 0.14), 0 0 2.4rem rgba(34,211,238,0.10)"}}
             />
             <div class="relative">{children}</div>
           </div>
@@ -431,11 +429,7 @@ gtag('config', 'G-2M6V79H761');
                     <div class="absolute inset-0">
                       <div
                         class="absolute inset-0 opacity-0 transition group-hover:opacity-100"
-                        style={{
-                          background:
-                            "radial-gradient(circle at 30% 20%, rgba(34,211,238,0.12), transparent 50%), radial-gradient(circle at 70% 60%, rgba(168,85,247,0.10), transparent 55%)",
-                          filter: "blur(0.16rem)",
-                        }}
+                        style={{background: "radial-gradient(circle at 30% 20%, rgba(34, 211, 238, 0.12), transparent 50%), radial-gradient(circle at 70% 60%, rgba(168, 85, 247, 0.10), transparent 55%)", filter: "blur(0.16rem)"}}
                       />
                     </div>
 
@@ -444,7 +438,7 @@ gtag('config', 'G-2M6V79H761');
                         <div>
                           <h3
                             class="text-base font-semibold tracking-tight text-white"
-                            style={{ fontFamily: "Space Grotesk, Inter, system-ui" }}
+                            style={{fontFamily: "Space Grotesk, Inter, system-ui"}}
                           >
                             {p.title}
                           </h3>
@@ -455,9 +449,7 @@ gtag('config', 'G-2M6V79H761');
                           <a
                             href="#"
                             class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/75 transition hover:border-white/15 hover:text-white"
-                            style={{
-                              boxShadow: "0 0 1.4rem rgba(34,211,238,0.08)",
-                            }}
+                            style={{boxShadow: "0 0 1.4rem rgba(34,211,238,0.08)"}}
                             aria-label="Open project"
                             onClick={(e) => e.preventDefault()}
                           >
@@ -496,11 +488,7 @@ gtag('config', 'G-2M6V79H761');
                     <div
                       aria-hidden="true"
                       class="pointer-events-none absolute inset-x-0 bottom-0 h-16 opacity-80"
-                      style={{
-                        background:
-                          "linear-gradient(to top, rgba(34,211,238,0.10), rgba(168,85,247,0.06), transparent)",
-                        filter: "blur(0.12rem)",
-                      }}
+                      style={{background: "linear-gradient(to top, rgba(34, 211, 238, 0.10), rgba(168, 85, 247, 0.06), transparent)", filter: "blur(0.12rem)"}}
                     />
                   </div>
                 </GlassCard>
@@ -519,7 +507,7 @@ gtag('config', 'G-2M6V79H761');
                   <div>
                     <h3
                       class="text-lg font-semibold tracking-tight text-white"
-                      style={{ fontFamily: "Space Grotesk, Inter, system-ui" }}
+                      style={{fontFamily: "Space Grotesk, Inter, system-ui"}}
                     >
                       About
                     </h3>
@@ -532,9 +520,7 @@ gtag('config', 'G-2M6V79H761');
                   <div class="hidden sm:flex">
                     <div
                       class="h-10 w-10 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur"
-                      style={{
-                        boxShadow: `0 0 1.6rem rgba(168,85,247,${0.08 + glow * 0.10})`,
-                      }}
+                      style={{boxShadow: `0 0 1.6rem rgba(168,85,247,${0.08 + glow * 0.10})`}}
                     />
                   </div>
                 </div>
@@ -559,7 +545,7 @@ gtag('config', 'G-2M6V79H761');
               <GlassCard glow={glow} className="p-5 sm:p-6">
                 <h3
                   class="text-lg font-semibold tracking-tight text-white"
-                  style={{ fontFamily: "Space Grotesk, Inter, system-ui" }}
+                  style={{fontFamily: "Space Grotesk, Inter, system-ui"}}
                 >
                   Stack
                 </h3>
@@ -573,19 +559,14 @@ gtag('config', 'G-2M6V79H761');
                     <div
                       key={s.name}
                       class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3"
-                      style={{
-                        boxShadow:
-                          idx === 1
+                      style={{boxShadow: idx === 1
                             ? `0 0 1.8rem rgba(34,211,238,${0.06 + glow * 0.10})`
-                            : "none",
-                      }}
+                            : "none"}}
                     >
                       <div class="flex items-center gap-3">
                         <div
                           class="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/20"
-                          style={{
-                            boxShadow: `0 0 1.6rem rgba(59,130,246,${0.05 + glow * 0.08})`,
-                          }}
+                          style={{boxShadow: `0 0 1.6rem rgba(59,130,246,${0.05 + glow * 0.08})`}}
                         >
                           <iconify-icon
                             icon={s.icon}
@@ -627,7 +608,7 @@ gtag('config', 'G-2M6V79H761');
               <GlassCard glow={glow} className="p-5 sm:p-6">
                 <h3
                   class="text-lg font-semibold tracking-tight text-white"
-                  style={{ fontFamily: "Space Grotesk, Inter, system-ui" }}
+                  style={{fontFamily: "Space Grotesk, Inter, system-ui"}}
                 >
                   Contact
                 </h3>
@@ -674,7 +655,7 @@ gtag('config', 'G-2M6V79H761');
                   <div>
                     <h3
                       class="text-lg font-semibold tracking-tight text-white"
-                      style={{ fontFamily: "Space Grotesk, Inter, system-ui" }}
+                      style={{fontFamily: "Space Grotesk, Inter, system-ui"}}
                     >
                       Send a message
                     </h3>
@@ -682,9 +663,7 @@ gtag('config', 'G-2M6V79H761');
                   </div>
                   <div
                     class="hidden sm:block h-10 w-10 rounded-2xl border border-white/10 bg-white/[0.03]"
-                    style={{
-                      boxShadow: `0 0 1.8rem rgba(34,211,238,${0.06 + glow * 0.10})`,
-                    }}
+                    style={{boxShadow: `0 0 1.8rem rgba(34,211,238,${0.06 + glow * 0.10})`}}
                   />
                 </div>
 
@@ -727,9 +706,7 @@ gtag('config', 'G-2M6V79H761');
                     <button
                       type="submit"
                       class="group inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white/85 transition hover:border-white/15 hover:text-white"
-                      style={{
-                        boxShadow: `0 0 2.2rem rgba(59,130,246,${0.06 + glow * 0.10}), 0 0 2.8rem rgba(168,85,247,${0.04 + glow * 0.08})`,
-                      }}
+                      style={{boxShadow: `0 0 2.2rem rgba(59, 130, 246, ${0.06 + glow * 0.10}), 0 0 2.8rem rgba(168,85,247,${0.04 + glow * 0.08})`}}
                     >
                       <iconify-icon
                         icon="solar:plain-2-linear"
@@ -785,16 +762,9 @@ gtag('config', 'G-2M6V79H761');
                 <div class="relative mt-5 h-8 overflow-hidden rounded-xl border border-white/10 bg-black/30">
                   <div
                     class="absolute inset-y-0 left-0 w-1/3"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, rgba(34,211,238,0), rgba(34,211,238,0.22), rgba(168,85,247,0.16), rgba(59,130,246,0))",
-                      filter: "blur(0.10rem)",
-                      animation: "scan 4.8s linear infinite",
-                      opacity: 0.9,
-                      boxShadow: `0 0 2.4rem rgba(34,211,238,${0.10 + glow * 0.10})`,
-                    }}
+                    style={{background: "linear-gradient(90deg, rgba(34, 211, 238, 0), rgba(34, 211, 238, 0.22), rgba(168, 85, 247, 0.16), rgba(59, 130, 246, 0))", filter: "blur(0.10rem)", animation: "scan 4.8s linear infinite", opacity: 0.9, boxShadow: `0 0 2.4rem rgba(34,211,238,${0.10 + glow * 0.10})`}}
                   />
-                  <div class="absolute inset-0" style={{ boxShadow: "inset 0 0 0.06rem rgba(255,255,255,0.10)" }} />
+                  <div class="absolute inset-0" style={{boxShadow: "inset 0 0 0.06rem rgba(255,255,255,0.10)"}} />
                 </div>
 
                 <p class="mt-4 text-xs text-white/45">© {new Date().getFullYear()} NX. All rights reserved.</p>
@@ -826,7 +796,7 @@ gtag('config', 'G-2M6V79H761');
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                   class="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl"
-                  style={{ fontFamily: "Space Grotesk, Inter, system-ui" }}
+                  style={{fontFamily: "Space Grotesk, Inter, system-ui"}}
                 >
                   Building Digital Experiences
                 </motion.h1>
@@ -849,9 +819,7 @@ gtag('config', 'G-2M6V79H761');
                   <button
                     onClick={() => onNav("projects")}
                     class="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-semibold text-white/85 transition hover:border-white/15 hover:text-white sm:w-auto"
-                    style={{
-                      boxShadow: `0 0 2.8rem rgba(34,211,238,${0.08 + glow * 0.12}), 0 0 3.2rem rgba(168,85,247,${0.05 + glow * 0.10})`,
-                    }}
+                    style={{boxShadow: `0 0 2.8rem rgba(34, 211, 238, ${0.08 + glow * 0.12}), 0 0 3.2rem rgba(168,85,247,${0.05 + glow * 0.10})`}}
                   >
                     <iconify-icon
                       icon="solar:case-round-linear"
@@ -963,12 +931,7 @@ gtag('config', 'G-2M6V79H761');
                 <div
                   aria-hidden="true"
                   class="pointer-events-none absolute inset-0 -z-10"
-                  style={{
-                    background:
-                      "radial-gradient(circle at 20% 15%, rgba(168,85,247,0.10), transparent 45%), radial-gradient(circle at 80% 40%, rgba(34,211,238,0.08), transparent 40%), radial-gradient(circle at 50% 90%, rgba(59,130,246,0.10), transparent 46%)",
-                    filter: "blur(0.18rem)",
-                    opacity: 0.75,
-                  }}
+                  style={{background: "radial-gradient(circle at 20% 15%, rgba(168, 85, 247, 0.10), transparent 45%), radial-gradient(circle at 80% 40%, rgba(34, 211, 238, 0.08), transparent 40%), radial-gradient(circle at 50% 90%, rgba(59, 130, 246, 0.10), transparent 46%)", filter: "blur(0.18rem)", opacity: 0.75}}
                 />
 
                 <div class="space-y-16 pb-16 sm:space-y-20 sm:pb-20">
@@ -997,6 +960,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

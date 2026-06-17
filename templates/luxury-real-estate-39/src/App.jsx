@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -50,6 +86,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -80,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="flex-grow flex flex-col md:pb-0 z-10 pb-12 relative justify-end">
 
-<div className="absolute top-[20%] md:top-auto md:bottom-[20%] right-6 md:right-12 w-[90%] md:w-[32rem] p-8 md:p-10 rounded-sm animate-on-scroll" style={{-FxFilter: 'blur(12px) liquid-glass(2, 5) saturate(1.1)', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="absolute top-[20%] md:top-auto md:bottom-[20%] right-6 md:right-12 w-[90%] md:w-[32rem] p-8 md:p-10 rounded-sm animate-on-scroll" style={{'--fx-filter': 'blur(12px) liquid-glass(2, 5) saturate(1.1)', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <h2 className="font-serif italic text-3xl md:text-4xl leading-tight mb-6 tracking-tight text-white">
                     Holistic luxury 
                     in perfect harmony

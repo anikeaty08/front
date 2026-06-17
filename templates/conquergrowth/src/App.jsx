@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -130,6 +166,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -578,7 +620,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-x-6 gap-y-10" onmousemove="for(const card of this.children){const rect=card.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;card.style.setProperty('--mouse-x', x + 'px');card.style.setProperty('--mouse-y', y + 'px');}">
 
-<div className="col-span-1 md:col-span-2 lg:col-span-6 flex flex-col lg:mb-24 text-center mb-20 pt-12 relative items-center" id="the-system" style={{-MouseX: '1103.8046875px', -MouseY: '142px'}}>
+<div className="col-span-1 md:col-span-2 lg:col-span-6 flex flex-col lg:mb-24 text-center mb-20 pt-12 relative items-center" id="the-system" style={{'--mouse-x': '1103.8046875px', '--mouse-y': '142px'}}>
 
 <h3 className="md:text-3xl lg:text-4xl leading-snug text-2xl font-normal text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/50 tracking-tight max-w-2xl mr-auto mb-8 ml-auto">
     This is how established trades businesses remove feast-and-famine cycles, without adding chaos.
@@ -597,7 +639,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 overflow-hidden h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{-MouseX: '1103.8046875px', -MouseY: '-371px'}}>
+<div className="col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 overflow-hidden h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{'--mouse-x': '1103.8046875px', '--mouse-y': '-371px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <span className="absolute top-5 left-8 text-[10px] font-mono tracking-widest text-white/30 z-20">01</span>
@@ -620,7 +662,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{-MouseX: '664.6015625px', -MouseY: '-371px'}}>
+<div className="col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between overflow-hidden" style={{'--mouse-x': '664.6015625px', '--mouse-y': '-371px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <span className="absolute top-5 left-8 text-[10px] font-mono tracking-widest text-white/30 z-20">02</span>
@@ -639,7 +681,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 overflow-hidden h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{-MouseX: '225.3984375px', -MouseY: '-371px'}}>
+<div className="col-span-1 lg:col-span-2 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col hover:border-white/10 overflow-hidden h-full border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{'--mouse-x': '225.3984375px', '--mouse-y': '-371px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <span className="absolute top-5 left-8 text-[10px] font-mono tracking-widest text-white/30 z-20">03</span>
@@ -679,7 +721,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 overflow-hidden border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{-MouseX: '1103.8046875px', -MouseY: '-832px'}}>
+<div className="col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 overflow-hidden border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{'--mouse-x': '1103.8046875px', '--mouse-y': '-832px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <span className="absolute top-5 left-8 text-[10px] font-mono tracking-widest text-white/30 z-20">04</span>
@@ -702,7 +744,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 overflow-hidden border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{-MouseX: '445px', -MouseY: '-832px'}}>
+<div className="col-span-1 lg:col-span-3 group hover:bg-white/[0.04] transition-all duration-500 flex flex-col min-h-[320px] hover:border-white/10 overflow-hidden border-white/5 border rounded-sm pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-lg justify-between" style={{'--mouse-x': '445px', '--mouse-y': '-832px'}}>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', padding: '1px'}}></div>
 <span className="absolute top-5 left-8 text-[10px] font-mono tracking-widest text-white/30 z-20">05</span>
@@ -722,7 +764,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-1 md:col-span-2 lg:col-span-6 text-center mt-6" style={{-MouseX: '1103.8046875px', -MouseY: '-1294.25px'}}>
+<div className="col-span-1 md:col-span-2 lg:col-span-6 text-center mt-6" style={{'--mouse-x': '1103.8046875px', '--mouse-y': '-1294.25px'}}>
 <p className="text-xl font-medium text-white tracking-tight">One revenue system, designed to run without everything relying on you.</p>
 </div>
 </div>

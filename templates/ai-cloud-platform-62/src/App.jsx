@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -124,6 +160,12 @@ if (copyBtn) {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -369,22 +411,22 @@ if (copyBtn) {
 </div>
 </div>
 <div className="platform__features stagger-up">
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:container" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>Auto-containerize</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>Zero config</div>
 </div>
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:git-branch" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>Branch deploys</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>Preview URLs</div>
 </div>
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:activity" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>Live metrics</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>Real-time</div>
 </div>
-<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)'}}>
+<div className="platform__feat reveal-child" style={{textAlign: 'center', padding: '16px 8px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)'}}>
 <iconify-icon icon="lucide:rotate-ccw" style={{fontSize: '1.1rem', color: 'var(--blue-light)', marginBottom: '6px', display: 'block'}}></iconify-icon>
 <div style={{fontSize: '0.72rem', fontWeight: '400', marginBottom: '2px'}}>Instant rollback</div>
 <div style={{fontSize: '0.65rem', color: 'var(--text-3)'}}>One click</div>
@@ -421,7 +463,7 @@ if (copyBtn) {
 </div>
 </div>
 <div className="pipeline__integrations stagger-up" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginTop: '48px', paddingTop: '32px', borderTop: '1px solid var(--border)'}}>
-<span style={{fontSize: '0.68rem', color: 'var(--text-3)', fontFamily: '\'JetBrains Mono\',monospace', letterSpacing: '0.08em', textTransform: 'uppercase'}}>Integrates with</span>
+<span style={{fontSize: '0.68rem', color: 'var(--text-3)', fontFamily: '\'JetBrains Mono\', monospace', letterSpacing: '0.08em', textTransform: 'uppercase'}}>Integrates with</span>
 <div style={{display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap'}}>
 <span className="reveal-child" style={{display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.76rem', color: 'var(--text-3)', opacity: '0.6'}}><iconify-icon icon="lucide:github"></iconify-icon> GitHub</span>
 <span className="reveal-child" style={{display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.76rem', color: 'var(--text-3)', opacity: '0.6'}}><iconify-icon icon="lucide:gitlab"></iconify-icon> GitLab</span>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -229,12 +265,12 @@ boxShadow: {
                 return (
                     <div className="flex items-end gap-[3px] h-6 mt-3">
                         {bars.map((h, i) => (
-                            <div key={i} className={`w-1.5 rounded-sm ${i > 15 ? 'bg-zinc-700' : 'bg-emerald-800'}`} style={{ height: `${h * 20 + 20}%`, opacity: i > 15 ? 0.3 : 1 }}></div>
+                            <div key={i} className={`w-1.5 rounded-sm ${i > 15 ? 'bg-zinc-700' : 'bg-emerald-800'}`} style={{height: `${h * 20 + 20}%`, opacity: i > 15 ? 0.3 : 1}}></div>
                         ))}
                          {/* Manual override for visual match */}
                          <div className="absolute flex items-end gap-[3px] h-6 mt-3 pointer-events-none">
                             {Array.from({length: 18}).map((_, i) => (
-                                <div key={i} className={`w-1.5 rounded-sm ${i < 12 ? 'bg-emerald-600' : 'bg-emerald-900'}`} style={{ height: '60%' }}></div>
+                                <div key={i} className={`w-1.5 rounded-sm ${i < 12 ? 'bg-emerald-600' : 'bg-emerald-900'}`} style={{height: '60%'}}></div>
                             ))}
                          </div>
                     </div>
@@ -526,6 +562,12 @@ boxShadow: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

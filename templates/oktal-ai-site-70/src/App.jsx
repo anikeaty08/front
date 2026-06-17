@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -389,6 +425,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -431,7 +473,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </a>
@@ -466,7 +508,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="[animation:fadeSlideIn_0.5s_ease-out_0.5s_both] animate-on-scroll mt-10 relative animate">
 
 <div className="-inset-0.5 bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 opacity-40 w-64 rounded-full absolute blur-xl"></div>
-<a className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_8px_rgba(129,140,248,0.35)] rounded-full relative shadow-[0_8px_40px_rgba(129,140,248,0.25)]" href="#" style={{-Spread: '90deg', -ShimmerColor: 'rgba(255,255,255,0.6)', -Radius: '9999px', -Speed: '4s', -Cut: '1px', -Bg: 'rgba(255, 255, 255, 0.05)'}}>
+<a className="group isolate inline-flex cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_8px_rgba(129,140,248,0.35)] rounded-full relative shadow-[0_8px_40px_rgba(129,140,248,0.25)]" href="#" style={{'--spread': '90deg', '--shimmer-color': 'rgba(255, 255, 255, 0.6)', '--radius': '9999px', '--speed': '4s', '--cut': '1px', '--bg': 'rgba(255, 255, 255, 0.05)'}}>
 <div className="absolute inset-0">
 <div className="absolute inset-[-200%] w-[400%] h-[400%] [animation:rotate-gradient_var(--speed)_linear_infinite]">
 <div className="absolute inset-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]"></div>
@@ -1201,7 +1243,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </a>
@@ -1432,7 +1474,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </a>
@@ -1534,7 +1576,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </a>
@@ -2205,7 +2247,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </button>
@@ -2220,7 +2262,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </button>
@@ -2512,7 +2554,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </button>
@@ -2561,7 +2603,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </button>
@@ -2620,7 +2662,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </button>
@@ -2665,7 +2707,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/30 to-violet-600/50" style={{animation: 'glowSlideDown 0.5s ease-out forwards'}}></div>
 </div>
 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full overflow-hidden rounded-md z-0">
-<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88,28,135,0.35) 0%, rgba(24,24,32,0.0) 60%)', filter: 'blur(24px)'}}></div>
+<div className="absolute inset-x-0 bottom-0 h-full" style={{background: 'radial-gradient(70% 100% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, rgba(24, 24, 32, 0.0) 60%)', filter: 'blur(24px)'}}></div>
 </div>
 <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 z-0" style={{height: '1px', background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(167,139,250,0.9) 50%, rgba(124,58,237,0) 100%)', borderTopLeftRadius: '9999px', borderTopRightRadius: '9999px', opacity: '0.7', filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.35))'}}></div>
 </button>

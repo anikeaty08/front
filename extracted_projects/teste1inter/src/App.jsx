@@ -11,6 +11,42 @@ export default function App() {
   });
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observerOptions = {
       threshold: 0.15,
       rootMargin: "0px 0px -10% 0px"
@@ -51,13 +87,11 @@ export default function App() {
   return (
     <div 
       className="h-full w-full"
-      style={{
-        fontFamily: "'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif"
-      }}
+      style={{fontFamily: "'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif"}}
     >
       {/* Background */}
       <div className="aura-background-component -z-10 w-full h-[1040px] absolute top-0">
-        <div className="absolute w-full h-full left-0 top-0 -z-10" style={{ filter: 'hue-rotate(90deg)' }}>
+        <div className="absolute w-full h-full left-0 top-0 -z-10" style={{filter: 'hue-rotate(90deg)'}}>
           <UnicornScene projectId="vTTCp5g4cVl9nwjlT56Z" />
         </div>
       </div>
@@ -80,7 +114,7 @@ export default function App() {
                   <a href="#application" className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] relative z-10 overflow-hidden transition-[transform] duration-150 ease-out active:scale-[0.98] text-white bg-neutral-900/60 border-white/20 border pt-3 pr-6 pb-3 pl-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] text-xs rounded-full cursor-pointer inline-flex">
                     <span className="relative z-10 inline-flex items-center gap-2 font-medium text-xs rounded-full font-geist">Inscreva-se Agora</span>
                     <span className="pointer-events-none absolute bottom-0 left-1/2 right-1/2 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 transition-[left,right] duration-500 ease-out group-hover:left-0 group-hover:right-0 text-xs rounded-full"></span>
-                    <span className="glow pointer-events-none absolute inset-0 -z-10 text-xs rounded-full" aria-hidden="true" style={{ transform: 'scale(0.95) translate(0px, -24px)' }}></span>
+                    <span className="glow pointer-events-none absolute inset-0 -z-10 text-xs rounded-full" aria-hidden="true" style={{transform: 'scale(0.95) translate(0px, -24px)'}}></span>
                   </a>
                 </div>
               </div>
@@ -410,7 +444,7 @@ export default function App() {
 
               {/* Tier 3: The Growth Engine (Featured) */}
               <article className="relative overflow-hidden rounded-2xl border border-blue-500/30 bg-blue-900/10 backdrop-blur-xl p-6 [animation:fadeSlideIn_1s_ease-out_0.4s_both] animate-on-scroll flex flex-col h-full shadow-[0_0_30px_-5px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/20">
-                <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% -20%, rgba(59, 130, 246, 0.15), transparent 70%)' }}></div>
+                <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(circle at 50% -20%, rgba(59, 130, 246, 0.15), transparent 70%)'}}></div>
                 <div className="relative flex flex-col gap-1 mb-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg text-white font-semibold tracking-tight font-geist">O Motor de Crescimento</h3>

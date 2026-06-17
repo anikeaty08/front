@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -50,7 +92,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </a>
 </div>
 <button aria-label="Open menu" className="inline-flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/10 md:hidden">
-<iconify-icon className="h-5 w-5" icon="solar:hamburger-menu-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5" icon="solar:hamburger-menu-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
               Menu
             </button>
 </div>
@@ -74,18 +116,18 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row">
 <a className="inline-flex items-center gap-2 rounded-md bg-gradient-to-tr from-indigo-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:from-indigo-400 hover:to-fuchsia-400 transition" href="#">
                   Get started
-                  <iconify-icon className="h-5 w-5" icon="solar:arrow-right-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+                  <iconify-icon className="h-5 w-5" icon="solar:arrow-right-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 </a>
 <a className="inline-flex items-center gap-2 rounded-md bg-white/5 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/10 transition" href="#">
                   Book a demo
-                  <iconify-icon className="h-5 w-5" icon="solar:calendar-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+                  <iconify-icon className="h-5 w-5" icon="solar:calendar-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 
 <div className="mt-10 grid gap-4 sm:grid-cols-3" id="solutions">
 <div className="rounded-lg bg-white/5 p-4 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:bag-3-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:bag-3-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-sm font-semibold text-white">Sales Teams</span>
 </div>
 <p className="mt-2 text-sm text-zinc-300">
@@ -94,7 +136,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rounded-lg bg-white/5 p-4 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:lifebuoy-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:lifebuoy-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-sm font-semibold text-white">Support Teams</span>
 </div>
 <p className="mt-2 text-sm text-zinc-300">
@@ -103,7 +145,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rounded-lg bg-white/5 p-4 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:cup-star-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:cup-star-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-sm font-semibold text-white">CS Teams</span>
 </div>
 <p className="mt-2 text-sm text-zinc-300">
@@ -119,7 +161,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative grid gap-6">
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10">
-<iconify-icon className="h-4 w-4 text-indigo-400" icon="solar:users-group-rounded-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-indigo-400" icon="solar:users-group-rounded-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Team Collaboration</span>
 </div>
 <div className="inline-flex items-center gap-3">
@@ -152,19 +194,19 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4 grid grid-cols-3 gap-3">
 <div className="rounded-md bg-white/5 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:microphone-2-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:microphone-2-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Natural voice</span>
 </div>
 </div>
 <div className="rounded-md bg-white/5 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:translate-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:translate-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Instant translation</span>
 </div>
 </div>
 <div className="rounded-md bg-white/5 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:shield-check-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:shield-check-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Zero friction</span>
 </div>
 </div>
@@ -174,7 +216,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-lg bg-zinc-900 p-4 ring-1 ring-white/10">
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:video-frame-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:video-frame-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-sm font-semibold text-white tracking-tight">Multilingual video creation</span>
 </div>
 <span className="text-xs text-zinc-400">With just a few clicks</span>
@@ -182,25 +224,25 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-4 grid grid-cols-2 gap-3">
 <div className="rounded-md bg-white/5 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:wand-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:wand-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Translate your demos</span>
 </div>
 </div>
 <div className="rounded-md bg-white/5 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:document-add-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:document-add-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Onboarding &amp; support content</span>
 </div>
 </div>
 <div className="rounded-md bg-white/5 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:voice-square-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:voice-square-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Authentic human voices</span>
 </div>
 </div>
 <div className="rounded-md bg-white/5 p-3 ring-1 ring-white/10">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:globe-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-fuchsia-400" icon="solar:globe-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-300">Ready for international markets</span>
 </div>
 </div>
@@ -230,11 +272,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-zinc-950/0 to-transparent"></div>
 <div className="absolute left-3 top-3 flex items-center gap-2">
 <span className="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-200 ring-1 ring-indigo-500/20 tracking-tight">EN</span>
-<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="inline-flex items-center rounded-full bg-fuchsia-500/10 px-2.5 py-1 text-xs font-medium text-fuchsia-200 ring-1 ring-fuchsia-500/20 tracking-tight">ES</span>
 </div>
 <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-md bg-white/5 px-2.5 py-1 ring-1 ring-white/10">
-<iconify-icon className="h-4 w-4 text-emerald-300" icon="solar:microphone-2-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-emerald-300" icon="solar:microphone-2-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-200">Traduction en direct</span>
 </div>
 </div>
@@ -250,11 +292,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-zinc-950/0 to-transparent"></div>
 <div className="absolute left-3 top-3 flex items-center gap-2">
 <span className="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-200 ring-1 ring-indigo-500/20 tracking-tight">FR</span>
-<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="inline-flex items-center rounded-full bg-fuchsia-500/10 px-2.5 py-1 text-xs font-medium text-fuchsia-200 ring-1 ring-fuchsia-500/20 tracking-tight">DE</span>
 </div>
 <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-md bg-white/5 px-2.5 py-1 ring-1 ring-white/10">
-<iconify-icon className="h-4 w-4 text-indigo-300" icon="solar:chat-round-dots-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-indigo-300" icon="solar:chat-round-dots-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-200">Sous-titres automatiques</span>
 </div>
 </div>
@@ -270,11 +312,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-zinc-950/0 to-transparent"></div>
 <div className="absolute left-3 top-3 flex items-center gap-2">
 <span className="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-200 ring-1 ring-indigo-500/20 tracking-tight">JP</span>
-<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="inline-flex items-center rounded-full bg-fuchsia-500/10 px-2.5 py-1 text-xs font-medium text-fuchsia-200 ring-1 ring-fuchsia-500/20 tracking-tight">EN</span>
 </div>
 <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-md bg-white/5 px-2.5 py-1 ring-1 ring-white/10">
-<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="solar:voice-square-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-fuchsia-300" icon="solar:voice-square-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-200">Voix naturelles</span>
 </div>
 </div>
@@ -290,11 +332,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-zinc-950/0 to-transparent"></div>
 <div className="absolute left-3 top-3 flex items-center gap-2">
 <span className="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-200 ring-1 ring-indigo-500/20 tracking-tight">PT</span>
-<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-zinc-300" icon="solar:translate-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="inline-flex items-center rounded-full bg-fuchsia-500/10 px-2.5 py-1 text-xs font-medium text-fuchsia-200 ring-1 ring-fuchsia-500/20 tracking-tight">AR</span>
 </div>
 <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-md bg-white/5 px-2.5 py-1 ring-1 ring-white/10">
-<iconify-icon className="h-4 w-4 text-emerald-300" icon="solar:shield-check-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-emerald-300" icon="solar:shield-check-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-zinc-200">Confiance &amp; sécurité</span>
 </div>
 </div>
@@ -315,7 +357,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-start justify-between">
 <div>
 <div className="inline-flex items-center gap-2 rounded-full bg-indigo-500/10 px-3 py-1 ring-1 ring-indigo-500/20">
-<iconify-icon className="h-4 w-4 text-indigo-400" icon="solar:call-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-indigo-400" icon="solar:call-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-indigo-200">Real-time multilingual calls</span>
 </div>
 <h2 className="mt-3 text-2xl font-semibold tracking-tight text-white">Instant translation with your natural voice cloned</h2>
@@ -324,7 +366,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="mt-5 rounded-lg bg-zinc-900 p-4 ring-1 ring-white/10" id="integrations">
 <div className="flex items-center gap-2">
-<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:plug-circle-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-5 w-5 text-indigo-400" icon="solar:plug-circle-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-sm font-semibold text-white tracking-tight">Native integration</span>
 <span className="text-xs text-zinc-400">Zero friction</span>
 </div>
@@ -338,35 +380,35 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-xl bg-white/5 p-6 ring-1 ring-white/10">
 <div className="inline-flex items-center gap-2 rounded-full bg-fuchsia-500/10 px-3 py-1 ring-1 ring-fuchsia-500/20">
-<iconify-icon className="h-4 w-4 text-fuchsia-400" icon="solar:clapperboard-open-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="h-4 w-4 text-fuchsia-400" icon="solar:clapperboard-open-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-xs font-medium text-fuchsia-200">Multilingual video creation</span>
 </div>
 <h2 className="mt-3 text-2xl font-semibold tracking-tight text-white">Translate your demos, onboarding, or support content automatically</h2>
 <p className="mt-2 text-sm text-zinc-300">Produce localized videos with authentic human voices—not synthetic robots.</p>
 <div className="mt-5 grid gap-3 sm:grid-cols-2">
 <div className="flex items-start gap-3 rounded-lg bg-zinc-900 p-4 ring-1 ring-white/10">
-<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:scroll-text-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:scroll-text-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <div>
 <p className="text-sm font-semibold text-white tracking-tight">Script-aware translation</p>
 <p className="text-xs text-zinc-400">Keeps product terms and tone intact.</p>
 </div>
 </div>
 <div className="flex items-start gap-3 rounded-lg bg-zinc-900 p-4 ring-1 ring-white/10">
-<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:gallery-add-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:gallery-add-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <div>
 <p className="text-sm font-semibold text-white tracking-tight">Subtitles &amp; overlays</p>
 <p className="text-xs text-zinc-400">Auto captions and localized UI text.</p>
 </div>
 </div>
 <div className="flex items-start gap-3 rounded-lg bg-zinc-900 p-4 ring-1 ring-white/10">
-<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:export-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:export-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <div>
 <p className="text-sm font-semibold text-white tracking-tight">One-click publishing</p>
 <p className="text-xs text-zinc-400">Share or download in multiple formats.</p>
 </div>
 </div>
 <div className="flex items-start gap-3 rounded-lg bg-zinc-900 p-4 ring-1 ring-white/10">
-<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:code-square-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="mt-0.5 h-5 w-5 text-fuchsia-400" icon="solar:code-square-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 <div>
 <p className="text-sm font-semibold text-white tracking-tight">Embed anywhere</p>
 <p className="text-xs text-zinc-400">Docs, portals, LMS—no friction.</p>
@@ -385,11 +427,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center gap-3 sm:justify-end">
 <a className="inline-flex items-center gap-2 rounded-md bg-white/5 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/10 transition" href="#">
                   See it in action
-                  <iconify-icon className="h-5 w-5" icon="solar:play-circle-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+                  <iconify-icon className="h-5 w-5" icon="solar:play-circle-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 </a>
 <a className="inline-flex items-center gap-2 rounded-md bg-gradient-to-tr from-indigo-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:from-indigo-400 hover:to-fuchsia-400 transition" href="#">
                   Start free
-                  <iconify-icon className="h-5 w-5" icon="solar:arrow-right-up-linear" style={{-SvgStrokeWidth: '1.5'}}></iconify-icon>
+                  <iconify-icon className="h-5 w-5" icon="solar:arrow-right-up-linear" style={{'--svg-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 </div>

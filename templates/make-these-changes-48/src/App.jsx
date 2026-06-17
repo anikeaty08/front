@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -247,6 +283,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -734,7 +776,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <h2 className="font-sans text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white" style={{textShadow: '0 0 30px rgba(255, 255, 255, 0.3)'}}>
             System <span style={{color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.3)'}}>Feedback.</span>
 </h2>
-<div className="mt- inline-block text-sm font-normal tracking-widest uppercase text-white/70 px-6 py-2 rounded-full" style={{background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', backdropFilter: 'blur(5px)', border: '1px solid rgba(255,255,255,0.1)'}}>
+<div className="mt- inline-block text-sm font-normal tracking-widest uppercase text-white/70 px-6 py-2 rounded-full" style={{background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)', backdropFilter: 'blur(5px)', border: '1px solid rgba(255,255,255,0.1)'}}>
             Neural Network Client Data
         </div>
 </div>
@@ -1005,7 +1047,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 <div className="relative animate-on-scroll [animation:animationIn_0.8s_ease-out_0.3s_both]">
 
-<div className="absolute -top-12 -right-8 md:-right-12 z-20 w-[120px] h-[120px] animate-float" style={{-OrbitRadius: '60px'}}>
+<div className="absolute -top-12 -right-8 md:-right-12 z-20 w-[120px] h-[120px] animate-float" style={{'--orbit-radius': '60px'}}>
 <div className="absolute inset-0 rounded-full border border-white/10 backdrop-blur-sm animate-spin-slow" style={{background: 'rgba(255, 255, 255, 0.03)', animationDuration: '20s'}}></div>
 <div className="absolute inset-0 flex items-center justify-center">
 <div className="w-1/2 h-1/2 rounded-full border relative overflow-hidden backdrop-blur-xl" style={{background: 'linear-gradient(135deg, rgba(0, 194, 255, 0.15) 0%, rgba(0, 194, 255, 0.05) 100%)', boxShadow: '0 8px 32px rgba(0, 194, 255, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.3)'}}>
@@ -1019,7 +1061,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="absolute top-1/2 left h-2 rounded-full bg/60 backdrop-blur-sm ring-1 ring-white/30 -ml-[4px] -mt-[4px] shadow-[0_0_8px_rgba(255,255,255,0.4)] animate-orbit-ccw"></div>
 </div>
 
-<div className="absolute -bottom-8 -left-4 md:-left-8 z-20 w-[90px] h-[90px] animate-float" style={{animationDelay: '1.5s', -OrbitRadius: '45px'}}>
+<div className="absolute -bottom-8 -left-4 md:-left-8 z-20 w-[90px] h-[90px] animate-float" style={{animationDelay: '1.5s', '--orbit-radius': '45px'}}>
 <div className="absolute inset-0 rounded-full border border-white/10 backdrop-blur-sm animate-spin-slow" style={{background: 'rgba(255, 255, 255, 0.03)', animationDuration: '20s', animationDirection: 'reverse'}}></div>
 <div className="absolute inset-0 flex items-center justify-center">
 <div className="w-1/2 h-1/2 rounded-full border relative overflow-hidden backdrop-blur-xl" style={{borderColor: 'rgba(245, 158, 11, 0.3)', background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%)', boxShadow: '0 8px 32px rgba(245, 158, 11, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.3)'}}>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head||document.body).appendChild(i)}}();
 
@@ -157,6 +193,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -193,7 +235,7 @@ export default function App() {
 <a className="text-sm font-medium text-slate-300 hover:text-white transition" href="#membership">Membership</a>
 <div className="hidden h-6 w-px bg-white/10 md:block"></div>
 <a className="text-sm font-medium text-slate-300 hover:text-white transition" href="#">Log in</a>
-<button className="group relative inline-flex cursor-pointer transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] hover:scale-[1.05] hover:text-white text-xs font-semibold text-white/70 tracking-tight rounded-full pt-[10px] pr-[16px] pb-[10px] pl-[16px] items-center justify-center" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)', background: 'radial-gradient(120% 140% at 50% 120%,rgba(2,132,199,0.35) 0%,rgba(0,0,0,0.9) 42%), rgba(15,23,42,0.3)'}}>
+<button className="group relative inline-flex cursor-pointer transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] hover:scale-[1.05] hover:text-white text-xs font-semibold text-white/70 tracking-tight rounded-full pt-[10px] pr-[16px] pb-[10px] pl-[16px] items-center justify-center" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.1)', background: 'radial-gradient(120% 140% at 50% 120%, rgba(2, 132, 199, 0.35) 0%, rgba(0, 0, 0, 0.9) 42%), rgba(15,23,42,0.3)'}}>
 <span className="relative z-10 text-sm font-normal rounded-full">Create Wallet</span>
 <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 opacity-20 transition-all duration-[1000ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] group-hover:opacity-80 rounded-full" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
@@ -230,11 +272,11 @@ export default function App() {
             NeonPay is the next-gen Web3 platform that combines secure crypto wallets, lightning-fast transactions, and investment tools—all powered by the blockchain.
           </p>
 <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-<a className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium text-black transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-sky-500/50 hover:animate-pulse" href="#membership" style={{background: 'linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(226,232,240,1) 100%)', boxShadow: '0 10px 30px -10px rgba(56,189,248,0.3)'}}>
+<a className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium text-black transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-sky-500/50 hover:animate-pulse" href="#membership" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(226, 232, 240, 1) 100%)', boxShadow: '0 10px 30px -10px rgba(56,189,248,0.3)'}}>
               Get Started
               <svg className="lucide lucide-arrow-right h-4 w-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </a>
-<button className="group relative inline-flex items-center justify-center min-w-[140px] cursor-pointer rounded-xl px-[17px] py-[12px] text-white/80 tracking-tight font-semibold transition-all duration-[900ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] hover:scale-[1.05] hover:text-white hover:ring-2 hover:ring-cyan-500/40" id="openDemo" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.12)', background: 'radial-gradient(120% 140% at 50% 120%,rgba(100,116,139,0.18) 0%,rgba(0,0,0,0.9) 42%), rgba(15,23,42,0.35)'}}>
+<button className="group relative inline-flex items-center justify-center min-w-[140px] cursor-pointer rounded-xl px-[17px] py-[12px] text-white/80 tracking-tight font-semibold transition-all duration-[900ms] ease-[cubic-bezier(0.15,0.83,0.66,1)] hover:-translate-y-[3px] hover:scale-[1.05] hover:text-white hover:ring-2 hover:ring-cyan-500/40" id="openDemo" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.12)', background: 'radial-gradient(120% 140% at 50% 120%, rgba(100, 116, 139, 0.18) 0%, rgba(0, 0, 0, 0.9) 42%), rgba(15,23,42,0.35)'}}>
 <span className="relative z-10 font-normal inline-flex items-center gap-2">
 <svg className="lucide lucide-play-circle h-4 w-4" data-lucide="play-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path><circle cx="12" cy="12" r="10"></circle></svg>
                 Explore Features
@@ -567,7 +609,7 @@ export default function App() {
 </h4>
 <div className="relative" id="badgesLayer"></div>
 </div>
-<p className="text-neutral-400 leading-relaxed text-lg mb-8" id="bodyCopy"><span className="rounded-md px-2 py-0.5 ring-1" style={{background: 'rgba(14,165,233,0.18)', boxShadow: 'inset 0 0 0 1px rgba(14,165,233,0.35)'}}>Fast</span>, <span className="rounded-md px-2 py-0.5 ring-1" style={{background: 'rgba(16,185,129,0.18)', boxShadow: 'inset 0 0 0 1px rgba(16,185,129,0.35)'}}>low‑cost</span> payments across borders with on‑chain finality.</p>
+<p className="text-neutral-400 leading-relaxed text-lg mb-8" id="bodyCopy"><span className="rounded-md px-2 py-0.5 ring-1" style={{background: 'rgba(14, 165, 233, 0.18)', boxShadow: 'inset 0 0 0 1px rgba(14,165,233,0.35)'}}>Fast</span>, <span className="rounded-md px-2 py-0.5 ring-1" style={{background: 'rgba(16, 185, 129, 0.18)', boxShadow: 'inset 0 0 0 1px rgba(16,185,129,0.35)'}}>low‑cost</span> payments across borders with on‑chain finality.</p>
 <div className="space-y-3 mb-6">
 <div className="h-2 rounded-full bg-neutral-800/70 w-4/5"></div>
 <div className="h-2 rounded-full bg-neutral-800/70 w-full"></div>

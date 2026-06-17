@@ -8,6 +8,42 @@ const SplitText = ({ text, className }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -27,7 +63,7 @@ const SplitText = ({ text, className }) => {
         <span key={i} className="word-wrap mr-[0.3em]">
           <span
             className={clsx("word-inner", isVisible && "revealed")}
-            style={{ transitionDelay: `${i * 100}ms` }}
+            style={{transitionDelay: `${i * 100}ms`}}
           >
             {word}&nbsp;
           </span>
@@ -210,12 +246,12 @@ export default function App() {
           <div className={clsx("loader-text", loadingPhase === 'fading-text' && "fade-out")}>
             AURUM
           </div>
-          <div className="loader-bar" style={{ width: `${progress}%` }}></div>
+          <div className="loader-bar" style={{width: `${progress}%`}}></div>
         </div>
       )}
 
       {/* Main Content */}
-      <div style={{ opacity: appOpacity, transition: 'opacity 0.8s ease' }}>
+      <div style={{opacity: appOpacity, transition: 'opacity 0.8s ease'}}>
         
         <nav className="fixed flex z-50 text-white mix-blend-difference w-full pt-8 pr-8 pb-8 pl-8 top-0 items-center justify-between pointer-events-none">
           <div className="display text-xl font-bold tracking-tighter pointer-events-auto">OASIS</div>
@@ -330,17 +366,17 @@ export default function App() {
             className="flex flex-col cursor-pointer z-10 text-center bg-[#E3E1DC] pt-40 pb-40 relative items-center justify-center" 
             onClick={() => window.location.href='/Contacto'}
           >
-            <h2 className="display md:text-5xl text-3xl mb-8" style={{ animation: "smoothEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}>
+            <h2 className="display md:text-5xl text-3xl mb-8" style={{animation: "smoothEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards"}}>
               Haz parte de un proyecto único 
             </h2>
-            <div className="leading-relaxed font-light text-gray-600 max-w-xl mb-12" style={{ animation: "smoothEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards" }}>
+            <div className="leading-relaxed font-light text-gray-600 max-w-xl mb-12" style={{animation: "smoothEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards"}}>
               Descubre cada detalle de Oasis Tibasosa y recibe atención personalizada para encontrar la casa ideal para ti.
             </div>
             <div 
               role="button" 
               tabIndex="0" 
               className="group inline-flex overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1 hover:scale-[1.03] text-[#E3E1DC] bg-[#121212] mt-6 pt-5 pr-12 pb-5 pl-12 relative shadow-[0_20px_40px_rgba(0,0,0,0.1)] items-center justify-center" 
-              style={{ animation: "buttonFadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
+              style={{animation: "buttonFadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards"}}
               onClick={(e) => {
                 e.stopPropagation();
                 window.open('https://wa.me/573104794229?text=Hola%2C%20quisiera%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20proyecto%20Oasis%20Tibasosa.', '_blank');
@@ -358,7 +394,7 @@ export default function App() {
 
         {/* FOOTER */}
         <footer className="footer-sticky">
-          <div className="z-10 text-center relative" ref={footerContentRef} style={{ transform: 'translateY(100px) scale(0.9)', opacity: 0.5 }}>
+          <div className="z-10 text-center relative" ref={footerContentRef} style={{transform: 'translateY(100px) scale(0.9)', opacity: 0.5}}>
             <div className="uppercase text-xs text-gray-500 tracking-[0.3em] mb-4">invierte en el futuro</div>
             <a href="/" className="display text-[8vw] leading-none hover:text-gray-400 transition-colors">VIVE OASIS</a>
             <div className="flex gap-8 uppercase text-sm text-gray-400 tracking-widest mt-12 flex-wrap justify-center">

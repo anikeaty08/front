@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -309,6 +345,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -636,28 +678,28 @@ addUtilities({
 <div className="w-full h-px bg-gray-50"></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[30%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '0.8s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '0.8s'}}></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[50%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '0.9s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '0.9s'}}></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[40%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '1.0s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '1.0s'}}></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[70%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '1.1s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '1.1s'}}></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[60%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '1.2s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '1.2s'}}></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[90%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '1.3s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '1.3s'}}></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[75%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '1.4s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '1.4s'}}></div>
 </div>
 <div className="w-full bg-gray-50 rounded-t-sm h-[85%] relative overflow-hidden group hover:bg-gray-100 transition-colors">
-<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{-H: '100%', animationDelay: '1.5s'}}></div>
+<div className="absolute bottom-0 w-full bg-[#1d1d1f] anim-chart-bar-new" style={{'--h': '100%', animationDelay: '1.5s'}}></div>
 </div>
 </div>
 </div>
@@ -849,22 +891,22 @@ addUtilities({
                     </div>
 </div>
 <div className="flex items-end justify-between gap-1 h-32 w-full mt-auto">
-<div className="w-1.5 bg-[#d49a1a]/20 rounded-t-sm anim-bar" style={{-H: '20%', animationDelay: '0.1s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{-H: '35%', animationDelay: '0.15s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{-H: '50%', animationDelay: '0.2s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{-H: '30%', animationDelay: '0.25s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/20 rounded-t-sm anim-bar" style={{-H: '25%', animationDelay: '0.3s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{-H: '60%', animationDelay: '0.35s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/60 rounded-t-sm anim-bar" style={{-H: '80%', animationDelay: '0.4s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{-H: '45%', animationDelay: '0.45s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{-H: '40%', animationDelay: '0.5s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/20 rounded-t-sm anim-bar" style={{-H: '30%', animationDelay: '0.55s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{-H: '55%', animationDelay: '0.6s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/60 rounded-t-sm anim-bar" style={{-H: '75%', animationDelay: '0.65s'}}></div>
-<div className="w-1.5 bg-[#d49a1a] rounded-t-sm anim-bar" style={{-H: '90%', animationDelay: '0.7s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/60 rounded-t-sm anim-bar" style={{-H: '65%', animationDelay: '0.75s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{-H: '50%', animationDelay: '0.8s'}}></div>
-<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{-H: '35%', animationDelay: '0.85s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/20 rounded-t-sm anim-bar" style={{'--h': '20%', animationDelay: '0.1s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{'--h': '35%', animationDelay: '0.15s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{'--h': '50%', animationDelay: '0.2s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{'--h': '30%', animationDelay: '0.25s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/20 rounded-t-sm anim-bar" style={{'--h': '25%', animationDelay: '0.3s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{'--h': '60%', animationDelay: '0.35s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/60 rounded-t-sm anim-bar" style={{'--h': '80%', animationDelay: '0.4s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{'--h': '45%', animationDelay: '0.45s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{'--h': '40%', animationDelay: '0.5s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/20 rounded-t-sm anim-bar" style={{'--h': '30%', animationDelay: '0.55s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{'--h': '55%', animationDelay: '0.6s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/60 rounded-t-sm anim-bar" style={{'--h': '75%', animationDelay: '0.65s'}}></div>
+<div className="w-1.5 bg-[#d49a1a] rounded-t-sm anim-bar" style={{'--h': '90%', animationDelay: '0.7s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/60 rounded-t-sm anim-bar" style={{'--h': '65%', animationDelay: '0.75s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/40 rounded-t-sm anim-bar" style={{'--h': '50%', animationDelay: '0.8s'}}></div>
+<div className="w-1.5 bg-[#d49a1a]/30 rounded-t-sm anim-bar" style={{'--h': '35%', animationDelay: '0.85s'}}></div>
 </div>
 </div>
 </div>
@@ -1463,7 +1505,7 @@ addUtilities({
 </div>
 
 <div className="hidden md:block relative perspective-midrange">
-<div className="group-hover:rotate-3 group-hover:scale-105 transition-all duration-700 ease-out flex flex-col overflow-hidden text-center bg-gradient-to-tr from-white/0 via-white/10 to-white/0 w-72 h-72 rounded-3xl px-8 py-8 relative shadow-2xl backdrop-blur-xl rotate-6 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group-hover:rotate-3 group-hover:scale-105 transition-all duration-700 ease-out flex flex-col overflow-hidden text-center bg-gradient-to-tr from-white/0 via-white/10 to-white/0 w-72 h-72 rounded-3xl px-8 py-8 relative shadow-2xl backdrop-blur-xl rotate-6 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="bg-gradient-to-t from-[#d49a1a]/10 to-transparent opacity-50 absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="w-16 h-16 rounded-2xl bg-[#1d1d1f] border border-white/10 flex items-center justify-center mb-6 shadow-xl relative z-10 group-hover:-translate-y-2 transition-transform duration-500">
 <svg className="text-[#d49a1a]" fill="none" height="32" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">

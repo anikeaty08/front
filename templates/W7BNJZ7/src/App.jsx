@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -102,6 +138,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -114,7 +156,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
       Legal Entity Account Activity
     </h1>
 
-<div className="flex flex-wrap items-center gap-4 fade-in" style={{-Delay: '0.1s'}}>
+<div className="flex flex-wrap items-center gap-4 fade-in" style={{'--delay': '0.1s'}}>
 
 <div className="flex items-center gap-3">
 <label className="text-sm font-medium text-gray-700 select-none" htmlFor="progressFilter">Min % Complete</label>
@@ -142,7 +184,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <main className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 grow">
 
-<section className="fade-in" data-entity="Acme Corp" data-progress="75" style={{-Delay: '0.2s'}}>
+<section className="fade-in" data-entity="Acme Corp" data-progress="75" style={{'--delay': '0.2s'}}>
 <div className="bg-white rounded-lg p-5 border border-gray-200 hover:shadow-md transition h-full flex flex-col">
 <div className="flex items-center justify-between">
 <h2 className="text-lg font-medium tracking-tight flex items-center gap-2">
@@ -219,7 +261,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="fade-in" data-entity="Globex Inc" data-progress="90" style={{-Delay: '0.3s'}}>
+<section className="fade-in" data-entity="Globex Inc" data-progress="90" style={{'--delay': '0.3s'}}>
 <div className="bg-white rounded-lg p-5 border border-gray-200 hover:shadow-md transition h-full flex flex-col">
 <div className="flex items-center justify-between">
 <h2 className="text-lg font-medium tracking-tight flex items-center gap-2">
@@ -294,7 +336,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="fade-in" data-entity="Umbrella LLC" data-progress="45" style={{-Delay: '0.4s'}}>
+<section className="fade-in" data-entity="Umbrella LLC" data-progress="45" style={{'--delay': '0.4s'}}>
 <div className="bg-white rounded-lg p-5 border border-gray-200 hover:shadow-md transition h-full flex flex-col">
 <div className="flex items-center justify-between">
 <h2 className="text-lg font-medium tracking-tight flex items-center gap-2">
@@ -369,7 +411,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<section className="fade-in" data-entity="Stark Industries" data-progress="100" style={{-Delay: '0.5s'}}>
+<section className="fade-in" data-entity="Stark Industries" data-progress="100" style={{'--delay': '0.5s'}}>
 <div className="bg-white rounded-lg p-5 border border-gray-200 hover:shadow-md transition h-full flex flex-col">
 <div className="flex items-center justify-between">
 <h2 className="text-lg font-medium tracking-tight flex items-center gap-2">
@@ -447,7 +489,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="px-6 pb-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-<div className="lg:col-span-2 bg-white rounded-lg p-6 border border-gray-200 fade-in" style={{-Delay: '0.6s'}}>
+<div className="lg:col-span-2 bg-white rounded-lg p-6 border border-gray-200 fade-in" style={{'--delay': '0.6s'}}>
 <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2 mb-4">
 <i className="w-6 h-6 text-indigo-600" data-lucide="bar-chart"></i>Feature Usage
       </h2>
@@ -485,7 +527,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </ul>
 </div>
 
-<div className="bg-white rounded-lg p-6 border border-gray-200 fade-in" style={{-Delay: '0.7s'}}>
+<div className="bg-white rounded-lg p-6 border border-gray-200 fade-in" style={{'--delay': '0.7s'}}>
 <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2 mb-4">
 <i className="w-6 h-6 text-indigo-600" data-lucide="clock"></i>Last Account Login
       </h2>

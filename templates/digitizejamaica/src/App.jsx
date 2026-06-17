@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -120,6 +156,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -156,7 +198,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </a>
 </nav>
 <div className="flex gap-3 items-center justify-center">
-<a className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:text-white hover:border-indigo-400/40 hover:bg-gradient-to-br hover:from-indigo-500/30 hover:to-blue-500/20 hover:shadow-[0_0_25px_rgba(59,130,246,0.35)] text-sm font-medium text-white/90 bg-gradient-to-br from-white/5 via-white/10 to-white/5 rounded-md ring-0 pt-3 pr-5 pb-3 pl-5 shadow-[0_0_15px_rgba(59,130,246,0.15)]" href="#" onclick="toggleOnboarding(true); return false;" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}>
+<a className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:text-white hover:border-indigo-400/40 hover:bg-gradient-to-br hover:from-indigo-500/30 hover:to-blue-500/20 hover:shadow-[0_0_25px_rgba(59,130,246,0.35)] text-sm font-medium text-white/90 bg-gradient-to-br from-white/5 via-white/10 to-white/5 rounded-md ring-0 pt-3 pr-5 pb-3 pl-5 shadow-[0_0_15px_rgba(59,130,246,0.15)]" href="#" onclick="toggleOnboarding(true); return false;" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}>
                 Get Started
                 <svg className="lucide lucide-arrow-right stroke-[1.5]" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M5 12h14"></path>
@@ -220,7 +262,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 
 <div className="flex flex-col sm:flex-row gap-4 mt-10 items-center justify-center">
-<a className="btn-wrapper" href="#" onclick="toggleOnboarding(true); return false;" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
+<a className="btn-wrapper" href="#" onclick="toggleOnboarding(true); return false;" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
 <style>
                   .btn-wrapper::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; pointer-events: none; background-color: #0000; background-image: repeating-linear-gradient(45deg, var(--grid-color) 0 1px, transparent 2px 5px); opacity: 0; z-index: -1; } .btn-wrapper:has(.btn:hover)::after { animation: opacity-anim calc(var(--animation-speed) * 4) ease-in-out forwards; } @keyframes opacity-anim { 80% { opacity: 0; } 100% { opacity: 1; } } .btn-wrapper .btn { position: relative; display: flex; justify-content: center; align-items: center; padding: 0.8rem 1.25rem; background-color: #ffffff; border: 1px solid #ffffff; color: #09090b; font-family: "Inter", sans-serif; letter-spacing: -0.01em; font-size: 1rem; font-weight: 600; text-transform: capitalize; border-radius: 6px; cursor: pointer; transition: all .2s ease-in-out; } .btn-wrapper .btn:hover { background-color: #25358b; color: #ffffff; transform: scale(1.05); letter-spacing: .06em; border-color: #25358b; } .btn-wrapper .btn:active { background-color: #1e2b70; transform: scale(.98); letter-spacing: .02em; } .btn-wrapper .dot { position: absolute; width: var(--dot-size); aspect-ratio: 1; border-radius: 2px; background-color: var(--dot-color); transition: all .3s ease-in-out; opacity: 0; } .btn-wrapper:has(.btn:hover) .dot.top.left { top: 50%; left: 20%; animation: move-top-left var(--animation-speed) ease-in-out forwards; } @keyframes move-top-left { 100% { top: calc(var(--dot-size) * -0.5); left: calc(var(--dot-size) * -0.5); opacity: 1; } } .btn-wrapper:has(.btn:hover) .dot.top.right { top: 50%; right: 20%; animation: move-top-right var(--animation-speed) ease-in-out forwards; animation-delay: calc(var(--animation-speed)*.6); } @keyframes move-top-right { 100% { top: calc(var(--dot-size) * -0.5); right: calc(var(--dot-size) * -0.5); opacity: 1; } } .btn-wrapper:has(.btn:hover) .dot.bottom.right { bottom: 50%; right: 20%; animation: move-bottom-right var(--animation-speed) ease-in-out forwards; animation-delay: calc(var(--animation-speed)*1.2); } @keyframes move-bottom-right { 100% { bottom: calc(var(--dot-size) * -0.5); right: calc(var(--dot-size) * -0.5); opacity: 1; } } .btn-wrapper:has(.btn:hover) .dot.bottom.left { bottom: 50%; left: 20%; animation: move-bottom-left var(--animation-speed) ease-in-out forwards; animation-delay: calc(var(--animation-speed)*1.8); } @keyframes move-bottom-left { 100% { bottom: calc(var(--dot-size) * -0.5); left: calc(var(--dot-size) * -0.5); opacity: 1; } } .btn-wrapper .line { position: absolute; transition: all .3s ease-in-out; } .btn-wrapper .line.horizontal { height: var(--line-weight); width: 100%; background-image: repeating-linear-gradient(90deg, #0000 0 calc(var(--line-weight)*2), var(--line-color) calc(var(--line-weight)*2) calc(var(--line-weight)*4)); } .btn-wrapper .line.vertical { width: var(--line-weight); height: 100%; background-image: repeating-linear-gradient(0deg, #0000 0 calc(var(--line-weight)*2), var(--line-color) calc(var(--line-weight)*2) calc(var(--line-weight)*4)); }
                 </style>
@@ -405,7 +447,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="space-y-2">
 
-<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{-X: '443px', -Y: '768.3125px'}}>
+<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{'--x': '443px', '--y': '768.3125px'}}>
 <div className="h-8 w-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-xs">
                           AS
                         </div>
@@ -427,7 +469,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{-X: '443px', -Y: '696.3125px'}}>
+<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{'--x': '443px', '--y': '696.3125px'}}>
 <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-xs">
                           GT
                         </div>
@@ -449,7 +491,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{-X: '443px', -Y: '624.3125px'}}>
+<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{'--x': '443px', '--y': '624.3125px'}}>
 <div className="h-8 w-8 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400 font-bold text-xs">
                           SL
                         </div>
@@ -471,7 +513,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{-X: '443px', -Y: '552.3125px'}}>
+<div className="flex items-center p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition group cursor-pointer" style={{'--x': '443px', '--y': '552.3125px'}}>
 <div className="h-8 w-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 font-bold text-xs">
                           WB
                         </div>
@@ -583,7 +625,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="flex flex-col lg:px-8 lg:pt-20 animate-on-scroll [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] max-w-6xl mr-auto ml-auto pt-16 pr-6 pl-6 items-center">
-<div className="overflow-hidden sm:px-8 sm:py-10 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="overflow-hidden sm:px-8 sm:py-10 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 
 <div className="flex border-slate-900 border-b pb-4 gap-x-4 gap-y-4 items-center justify-between">
 <span className="text-[11px] uppercase font-medium text-sky-300 tracking-[0.2em]">
@@ -614,7 +656,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid md:grid-cols-3 mt-10 gap-x-4 gap-y-4 sm:gap-x-6 sm:gap-y-6">
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 
 <div className="flex items-center justify-between text-[10px] text-slate-400">
 <span className="uppercase tracking-[0.16em] text-slate-300">
@@ -642,7 +684,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </div>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 <div className="flex items-center justify-between text-[10px] text-slate-400">
 <span className="uppercase tracking-[0.16em] text-slate-300">
                 ADVANCED ENGINE
@@ -669,7 +711,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </ul>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 <div className="flex items-center justify-between text-[10px] text-slate-400">
 <span className="uppercase tracking-[0.16em] text-slate-300">
                 REAL-TIME TRIGGERS
@@ -736,7 +778,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '649px', -Y: '-901.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '649px', '--y': '-901.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-blue-300 group-hover:text-blue-500/20 group-hover:border-blue-500/20 transition-all duration-300">
@@ -750,7 +792,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '307.671875px', -Y: '-901.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '307.671875px', '--y': '-901.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-indigo-300 group-hover:text-indigo-500/20 group-hover:border-indigo-500/20 transition-all duration-300">
@@ -764,7 +806,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '-33.6640625px', -Y: '-901.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '-33.6640625px', '--y': '-901.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-orange-300 group-hover:text-orange-500/20 group-hover:border-orange-500/20 transition-all duration-300">
@@ -778,7 +820,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '649px', -Y: '-1013.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '649px', '--y': '-1013.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-purple-300 group-hover:text-purple-500/20 group-hover:border-purple-500/20 transition-all duration-300">
@@ -792,7 +834,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '307.671875px', -Y: '-1013.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '307.671875px', '--y': '-1013.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-emerald-300 group-hover:text-emerald-500/20 group-hover:border-emerald-500/20 transition-all duration-300">
@@ -806,7 +848,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '-33.6640625px', -Y: '-1013.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '-33.6640625px', '--y': '-1013.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-sky-300 group-hover:text-sky-500/20 group-hover:border-sky-500/20 transition-all duration-300">
@@ -820,7 +862,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '649px', -Y: '-1125.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '649px', '--y': '-1125.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-pink-300 group-hover:text-pink-500/20 group-hover:border-pink-500/20 transition-all duration-300">
@@ -834,7 +876,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{-X: '307.671875px', -Y: '-1125.1875px'}}>
+<div className="group relative p-6 bg-white/[0.03] border border-white/10 rounded-xl hover:bg-white/[0.06] transition-all duration-300 hover:border-white/20" style={{'--x': '307.671875px', '--y': '-1125.1875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
 <div className="flex items-center gap-4 relative">
 <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 text-slate-300 group-hover:text-yellow-300 group-hover:text-yellow-500/20 group-hover:border-yellow-500/20 transition-all duration-300">
@@ -848,7 +890,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group relative p-6 bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/20 rounded-xl hover:border-white/30 transition-all duration-300" style={{-X: '-33.6640625px', -Y: '-1125.1875px'}}>
+<div className="group relative p-6 bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/20 rounded-xl hover:border-white/30 transition-all duration-300" style={{'--x': '-33.6640625px', '--y': '-1125.1875px'}}>
 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
 <div className="flex items-center justify-center h-full gap-3 relative">
 <svg className="lucide lucide-sparkles w-5 h-5 text-indigo-400 fill-indigo-400/20 animate-pulse" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
@@ -879,7 +921,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <div className="mt-10 space-y-6">
 
-<section className="group overflow-hidden md:p-6 ring-white/10 ring-1 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative" id="card-marketing" style={{-X: '609px', -Y: '-1739.1875px'}}>
+<section className="group overflow-hidden md:p-6 ring-white/10 ring-1 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative" id="card-marketing" style={{'--x': '609px', '--y': '-1739.1875px'}}>
 <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/5 to-transparent"></div>
 <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-4 ring-1 ring-white/10 backdrop-blur">
 <div className="flex items-center gap-2 text-white/80 text-sm mb-3">
@@ -910,7 +952,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </p>
 </section>
 
-<section className="group overflow-hidden md:p-6 rounded-3xl ring-white/10 ring-1 pt-5 pr-5 pb-5 pl-5 relative" id="card-seo" style={{-X: '609px', -Y: '-2041.1875px'}}>
+<section className="group overflow-hidden md:p-6 rounded-3xl ring-white/10 ring-1 pt-5 pr-5 pb-5 pl-5 relative" id="card-seo" style={{'--x': '609px', '--y': '-2041.1875px'}}>
 <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/5 to-transparent"></div>
 <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-4 ring-1 ring-white/10 backdrop-blur">
 <div className="flex items-center gap-2 text-white/80 text-sm mb-3">
@@ -946,7 +988,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex flex-col gap-6 p-6 sm:p-10 lg:col-start-2">
 
-<section className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-5 md:p-6" style={{-X: '105px', -Y: '-1439.1875px'}}>
+<section className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-5 md:p-6" style={{'--x': '105px', '--y': '-1439.1875px'}}>
 <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/5 to-transparent"></div>
 <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-4 ring-1 ring-white/10 backdrop-blur">
 <div className="flex items-center gap-2 text-white/80 text-sm mb-3">
@@ -980,7 +1022,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </p>
 </section>
 
-<section className="group overflow-hidden md:p-6 ring-1 ring-white/10 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative" style={{-X: '105px', -Y: '-1705.1875px'}}>
+<section className="group overflow-hidden md:p-6 ring-1 ring-white/10 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative" style={{'--x': '105px', '--y': '-1705.1875px'}}>
 <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/5 to-transparent"></div>
 <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-4 ring-1 ring-white/10 backdrop-blur">
 <div className="flex items-center gap-2 text-white/80 text-sm mb-3">
@@ -1014,7 +1056,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </p>
 </section>
 
-<section className="group overflow-hidden md:p-6 ring-1 ring-white/10 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative" style={{-X: '105px', -Y: '-1979.1875px'}}>
+<section className="group overflow-hidden md:p-6 ring-1 ring-white/10 rounded-3xl pt-5 pr-5 pb-5 pl-5 relative" style={{'--x': '105px', '--y': '-1979.1875px'}}>
 <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/5 to-transparent"></div>
 <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-4 ring-1 ring-white/10 backdrop-blur">
 <div className="flex items-center gap-2 text-white/80 text-sm mb-3">

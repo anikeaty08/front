@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -82,6 +118,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -164,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
             fanmade.pro gives you high‑quality followers, likes, comments, views and more, across all major platforms — automated, fast and affordable.
           </p>
 <div className="flex flex-wrap mt-8 gap-x-3 gap-y-3 items-center justify-center">
-<a className="inline-flex items-center justify-center text-[15px] transition-all duration-500 hover:scale-105 hover:shadow-2xl [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] font-medium text-white h-11 rounded-full pr-6 pl-6" href="https://www.fanmade.pro/auth/signup" style={{background: 'radial-gradient(circle, rgba(88,28,135,0.95) 0%, rgba(88,28,135,0) 65%), linear-gradient(135deg,#ec4899,#a855f7,#6366f1,#22d3ee)', boxShadow: 'rgba(0, 0, 0, 0.35) 0 -18px 28px inset, rgba(255, 255, 255, 0.25) 0 3px 6px inset, rgba(0, 0, 0, 0.6) 0 10px 25px', textShadow: 'rgba(0, 0, 0, 0.75) 0 1px 3px'}}>
+<a className="inline-flex items-center justify-center text-[15px] transition-all duration-500 hover:scale-105 hover:shadow-2xl [animation:fadeSlideIn_0.8s_ease-out_0.7s_both] font-medium text-white h-11 rounded-full pr-6 pl-6" href="https://www.fanmade.pro/auth/signup" style={{background: 'radial-gradient(circle, rgba(88, 28, 135, 0.95) 0%, rgba(88, 28, 135, 0) 65%), linear-gradient(135deg, #ec4899, #a855f7, #6366f1, #22d3ee)', boxShadow: 'rgba(0, 0, 0, 0.35) 0 -18px 28px inset, rgba(255, 255, 255, 0.25) 0 3px 6px inset, rgba(0, 0, 0, 0.6) 0 10px 25px', textShadow: 'rgba(0, 0, 0, 0.75) 0 1px 3px'}}>
               Get started in 60 seconds
             </a>
 <a className="inline-flex items-center justify-center text-[15px] transition-all duration-300 hover:bg-white/20 hover:scale-[1.02] [animation:fadeSlideIn_0.8s_ease-out_0.8s_both] font-medium text-white bg-white/10 h-11 rounded-full ring-white/20 ring-1 pr-6 pl-6" href="#services">

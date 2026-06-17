@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -754,6 +790,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1645,7 +1687,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative w-full overflow-hidden scroll-group py-4" style={{WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'}}>
 
 <div className="flex gap-6 mb-6 w-max animate-scroll">
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '0s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '0s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1673,7 +1715,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '1.2s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '1.2s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1701,7 +1743,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '2.4s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '2.4s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1729,7 +1771,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '3.6s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '3.6s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1757,7 +1799,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '4.8s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '4.8s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1786,7 +1828,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '0s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '0s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1814,7 +1856,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '1.2s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '1.2s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1842,7 +1884,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '2.4s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '2.4s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1870,7 +1912,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '3.6s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '3.6s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1898,7 +1940,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '4.8s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '4.8s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1929,7 +1971,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex gap-6 w-max animate-scroll-reverse" style={{marginLeft: '-200px'}}>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '0.5s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '0.5s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1957,7 +1999,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '1.7s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '1.7s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -1985,7 +2027,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '2.9s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '2.9s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -2013,7 +2055,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '4.1s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '4.1s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -2041,7 +2083,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '5.3s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '5.3s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -2070,7 +2112,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '0.5s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '0.5s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -2098,7 +2140,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '1.7s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '1.7s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -2126,7 +2168,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '2.9s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '2.9s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -2154,7 +2196,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '4.1s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '4.1s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">
@@ -2182,7 +2224,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{-Delay: '5.3s'}}>
+<div className="testimonial-card w-[320px] md:w-[420px] shrink-0 border border-emerald-900/30 bg-[#050a06]/80 backdrop-blur-xl p-8 transition-all duration-500 rounded-2xl relative flex flex-col justify-between group/card" style={{'--delay': '5.3s'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"></div>
 <div className="relative z-10 flex-grow">
 <div className="mb-6 flex gap-1 opacity-80">

@@ -39,12 +39,12 @@ function App() {
         {/* Hero Section */}
         <section className="relative min-h-[90vh] pt-32 pb-32 md:pt-40 md:pb-40 px-6 md:px-12 flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#FDFBF7] to-[#F7F3E8] overflow-hidden">
           {/* Background animated shapes */}
-          <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-amber-accent/5 rounded-full blur-[100px] animate-float" style={{ animationDelay: '-2s', animationDuration: '10s' }}></div>
-          <div className="absolute -bottom-32 left-10 w-[50rem] h-[50rem] bg-muted-sage/20 rounded-full blur-[120px] animate-float" style={{ animationDuration: '12s' }}></div>
+          <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-amber-accent/5 rounded-full blur-[100px] animate-float" style={{animationDelay: '-2s', animationDuration: '10s'}}></div>
+          <div className="absolute -bottom-32 left-10 w-[50rem] h-[50rem] bg-muted-sage/20 rounded-full blur-[120px] animate-float" style={{animationDuration: '12s'}}></div>
 
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center relative z-10 w-full">
-            <div className="lg:col-span-6 flex flex-col justify-center fade-in-up" style={{ animationDelay: '0.1s' }}>
-              <div className="inline-flex items-center gap-3 mb-8 w-max px-4 py-2 rounded-full border border-amber-accent/20 bg-white/50 backdrop-blur-sm shadow-sm fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <div className="lg:col-span-6 flex flex-col justify-center fade-in-up" style={{animationDelay: '0.1s'}}>
+              <div className="inline-flex items-center gap-3 mb-8 w-max px-4 py-2 rounded-full border border-amber-accent/20 bg-white/50 backdrop-blur-sm shadow-sm fade-in-up" style={{animationDelay: '0.2s'}}>
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-accent opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-accent"></span>
@@ -54,7 +54,7 @@ function App() {
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-slate-900 leading-[1.1] mb-8 fade-in-up" style={{ animationDelay: '0.3s' }}>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-slate-900 leading-[1.1] mb-8 fade-in-up" style={{animationDelay: '0.3s'}}>
                 The New Era of Leadership Demands the
                 <span className="relative inline-block whitespace-nowrap">
                   <span className="relative z-10">Best of Both</span>
@@ -64,12 +64,12 @@ function App() {
                 </span>
                 Worlds.
               </h1>
-              <p className="text-lg md:text-xl text-slate-600 leading-relaxed mb-10 max-w-lg fade-in-up" style={{ animationDelay: '0.5s' }}>
+              <p className="text-lg md:text-xl text-slate-600 leading-relaxed mb-10 max-w-lg fade-in-up" style={{animationDelay: '0.5s'}}>
                 At the intersection of Emotional Intelligence and Artificial
                 Intelligence, MissionEnable prepares leaders and organizations to
                 thrive in a world that demands both.
               </p>
-              <div className="flex flex-wrap items-center gap-5 fade-in-up" style={{ animationDelay: '0.7s' }}>
+              <div className="flex flex-wrap items-center gap-5 fade-in-up" style={{animationDelay: '0.7s'}}>
                 <a href="#" className="bg-amber-accent text-white text-base font-medium px-8 py-4 rounded-sm hover:bg-[#b58b5b] transition-all duration-300 shadow-xl shadow-amber-accent/20 hover:shadow-amber-accent/40 hover:-translate-y-1 flex items-center gap-2">
                   Discover the EQ+AI Audit
                   <iconify-icon icon="solar:arrow-right-linear" class="text-lg"></iconify-icon>
@@ -80,27 +80,27 @@ function App() {
               </div>
             </div>
 
-            <div className="lg:col-span-6 relative fade-in-up h-full flex items-center justify-center lg:justify-end" style={{ animationDelay: '0.4s' }}>
+            <div className="lg:col-span-6 relative fade-in-up h-full flex items-center justify-center lg:justify-end" style={{animationDelay: '0.4s'}}>
               <div className="relative w-full max-w-md lg:max-w-none aspect-[4/5] lg:aspect-square flex items-center justify-center">
                 {/* Main floating image */}
-                <div className="relative w-[85%] h-[90%] lg:h-[85%] rounded-[2rem] overflow-hidden shadow-2xl z-20 animate-float" style={{ animationDuration: '7s' }}>
+                <div className="relative w-[85%] h-[90%] lg:h-[85%] rounded-[2rem] overflow-hidden shadow-2xl z-20 animate-float" style={{animationDuration: '7s'}}>
                   <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&amp;w=2070&amp;auto=format&amp;fit=crop" alt="Leadership collaboration" className="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-700 ease-out" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-amber-accent/10 mix-blend-overlay"></div>
                 </div>
 
                 {/* Decorative background elements */}
-                <div className="absolute top-[5%] right-[5%] w-[60%] h-[60%] border-[1px] border-amber-accent/40 rounded-full z-10 animate-spin-slow" style={{ animationDuration: '25s' }}></div>
-                <div className="absolute bottom-[5%] left-[5%] w-[50%] h-[50%] border-[1px] border-slate-300 rounded-full z-10 animate-spin-slow" style={{ animationDuration: '20s', animationDirection: 'reverse' }}></div>
+                <div className="absolute top-[5%] right-[5%] w-[60%] h-[60%] border-[1px] border-amber-accent/40 rounded-full z-10 animate-spin-slow" style={{animationDuration: '25s'}}></div>
+                <div className="absolute bottom-[5%] left-[5%] w-[50%] h-[50%] border-[1px] border-slate-300 rounded-full z-10 animate-spin-slow" style={{animationDuration: '20s', animationDirection: 'reverse'}}></div>
 
                 {/* Floating Cards */}
-                <div className="absolute bottom-16 -left-4 lg:left-0 w-32 h-36 bg-white/90 backdrop-blur-md rounded-2xl z-30 shadow-xl border border-white/50 animate-float flex flex-col items-center justify-center gap-3" style={{ animationDelay: '-3s', animationDuration: '6s' }}>
+                <div className="absolute bottom-16 -left-4 lg:left-0 w-32 h-36 bg-white/90 backdrop-blur-md rounded-2xl z-30 shadow-xl border border-white/50 animate-float flex flex-col items-center justify-center gap-3" style={{animationDelay: '-3s', animationDuration: '6s'}}>
                   <iconify-icon icon="solar:cpu-linear" class="text-4xl text-amber-accent"></iconify-icon>
                   <span className="text-sm font-semibold text-slate-800 tracking-tight">
                     AI Literacy
                   </span>
                 </div>
 
-                <div className="absolute top-12 -right-4 lg:right-0 w-32 h-36 bg-slate-900/95 backdrop-blur-md rounded-2xl z-30 shadow-2xl border border-slate-700 animate-float flex flex-col items-center justify-center gap-3" style={{ animationDelay: '-1.5s', animationDuration: '5s' }}>
+                <div className="absolute top-12 -right-4 lg:right-0 w-32 h-36 bg-slate-900/95 backdrop-blur-md rounded-2xl z-30 shadow-2xl border border-slate-700 animate-float flex flex-col items-center justify-center gap-3" style={{animationDelay: '-1.5s', animationDuration: '5s'}}>
                   <iconify-icon icon="solar:heart-angle-linear" class="text-4xl text-amber-accent"></iconify-icon>
                   <span className="text-sm font-semibold text-white tracking-tight">
                     Human EQ

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -26,7 +68,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center gap-4">
 <a className="hidden md:block text-sm font-medium text-slate-900" href="#">Request a Demo</a>
-<a className="inline-flex transition-all duration-500 overflow-hidden group text-sm font-medium text-white rounded-full pt-3 pr-6 pb-3 pl-6 relative gap-x-2 items-center justify-center" href="#" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; const centerX = rect.width / 2; const centerY = rect.height / 2; const rotateX = ((y - centerY) / centerY) * -12; const rotateY = ((x - centerX) / centerX) * 12; this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05) translateZ(10px)`; this.style.setProperty('--x', ((x / rect.width) * 100) + '%'); this.style.setProperty('--y', ((y / rect.height) * 100) + '%');" onmouseout="this.style.transform='perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)'; this.style.boxShadow='0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255,255,255,0.15)';" onmouseover="this.style.transform='perspective(1000px) rotateX(-5deg) rotateY(5deg) scale(1.05) translateZ(10px)'; this.style.boxShadow='0 20px 50px -10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.3), 0 0 40px rgba(220, 38, 38, 0.4)';" style={{-X: '0.9500912786783366%', -Y: '71.61101863234207%', background: 'linear-gradient(135deg, rgb(127, 29, 29) 0%, rgb(69, 10, 10) 100%)', border: '1px solid rgba(255, 255, 255, 0.15)', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 10px 30px -10px, rgba(255, 255, 255, 0.15) 0px 1px 1px inset', transformStyle: 'preserve-3d', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)'}}>
+<a className="inline-flex transition-all duration-500 overflow-hidden group text-sm font-medium text-white rounded-full pt-3 pr-6 pb-3 pl-6 relative gap-x-2 items-center justify-center" href="#" onmousemove="const rect = this.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; const centerX = rect.width / 2; const centerY = rect.height / 2; const rotateX = ((y - centerY) / centerY) * -12; const rotateY = ((x - centerX) / centerX) * 12; this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05) translateZ(10px)`; this.style.setProperty('--x', ((x / rect.width) * 100) + '%'); this.style.setProperty('--y', ((y / rect.height) * 100) + '%');" onmouseout="this.style.transform='perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)'; this.style.boxShadow='0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255,255,255,0.15)';" onmouseover="this.style.transform='perspective(1000px) rotateX(-5deg) rotateY(5deg) scale(1.05) translateZ(10px)'; this.style.boxShadow='0 20px 50px -10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.3), 0 0 40px rgba(220, 38, 38, 0.4)';" style={{'--x': '0.9500912786783366%', '--y': '71.61101863234207%', background: 'linear-gradient(135deg, rgb(127, 29, 29) 0%, rgb(69, 10, 10) 100%)', border: '1px solid rgba(255, 255, 255, 0.15)', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 10px 30px -10px, rgba(255, 255, 255, 0.15) 0px 1px 1px inset', transformStyle: 'preserve-3d', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)'}}>
 
 <div className="absolute inset-0 rounded-full" style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%)', pointerEvents: 'none', zIndex: '1'}}></div>
 
@@ -88,7 +130,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="-translate-x-1/2 overflow-hidden border-[8px] z-20 w-[770px] h-[552px] rounded-[2.5rem] absolute top-0 left-1/2 shadow-2xl [--fx-filter:blur(7px)_liquid-glass(0,10)_saturate(1.1)_noise(0.5,1,0)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(270deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '2.5rem'}}>
+<div className="-translate-x-1/2 overflow-hidden border-[8px] z-20 w-[770px] h-[552px] rounded-[2.5rem] absolute top-0 left-1/2 shadow-2xl [--fx-filter:blur(7px)_liquid-glass(0,10)_saturate(1.1)_noise(0.5,1,0)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(270deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '2.5rem'}}>
 <div className="bg-center bg-slate-800 w-full h-full bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/894a8442-0374-4e4a-8305-a966db6619fe_1600w.png)] bg-cover relative"><style>@keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }</style></div>
 </div>
 

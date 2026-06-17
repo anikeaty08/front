@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -450,6 +486,12 @@ Runlyx.lock("service:api").run("restart-workers");`,
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -482,7 +524,7 @@ Runlyx.lock("service:api").run("restart-workers");`,
 <a className="hover:text-white transition-colors" href="#">Changelog</a>
 </nav>
 <div className="flex gap-3 items-center justify-center">
-<a className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:text-white hover:border-indigo-400/40 hover:bg-gradient-to-br hover:from-indigo-500/30 hover:to-blue-500/20 hover:shadow-[0_0_25px_rgba(59,130,246,0.35)] text-sm font-medium text-white/90 bg-gradient-to-br from-white/5 via-white/10 to-white/5 rounded-md ring-0 pt-3 pr-5 pb-3 pl-5 shadow-[0_0_15px_rgba(59,130,246,0.15)]" href="#" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}>
+<a className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:text-white hover:border-indigo-400/40 hover:bg-gradient-to-br hover:from-indigo-500/30 hover:to-blue-500/20 hover:shadow-[0_0_25px_rgba(59,130,246,0.35)] text-sm font-medium text-white/90 bg-gradient-to-br from-white/5 via-white/10 to-white/5 rounded-md ring-0 pt-3 pr-5 pb-3 pl-5 shadow-[0_0_15px_rgba(59,130,246,0.15)]" href="#" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}>
   Watch Demo
   <svg className="lucide lucide-arrow-right stroke-[1.5]" data-icon-replaced="true" data-icon-set="lucide" data-lucide="arrow-right" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(255, 255, 255)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </a>
@@ -542,7 +584,7 @@ Runlyx.lock("service:api").run("restart-workers");`,
     </p>
 
 <div className="flex flex-col sm:flex-row gap-4 mt-10 gap-x-4 gap-y-4 items-center justify-center">
-<a className="btn-wrapper" href="#" style={{-DotSize: '8px', -LineWeight: '1px', -LineDistance: '0.8rem 1rem', -AnimationSpeed: '0.35s', -DotColor: '#fffa', -LineColor: '#fffa', -GridColor: '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
+<a className="btn-wrapper" href="#" style={{'--dot-size': '8px', '--line-weight': '1px', '--line-distance': '0.8rem 1rem', '--animation-speed': '0.35s', '--dot-color': '#fffa', '--line-color': '#fffa', '--grid-color': '#fff3', position: 'relative', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: 'auto', height: 'auto', padding: 'var(--line-distance)', backgroundColor: 'rgba(0, 0, 0, 0)', userSelect: 'none'}}>
 <style>
       .btn-wrapper::after {
         content: "";
@@ -809,7 +851,7 @@ Runlyx.lock("service:api").run("restart-workers");`,
 </svg>
 </button>
 </a>
-<a className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:text-white hover:border-indigo-400/40 hover:bg-gradient-to-br hover:from-indigo-500/30 hover:to-blue-500/20 hover:shadow-[0_0_25px_rgba(59,130,246,0.35)] text-base font-medium text-white/90 bg-gradient-to-br from-white/5 via-white/10 to-white/5 rounded-md ring-0 pt-3 pr-5 pb-3 pl-5 shadow-[0_0_15px_rgba(59,130,246,0.15)]" href="#" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}>
+<a className="inline-flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:text-white hover:border-indigo-400/40 hover:bg-gradient-to-br hover:from-indigo-500/30 hover:to-blue-500/20 hover:shadow-[0_0_25px_rgba(59,130,246,0.35)] text-base font-medium text-white/90 bg-gradient-to-br from-white/5 via-white/10 to-white/5 rounded-md ring-0 pt-3 pr-5 pb-3 pl-5 shadow-[0_0_15px_rgba(59,130,246,0.15)]" href="#" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}>
   Watch Demo
   <svg className="w-5 h-5 stroke-[1.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="6 3 20 12 6 21 6 3" strokeLinecap="round" strokeLinejoin="round"></polygon>
@@ -1732,7 +1774,7 @@ s.save("v1.2.1", "Add safety check");</pre>
 
 <div className="mt-10 space-y-3">
 
-<button className="plan-select-btn group hover:bg-white/[0.07] transition flex text-left bg-gradient-to-br from-white/10 to-white/0 w-full rounded-2xl ring-0 pt-5 pr-5 pb-5 pl-5 items-center justify-between" data-plan-select="starter" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<button className="plan-select-btn group hover:bg-white/[0.07] transition flex text-left bg-gradient-to-br from-white/10 to-white/0 w-full rounded-2xl ring-0 pt-5 pr-5 pb-5 pl-5 items-center justify-between" data-plan-select="starter" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="">
 <p className="text-white text-lg tracking-tight font-semibold">Starter</p>
 <p className="text-[12px] tracking-tight text-zinc-300 mt-1 uppercase">Launch fast, learn faster.</p>
@@ -1745,7 +1787,7 @@ s.save("v1.2.1", "Add safety check");</pre>
 </span>
 </button>
 
-<button className="plan-select-btn group hover:bg-white/[0.07] transition flex text-left bg-gradient-to-br from-white/10 to-white/0 w-full rounded-2xl ring-0 pt-5 pr-5 pb-5 pl-5 items-center justify-between" data-plan-select="pro" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<button className="plan-select-btn group hover:bg-white/[0.07] transition flex text-left bg-gradient-to-br from-white/10 to-white/0 w-full rounded-2xl ring-0 pt-5 pr-5 pb-5 pl-5 items-center justify-between" data-plan-select="pro" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="">
 <p className="text-white text-lg tracking-tight font-semibold">Pro</p>
 <p className="text-[12px] tracking-tight text-zinc-300 mt-1 uppercase">Grow with confidence.</p>
@@ -1758,7 +1800,7 @@ s.save("v1.2.1", "Add safety check");</pre>
 </span>
 </button>
 
-<button className="plan-select-btn group hover:bg-white/[0.07] transition flex text-left bg-gradient-to-br from-white/10 to-white/0 w-full rounded-2xl ring-0 pt-5 pr-5 pb-5 pl-5 items-center justify-between" data-plan-select="enterprise" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<button className="plan-select-btn group hover:bg-white/[0.07] transition flex text-left bg-gradient-to-br from-white/10 to-white/0 w-full rounded-2xl ring-0 pt-5 pr-5 pb-5 pl-5 items-center justify-between" data-plan-select="enterprise" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div>
 <p className="text-white text-lg tracking-tight font-semibold">Enterprise</p>
 <p className="text-[12px] tracking-tight text-zinc-300 mt-1 uppercase">Tailored for scale &amp; security.</p>
@@ -1774,7 +1816,7 @@ s.save("v1.2.1", "Add safety check");</pre>
 <div className="mt-auto"></div>
 </div>
 
-<div className="flex flex-col sm:p-8 bg-gradient-to-br from-white/0 via-white/10 to-white/0 max-w-xl rounded-2xl mt-8 mr-8 mb-8 ml-8 pt-6 pr-6 pb-6 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] gap-x-6 gap-y-6" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col sm:p-8 bg-gradient-to-br from-white/0 via-white/10 to-white/0 max-w-xl rounded-2xl mt-8 mr-8 mb-8 ml-8 pt-6 pr-6 pb-6 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] gap-x-6 gap-y-6" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="pointer-events-none absolute inset-0 opacity-[0.05]" style={{background: 'radial-gradient(900px 360px at 20% -10%, rgba(255,255,255,0.12) 15%, transparent 60%)'}}>
 </div>
 
@@ -1800,7 +1842,7 @@ s.save("v1.2.1", "Add safety check");</pre>
           </span>
 </div>
 
-<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-6 pr-6 pb-6 pl-6" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <ul className="space-y-3 text-sm text-zinc-100" id="featureList">
 <li className="flex items-start gap-2">
 <svg className="lucide lucide-check mt-0.5 text-blue-400" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">

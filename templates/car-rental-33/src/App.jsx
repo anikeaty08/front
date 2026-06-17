@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -227,6 +263,12 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -351,15 +393,15 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="mt-8 grid grid-cols-3 gap-3 max-w-lg">
 <div className="rounded-lg border border-slate-200/70 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-3">
 <div className="text-[11px] text-slate-500 dark:text-slate-400">Active Rentals</div>
-<div className="mt-1 text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>124</div>
+<div className="mt-1 text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>124</div>
 </div>
 <div className="rounded-lg border border-slate-200/70 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-3">
 <div className="text-[11px] text-slate-500 dark:text-slate-400">Double-Bookings</div>
-<div className="mt-1 text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>-90%</div>
+<div className="mt-1 text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>-90%</div>
 </div>
 <div className="rounded-lg border border-slate-200/70 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-3">
 <div className="text-[11px] text-slate-500 dark:text-slate-400">VAT-ready Invoices</div>
-<div className="mt-1 text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>100%</div>
+<div className="mt-1 text-xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>100%</div>
 </div>
 </div>
 </div>
@@ -429,7 +471,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Stop double-bookings</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Smart Calendar</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Smart Calendar</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Conflict-free scheduling for cars, SUVs, vans, EVs, and motorcycles.</p>
 </button>
 
@@ -440,7 +482,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Stay compliant</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Renewal Radar</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Renewal Radar</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">LTO, insurance, emission, EV checks—sorted.</p>
 </button>
 
@@ -451,7 +493,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Know your margins</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Profit Dashboard</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Profit Dashboard</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Per-car profit clarity—no more guessing.</p>
 </button>
 
@@ -462,7 +504,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Reduce disputes</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>KYC + Damage Flow</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>KYC + Damage Flow</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">ID checks and photo-based damage logging.</p>
 </button>
 
@@ -473,7 +515,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 <span className="text-xs text-emerald-600 dark:text-emerald-400">Faster collections</span>
 </div>
-<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Invoicing &amp; Receipts</h3>
+<h3 className="mt-4 text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Invoicing &amp; Receipts</h3>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">PHP billing with VAT and withholdings.</p>
 </button>
 </div>
@@ -515,7 +557,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 </div>
 </div>
 <div className="absolute -top-3 -right-3 rounded-md bg-white dark:bg-neutral-900 border border-slate-200/70 dark:border-white/10 px-2 py-1 text-xs shadow">
-<span className="font-medium tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>PH-Ready</span>
+<span className="font-medium tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>PH-Ready</span>
 </div>
 </div>
 </div>
@@ -527,7 +569,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
 <div className="flex items-end justify-between gap-6">
 <div>
-<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>From messy spreadsheets → one smart dashboard.</h2>
+<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>From messy spreadsheets → one smart dashboard.</h2>
 <p className="mt-2 text-slate-600 dark:text-slate-400">Drag trips on the calendar. Monitor revenue at a glance.</p>
 </div>
 <div className="hidden sm:flex items-center gap-3">
@@ -541,7 +583,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <i className="w-5 h-5 text-[#007BFF]" data-lucide="calendar"></i>
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Booking Calendar</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Booking Calendar</h3>
 
 <button aria-label="Previous period" className="inline-flex items-center justify-center h-8 w-8 rounded-md border border-slate-200/70 dark:border-white/10 hover:border-[#007BFF]/50 hover:text-[#007BFF] dark:hover:text-[#7AB8FF]" id="prevMonth">
 <i className="w-4 h-4" data-lucide="chevron-left"></i>
@@ -672,7 +714,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <i className="w-5 h-5 text-orange-500" data-lucide="line-chart"></i>
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Revenue Overview</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Revenue Overview</h3>
 </div>
 <span className="text-xs text-slate-500 dark:text-slate-400">Last 6 months</span>
 </div>
@@ -684,7 +726,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <i className="w-5 h-5 text-emerald-500" data-lucide="gauge"></i>
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Utilization</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Utilization</h3>
 </div>
 <span className="text-xs text-slate-500 dark:text-slate-400">Fleet snapshot</span>
 </div>
@@ -719,7 +761,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <i className="w-5 h-5 text-[#007BFF]" data-lucide="calendar-clock"></i>
-<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Renewal Radar</h3>
+<h3 className="text-lg font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Renewal Radar</h3>
 </div>
 <span className="text-xs text-slate-500 dark:text-slate-400">Next 30 days</span>
 </div>
@@ -746,7 +788,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="relative mx-auto my-10 max-w-lg w-[92%] rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white dark:bg-neutral-900 p-5 shadow-2xl">
 <div className="flex items-start justify-between">
 <div>
-<h4 className="text-xl font-semibold tracking-tight" id="featureTitle" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Feature</h4>
+<h4 className="text-xl font-semibold tracking-tight" id="featureTitle" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Feature</h4>
 <p className="mt-1 text-sm text-slate-600 dark:text-slate-400" id="featureDesc">Description</p>
 </div>
 <button aria-label="Close" className="ml-4 inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200/70 dark:border-white/10 hover:text-[#007BFF]" id="featureClose">
@@ -781,7 +823,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <section className="relative" id="customers">
 <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
 <div className="text-center">
-<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Trusted by growing PH rental fleets</h2>
+<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Trusted by growing PH rental fleets</h2>
 <p className="mt-2 text-slate-600 dark:text-slate-400">From city sedans to provincial vans and EVs.</p>
 </div>
 <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 items-center">
@@ -825,7 +867,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <section className="relative" id="pricing">
 <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
 <div className="text-center">
-<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Simple pricing for every fleet size</h2>
+<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Simple pricing for every fleet size</h2>
 <p className="mt-2 text-slate-600 dark:text-slate-400">Start free. Upgrade when you grow. All prices in PHP, VAT-inclusive.</p>
 </div>
 <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -845,7 +887,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="relative rounded-2xl border border-[#007BFF]/40 bg-gradient-to-b from-[#007BFF]/10 to-transparent dark:from-[#007BFF]/20 dark:to-transparent p-6 shadow-lg shadow-[#007BFF]/10">
 <div className="absolute -top-3 right-4 inline-flex items-center gap-1.5 rounded-md bg-[#007BFF] text-white px-2 py-1 text-[11px]">Most Popular</div>
 <div className="text-sm text-slate-600 dark:text-slate-300">Growth</div>
-<div className="mt-2 text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>₱2,990<span className="text-base font-normal text-slate-500">/mo</span></div>
+<div className="mt-2 text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>₱2,990<span className="text-base font-normal text-slate-500">/mo</span></div>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Up to 50 vehicles</p>
 <ul className="mt-4 space-y-2 text-sm">
 <li className="inline-flex items-center gap-2"><i className="w-4 h-4 text-emerald-500" data-lucide="check"></i> All Starter features</li>
@@ -858,7 +900,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 
 <div className="relative rounded-2xl border border-slate-200/70 dark:border-white/10 bg-white/80 dark:bg-neutral-900/60 backdrop-blur-xl p-6">
 <div className="text-sm text-slate-500 dark:text-slate-400">Pro</div>
-<div className="mt-2 text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>₱7,990<span className="text-base font-normal text-slate-500">/mo</span></div>
+<div className="mt-2 text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>₱7,990<span className="text-base font-normal text-slate-500">/mo</span></div>
 <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Unlimited vehicles</p>
 <ul className="mt-4 space-y-2 text-sm">
 <li className="inline-flex items-center gap-2"><i className="w-4 h-4 text-emerald-500" data-lucide="check"></i> Multi-branch + roles</li>
@@ -875,7 +917,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <section className="relative" id="faq">
 <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
 <div className="text-center">
-<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Frequently asked questions</h2>
+<h2 className="text-2xl md:text-3xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Frequently asked questions</h2>
 <p className="mt-2 text-slate-600 dark:text-slate-400">Everything you need to know about Fleetlytics.</p>
 </div>
 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -963,7 +1005,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-[#007BFF]/10 blur-2xl"></div>
 <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-6">
 <div className="md:col-span-2">
-<h3 className="text-xl md:text-2xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\',\'Inter\''}}>Ready to modernize your rental operations?</h3>
+<h3 className="text-xl md:text-2xl font-semibold tracking-tight" style={{fontFamily: '\'Aileron\', \'Inter\''}}>Ready to modernize your rental operations?</h3>
 <p className="mt-2 text-slate-600 dark:text-slate-400">Start free in minutes. Import vehicles, add rates, and go live today.</p>
 </div>
 <div className="flex md:justify-end gap-3">
@@ -986,7 +1028,7 @@ if (saved === 'dark') document.documentElement.classList.add('dark');
 <div className="col-span-2 sm:col-span-1">
 <div className="flex items-center gap-2">
 <div className="h-8 w-8 rounded-lg bg-[#007BFF] flex items-center justify-center shadow-sm shadow-[#007BFF]/30">
-<span className="text-white text-sm font-semibold" style={{fontFamily: '\'Aileron\',\'Inter\''}}>FL</span>
+<span className="text-white text-sm font-semibold" style={{fontFamily: '\'Aileron\', \'Inter\''}}>FL</span>
 </div>
 <span className="sr-only">Fleetlytics</span>
 </div>

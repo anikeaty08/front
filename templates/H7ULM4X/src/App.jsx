@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -36,6 +72,12 @@ window.addEventListener('load', disableHashLinks);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -90,7 +132,7 @@ window.addEventListener('load', disableHashLinks);
 <div className="absolute top-1/3 left-1/3 h-16 w-16 rounded-full bg-orange-500/30 blur-2xl animate-[floatY_12s_ease-in-out_infinite]"></div>
 </div>
 <div className="grid lg:grid-cols-2 gap-10 items-center">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white">
             Empowering Identity, Fueling Communities
           </h1>
@@ -109,22 +151,22 @@ window.addEventListener('load', disableHashLinks);
 </div>
 
 <div className="mt-10 grid grid-cols-3 max-w-md gap-4">
-<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{-Delay: '.15s'}}>
+<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{'--delay': '.15s'}}>
 <div className="text-2xl font-semibold text-white">250+</div>
 <div className="text-xs text-slate-400">Programs Funded</div>
 </div>
-<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{-Delay: '.25s'}}>
+<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{'--delay': '.25s'}}>
 <div className="text-2xl font-semibold text-white">100k+</div>
 <div className="text-xs text-slate-400">Caps Delivered</div>
 </div>
-<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{-Delay: '.35s'}}>
+<div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-xl reveal" style={{'--delay': '.35s'}}>
 <div className="text-2xl font-semibold text-white">$1.2M</div>
 <div className="text-xs text-slate-400">Raised for Youth</div>
 </div>
 </div>
 </div>
 
-<div className="relative reveal-right" style={{-Delay: '.2s'}}>
+<div className="relative reveal-right" style={{'--delay': '.2s'}}>
 <div className="relative rounded-3xl bg-white/5 border border-white/10 p-2 md:p-3 backdrop-blur-2xl overflow-hidden">
 <div className="aspect-[5/4] rounded-2xl overflow-hidden bg-black/30 ring-1 ring-white/10 relative">
 <img alt="Custom cap" className="h-full w-full object-cover opacity-90" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
@@ -161,7 +203,7 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="mission">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Mission, Vision &amp; Impact</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">We craft custom headwear that amplifies identity and powers community causes.</p>
 </div>
@@ -177,7 +219,7 @@ window.addEventListener('load', disableHashLinks);
 </div>
 <div className="mt-6 grid md:grid-cols-3 gap-4">
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-left peer-checked/mis:block peer-checked/vis:opacity-50 peer-checked/imp:opacity-50" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-left peer-checked/mis:block peer-checked/vis:opacity-50 peer-checked/imp:opacity-50" style={{'--delay': '.05s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="flag"></i>
@@ -189,7 +231,7 @@ window.addEventListener('load', disableHashLinks);
             </p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal peer-checked/vis:block peer-checked/mis:opacity-50 peer-checked/imp:opacity-50" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal peer-checked/vis:block peer-checked/mis:opacity-50 peer-checked/imp:opacity-50" style={{'--delay': '.15s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <i data-lucide="radar"></i>
@@ -201,7 +243,7 @@ window.addEventListener('load', disableHashLinks);
             </p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-right peer-checked/imp:block peer-checked/mis:opacity-50 peer-checked/vis:opacity-50" style={{-Delay: '.25s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-right peer-checked/imp:block peer-checked/mis:opacity-50 peer-checked/vis:opacity-50" style={{'--delay': '.25s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-purple-500/30 ring-1 ring-purple-400/40 flex items-center justify-center">
 <i data-lucide="heart-handshake"></i>
@@ -217,7 +259,7 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="catalog">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <div className="flex items-end justify-between gap-4">
 <div>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Product Showcase</h2>
@@ -339,13 +381,13 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="configure">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Customization Features</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">Choose embroidery styles, patches, fabrics, closures, and accessories to make it yours.</p>
 </div>
 <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{'--delay': '.05s'}}>
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="needle"></i>
 </div>
@@ -353,7 +395,7 @@ window.addEventListener('load', disableHashLinks);
 <p className="text-sm text-slate-300 mt-1">Flat, 3D puff, metallic, applique.</p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{-Delay: '.1s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{'--delay': '.1s'}}>
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <i data-lucide="badge"></i>
 </div>
@@ -361,7 +403,7 @@ window.addEventListener('load', disableHashLinks);
 <p className="text-sm text-slate-300 mt-1">Woven, leather, PVC, chenille.</p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{'--delay': '.15s'}}>
 <div className="h-10 w-10 rounded-lg bg-purple-500/30 ring-1 ring-purple-400/40 flex items-center justify-center">
 <i data-lucide="layers"></i>
 </div>
@@ -369,7 +411,7 @@ window.addEventListener('load', disableHashLinks);
 <p className="text-sm text-slate-300 mt-1">Twill, wool, nylon, eco cotton.</p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{-Delay: '.2s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{'--delay': '.2s'}}>
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="link"></i>
 </div>
@@ -377,7 +419,7 @@ window.addEventListener('load', disableHashLinks);
 <p className="text-sm text-slate-300 mt-1">Snapback, strapback, flex-fit.</p>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{-Delay: '.25s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{'--delay': '.25s'}}>
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <i data-lucide="sparkle"></i>
 </div>
@@ -388,13 +430,13 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24" id="pricing">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Pricing &amp; Volume Discounts</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">Per-unit cost drops as you scale. Transparent, no surprises.</p>
 </div>
 <div className="mt-6 grid md:grid-cols-3 gap-4">
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-lime-400/50 hover:shadow-[0_20px_60px_-20px_rgba(132,204,22,0.6)] transition reveal" style={{'--delay': '.05s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">Starter</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-lime-400/20 text-lime-300 border border-lime-300/40">Save 10%</span>
@@ -414,7 +456,7 @@ window.addEventListener('load', disableHashLinks);
           </a>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-orange-400/50 hover:shadow-[0_20px_60px_-20px_rgba(251,146,60,0.6)] transition reveal" style={{'--delay': '.15s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">Growth</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-orange-400/20 text-orange-300 border border-orange-300/40">Save 18%</span>
@@ -434,7 +476,7 @@ window.addEventListener('load', disableHashLinks);
           </a>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{-Delay: '.25s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_20px_60px_-20px_rgba(168,85,247,0.6)] transition reveal" style={{'--delay': '.25s'}}>
 <div className="flex items-center justify-between">
 <div className="font-medium text-white">Scale</div>
 <span className="text-xs px-2 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-300/40">Save 25%</span>
@@ -457,13 +499,13 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">How It Works</h2>
 <p className="mt-2 text-slate-300 max-w-2xl">From idea to delivery in four streamlined steps.</p>
 </div>
 <div className="mt-8 grid lg:grid-cols-4 gap-4 items-center">
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal-left hover:-translate-y-1 hover:border-lime-400/50 transition" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal-left hover:-translate-y-1 hover:border-lime-400/50 transition" style={{'--delay': '.05s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="pencil-ruler"></i>
@@ -478,7 +520,7 @@ window.addEventListener('load', disableHashLinks);
 <i className="text-lime-300" data-lucide="chevron-right"></i>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-orange-400/50 transition" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-orange-400/50 transition" style={{'--delay': '.15s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <i data-lucide="factory"></i>
@@ -493,7 +535,7 @@ window.addEventListener('load', disableHashLinks);
 <i className="text-orange-300" data-lucide="chevron-right"></i>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-purple-400/50 transition" style={{-Delay: '.25s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal hover:-translate-y-1 hover:border-purple-400/50 transition" style={{'--delay': '.25s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-purple-500/30 ring-1 ring-purple-400/40 flex items-center justify-center">
 <i data-lucide="shopping-cart"></i>
@@ -508,7 +550,7 @@ window.addEventListener('load', disableHashLinks);
 <i className="text-purple-300" data-lucide="chevron-right"></i>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal-right hover:-translate-y-1 hover:border-lime-400/50 transition" style={{-Delay: '.35s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-xl reveal-right hover:-translate-y-1 hover:border-lime-400/50 transition" style={{'--delay': '.35s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="gift"></i>
@@ -536,7 +578,7 @@ window.addEventListener('load', disableHashLinks);
 </section>
 
 <section className="mt-24">
-<div className="reveal" style={{-Delay: '.05s'}}>
+<div className="reveal" style={{'--delay': '.05s'}}>
 <div className="flex items-end justify-between">
 <div>
 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Community Voices</h2>
@@ -598,7 +640,7 @@ window.addEventListener('load', disableHashLinks);
 </div>
 </div>
 
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-right hover:-translate-y-1 transition" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl reveal-right hover:-translate-y-1 transition" style={{'--delay': '.15s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="users"></i>
@@ -616,7 +658,7 @@ window.addEventListener('load', disableHashLinks);
 
 <section className="mt-24" id="shipping">
 <div className="grid md:grid-cols-2 gap-4">
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:border-lime-400/50 transition reveal-left" style={{-Delay: '.05s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:border-lime-400/50 transition reveal-left" style={{'--delay': '.05s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-lime-400/30 ring-1 ring-lime-300/40 flex items-center justify-center">
 <i data-lucide="truck"></i>
@@ -626,7 +668,7 @@ window.addEventListener('load', disableHashLinks);
 <p className="mt-2 text-sm text-slate-300">Standard in 3–4 weeks, rush options available. Global delivery with tracking.</p>
 <a className="mt-3 inline-flex items-center gap-2 text-sm text-lime-300 hover:underline" href="#contact"><i data-lucide="message-square"></i> Ask about rush</a>
 </div>
-<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:border-orange-400/50 transition reveal-right" id="about" style={{-Delay: '.15s'}}>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur-xl hover:border-orange-400/50 transition reveal-right" id="about" style={{'--delay': '.15s'}}>
 <div className="flex items-center gap-3">
 <div className="h-10 w-10 rounded-lg bg-orange-400/30 ring-1 ring-orange-300/40 flex items-center justify-center">
 <i data-lucide="info"></i>

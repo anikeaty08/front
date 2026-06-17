@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -166,44 +202,44 @@ gtag('config', 'G-2M6V79H761');
 
             return (
                 <div className="animate-[scaleIn_0.4s_ease-out]">
-                    <div style={{marginBottom:'28px'}}>
+                    <div style={{marginBottom: '28px'}}>
                         <div style={S.label}>DASHBOARD</div>
-                        <div style={{height:'1px', backgroundColor:'rgba(255,255,255,0.08)', margin:'8px 0 12px'}}/>
-                        <h1 style={{fontSize:'42px',fontWeight:900, color:'#fff',lineHeight:1, letterSpacing: '-0.02em'}}>RESET</h1>
-                        <p style={{color:'rgba(255,255,255,0.3)', fontStyle:'italic',marginTop:'6px'}}>Sofra todos os dias.</p>
+                        <div style={{height: '1px', backgroundColor: 'rgba(255,255,255,0.08)', margin: '8px 0 12px'}}/>
+                        <h1 style={{fontSize: '42px', fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.02em'}}>RESET</h1>
+                        <p style={{color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', marginTop: '6px'}}>Sofra todos os dias.</p>
                     </div>
 
-                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
                         <div style={S.card}>
-                            <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                                 <div style={S.label}>TOTAL ACUMULADO</div>
                                 <DollarSign size={18} color={C.accent}/>
                             </div>
-                            <div style={{fontSize:'44px',fontWeight:800, marginTop:'8px',color:'#aaff00', letterSpacing: '-0.02em'}}>
+                            <div style={{fontSize: '44px', fontWeight: 800, marginTop: '8px', color: '#aaff00', letterSpacing: '-0.02em'}}>
                                 ${financeiro.toFixed(2)}
                             </div>
-                            <div style={{color:C.textMuted,fontSize:'13px', marginTop:'4px'}}>CAD · +$0 este mês</div>
+                            <div style={{color: C.textMuted, fontSize: '13px', marginTop: '4px'}}>CAD · +$0 este mês</div>
                             <div style={S.progressTrack}>
                                 <div style={S.progressFill((financeiro/META_CAD)*100)}/>
                             </div>
                         </div>
 
                         <div style={S.card}>
-                            <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                                 <div style={S.label}>USUÁRIOS RESET</div>
                                 <Users size={18} color={C.accent}/>
                             </div>
-                            <div style={{fontSize:'44px',fontWeight:800, marginTop:'8px',color:'#fff', letterSpacing: '-0.02em'}}>
+                            <div style={{fontSize: '44px', fontWeight: 800, marginTop: '8px', color: '#fff', letterSpacing: '-0.02em'}}>
                                 {usuarios}
                             </div>
-                            <div style={{color:C.textMuted,fontSize:'13px', marginTop:'4px'}}>Meta: 170 usuários ativos</div>
+                            <div style={{color: C.textMuted, fontSize: '13px', marginTop: '4px'}}>Meta: 170 usuários ativos</div>
                             <div style={S.progressTrack}>
                                 <div style={S.progressFill((usuarios/170)*100)}/>
                             </div>
                         </div>
 
                         <div style={S.card}>
-                            <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                                 <div style={S.label}>VÍDEOS ESTE MÊS</div>
                                 <Video size={18} color={C.accent}/>
                             </div>
@@ -216,62 +252,62 @@ gtag('config', 'G-2M6V79H761');
                                     }}
                                     onBlur={() => setEditingVideos(false)}
                                     autoFocus
-                                    style={{fontSize:'44px',fontWeight:800, background:'transparent',border:'none', borderBottom:`1px solid ${C.accent}`, color:'#fff',width:'100%',outline:'none', marginTop:'8px'}}/>
+                                    style={{fontSize: '44px', fontWeight: 800, background: 'transparent', border: 'none', borderBottom: `1px solid ${C.accent}`, color: '#fff', width: '100%', outline: 'none', marginTop: '8px'}}/>
                             ) : (
-                                <div onClick={() => setEditingVideos(true)} style={{fontSize:'44px',fontWeight:800, marginTop:'8px',color:'#fff', cursor:'pointer', letterSpacing: '-0.02em'}}>
+                                <div onClick={() => setEditingVideos(true)} style={{fontSize: '44px', fontWeight: 800, marginTop: '8px', color: '#fff', cursor: 'pointer', letterSpacing: '-0.02em'}}>
                                     {videos}
                                 </div>
                             )}
-                            <div style={{display:'flex',alignItems:'center', gap:'6px',marginTop:'4px'}}>
-                                <div style={{width:'6px',height:'6px', borderRadius:'50%', backgroundColor:C.accent}}/>
-                                <span style={{color:C.textMuted, fontSize:'13px'}}>Sr. Yakov Channel</span>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px'}}>
+                                <div style={{width: '6px', height: '6px', borderRadius: '50%', backgroundColor: C.accent}}/>
+                                <span style={{color: C.textMuted, fontSize: '13px'}}>Sr. Yakov Channel</span>
                             </div>
                         </div>
 
                         <div style={S.card}>
-                            <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                                 <div style={S.label}>MÊS DO PLANO</div>
                                 <Calendar size={18} color={C.accent}/>
                             </div>
-                            <div style={{marginTop:'8px'}}>
-                                <span style={{fontSize:'44px',fontWeight:800, color:'#fff', letterSpacing: '-0.02em'}}>1</span>
-                                <span style={{color:C.textMuted, fontSize:'20px'}}> de 9</span>
+                            <div style={{marginTop: '8px'}}>
+                                <span style={{fontSize: '44px', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em'}}>1</span>
+                                <span style={{color: C.textMuted, fontSize: '20px'}}> de 9</span>
                             </div>
-                            <div style={{display:'flex',gap:'6px', marginTop:'12px'}}>
+                            <div style={{display: 'flex', gap: '6px', marginTop: '12px'}}>
                                 {Array.from({length:9},(_,i) => (
-                                    <div key={i} style={{width:'8px',height:'8px', borderRadius:'50%', backgroundColor: i===0 ? C.accent : 'rgba(255,255,255,0.1)'}}/>
+                                    <div key={i} style={{width: '8px', height: '8px', borderRadius: '50%', backgroundColor: i===0 ? C.accent : 'rgba(255,255,255,0.1)'}}/>
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    <div style={{...S.card, marginTop:'16px', display:'grid',gridTemplateColumns:'1fr 1fr 1fr'}}>
+                    <div style={{...S.card, marginTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr'}}>
                         {[
                             {icon:<Dumbbell size={16} color={C.accent}/>, label:'TREINO HOJE', val:treino.nome},
                             {icon:<Clock size={16} color={C.accent}/>, label:'ROTINA', val:'0% concluído'},
                             {icon:<Zap size={16} color={C.accent}/>, label:'FERRAMENTA', val:ferramenta},
                         ].map((item,i) => (
-                            <div key={i} style={{padding:'0 16px', borderRight: i<2 ? '1px solid rgba(255,255,255,0.06)' : 'none'}}>
-                                <div style={{display:'flex', alignItems:'center',gap:'6px', marginBottom:'4px'}}>
+                            <div key={i} style={{padding: '0 16px', borderRight: i<2 ? '1px solid rgba(255,255,255,0.06)' : 'none'}}>
+                                <div style={{display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px'}}>
                                     {item.icon}
                                     <span style={S.label}>{item.label}</span>
                                 </div>
-                                <div style={{color:'#fff',fontSize:'14px', fontWeight:600}}>{item.val}</div>
+                                <div style={{color: '#fff', fontSize: '14px', fontWeight: 600}}>{item.val}</div>
                             </div>
                         ))}
                     </div>
 
-                    <div style={{...S.card, marginTop:'16px'}}>
-                        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center',marginBottom:'16px'}}>
+                    <div style={{...S.card, marginTop: '16px'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
                             <div style={S.label}>PROGRESSÃO FINANCEIRA (CAD)</div>
-                            <div style={{display:'flex', alignItems:'center',gap:'16px'}}>
-                                <div style={{display:'flex', alignItems:'center',gap:'6px'}}>
-                                    <div style={{width:'8px',height:'8px', borderRadius:'50%', backgroundColor:C.accent}}/>
-                                    <span style={{color:C.textMuted, fontSize:'11px'}}>Acumulado</span>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+                                <div style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
+                                    <div style={{width: '8px', height: '8px', borderRadius: '50%', backgroundColor: C.accent}}/>
+                                    <span style={{color: C.textMuted, fontSize: '11px'}}>Acumulado</span>
                                 </div>
-                                <div style={{display:'flex', alignItems:'center',gap:'6px'}}>
-                                    <div style={{width:'16px',height:'1px', borderTop:'1px dashed rgba(255,255,255,0.2)'}}/>
-                                    <span style={{color:C.textMuted, fontSize:'11px'}}>Meta</span>
+                                <div style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
+                                    <div style={{width: '16px', height: '1px', borderTop: '1px dashed rgba(255,255,255,0.2)'}}/>
+                                    <span style={{color: C.textMuted, fontSize: '11px'}}>Meta</span>
                                 </div>
                             </div>
                         </div>
@@ -289,10 +325,10 @@ gtag('config', 'G-2M6V79H761');
                                 </linearGradient>
                             </defs>
                             <path d={`${pathD} L ${getX(8)} ${svgH-30} L ${getX(0)} ${svgH-30} Z`} fill="url(#ag)"/>
-                            <path d={pathD} fill="none" stroke="#aaff00" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{filter:'drop-shadow(0 0 6px rgba(170,255,0,0.5))'}}/>
+                            <path d={pathD} fill="none" stroke="#aaff00" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{filter: 'drop-shadow(0 0 6px rgba(170,255,0,0.5))'}}/>
                             
                             {chartData.map((v,i) => (
-                                <circle key={i} cx={getX(i)} cy={getY(v)} r={4} fill="#aaff00" style={{filter:'drop-shadow(0 0 4px rgba(170,255,0,0.8))'}}/>
+                                <circle key={i} cx={getX(i)} cy={getY(v)} r={4} fill="#aaff00" style={{filter: 'drop-shadow(0 0 4px rgba(170,255,0,0.8))'}}/>
                             ))}
                             
                             {months.map((m,i) => (
@@ -395,103 +431,103 @@ gtag('config', 'G-2M6V79H761');
 
             return (
                 <div className="animate-[scaleIn_0.4s_ease-out]">
-                    <div style={{marginBottom:'28px'}}>
+                    <div style={{marginBottom: '28px'}}>
                         <div style={S.label}>ROTINA</div>
-                        <div style={{height:'1px', backgroundColor:'rgba(255,255,255,0.08)', margin:'8px 0 12px'}}/>
-                        <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-end'}}>
-                            <h1 style={{fontSize:'42px',fontWeight:900, color:'#fff', letterSpacing: '-0.02em'}}>Rotina Diária</h1>
-                            <div style={{display:'flex', flexDirection:'column',alignItems:'flex-end', gap:'4px'}}>
-                                <div style={{color:'rgba(255,255,255,0.4)', fontSize:'13px'}}>{getDayName()}</div>
-                                <div style={{backgroundColor:'rgba(170,255,0,0.08)', border:'1px solid rgba(170,255,0,0.3)', borderRadius:'20px',padding:'4px 12px', color:C.accent,fontSize:'11px', fontWeight:700}}>Semana {getWeekNumber()} de 40</div>
+                        <div style={{height: '1px', backgroundColor: 'rgba(255,255,255,0.08)', margin: '8px 0 12px'}}/>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+                            <h1 style={{fontSize: '42px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em'}}>Rotina Diária</h1>
+                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px'}}>
+                                <div style={{color: 'rgba(255,255,255,0.4)', fontSize: '13px'}}>{getDayName()}</div>
+                                <div style={{backgroundColor: 'rgba(170, 255, 0, 0.08)', border: '1px solid rgba(170,255,0,0.3)', borderRadius: '20px', padding: '4px 12px', color: C.accent, fontSize: '11px', fontWeight: 700}}>Semana {getWeekNumber()} de 40</div>
                             </div>
                         </div>
                     </div>
 
-                    <div style={{...S.card,marginBottom:'24px'}}>
-                        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center',marginBottom:'8px'}}>
-                            <span style={{color:'#fff',fontWeight:600}}>Progresso do Dia</span>
-                            <span style={{color:C.accent,fontWeight:700}}>{progress}%</span>
+                    <div style={{...S.card, marginBottom: '24px'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px'}}>
+                            <span style={{color: '#fff', fontWeight: 600}}>Progresso do Dia</span>
+                            <span style={{color: C.accent, fontWeight: 700}}>{progress}%</span>
                         </div>
-                        <div style={{height:'6px', backgroundColor:'rgba(255,255,255,0.08)', borderRadius:'3px',overflow:'hidden'}}>
-                            <div style={{width:`${progress}%`,height:'100%', backgroundColor:C.accent, transition:'width 500ms ease-out'}}/>
+                        <div style={{height: '6px', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden'}}>
+                            <div style={{width: `${progress}%`, height: '100%', backgroundColor: C.accent, transition: 'width 500ms ease-out'}}/>
                         </div>
-                        <div style={{color:'rgba(255,255,255,0.3)', fontSize:'12px',fontStyle:'italic', marginTop:'8px'}}>
+                        <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '12px', fontStyle: 'italic', marginTop: '8px'}}>
                             {doneTasks} de {totalTasks} tarefas · Consistência é o segredo
                         </div>
                     </div>
 
-                    <div style={{position:'relative',paddingLeft:'28px'}}>
-                        <div style={{position:'absolute',left:'5px', top:0,bottom:0,width:'2px', backgroundColor:'rgba(255,255,255,0.06)'}}/>
+                    <div style={{position: 'relative', paddingLeft: '28px'}}>
+                        <div style={{position: 'absolute', left: '5px', top: 0, bottom: 0, width: '2px', backgroundColor: 'rgba(255,255,255,0.06)'}}/>
                         {BLOCOS.map((bloco) => {
                             const active = isActive(bloco);
                             return (
-                                <div key={bloco.id} style={{position:'relative', marginBottom:'12px'}}>
-                                    <div style={{position:'absolute', left:'-26px', top:'20px', width:'10px', height:'10px', borderRadius:'50%', backgroundColor: active ? C.accent : 'rgba(255,255,255,0.15)', boxShadow: active ? '0 0 8px rgba(170,255,0,0.7)' : 'none', animation: active ? 'dotPulse 2s infinite' : 'none'}}/>
-                                    <div style={{background: bloco.special==='work' ? 'rgba(170,255,0,0.03)' : C.bgCard, backdropFilter:'blur(20px)', border: active ? `1px solid rgba(170,255,0,0.3)` : `1px solid rgba(255,255,255,0.06)`, borderLeft: active ? '2px solid #aaff00' : bloco.special==='work' ? '2px solid rgba(170,255,0,0.2)' : '2px solid rgba(255,255,255,0.06)', borderRadius:'12px',padding:'16px', transition: 'all 300ms ease'}}>
-                                        <div style={{display:'flex', alignItems:'center',gap:'8px', marginBottom:'12px'}}>
-                                            <span style={{color:'rgba(255,255,255,0.3)', fontSize:'11px'}}>{bloco.horario}</span>
-                                            <span style={{color:C.accent}}>{bloco.icon}</span>
-                                            <span style={{color:'#fff', fontWeight:700,fontSize:'15px'}}>{bloco.nome}</span>
+                                <div key={bloco.id} style={{position: 'relative', marginBottom: '12px'}}>
+                                    <div style={{position: 'absolute', left: '-26px', top: '20px', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: active ? C.accent : 'rgba(255, 255, 255, 0.15)', boxShadow: active ? '0 0 8px rgba(170,255,0,0.7)' : 'none', animation: active ? 'dotPulse 2s infinite' : 'none'}}/>
+                                    <div style={{background: bloco.special==='work' ? 'rgba(170, 255, 0, 0.03)': C.bgCard, backdropFilter: 'blur(20px)', border: active ? `1px solid rgba(170, 255, 0, 0.3)`: `1px solid rgba(255, 255, 255, 0.06)`, borderLeft: active ? '2px solid #aaff00' : bloco.special==='work' ? '2px solid rgba(170, 255, 0, 0.2)': '2px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px', transition: 'all 300ms ease'}}>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px'}}>
+                                            <span style={{color: 'rgba(255,255,255,0.3)', fontSize: '11px'}}>{bloco.horario}</span>
+                                            <span style={{color: C.accent}}>{bloco.icon}</span>
+                                            <span style={{color: '#fff', fontWeight: 700, fontSize: '15px'}}>{bloco.nome}</span>
                                             {bloco.special==='work' && (
-                                                <div style={{marginLeft:'auto', backgroundColor:'rgba(170,255,0,0.08)', border:'1px solid rgba(170,255,0,0.2)', borderRadius:'8px',padding:'4px 12px', textAlign:'center'}}>
-                                                    <div style={{color:C.accent, fontSize:'18px',fontWeight:800}}>3h</div>
-                                                    <div style={{color:'rgba(255,255,255,0.3)', fontSize:'9px'}}>DE FOCO</div>
+                                                <div style={{marginLeft: 'auto', backgroundColor: 'rgba(170, 255, 0, 0.08)', border: '1px solid rgba(170,255,0,0.2)', borderRadius: '8px', padding: '4px 12px', textAlign: 'center'}}>
+                                                    <div style={{color: C.accent, fontSize: '18px', fontWeight: 800}}>3h</div>
+                                                    <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '9px'}}>DE FOCO</div>
                                                 </div>
                                             )}
                                         </div>
 
                                         {bloco.special === 'treino' && (
                                             <div>
-                                                <div style={{backgroundColor:'rgba(170,255,0,0.05)', border:'1px solid rgba(170,255,0,0.15)', borderRadius:'8px',padding:'10px', marginBottom:'10px'}}>
-                                                    <div style={{...S.label, marginBottom:'4px'}}>TREINO DE HOJE</div>
-                                                    <div style={{color:'#fff', fontWeight:700}}>
+                                                <div style={{backgroundColor: 'rgba(170, 255, 0, 0.05)', border: '1px solid rgba(170,255,0,0.15)', borderRadius: '8px', padding: '10px', marginBottom: '10px'}}>
+                                                    <div style={{...S.label, marginBottom: '4px'}}>TREINO DE HOJE</div>
+                                                    <div style={{color: '#fff', fontWeight: 700}}>
                                                         {treinoHoje.grupos}
                                                         {treinoHoje.dur > 0 && ` — ${treinoHoje.dur}min`}
                                                     </div>
                                                 </div>
                                                 {treinoHoje.dur > 0 && (
-                                                    <div style={{textAlign:'center', marginBottom:'10px'}}>
-                                                        <div style={{fontSize:'36px', fontWeight:800,color:'#fff', fontVariantNumeric:'tabular-nums'}}>
+                                                    <div style={{textAlign: 'center', marginBottom: '10px'}}>
+                                                        <div style={{fontSize: '36px', fontWeight: 800, color: '#fff', fontVariantNumeric: 'tabular-nums'}}>
                                                             {fmtTimer(timer)}
                                                         </div>
-                                                        <div style={{height:'4px', backgroundColor:'rgba(255,255,255,0.08)', borderRadius:'2px', margin:'8px 0',overflow:'hidden'}}>
-                                                            <div style={{width:`${timer===null?100:(timer/timerTotal)*100}%`, height:'100%', backgroundColor:C.accent, transition:'width 1s linear'}}/>
+                                                        <div style={{height: '4px', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '2px', margin: '8px 0', overflow: 'hidden'}}>
+                                                            <div style={{width: `${timer===null?100:(timer/timerTotal)*100}%`, height: '100%', backgroundColor: C.accent, transition: 'width 1s linear'}}/>
                                                         </div>
-                                                        <button onClick={startTimer} style={{...S.btnPrimary, width:'100%',marginTop:'4px'}}>
+                                                        <button onClick={startTimer} style={{...S.btnPrimary, width: '100%', marginTop: '4px'}}>
                                                             {timerActive ? 'Pausar' : timer===0 ? '✓ Concluído!' : 'Iniciar Treino'}
                                                         </button>
                                                     </div>
                                                 )}
-                                                <label style={{display:'flex', alignItems:'center',gap:'8px', cursor:'pointer'}}>
-                                                    <div onClick={() => toggle('treino_done')} style={{width:'16px',height:'16px', borderRadius:'4px', backgroundColor: checks['treino_done'] ? C.accent : 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.15)', display:'flex',alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all 150ms ease'}}>
+                                                <label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}>
+                                                    <div onClick={() => toggle('treino_done')} style={{width: '16px', height: '16px', borderRadius: '4px', backgroundColor: checks['treino_done'] ? C.accent : 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 150ms ease'}}>
                                                         {checks['treino_done'] && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#050505" strokeWidth="2" strokeLinecap="round"/></svg>}
                                                     </div>
-                                                    <span style={{color: checks['treino_done'] ? 'rgba(255,255,255,0.4)' : '#fff', fontSize:'14px', textDecoration: checks['treino_done'] ? 'line-through' : 'none', transition:'all 200ms ease'}}>Treino concluído</span>
+                                                    <span style={{color: checks['treino_done'] ? 'rgba(255,255,255,0.4)' : '#fff', fontSize: '14px', textDecoration: checks['treino_done'] ? 'line-through' : 'none', transition: 'all 200ms ease'}}>Treino concluído</span>
                                                 </label>
                                             </div>
                                         )}
 
                                         {bloco.special === 'revisao' && (
                                             <div>
-                                                <label style={{display:'flex', alignItems:'center',gap:'8px', cursor:'pointer',marginBottom:'10px'}}>
-                                                    <div onClick={() => toggle('rev_done')} style={{width:'16px',height:'16px', borderRadius:'4px', backgroundColor: checks['rev_done'] ? C.accent : 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.15)', display:'flex',alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all 150ms ease'}}>
+                                                <label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginBottom: '10px'}}>
+                                                    <div onClick={() => toggle('rev_done')} style={{width: '16px', height: '16px', borderRadius: '4px', backgroundColor: checks['rev_done'] ? C.accent : 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 150ms ease'}}>
                                                         {checks['rev_done'] && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#050505" strokeWidth="2" strokeLinecap="round"/></svg>}
                                                     </div>
-                                                    <span style={{color: checks['rev_done'] ? 'rgba(255,255,255,0.4)' : '#fff', fontSize:'14px', textDecoration: checks['rev_done'] ? 'line-through' : 'none', transition:'all 200ms ease'}}>Revisão concluída</span>
+                                                    <span style={{color: checks['rev_done'] ? 'rgba(255,255,255,0.4)' : '#fff', fontSize: '14px', textDecoration: checks['rev_done'] ? 'line-through' : 'none', transition: 'all 200ms ease'}}>Revisão concluída</span>
                                                 </label>
-                                                <textarea value={revisaoText} onChange={e => setRevisaoText(e.target.value)} placeholder="O que revisei hoje?" style={{width:'100%', backgroundColor:'transparent', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'8px',padding:'10px', color:'#fff',fontSize:'13px', outline:'none',resize:'vertical', minHeight:'80px', transition:'border-color 200ms ease'}} onFocus={e => e.target.style.borderColor='#aaff00'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.08)'} />
-                                                <div style={{color:'rgba(255,255,255,0.25)', fontSize:'11px',fontStyle:'italic', marginTop:'4px'}}>Revisão espaçada = maior retenção</div>
+                                                <textarea value={revisaoText} onChange={e => setRevisaoText(e.target.value)} placeholder="O que revisei hoje?" style={{width: '100%', backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '10px', color: '#fff', fontSize: '13px', outline: 'none', resize: 'vertical', minHeight: '80px', transition: 'border-color 200ms ease'}} onFocus={e => e.target.style.borderColor='#aaff00'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.08)'} />
+                                                <div style={{color: 'rgba(255,255,255,0.25)', fontSize: '11px', fontStyle: 'italic', marginTop: '4px'}}>Revisão espaçada = maior retenção</div>
                                             </div>
                                         )}
 
                                         {bloco.tasks && !bloco.special && bloco.tasks.map((task,ti) => {
                                             const key = `${bloco.id}_${ti}`;
                                             return (
-                                                <label key={ti} style={{display:'flex', alignItems:'center',gap:'8px', marginBottom:'8px', cursor:'pointer'}}>
-                                                    <div onClick={() => toggle(key)} style={{width:'16px',height:'16px', borderRadius:'4px', backgroundColor: checks[key] ? C.accent : 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.15)', display:'flex',alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all 150ms ease'}}>
+                                                <label key={ti} style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer'}}>
+                                                    <div onClick={() => toggle(key)} style={{width: '16px', height: '16px', borderRadius: '4px', backgroundColor: checks[key] ? C.accent : 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 150ms ease'}}>
                                                         {checks[key] && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#050505" strokeWidth="2" strokeLinecap="round"/></svg>}
                                                     </div>
-                                                    <span style={{color: checks[key] ? 'rgba(255,255,255,0.3)' : '#fff', fontSize:'14px', textDecoration: checks[key] ? 'line-through' : 'none', transition:'all 200ms'}}>{task}</span>
+                                                    <span style={{color: checks[key] ? 'rgba(255,255,255,0.3)' : '#fff', fontSize: '14px', textDecoration: checks[key] ? 'line-through' : 'none', transition: 'all 200ms'}}>{task}</span>
                                                 </label>
                                             );
                                         })}
@@ -499,30 +535,30 @@ gtag('config', 'G-2M6V79H761');
                                         {bloco.special === 'work' && bloco.tasks.map((task,ti) => {
                                             const key = `work_${ti}`;
                                             return (
-                                                <label key={ti} style={{display:'flex', alignItems:'center',gap:'8px', marginBottom:'8px', cursor:'pointer'}}>
-                                                    <div onClick={() => toggle(key)} style={{width:'16px',height:'16px', borderRadius:'4px', backgroundColor: checks[key] ? C.accent : 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.15)', display:'flex',alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all 150ms ease'}}>
+                                                <label key={ti} style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer'}}>
+                                                    <div onClick={() => toggle(key)} style={{width: '16px', height: '16px', borderRadius: '4px', backgroundColor: checks[key] ? C.accent : 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 150ms ease'}}>
                                                         {checks[key] && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#050505" strokeWidth="2" strokeLinecap="round"/></svg>}
                                                     </div>
-                                                    <span style={{color: checks[key] ? 'rgba(255,255,255,0.3)' : '#fff', fontSize:'14px', textDecoration: checks[key] ? 'line-through' : 'none', transition:'all 200ms'}}>{task}</span>
+                                                    <span style={{color: checks[key] ? 'rgba(255,255,255,0.3)' : '#fff', fontSize: '14px', textDecoration: checks[key] ? 'line-through' : 'none', transition: 'all 200ms'}}>{task}</span>
                                                 </label>
                                             );
                                         })}
 
-                                        {bloco.id === 'sono' && <div style={{color:'rgba(255,255,255,0.3)', fontSize:'13px',marginBottom:'8px'}}>8h20 de sono</div>}
-                                        {bloco.id === 'leitura' && <div style={{color:'rgba(255,255,255,0.25)', fontSize:'11px',marginTop:'4px', fontStyle:'italic'}}>Preparar roupa e mochila para amanhã</div>}
+                                        {bloco.id === 'sono' && <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '13px', marginBottom: '8px'}}>8h20 de sono</div>}
+                                        {bloco.id === 'leitura' && <div style={{color: 'rgba(255,255,255,0.25)', fontSize: '11px', marginTop: '4px', fontStyle: 'italic'}}>Preparar roupa e mochila para amanhã</div>}
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
 
-                    <div style={{...S.card,marginTop:'24px'}}>
-                        <div style={{color:'#fff',fontWeight:700, marginBottom:'16px'}}>Atividade da Semana</div>
-                        <div style={{display:'flex',alignItems:'flex-end', gap:'8px',height:'80px'}}>
+                    <div style={{...S.card, marginTop: '24px'}}>
+                        <div style={{color: '#fff', fontWeight: 700, marginBottom: '16px'}}>Atividade da Semana</div>
+                        <div style={{display: 'flex', alignItems: 'flex-end', gap: '8px', height: '80px'}}>
                             {weekActivity.map((v,i) => (
-                                <div key={i} style={{flex:1, display:'flex',flexDirection:'column', alignItems:'center',gap:'6px', height:'100%',justifyContent:'flex-end'}}>
-                                    <div style={{width:'100%', height:`${(v/maxAct)*100}%`, minHeight:'4px', backgroundColor: i===dayOfWeek ? C.accent : 'rgba(170,255,0,0.2)', borderRadius:'4px', boxShadow: i===dayOfWeek ? '0 0 8px rgba(170,255,0,0.5)' : 'none', transition:'height 500ms ease'}}/>
-                                    <div style={{color:'rgba(255,255,255,0.3)', fontSize:'10px'}}>{weekDays[i]}</div>
+                                <div key={i} style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', height: '100%', justifyContent: 'flex-end'}}>
+                                    <div style={{width: '100%', height: `${(v/maxAct)*100}%`, minHeight: '4px', backgroundColor: i===dayOfWeek ? C.accent : 'rgba(170, 255, 0, 0.2)', borderRadius: '4px', boxShadow: i===dayOfWeek ? '0 0 8px rgba(170,255,0,0.5)' : 'none', transition: 'height 500ms ease'}}/>
+                                    <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '10px'}}>{weekDays[i]}</div>
                                 </div>
                             ))}
                         </div>
@@ -559,98 +595,98 @@ gtag('config', 'G-2M6V79H761');
             const [historico] = useState(() => loadData('reset_historico', meses.map(m => ({mes:m,yakov:0,mentor:0}))));
 
             const InputField = ({label, value, onChange}) => (
-                <div style={{marginBottom:'16px'}}>
+                <div style={{marginBottom: '16px'}}>
                     <div style={S.label}>{label}</div>
-                    <input type="number" value={value} onChange={e => onChange(e.target.value)} style={{width:'100%',backgroundColor:'transparent', border:'none', borderBottom:'1px solid rgba(255,255,255,0.1)', color:'#fff',fontSize:'18px',fontWeight:600, padding:'6px 0',outline:'none', transition:'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.1)'}/>
+                    <input type="number" value={value} onChange={e => onChange(e.target.value)} style={{width: '100%', backgroundColor: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '18px', fontWeight: 600, padding: '6px 0', outline: 'none', transition: 'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.1)'}/>
                 </div>
             );
 
             return (
                 <div className="animate-[scaleIn_0.4s_ease-out]">
-                    <div style={{marginBottom:'28px'}}>
+                    <div style={{marginBottom: '28px'}}>
                         <div style={S.label}>FINANCEIRO</div>
-                        <div style={{height:'1px', backgroundColor:'rgba(255,255,255,0.08)', margin:'8px 0 12px'}}/>
-                        <h1 style={{fontSize:'42px',fontWeight:900, color:'#fff', letterSpacing: '-0.02em'}}>Tracker Financeiro</h1>
-                        <p style={{color:'rgba(255,255,255,0.3)', fontStyle:'italic',marginTop:'4px'}}>Sr. Yakov → capital → Mentor AI</p>
+                        <div style={{height: '1px', backgroundColor: 'rgba(255,255,255,0.08)', margin: '8px 0 12px'}}/>
+                        <h1 style={{fontSize: '42px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em'}}>Tracker Financeiro</h1>
+                        <p style={{color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', marginTop: '4px'}}>Sr. Yakov → capital → Mentor AI</p>
                     </div>
 
-                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr',gap:'16px', marginBottom:'16px'}}>
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px'}}>
                         <div style={S.card}>
-                            <div style={{display:'flex', alignItems:'center',gap:'8px', marginBottom:'20px'}}>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px'}}>
                                 <Play size={18} color={C.accent}/>
-                                <span style={{color:'#fff',fontWeight:700, fontSize:'16px'}}>Sr. Yakov</span>
+                                <span style={{color: '#fff', fontWeight: 700, fontSize: '16px'}}>Sr. Yakov</span>
                             </div>
                             <InputField label="ADSENSE (CAD)" value={adsense} onChange={setAdsense}/>
                             <InputField label="SPONSORSHIPS (CAD)" value={sponsors} onChange={setSponsors}/>
                             <InputField label="AFILIADOS (CAD)" value={afiliados} onChange={setAfiliados}/>
-                            <div style={{display:'flex', justifyContent:'space-between', marginTop:'16px',paddingTop:'16px', borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-                                <span style={{color:'rgba(255,255,255,0.4)', fontSize:'13px'}}>Total Sr. Yakov</span>
-                                <span style={{color:C.accent,fontWeight:700, fontSize:'18px'}}>${totalYakov.toFixed(2)}</span>
+                            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.06)'}}>
+                                <span style={{color: 'rgba(255,255,255,0.4)', fontSize: '13px'}}>Total Sr. Yakov</span>
+                                <span style={{color: C.accent, fontWeight: 700, fontSize: '18px'}}>${totalYakov.toFixed(2)}</span>
                             </div>
                         </div>
 
                         <div style={S.card}>
-                            <div style={{display:'flex', alignItems:'center',gap:'8px', marginBottom:'20px'}}>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px'}}>
                                 <Bot size={18} color={C.accent}/>
-                                <span style={{color:'#fff',fontWeight:700, fontSize:'16px'}}>Mentor AI</span>
+                                <span style={{color: '#fff', fontWeight: 700, fontSize: '16px'}}>Mentor AI</span>
                             </div>
-                            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr',gap:'12px'}}>
+                            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px'}}>
                                 <InputField label="NOVOS PREMIUM" value={newPremium} onChange={setNewPremium}/>
                                 <InputField label="NOVOS PRO" value={newPro} onChange={setNewPro}/>
                             </div>
                             <InputField label="TOTAL USUÁRIOS ATIVOS" value={totalAtivos} onChange={setTotalAtivos}/>
-                            <div style={{display:'flex', justifyContent:'space-between', marginTop:'16px',paddingTop:'16px', borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-                                <span style={{color:'rgba(255,255,255,0.4)', fontSize:'13px'}}>Receita Recorrente (Est.)</span>
-                                <span style={{color:C.accent,fontWeight:700, fontSize:'18px'}}>${recorrenteCAD.toFixed(2)}</span>
+                            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.06)'}}>
+                                <span style={{color: 'rgba(255,255,255,0.4)', fontSize: '13px'}}>Receita Recorrente (Est.)</span>
+                                <span style={{color: C.accent, fontWeight: 700, fontSize: '18px'}}>${recorrenteCAD.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div style={{...S.card,textAlign:'center', marginBottom:'16px'}}>
-                        <div style={{color:'rgba(255,255,255,0.35)', fontSize:'13px',marginBottom:'12px'}}>
+                    <div style={{...S.card, textAlign: 'center', marginBottom: '16px'}}>
+                        <div style={{color: 'rgba(255,255,255,0.35)', fontSize: '13px', marginBottom: '12px'}}>
                             Sr. Yakov: ${totalYakov.toFixed(2)} · Mentor AI: ${mentorCAD.toFixed(2)}
                         </div>
-                        <div style={{fontSize:'52px',fontWeight:900, color:'#fff',lineHeight:1, letterSpacing: '-0.02em'}}>
+                        <div style={{fontSize: '52px', fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.02em'}}>
                             CAD ${totalMes.toFixed(2)}
                         </div>
                         <div style={{...S.label, marginTop: '12px'}}>TOTAL ESTE MÊS</div>
-                        <div style={{height:'1px', backgroundColor:'rgba(255,255,255,0.08)', margin:'16px 0'}}/>
-                        <div style={{display:'flex', justifyContent:'space-between', color:'rgba(255,255,255,0.35)',fontSize:'13px', marginBottom:'8px'}}>
+                        <div style={{height: '1px', backgroundColor: 'rgba(255,255,255,0.08)', margin: '16px 0'}}/>
+                        <div style={{display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.35)', fontSize: '13px', marginBottom: '8px'}}>
                             <span>Acumulado: ${acumulado.toFixed(2)}</span>
                             <span>Meta: $10,000</span>
                         </div>
-                        <div style={{height:'4px', backgroundColor:'rgba(255,255,255,0.08)', borderRadius:'2px',overflow:'hidden', marginBottom:'8px'}}>
-                            <div style={{width:`${Math.min((acumulado/META_CAD)*100,100)}%`, height:'100%',backgroundColor:C.accent, transition:'width 800ms ease-out'}}/>
+                        <div style={{height: '4px', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '2px', overflow: 'hidden', marginBottom: '8px'}}>
+                            <div style={{width: `${Math.min((acumulado/META_CAD)*100,100)}%`, height: '100%', backgroundColor: C.accent, transition: 'width 800ms ease-out'}}/>
                         </div>
-                        <div style={{color:'rgba(255,255,255,0.3)', fontSize:'13px'}}>
+                        <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '13px'}}>
                             Faltam CAD ${Math.max(faltam,0).toFixed(2)} para a meta
                         </div>
-                        <button onClick={save} style={{...S.btnPrimary,marginTop:'16px', width:'100%'}}>Salvar e Atualizar</button>
+                        <button onClick={save} style={{...S.btnPrimary, marginTop: '16px', width: '100%'}}>Salvar e Atualizar</button>
                     </div>
 
-                    <div style={{backgroundColor:'rgba(170,255,0,0.03)', border:'1px solid rgba(170,255,0,0.15)', borderRadius:'14px',padding:'20px', marginBottom:'16px', display:'flex',alignItems:'center',gap:'12px'}}>
+                    <div style={{backgroundColor: 'rgba(170, 255, 0, 0.03)', border: '1px solid rgba(170,255,0,0.15)', borderRadius: '14px', padding: '20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px'}}>
                         <TrendingUp size={20} color={C.accent}/>
                         <div>
-                            <div style={{color:'#fff',fontWeight:600}}>Projeção para Meta</div>
-                            <div style={{color:'rgba(255,255,255,0.4)', fontSize:'13px',marginTop:'2px'}}>
-                                No ritmo atual, atingirás CAD$10,000 em <strong style={{color:'#fff'}}>Agosto</strong>
+                            <div style={{color: '#fff', fontWeight: 600}}>Projeção para Meta</div>
+                            <div style={{color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '2px'}}>
+                                No ritmo atual, atingirás CAD$10,000 em <strong style={{color: '#fff'}}>Agosto</strong>
                             </div>
-                            <div style={{color:C.accent,fontSize:'12px', fontWeight:600,marginTop:'4px'}}>✓ No prazo!</div>
+                            <div style={{color: C.accent, fontSize: '12px', fontWeight: 600, marginTop: '4px'}}>✓ No prazo!</div>
                         </div>
                     </div>
 
                     <div style={S.card}>
-                        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr', gap:'8px',marginBottom:'12px', paddingBottom:'8px', borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+                        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '8px', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
                             {['MÊS','SR. YAKOV','MENTOR AI','TOTAL'].map(h => <div key={h} style={S.label}>{h}</div>)}
                         </div>
                         {historico.map((row,i) => {
                             const isCurrent = i === new Date().getMonth();
                             return (
-                                <div key={i} style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr', gap:'8px',padding:'8px 0', borderLeft: isCurrent ? '2px solid #aaff00' : 'none', paddingLeft: isCurrent ? '8px' : '0', backgroundColor: isCurrent ? 'rgba(170,255,0,0.04)' : 'transparent', borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
-                                    <div style={{color:'#fff',fontSize:'13px', fontWeight: isCurrent ? 700 : 400}}>{row.mes}</div>
-                                    <div style={{color:'rgba(255,255,255,0.4)', fontSize:'13px'}}>${row.yakov.toFixed(2)}</div>
-                                    <div style={{color:'rgba(255,255,255,0.4)', fontSize:'13px'}}>${row.mentor.toFixed(2)}</div>
-                                    <div style={{color: isCurrent ? C.accent : 'rgba(255,255,255,0.4)', fontSize:'13px',fontWeight:600}}>${(row.yakov+row.mentor).toFixed(2)}</div>
+                                <div key={i} style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '8px', padding: '8px 0', borderLeft: isCurrent ? '2px solid #aaff00' : 'none', paddingLeft: isCurrent ? '8px' : '0', backgroundColor: isCurrent ? 'rgba(170, 255, 0, 0.04)': 'transparent', borderBottom: '1px solid rgba(255,255,255,0.04)'}}>
+                                    <div style={{color: '#fff', fontSize: '13px', fontWeight: isCurrent ? 700 : 400}}>{row.mes}</div>
+                                    <div style={{color: 'rgba(255,255,255,0.4)', fontSize: '13px'}}>${row.yakov.toFixed(2)}</div>
+                                    <div style={{color: 'rgba(255,255,255,0.4)', fontSize: '13px'}}>${row.mentor.toFixed(2)}</div>
+                                    <div style={{color: isCurrent ? C.accent : 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 600}}>${(row.yakov+row.mentor).toFixed(2)}</div>
                                 </div>
                             );
                         })}
@@ -688,46 +724,46 @@ gtag('config', 'G-2M6V79H761');
 
             return (
                 <div className="animate-[scaleIn_0.4s_ease-out]">
-                    <div style={{marginBottom:'28px'}}>
+                    <div style={{marginBottom: '28px'}}>
                         <div style={S.label}>FERRAMENTAS</div>
-                        <div style={{height:'1px', backgroundColor:'rgba(255,255,255,0.08)', margin:'8px 0 12px'}}/>
-                        <h1 style={{fontSize:'42px',fontWeight:900, color:'#fff', letterSpacing: '-0.02em'}}>Ferramentas da Semana</h1>
-                        <p style={{color:'rgba(255,255,255,0.3)', fontStyle:'italic',marginTop:'4px'}}>Domine uma ferramenta por vez</p>
+                        <div style={{height: '1px', backgroundColor: 'rgba(255,255,255,0.08)', margin: '8px 0 12px'}}/>
+                        <h1 style={{fontSize: '42px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em'}}>Ferramentas da Semana</h1>
+                        <p style={{color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', marginTop: '4px'}}>Domine uma ferramenta por vez</p>
                     </div>
 
-                    <div style={{position:'relative',overflow:'hidden', background:'rgba(170,255,0,0.03)', backdropFilter:'blur(20px)', border:'1px solid rgba(170,255,0,0.25)', borderRadius:'16px',padding:'24px', marginBottom:'24px', boxShadow:'0 0 40px rgba(170,255,0,0.06)'}}>
-                        <IconAtiva size={80} color="rgba(170,255,0,0.05)" style={{position:'absolute',top:'20px', right:'20px'}}/>
+                    <div style={{position: 'relative', overflow: 'hidden', background: 'rgba(170, 255, 0, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(170, 255, 0, 0.25)', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 0 40px rgba(170,255,0,0.06)'}}>
+                        <IconAtiva size={80} color="rgba(170,255,0,0.05)" style={{position: 'absolute', top: '20px', right: '20px'}}/>
                         <div style={S.label}>ESTUDANDO ESTA SEMANA</div>
-                        <div style={{fontSize:'36px',fontWeight:900, color:'#fff',marginTop:'4px', letterSpacing: '-0.02em'}}>{ativa}</div>
-                        <div style={{color:'rgba(255,255,255,0.35)', fontSize:'14px',marginBottom:'16px'}}>{toolAtiva.desc}</div>
-                        <div style={{display:'flex', justifyContent:'space-between', marginBottom:'6px'}}>
-                            <span style={{color:'rgba(255,255,255,0.4)', fontSize:'12px'}}>Progresso Semanal</span>
-                            <span style={{color:C.accent,fontSize:'12px', fontWeight:700}}>{progresso[ativa] || 0}%</span>
+                        <div style={{fontSize: '36px', fontWeight: 900, color: '#fff', marginTop: '4px', letterSpacing: '-0.02em'}}>{ativa}</div>
+                        <div style={{color: 'rgba(255,255,255,0.35)', fontSize: '14px', marginBottom: '16px'}}>{toolAtiva.desc}</div>
+                        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
+                            <span style={{color: 'rgba(255,255,255,0.4)', fontSize: '12px'}}>Progresso Semanal</span>
+                            <span style={{color: C.accent, fontSize: '12px', fontWeight: 700}}>{progresso[ativa] || 0}%</span>
                         </div>
-                        <input type="range" min={0} max={100} value={progresso[ativa] || 0} onChange={e => updateProg(ativa, parseInt(e.target.value))} style={{width:'100%', accentColor:C.accent,marginBottom:'16px', cursor: 'ew-resize'}}/>
-                        <textarea value={aprendizado} onChange={e => setAprendizado(e.target.value)} placeholder="O que aprendi hoje..." style={{width:'100%', backgroundColor:'rgba(0,0,0,0.4)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px',padding:'12px', color:'#fff',fontSize:'13px',outline:'none', resize:'vertical',minHeight:'80px', marginBottom:'12px', transition:'border-color 200ms ease'}} onFocus={e => e.target.style.borderColor='#aaff00'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.08)'}/>
+                        <input type="range" min={0} max={100} value={progresso[ativa] || 0} onChange={e => updateProg(ativa, parseInt(e.target.value))} style={{width: '100%', accentColor: C.accent, marginBottom: '16px', cursor: 'ew-resize'}}/>
+                        <textarea value={aprendizado} onChange={e => setAprendizado(e.target.value)} placeholder="O que aprendi hoje..." style={{width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.4)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '12px', color: '#fff', fontSize: '13px', outline: 'none', resize: 'vertical', minHeight: '80px', marginBottom: '12px', transition: 'border-color 200ms ease'}} onFocus={e => e.target.style.borderColor='#aaff00'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.08)'}/>
                         <button onClick={saveAprendizado} style={S.btnPrimary}>Salvar aprendizado</button>
                     </div>
 
-                    <div style={{display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'12px',marginBottom:'24px'}}>
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginBottom: '24px'}}>
                         {TOOLS.map(tool => {
                             const Icon = iconMap[tool.icon] || Zap;
                             const isAtiva = tool.name === ativa;
                             const isHovered = hoveredTool === tool.id;
                             const prog = progresso[tool.name] || 0;
                             return (
-                                <div key={tool.id} onMouseEnter={() => setHoveredTool(tool.id)} onMouseLeave={() => setHoveredTool(null)} style={{position:'relative', background: isAtiva ? 'rgba(170,255,0,0.05)' : 'rgba(255,255,255,0.03)', backdropFilter:'blur(20px)', border: isAtiva || isHovered ? '1px solid rgba(170,255,0,0.4)' : '1px solid rgba(255,255,255,0.06)', borderRadius:'14px',padding:'20px', cursor:'pointer', transform: isHovered ? 'perspective(800px) rotateX(8deg) translateY(-8px) scale(1.02)' : 'none', boxShadow: isHovered ? '0 20px 40px rgba(170,255,0,0.12)' : 'none', transition:'all 400ms cubic-bezier(0.16,1,0.3,1)'}}>
-                                    {isAtiva && <div style={{position:'absolute',top:'8px',right:'8px', backgroundColor:'rgba(170,255,0,0.1)', border:'1px solid rgba(170,255,0,0.3)', borderRadius:'10px',padding:'2px 8px', color:C.accent,fontSize:'9px',fontWeight:700}}>ATIVA</div>}
-                                    <Icon size={28} color={C.accent} style={{marginBottom:'10px'}}/>
-                                    <div style={{color:'#fff',fontWeight:700, fontSize:'14px'}}>{tool.name}</div>
-                                    <div style={{color:'rgba(255,255,255,0.3)', fontSize:'11px',marginBottom:'12px'}}>{tool.desc}</div>
-                                    <div style={{height:'2px', backgroundColor:'rgba(255,255,255,0.06)', borderRadius:'1px',overflow:'hidden'}}>
-                                        <div style={{width:`${prog}%`,height:'100%', backgroundColor:C.accent}}/>
+                                <div key={tool.id} onMouseEnter={() => setHoveredTool(tool.id)} onMouseLeave={() => setHoveredTool(null)} style={{position: 'relative', background: isAtiva ? 'rgba(170, 255, 0, 0.05)': 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)', border: isAtiva || isHovered ? '1px solid rgba(170, 255, 0, 0.4)': '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '14px', padding: '20px', cursor: 'pointer', transform: isHovered ? 'perspective(800px) rotateX(8deg) translateY(-8px) scale(1.02)' : 'none', boxShadow: isHovered ? '0 20px 40px rgba(170, 255, 0, 0.12)': 'none', transition: 'all 400ms cubic-bezier(0.16,1,0.3,1)'}}>
+                                    {isAtiva && <div style={{position: 'absolute', top: '8px', right: '8px', backgroundColor: 'rgba(170, 255, 0, 0.1)', border: '1px solid rgba(170,255,0,0.3)', borderRadius: '10px', padding: '2px 8px', color: C.accent, fontSize: '9px', fontWeight: 700}}>ATIVA</div>}
+                                    <Icon size={28} color={C.accent} style={{marginBottom: '10px'}}/>
+                                    <div style={{color: '#fff', fontWeight: 700, fontSize: '14px'}}>{tool.name}</div>
+                                    <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '11px', marginBottom: '12px'}}>{tool.desc}</div>
+                                    <div style={{height: '2px', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '1px', overflow: 'hidden'}}>
+                                        <div style={{width: `${prog}%`, height: '100%', backgroundColor: C.accent}}/>
                                     </div>
                                     {isHovered && (
-                                        <div style={{marginTop:'10px', animation: 'scaleIn 200ms ease-out'}}>
-                                            <div style={{color:'rgba(255,255,255,0.4)', fontSize:'11px',marginBottom:'6px'}}>Progresso: {prog}%</div>
-                                            <button onClick={(e) => { e.stopPropagation(); setAtiva(tool.name); saveData('reset_ferramenta_ativa', tool.name); addToast(`✓ ${tool.name} selecionada!`); }} style={{backgroundColor:'rgba(170,255,0,0.1)', border:'1px solid rgba(170,255,0,0.4)', borderRadius:'20px', padding:'4px 12px', color:C.accent,fontSize:'11px', fontWeight:600,cursor:'pointer', transition:'all 200ms hover:bg-opacity-20'}}>Selecionar →</button>
+                                        <div style={{marginTop: '10px', animation: 'scaleIn 200ms ease-out'}}>
+                                            <div style={{color: 'rgba(255,255,255,0.4)', fontSize: '11px', marginBottom: '6px'}}>Progresso: {prog}%</div>
+                                            <button onClick={(e) => { e.stopPropagation(); setAtiva(tool.name); saveData('reset_ferramenta_ativa', tool.name); addToast(`✓ ${tool.name} selecionada!`); }} style={{backgroundColor: 'rgba(170, 255, 0, 0.1)', border: '1px solid rgba(170,255,0,0.4)', borderRadius: '20px', padding: '4px 12px', color: C.accent, fontSize: '11px', fontWeight: 600, cursor: 'pointer', transition: 'all 200ms hover:bg-opacity-20'}}>Selecionar →</button>
                                         </div>
                                     )}
                                 </div>
@@ -736,19 +772,19 @@ gtag('config', 'G-2M6V79H761');
                     </div>
 
                     <div style={S.card}>
-                        <div style={{color:'#fff',fontWeight:700, marginBottom:'16px'}}>Histórico de Aprendizados</div>
+                        <div style={{color: '#fff', fontWeight: 700, marginBottom: '16px'}}>Histórico de Aprendizados</div>
                         {historico.length === 0 ? (
-                            <div style={{color:'rgba(255,255,255,0.25)', fontSize:'13px',fontStyle:'italic'}}>Nenhum aprendizado registado ainda.</div>
+                            <div style={{color: 'rgba(255,255,255,0.25)', fontSize: '13px', fontStyle: 'italic'}}>Nenhum aprendizado registado ainda.</div>
                         ) : (
                             historico.slice(0,8).map(h => (
-                                <div key={h.id} style={{display:'flex',gap:'12px', padding:'10px 0', borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
-                                    <div style={{width:'6px',height:'6px', borderRadius:'50%', backgroundColor:C.accent, marginTop:'6px',flexShrink:0}}/>
+                                <div key={h.id} style={{display: 'flex', gap: '12px', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)'}}>
+                                    <div style={{width: '6px', height: '6px', borderRadius: '50%', backgroundColor: C.accent, marginTop: '6px', flexShrink: 0}}/>
                                     <div>
-                                        <div style={{display:'flex',gap:'8px', marginBottom:'2px'}}>
-                                            <span style={{color:C.accent, fontSize:'11px',fontWeight:600}}>{h.ferramenta}</span>
-                                            <span style={{color:'rgba(255,255,255,0.25)', fontSize:'11px'}}>{h.data}</span>
+                                        <div style={{display: 'flex', gap: '8px', marginBottom: '2px'}}>
+                                            <span style={{color: C.accent, fontSize: '11px', fontWeight: 600}}>{h.ferramenta}</span>
+                                            <span style={{color: 'rgba(255,255,255,0.25)', fontSize: '11px'}}>{h.data}</span>
                                         </div>
-                                        <div style={{color:'rgba(255,255,255,0.6)', fontSize:'13px'}}>{h.texto}</div>
+                                        <div style={{color: 'rgba(255,255,255,0.6)', fontSize: '13px'}}>{h.texto}</div>
                                     </div>
                                 </div>
                             ))
@@ -816,53 +852,53 @@ gtag('config', 'G-2M6V79H761');
 
             return (
                 <div className="animate-[scaleIn_0.4s_ease-out]">
-                    <div style={{marginBottom:'28px'}}>
+                    <div style={{marginBottom: '28px'}}>
                         <div style={S.label}>TREINOS</div>
-                        <div style={{height:'1px', backgroundColor:'rgba(255,255,255,0.08)', margin:'8px 0 12px'}}/>
-                        <h1 style={{fontSize:'42px',fontWeight:900, color:'#fff', letterSpacing: '-0.02em'}}>Semana Tipo</h1>
-                        <p style={{color:'rgba(255,255,255,0.3)', fontStyle:'italic',marginTop:'4px'}}>06:20 — 07:30 todos os dias</p>
+                        <div style={{height: '1px', backgroundColor: 'rgba(255,255,255,0.08)', margin: '8px 0 12px'}}/>
+                        <h1 style={{fontSize: '42px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em'}}>Semana Tipo</h1>
+                        <p style={{color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', marginTop: '4px'}}>06:20 — 07:30 todos os dias</p>
                     </div>
 
-                    <div style={{background:'rgba(170,255,0,0.03)', backdropFilter:'blur(20px)', border:'1px solid rgba(170,255,0,0.25)', borderRadius:'16px',padding:'24px', marginBottom:'16px', boxShadow:'0 0 40px rgba(170,255,0,0.06)'}}>
-                        <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start',marginBottom:'12px'}}>
+                    <div style={{background: 'rgba(170, 255, 0, 0.03)', backdropFilter: 'blur(20px)', border: '1px solid rgba(170, 255, 0, 0.25)', borderRadius: '16px', padding: '24px', marginBottom: '16px', boxShadow: '0 0 40px rgba(170,255,0,0.06)'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px'}}>
                             <div>
-                                <div style={{backgroundColor:'rgba(170,255,0,0.08)', border:'1px solid rgba(170,255,0,0.2)', borderRadius:'20px',padding:'4px 12px', color:C.accent,fontSize:'11px',fontWeight:700, display:'inline-block',marginBottom:'8px'}}>{diasNomes[dayOfWeek].toUpperCase()}</div>
-                                <h2 style={{color:'#fff',fontSize:'28px', fontWeight:800, letterSpacing: '-0.02em'}}>{hoje.nome}</h2>
-                                <p style={{color:'rgba(255,255,255,0.35)', fontSize:'14px'}}>{hoje.grupos}</p>
+                                <div style={{backgroundColor: 'rgba(170, 255, 0, 0.08)', border: '1px solid rgba(170,255,0,0.2)', borderRadius: '20px', padding: '4px 12px', color: C.accent, fontSize: '11px', fontWeight: 700, display: 'inline-block', marginBottom: '8px'}}>{diasNomes[dayOfWeek].toUpperCase()}</div>
+                                <h2 style={{color: '#fff', fontSize: '28px', fontWeight: 800, letterSpacing: '-0.02em'}}>{hoje.nome}</h2>
+                                <p style={{color: 'rgba(255,255,255,0.35)', fontSize: '14px'}}>{hoje.grupos}</p>
                             </div>
                             {hoje.dur > 0 && (
-                                <div style={{textAlign:'right'}}>
-                                    <div style={{color:C.accent,fontSize:'40px', fontWeight:900,lineHeight:1}}>{hoje.dur}</div>
-                                    <div style={{color:'rgba(255,255,255,0.3)', fontSize:'10px'}}>MIN</div>
+                                <div style={{textAlign: 'right'}}>
+                                    <div style={{color: C.accent, fontSize: '40px', fontWeight: 900, lineHeight: 1}}>{hoje.dur}</div>
+                                    <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '10px'}}>MIN</div>
                                 </div>
                             )}
                         </div>
 
                         {hoje.dur > 0 && (
-                            <div style={{backgroundColor:'rgba(0,0,0,0.4)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px',padding:'20px', textAlign:'center'}}>
-                                <div style={{fontSize:'52px',fontWeight:800, color:'#fff', fontVariantNumeric:'tabular-nums', letterSpacing:'0.05em'}}>{fmtTimer(timer)}</div>
-                                <div style={{height:'4px', backgroundColor:'rgba(255,255,255,0.08)', borderRadius:'2px',margin:'12px 0', overflow:'hidden'}}>
-                                    <div style={{width:`${timer===null?100:(timer/timerTotal)*100}%`, height:'100%', backgroundColor:C.accent, transition:'width 1s linear'}}/>
+                            <div style={{backgroundColor: 'rgba(0, 0, 0, 0.4)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '20px', textAlign: 'center'}}>
+                                <div style={{fontSize: '52px', fontWeight: 800, color: '#fff', fontVariantNumeric: 'tabular-nums', letterSpacing: '0.05em'}}>{fmtTimer(timer)}</div>
+                                <div style={{height: '4px', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '2px', margin: '12px 0', overflow: 'hidden'}}>
+                                    <div style={{width: `${timer===null?100:(timer/timerTotal)*100}%`, height: '100%', backgroundColor: C.accent, transition: 'width 1s linear'}}/>
                                 </div>
-                                <button onClick={startTimer} style={{...S.btnPrimary,width:'100%'}}>
+                                <button onClick={startTimer} style={{...S.btnPrimary, width: '100%'}}>
                                     {timerActive ? '⏸ Pausar' : timer === 0 ? '✓ Concluído!' : 'Iniciar Treino'}
                                 </button>
                             </div>
                         )}
                     </div>
 
-                    <div style={{...S.card,marginBottom:'16px'}}>
-                        <div style={{display:'grid', gridTemplateColumns:'120px 1fr 80px 60px', gap:'12px',marginBottom:'12px', paddingBottom:'8px', borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+                    <div style={{...S.card, marginBottom: '16px'}}>
+                        <div style={{display: 'grid', gridTemplateColumns: '120px 1fr 80px 60px', gap: '12px', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
                             {['DIA','GRUPO MUSCULAR','DURAÇÃO','STATUS'].map(h => <div key={h} style={S.label}>{h}</div>)}
                         </div>
                         {treinosArray.map((t,i) => {
                             const isHoje = t.dayNum === dayOfWeek;
                             const done = weekChecks[t.dayNum];
                             return (
-                                <div key={i} style={{display:'grid', gridTemplateColumns:'120px 1fr 80px 60px', gap:'12px',padding:'10px 0', borderLeft: isHoje ? '2px solid #aaff00' : 'none', paddingLeft: isHoje ? '8px' : '0', backgroundColor: isHoje ? 'rgba(170,255,0,0.04)' : 'transparent', borderBottom:'1px solid rgba(255,255,255,0.04)', transition:'background 200ms'}}>
-                                    <div style={{color:'#fff',fontSize:'13px', fontWeight: isHoje ? 700 : 400}}>{t.dia}</div>
-                                    <div style={{color:'rgba(255,255,255,0.5)', fontSize:'13px'}}>{t.grupos}</div>
-                                    <div style={{color:'rgba(255,255,255,0.4)', fontSize:'13px'}}>{t.dur > 0 ? `${t.dur} min` : '—'}</div>
+                                <div key={i} style={{display: 'grid', gridTemplateColumns: '120px 1fr 80px 60px', gap: '12px', padding: '10px 0', borderLeft: isHoje ? '2px solid #aaff00' : 'none', paddingLeft: isHoje ? '8px' : '0', backgroundColor: isHoje ? 'rgba(170, 255, 0, 0.04)': 'transparent', borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 200ms'}}>
+                                    <div style={{color: '#fff', fontSize: '13px', fontWeight: isHoje ? 700 : 400}}>{t.dia}</div>
+                                    <div style={{color: 'rgba(255,255,255,0.5)', fontSize: '13px'}}>{t.grupos}</div>
+                                    <div style={{color: 'rgba(255,255,255,0.4)', fontSize: '13px'}}>{t.dur > 0 ? `${t.dur} min` : '—'}</div>
                                     <div onClick={() => {
                                         if (t.dur === 0) return;
                                         const next = {...weekChecks,[t.dayNum]:!weekChecks[t.dayNum]};
@@ -872,7 +908,7 @@ gtag('config', 'G-2M6V79H761');
                                         {t.dur === 0 ? (
                                             <span>🎉</span>
                                         ) : (
-                                            <div style={{width:'18px',height:'18px', borderRadius:'4px', backgroundColor: done ? C.accent : 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.15)', display:'flex',alignItems:'center', justifyContent:'center',cursor:'pointer', transition: 'all 150ms ease'}}>
+                                            <div style={{width: '18px', height: '18px', borderRadius: '4px', backgroundColor: done ? C.accent : 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 150ms ease'}}>
                                                 {done && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#050505" strokeWidth="2" strokeLinecap="round"/></svg>}
                                             </div>
                                         )}
@@ -882,7 +918,7 @@ gtag('config', 'G-2M6V79H761');
                         })}
                     </div>
 
-                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'12px',marginBottom:'16px'}}>
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '16px'}}>
                         {[
                             {label:'TREINOS CONCLUÍDOS', val:`${concluidos}/26`},
                             {label:'SEQUÊNCIA ATUAL', val:`${sequencia} 🔥`},
@@ -890,20 +926,20 @@ gtag('config', 'G-2M6V79H761');
                         ].map((s,i) => (
                             <div key={i} style={S.card}>
                                 <div style={S.label}>{s.label}</div>
-                                <div style={{color:C.accent,fontSize:'28px', fontWeight:800,marginTop:'8px', letterSpacing: '-0.02em'}}>{s.val}</div>
+                                <div style={{color: C.accent, fontSize: '28px', fontWeight: 800, marginTop: '8px', letterSpacing: '-0.02em'}}>{s.val}</div>
                             </div>
                         ))}
                     </div>
 
                     <div style={S.card}>
-                        <div style={{display:'flex', alignItems:'center',gap:'8px', marginBottom:'16px'}}>
+                        <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px'}}>
                             <AlertTriangle size={18} color={C.accent}/>
-                            <span style={{color:'#fff',fontWeight:700}}>Notas do Programa</span>
+                            <span style={{color: '#fff', fontWeight: 700}}>Notas do Programa</span>
                         </div>
                         {notas.map((n,i) => (
-                            <div key={i} style={{display:'flex',gap:'10px', padding:'8px 0', borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
-                                <CheckCircle2 size={15} color={C.accent} style={{flexShrink:0,marginTop:'2px'}}/>
-                                <span style={{color:'rgba(255,255,255,0.6)', fontSize:'13px'}}>{n}</span>
+                            <div key={i} style={{display: 'flex', gap: '10px', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)'}}>
+                                <CheckCircle2 size={15} color={C.accent} style={{flexShrink: 0, marginTop: '2px'}}/>
+                                <span style={{color: 'rgba(255,255,255,0.6)', fontSize: '13px'}}>{n}</span>
                             </div>
                         ))}
                     </div>
@@ -980,100 +1016,100 @@ gtag('config', 'G-2M6V79H761');
 
             return (
                 <div className="animate-[scaleIn_0.4s_ease-out]">
-                    <div style={{marginBottom:'28px'}}>
+                    <div style={{marginBottom: '28px'}}>
                         <div style={S.label}>ESCOLA</div>
-                        <div style={{height:'1px', backgroundColor:'rgba(255,255,255,0.08)', margin:'8px 0 12px'}}/>
-                        <h1 style={{fontSize:'42px',fontWeight:900, color:'#fff', letterSpacing: '-0.02em'}}>Tracker Escolar</h1>
-                        <p style={{color:'rgba(255,255,255,0.3)', fontStyle:'italic',marginTop:'4px'}}>08:20–15:10 · Revisão 15:50–17:00</p>
+                        <div style={{height: '1px', backgroundColor: 'rgba(255,255,255,0.08)', margin: '8px 0 12px'}}/>
+                        <h1 style={{fontSize: '42px', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em'}}>Tracker Escolar</h1>
+                        <p style={{color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', marginTop: '4px'}}>08:20–15:10 · Revisão 15:50–17:00</p>
                     </div>
 
-                    <div style={{...S.card,marginBottom:'16px'}}>
-                        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center',marginBottom:'20px'}}>
-                            <div style={{display:'flex', alignItems:'center',gap:'8px'}}>
+                    <div style={{...S.card, marginBottom: '16px'}}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
                                 <BookOpen size={18} color={C.accent}/>
-                                <span style={{color:'#fff',fontWeight:700, fontSize:'16px'}}>Hoje na Escola</span>
+                                <span style={{color: '#fff', fontWeight: 700, fontSize: '16px'}}>Hoje na Escola</span>
                             </div>
-                            <span style={{color:'rgba(255,255,255,0.3)', fontSize:'12px'}}>{today}</span>
+                            <span style={{color: 'rgba(255,255,255,0.3)', fontSize: '12px'}}>{today}</span>
                         </div>
 
-                        <div style={{marginBottom:'20px'}}>
+                        <div style={{marginBottom: '20px'}}>
                             <div style={S.label}>MATÉRIAS DE HOJE</div>
-                            <div style={{display:'flex', flexWrap:'wrap',gap:'6px',margin:'8px 0'}}>
+                            <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '8px 0'}}>
                                 {materias.map((m,i) => (
-                                    <div key={i} style={{backgroundColor:'rgba(170,255,0,0.08)', border:'1px solid rgba(170,255,0,0.3)', borderRadius:'20px', padding:'4px 10px', display:'flex',alignItems:'center',gap:'6px'}}>
-                                        <span style={{color:C.accent, fontSize:'12px',fontWeight:600}}>{m}</span>
-                                        <X size={12} color={C.accent} style={{cursor:'pointer'}} onClick={() => removeMateria(i)}/>
+                                    <div key={i} style={{backgroundColor: 'rgba(170, 255, 0, 0.08)', border: '1px solid rgba(170,255,0,0.3)', borderRadius: '20px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '6px'}}>
+                                        <span style={{color: C.accent, fontSize: '12px', fontWeight: 600}}>{m}</span>
+                                        <X size={12} color={C.accent} style={{cursor: 'pointer'}} onClick={() => removeMateria(i)}/>
                                     </div>
                                 ))}
-                                <div style={{display:'flex',gap:'6px'}}>
-                                    <input value={newMateria} onChange={e => setNewMateria(e.target.value)} onKeyDown={e => e.key==='Enter' && addMateria()} placeholder="Adicionar..." style={{backgroundColor:'transparent', border:'none', borderBottom:'1px solid rgba(255,255,255,0.1)', color:'#fff',fontSize:'13px', outline:'none',padding:'4px 0',width:'100px', transition:'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.1)'}/>
-                                    <button onClick={addMateria} style={{backgroundColor:'rgba(170,255,0,0.1)', border:'1px solid rgba(170,255,0,0.3)', borderRadius:'6px',padding:'4px 8px', color:C.accent,cursor:'pointer', transition:'all 200ms hover:bg-opacity-20'}}>
+                                <div style={{display: 'flex', gap: '6px'}}>
+                                    <input value={newMateria} onChange={e => setNewMateria(e.target.value)} onKeyDown={e => e.key==='Enter' && addMateria()} placeholder="Adicionar..." style={{backgroundColor: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '13px', outline: 'none', padding: '4px 0', width: '100px', transition: 'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.1)'}/>
+                                    <button onClick={addMateria} style={{backgroundColor: 'rgba(170, 255, 0, 0.1)', border: '1px solid rgba(170,255,0,0.3)', borderRadius: '6px', padding: '4px 8px', color: C.accent, cursor: 'pointer', transition: 'all 200ms hover:bg-opacity-20'}}>
                                         <Plus size={14}/>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div style={{marginBottom:'20px'}}>
+                        <div style={{marginBottom: '20px'}}>
                             <div style={S.label}>LIÇÃO DE CASA</div>
-                            <div style={{margin:'8px 0'}}>
+                            <div style={{margin: '8px 0'}}>
                                 {tarefas.map(t => (
-                                    <div key={t.id} style={{display:'flex', alignItems:'center',gap:'8px', marginBottom:'6px',cursor:'pointer'}} onClick={() => toggleTarefa(t.id)}>
-                                        <div style={{width:'16px',height:'16px', borderRadius:'4px', backgroundColor: t.done ? C.accent : 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.15)', display:'flex',alignItems:'center', justifyContent:'center',flexShrink:0, transition:'all 150ms ease'}}>
+                                    <div key={t.id} style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', cursor: 'pointer'}} onClick={() => toggleTarefa(t.id)}>
+                                        <div style={{width: '16px', height: '16px', borderRadius: '4px', backgroundColor: t.done ? C.accent : 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 150ms ease'}}>
                                             {t.done && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#050505" strokeWidth="2" strokeLinecap="round"/></svg>}
                                         </div>
-                                        <span style={{color: t.done ? 'rgba(255,255,255,0.25)' : '#fff', fontSize:'13px', textDecoration: t.done ? 'line-through' : 'none', transition:'all 200ms ease'}}>{t.text}</span>
+                                        <span style={{color: t.done ? 'rgba(255,255,255,0.25)' : '#fff', fontSize: '13px', textDecoration: t.done ? 'line-through' : 'none', transition: 'all 200ms ease'}}>{t.text}</span>
                                     </div>
                                 ))}
-                                <div style={{display:'flex', gap:'6px',marginTop:'6px'}}>
-                                    <input value={newTarefa} onChange={e => setNewTarefa(e.target.value)} onKeyDown={e => e.key==='Enter' && addTarefa()} placeholder="Nova tarefa..." style={{flex:1,backgroundColor:'transparent', border:'none', borderBottom:'1px solid rgba(255,255,255,0.1)', color:'#fff',fontSize:'13px', outline:'none',padding:'4px 0', transition:'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.1)'}/>
+                                <div style={{display: 'flex', gap: '6px', marginTop: '6px'}}>
+                                    <input value={newTarefa} onChange={e => setNewTarefa(e.target.value)} onKeyDown={e => e.key==='Enter' && addTarefa()} placeholder="Nova tarefa..." style={{flex: 1, backgroundColor: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '13px', outline: 'none', padding: '4px 0', transition: 'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.1)'}/>
                                 </div>
                             </div>
                         </div>
 
-                        <div style={{marginBottom:'20px'}}>
+                        <div style={{marginBottom: '20px'}}>
                             <div style={S.label}>NOTAS DA REVISÃO</div>
-                            <textarea value={revisao} onChange={e => setRevisao(e.target.value)} placeholder="O que revisaste hoje às 15:50?" style={{width:'100%',marginTop:'8px', backgroundColor:'rgba(0,0,0,0.3)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'8px',padding:'10px', color:'#fff',fontSize:'13px', outline:'none',resize:'vertical', minHeight:'80px', transition:'border-color 200ms ease'}} onFocus={e => e.target.style.borderColor='#aaff00'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.08)'}/>
+                            <textarea value={revisao} onChange={e => setRevisao(e.target.value)} placeholder="O que revisaste hoje às 15:50?" style={{width: '100%', marginTop: '8px', backgroundColor: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '10px', color: '#fff', fontSize: '13px', outline: 'none', resize: 'vertical', minHeight: '80px', transition: 'border-color 200ms ease'}} onFocus={e => e.target.style.borderColor='#aaff00'} onBlur={e => e.target.style.borderColor='rgba(255,255,255,0.08)'}/>
                         </div>
 
-                        <button onClick={saveAll} style={{...S.btnPrimary,width:'100%'}}>Salvar Tudo</button>
+                        <button onClick={saveAll} style={{...S.btnPrimary, width: '100%'}}>Salvar Tudo</button>
                     </div>
 
-                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px',marginBottom:'16px'}}>
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px'}}>
                         {notas.map(n => {
                             const trend = n.historico.length >= 2 ? n.nota > n.historico[n.historico.length-2] ? '↑' : n.nota < n.historico[n.historico.length-2] ? '↓' : '→' : '→';
                             const trendColor = trend==='↑' ? C.accent : trend==='↓' ? '#ef4444' : '#fff';
                             return (
                                 <div key={n.id} style={S.card}>
-                                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
-                                        <div style={{color:'#fff',fontWeight:700}}>{n.materia}</div>
-                                        <div style={{display:'flex', alignItems:'center',gap:'6px'}}>
-                                            <span style={{color:trendColor, fontSize:'16px'}}>{trend}</span>
-                                            <input type="number" min={0} max={10} value={n.nota} onChange={e => updateNota(n.id, parseFloat(e.target.value)||0)} style={{width:'48px', backgroundColor:'transparent', border:'none', color:getBarColor(n.nota), fontSize:'24px',fontWeight:800, textAlign:'right',outline:'none', transition:'color 300ms ease'}}/>
+                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                                        <div style={{color: '#fff', fontWeight: 700}}>{n.materia}</div>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
+                                            <span style={{color: trendColor, fontSize: '16px'}}>{trend}</span>
+                                            <input type="number" min={0} max={10} value={n.nota} onChange={e => updateNota(n.id, parseFloat(e.target.value)||0)} style={{width: '48px', backgroundColor: 'transparent', border: 'none', color: getBarColor(n.nota), fontSize: '24px', fontWeight: 800, textAlign: 'right', outline: 'none', transition: 'color 300ms ease'}}/>
                                         </div>
                                     </div>
-                                    <div style={{height:'3px', backgroundColor:'rgba(255,255,255,0.08)', borderRadius:'2px',marginTop:'8px', overflow:'hidden'}}>
-                                        <div style={{width:`${(n.nota/10)*100}%`, height:'100%', backgroundColor:getBarColor(n.nota), transition:'all 500ms ease'}}/>
+                                    <div style={{height: '3px', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '2px', marginTop: '8px', overflow: 'hidden'}}>
+                                        <div style={{width: `${(n.nota/10)*100}%`, height: '100%', backgroundColor: getBarColor(n.nota), transition: 'all 500ms ease'}}/>
                                     </div>
                                 </div>
                             );
                         })}
                         {showAddNota ? (
-                            <div style={{...S.card,display:'flex', flexDirection:'column',gap:'8px'}}>
-                                <input value={newNota} onChange={e => setNewNota(e.target.value)} placeholder="Nome da matéria..." autoFocus style={{backgroundColor:'transparent', border:'none', borderBottom:'1px solid rgba(255,255,255,0.15)', color:'#fff',fontSize:'14px', outline:'none',padding:'4px 0', transition:'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.15)'} onKeyDown={e => e.key==='Enter' && addNota()}/>
-                                <div style={{display:'flex',gap:'8px'}}>
-                                    <button onClick={addNota} style={{...S.btnPrimary,flex:1, padding:'8px'}}>Adicionar</button>
-                                    <button onClick={() => setShowAddNota(false)} style={{flex:1,padding:'8px', backgroundColor:'transparent', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'8px',color:'#fff', cursor:'pointer', transition:'all 200ms ease hover:bg-[rgba(255,255,255,0.05)]'}}>Cancelar</button>
+                            <div style={{...S.card, display: 'flex', flexDirection: 'column', gap: '8px'}}>
+                                <input value={newNota} onChange={e => setNewNota(e.target.value)} placeholder="Nome da matéria..." autoFocus style={{backgroundColor: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontSize: '14px', outline: 'none', padding: '4px 0', transition: 'border-color 200ms ease'}} onFocus={e => e.target.style.borderBottomColor='#aaff00'} onBlur={e => e.target.style.borderBottomColor='rgba(255,255,255,0.15)'} onKeyDown={e => e.key==='Enter' && addNota()}/>
+                                <div style={{display: 'flex', gap: '8px'}}>
+                                    <button onClick={addNota} style={{...S.btnPrimary, flex: 1, padding: '8px'}}>Adicionar</button>
+                                    <button onClick={() => setShowAddNota(false)} style={{flex: 1, padding: '8px', backgroundColor: 'transparent', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: '#fff', cursor: 'pointer', transition: 'all 200ms ease hover:bg-[rgba(255,255,255,0.05)]'}}>Cancelar</button>
                                 </div>
                             </div>
                         ) : (
-                            <div onClick={() => setShowAddNota(true)} style={{border:'1px dashed rgba(255,255,255,0.15)', borderRadius:'14px',padding:'24px', display:'flex',alignItems:'center', justifyContent:'center',gap:'8px', cursor:'pointer', color:'rgba(255,255,255,0.3)', transition:'all 200ms'}} onMouseEnter={e => { e.currentTarget.style.borderColor='#aaff00'; e.currentTarget.style.color='#aaff00'; }} onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'; e.currentTarget.style.color='rgba(255,255,255,0.3)'; }}>
+                            <div onClick={() => setShowAddNota(true)} style={{border: '1px dashed rgba(255, 255, 255, 0.15)', borderRadius: '14px', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', transition: 'all 200ms'}} onMouseEnter={e => { e.currentTarget.style.borderColor='#aaff00'; e.currentTarget.style.color='#aaff00'; }} onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'; e.currentTarget.style.color='rgba(255,255,255,0.3)'; }}>
                                 <Plus size={16}/> Adicionar Matéria
                             </div>
                         )}
                     </div>
 
-                    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr',gap:'12px'}}>
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px'}}>
                         {[
                             {label:'DIAS COM REVISÃO',val:'0/20'},
                             {label:'MÉDIA GERAL',val:`${media}/10`},
@@ -1081,7 +1117,7 @@ gtag('config', 'G-2M6V79H761');
                         ].map((s,i) => (
                             <div key={i} style={S.card}>
                                 <div style={S.label}>{s.label}</div>
-                                <div style={{color:C.accent,fontSize:'28px', fontWeight:800,marginTop:'8px', letterSpacing: '-0.02em'}}>{s.val}</div>
+                                <div style={{color: C.accent, fontSize: '28px', fontWeight: 800, marginTop: '8px', letterSpacing: '-0.02em'}}>{s.val}</div>
                             </div>
                         ))}
                     </div>
@@ -1170,14 +1206,14 @@ gtag('config', 'G-2M6V79H761');
             }, [loading]);
 
             if (loading) return (
-                <div style={{position:'fixed', inset:0, backgroundColor:'#050505', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:9999}}>
-                    <div style={{width:'80px', height:'80px', backgroundColor:'rgba(170,255,0,0.08)', border:'1px solid rgba(170,255,0,0.3)', borderRadius:'20px', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 0 40px rgba(170,255,0,0.25)', animation:'pulse 1.5s infinite'}}>
-                        <span style={{color:'#aaff00', fontSize:'36px', fontWeight:900, letterSpacing: '-0.05em'}}>R</span>
+                <div style={{position: 'fixed', inset: 0, backgroundColor: '#050505', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 9999}}>
+                    <div style={{width: '80px', height: '80px', backgroundColor: 'rgba(170, 255, 0, 0.08)', border: '1px solid rgba(170, 255, 0, 0.3)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(170,255,0,0.25)', animation: 'pulse 1.5s infinite'}}>
+                        <span style={{color: '#aaff00', fontSize: '36px', fontWeight: 900, letterSpacing: '-0.05em'}}>R</span>
                     </div>
-                    <div style={{color:'#aaff00', fontSize:'28px', fontWeight:900, letterSpacing:'0.35em', marginTop:'24px', transform: 'translateX(0.175em)'}}>RESET</div>
-                    <div style={{color:'rgba(255,255,255,0.3)', fontSize:'13px', fontStyle:'italic', marginTop:'8px'}}>Sofra todos os dias.</div>
-                    <div style={{width:'200px', height:'2px', backgroundColor:'rgba(255,255,255,0.08)', borderRadius:'1px', marginTop:'28px', overflow:'hidden'}}>
-                        <div style={{height:'100%', backgroundColor:'#aaff00', borderRadius:'1px', animation:'loadBar 1.8s ease-out forwards'}}/>
+                    <div style={{color: '#aaff00', fontSize: '28px', fontWeight: 900, letterSpacing: '0.35em', marginTop: '24px', transform: 'translateX(0.175em)'}}>RESET</div>
+                    <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '13px', fontStyle: 'italic', marginTop: '8px'}}>Sofra todos os dias.</div>
+                    <div style={{width: '200px', height: '2px', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '1px', marginTop: '28px', overflow: 'hidden'}}>
+                        <div style={{height: '100%', backgroundColor: '#aaff00', borderRadius: '1px', animation: 'loadBar 1.8s ease-out forwards'}}/>
                     </div>
                     <style>{`
                         @keyframes pulse { 0%,100%{box-shadow:0 0 20px rgba(170,255,0,0.2)} 50%{box-shadow:0 0 60px rgba(170,255,0,0.5)} }
@@ -1187,7 +1223,7 @@ gtag('config', 'G-2M6V79H761');
             );
 
             return (
-                <div style={{backgroundColor:'#050505', minHeight:'100vh', color:'#ffffff', position:'relative', overflow:'hidden'}}>
+                <div style={{backgroundColor: '#050505', minHeight: '100vh', color: '#ffffff', position: 'relative', overflow: 'hidden'}}>
                     <style>{`
                         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
                         *{box-sizing:border-box;margin:0;padding:0; font-family:"'Inter', sans-serif"}
@@ -1199,22 +1235,22 @@ gtag('config', 'G-2M6V79H761');
                         @keyframes scaleIn { 0%{transform:scale(0.98);opacity:0} 100%{transform:scale(1);opacity:1} }
                     `}</style>
 
-                    <canvas ref={canvasRef} style={{position:'fixed', inset:0, zIndex:0, pointerEvents:'none'}}/>
+                    <canvas ref={canvasRef} style={{position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none'}}/>
 
-                    <div style={{position:'fixed', left: blurPos.x, top: blurPos.y, width:'350px', height:'350px', transform:'translate(-50%,-50%)', background:'radial-gradient(circle, rgba(170,255,0,0.06) 0%, transparent 70%)', filter:'blur(60px)', borderRadius:'50%', pointerEvents:'none', zIndex:1}}/>
+                    <div style={{position: 'fixed', left: blurPos.x, top: blurPos.y, width: '350px', height: '350px', transform: 'translate(-50%, -50%)', background: 'radial-gradient(circle, rgba(170, 255, 0, 0.06) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none', zIndex: 1}}/>
 
-                    <div style={{position:'fixed', left:0, top:0, width:'240px', height:'100vh', backgroundColor:'rgba(0,0,0,0.88)', backdropFilter:'blur(20px)', borderRight:'1px solid rgba(255,255,255,0.06)', zIndex:10, display:'flex', flexDirection:'column'}}>
-                        <div style={{padding:'20px', display:'flex', alignItems:'center', gap:'12px'}}>
-                            <div style={{width:'36px', height:'36px', backgroundColor:'rgba(170,255,0,0.08)', border:'1px solid rgba(170,255,0,0.3)', borderRadius:'10px', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 0 12px rgba(170,255,0,0.2)'}}>
-                                <span style={{color:'#aaff00', fontWeight:900, fontSize:'18px', letterSpacing: '-0.05em'}}>R</span>
+                    <div style={{position: 'fixed', left: 0, top: 0, width: '240px', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.88)', backdropFilter: 'blur(20px)', borderRight: '1px solid rgba(255,255,255,0.06)', zIndex: 10, display: 'flex', flexDirection: 'column'}}>
+                        <div style={{padding: '20px', display: 'flex', alignItems: 'center', gap: '12px'}}>
+                            <div style={{width: '36px', height: '36px', backgroundColor: 'rgba(170, 255, 0, 0.08)', border: '1px solid rgba(170, 255, 0, 0.3)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(170,255,0,0.2)'}}>
+                                <span style={{color: '#aaff00', fontWeight: 900, fontSize: '18px', letterSpacing: '-0.05em'}}>R</span>
                             </div>
                             <div>
-                                <div style={{color:'#fff', fontWeight:800, fontSize:'15px', letterSpacing: '-0.02em'}}>RESET</div>
-                                <div style={{color:'rgba(255,255,255,0.3)', fontSize:'11px'}}>2026</div>
+                                <div style={{color: '#fff', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.02em'}}>RESET</div>
+                                <div style={{color: 'rgba(255,255,255,0.3)', fontSize: '11px'}}>2026</div>
                             </div>
                         </div>
 
-                        <nav style={{padding:'8px 12px', flex:1}}>
+                        <nav style={{padding: '8px 12px', flex: 1}}>
                             {[
                                 {id:'dashboard', label:'Dashboard', Icon:LayoutDashboard},
                                 {id:'rotina', label:'Rotina', Icon:Clock},
@@ -1223,24 +1259,24 @@ gtag('config', 'G-2M6V79H761');
                                 {id:'treinos', label:'Treinos', Icon:Dumbbell},
                                 {id:'escola', label:'Escola', Icon:BookOpen},
                             ].map(({id,label,Icon}) => (
-                                <div key={id} onClick={() => setPage(id)} style={{display:'flex', alignItems:'center', gap:'10px', padding:'10px 14px', borderRadius:'10px', cursor:'pointer', marginBottom:'2px', borderLeft: page===id ? '2px solid #aaff00' : '2px solid transparent', backgroundColor: page===id ? 'rgba(170,255,0,0.08)' : 'transparent', color: page===id ? '#aaff00' : 'rgba(255,255,255,0.4)', transition:'all 200ms ease',}}>
+                                <div key={id} onClick={() => setPage(id)} style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '10px', cursor: 'pointer', marginBottom: '2px', borderLeft: page===id ? '2px solid #aaff00' : '2px solid transparent', backgroundColor: page===id ? 'rgba(170, 255, 0, 0.08)': 'transparent', color: page===id ? '#aaff00' : 'rgba(255,255,255,0.4)', transition: 'all 200ms ease'}}>
                                     <Icon size={17} strokeWidth={page===id ? 2 : 1.5}/>
-                                    <span style={{fontSize:'14px',fontWeight: page===id ? 600 : 500}}>{label}</span>
+                                    <span style={{fontSize: '14px', fontWeight: page===id ? 600 : 500}}>{label}</span>
                                 </div>
                             ))}
                         </nav>
 
-                        <div style={{padding:'16px 20px'}}>
-                            <div style={{color:'rgba(255,255,255,0.25)', fontSize:'11px', marginBottom:'6px', fontWeight: 500}}>
+                        <div style={{padding: '16px 20px'}}>
+                            <div style={{color: 'rgba(255,255,255,0.25)', fontSize: '11px', marginBottom: '6px', fontWeight: 500}}>
                                 Mês 1 de 9
                             </div>
-                            <div style={{height:'3px', backgroundColor:'rgba(255,255,255,0.08)', borderRadius:'2px'}}>
-                                <div style={{width:'11%', height:'100%', backgroundColor:'#aaff00', borderRadius:'2px'}}/>
+                            <div style={{height: '3px', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '2px'}}>
+                                <div style={{width: '11%', height: '100%', backgroundColor: '#aaff00', borderRadius: '2px'}}/>
                             </div>
                         </div>
                     </div>
 
-                    <div style={{marginLeft:'240px', padding:'32px', minHeight:'100vh', position:'relative', zIndex:2, maxWidth: '1200px'}}>
+                    <div style={{marginLeft: '240px', padding: '32px', minHeight: '100vh', position: 'relative', zIndex: 2, maxWidth: '1200px'}}>
                         {page === 'dashboard' && <Dashboard addToast={addToast} C={C} S={S}/>}
                         {page === 'rotina' && <Rotina addToast={addToast} C={C} S={S}/>}
                         {page === 'financeiro' && <Financeiro addToast={addToast} C={C} S={S}/>}
@@ -1249,9 +1285,9 @@ gtag('config', 'G-2M6V79H761');
                         {page === 'escola' && <Escola addToast={addToast} C={C} S={S}/>}
                     </div>
 
-                    <div style={{position:'fixed', bottom:'24px', right:'24px', zIndex:9999, display:'flex', flexDirection:'column', gap:'8px'}}>
+                    <div style={{position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '8px'}}>
                         {toasts.map(t => (
-                            <div key={t.id} style={{backgroundColor:'rgba(0,0,0,0.9)', border:`1px solid ${t.type==='special' ? '#aaff00' : 'rgba(170,255,0,0.4)'}`, borderRadius:'10px', padding: t.type==='special' ? '14px 20px' : '10px 16px', color: '#aaff00', fontSize:'13px', fontWeight:600, backdropFilter:'blur(20px)', animation:'bounceIn 300ms ease', boxShadow: t.type==='special' ? '0 0 20px rgba(170,255,0,0.2)' : '0 4px 12px rgba(0,0,0,0.5)'}}>
+                            <div key={t.id} style={{backgroundColor: 'rgba(0, 0, 0, 0.9)', border: `1px solid ${t.type==='special' ? '#aaff00' : 'rgba(170, 255, 0, 0.4)'}`, borderRadius: '10px', padding: t.type==='special' ? '14px 20px' : '10px 16px', color: '#aaff00', fontSize: '13px', fontWeight: 600, backdropFilter: 'blur(20px)', animation: 'bounceIn 300ms ease', boxShadow: t.type==='special' ? '0 0 20px rgba(170, 255, 0, 0.2)': '0 4px 12px rgba(0,0,0,0.5)'}}>
                                 {t.msg}
                             </div>
                         ))}
@@ -1267,6 +1303,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -90,6 +126,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -203,8 +245,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>Prevention (2%)</span>
 </div>
 <div className="h-4 bg-white/5 rounded-full overflow-hidden flex">
-<div className="h-full bg-gradient-to-r from-red-500 to-orange-500 grow-bar-x" style={{-TargetWidth: '98%'}}></div>
-<div className="h-full bg-green-500 grow-bar-x" style={{-TargetWidth: '2%'}}></div>
+<div className="h-full bg-gradient-to-r from-red-500 to-orange-500 grow-bar-x" style={{'--target-width': '98%'}}></div>
+<div className="h-full bg-green-500 grow-bar-x" style={{'--target-width': '2%'}}></div>
 </div>
 </div>
 </div>
@@ -472,7 +514,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                 </span>
 <div className="font-medium text-white mt-2 text-4xl">3.4x</div>
 <div className="w-full bg-white/10 h-1.5 mt-4 rounded-full overflow-hidden">
-<div className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 grow-bar-x" style={{-TargetWidth: '75%'}}></div>
+<div className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 grow-bar-x" style={{'--target-width': '75%'}}></div>
 </div>
 </div>
 <div className="bg-white/5 rounded-xl p-6 border border-white/5 hover:border-white/10 transition-colors">
@@ -498,13 +540,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="flex-1 flex items-end gap-2 mt-auto">
-<div className="flex-1 bg-gradient-to-t from-blue-500/20 to-blue-500/30 rounded-t-sm hover:bg-blue-500/40 transition grow-bar-y" style={{-TargetHeight: '40%', animationDelay: '0.5s'}}></div>
-<div className="flex-1 bg-gradient-to-t from-blue-500/30 to-blue-500/40 rounded-t-sm hover:bg-blue-500/50 transition grow-bar-y" style={{-TargetHeight: '60%', animationDelay: '0.6s'}}></div>
-<div className="flex-1 bg-gradient-to-t from-blue-500/60 to-blue-500/70 rounded-t-sm hover:bg-blue-500/70 transition grow-bar-y" style={{-TargetHeight: '80%', animationDelay: '0.7s'}}></div>
-<div className="flex-1 bg-gradient-to-t from-blue-500/40 to-blue-500/50 rounded-t-sm hover:bg-blue-500/60 transition grow-bar-y" style={{-TargetHeight: '50%', animationDelay: '0.8s'}}></div>
-<div className="flex-1 bg-gradient-to-t from-blue-500/80 to-blue-500/90 rounded-t-sm hover:bg-blue-500/90 transition grow-bar-y" style={{-TargetHeight: '90%', animationDelay: '0.9s'}}></div>
-<div className="flex-1 bg-gradient-to-t from-blue-500/50 to-blue-500/60 rounded-t-sm hover:bg-blue-500/70 transition grow-bar-y" style={{-TargetHeight: '65%', animationDelay: '1.0s'}}></div>
-<div className="flex-1 bg-gradient-to-t from-blue-500/30 to-blue-500/40 rounded-t-sm hover:bg-blue-500/50 transition grow-bar-y" style={{-TargetHeight: '45%', animationDelay: '1.1s'}}></div>
+<div className="flex-1 bg-gradient-to-t from-blue-500/20 to-blue-500/30 rounded-t-sm hover:bg-blue-500/40 transition grow-bar-y" style={{'--target-height': '40%', animationDelay: '0.5s'}}></div>
+<div className="flex-1 bg-gradient-to-t from-blue-500/30 to-blue-500/40 rounded-t-sm hover:bg-blue-500/50 transition grow-bar-y" style={{'--target-height': '60%', animationDelay: '0.6s'}}></div>
+<div className="flex-1 bg-gradient-to-t from-blue-500/60 to-blue-500/70 rounded-t-sm hover:bg-blue-500/70 transition grow-bar-y" style={{'--target-height': '80%', animationDelay: '0.7s'}}></div>
+<div className="flex-1 bg-gradient-to-t from-blue-500/40 to-blue-500/50 rounded-t-sm hover:bg-blue-500/60 transition grow-bar-y" style={{'--target-height': '50%', animationDelay: '0.8s'}}></div>
+<div className="flex-1 bg-gradient-to-t from-blue-500/80 to-blue-500/90 rounded-t-sm hover:bg-blue-500/90 transition grow-bar-y" style={{'--target-height': '90%', animationDelay: '0.9s'}}></div>
+<div className="flex-1 bg-gradient-to-t from-blue-500/50 to-blue-500/60 rounded-t-sm hover:bg-blue-500/70 transition grow-bar-y" style={{'--target-height': '65%', animationDelay: '1.0s'}}></div>
+<div className="flex-1 bg-gradient-to-t from-blue-500/30 to-blue-500/40 rounded-t-sm hover:bg-blue-500/50 transition grow-bar-y" style={{'--target-height': '45%', animationDelay: '1.1s'}}></div>
 </div>
 </div>
 
@@ -523,7 +565,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       </span>
 </div>
 <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-<div className="bg-gradient-to-r from-green-500 to-emerald-400 h-full rounded-full grow-bar-x" style={{-TargetWidth: '80%', animationDelay: '1s'}}></div>
+<div className="bg-gradient-to-r from-green-500 to-emerald-400 h-full rounded-full grow-bar-x" style={{'--target-width': '80%', animationDelay: '1s'}}></div>
 </div>
 </div>
 <div>
@@ -536,7 +578,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                       </span>
 </div>
 <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-<div className="bg-gradient-to-r from-yellow-500 to-amber-400 h-full rounded-full grow-bar-x" style={{-TargetWidth: '40%', animationDelay: '1.2s'}}></div>
+<div className="bg-gradient-to-r from-yellow-500 to-amber-400 h-full rounded-full grow-bar-x" style={{'--target-width': '40%', animationDelay: '1.2s'}}></div>
 </div>
 </div>
 </div>

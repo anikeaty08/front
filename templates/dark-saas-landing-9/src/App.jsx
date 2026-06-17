@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -22,6 +58,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -158,7 +200,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1305.5px', -MouseY: '6518.5px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1305.5px', '--mouse-y': '6518.5px'}}>
 <div className="spotlight-inner rounded-3xl p-6 h-full flex flex-col">
 <div className="aspect-video flex bg-white/5 w-full border-white/5 border rounded-xl mb-6 items-center justify-center">
 <svg className="text-gray-600" fill="none" height="32" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
@@ -177,7 +219,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '870.84375px', -MouseY: '6518.5px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '870.84375px', '--mouse-y': '6518.5px'}}>
 <div className="spotlight-inner rounded-3xl p-6 h-full flex flex-col">
 <div className="w-full aspect-video bg-white/5 rounded-xl mb-6 flex items-center justify-center border border-white/5">
 <svg className="text-gray-600" fill="none" height="32" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
@@ -196,7 +238,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '436.171875px', -MouseY: '6518.5px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '436.171875px', '--mouse-y': '6518.5px'}}>
 <div className="spotlight-inner rounded-3xl p-6 h-full flex flex-col">
 <div className="w-full aspect-video bg-white/5 rounded-xl mb-6 flex items-center justify-center border border-white/5">
 <svg className="text-gray-600" fill="none" height="32" stroke="currentColor" strokeWidth="1" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg">
@@ -485,7 +527,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex flex-col gap-4">
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1113.5px', -MouseY: '4659.375px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1113.5px', '--mouse-y': '4659.375px'}}>
 <div className="spotlight-inner rounded-3xl p-8 grid md:grid-cols-2 gap-8 items-center">
 <div>
 <h3 className="text-xl font-medium text-white mb-3">
@@ -509,7 +551,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1113.5px', -MouseY: '4352.9375px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1113.5px', '--mouse-y': '4352.9375px'}}>
 <div className="spotlight-inner rounded-3xl p-8 grid md:grid-cols-2 gap-8 items-center">
 <div>
 <h3 className="text-xl font-medium text-white mb-3">
@@ -533,7 +575,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1113.5px', -MouseY: '4046.5px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1113.5px', '--mouse-y': '4046.5px'}}>
 <div className="spotlight-inner rounded-3xl p-8 grid md:grid-cols-2 gap-8 items-center">
 <div>
 <h3 className="text-xl font-medium text-white mb-3">
@@ -556,7 +598,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1113.5px', -MouseY: '3740.0625px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1113.5px', '--mouse-y': '3740.0625px'}}>
 <div className="spotlight-inner rounded-3xl p-8 grid md:grid-cols-2 gap-8 items-center">
 <div>
 <h3 className="text-xl font-medium text-white mb-3">
@@ -579,7 +621,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card rounded-3xl p-[1px]" style={{-MouseX: '1113.5px', -MouseY: '3433.625px'}}>
+<div className="spotlight-card rounded-3xl p-[1px]" style={{'--mouse-x': '1113.5px', '--mouse-y': '3433.625px'}}>
 <div className="spotlight-inner rounded-3xl p-8 grid md:grid-cols-2 gap-8 items-center">
 <div>
 <h3 className="text-xl font-medium text-white mb-3">
@@ -618,7 +660,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <section className="py-24 px-6 relative">
-<div className="max-w-7xl mx-auto rounded-[40px] overflow-hidden spotlight-card p-[1px]" style={{-MouseX: '1305.5px', -MouseY: '2951.1875px'}}>
+<div className="max-w-7xl mx-auto rounded-[40px] overflow-hidden spotlight-card p-[1px]" style={{'--mouse-x': '1305.5px', '--mouse-y': '2951.1875px'}}>
 <div className="spotlight-inner rounded-[40px] bg-[#0F0F0F] relative overflow-hidden">
 
 <div className="absolute inset-0 bg-gradient-to-b from-orange-900/10 to-transparent pointer-events-none"></div>

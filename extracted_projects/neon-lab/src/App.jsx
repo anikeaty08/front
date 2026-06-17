@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -256,6 +292,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1389,7 +1431,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <input className="w-full rounded-full bg-white/5 text-white placeholder-white/50 px-4 py-3 text-sm ring-1 ring-white/10 focus:ring-2 focus:ring-[#7377F6]/30 outline-none" id="nl-email" placeholder="Your email" required="" type="email"/>
 </div>
 <button className="inline-flex hover:-translate-y-0.5 transition will-change-transform bg-gradient-to-r from-[#2A2DFE] via-[#4338CA] to-[#7C3AED] rounded-full px-[2px] py-[2px] relative shadow-[0_0_48px_rgba(67,56,202,0.45)] items-center" type="submit">
-<span className="z-0 inline-flex items-center justify-between gap-4 leading-[1] text-lg font-semibold text-white tracking-tight rounded-full pt-3.5 pr-6 pb-3.5 pl-6 relative" style={{background: 'linear-gradient(90deg,#2A2DFE 0%, #4338CA 50%, #7C3AED 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.25)'}}>
+<span className="z-0 inline-flex items-center justify-between gap-4 leading-[1] text-lg font-semibold text-white tracking-tight rounded-full pt-3.5 pr-6 pb-3.5 pl-6 relative" style={{background: 'linear-gradient(90deg, #2A2DFE 0%, #4338CA 50%, #7C3AED 100%)', boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0,0,0,0.25)'}}>
 <span className="pointer-events-none absolute inset-0 rounded-full" style={{background: 'radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0) 60%)', mixBlend: 'screen'}}></span>
 <span className="z-10 relative">Subscribe</span>
 <span className="z-10 inline-flex items-center justify-center bg-white/10 w-8 h-8 ring-white/10 ring-1 rounded-xl relative">

@@ -17,7 +17,7 @@ export default function App() {
       <div 
         className="hidden md:flex absolute top-0 left-0 right-0 h-[100vh] z-0 pointer-events-none overflow-hidden opacity-50 dither-bg" 
         aria-hidden="true" 
-        style={{ bottom: 'auto' }}
+        style={{bottom: 'auto'}}
       ></div>
 
       {/* Reusable Vertical Container Lines Macro */}
@@ -61,27 +61,27 @@ export default function App() {
           
           <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-medium tracking-tighter leading-none mb-12 flex justify-center flex-wrap gap-x-4 md:gap-x-8">
             <span className="flex">
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.1s' }}>E</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.15s' }}>n</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.2s' }}>g</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.25s' }}>i</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.3s' }}>n</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.35s' }}>e</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.4s' }}>e</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.45s' }}>r</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.5s' }}>e</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.55s' }}>d</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.1s'}}>E</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.15s'}}>n</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.2s'}}>g</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.25s'}}>i</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.3s'}}>n</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.35s'}}>e</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.4s'}}>e</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.45s'}}>r</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.5s'}}>e</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.55s'}}>d</span></span>
             </span>
             <span className="flex text-black/30">
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.6s' }}>f</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.65s' }}>o</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.7s' }}>r</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.6s'}}>f</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.65s'}}>o</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.7s'}}>r</span></span>
             </span>
             <span className="flex">
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.75s' }}>R</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.8s' }}>e</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.85s' }}>s</span></span>
-              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{ animationDelay: '0.9s' }}>t</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.75s'}}>R</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.8s'}}>e</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.85s'}}>s</span></span>
+              <span className="clip-text-container"><span className="animate-letter font-jakarta font-light" style={{animationDelay: '0.9s'}}>t</span></span>
             </span>
           </h1>
 
@@ -90,7 +90,7 @@ export default function App() {
               src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/687d701a-8748-4856-8c62-5627d113ee3e_1600w.webp" 
               alt="Sculptural Modern Chair" 
               className="w-full max-w-4xl object-contain h-[70vh] mix-blend-multiply" 
-              style={{ maskImage: 'linear-gradient(black 70%, transparent 100%)', WebkitMaskImage: 'linear-gradient(black 70%, transparent 100%)' }} 
+              style={{maskImage: 'linear-gradient(black 70%, transparent 100%)', WebkitMaskImage: 'linear-gradient(black 70%, transparent 100%)'}} 
             />
           </div>
 
@@ -182,7 +182,7 @@ export default function App() {
               </p>
               <div className="relative inline-flex text-[#C48C56] mt-4">
                 <iconify-icon icon="solar:asterisk-bold-duotone" className="text-3xl"></iconify-icon>
-                <div className="sonar-ring" style={{ animationDelay: '1s' }}></div>
+                <div className="sonar-ring" style={{animationDelay: '1s'}}></div>
               </div>
             </div>
 

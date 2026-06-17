@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -196,6 +232,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -207,9 +249,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex items-center gap-3">
 <div className="h-9 w-9 rounded-md bg-gradient-to-br from-fuchsia-500 via-purple-500 to-cyan-400 flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.35)]">
-<span className="text-white text-lg tracking-tight" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>NX</span>
+<span className="text-white text-lg tracking-tight" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>NX</span>
 </div>
-<span className="text-slate-100 text-lg tracking-tight hidden sm:block" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>NEONX Store</span>
+<span className="text-slate-100 text-lg tracking-tight hidden sm:block" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>NEONX Store</span>
 </div>
 
 <div className="hidden md:flex items-center gap-6">
@@ -224,7 +266,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-4 h-4 text-slate-400 ml-3" data-lucide="search"></i>
 <input className="bg-transparent placeholder:text-slate-500 px-3 py-2.5 text-sm text-slate-100 focus:outline-none" placeholder="Search games" type="text"/>
 </div>
-<button className="px-3 py-2 rounded-md text-sm bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors" id="open-login" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>Login</button>
+<button className="px-3 py-2 rounded-md text-sm bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors" id="open-login" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>Login</button>
 <button className="relative p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors" id="cart-btn">
 <i className="w-5 h-5 text-slate-200" data-lucide="shopping-cart"></i>
 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-fuchsia-500 text-[10px] leading-[18px] text-white text-center shadow-[0_0_18px_rgba(217,70,239,0.65)]" id="cart-badge">0</span>
@@ -248,34 +290,34 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]"></span>
           Featured Drop
         </div>
-<h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white drop-shadow-[0_0_30px_rgba(168,85,247,0.25)]" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>
+<h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white drop-shadow-[0_0_30px_rgba(168,85,247,0.25)]" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>
           Enter The Neon Frontier
         </h1>
 <p className="mt-4 text-slate-300/90 text-base sm:text-lg max-w-xl">
           Experience next‑gen action with hyper‑real visuals, adaptive AI, and a synthwave-fueled universe. Pre-order now for exclusive skins and early access.
         </p>
 <div className="mt-8 flex items-center gap-4">
-<a className="group relative inline-flex items-center gap-3 rounded-lg px-5 py-3 text-slate-900 transition-transform will-change-transform hover:-translate-y-0.5" href="#" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '600', background: 'linear-gradient(135deg,#f0abfc, #a78bfa 40%, #22d3ee 100%)', boxShadow: '0 0 40px rgba(168,85,247,0.45)'}}>
+<a className="group relative inline-flex items-center gap-3 rounded-lg px-5 py-3 text-slate-900 transition-transform will-change-transform hover:-translate-y-0.5" href="#" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '600', background: 'linear-gradient(135deg, #f0abfc, #a78bfa 40%, #22d3ee 100%)', boxShadow: '0 0 40px rgba(168,85,247,0.45)'}}>
 <span className="absolute inset-0 rounded-lg ring-2 ring-fuchsia-400/50 group-hover:ring-cyan-300/70 transition-all"></span>
 <i className="w-5 h-5 text-slate-900" data-lucide="play-circle"></i>
             Play Trailer
           </a>
-<button className="px-5 py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white transition-colors" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>
+<button className="px-5 py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white transition-colors" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>
             Add to Wishlist
           </button>
 </div>
 
 <div className="mt-10 grid grid-cols-3 max-w-md gap-6 text-center">
 <div className="bg-white/5 border border-white/10 rounded-lg p-4 backdrop-blur reveal">
-<div className="text-2xl text-white tracking-tight" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>120+</div>
+<div className="text-2xl text-white tracking-tight" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>120+</div>
 <div className="text-xs text-slate-400">New Releases</div>
 </div>
 <div className="bg-white/5 border border-white/10 rounded-lg p-4 backdrop-blur reveal">
-<div className="text-2xl text-white tracking-tight" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>4K</div>
+<div className="text-2xl text-white tracking-tight" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>4K</div>
 <div className="text-xs text-slate-400">Ultra Assets</div>
 </div>
 <div className="bg-white/5 border border-white/10 rounded-lg p-4 backdrop-blur reveal">
-<div className="text-2xl text-white tracking-tight" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>HDR</div>
+<div className="text-2xl text-white tracking-tight" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>HDR</div>
 <div className="text-xs text-slate-400">Cinematic</div>
 </div>
 </div>
@@ -289,10 +331,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute bottom-0 left-0 right-0 p-5">
 <div className="flex items-center justify-between">
 <div>
-<h3 className="text-xl tracking-tight text-white" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>NEON FRONTIER</h3>
+<h3 className="text-xl tracking-tight text-white" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>NEON FRONTIER</h3>
 <p className="text-sm text-slate-300/80">Action • Sci‑Fi • Open World</p>
 </div>
-<button className="px-4 py-2 rounded-md bg-fuchsia-500/90 hover:bg-fuchsia-400 text-white transition-colors border border-fuchsia-300/30" data-add="featured" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>
+<button className="px-4 py-2 rounded-md bg-fuchsia-500/90 hover:bg-fuchsia-400 text-white transition-colors border border-fuchsia-300/30" data-add="featured" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>
                   $69.99
                 </button>
 </div>
@@ -306,7 +348,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-4">
 <div className="flex items-end justify-between">
-<h2 className="text-2xl sm:text-3xl tracking-tight text-white" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>New Releases</h2>
+<h2 className="text-2xl sm:text-3xl tracking-tight text-white" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>New Releases</h2>
 <div className="flex gap-2">
 <button className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors" id="carousel-prev"><i className="w-5 h-5 text-slate-200" data-lucide="chevron-left"></i></button>
 <button className="p-2 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-colors" id="carousel-next"><i className="w-5 h-5 text-slate-200" data-lucide="chevron-right"></i></button>
@@ -324,7 +366,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-3">
 <div className="flex items-center justify-between">
-<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\',sans-serif'}}>Cyber Racer</p>
+<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\', sans-serif'}}>Cyber Racer</p>
 <span className="text-sm text-sky-300">$39.99</span>
 </div>
 <button className="mt-2 w-full py-2 text-sm rounded-md bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors" data-add="">Add to cart</button>
@@ -337,7 +379,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-3">
 <div className="flex items-center justify-between">
-<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\',sans-serif'}}>Arc Mage</p>
+<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\', sans-serif'}}>Arc Mage</p>
 <span className="text-sm text-sky-300">$59.99</span>
 </div>
 <button className="mt-2 w-full py-2 text-sm rounded-md bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors" data-add="">Add to cart</button>
@@ -350,7 +392,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-3">
 <div className="flex items-center justify-between">
-<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\',sans-serif'}}>Void Tactics</p>
+<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\', sans-serif'}}>Void Tactics</p>
 <span className="text-sm text-sky-300">$29.99</span>
 </div>
 <button className="mt-2 w-full py-2 text-sm rounded-md bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors" data-add="">Add to cart</button>
@@ -363,7 +405,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-3">
 <div className="flex items-center justify-between">
-<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\',sans-serif'}}>Indie Bloom</p>
+<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\', sans-serif'}}>Indie Bloom</p>
 <span className="text-sm text-sky-300">$14.99</span>
 </div>
 <button className="mt-2 w-full py-2 text-sm rounded-md bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors" data-add="">Add to cart</button>
@@ -376,7 +418,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-3">
 <div className="flex items-center justify-between">
-<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\',sans-serif'}}>Mecha Assault</p>
+<p className="text-sm text-white tracking-tight" style={{fontWeight: '600', fontFamily: '\'Manrope\', sans-serif'}}>Mecha Assault</p>
 <span className="text-sm text-sky-300">$49.99</span>
 </div>
 <button className="mt-2 w-full py-2 text-sm rounded-md bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors" data-add="">Add to cart</button>
@@ -390,16 +432,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
 <div className="flex items-center justify-between">
-<h2 className="text-2xl sm:text-3xl tracking-tight text-white" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>Explore by Genre</h2>
+<h2 className="text-2xl sm:text-3xl tracking-tight text-white" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>Explore by Genre</h2>
 </div>
 <div className="relative mt-4 bg-white/5 border border-white/10 rounded-xl p-2">
 <div className="relative flex flex-wrap gap-2" id="genre-tabs">
-<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/10 border border-white/10 text-white hover:bg-white/15 transition-colors" data-genre="all" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>All</button>
-<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="action" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>Action</button>
-<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="rpg" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>RPG</button>
-<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="indie" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>Indie</button>
-<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="racing" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>Racing</button>
-<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="strategy" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '500'}}>Strategy</button>
+<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/10 border border-white/10 text-white hover:bg-white/15 transition-colors" data-genre="all" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>All</button>
+<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="action" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>Action</button>
+<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="rpg" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>RPG</button>
+<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="indie" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>Indie</button>
+<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="racing" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>Racing</button>
+<button className="genre-pill px-3 py-1.5 rounded-md text-sm bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-colors" data-genre="strategy" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '500'}}>Strategy</button>
 
 <span className="absolute h-8 rounded-md -z-10 transition-all duration-300" id="tab-underline" style={{boxShadow: '0 0 28px rgba(168,85,247,0.35), inset 0 0 0 1px rgba(255,255,255,0.08)', background: 'linear-gradient(135deg,rgba(240,171,252,0.15),rgba(167,139,250,0.15))'}}></span>
 </div>
@@ -417,7 +459,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Night Runner</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Night Runner</h3>
 <span className="text-sky-300">$49.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Fast-paced urban battles under neon skies.</p>
@@ -430,7 +472,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500 group-[.flipped]:opacity-100 bg-black/70 backdrop-blur-md p-4">
 <div className="h-full flex flex-col justify-between">
 <div>
-<h4 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Night Runner</h4>
+<h4 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Night Runner</h4>
 <p className="text-sm text-slate-300 mt-2">Parkour combat, reactive AI, dynamic soundtrack. Supports 120 FPS.</p>
 </div>
 <div className="flex gap-2">
@@ -448,7 +490,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Elder Realms</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Elder Realms</h3>
 <span className="text-sky-300">$59.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Forge destinies in a living fantasy world.</p>
@@ -465,7 +507,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Pixel Harbor</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Pixel Harbor</h3>
 <span className="text-sky-300">$12.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Cozy exploration with relaxing synth vibes.</p>
@@ -482,7 +524,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Neon Drift</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Neon Drift</h3>
 <span className="text-sky-300">$34.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Street circuits lit by radiant holograms.</p>
@@ -499,7 +541,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Star Forge</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Star Forge</h3>
 <span className="text-sky-300">$27.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Command fleets with tactical precision.</p>
@@ -516,7 +558,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Shadow Ops</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Shadow Ops</h3>
 <span className="text-sky-300">$44.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Stealth meets high-octane firefights.</p>
@@ -533,7 +575,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Mythborne</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Mythborne</h3>
 <span className="text-sky-300">$54.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Epic questlines and branching narratives.</p>
@@ -550,7 +592,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Solar Seeds</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Solar Seeds</h3>
 <span className="text-sky-300">$9.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Chill farming meets astro exploration.</p>
@@ -567,7 +609,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4">
 <div className="flex items-center justify-between">
-<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\',sans-serif', fontWeight: '600'}}>Hex Dominion</h3>
+<h3 className="text-white tracking-tight" style={{fontFamily: '\'Manrope\', sans-serif', fontWeight: '600'}}>Hex Dominion</h3>
 <span className="text-sky-300">$24.99</span>
 </div>
 <p className="text-sm text-slate-400 mt-1">Hex-based warfare with roguelite depth.</p>
@@ -585,7 +627,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
 <div className="flex items-center gap-3">
 <div className="h-8 w-8 rounded-md bg-gradient-to-br from-fuchsia-500 via-purple-500 to-cyan-400 flex items-center justify-center">
-<span className="text-white text-sm tracking-tight" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>NX</span>
+<span className="text-white text-sm tracking-tight" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>NX</span>
 </div>
 <p className="text-sm text-slate-400">© 2025 NEONX. All rights reserved.</p>
 </div>
@@ -606,7 +648,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative mx-auto max-w-md w-full mt-24 p-6">
 <div className="rounded-xl bg-white/5 border border-white/10 shadow-[0_0_60px_rgba(168,85,247,0.25)]">
 <div className="p-4 border-b border-white/10 flex items-center justify-between">
-<h3 className="text-lg tracking-tight text-white" style={{fontFamily: '\'Orbitron\',sans-serif', fontWeight: '600'}}>Welcome Back</h3>
+<h3 className="text-lg tracking-tight text-white" style={{fontFamily: '\'Orbitron\', sans-serif', fontWeight: '600'}}>Welcome Back</h3>
 <button className="p-2 rounded-md hover:bg-white/10 transition-colors" id="close-login">
 <i className="w-4 h-4 text-slate-300" data-lucide="x"></i>
 </button>
@@ -625,7 +667,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-4 h-4 text-slate-400" data-lucide="lock"></i>
 <input className="flex-1 bg-transparent py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none" placeholder="Password" type="password"/>
 </div>
-<button className="w-full py-3 rounded-lg text-slate-900" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '600', background: 'linear-gradient(135deg,#f0abfc, #a78bfa 40%, #22d3ee 100%)', boxShadow: '0 0 30px rgba(168,85,247,0.35)'}} type="submit">
+<button className="w-full py-3 rounded-lg text-slate-900" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '600', background: 'linear-gradient(135deg, #f0abfc, #a78bfa 40%, #22d3ee 100%)', boxShadow: '0 0 30px rgba(168,85,247,0.35)'}} type="submit">
               Continue
             </button>
 </form>
@@ -642,7 +684,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="w-4 h-4 text-slate-400" data-lucide="lock"></i>
 <input className="flex-1 bg-transparent py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none" placeholder="Password" type="password"/>
 </div>
-<button className="w-full py-3 rounded-lg text-slate-900" style={{fontFamily: '\'Poppins\',sans-serif', fontWeight: '600', background: 'linear-gradient(135deg,#f0abfc, #a78bfa 40%, #22d3ee 100%)', boxShadow: '0 0 30px rgba(168,85,247,0.35)'}} type="submit">
+<button className="w-full py-3 rounded-lg text-slate-900" style={{fontFamily: '\'Poppins\', sans-serif', fontWeight: '600', background: 'linear-gradient(135deg, #f0abfc, #a78bfa 40%, #22d3ee 100%)', boxShadow: '0 0 30px rgba(168,85,247,0.35)'}} type="submit">
               Create Account
             </button>
 </form>

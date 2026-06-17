@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -64,6 +100,12 @@ beam: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -253,7 +295,7 @@ beam: {
 
 <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="col-span-1 md:col-span-2 row-span-2 rounded-xl bg-neutral-900 border border-white/5 p-8 relative overflow-hidden group spotlight-card" style={{-MouseX: '985px', -MouseY: '-1836.75px'}}>
+<div className="col-span-1 md:col-span-2 row-span-2 rounded-xl bg-neutral-900 border border-white/5 p-8 relative overflow-hidden group spotlight-card" style={{'--mouse-x': '985px', '--mouse-y': '-1836.75px'}}>
 <div className="relative z-10 h-full flex flex-col">
 <div className="w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-white">
 <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:bot" data-strokeWidth="1.5" data-width="24" height="24" role="img" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2m16 0h2m-7-1v2m-6-2v2"></path></g></svg>
@@ -283,7 +325,7 @@ beam: {
 </div>
 </div>
 
-<div className="col-span-1 rounded-xl bg-neutral-900 border border-white/5 p-6 relative overflow-hidden group spotlight-card" style={{-MouseX: '233.671875px', -MouseY: '-1836.75px'}}>
+<div className="col-span-1 rounded-xl bg-neutral-900 border border-white/5 p-6 relative overflow-hidden group spotlight-card" style={{'--mouse-x': '233.671875px', '--mouse-y': '-1836.75px'}}>
 <div className="relative z-10">
 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-white">
 <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:workflow" data-strokeWidth="1.5" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><rect height="8" rx="2" width="8" x="3" y="3"></rect><path d="M7 11v4a2 2 0 0 0 2 2h4"></path><rect height="8" rx="2" width="8" x="13" y="13"></rect></g></svg>
@@ -293,7 +335,7 @@ beam: {
 </div>
 </div>
 
-<div className="col-span-1 rounded-xl bg-neutral-900 border border-white/5 p-6 relative overflow-hidden group spotlight-card" style={{-MouseX: '233.671875px', -MouseY: '-2057.75px'}}>
+<div className="col-span-1 rounded-xl bg-neutral-900 border border-white/5 p-6 relative overflow-hidden group spotlight-card" style={{'--mouse-x': '233.671875px', '--mouse-y': '-2057.75px'}}>
 <div className="relative z-10">
 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-white">
 <svg aria-hidden="true" className="iconify iconify--lucide" data-icon="lucide:plug-zap" data-strokeWidth="1.5" data-width="20" height="20" role="img" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6l-2.3 2.3a2.4 2.4 0 0 0 0 3.4ZM2 22l3-3m2.5-5.5L10 11m.5 5.5L13 14m5-11l-4 4h6l-4 4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
@@ -303,7 +345,7 @@ beam: {
 </div>
 </div>
 
-<div className="col-span-1 md:col-span-3 rounded-xl bg-neutral-900 border border-white/5 p-8 relative overflow-hidden group spotlight-card flex flex-col md:flex-row items-center gap-8" style={{-MouseX: '985px', -MouseY: '-2298.75px'}}>
+<div className="col-span-1 md:col-span-3 rounded-xl bg-neutral-900 border border-white/5 p-8 relative overflow-hidden group spotlight-card flex flex-col md:flex-row items-center gap-8" style={{'--mouse-x': '985px', '--mouse-y': '-2298.75px'}}>
 <div className="relative z-10 md:w-1/2">
 <h3 className="text-xl font-semibold text-white mb-2">Custom Builds</h3>
 <p className="text-sm text-gray-400 mb-4">If it's slowing you down, we can automate it. From bespoke internal tools to complex data pipelines.</p>

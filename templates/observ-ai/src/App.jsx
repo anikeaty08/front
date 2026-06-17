@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -76,7 +118,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col mb-10 gap-x-4 gap-y-4 items-start">
 <div className="inline-flex items-center gap-3">
 </div>
-<div className="inline-flex text-[11px] text-neutral-200 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-4 py-1.5 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex text-[11px] text-neutral-200 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-4 py-1.5 backdrop-blur-sm gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.85)]"></div>
 <span className="uppercase tracking-[0.22em] text-neutral-400">Live</span>
 <span className="h-3 w-px bg-neutral-800"></span>
@@ -95,11 +137,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="mt-10 flex flex-col sm:flex-row items-start gap-4">
-<button className="inline-flex text-[15px] hover:bg-amber-200 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 font-medium text-neutral-950 bg-amber-300 rounded-full pt-3.5 pr-7 pb-3.5 pl-7 shadow-[0_20px_45px_rgba(251,191,36,0.7)] gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="button">
+<button className="inline-flex text-[15px] hover:bg-amber-200 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 font-medium text-neutral-950 bg-amber-300 rounded-full pt-3.5 pr-7 pb-3.5 pl-7 shadow-[0_20px_45px_rgba(251,191,36,0.7)] gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="button">
 <svg className="lucide w-[20px] h-[20px]" data-icon-replaced="true" data-icon-set="solar" data-solar="calendar-bold-duotone" fill="none" height="20" stroke="currentColor" strokeWidth="2" style={{color: 'rgb(10, 10, 10)', width: '20px', height: '20px'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M6.94 2c.416 0 .753.324.753.724v1.46c.668-.012 1.417-.012 2.26-.012h4.015c.842 0 1.591 0 2.259.013v-1.46c0-.4.337-.725.753-.725s.753.324.753.724V4.25c1.445.111 2.394.384 3.09 1.055c.698.67.982 1.582 1.097 2.972L22 9H2v-.724c.116-1.39.4-2.302 1.097-2.972s1.645-.944 3.09-1.055V2.724c0-.4.337-.724.753-.724" fill="#0a0a0a"></path><path d="M22 14v-2c0-.839-.004-2.335-.017-3H2.01c-.013.665-.01 2.161-.01 3v2c0 3.771 0 5.657 1.172 6.828S6.228 22 10 22h4c3.77 0 5.656 0 6.828-1.172S22 17.772 22 14" fill="#0a0a0a" opacity=".5"></path><path d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0" fill="#0a0a0a"></path></svg>
 <span className="">Book a 20‑minute demo</span>
 </button>
-<button className="inline-flex text-[15px] hover:bg-neutral-900 hover:border-neutral-500 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-100 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-6 py-3 gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="button">
+<button className="inline-flex text-[15px] hover:bg-neutral-900 hover:border-neutral-500 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-100 bg-gradient-to-br from-white/10 to-white/0 rounded-full px-6 py-3 gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="button">
 <svg className="lucide w-[16px] h-[16px]" data-icon-replaced="true" data-icon-set="solar" data-solar="check-circle-bold-duotone" fill="none" height="16" stroke="currentColor" strokeWidth="2" style={{color: 'rgb(245, 245, 245)', width: '16px', height: '16px'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10" fill="#f5f5f5" opacity=".5"></path><path d="M16.03 8.97a.75.75 0 0 1 0 1.06l-5 5a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 1 1 1.06-1.06l1.47 1.47l2.235-2.235L14.97 8.97a.75.75 0 0 1 1.06 0" fill="#f5f5f5"></path></svg>
 <span className="">Start free trial</span>
 </button>
@@ -154,7 +196,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Finance leader" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3691aee0-4fca-4e6a-8972-df1f5a6373ad_800w.webp"/>
 </div>
 
-<div className="flex flex-col bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-3xl pt-6 pr-5 pb-6 pl-5 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-3xl pt-6 pr-5 pb-6 pl-5 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="space-y-3">
 <div className="flex items-center justify-between text-[11px] text-neutral-300">
 <span className="uppercase tracking-[0.22em] text-amber-200">
@@ -194,7 +236,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="col-span-2 flex flex-col sm:flex-row sm:items-center bg-gradient-to-br from-white/5 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-6 gap-y-6 items-start justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="col-span-2 flex flex-col sm:flex-row sm:items-center bg-gradient-to-br from-white/5 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-6 gap-y-6 items-start justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4">
 <div className="flex flex-none bg-amber-300 w-11 h-11 rounded-3xl shadow-[0_0_0_1px_rgba(250,204,21,0.4)] items-center justify-center">
 <svg className="lucide text-neutral-950 w-[20px] h-[20px]" data-icon-replaced="true" data-icon-set="solar" data-solar="play-bold-duotone" fill="none" height="20" stroke="currentColor" strokeWidth="2" style={{color: 'rgb(10, 10, 10)', width: '20px', height: '20px'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M23 12c0-1.035-.53-2.07-1.591-2.647L8.597 2.385C6.534 1.264 4 2.724 4 5.033V12z" fill="#0a0a0a" fill-rule="evenodd"></path><path d="m8.597 21.615l12.812-6.968A2.99 2.99 0 0 0 23 12H4v6.967c0 2.31 2.534 3.769 4.597 2.648" fill="#0a0a0a" opacity=".5"></path></svg>
@@ -260,7 +302,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     Company‑wide recurring spend, in one live view.
                   </h2>
 </div>
-<div className="inline-flex gap-2 text-[11px] text-neutral-300 bg-neutral-950 rounded-full pt-1.5 pr-4 pb-1.5 pl-4 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex gap-2 text-[11px] text-neutral-300 bg-neutral-950 rounded-full pt-1.5 pr-4 pb-1.5 pl-4 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
 <span className="uppercase tracking-[0.2em] text-neutral-400">
                     Last 30 days
@@ -269,7 +311,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-<div className="flex flex-col bg-emerald-500/5 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-emerald-500/5 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-[11px] uppercase tracking-[0.22em] text-emerald-300">
                     Total spend
                   </p>
@@ -281,21 +323,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>+8.4% vs last quarter</span>
 </div>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">
                     Active subscriptions
                   </p>
 <p className="mt-2 text-[20px] font-medium text-neutral-50">174</p>
 <p className="mt-2 text-[11px] text-neutral-400">18 flagged by AI</p>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">
                     Upcoming renewals
                   </p>
 <p className="mt-2 text-[20px] font-medium text-neutral-50">23</p>
 <p className="mt-2 text-[11px] text-amber-300/90">7 high‑impact</p>
 </div>
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-3.5 pr-4 pb-3.5 pl-4 justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">
                     Potential savings
                   </p>
@@ -304,7 +346,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bg-neutral-950 rounded-2xl mt-3 pt-5 pr-5 pb-5 pl-5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-neutral-950 rounded-2xl mt-3 pt-5 pr-5 pb-5 pl-5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center justify-between gap-3 mb-4">
 <div className="">
 <p className="text-[11px] uppercase tracking-[0.24em] text-neutral-500">
@@ -324,51 +366,51 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-12 gap-1.5 h-36 items-end">
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-10 rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-10 rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-4 rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-12 rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-12 rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-5 rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[54px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[54px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[18px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[62px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[62px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-6 rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-16 rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-16 rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[22px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[70px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[70px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[26px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[76px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[76px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[30px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[84px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[84px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[34px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[96px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[96px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[38px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[98px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[98px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[46px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[104px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[104px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[52px] rounded-md bg-emerald-500/25"></div>
 </div>
 <div className="flex flex-col justify-end gap-1">
-<div className="bg-gradient-to-br from-white/10 to-white/0 h-[108px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '6px'}}></div>
+<div className="bg-gradient-to-br from-white/10 to-white/0 h-[108px] rounded-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '6px'}}></div>
 <div className="h-[64px] rounded-md bg-emerald-500/25"></div>
 </div>
 </div>
@@ -385,7 +427,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[11px] uppercase tracking-[0.24em] text-neutral-500">
                     Upcoming renewals
                   </p>
-<button className="inline-flex text-[11px] hover:border-neutral-600 hover:bg-neutral-900 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-1.5 gap-y-1.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="button">
+<button className="inline-flex text-[11px] hover:border-neutral-600 hover:bg-neutral-900 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-300 bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-1.5 gap-y-1.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="button">
 <svg className="lucide h-3.5 w-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M21 6H3"></path>
 <path d="M10 12H3"></path>
@@ -400,7 +442,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex items-center justify-between gap-3 rounded-2xl border border-neutral-800 bg-neutral-950 px-3.5 py-3 hover:border-amber-300/70 hover:bg-neutral-900 transition">
 <div className="flex items-center gap-3">
-<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-9 h-9 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-9 h-9 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
                         ST
                       </div>
 <div className="">
@@ -420,7 +462,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[11px] text-amber-300 border border-amber-500/40">
                         High impact
                       </span>
-<button className="hidden sm:inline-flex hover:bg-neutral-900 hover:border-neutral-500 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-200 bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}} type="button">
+<button className="hidden sm:inline-flex hover:bg-neutral-900 hover:border-neutral-500 transition outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300/80 text-neutral-200 bg-gradient-to-br from-white/10 to-white/0 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}} type="button">
 <svg className="lucide h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M12 5v14"></path>
 <path d="M5 12h14"></path>
@@ -431,7 +473,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex items-center justify-between gap-3 rounded-2xl border border-neutral-800 bg-neutral-950 px-3.5 py-3 hover:border-amber-300/70 hover:bg-neutral-900 transition">
 <div className="flex items-center gap-3">
-<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-9 h-9 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-9 h-9 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
                         SL
                       </div>
 <div>
@@ -456,7 +498,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex items-center justify-between gap-3 rounded-2xl border border-neutral-800 bg-neutral-950 px-3.5 py-3 hover:border-amber-300/70 hover:bg-neutral-900 transition">
 <div className="flex items-center gap-3">
-<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-9 h-9 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-9 h-9 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
                         AD
                       </div>
 <div className="">
@@ -485,7 +527,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid md:grid-cols-2 gap-6">
 
-<div className="bg-gradient-to-br from-white/5 to-white/0 rounded-3xl px-5 py-5 shadow-2xl space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="bg-gradient-to-br from-white/5 to-white/0 rounded-3xl px-5 py-5 shadow-2xl space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between gap-3">
 <p className="text-[11px] uppercase tracking-[0.24em] text-neutral-500">
                   AI alerts
@@ -496,7 +538,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </span>
 </div>
 <div className="space-y-3 text-[13px]">
-<div className="bg-rose-500/5 rounded-2xl pt-3 pr-3.5 pb-3 pl-3.5 space-y-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-rose-500/5 rounded-2xl pt-3 pr-3.5 pb-3 pl-3.5 space-y-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center justify-between gap-2">
 <p className="text-[11px] uppercase tracking-[0.22em] text-rose-300">
                       Spike detected
@@ -517,7 +559,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </button>
 </div>
-<div className="bg-neutral-950 rounded-2xl pt-3 pr-3.5 pb-3 pl-3.5 space-y-1.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-neutral-950 rounded-2xl pt-3 pr-3.5 pb-3 pl-3.5 space-y-1.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">
                     Shadow tools
                   </p>
@@ -531,14 +573,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="bg-gradient-to-br from-white/5 to-white/0 rounded-3xl px-5 py-5 shadow-2xl space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="bg-gradient-to-br from-white/5 to-white/0 rounded-3xl px-5 py-5 shadow-2xl space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <p className="text-[11px] uppercase tracking-[0.24em] text-neutral-500">
                 Set up in under a week
               </p>
 <div className="space-y-3 text-[13px]">
 <div className="flex items-center justify-between gap-3 pb-3 border-b border-neutral-800">
 <div className="flex items-center gap-3">
-<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-8 h-8 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-8 h-8 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
                       FS
                     </div>
 <div className="">
@@ -550,7 +592,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center justify-between gap-3 pb-3 border-b border-neutral-800">
 <div className="flex items-center gap-3">
-<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-8 h-8 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-8 h-8 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
                       ID
                     </div>
 <div className="">
@@ -562,7 +604,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center justify-between gap-3">
 <div className="flex items-center gap-3">
-<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-8 h-8 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex text-[11px] font-medium text-neutral-200 bg-neutral-800 w-8 h-8 rounded-2xl items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
                       ML
                     </div>
 <div className="">
@@ -611,7 +653,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Dynamic finance dashboard" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/38df4875-7ce5-4138-a103-62a35135b438_800w.webp"/>
 <div className="bg-gradient-to-t from-neutral-950/80 via-neutral-950/0 to-transparent absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
-<button className="inline-flex gap-1.5 text-[11px] text-neutral-50 bg-neutral-900/70 rounded-full pt-1 pr-3 pb-1 pl-3 backdrop-blur gap-x-1.5 gap-y-1.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="inline-flex gap-1.5 text-[11px] text-neutral-50 bg-neutral-900/70 rounded-full pt-1 pr-3 pb-1 pl-3 backdrop-blur gap-x-1.5 gap-y-1.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="lucide h-3.5 w-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path d="M4 4h16v16H4z"></path>
 <path d="M9 4v16"></path>
@@ -619,7 +661,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 <span>Live controls</span>
 </button>
-<button className="inline-flex text-[11px] text-neutral-100 bg-white/10 rounded-full pt-1 pr-3 pb-1 pl-3 backdrop-blur gap-x-1.5 gap-y-1.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="inline-flex text-[11px] text-neutral-100 bg-white/10 rounded-full pt-1 pr-3 pb-1 pl-3 backdrop-blur gap-x-1.5 gap-y-1.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <span className="">Focus view</span>
 </button>
 </div>
@@ -636,7 +678,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <article className="flex flex-col bg-neutral-900 rounded-[1.75rem] overflow-hidden">
 <div className="sm:h-64 flex bg-neutral-950 h-60 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/099f3058-0cbd-498f-84e3-50a646ae50f5_800w.webp)] bg-cover bg-center relative items-center justify-center">
-<div className="flex flex-col bg-neutral-900 w-[78%] max-w-xs rounded-[2rem] pt-4 pr-3 pb-4 pl-3 shadow-[0_20px_60px_rgba(0,0,0,0.85)] gap-x-3 gap-y-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '2rem'}}>
+<div className="flex flex-col bg-neutral-900 w-[78%] max-w-xs rounded-[2rem] pt-4 pr-3 pb-4 pl-3 shadow-[0_20px_60px_rgba(0,0,0,0.85)] gap-x-3 gap-y-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '2rem'}}>
 <div className="flex items-center justify-between text-[10px] text-neutral-400">
 <span className="uppercase tracking-[0.22em]">Lock screen</span>
 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-300">
@@ -677,7 +719,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <img alt="Notification style interface" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/528dff93-f5f5-4795-b840-34fc7c42a778_800w.webp"/>
 <div className="bg-gradient-to-t from-neutral-950/85 via-neutral-950/40 to-transparent absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="absolute left-4 right-4 bottom-4">
-<div className="flex flex-col gap-2 text-[11px] text-neutral-50 bg-neutral-950/80 w-full rounded-2xl pt-3 pr-4 pb-3 pl-4 backdrop-blur gap-x-2 gap-y-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col gap-2 text-[11px] text-neutral-50 bg-neutral-950/80 w-full rounded-2xl pt-3 pr-4 pb-3 pl-4 backdrop-blur gap-x-2 gap-y-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-1.5">
 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
@@ -707,7 +749,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <article className="flex flex-col bg-neutral-900 rounded-[1.75rem] overflow-hidden">
 <div className="sm:h-64 flex bg-gradient-to-br from-sky-900 to-emerald-900 h-60 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5e8e210a-87b7-4974-914c-735c1240cb84_800w.webp)] bg-cover bg-center relative items-center justify-center">
-<div className="text-[11px] text-neutral-100 bg-neutral-950/80 w-[82%] max-w-xs rounded-[2rem] pt-5 pr-5 pb-5 pl-5 backdrop-blur space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '2rem'}}>
+<div className="text-[11px] text-neutral-100 bg-neutral-950/80 w-[82%] max-w-xs rounded-[2rem] pt-5 pr-5 pb-5 pl-5 backdrop-blur space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '2rem'}}>
 <div className="flex items-center justify-between">
 <span className="uppercase tracking-[0.2em] text-neutral-400">
                 Hold assist

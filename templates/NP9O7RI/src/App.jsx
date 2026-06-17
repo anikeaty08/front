@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -32,6 +68,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -42,7 +84,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <header className="absolute inset-x-0 top-0 z-20">
 <nav className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-<span className="text-2xl tracking-tight text-white" style={{fontFamily: '\'Permanent Marker\',cursive'}}>CC</span>
+<span className="text-2xl tracking-tight text-white" style={{fontFamily: '\'Permanent Marker\', cursive'}}>CC</span>
 <ul className="hidden md:flex space-x-8 text-sm font-medium">
 <li><a className="hover:text-white transition" href="#shows">Shows</a></li>
 <li><a className="hover:text-white transition" href="#about">About</a></li>
@@ -58,7 +100,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <video autoplay="" className="absolute inset-0 w-full h-full object-cover" loop="" muted="" playsinline="" src="https://cdn.coverr.co/videos/coverr-lights-turn-on-1440p.mp4"></video>
 <div className="absolute inset-0 bg-black/50 backdrop-brightness-50"></div>
 <div className="relative z-10 text-center space-y-6 px-6">
-<h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-white opacity-0 translate-y-8 transition duration-700 ease-out" data-animate="" style={{fontFamily: '\'Permanent Marker\',cursive'}}>
+<h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-white opacity-0 translate-y-8 transition duration-700 ease-out" data-animate="" style={{fontFamily: '\'Permanent Marker\', cursive'}}>
         Abandoned Realms<br/>Immersive Circus
       </h1>
 <p className="max-w-xl mx-auto text-gray-300 opacity-0 translate-y-8 transition duration-700 ease-out delay-150" data-animate="">
@@ -73,7 +115,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="relative py-24" id="shows">
 <div className="max-w-6xl mx-auto px-6">
-<h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-10 opacity-0 translate-y-8 transition duration-700 ease-out" data-animate="" style={{fontFamily: '\'Permanent Marker\',cursive'}}>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-10 opacity-0 translate-y-8 transition duration-700 ease-out" data-animate="" style={{fontFamily: '\'Permanent Marker\', cursive'}}>
         Upcoming Spectacles
       </h2>
 <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
@@ -81,7 +123,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <article className="group opacity-0 translate-y-8 transition duration-700 ease-out delay-100 bg-gray-800/60 rounded-lg overflow-hidden backdrop-blur-sm ring-1 ring-white/5 hover:ring-red-500/40" data-animate="">
 <img alt="" className="h-48 w-full object-cover transition group-hover:scale-105" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <div className="p-6 space-y-2">
-<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\',cursive'}}>The Lantern Factory</h3>
+<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\', cursive'}}>The Lantern Factory</h3>
 <p className="text-sm text-gray-400">July 28 · Detroit</p>
 <p className="text-sm leading-relaxed">An electric fusion of shadow play and high-wire duets beneath rusted steel beams.</p>
 </div>
@@ -90,7 +132,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <article className="group opacity-0 translate-y-8 transition duration-700 ease-out delay-200 bg-gray-800/60 rounded-lg overflow-hidden backdrop-blur-sm ring-1 ring-white/5 hover:ring-red-500/40" data-animate="">
 <img alt="" className="h-48 w-full object-cover transition group-hover:scale-105" src="https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&amp;fit=crop&amp;w=800&amp;q=60"/>
 <div className="p-6 space-y-2">
-<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\',cursive'}}>Cathedral of Rust</h3>
+<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\', cursive'}}>Cathedral of Rust</h3>
 <p className="text-sm text-gray-400">Aug 19 · Prague</p>
 <p className="text-sm leading-relaxed">A vertical labyrinth where silks meet stone, echoing with ethereal choral loops.</p>
 </div>
@@ -99,7 +141,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <article className="group opacity-0 translate-y-8 transition duration-700 ease-out delay-300 bg-gray-800/60 rounded-lg overflow-hidden backdrop-blur-sm ring-1 ring-white/5 hover:ring-red-500/40" data-animate="">
 <img alt="" className="h-48 w-full object-cover transition group-hover:scale-105" src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&amp;fit=crop&amp;w=800&amp;q=60"/>
 <div className="p-6 space-y-2">
-<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\',cursive'}}>Echo Vault</h3>
+<h3 className="text-xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\', cursive'}}>Echo Vault</h3>
 <p className="text-sm text-gray-400">Sep 09 · Lisbon</p>
 <p className="text-sm leading-relaxed">Site-specific aerial choreography spirals through dust-laden air in perfect silence.</p>
 </div>
@@ -115,7 +157,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="relative py-24" id="about">
 <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
 <div className="space-y-6 opacity-0 translate-y-8 transition duration-700 ease-out" data-animate="">
-<h2 className="text-3xl md:text-4xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\',cursive'}}>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight" style={{fontFamily: '\'Permanent Marker\', cursive'}}>
           Who We Are
         </h2>
 <p className="text-gray-300 leading-relaxed">
@@ -134,7 +176,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="relative py-32" id="join">
 <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
-<h2 className="text-4xl md:text-5xl font-semibold tracking-tight opacity-0 translate-y-8 transition duration-700 ease-out" data-animate="" style={{fontFamily: '\'Permanent Marker\',cursive'}}>
+<h2 className="text-4xl md:text-5xl font-semibold tracking-tight opacity-0 translate-y-8 transition duration-700 ease-out" data-animate="" style={{fontFamily: '\'Permanent Marker\', cursive'}}>
         Join the Spectacle
       </h2>
 <p className="max-w-2xl mx-auto text-gray-300 opacity-0 translate-y-8 transition duration-700 ease-out delay-150" data-animate="">

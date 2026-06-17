@@ -15,14 +15,14 @@ const Navigation = () => {
         </div>
         <div className="flex items-center gap-5">
           <button className="text-stone-600 hover:text-stone-900 transition-colors">
-            <iconify-icon icon="solar:magnifer-linear" width="20" height="20" style={{ strokeWidth: 1.5 }}></iconify-icon>
+            <iconify-icon icon="solar:magnifer-linear" width="20" height="20" style={{strokeWidth: 1.5}}></iconify-icon>
           </button>
           <button className="text-stone-600 hover:text-stone-900 transition-colors relative">
-            <iconify-icon icon="solar:bag-2-linear" width="20" height="20" style={{ strokeWidth: 1.5 }}></iconify-icon>
+            <iconify-icon icon="solar:bag-2-linear" width="20" height="20" style={{strokeWidth: 1.5}}></iconify-icon>
             <span className="absolute -top-1 -right-1 bg-stone-900 text-white text-[10px] w-3.5 h-3.5 flex items-center justify-center rounded-full font-geist">0</span>
           </button>
           <button className="md:hidden text-stone-600">
-            <iconify-icon icon="solar:hamburger-menu-linear" width="20" height="20" style={{ strokeWidth: 1.5 }}></iconify-icon>
+            <iconify-icon icon="solar:hamburger-menu-linear" width="20" height="20" style={{strokeWidth: 1.5}}></iconify-icon>
           </button>
         </div>
       </div>
@@ -40,8 +40,8 @@ const Hero = () => {
         </div>
 
         {/* Brand Watermark */}
-        <div aria-hidden="true" className="pointer-events-none select-none absolute bottom-6 left-6 animate-fadeIn animation-delay-600" style={{ letterSpacing: '-0.02em' }}>
-          <span className="block leading-none font-playfair font-medium" style={{ fontWeight: 600, fontSize: 'min(18vw, 240px)', lineHeight: 0.8, color: 'rgba(255, 255, 255, 0.05)' }}>ELVAINO</span>
+        <div aria-hidden="true" className="pointer-events-none select-none absolute bottom-6 left-6 animate-fadeIn animation-delay-600" style={{letterSpacing: '-0.02em'}}>
+          <span className="block leading-none font-playfair font-medium" style={{fontWeight: 600, fontSize: 'min(18vw, 240px)', lineHeight: 0.8, color: 'rgba(255, 255, 255, 0.05)'}}>ELVAINO</span>
         </div>
       </div>
 

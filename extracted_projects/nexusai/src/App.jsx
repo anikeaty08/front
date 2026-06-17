@@ -6,6 +6,42 @@ function GridCanvas() {
   const ref = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const canvas = ref.current;
     const ctx = canvas.getContext("2d", { alpha: false });
     let width, height, size, gap, cols, rows;
@@ -230,7 +266,7 @@ function Hero() {
     >
       <div
         className="mb-7 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md reveal in"
-        style={{ animationDelay: "0.05s" }}
+        style={{animationDelay: "0.05s"}}
       >
         <span className="w-1.5 h-1.5 rounded-full bg-white float" />
         <span className="mono text-[0.7rem] tracking-widest uppercase text-neutral-300">
@@ -240,7 +276,7 @@ function Hero() {
 
       <h1
         className="text-5xl md:text-7xl leading-[1.04] font-light tracking-tight text-white mb-6 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] reveal in"
-        style={{ animationDelay: "0.15s" }}
+        style={{animationDelay: "0.15s"}}
       >
         Decentralized processing,
         <br /> engineered for infinity.
@@ -248,7 +284,7 @@ function Hero() {
 
       <p
         className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto mb-10 font-extralight leading-relaxed reveal in"
-        style={{ animationDelay: "0.28s" }}
+        style={{animationDelay: "0.28s"}}
       >
         Launch borderless workloads across a hyper-resilient network. Nexus
         delivers edge-optimized execution with smart routing, instant wake-ups,
@@ -257,7 +293,7 @@ function Hero() {
 
       <div
         className="flex flex-col sm:flex-row items-center gap-4 reveal in"
-        style={{ animationDelay: "0.4s" }}
+        style={{animationDelay: "0.4s"}}
       >
         <a
           href="#"
@@ -279,7 +315,7 @@ function Hero() {
 
       <div
         className="mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 opacity-60 reveal in"
-        style={{ animationDelay: "0.55s" }}
+        style={{animationDelay: "0.55s"}}
       >
         {["typescript", "python", "rust", "go", "react"].map((b) => (
           <iconify-icon
@@ -345,7 +381,7 @@ function Features() {
           <div
             key={i}
             className="reveal group relative p-6 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/25 hover:bg-white/[0.04] transition-all duration-300 hover:-translate-y-1"
-            style={{ animationDelay: `${i * 0.07}s` }}
+            style={{animationDelay: `${i * 0.07}s`}}
           >
             <div className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-5 group-hover:bg-white group-hover:text-black transition-colors">
               <iconify-icon icon={f.icon} class="text-xl"></iconify-icon>
@@ -424,7 +460,7 @@ function Demo() {
           </div>
           <div className="p-5 mono text-[0.8rem] leading-relaxed min-h-[260px]">
             {codeLines.slice(0, visible).map((line, i) => (
-              <div key={i} className="mb-1.5" style={{ animation: "fadeIn .4s ease" }}>
+              <div key={i} className="mb-1.5" style={{animation: "fadeIn .4s ease"}}>
                 {line.t ? (
                   <span className="text-neutral-400">
                     {line.t}
@@ -473,7 +509,7 @@ function Testimonials() {
           <figure
             key={i}
             className="reveal p-7 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/25 transition-all duration-300 flex flex-col"
-            style={{ animationDelay: `${i * 0.1}s` }}
+            style={{animationDelay: `${i * 0.1}s`}}
           >
             <div className="flex gap-0.5 mb-5 text-white">
               {Array.from({ length: 5 }).map((_, s) => (

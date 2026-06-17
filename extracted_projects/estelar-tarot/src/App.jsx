@@ -5,6 +5,42 @@ import { testimonials, services, steps, faqs } from "./data.js";
 function useScrollY() {
   const [y, setY] = useState(0);
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     let raf = 0;
     const onScroll = () => {
       cancelAnimationFrame(raf);
@@ -39,7 +75,7 @@ function Reveal({ children, delay = 0, className = "" }) {
   return (
     <div
       ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={{transitionDelay: `${delay}ms`}}
       className={`reveal ${vis ? "reveal-in" : ""} ${className}`}
     >
       {children}
@@ -65,19 +101,14 @@ const StarField = memo(function StarField({ count = 40, parallax = 0 }) {
   return (
     <div
       className="absolute inset-0 overflow-hidden pointer-events-none"
-      style={{ transform: `translateY(${parallax}px)` }}
+      style={{transform: `translateY(${parallax}px)`}}
       aria-hidden="true"
     >
       {stars.map((s) => (
         <span
           key={s.id}
           className="absolute text-[#B8893E]"
-          style={{
-            left: `${s.left}%`,
-            top: `${s.top}%`,
-            fontSize: `${s.size}px`,
-            animation: `twinkle ${s.dur}s ease-in-out ${s.delay}s infinite`,
-          }}
+          style={{left: `${s.left}%`, top: `${s.top}%`, fontSize: `${s.size}px`, animation: `twinkle ${s.dur}s ease-in-out ${s.delay}s infinite`}}
         >
           {s.eight ? "✦" : "✧"}
         </span>
@@ -91,14 +122,14 @@ function Moon({ size = 200, parallax = 0 }) {
   return (
     <div
       className="moon-wrap"
-      style={{ transform: `translateY(${parallax}px)` }}
+      style={{transform: `translateY(${parallax}px)`}}
       aria-hidden="true"
     >
-      <div className="moon-halo" style={{ width: size * 1.6, height: size * 1.6 }} />
-      <div className="moon" style={{ width: size, height: size }} />
-      <span className="moon-spark" style={{ top: "-8%", right: "4%" }}>✦</span>
-      <span className="moon-spark" style={{ bottom: "2%", left: "-10%", animationDelay: "1.2s" }}>✧</span>
-      <span className="moon-spark" style={{ top: "30%", left: "-18%", animationDelay: "2s", fontSize: "0.8rem" }}>✦</span>
+      <div className="moon-halo" style={{width: size * 1.6, height: size * 1.6}} />
+      <div className="moon" style={{width: size, height: size}} />
+      <span className="moon-spark" style={{top: "-8%", right: "4%"}}>✦</span>
+      <span className="moon-spark" style={{bottom: "2%", left: "-10%", animationDelay: "1.2s"}}>✧</span>
+      <span className="moon-spark" style={{top: "30%", left: "-18%", animationDelay: "2s", fontSize: "0.8rem"}}>✦</span>
     </div>
   );
 }
@@ -143,7 +174,7 @@ function StarTrail() {
         <span
           key={p.id}
           className="trail-star"
-          style={{ left: p.x, top: p.y, fontSize: p.s }}
+          style={{left: p.x, top: p.y, fontSize: p.s}}
         >
           ✦
         </span>
@@ -489,7 +520,7 @@ function FAQ() {
                 </button>
                 <div
                   className="grid transition-all duration-500 ease-out"
-                  style={{ gridTemplateRows: open === i ? "1fr" : "0fr" }}
+                  style={{gridTemplateRows: open === i ? "1fr" : "0fr"}}
                 >
                   <div className="overflow-hidden">
                     <p className="px-5 pb-5 text-sm text-[#3B2A18]/65 leading-relaxed">{f.a}</p>

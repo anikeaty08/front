@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -143,6 +179,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1412,10 +1454,10 @@ gtag('config', 'G-2M6V79H761');
       </h2>
 </div>
 <div className="flex gap-3 gap-x-3 gap-y-3">
-<button className="transition-all flex bg-zinc-900 bg-gradient-to-b from-black/10 via-black/20 to-black/10 rounded-full shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] items-center justify-center w-12 h-12 hover:bg-zinc-800 hover:text-white" style={{boxShadow: '0 18px 35px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<button className="transition-all flex bg-zinc-900 bg-gradient-to-b from-black/10 via-black/20 to-black/10 rounded-full shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] items-center justify-center w-12 h-12 hover:bg-zinc-800 hover:text-white" style={{boxShadow: '0 18px 35px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
 <i className="w-5 h-5" data-lucide="chevron-left"></i>
 </button>
-<button className="transition-all flex bg-zinc-900 bg-gradient-to-b from-black/10 via-black/20 to-black/10 rounded-full shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] items-center justify-center w-12 h-12 hover:bg-zinc-800 hover:text-white" style={{boxShadow: '0 18px 35px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.2))', -BorderRadiusBefore: '9999px'}}>
+<button className="transition-all flex bg-zinc-900 bg-gradient-to-b from-black/10 via-black/20 to-black/10 rounded-full shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] items-center justify-center w-12 h-12 hover:bg-zinc-800 hover:text-white" style={{boxShadow: '0 18px 35px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.2))', '--border-radius-before': '9999px'}}>
 <i className="w-5 h-5" data-lucide="chevron-right"></i>
 </button>
 <style id="border-gradient-shared-style">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -100,13 +136,19 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 
-<section className="relative min-h-screen flex flex-col" style={{background: 'linear-gradient(to bottom right, rgba(64,64,65,0.78), rgba(64,64,65,0.78)), url(\'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1440&amp'}}>
+<section className="relative min-h-screen flex flex-col" style={{background: 'linear-gradient(to bottom right, rgba(64,64,65,0.78), rgba(64,64,65,0.78)), url(\'https: //images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1440&amp'}}>
 
 <nav className="flex items-center justify-between px-8 lg:px-28 py-5 relative z-10">
 <div className="text-white font-bold text-xl tracking-tighter" style={{fontFamily: '\'Kirvy\', sans-serif'}}>myt</div>
@@ -125,14 +167,14 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex-1 flex flex-col lg:flex-row items-start px-8 lg:px-28 pb-20 pt-10 gap-12">
 <div className="flex-1 max-w-2xl">
-<div className="hero-badge inline-flex items-center gap-2 rounded-full px-4 py-2 mb-8" style={{background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)'}}>
+<div className="hero-badge inline-flex items-center gap-2 rounded-full px-4 py-2 mb-8" style={{background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255,255,255,0.12)'}}>
 <span className="w-2 h-2 rounded-full" style={{backgroundColor: '#8CB846'}}></span>
 <span className="text-white/80 text-xs uppercase tracking-widest">Tour Operator Software</span>
 </div>
 <h1 className="hero-title text-5xl lg:text-6xl font-semibold text-white tracking-tight leading-none mb-1" style={{fontFamily: '\'Kirvy\', sans-serif'}}>Build Stunning</h1>
 <h1 className="hero-title-gradient text-5xl lg:text-6xl font-bold tracking-tight leading-none mb-1" style={{fontFamily: '\'Kirvy\', sans-serif', background: 'linear-gradient(to right, #cad6d9, #8BB4BE)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>Travel Itineraries</h1>
 <h1 className="hero-title text-5xl lg:text-6xl font-semibold text-white tracking-tight leading-none mb-6" style={{fontFamily: '\'Kirvy\', sans-serif'}}>in Minutes, Not Hours.</h1>
-<div className="hero-badge-inline inline-flex items-center gap-3 rounded-xl px-4 py-2.5 mb-6" style={{background: 'rgba(140,184,70,0.1)', border: '1px solid rgba(140,184,70,0.2)'}}>
+<div className="hero-badge-inline inline-flex items-center gap-3 rounded-xl px-4 py-2.5 mb-6" style={{background: 'rgba(140, 184, 70, 0.1)', border: '1px solid rgba(140,184,70,0.2)'}}>
 <span className="text-white/40 text-sm line-through">4 hours</span>
 <iconify-icon icon="solar:arrow-right-linear" style={{color: 'rgba(255,255,255,0.3)'}} width="14"></iconify-icon>
 <span className="text-sm font-semibold" style={{color: '#8CB846'}}>4 minutes</span>
@@ -145,7 +187,7 @@ gtag('config', 'G-2M6V79H761');
                         Book Your Demo
                         <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
 </a>
-<a className="inline-flex items-center gap-3 text-white text-sm font-medium rounded-xl px-8 py-4" href="#" style={{background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)'}}>
+<a className="inline-flex items-center gap-3 text-white text-sm font-medium rounded-xl px-8 py-4" href="#" style={{background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255,255,255,0.12)'}}>
 <span className="w-2 h-2 rounded-full" style={{backgroundColor: '#8CB846'}}></span>
                         Watch Dashboard Overview
                         <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
@@ -271,7 +313,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="py-28 px-8 lg:px-28" style={{background: 'rgba(240,245,247,0.5)'}}>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
 <div>
-<div className="evo-badge inline-flex items-center rounded-full px-3 py-1.5 mb-6" style={{background: 'rgba(139,180,190,0.12)', border: '1px solid rgba(139,180,190,0.25)'}}>
+<div className="evo-badge inline-flex items-center rounded-full px-3 py-1.5 mb-6" style={{background: 'rgba(139, 180, 190, 0.12)', border: '1px solid rgba(139,180,190,0.25)'}}>
 <span className="text-xs font-semibold uppercase tracking-widest" style={{color: '#6D9AA6'}}>The Evolution</span>
 </div>
 <h2 className="evo-title text-3xl lg:text-4xl font-bold tracking-tight mb-6" style={{fontFamily: '\'Kirvy\', sans-serif', color: '#404041'}}>The Evolution of Travel Itinerary Software</h2>
@@ -361,7 +403,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="py-28 px-8 lg:px-28 relative" style={{background: 'linear-gradient(135deg, rgba(26,35,50,0.92), rgba(42,58,74,0.8), rgba(58,74,90,0.7)), url(\'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1440&amp'}}>
+<section className="py-28 px-8 lg:px-28 relative" style={{background: 'linear-gradient(135deg, rgba(26,35,50,0.92), rgba(42,58,74,0.8), rgba(58,74,90,0.7)), url(\'https: //images.unsplash.com/photo-1469474968028-56623f02e42e?w=1440&amp'}}>
 <div className="text-center mb-12">
 <p className="section-label text-xs font-bold uppercase tracking-widest mb-4" style={{color: '#8BB4BE'}}>What Clients Say</p>
 <h2 className="section-title text-3xl lg:text-4xl font-bold text-white/95 tracking-tight mb-4" style={{fontFamily: '\'Kirvy\', sans-serif'}}>Cherished by Industry Leaders</h2>
@@ -449,9 +491,9 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 
-<section className="relative py-28 px-8 lg:px-28 text-center overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(139,180,190,0.92), rgba(109,154,166,0.85)), url(\'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1440&amp'}}>
+<section className="relative py-28 px-8 lg:px-28 text-center overflow-hidden" style={{background: 'linear-gradient(135deg, rgba(139,180,190,0.92), rgba(109,154,166,0.85)), url(\'https: //images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1440&amp'}}>
 <div className="relative z-10 max-w-3xl mx-auto">
-<div className="cta-badge inline-flex items-center gap-2 rounded-full px-4 py-2 mb-8" style={{background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)'}}>
+<div className="cta-badge inline-flex items-center gap-2 rounded-full px-4 py-2 mb-8" style={{background: 'rgba(255, 255, 255, 0.15)', border: '1px solid rgba(255,255,255,0.2)'}}>
 <iconify-icon icon="solar:rocket-2-linear" style={{color: 'rgba(255,255,255,0.8)'}} width="16"></iconify-icon>
 <span className="text-xs text-white/90 uppercase tracking-widest font-medium">Start Your Journey</span>
 </div>

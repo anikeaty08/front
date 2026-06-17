@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,17 +45,23 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<div className="relative w-[53vmin] h-[33vmin] bg-white/60 custom-shadow responsive-scale rounded-[2.2vmin] overflow-hidden flex items-center px-0 py-0" style={{boxShadow: '0 8px 40px 0 rgba(25,35,93,0.11),0 1.5px 5px 0 rgba(25,35,93,0.08)'}}>
+<div className="relative w-[53vmin] h-[33vmin] bg-white/60 custom-shadow responsive-scale rounded-[2.2vmin] overflow-hidden flex items-center px-0 py-0" style={{boxShadow: '0 8px 40px 0 rgba(25, 35, 93, 0.11), 0 1.5px 5px 0 rgba(25,35,93,0.08)'}}>
 
-<div className="absolute top-1/2 left-1/2 w-[34vmin] h-[25vmin] rounded-full mesh1 pointer-events-none" style={{background: 'linear-gradient(110deg,#6366f1 90%,transparent 100%)', filter: 'blur(3.2vmin)'}}></div>
-<div className="absolute top-1/2 left-1/2 w-[30vmin] h-[25vmin] rounded-full mesh2 pointer-events-none" style={{background: 'linear-gradient(80deg,#2563eb 85%,transparent 100%)', filter: 'blur(2.2vmin)'}}></div>
+<div className="absolute top-1/2 left-1/2 w-[34vmin] h-[25vmin] rounded-full mesh1 pointer-events-none" style={{background: 'linear-gradient(110deg, #6366f1 90%, transparent 100%)', filter: 'blur(3.2vmin)'}}></div>
+<div className="absolute top-1/2 left-1/2 w-[30vmin] h-[25vmin] rounded-full mesh2 pointer-events-none" style={{background: 'linear-gradient(80deg, #2563eb 85%, transparent 100%)', filter: 'blur(2.2vmin)'}}></div>
 <div className="absolute top-1/2 left-1/2 w-[26vmin] h-[18vmin] rounded-full bg-white mesh-overlay pointer-events-none mesh3" style={{filter: 'blur(1.7vmin)'}}></div>
-<div className="absolute top-1/2 left-1/2 w-[15vmin] h-[16vmin] rounded-full mesh4 pointer-events-none" style={{background: 'linear-gradient(95deg,#fb923c 80%,transparent 100%)', filter: 'blur(1.8vmin)'}}></div>
+<div className="absolute top-1/2 left-1/2 w-[15vmin] h-[16vmin] rounded-full mesh4 pointer-events-none" style={{background: 'linear-gradient(95deg, #fb923c 80%, transparent 100%)', filter: 'blur(1.8vmin)'}}></div>
 
 <div className="absolute top-[3.3vmin] left-[3.1vmin] flex flex-col items-center z-10">
 

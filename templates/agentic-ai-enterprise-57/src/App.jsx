@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -184,6 +220,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -214,7 +256,7 @@ addUtilities({
 
 <nav className="fixed top-0 w-full z-50 px-6 md:px-12 py-6 flex justify-between items-center backdrop-blur-sm border-b border-white/5">
 <div className="flex items-center gap-3 group cursor-none">
-<div className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-5 h-5 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', -BorderRadiusBefore: '8px'}}>
+<div className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-5 h-5 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', '--border-radius-before': '8px'}}>
 <iconify-icon className="text-white group-hover:text-orange-500 transition-colors" icon="solar:cpu-bolt-linear" width="14"></iconify-icon>
 </div>
 <span className="group-hover:text-white/90 text-lg font-bold text-white tracking-tight font-display">SYNAPSE</span>
@@ -537,7 +579,7 @@ addUtilities({
 <footer className="border-t border-white/5 bg-gray-950 py-12 px-6 relative z-10">
 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
 <div className="flex items-center gap-2">
-<div className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-4 h-4 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', -BorderRadiusBefore: '8px'}}>
+<div className="flex group-hover:border-orange-500/50 transition-colors duration-300 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-orange-400 to-orange-600 w-4 h-4 rounded-lg relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(251, 146, 60, 1), rgba(234, 88, 12, 1))', '--border-radius-before': '8px'}}>
 <iconify-icon className="text-white" icon="solar:cpu-bolt-linear" width="12"></iconify-icon>
 </div>
 <span className="font-bold text-white tracking-tight font-display text-sm">SYNAPSE</span>

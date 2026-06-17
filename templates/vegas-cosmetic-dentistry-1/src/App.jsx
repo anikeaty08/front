@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -38,19 +80,19 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 mb-16 py-8 border-y border-zinc-900/50">
 <div className="flex items-center justify-center gap-2.5">
-<iconify-icon className="text-gold" icon="solar:star-linear" style={{fontSize: '1.25rem', -IronStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-gold" icon="solar:star-linear" style={{fontSize: '1.25rem', '--iron-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-300 whitespace-nowrap">100+ Five-Star Reviews</span>
 </div>
 <div className="flex items-center justify-center gap-2.5 border-l border-zinc-900/50 md:border-l">
-<iconify-icon className="text-gold" icon="solar:medal-ribbons-star-linear" style={{fontSize: '1.25rem', -IronStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-gold" icon="solar:medal-ribbons-star-linear" style={{fontSize: '1.25rem', '--iron-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-300 whitespace-nowrap">7 Dentistry Awards</span>
 </div>
 <div className="flex items-center justify-center gap-2.5 border-t md:border-t-0 md:border-l border-zinc-900/50 pt-6 md:pt-0">
-<iconify-icon className="text-gold" icon="solar:emoji-funny-square-linear" style={{fontSize: '1.25rem', -IronStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-gold" icon="solar:emoji-funny-square-linear" style={{fontSize: '1.25rem', '--iron-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-300 whitespace-nowrap">1,000+ Happy Clients</span>
 </div>
 <div className="flex items-center justify-center gap-2.5 border-t md:border-t-0 md:border-l border-zinc-900/50 pt-6 md:pt-0">
-<iconify-icon className="text-gold" icon="solar:calendar-date-linear" style={{fontSize: '1.25rem', -IronStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-gold" icon="solar:calendar-date-linear" style={{fontSize: '1.25rem', '--iron-stroke-width': '1.5'}}></iconify-icon>
 <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-300 whitespace-nowrap">30+ Years Experience</span>
 </div>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -301,6 +337,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -760,7 +802,7 @@ ship faster</span>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-<div className="flashlight-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full" style={{-MouseX: '234px', -MouseY: '14.5px'}}>
+<div className="flashlight-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full" style={{'--mouse-x': '234px', '--mouse-y': '14.5px'}}>
 
 <div className="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden z-0">
 <div className="absolute inset-0" style={{background: 'radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.3), transparent 40%)'}}></div>
@@ -800,7 +842,7 @@ ship faster</span>
 </div>
 </div>
 
-<div className="flashlight-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full mt-0 lg:-mt-6 lg:mb-6" style={{-MouseX: '14.3359375px', -MouseY: '214.5px'}}>
+<div className="flashlight-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full mt-0 lg:-mt-6 lg:mb-6" style={{'--mouse-x': '14.3359375px', '--mouse-y': '214.5px'}}>
 
 <div className="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden z-0">
 <div className="absolute inset-0" style={{background: 'radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.3), transparent 40%)'}}></div>
@@ -854,7 +896,7 @@ ship faster</span>
 </div>
 </div>
 
-<div className="flashlight-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full" style={{-MouseX: '184.671875px', -MouseY: '185.5px'}}>
+<div className="flashlight-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full" style={{'--mouse-x': '184.671875px', '--mouse-y': '185.5px'}}>
 
 <div className="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden z-0">
 <div className="absolute inset-0" style={{background: 'radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.3), transparent 40%)'}}></div>
@@ -949,11 +991,11 @@ ship faster</span>
       </p>
 </div>
 
-<div className="relative w-full" id="chroma-grid-container" style={{-R: '300px', -X: '50%', -Y: '50%'}}>
+<div className="relative w-full" id="chroma-grid-container" style={{'--r': '300px', '--x': '50%', '--y': '50%'}}>
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 gap-x-6 gap-y-6 relative z-10">
 
-<div className="chroma-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full cursor-pointer" style={{-MouseX: '343px', -MouseY: '84px'}}>
+<div className="chroma-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full cursor-pointer" style={{'--mouse-x': '343px', '--mouse-y': '84px'}}>
 <div className="h-full rounded-[23px] bg-[rgba(15,15,15,0.95)] overflow-hidden relative shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.1),inset_0px_-2px_4px_0px_rgba(0,0,0,0.9)] flex flex-col p-[24px] backdrop-blur-[64px]">
 <img alt="GitHub Network" className="absolute inset-0 w-full h-full object-cover grayscale opacity-15 transition-transform duration-[15000ms] ease-out group-hover:scale-110 pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/be4d1bcf-7feb-4d86-bf4f-5ca227af720f_800w.jpg"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/80 to-transparent pointer-events-none"></div>
@@ -984,7 +1026,7 @@ ship faster</span>
 </div>
 </div>
 
-<div className="chroma-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full cursor-pointer" style={{-MouseX: '109.3359375px', -MouseY: '8px'}}>
+<div className="chroma-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full cursor-pointer" style={{'--mouse-x': '109.3359375px', '--mouse-y': '8px'}}>
 <div className="h-full rounded-[23px] bg-[rgba(15,15,15,0.95)] overflow-hidden relative shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.1),inset_0px_-2px_4px_0px_rgba(0,0,0,0.9)] flex flex-col p-[24px] backdrop-blur-[64px]">
 <img alt="Slack Network" className="absolute inset-0 w-full h-full object-cover grayscale opacity-15 transition-transform duration-[15000ms] ease-out group-hover:scale-110 pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/888350e7-324c-4318-a356-ff129608b385_800w.webp"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/80 to-transparent pointer-events-none"></div>
@@ -1014,7 +1056,7 @@ ship faster</span>
 </div>
 </div>
 
-<div className="chroma-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full cursor-pointer" style={{-MouseX: '101.671875px', -MouseY: '210px'}}>
+<div className="chroma-card p-[1px] rounded-[24px] bg-gradient-to-b from-white/10 via-white/5 to-transparent shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.8)] relative group h-full cursor-pointer" style={{'--mouse-x': '101.671875px', '--mouse-y': '210px'}}>
 <div className="h-full rounded-[23px] bg-[rgba(15,15,15,0.95)] overflow-hidden relative shadow-[inset_0px_1px_1px_0px_rgba(255,255,255,0.1),inset_0px_-2px_4px_0px_rgba(0,0,0,0.9)] flex flex-col p-[24px] backdrop-blur-[64px]">
 <img alt="Figma Design" className="absolute inset-0 w-full h-full object-cover grayscale opacity-15 transition-transform duration-[15000ms] ease-out group-hover:scale-110 pointer-events-none" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c9104c6d-9521-4057-b664-ed476bf3039e_800w.webp"/>
 <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/95 via-[#000000]/80 to-transparent pointer-events-none"></div>

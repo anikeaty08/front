@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -54,7 +96,7 @@ gtag('config', 'G-2M6V79H761');
 <section bis_size='{"x":0,"y":0,"w":1293,"h":634,"abs_x":480,"abs_y":43}' className="relative pt-32 pb-48 lg:pt-40 lg:pb-56 bg-gradient-to-br from-[#0a2e20] via-[#114232] to-[#164a39] overflow-hidden">
 
 <div bis_size='{"x":0,"y":0,"w":1293,"h":634,"abs_x":480,"abs_y":43}' className="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: 'radial-gradient(#c9a961 1px, transparent 1px)', backgroundSize: '32px 32px'}}></div>
-<div bis_label="style" bis_size='{"x":0,"y":0,"w":1293,"h":634,"abs_x":480,"abs_y":43}' className="bg-center bg-cover absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to top, rgba(17, 66, 50, 0.95), rgba(17, 66, 50, 0.4)), url(\'https://images.unsplash.com/photo-1565552643952-277a94d93547?auto=format&amp'}}></div>
+<div bis_label="style" bis_size='{"x":0,"y":0,"w":1293,"h":634,"abs_x":480,"abs_y":43}' className="bg-center bg-cover absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'linear-gradient(to top, rgba(17, 66, 50, 0.95), rgba(17, 66, 50, 0.4)), url(\'https: //images.unsplash.com/photo-1565552643952-277a94d93547?auto=format&amp'}}></div>
 <div bis_size='{"x":198,"y":160,"w":896,"h":250,"abs_x":678,"abs_y":203}' className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
 <div bis_size='{"x":530,"y":160,"w":231,"h":26,"abs_x":1010,"abs_y":203}' className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-medium mb-6 backdrop-blur-sm">
 <iconify-icon bis_size='{"x":543,"y":167,"w":12,"h":12,"abs_x":1023,"abs_y":210}' icon="solar:shield-check-linear" style={{strokeWidth: '1.5'}}></iconify-icon>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -72,7 +108,7 @@ cursor: {
                 <div 
                     ref={cursorRef} 
                     className="custom-cursor fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9999] mix-blend-difference"
-                    style={{ marginTop: '-16px', marginLeft: '-16px' }}
+                    style={{marginTop: '-16px', marginLeft: '-16px'}}
                 >
                     <div className="w-full h-full border border-white rounded-full bg-white/20 backdrop-blur-sm transition-transform duration-100 ease-out"></div>
                     <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
@@ -101,7 +137,7 @@ cursor: {
                 <div 
                     ref={ref} 
                     className={`transform transition-all duration-1000 cubic-bezier(0.17, 0.55, 0.55, 1) ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                    style={{ transitionDelay: `${delay}ms` }}
+                    style={{transitionDelay: `${delay}ms`}}
                 >
                     {children}
                 </div>
@@ -332,7 +368,7 @@ cursor: {
                                         <div className="h-1.5 w-full bg-neutral-800 rounded-full overflow-hidden">
                                             <div 
                                                 className="h-full bg-white rounded-full transition-all duration-1000 ease-out"
-                                                style={{ width: `${skill.level}%` }}
+                                                style={{width: `${skill.level}%`}}
                                             ></div>
                                         </div>
                                     </div>
@@ -526,6 +562,12 @@ cursor: {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

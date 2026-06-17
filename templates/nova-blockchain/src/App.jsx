@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -65,6 +101,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -681,7 +723,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="inline-flex items-center justify-center bg-center -top-8 -right-4 w-[120px] h-[126px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/19c3b675-89a6-4ee4-a233-98ee8763bf65_320w.png)] bg-cover absolute transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-y-3 group-hover:rotate-3 transform-gpu" href="#"></a>
 <div className="relative z-10 h-full flex flex-col justify-between">
 <div className="mb-8">
-<div className="flex bg-slate-50/10 w-12 h-12 rounded-lg mb-6 items-center justify-center transition-all duration-500 group-hover:bg-cyan-500/10 group-hover:scale-110" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '8px'}}>
+<div className="flex bg-slate-50/10 w-12 h-12 rounded-lg mb-6 items-center justify-center transition-all duration-500 group-hover:bg-cyan-500/10 group-hover:scale-110" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '8px'}}>
 <svg className="lucide lucide-message-circle w-[24px] h-[24px] text-slate-50/50 group-hover:text-cyan-400 transition-colors duration-300" data-icon-replaced="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path></svg>
 </div>
 <h3 className="text-xl font-medium text-white mb-2 group-hover:text-cyan-400 transition-colors duration-300">Community</h3>
@@ -701,7 +743,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="inline-flex items-center justify-center bg-center -top-8 -right-4 w-[120px] h-[126px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a55144e0-48c7-44b9-890c-1002e3e45900_320w.png)] bg-cover absolute transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-y-3 group-hover:-rotate-3 transform-gpu" href="#"></a>
 <div className="z-10 flex flex-col h-full relative justify-between">
 <div className="mb-8">
-<div className="flex bg-slate-50/10 w-12 h-12 rounded-lg mb-6 items-center justify-center transition-all duration-500 group-hover:bg-cyan-500/10 group-hover:scale-110" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '8px'}}>
+<div className="flex bg-slate-50/10 w-12 h-12 rounded-lg mb-6 items-center justify-center transition-all duration-500 group-hover:bg-cyan-500/10 group-hover:scale-110" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '8px'}}>
 <svg className="lucide lucide-graduation-cap w-[24px] h-[24px] text-slate-50/50 group-hover:text-cyan-400 transition-colors duration-300" data-icon-replaced="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
 </div>
 <h3 className="text-xl font-medium text-white mb-2 group-hover:text-cyan-400 transition-colors duration-300">Academy</h3>
@@ -717,7 +759,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="inline-flex items-center justify-center bg-center -top-8 -right-4 w-[120px] h-[126px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/609907fc-bc04-4c0f-9c3f-36e653a07cea_320w.png)] bg-cover absolute transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-y-3 group-hover:rotate-3 transform-gpu" href="#"></a>
 <div className="relative z-10 h-full flex flex-col justify-between">
 <div className="mb-8">
-<div className="flex bg-slate-50/10 w-12 h-12 rounded-lg mb-6 items-center justify-center transition-all duration-500 group-hover:bg-emerald-500/10 group-hover:scale-110" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '8px'}}>
+<div className="flex bg-slate-50/10 w-12 h-12 rounded-lg mb-6 items-center justify-center transition-all duration-500 group-hover:bg-emerald-500/10 group-hover:scale-110" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '8px'}}>
 <svg className="lucide lucide-sprout text-slate-50/50 w-[24px] h-[24px] group-hover:text-emerald-400 transition-colors duration-300" data-icon-replaced="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '24px', height: '24px'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path className="" d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path className="" d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
 </div>
 <h3 className="text-xl font-medium text-white mb-2 group-hover:text-emerald-400 transition-colors duration-300">Ventures</h3>

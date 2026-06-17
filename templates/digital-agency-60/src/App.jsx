@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -79,6 +115,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -329,7 +371,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="relative w-full h-[220px] mt-12 flex items-end justify-center z-10">
 <div className="absolute bottom-[-100px] w-[140%] h-[320px] rounded-[50%] border-[60px] border-blue-500/5 group-hover:border-blue-500/10 transition-colors duration-700"></div>
 <div className="absolute bottom-[-100px] w-[140%] h-[320px] rounded-[50%] border-t border-white/5"></div>
-<div className="relative z-20 mb-8 px-5 py-3 rounded-xl shadow-2xl flex items-center gap-4 transform group-hover:-translate-y-4 transition-transform duration-500" style={{-FxFilter: 'blur(4px) liquid-glass(2, 10) saturate(1.25)', background: 'rgba(21, 25, 37, 0.6)'}}>
+<div className="relative z-20 mb-8 px-5 py-3 rounded-xl shadow-2xl flex items-center gap-4 transform group-hover:-translate-y-4 transition-transform duration-500" style={{'--fx-filter': 'blur(4px) liquid-glass(2, 10) saturate(1.25)', background: 'rgba(21, 25, 37, 0.6)'}}>
 <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-blue-500/20">
 <svg className="lucide lucide-flower-2 w-5 h-5" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"></svg></div>
 <span className="text-sm font-medium text-white tracking-tight font-manrope" style={{transition: 'outline 0.1s ease-in-out'}}>We Make Corporates Entrepreneurs Again</span>
@@ -389,11 +431,11 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="lg:w-1/2 w-full relative h-[350px] flex items-center justify-center overflow-visible">
 <div className="flex w-full h-full relative items-center justify-center" style={{perspective: '1200px'}}>
 
-<div className="absolute w-[180px] h-[280px] bg-[#1E1E2E] border border-white/5 rounded-2xl shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.25,0.4,0.25,1)] transform group-hover:translate-x-16 group-hover:-translate-y-12 group-hover:rotate-[-4deg] group-hover:opacity-60" style={{transform: 'rotateX(60deg) rotateZ(-45deg) translateZ(-60px) translateX(var(--tw-translate-x,0)) translateY(var(--tw-translate-y,0)) rotate(var(--tw-rotate,0))', boxShadow: '30px 30px 60px rgba(0,0,0,0.5)'}}></div>
+<div className="absolute w-[180px] h-[280px] bg-[#1E1E2E] border border-white/5 rounded-2xl shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.25,0.4,0.25,1)] transform group-hover:translate-x-16 group-hover:-translate-y-12 group-hover:rotate-[-4deg] group-hover:opacity-60" style={{transform: 'rotateX(60deg) rotateZ(-45deg) translateZ(-60px) translateX(var(--tw-translate-x, 0)) translateY(var(--tw-translate-y, 0)) rotate(var(--tw-rotate, 0))', boxShadow: '30px 30px 60px rgba(0,0,0,0.5)'}}></div>
 
-<div className="absolute w-[180px] h-[280px] bg-blue-900/30 border border-blue-500/20 rounded-2xl backdrop-blur-md transition-all duration-700 delay-75 ease-[cubic-bezier(0.25,0.4,0.25,1)] transform group-hover:translate-x-6 group-hover:-translate-y-4 group-hover:rotate-[-2deg] group-hover:bg-blue-800/40" style={{transform: 'rotateX(60deg) rotateZ(-45deg) translateZ(-10px) translateX(var(--tw-translate-x,0)) translateY(var(--tw-translate-y,0)) rotate(var(--tw-rotate,0))', boxShadow: '15px 15px 40px rgba(0,0,0,0.3)'}}></div>
+<div className="absolute w-[180px] h-[280px] bg-blue-900/30 border border-blue-500/20 rounded-2xl backdrop-blur-md transition-all duration-700 delay-75 ease-[cubic-bezier(0.25,0.4,0.25,1)] transform group-hover:translate-x-6 group-hover:-translate-y-4 group-hover:rotate-[-2deg] group-hover:bg-blue-800/40" style={{transform: 'rotateX(60deg) rotateZ(-45deg) translateZ(-10px) translateX(var(--tw-translate-x, 0)) translateY(var(--tw-translate-y, 0)) rotate(var(--tw-rotate, 0))', boxShadow: '15px 15px 40px rgba(0,0,0,0.3)'}}></div>
 
-<div className="absolute w-[180px] h-[280px] bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl border-t border-blue-400/50 flex items-center justify-center transition-all duration-700 delay-150 ease-[cubic-bezier(0.25,0.4,0.25,1)] transform group-hover:-translate-x-12 group-hover:translate-y-6 group-hover:rotate-[2deg] group-hover:shadow-[0_20px_50px_rgba(37,99,235,0.6)]" style={{transform: 'rotateX(60deg) rotateZ(-45deg) translateZ(40px) translateX(var(--tw-translate-x,0)) translateY(var(--tw-translate-y,0)) rotate(var(--tw-rotate,0))', boxShadow: '-20px 20px 60px rgba(37, 99, 235, 0.3)'}}>
+<div className="absolute w-[180px] h-[280px] bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl border-t border-blue-400/50 flex items-center justify-center transition-all duration-700 delay-150 ease-[cubic-bezier(0.25,0.4,0.25,1)] transform group-hover:-translate-x-12 group-hover:translate-y-6 group-hover:rotate-[2deg] group-hover:shadow-[0_20px_50px_rgba(37,99,235,0.6)]" style={{transform: 'rotateX(60deg) rotateZ(-45deg) translateZ(40px) translateX(var(--tw-translate-x, 0)) translateY(var(--tw-translate-y, 0)) rotate(var(--tw-rotate, 0))', boxShadow: '-20px 20px 60px rgba(37, 99, 235, 0.3)'}}>
 
 <div className="relative z-10 transform transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-12 group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
 <svg className="lucide lucide-layers w-16 h-16 text-white/95 drop-shadow-xl -rotate-[135deg]" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"></path><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"></path><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"></path></svg>
@@ -455,7 +497,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]"></div>
 <div className="absolute inset-0 flex items-center justify-center p-8">
 
-<div className="aspect-[4/5] flex flex-col transform transition-all duration-700 ease-[cubic-bezier(0.25,0.4,0.25,1)] hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(-2deg)_scale(1.02)] hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.25)] hover:border-white/20 w-full max-w-md border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-2xl group bg-white/5 backdrop-blur-md" style={{-FxFilter: 'blur(8px) liquid-glass(2, 10) saturate(1.25)', background: 'rgba(20, 20, 30, 0.4)', transformStyle: 'preserve-3d'}}>
+<div className="aspect-[4/5] flex flex-col transform transition-all duration-700 ease-[cubic-bezier(0.25,0.4,0.25,1)] hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(-2deg)_scale(1.02)] hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.25)] hover:border-white/20 w-full max-w-md border-white/10 border rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-2xl group bg-white/5 backdrop-blur-md" style={{'--fx-filter': 'blur(8px) liquid-glass(2, 10) saturate(1.25)', background: 'rgba(20, 20, 30, 0.4)', transformStyle: 'preserve-3d'}}>
 <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4 transition-colors duration-500 group-hover:border-white/10">
 <div className="flex items-center gap-3">
 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">

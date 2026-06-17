@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -300,6 +336,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -314,7 +356,7 @@ gtag('config', 'G-2M6V79H761');
 <a className="flex items-center" href="#">
 <img alt="Synergeus" className="h-7 w-auto brightness-0 invert" src="https://qclay.design/lovable/synergy/Logo-lov.svg"/>
 </a>
-<div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border px-2 py-1.5 md:flex" style={{background: 'rgba(28,28,28,.75)', borderColor: 'rgba(255,255,255,.10)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)'}}>
+<div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border px-2 py-1.5 md:flex" style={{background: 'rgba(28, 28, 28, .75)', borderColor: 'rgba(255, 255, 255, .10)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)'}}>
 <a className="nav-pill rounded-full px-4 py-2 text-[0.875rem] font-normal text-white/80" href="#">Advisors</a>
 <a className="nav-pill rounded-full px-4 py-2 text-[0.875rem] font-normal text-white/80" href="#analytics">What we do</a>
 <a className="nav-pill rounded-full px-4 py-2 text-[0.875rem] font-normal text-white/80" href="#ai">AI Intelligence</a>
@@ -330,7 +372,7 @@ gtag('config', 'G-2M6V79H761');
 <h1 className="text-center text-[4rem] font-normal leading-[0.94] tracking-tight text-white opacity-0 md:text-[6.375rem]" data-duration="900" data-reveal="" data-y="-40" style={{transform: 'translateY(-40px)'}}>
 <span className="block">Our AI simplify</span>
 <span className="block">
-<span>your </span><span style={{fontFamily: '\'Instrument Serif\',serif', fontStyle: 'italic'}}>financial life</span>
+<span>your </span><span style={{fontFamily: '\'Instrument Serif\', serif', fontStyle: 'italic'}}>financial life</span>
 </span>
 </h1>
 <button className="mt-8 flex items-center gap-2 rounded-full bg-white py-1.5 pl-6 pr-2 text-[0.9375rem] font-normal text-black opacity-0" data-delay="250" data-duration="800" data-reveal="" data-y="30" style={{transform: 'translateY(30px)'}}>
@@ -340,30 +382,30 @@ gtag('config', 'G-2M6V79H761');
 </span>
 </button>
 <div className="mt-12" style={{perspective: '1200px'}}>
-<div className="relative h-[455px] w-[310px] overflow-hidden rounded-[28px] bg-[#1a1a1a] opacity-0 will-change-transform" data-delay="200" data-duration="800" data-reveal="" data-y="30" id="storyCard" style={{transformStyle: 'preserve-3d', transform: 'translateY(30px)', boxShadow: '0 40px 100px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(255,255,255,.06)'}}>
+<div className="relative h-[455px] w-[310px] overflow-hidden rounded-[28px] bg-[#1a1a1a] opacity-0 will-change-transform" data-delay="200" data-duration="800" data-reveal="" data-y="30" id="storyCard" style={{transformStyle: 'preserve-3d', transform: 'translateY(30px)', boxShadow: '0 40px 100px rgba(0, 0, 0, .55), 0 8px 24px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18), inset 0 0 0 1px rgba(255,255,255,.06)'}}>
 <img alt="" className="absolute inset-0 h-full w-full object-cover" src="https://qclay.design/lovable/synergy/person-2.png" style={{objectPosition: 'center 20%'}}/>
 <div className="pointer-events-none absolute inset-0" style={{mixBlendMode: 'soft-light', background: 'linear-gradient(160deg,rgba(220,255,90,.65) 0%,rgba(170,230,70,.35) 40%,rgba(80,140,40,.25) 100%)'}}></div>
 <div className="pointer-events-none absolute inset-0" style={{background: 'radial-gradient(circle at 30% 15%,rgba(230,255,120,.25),transparent 55%)'}}></div>
 <div className="pointer-events-none absolute inset-0 rounded-[28px]" style={{boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25)'}}></div>
 <div className="absolute left-6 right-6 top-6 z-20 flex gap-1.5">
 <div className="h-[3px] flex-1 overflow-hidden rounded-full" style={{background: 'rgba(0,0,0,.25)'}}>
-<div className="h-full origin-left rounded-full" id="storyBar1" style={{background: 'rgba(0,0,0,.95)', transform: 'scaleX(0)'}}></div>
+<div className="h-full origin-left rounded-full" id="storyBar1" style={{background: 'rgba(0, 0, 0, .95)', transform: 'scaleX(0)'}}></div>
 </div>
 <div className="h-[3px] flex-1 overflow-hidden rounded-full" style={{background: 'rgba(0,0,0,.25)'}}>
-<div className="h-full origin-left rounded-full" id="storyBar2" style={{background: 'rgba(0,0,0,.95)', transform: 'scaleX(0)'}}></div>
+<div className="h-full origin-left rounded-full" id="storyBar2" style={{background: 'rgba(0, 0, 0, .95)', transform: 'scaleX(0)'}}></div>
 </div>
 </div>
 <div className="absolute bottom-0 left-0 right-0 h-[55%]" style={{background: 'linear-gradient(0deg,#040504 20.54%,rgba(29,37,9,0) 100%)'}}></div>
 <h3 className="absolute bottom-[88px] left-6 right-6 z-10 text-[2.375rem] font-normal leading-[2.5rem] tracking-tight text-white" id="storyHeadline" style={{textShadow: '0 2px 18px rgba(0,0,0,.35)'}}>
 <span className="font-semibold">Guiding</span><br/>
-<span style={{fontFamily: '\'Instrument Serif\',serif', fontStyle: 'italic'}}>your money</span>
+<span style={{fontFamily: '\'Instrument Serif\', serif', fontStyle: 'italic'}}>your money</span>
 </h3>
 <div className="absolute bottom-6 left-6 right-6 z-10 flex items-center gap-2.5">
-<span className="rounded-full px-4 py-[9px] text-[0.8125rem] font-normal text-[#0a0a0a]" style={{background: 'rgba(255,255,255,.96)', boxShadow: '0 6px 18px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.9)'}}>Top Rated</span>
-<button className="flex h-[38px] w-[38px] items-center justify-center rounded-[14px] border text-white" style={{background: 'rgba(20,20,20,.45)', borderColor: 'rgba(255,255,255,.14)', backdropFilter: 'blur(10px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.12)'}}>
+<span className="rounded-full px-4 py-[9px] text-[0.8125rem] font-normal text-[#0a0a0a]" style={{background: 'rgba(255, 255, 255, .96)', boxShadow: '0 6px 18px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255,255,255,.9)'}}>Top Rated</span>
+<button className="flex h-[38px] w-[38px] items-center justify-center rounded-[14px] border text-white" style={{background: 'rgba(20, 20, 20, .45)', borderColor: 'rgba(255, 255, 255, .14)', backdropFilter: 'blur(10px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.12)'}}>
 <iconify-icon icon="solar:heart-linear" style={{fontSize: '1.125rem', strokeWidth: '1.5'}}></iconify-icon>
 </button>
-<button className="flex h-[38px] w-[38px] items-center justify-center rounded-[14px] border text-white" style={{background: 'rgba(20,20,20,.45)', borderColor: 'rgba(255,255,255,.14)', backdropFilter: 'blur(10px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.12)'}}>
+<button className="flex h-[38px] w-[38px] items-center justify-center rounded-[14px] border text-white" style={{background: 'rgba(20, 20, 20, .45)', borderColor: 'rgba(255, 255, 255, .14)', backdropFilter: 'blur(10px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.12)'}}>
 <iconify-icon icon="solar:chat-round-line-linear" style={{fontSize: '1.125rem', strokeWidth: '1.5'}}></iconify-icon>
 </button>
 </div>
@@ -395,7 +437,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-4 text-[0.75rem] font-normal uppercase tracking-[0.125rem] text-white/50">ANALYTICS</div>
 <h2 className="m-0 text-white opacity-0" data-blur="12" data-duration="800" data-reveal="" data-scope="analytics" data-y="30" style={{transform: 'translateY(30px)', filter: 'blur(12px)'}}>
 <span className="block text-[3.5rem] font-normal leading-none tracking-tight md:text-[4.5rem]">Smarter cash flow</span>
-<span className="block text-[3.5rem] font-normal italic leading-none tracking-tight md:text-[4.5rem]" style={{fontFamily: '\'Instrument Serif\',serif'}}>insights at a glance</span>
+<span className="block text-[3.5rem] font-normal italic leading-none tracking-tight md:text-[4.5rem]" style={{fontFamily: '\'Instrument Serif\', serif'}}>insights at a glance</span>
 </h2>
 <p className="mt-4 text-[1rem] font-normal text-white/60 opacity-0" data-blur="8" data-delay="200" data-duration="800" data-reveal="" data-scope="analytics" data-y="20" style={{transform: 'translateY(20px)', filter: 'blur(8px)'}}>Keep your income and expense in sync with real-time AI</p>
 </div>
@@ -403,7 +445,7 @@ gtag('config', 'G-2M6V79H761');
 <article className="relative min-h-[480px] flex-[1.4] overflow-hidden rounded-3xl opacity-0" data-delay="300" data-duration="800" data-reveal="" data-scope="analytics" data-x="-60" style={{transform: 'translateX(-60px)'}}>
 <img alt="" className="absolute inset-0 z-0 h-full w-full object-cover" src="https://qclay.design/lovable/synergy/block-1.png"/>
 <div className="absolute inset-0 z-[1]" style={{background: 'rgba(0,0,0,.35)'}}></div>
-<div className="absolute left-8 right-8 top-8 z-[2] rounded-[20px] border px-7 py-6" style={{borderColor: 'rgba(255,255,255,.20)', background: 'rgba(255,255,255,.10)', backdropFilter: 'blur(56px)', WebkitBackdropFilter: 'blur(56px)'}}>
+<div className="absolute left-8 right-8 top-8 z-[2] rounded-[20px] border px-7 py-6" style={{borderColor: 'rgba(255, 255, 255, .20)', background: 'rgba(255, 255, 255, .10)', backdropFilter: 'blur(56px)', WebkitBackdropFilter: 'blur(56px)'}}>
 <div className="mb-2 flex items-center justify-between">
 <span className="text-[0.6875rem] font-normal tracking-[0.09375rem] text-white/60">MONTHLY OVERVIEW</span>
 <span className="text-[0.6875rem] font-normal tracking-[0.09375rem] text-white/60 underline">MONTHLY</span>
@@ -433,7 +475,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="absolute bottom-[22px] left-8 right-8 z-[2]">
-<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\',serif'}}>See the full picture of your finances.</h3>
+<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\', serif'}}>See the full picture of your finances.</h3>
 <p className="m-0 text-[0.8125rem] font-normal leading-[1.6] text-white/65">AI keeps your income, expenses, and goals effortlessly aligned giving you a clearer view of your financial rhythm, smarter decisions, and lasting stability.</p>
 </div>
 </article>
@@ -456,15 +498,15 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <img alt="" className="absolute bottom-[140px] left-1/2 z-[2] h-[240px] w-[200px] -translate-x-1/2 rounded-2xl object-cover" src="https://qclay.design/lovable/synergy/person-2.png" style={{objectPosition: 'top center'}}/>
 <div className="absolute bottom-[160px] right-6 z-[3] flex items-center gap-2">
-<div className="flex items-center gap-2 rounded-full py-2 pl-2.5 pr-4" style={{background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(12px)'}}>
+<div className="flex items-center gap-2 rounded-full py-2 pl-2.5 pr-4" style={{background: 'rgba(255, 255, 255, .15)', backdropFilter: 'blur(12px)'}}>
 <img alt="" className="h-[22px] w-auto brightness-0 invert" src="https://qclay.design/lovable/synergy/Logo-lov.svg"/>
 </div>
-<button className="flex h-9 w-9 items-center justify-center rounded-full text-white" style={{background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(12px)'}}>
+<button className="flex h-9 w-9 items-center justify-center rounded-full text-white" style={{background: 'rgba(255, 255, 255, .15)', backdropFilter: 'blur(12px)'}}>
 <iconify-icon icon="solar:arrow-right-up-linear" style={{fontSize: '1rem', strokeWidth: '1.5'}}></iconify-icon>
 </button>
 </div>
 <div className="absolute bottom-[22px] left-8 right-8 z-[2]">
-<h3 className="mb-2 text-[1.5rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\',serif'}}>Your money, perfect transactions</h3>
+<h3 className="mb-2 text-[1.5rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\', serif'}}>Your money, perfect transactions</h3>
 <p className="m-0 text-[0.8125rem] font-normal leading-[1.6] text-white/65">Stay grounded with real-time visibility into where your money’s going and growing.</p>
 </div>
 </article>
@@ -475,7 +517,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-4 text-[0.75rem] font-normal uppercase tracking-[0.125rem] text-white/50">AI INTELLIGENCE</div>
 <h2 className="m-0 text-white opacity-0" data-blur="12" data-duration="800" data-reveal="" data-scope="ai" data-y="30" style={{transform: 'translateY(30px)', filter: 'blur(12px)'}}>
 <span className="text-[3.5rem] font-normal leading-none tracking-tight md:text-[4.5rem]">Your personal </span>
-<span className="text-[3.5rem] font-normal italic leading-none tracking-tight md:text-[4.5rem]" style={{fontFamily: '\'Instrument Serif\',serif'}}>AI advisor</span>
+<span className="text-[3.5rem] font-normal italic leading-none tracking-tight md:text-[4.5rem]" style={{fontFamily: '\'Instrument Serif\', serif'}}>AI advisor</span>
 </h2>
 <p className="mx-auto mt-4 max-w-2xl text-center text-[1rem] font-normal leading-[1.6] text-white/60 opacity-0" data-blur="8" data-delay="200" data-duration="800" data-reveal="" data-scope="ai" data-y="20" style={{transform: 'translateY(20px)', filter: 'blur(8px)'}}>Experience the power of artificial intelligence working for your financial well being</p>
 </div>
@@ -483,7 +525,7 @@ gtag('config', 'G-2M6V79H761');
 <article className="relative min-h-[560px] flex-1 overflow-hidden rounded-3xl opacity-0" data-delay="200" data-duration="700" data-reveal="" data-scope="ai" data-y="40" style={{transform: 'translateY(40px)'}}>
 <img alt="" className="absolute inset-0 z-0 h-full w-full object-cover" src="https://qclay.design/lovable/synergy/back-3-1.png"/>
 <div className="absolute inset-0 z-[1]" style={{background: 'rgba(0,0,0,.30)'}}></div>
-<div className="absolute left-6 right-6 top-8 z-[2] rounded-[20px] border p-5" style={{borderColor: 'rgba(255,255,255,.20)', background: 'rgba(255,255,255,.10)', backdropFilter: 'blur(56px)', WebkitBackdropFilter: 'blur(56px)'}}>
+<div className="absolute left-6 right-6 top-8 z-[2] rounded-[20px] border p-5" style={{borderColor: 'rgba(255, 255, 255, .20)', background: 'rgba(255, 255, 255, .10)', backdropFilter: 'blur(56px)', WebkitBackdropFilter: 'blur(56px)'}}>
 <div className="mb-4 flex items-center gap-2.5">
 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white">
 <img alt="" className="w-[22px] brightness-0" src="https://qclay.design/lovable/synergy/Logo-lov.svg"/>
@@ -513,7 +555,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="absolute bottom-7 left-6 right-6 z-[2]">
-<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\',serif'}}>Natural Language Queries</h3>
+<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\', serif'}}>Natural Language Queries</h3>
 <p className="text-[0.8125rem] font-normal leading-[1.6] text-white/65">Ask questions about your finances in plain English and get instant, accurate answers.</p>
 </div>
 </article>
@@ -523,7 +565,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute left-6 right-6 top-8 z-[2]">
 <div className="rounded-[20px] px-5 pb-5 pt-6 text-center" style={{background: 'rgba(255,255,255,.92)'}}>
 <div className="mb-1 text-[0.75rem] font-normal leading-[1.5] text-black/50">Expenses<br/>expected to rise</div>
-<div className="text-[3.25rem] font-normal italic leading-none tracking-tight text-black" style={{fontFamily: '\'Instrument Serif\',serif'}}>3%</div>
+<div className="text-[3.25rem] font-normal italic leading-none tracking-tight text-black" style={{fontFamily: '\'Instrument Serif\', serif'}}>3%</div>
 <div className="h-4"></div>
 <div className="relative mx-auto h-[145px] w-[280px] max-w-full overflow-visible">
 <svg height="100%" preserveaspectratio="none" style={{overflow: 'visible'}} viewbox="60 -25 220 145" width="100%">
@@ -546,11 +588,11 @@ gtag('config', 'G-2M6V79H761');
 <circle cx="150" cy="-15" fill="#1DC47D" id="greenDot" r="4.5" style={{transformBox: 'fill-box', transformOrigin: 'center', transform: 'scale(0)'}}></circle>
 </svg>
 </div>
-<div className="mt-4 inline-block rounded-full border px-4 py-2 text-center text-[0.6875rem] text-black/60" style={{borderColor: 'rgba(0,0,0,.12)', background: 'rgba(255,255,255,.80)', backdropFilter: 'blur(8px)'}}>Tip: Reduce subscriptions to maintain savings target.</div>
+<div className="mt-4 inline-block rounded-full border px-4 py-2 text-center text-[0.6875rem] text-black/60" style={{borderColor: 'rgba(0, 0, 0, .12)', background: 'rgba(255, 255, 255, .80)', backdropFilter: 'blur(8px)'}}>Tip: Reduce subscriptions to maintain savings target.</div>
 </div>
 </div>
 <div className="absolute bottom-7 left-6 right-6 z-[2]">
-<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\',serif'}}>Predictive Analysis</h3>
+<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\', serif'}}>Predictive Analysis</h3>
 <p className="text-[0.8125rem] font-normal leading-[1.6] text-white/65">AI algorithms analyze patterns to forecast future expenses and income trends.</p>
 </div>
 </article>
@@ -589,21 +631,21 @@ gtag('config', 'G-2M6V79H761');
 </g>
 </svg>
 <div className="relative z-[2] flex h-full flex-col items-center gap-[18px]">
-<div className="tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="0" style={{fontFamily: '\'Instrument Serif\',serif', borderColor: 'rgba(255,255,255,.25)', background: 'rgba(255,255,255,.10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Categorization</div>
+<div className="tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="0" style={{fontFamily: '\'Instrument Serif\', serif', borderColor: 'rgba(255, 255, 255, .25)', background: 'rgba(255, 255, 255, .10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Categorization</div>
 <div className="flex gap-4">
-<div className="tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="180" style={{fontFamily: '\'Instrument Serif\',serif', borderColor: 'rgba(255,255,255,.25)', background: 'rgba(255,255,255,.10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Transportation</div>
-<div className="tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="360" style={{fontFamily: '\'Instrument Serif\',serif', borderColor: 'rgba(255,255,255,.25)', background: 'rgba(255,255,255,.10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Entertainment</div>
+<div className="tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="180" style={{fontFamily: '\'Instrument Serif\', serif', borderColor: 'rgba(255, 255, 255, .25)', background: 'rgba(255, 255, 255, .10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Transportation</div>
+<div className="tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="360" style={{fontFamily: '\'Instrument Serif\', serif', borderColor: 'rgba(255, 255, 255, .25)', background: 'rgba(255, 255, 255, .10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Entertainment</div>
 </div>
 <div className="flex items-start gap-4">
-<div className="tree-node max-w-[160px] rounded-xl px-4 py-2.5 text-[0.75rem] font-normal leading-[1.5] text-black/75 opacity-0" data-delay="540" style={{background: 'rgba(255,255,255,.92)', transform: 'scale(.85)'}}>Fuel, rides, car maintenance, public transit</div>
-<div className="tree-node max-w-[160px] rounded-xl px-4 py-2.5 text-[0.75rem] font-normal leading-[1.5] text-black/75 opacity-0" data-delay="720" style={{background: 'rgba(255,255,255,.92)', transform: 'scale(.85)'}}>Streaming services, gaming, events</div>
+<div className="tree-node max-w-[160px] rounded-xl px-4 py-2.5 text-[0.75rem] font-normal leading-[1.5] text-black/75 opacity-0" data-delay="540" style={{background: 'rgba(255, 255, 255, .92)', transform: 'scale(.85)'}}>Fuel, rides, car maintenance, public transit</div>
+<div className="tree-node max-w-[160px] rounded-xl px-4 py-2.5 text-[0.75rem] font-normal leading-[1.5] text-black/75 opacity-0" data-delay="720" style={{background: 'rgba(255, 255, 255, .92)', transform: 'scale(.85)'}}>Streaming services, gaming, events</div>
 </div>
-<div className="mt-auto tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="900" style={{fontFamily: '\'Instrument Serif\',serif', borderColor: 'rgba(255,255,255,.25)', background: 'rgba(255,255,255,.10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Bills and Utilities</div>
-<div className="tree-node max-w-[160px] rounded-xl px-4 py-2.5 text-center text-[0.75rem] font-normal leading-[1.5] text-black/75 opacity-0" data-delay="1080" style={{background: 'rgba(255,255,255,.92)', transform: 'scale(.85)'}}>Electricity, water, gas, internet, phone</div>
+<div className="mt-auto tree-node rounded-full border px-5 py-2.5 text-[1rem] italic text-white opacity-0" data-delay="900" style={{fontFamily: '\'Instrument Serif\', serif', borderColor: 'rgba(255, 255, 255, .25)', background: 'rgba(255, 255, 255, .10)', backdropFilter: 'blur(20px)', transform: 'scale(.85)'}}>Bills and Utilities</div>
+<div className="tree-node max-w-[160px] rounded-xl px-4 py-2.5 text-center text-[0.75rem] font-normal leading-[1.5] text-black/75 opacity-0" data-delay="1080" style={{background: 'rgba(255, 255, 255, .92)', transform: 'scale(.85)'}}>Electricity, water, gas, internet, phone</div>
 </div>
 </div>
 <div className="absolute bottom-7 left-6 right-6 z-[2]">
-<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\',serif'}}>Smart Categorization</h3>
+<h3 className="mb-2 text-[1.625rem] font-normal italic tracking-tight text-white" style={{fontFamily: '\'Instrument Serif\', serif'}}>Smart Categorization</h3>
 <p className="text-[0.8125rem] font-normal leading-[1.6] text-white/65">Automatically categorize transactions with machine learning that improves over time.</p>
 </div>
 </article>

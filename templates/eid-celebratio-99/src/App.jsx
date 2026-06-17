@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -116,6 +152,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -129,7 +171,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 stars-bg opacity-40"></div>
 
 <div className="absolute top-[10%] right-[15%] w-32 h-32 md:w-64 md:h-64 rounded-full bg-gradient-to-br from-[#D4AF37]/20 to-transparent blur-3xl mix-blend-screen opacity-70"></div>
-<div className="absolute top-[12%] right-[18%] w-16 h-16 md:w-24 md:h-24 rounded-full bg-[#D4AF37] shadow-[0_0_80px_rgba(212,175,55,0.8)] opacity-90 animate-float" style={{boxShadow: 'inset -10px -5px 20px rgba(0,0,0,0.5), 0 0 50px rgba(212,175,55,0.6)'}}></div>
+<div className="absolute top-[12%] right-[18%] w-16 h-16 md:w-24 md:h-24 rounded-full bg-[#D4AF37] shadow-[0_0_80px_rgba(212,175,55,0.8)] opacity-90 animate-float" style={{boxShadow: 'inset -10px -5px 20px rgba(0, 0, 0, 0.5), 0 0 50px rgba(212,175,55,0.6)'}}></div>
 
 <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#01140c] to-transparent z-10"></div>
 <svg className="absolute bottom-0 w-full h-auto text-[#01140c] opacity-80" preserveaspectratio="none" viewbox="0 0 1440 320">

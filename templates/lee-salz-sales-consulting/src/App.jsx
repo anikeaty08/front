@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -298,6 +334,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -417,7 +459,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-between group cursor-none h-full min-h-[400px]" style={{-MouseX: '-85.15625px', -MouseY: '-883px'}}>
+<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-between group cursor-none h-full min-h-[400px]" style={{'--mouse-x': '-85.15625px', '--mouse-y': '-883px'}}>
 <div className="absolute right-0 top-0 p-10 opacity-10 transition-transform duration-700 group-hover:scale-110 group-hover:-translate-y-4">
 <iconify-icon className="text-[12rem] text-white" icon="solar:graph-down-linear"></iconify-icon>
 </div>
@@ -442,7 +484,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col gap-6">
 
-<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-center group cursor-none min-h-[220px]" style={{-MouseX: '-519.828125px', -MouseY: '-883px'}}>
+<div className="spotlight-card rounded-[2rem] p-10 flex flex-col justify-center group cursor-none min-h-[220px]" style={{'--mouse-x': '-519.828125px', '--mouse-y': '-883px'}}>
 <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
 <div className="relative z-10">
 <div className="flex items-center gap-3 mb-4">
@@ -458,7 +500,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="spotlight-card rounded-[2rem] p-10 flex-1 min-h-[240px] flex flex-col justify-end group cursor-none" style={{-MouseX: '-519.828125px', -MouseY: '-1149.25px'}}>
+<div className="spotlight-card rounded-[2rem] p-10 flex-1 min-h-[240px] flex flex-col justify-end group cursor-none" style={{'--mouse-x': '-519.828125px', '--mouse-y': '-1149.25px'}}>
 <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-1000 bg-[radial-gradient(circle_at_bottom_right,rgba(79,209,197,0.4),transparent_70%)]"></div>
 <div className="relative z-10 bg-gradient-to-t from-[#08080A] via-[#08080A]/80 to-transparent pt-6">
 <div className="flex items-center gap-3 mb-4">
@@ -522,7 +564,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex gap-16 px-24 pl-[20vw] items-center h-full w-max" id="cards-track">
 
-<div className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507]" style={{-MouseX: '132px', -MouseY: '-3767.546875px'}}>
+<div className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507]" style={{'--mouse-x': '132px', '--mouse-y': '-3767.546875px'}}>
 <div className="w-5/12 flex flex-col justify-between relative z-10 h-full">
 <div>
 <div className="inline-flex p-4 rounded-2xl bg-white/5 border border-white/10 mb-10 shadow-xl backdrop-blur-md text-luxota-accent font-mono font-bold text-xl">
@@ -544,7 +586,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507]" style={{-MouseX: '-832px', -MouseY: '-3767.546875px'}}>
+<div className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507]" style={{'--mouse-x': '-832px', '--mouse-y': '-3767.546875px'}}>
 <div className="w-5/12 flex flex-col justify-between relative z-10 h-full">
 <div className="">
 <div className="inline-flex p-4 rounded-2xl bg-white/5 border border-white/10 mb-10 shadow-xl backdrop-blur-md text-luxota-accent font-mono font-bold text-xl">
@@ -565,7 +607,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507]" style={{-MouseX: '-1796px', -MouseY: '-3767.546875px'}}>
+<div className="w-[70vw] max-w-[900px] h-[65vh] spotlight-card rounded-[2.5rem] p-16 shrink-0 relative flex overflow-hidden border border-white/10 bg-[#050507]" style={{'--mouse-x': '-1796px', '--mouse-y': '-3767.546875px'}}>
 <div className="w-5/12 flex flex-col justify-between relative z-10 h-full">
 <div>
 <div className="inline-flex p-4 rounded-2xl bg-white/5 border border-white/10 mb-10 shadow-xl backdrop-blur-md text-luxota-accent font-mono font-bold text-xl">
@@ -594,15 +636,15 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="block lg:hidden px-6 py-20 space-y-8 bg-luxota-bg">
 <span className="text-xs text-luxota-accent font-mono mb-2 block tracking-widest">[ 02 — ARCHITECTURE PROCESS ]</span>
-<div className="spotlight-card rounded-3xl p-8 border border-white/10" style={{-MouseX: '420px', -MouseY: '103px'}}>
+<div className="spotlight-card rounded-3xl p-8 border border-white/10" style={{'--mouse-x': '420px', '--mouse-y': '103px'}}>
 <h3 className="text-2xl text-white font-medium mb-2">Step 1: Diagnose</h3>
 <p className="text-sm text-luxota-dim">Assess current process, stage definitions, and differentiation gaps.</p>
 </div>
-<div className="spotlight-card rounded-3xl p-8 border border-white/10" style={{-MouseX: '420px', -MouseY: '103px'}}>
+<div className="spotlight-card rounded-3xl p-8 border border-white/10" style={{'--mouse-x': '420px', '--mouse-y': '103px'}}>
 <h3 className="text-2xl text-white font-medium mb-2">Step 2: Build Playbook</h3>
 <p className="text-sm text-luxota-dim">Document defined stages, measurable behaviors, and advancement criteria.</p>
 </div>
-<div className="spotlight-card rounded-3xl p-8 border border-white/10" style={{-MouseX: '420px', -MouseY: '103px'}}>
+<div className="spotlight-card rounded-3xl p-8 border border-white/10" style={{'--mouse-x': '420px', '--mouse-y': '103px'}}>
 <h3 className="text-2xl text-white font-medium mb-2">Step 3: Reinforce</h3>
 <p className="text-sm text-luxota-dim">Embed discipline and structured differentiation into daily execution.</p>
 </div>

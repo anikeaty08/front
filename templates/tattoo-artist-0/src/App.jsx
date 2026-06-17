@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -175,6 +211,12 @@ function dispararWhatsApp(e){
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -208,13 +250,13 @@ function dispararWhatsApp(e){
               background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:9999px;
               box-shadow:0 25px 50px -12px rgba(0,0,0,0.6);backdrop-filter:blur(40px);
               padding:0.25rem;pointer-events:auto;">
-<a href="#home" style={{fontSize: '0.75rem', fontWeight: '500', color: '#fff', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '9999px', padding: '0.5rem 1.5rem', transition: 'color 0.15s'}}>Home</a>
+<a href="#home" style={{fontSize: '0.75rem', fontWeight: '500', color: '#fff', background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '9999px', padding: '0.5rem 1.5rem', transition: 'color 0.15s'}}>Home</a>
 <a href="#historia" onmouseout="this.style.color='#a3a3a3'" onmouseover="this.style.color='#fff'" style={{fontSize: '0.75rem', fontWeight: '500', color: '#a3a3a3', borderRadius: '9999px', padding: '0.5rem 1.5rem', transition: 'color 0.15s'}}>História</a>
 <a href="#trabalho" onmouseout="this.style.color='#a3a3a3'" onmouseover="this.style.color='#fff'" style={{fontSize: '0.75rem', fontWeight: '500', color: '#a3a3a3', borderRadius: '9999px', padding: '0.5rem 1.5rem', transition: 'color 0.15s'}}>Portfólio</a>
 <a href="#contato" onmouseout="this.style.color='#a3a3a3'" onmouseover="this.style.color='#fff'" style={{fontSize: '0.75rem', fontWeight: '500', color: '#a3a3a3', borderRadius: '9999px', padding: '0.5rem 1.5rem', transition: 'color 0.15s'}}>Contato</a>
 </div>
 <div style={{display: 'flex', alignItems: 'center', gap: '0.75rem', pointerEvents: 'auto'}}>
-<div id="agenda-badge" style={{display: 'none', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '9999px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(12px)'}}>
+<div id="agenda-badge" style={{display: 'none', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '9999px', background: 'rgba(0, 0, 0, 0.4)', border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(12px)'}}>
 <div style={{position: 'relative', display: 'flex', width: '0.5rem', height: '0.5rem'}}>
 <span className="animate-ping" style={{position: 'absolute', inset: '0', borderRadius: '9999px', background: '#a3a3a3', opacity: '0.75'}}></span>
 <span style={{position: 'relative', width: '0.5rem', height: '0.5rem', borderRadius: '9999px', background: '#a3e635'}}></span>
@@ -249,7 +291,7 @@ function dispararWhatsApp(e){
 </div>
 </section>
 
-<section id="historia" style={{background: '#0a0a0a', width: '100%', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '3rem 1.5rem'}}>
+<section id="historia" style={{background: '#0a0a0a', width: '100%', borderTop: '1px solid rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '3rem 1.5rem'}}>
 <div style={{maxWidth: '1000px', margin: '0 auto'}}>
 <div className="glass-panel fade-in-up" style={{background: 'linear-gradient(to bottom,rgba(255,255,255,0.02),transparent)', borderRadius: '1.5rem', padding: '1.5rem'}}>
 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1.25rem'}}>
@@ -355,7 +397,7 @@ function dispararWhatsApp(e){
 
 <section style={{background: '#050505', width: '100%', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '6rem 1.5rem'}}>
 <div className="fade-in-up" style={{maxWidth: '42rem', margin: '0 auto', textAlign: 'center'}}>
-<div className="glass-panel" style={{background: 'rgba(0,0,0,0.4)', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)'}}>
+<div className="glass-panel" style={{background: 'rgba(0, 0, 0, 0.4)', borderColor: 'rgba(255, 255, 255, 0.05)', borderRadius: '1.5rem', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)'}}>
 <iconify-icon icon="solar:quote-up-square-linear" style={{fontSize: '2.5rem', color: 'rgba(255,255,255,0.2)', display: 'block', marginBottom: '1.5rem'}}></iconify-icon>
 <div className="font-manrope" style={{lineHeight: '1.625', fontSize: 'clamp(1rem,2vw,1.25rem)', fontWeight: '300', fontStyle: 'italic', color: '#d4d4d4'}}>
 <p style={{marginBottom: '1rem'}}>"A arte sempre foi parte de mim. Foi ela que transformou a minha vida.</p>
@@ -370,7 +412,7 @@ function dispararWhatsApp(e){
 </div>
 </section>
 
-<section id="contato" style={{background: 'linear-gradient(to bottom,#000,#171717)', width: '100%', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '8rem 1.5rem'}}>
+<section id="contato" style={{background: 'linear-gradient(to bottom, #000, #171717)', width: '100%', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '8rem 1.5rem'}}>
 <div className="fade-in-up" style={{maxWidth: '800px', margin: '0 auto'}}>
 <div style={{textAlign: 'center', marginBottom: '3rem'}}>
 <h2 className="font-manrope" style={{fontSize: 'clamp(2.25rem,4vw,3rem)', fontWeight: '600', color: '#fff', marginBottom: '1rem'}}>Inicie seu <span style={{color: '#737373'}}>Projeto</span></h2>
@@ -380,11 +422,11 @@ function dispararWhatsApp(e){
 <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem'}}>
 <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
 <label className="font-mono" style={{fontSize: '0.75rem', color: '#737373', textTransform: 'uppercase', marginLeft: '0.5rem'}}>Qual seu nome?</label>
-<input className="form-input" id="nome_contato" placeholder="Seu nome" required="" style={{width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9999px', padding: '1rem 1.5rem', color: '#fff'}} type="text"/>
+<input className="form-input" id="nome_contato" placeholder="Seu nome" required="" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9999px', padding: '1rem 1.5rem', color: '#fff'}} type="text"/>
 </div>
 <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
 <label className="font-mono" style={{fontSize: '0.75rem', color: '#737373', textTransform: 'uppercase', marginLeft: '0.5rem'}}>Sua Cidade/Estado?</label>
-<input className="form-input" id="cidade_contato" placeholder="Ex: Curitiba - PR" required="" style={{width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9999px', padding: '1rem 1.5rem', color: '#fff'}} type="text"/>
+<input className="form-input" id="cidade_contato" placeholder="Ex: Curitiba - PR" required="" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9999px', padding: '1rem 1.5rem', color: '#fff'}} type="text"/>
 </div>
 </div>
 <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem'}}>
@@ -482,11 +524,11 @@ function dispararWhatsApp(e){
 </div>
 <div id="container_outro_local" style={{display: 'none', flexDirection: 'column', gap: '0.5rem'}}>
 <label className="font-mono" style={{fontSize: '0.75rem', color: '#a3e635', textTransform: 'uppercase', marginLeft: '0.5rem'}}>Qual seria o outro local?</label>
-<input className="form-input" id="outro_local" placeholder="Digite o local exato..." style={{width: '100%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(163,230,53,0.5)', borderRadius: '9999px', padding: '1rem 1.5rem', color: '#fff'}} type="text"/>
+<input className="form-input" id="outro_local" placeholder="Digite o local exato..." style={{width: '100%', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(163,230,53,0.5)', borderRadius: '9999px', padding: '1rem 1.5rem', color: '#fff'}} type="text"/>
 </div>
 <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
 <label className="font-mono" style={{fontSize: '0.75rem', color: '#737373', textTransform: 'uppercase', marginLeft: '0.5rem'}}>Breve descrição da sua ideia:</label>
-<textarea className="form-input" id="ideia_contato" placeholder="Descreva o que você imagina para essa tatuagem..." required="" rows="4" style={{width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', padding: '1rem 1.5rem', color: '#fff', resize: 'none'}}></textarea>
+<textarea className="form-input" id="ideia_contato" placeholder="Descreva o que você imagina para essa tatuagem..." required="" rows="4" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', padding: '1rem 1.5rem', color: '#fff', resize: 'none'}}></textarea>
 </div>
 <button onclick="dispararWhatsApp(event)" onmouseout="this.style.backgroundColor='#fff'" onmouseover="this.style.backgroundColor='#e5e5e5'" style={{textTransform: 'uppercase', fontSize: '0.875rem', fontWeight: '700', color: '#000', letterSpacing: '0.1em', background: '#fff', width: '100%', borderRadius: '9999px', border: 'none', marginTop: '1rem', padding: '1.25rem', cursor: 'pointer', boxShadow: '0 0 25px -5px rgba(255,255,255,0.3)', transition: 'background-color 0.15s'}} type="button">
         Enviar e iniciar meu projeto

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -272,6 +308,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -308,7 +350,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex items-center gap-4 ml-auto md:hidden">
-<a className="group flex items-center justify-center px-4 py-1.5 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-sm relative" href="#" style={{boxShadow: '0 15px 33px -12px rgba(16,185,129,0.9), inset 0 4px 6.3px rgba(167,243,208,1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
+<a className="group flex items-center justify-center px-4 py-1.5 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-sm relative" href="#" style={{boxShadow: '0 15px 33px -12px rgba(16, 185, 129, 0.9), inset 0 4px 6.3px rgba(167, 243, 208, 1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 translate-y-full">
 </div>
 <span className="relative">Start free</span>
@@ -346,7 +388,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="hidden md:flex items-center justify-end flex-shrink-0 gap-4 ml-auto whitespace-nowrap">
 <a className="hover:text-white transition-colors text-base font-normal text-zinc-400" href="/login">Log in</a>
-<a className="group flex items-center justify-center px-5 py-2 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-base relative" href="#" style={{boxShadow: '0 15px 33px -12px rgba(16,185,129,0.9), inset 0 4px 6.3px rgba(167,243,208,1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
+<a className="group flex items-center justify-center px-5 py-2 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-base relative" href="#" style={{boxShadow: '0 15px 33px -12px rgba(16, 185, 129, 0.9), inset 0 4px 6.3px rgba(167, 243, 208, 1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 translate-y-full">
 </div>
 <span className="relative">Start free</span>
@@ -402,12 +444,12 @@ gtag('config', 'G-2M6V79H761');
 
           </p>
 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-<a className="group w-full sm:w-auto flex items-center justify-center px-8 py-3 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-base relative whitespace-nowrap" href="#" style={{boxShadow: '0 15px 33px -12px rgba(16,185,129,0.9), inset 0 4px 6.3px rgba(167,243,208,1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
+<a className="group w-full sm:w-auto flex items-center justify-center px-8 py-3 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-base relative whitespace-nowrap" href="#" style={{boxShadow: '0 15px 33px -12px rgba(16, 185, 129, 0.9), inset 0 4px 6.3px rgba(167, 243, 208, 1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 translate-y-full">
 </div>
 <span className="relative">Start free</span>
 </a>
-<a className="w-full sm:w-auto hover:bg-white/5 transition-all flex justify-center text-base font-light text-zinc-200 bg-gradient-to-b from-white/5 via-transparent to-black/20 rounded-full px-8 py-3 gap-2 items-center backdrop-blur-sm whitespace-nowrap" href="#" style={{boxShadow: '0 18px 35px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0), rgba(255,255,255,0.1))', -BorderRadiusBefore: '9999px'}}>
+<a className="w-full sm:w-auto hover:bg-white/5 transition-all flex justify-center text-base font-light text-zinc-200 bg-gradient-to-b from-white/5 via-transparent to-black/20 rounded-full px-8 py-3 gap-2 items-center backdrop-blur-sm whitespace-nowrap" href="#" style={{boxShadow: '0 18px 35px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0), rgba(255,255,255,0.1))', '--border-radius-before': '9999px'}}>
 <span className="tracking-tight">View demo</span>
 <iconify-icon className="text-base" icon="lucide:arrow-right"></iconify-icon>
 </a>
@@ -863,7 +905,7 @@ gtag('config', 'G-2M6V79H761');
                   Launch Sequence
                 </span>
 </button>
-<a className="inline-flex hover:bg-white/5 transition-all justify-center text-base font-light text-zinc-300 bg-gradient-to-b from-white/5 via-transparent to-black/20 rounded-full px-6 py-3.5 gap-2 items-center backdrop-blur-sm" href="#" style={{boxShadow: '0 18px 35px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0), rgba(255,255,255,0.1))', -BorderRadiusBefore: '9999px'}}>
+<a className="inline-flex hover:bg-white/5 transition-all justify-center text-base font-light text-zinc-300 bg-gradient-to-b from-white/5 via-transparent to-black/20 rounded-full px-6 py-3.5 gap-2 items-center backdrop-blur-sm" href="#" style={{boxShadow: '0 18px 35px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)', color: '#e5e7eb', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0), rgba(255,255,255,0.1))', '--border-radius-before': '9999px'}}>
 <span className="tracking-tight">Explore workflows</span>
 <iconify-icon className="text-base" icon="lucide:arrow-right"></iconify-icon>
 </a>
@@ -2010,14 +2052,14 @@ gtag('config', 'G-2M6V79H761');
               interest.
             </p>
 <div className="relative z-10 mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-[26rem] justify-center lg:justify-start">
-<button className="group flex-1 flex items-center justify-center py-3.5 px-7 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-base relative whitespace-nowrap" style={{boxShadow: '0 15px 33px -12px rgba(16,185,129,0.9), inset 0 4px 6.3px rgba(167,243,208,1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
+<button className="group flex-1 flex items-center justify-center py-3.5 px-7 shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 overflow-hidden font-medium text-emerald-950 bg-gradient-to-r from-[#A7F3D0] to-[#10B981] rounded-full text-base relative whitespace-nowrap" style={{boxShadow: '0 15px 33px -12px rgba(16, 185, 129, 0.9), inset 0 4px 6.3px rgba(167, 243, 208, 1), inset 0 -5px 6.3px rgba(5,150,105,1)'}}>
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute inset-0 translate-y-full"></div>
 <span className="relative flex items-center justify-center gap-2">
                     Start free
                     <iconify-icon className="w-4 h-4" icon="lucide:send"></iconify-icon>
 </span>
 </button>
-<button className="flex-1 hover:bg-white/5 transition-all flex justify-center text-base font-light text-zinc-200 bg-gradient-to-b from-white/5 via-transparent to-black/20 rounded-full px-7 py-3.5 gap-2 items-center backdrop-blur-sm" style={{boxShadow: '0 18px 35px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)', color: '#e5e7eb'}}>
+<button className="flex-1 hover:bg-white/5 transition-all flex justify-center text-base font-light text-zinc-200 bg-gradient-to-b from-white/5 via-transparent to-black/20 rounded-full px-7 py-3.5 gap-2 items-center backdrop-blur-sm" style={{boxShadow: '0 18px 35px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.05)', color: '#e5e7eb'}}>
 <span className="tracking-tight">Book a demo</span>
 <iconify-icon className="text-base" icon="lucide:arrow-right"></iconify-icon>
 </button>

@@ -6,10 +6,10 @@ import './index.css'
 import 'iconify-icon'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <BrowserRouter>
       <div className="noise-overlay"></div>
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
+  ,
 )

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -35,6 +71,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -44,7 +86,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     Skip to content
   </a>
 
-<section className="max-w-3xl mx-auto px-6 pt-12 animate" style={{-D: '.1s'}}>
+<section className="max-w-3xl mx-auto px-6 pt-12 animate" style={{'--d': '.1s'}}>
 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
 <div className="flex items-center gap-4">
 <img alt="Portrait of Segev smiling" className="h-20 w-20 rounded-full object-cover shadow-sm ring-1 ring-gray-200" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=240&amp;q=80"/>
@@ -75,7 +117,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <main id="main" tabindex="-1">
 
-<section className="max-w-3xl mx-auto px-6 mt-10 animate" style={{-D: '.2s'}}>
+<section className="max-w-3xl mx-auto px-6 mt-10 animate" style={{'--d': '.2s'}}>
 <h2 className="text-xl font-semibold tracking-tight mb-3">Summary</h2>
 <p>
         Data Science and Analytics Specialist with hands-on experience in financial data pipelines, fraud detection, and time-series analysis. Skilled in Python, SQL, and R for data processing, model development, and visualization. Proven ability to automate workflows, reduce errors, and generate actionable insights from large datasets.
@@ -83,7 +125,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 my-10 max-w-3xl mx-auto"></div>
 
-<section className="max-w-3xl mx-auto px-6 animate" style={{-D: '.3s'}}>
+<section className="max-w-3xl mx-auto px-6 animate" style={{'--d': '.3s'}}>
 <h2 className="text-xl font-semibold tracking-tight mb-6">Technical Skills</h2>
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 <div>
@@ -139,7 +181,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 my-10 max-w-3xl mx-auto"></div>
 
-<section className="max-w-3xl mx-auto px-6 animate" style={{-D: '.35s'}}>
+<section className="max-w-3xl mx-auto px-6 animate" style={{'--d': '.35s'}}>
 <h2 className="text-xl font-semibold tracking-tight mb-6">Featured Projects</h2>
 <div className="grid gap-6 md:grid-cols-2">
 
@@ -182,7 +224,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 my-10 max-w-3xl mx-auto"></div>
 
-<section className="max-w-3xl mx-auto px-6 animate" style={{-D: '.4s'}}>
+<section className="max-w-3xl mx-auto px-6 animate" style={{'--d': '.4s'}}>
 <h2 className="text-xl font-semibold tracking-tight mb-6">Professional Experience</h2>
 <div className="mb-8">
 <div className="flex items-start justify-between flex-wrap gap-y-1">
@@ -212,7 +254,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 my-10 max-w-3xl mx-auto"></div>
 
-<section className="max-w-3xl mx-auto px-6 animate" style={{-D: '.5s'}}>
+<section className="max-w-3xl mx-auto px-6 animate" style={{'--d': '.5s'}}>
 <h2 className="text-xl font-semibold tracking-tight mb-6">Education</h2>
 <div>
 <div className="flex items-start justify-between flex-wrap gap-y-1">
@@ -227,7 +269,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 my-10 max-w-3xl mx-auto"></div>
 
-<section className="max-w-3xl mx-auto px-6 animate" style={{-D: '.6s'}}>
+<section className="max-w-3xl mx-auto px-6 animate" style={{'--d': '.6s'}}>
 <h2 className="text-xl font-semibold tracking-tight mb-6">Additional Information</h2>
 <div className="grid sm:grid-cols-2 gap-6">
 <div>
@@ -250,7 +292,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 </main>
-<footer className="max-w-3xl mx-auto px-6 py-12 text-center text-sm text-gray-500 animate" style={{-D: '.7s'}}>
+<footer className="max-w-3xl mx-auto px-6 py-12 text-center text-sm text-gray-500 animate" style={{'--d': '.7s'}}>
     Jerusalem District • Languages: Hebrew (Native), English (Fluent)
   </footer>
 

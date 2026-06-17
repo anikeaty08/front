@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -371,6 +407,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -882,7 +924,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 <div className="grid md:grid-cols-2 gap-6 lg:gap-8 gap-x-6 gap-y-6">
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4 mb-6">
 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-sm text-indigo-400">
 <iconify-icon icon="solar:star-fall-linear" width="24"></iconify-icon>
@@ -896,7 +938,7 @@ gtag('config', 'G-2M6V79H761');
               becomes less central. That changes outcomes.
             </p>
 </div>
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4 mb-6">
 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-sm text-indigo-400">
 <iconify-icon icon="solar:user-id-linear" width="24"></iconify-icon>
@@ -912,7 +954,7 @@ gtag('config', 'G-2M6V79H761');
               C-suite using commercial insight and business cases.
             </p>
 </div>
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4 mb-6">
 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-sm text-indigo-400">
 <iconify-icon icon="solar:target-linear" width="24"></iconify-icon>
@@ -929,7 +971,7 @@ gtag('config', 'G-2M6V79H761');
               opportunities.
             </p>
 </div>
-<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="group hover:bg-white/10 hover:shadow-2xl transition-all duration-300 overflow-hidden bg-gradient-to-b from-white/10 to-white/0 rounded-3xl pt-8 pr-8 pb-8 pl-8 relative hover:border-indigo-500/30" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4 mb-6">
 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-sm text-indigo-400">
 <iconify-icon icon="solar:magic-stick-3-linear" width="24"></iconify-icon>

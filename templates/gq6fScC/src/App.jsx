@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
         tailwind.config = {
@@ -21,6 +57,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -43,7 +85,7 @@ export default function App() {
 
 <section className="relative h-screen flex items-center justify-center fade-in">
 <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
-<div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: 'url(\'data:image/svg+xml,&lt', svg xmlns=%22http: '//www.w3.org/2000/svg%22 viewBox=%220 0 1200 800%22&gt'}}></div>
+<div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: 'url(\'data:image/svg+xml, &lt', svg xmlns=%22http: '//www.w3.org/2000/svg%22 viewBox=%220 0 1200 800%22&gt'}}></div>
 <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
 <h1 className="font-playfair font-semibold text-5xl md:text-6xl leading-tight tracking-tight mb-6">
                 Where New York Style<br/>Meets Editorial Excellence

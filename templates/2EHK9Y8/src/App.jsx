@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       // Icons
@@ -123,6 +159,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -132,7 +174,7 @@ export default function App() {
 <header className="relative z-20">
 <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
 <div className="flex items-center gap-3">
-<div className="w-9 h-9 rounded-xl ring-glow flex items-center justify-center" style={{background: 'radial-gradient(80% 80% at 30% 20%, rgba(0,229,255,0.25), rgba(124,92,255,0.15))', border: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="w-9 h-9 rounded-xl ring-glow flex items-center justify-center" style={{background: 'radial-gradient(80% 80% at 30% 20%, rgba(0, 229, 255, 0.25), rgba(124, 92, 255, 0.15))', border: '1px solid rgba(255,255,255,0.06)'}}>
 <i className="w-5 h-5 text-cyan-300" data-lucide="shield"></i>
 </div>
 <span className="text-xl font-semibold tracking-tight">Finabox</span>
@@ -241,7 +283,7 @@ export default function App() {
 </div>
 <div className="glass rounded-2xl p-6 shadow-card">
 <div className="flex items-start gap-4">
-<div className="w-12 h-12 rounded-xl flex items-center justify-center ring-glow" style={{background: 'radial-gradient(60% 60% at 30% 20%, rgba(0,229,255,0.18), rgba(124,92,255,0.12))', border: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="w-12 h-12 rounded-xl flex items-center justify-center ring-glow" style={{background: 'radial-gradient(60% 60% at 30% 20%, rgba(0, 229, 255, 0.18), rgba(124, 92, 255, 0.12))', border: '1px solid rgba(255,255,255,0.06)'}}>
 <i className="w-6 h-6 text-violet-300" data-lucide="users"></i>
 </div>
 <div className="flex-1">
@@ -341,7 +383,7 @@ export default function App() {
 <section className="relative" id="governance">
 <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
 <div className="glass rounded-2xl p-6 md:p-8 shadow-card flex flex-col md:flex-row items-start md:items-center gap-6">
-<div className="w-14 h-14 rounded-2xl ring-glow flex items-center justify-center" style={{background: 'radial-gradient(60% 60% at 40% 30%, rgba(0,229,255,0.18), rgba(124,92,255,0.12))', border: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="w-14 h-14 rounded-2xl ring-glow flex items-center justify-center" style={{background: 'radial-gradient(60% 60% at 40% 30%, rgba(0, 229, 255, 0.18), rgba(124, 92, 255, 0.12))', border: '1px solid rgba(255,255,255,0.06)'}}>
 <i className="w-7 h-7 text-cyan-300" data-lucide="shield-check"></i>
 </div>
 <div className="flex-1">
@@ -417,7 +459,7 @@ export default function App() {
 <footer className="border-t border-white/5">
 <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
 <div className="flex items-center gap-3">
-<div className="w-9 h-9 rounded-xl ring-glow flex items-center justify-center" style={{background: 'radial-gradient(80% 80% at 30% 20%, rgba(0,229,255,0.25), rgba(124,92,255,0.15))', border: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="w-9 h-9 rounded-xl ring-glow flex items-center justify-center" style={{background: 'radial-gradient(80% 80% at 30% 20%, rgba(0, 229, 255, 0.25), rgba(124, 92, 255, 0.15))', border: '1px solid rgba(255,255,255,0.06)'}}>
 <i className="w-5 h-5 text-cyan-300" data-lucide="shield"></i>
 </div>
 <span className="text-sm text-white/70">© <span id="yr"></span> Finabox</span>

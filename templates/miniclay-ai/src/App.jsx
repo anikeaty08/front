@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -32,6 +68,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -39,14 +81,14 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
       
 
 <div className="fixed -z-10 w-full h-screen top-0 left-0">
-<div className="absolute inset-0" style={{background: 'radial-gradient(900px 400px at 10% 10%, rgba(102,126,234,0.25), transparent 60%), radial-gradient(900px 400px at 90% 0%, rgba(118,75,162,0.25), transparent 60%)', filter: 'blur(20px)', opacity: '0.7'}}></div>
+<div className="absolute inset-0" style={{background: 'radial-gradient(900px 400px at 10% 10%, rgba(102, 126, 234, 0.25), transparent 60%), radial-gradient(900px 400px at 90% 0%, rgba(118, 75, 162, 0.25), transparent 60%)', filter: 'blur(20px)', opacity: '0.7'}}></div>
 <div className="spline-container absolute top-0 left-0 w-full h-full -z-10">
 <div className="w-full h-full" style={{background: 'radial-gradient(600px 300px at 50% 60%, rgba(102,126,234,0.15), transparent 60%)'}}></div>
 </div>
 </div>
 
 <div className="fixed z-50 bg-transparent pt-6 pr-6 pb-6 pl-6 top-0 right-0 left-0">
-<div className="xl:pr-3 xl:pl-3 [animation:fadeSlideIn_1s_ease-out_0.1s_both] max-w-6xl border-white/10 border rounded-2xl mr-auto ml-auto pt-3 pr-3 pb-3 pl-3 themed-surface themed-border" style={{background: 'linear-gradient(180deg, rgba(14,16,26,0.55), rgba(14,16,26,0.35)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="xl:pr-3 xl:pl-3 [animation:fadeSlideIn_1s_ease-out_0.1s_both] max-w-6xl border-white/10 border rounded-2xl mr-auto ml-auto pt-3 pr-3 pb-3 pl-3 themed-surface themed-border" style={{background: 'linear-gradient(180deg, rgba(14, 16, 26, 0.55), rgba(14, 16, 26, 0.35)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.08)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <div className="flex items-center justify-between">
 <a className="inline-flex items-center gap-2" href="#home">
 <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{background: 'linear-gradient(135deg, var(--brand-start), var(--brand-end))', boxShadow: '0 8px 24px rgba(102,126,234,0.35)'}}>

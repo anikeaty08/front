@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -116,6 +152,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -252,7 +294,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-[#6b6560] mb-4 font-manrope">
                 Your total monthly budget across LinkedIn, Meta, and Google Ads
               </p>
-<input className="" id="spend-slider" max="100000" min="5000" step="1000" style={{-Progress: '15.789473684210526%'}} type="range" value="20000"/>
+<input className="" id="spend-slider" max="100000" min="5000" step="1000" style={{'--progress': '15.789473684210526%'}} type="range" value="20000"/>
 </div>
 
 <div className="">
@@ -265,7 +307,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-xs text-[#6b6560] mb-4 font-manrope">
                 Your blended CPL across all paid campaigns
               </p>
-<input id="cpl-slider" max="500" min="50" step="10" style={{-Progress: '22.22222222222222%'}} type="range" value="150"/>
+<input id="cpl-slider" max="500" min="50" step="10" style={{'--progress': '22.22222222222222%'}} type="range" value="150"/>
 </div>
 
 <div className="">
@@ -279,7 +321,7 @@ gtag('config', 'G-2M6V79H761');
                 The percentage of leads your sales team rejects or never
                 converts
               </p>
-<input className="" id="waste-slider" max="80" min="20" step="5" style={{-Progress: '50%'}} type="range" value="50"/>
+<input className="" id="waste-slider" max="80" min="20" step="5" style={{'--progress': '50%'}} type="range" value="50"/>
 </div>
 </div>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind 3D utils
@@ -936,6 +972,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2394,7 +2436,7 @@ gtag('config', 'G-2M6V79H761');
               }
             </style>
 
-<div className="card-shuffle-container-adjusted grid min-h-[500px] h-full relative justify-items-center" id="cards-inner-container" onclick="const c=event.target.closest('.card-shuffle-item');if(c){const i=c.firstElementChild;const f=i.classList.contains('flipped');this.querySelectorAll('.flipped').forEach(e=&gt;e.classList.remove('flipped'));if(!f)i.classList.add('flipped')}" style={{-Progress: '0'}}>
+<div className="card-shuffle-container-adjusted grid min-h-[500px] h-full relative justify-items-center" id="cards-inner-container" onclick="const c=event.target.closest('.card-shuffle-item');if(c){const i=c.firstElementChild;const f=i.classList.contains('flipped');this.querySelectorAll('.flipped').forEach(e=&gt;e.classList.remove('flipped'));if(!f)i.classList.add('flipped')}" style={{'--progress': '0'}}>
 <style>
               @media (orientation: portrait) and (max-width: 767px) {
                 #cards-inner-container {
@@ -2476,7 +2518,7 @@ gtag('config', 'G-2M6V79H761');
               }
             </style>
 
-<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 md:max-w-[330px] w-full max-w-[140px] rounded-[2rem] relative gap-x-6 gap-y-6" style={{-Sx: '200px', -Sy: '300px', -Sr: '-15deg', boxShadow: 'none !important'}}>
+<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 md:max-w-[330px] w-full max-w-[140px] rounded-[2rem] relative gap-x-6 gap-y-6" style={{'--sx': '200px', '--sy': '300px', '--sr': '-15deg', boxShadow: 'none !important'}}>
 <div className="transition-all duration-700 [transform-style:preserve-3d] [&amp;.flipped]:[transform:rotateY(180deg)] [container-type:size] w-full h-full rounded-[2rem] relative">
 <div className="[backface-visibility:hidden] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05] bg-black w-full h-full rounded-[2rem] absolute top-0 right-0 bottom-0 left-0">
 <img alt="Lumina" className="w-full h-full object-cover" id="card-1-img" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/117c2ff9-df9b-43ee-ae5d-cdb6b7735181_1600w.jpg"/>
@@ -2507,7 +2549,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative max-w-[140px] md:max-w-[330px] w-full" style={{-Sx: '-50px', -Sy: '400px', -Sr: '8deg', boxShadow: 'none !important'}}>
+<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative max-w-[140px] md:max-w-[330px] w-full" style={{'--sx': '-50px', '--sy': '400px', '--sr': '8deg', boxShadow: 'none !important'}}>
 <div className="transition-all duration-700 [transform-style:preserve-3d] [&amp;.flipped]:[transform:rotateY(180deg)] w-full h-full rounded-[2rem] relative ring-1 ring-black/5 [container-type:size]">
 <div className="[backface-visibility:hidden] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05] w-full h-full rounded-[2rem] absolute top-0 right-0 bottom-0 left-0 bg-black">
 <img alt="Apex" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8686e1cf-0f3f-4b17-b7c5-ecb0ca0e7a9b_1600w.png"/>
@@ -2538,7 +2580,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative max-w-[140px] md:max-w-[330px] w-full" style={{-Sx: '-150px', -Sy: '200px', -Sr: '-5deg', boxShadow: 'none !important'}}>
+<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative max-w-[140px] md:max-w-[330px] w-full" style={{'--sx': '-150px', '--sy': '200px', '--sr': '-5deg', boxShadow: 'none !important'}}>
 <div className="transition-all duration-700 [transform-style:preserve-3d] [&amp;.flipped]:[transform:rotateY(180deg)] w-full h-full rounded-[2rem] relative ring-1 ring-black/5 [container-type:size]">
 <div className="[backface-visibility:hidden] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05] w-full h-full rounded-[2rem] absolute top-0 right-0 bottom-0 left-0 bg-black">
 <img alt="Oasis" className="group-hover:opacity-100 transition-opacity duration-700 opacity-90 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/af71a446-504c-41cb-b292-ab6ba8c8707f_1600w.jpg"/>
@@ -2569,7 +2611,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative gap-x-6 gap-y-6 max-w-[140px] md:max-w-[330px] w-full" style={{-Sx: '180px', -Sy: '-80px', -Sr: '12deg', boxShadow: 'none !important'}}>
+<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative gap-x-6 gap-y-6 max-w-[140px] md:max-w-[330px] w-full" style={{'--sx': '180px', '--sy': '-80px', '--sr': '12deg', boxShadow: 'none !important'}}>
 <div className="transition-all duration-700 [transform-style:preserve-3d] [&amp;.flipped]:[transform:rotateY(180deg)] w-full h-full rounded-[2rem] relative ring-1 ring-black/5 [container-type:size]">
 <div className="[backface-visibility:hidden] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05] w-full h-full rounded-[2rem] absolute top-0 right-0 bottom-0 left-0 bg-black">
 <img alt="Oasis" className="group-hover:opacity-100 transition-opacity duration-700 opacity-90 w-full max-w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b808117f-e835-4288-acd7-81d12f8db47f_1600w.png"/>
@@ -2600,7 +2642,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative gap-x-6 gap-y-6 max-w-[140px] md:max-w-[330px] w-full" style={{-Sx: '-40px', -Sy: '-150px', -Sr: '-10deg', boxShadow: 'none !important'}}>
+<div className="card-shuffle-item aspect-square group cursor-pointer !opacity-100 rounded-[2rem] relative gap-x-6 gap-y-6 max-w-[140px] md:max-w-[330px] w-full" style={{'--sx': '-40px', '--sy': '-150px', '--sr': '-10deg', boxShadow: 'none !important'}}>
 <div className="w-full h-full relative transition-all duration-700 [transform-style:preserve-3d] [&amp;.flipped]:[transform:rotateY(180deg)] ring-1 rounded-[2rem] ring-black/5 [container-type:size]">
 <div className="[backface-visibility:hidden] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05] w-full h-full rounded-[2rem] absolute top-0 right-0 bottom-0 left-0 bg-black">
 <img alt="Vertex" className="group-hover:opacity-100 transition-opacity duration-700 opacity-90 w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/abd00c5b-e1c2-452b-85d9-f21765e6c8db_1600w.png"/>
@@ -2631,7 +2673,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="card-shuffle-item aspect-square group rounded-[2rem] relative cursor-pointer !opacity-100 max-w-[140px] md:max-w-[330px] w-full" style={{-Sx: '-180px', -Sy: '-100px', -Sr: '6deg', boxShadow: 'none !important'}}>
+<div className="card-shuffle-item aspect-square group rounded-[2rem] relative cursor-pointer !opacity-100 max-w-[140px] md:max-w-[330px] w-full" style={{'--sx': '-180px', '--sy': '-100px', '--sr': '6deg', boxShadow: 'none !important'}}>
 <div className="w-full h-full relative transition-all duration-700 [transform-style:preserve-3d] [&amp;.flipped]:[transform:rotateY(180deg)] ring-1 rounded-[2rem] ring-black/5 [container-type:size]">
 <div className="[backface-visibility:hidden] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05] w-full h-full rounded-[2rem] absolute top-0 right-0 bottom-0 left-0 bg-black">
 <img alt="Pulse" className="bg-center w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6673501d-f31e-4c8a-ab72-4a41cb109301_800w.png"/>

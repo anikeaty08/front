@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -310,6 +346,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -501,10 +543,10 @@ addUtilities({
 
 <div className="z-10 grid md:grid-cols-2 gap-6 relative gap-x-6 gap-y-6">
 
-<div className="group spotlight-card overflow-hidden md:p-10 bg-gradient-to-br from-[#121214] to-[#000000]/0 border-white/5 border rounded-[32px] px-8 py-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)]" style={{-MouseX: '173px', -MouseY: '10px'}}>
+<div className="group spotlight-card overflow-hidden md:p-10 bg-gradient-to-br from-[#121214] to-[#000000]/0 border-white/5 border rounded-[32px] px-8 py-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:shadow-[0_0_40px_rgba(59,130,246,0.1)]" style={{'--mouse-x': '173px', '--mouse-y': '10px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none"></div>
 <div className="max-w-sm z-10 relative">
 <div className="flex items-center gap-3 mb-4">
@@ -525,10 +567,10 @@ addUtilities({
 <div className="transition-transform duration-700 ease-out group-hover:scale-110 group-hover:-translate-y-4 group-hover:-translate-x-2 bg-center opacity-90 w-64 h-64 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6f79903e-24e5-42fc-a801-d9faa5fe2ed3_800w.png)] bg-cover absolute right-0 bottom-0 brightness-50 translate-x-12 translate-y-8"></div>
 </div>
 
-<div className="group spotlight-card overflow-hidden md:p-10 bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{-MouseX: '297px', -MouseY: '149px'}}>
+<div className="group spotlight-card overflow-hidden md:p-10 bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{'--mouse-x': '297px', '--mouse-y': '149px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none"></div>
 <div className="max-w-sm z-10 relative">
 <div className="flex items-center gap-3 mb-4">
@@ -551,10 +593,10 @@ addUtilities({
 <div className="transition-transform duration-700 ease-out group-hover:scale-105 group-hover:-translate-x-4 group-hover:-translate-y-4 bg-center group-hover:opacity-60 opacity-40 w-72 h-72 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e40a7744-73db-4b0e-b0bf-02ff9fe63fe6_800w.png)] bg-cover absolute right-0 bottom-0 translate-x-16 translate-y-16"></div>
 </div>
 
-<div className="group spotlight-card relative overflow-hidden rounded-[32px] border border-white/5 bg-[#0A0A0A] p-8 md:p-10 shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{-MouseX: '48px', -MouseY: '251px'}}>
+<div className="group spotlight-card relative overflow-hidden rounded-[32px] border border-white/5 bg-[#0A0A0A] p-8 md:p-10 shadow-2xl transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E]" style={{'--mouse-x': '48px', '--mouse-y': '251px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none"></div>
 <div className="max-w-sm z-10 relative">
 <div className="flex items-center gap-3 mb-4">
@@ -575,10 +617,10 @@ addUtilities({
 <div className="transition-transform duration-700 ease-out group-hover:scale-105 group-hover:-translate-y-2 group-hover:-translate-x-2 bg-center w-64 h-64 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f2dffafa-4bdc-460e-86d7-8d785d070e6a_800w.png)] bg-cover absolute right-0 bottom-0 shadow-sm brightness-50 translate-x-10 translate-y-10"></div>
 </div>
 
-<div className="group spotlight-card overflow-hidden md:p-10 transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E] bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl" style={{-MouseX: '296px', -MouseY: '211px'}}>
+<div className="group spotlight-card overflow-hidden md:p-10 transition-all duration-500 hover:border-white/10 hover:bg-[#0C0C0E] bg-[#0A0A0A] border-white/5 border rounded-[32px] pt-8 pr-8 pb-8 pl-8 relative shadow-2xl" style={{'--mouse-x': '296px', '--mouse-y': '211px'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)', zIndex: '1'}}></div>
-<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
+<div className="pointer-events-none absolute inset-0 rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px', zIndex: '50'}}></div>
 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_100%_100%,black_40%,transparent_100%)] pointer-events-none"></div>
 <div className="z-10 max-w-xs relative">
 <div className="flex items-center gap-3 mb-4">

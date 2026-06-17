@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -30,6 +66,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -52,13 +94,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="relative overflow-hidden">
 <img alt="" className="w-full h-[60vh] object-cover opacity-20" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-<h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-4" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out,transform .6s ease-out'}}>
+<h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-4" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out, transform .6s ease-out'}}>
         Neo-Traditional Flash &amp; Fine Art
       </h1>
-<p className="text-neutral-300 max-w-md mx-auto mb-6" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out,transform .6s .1s ease-out'}}>
+<p className="text-neutral-300 max-w-md mx-auto mb-6" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out, transform .6s .1s ease-out'}}>
         Original designs, limited prints and a direct path to your next tattoo appointment.
       </p>
-<a className="px-6 py-3 bg-rose-500 hover:bg-rose-600 rounded text-sm font-medium transition-colors" href="#designs" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out,transform .6s .2s ease-out'}}>
+<a className="px-6 py-3 bg-rose-500 hover:bg-rose-600 rounded text-sm font-medium transition-colors" href="#designs" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out, transform .6s .2s ease-out'}}>
         See Available Designs
       </a>
 </div>
@@ -68,7 +110,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h2 className="text-3xl font-semibold tracking-tight mb-8">Flash Sheets</h2>
 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out,transform .6s ease-out'}}>
+<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out, transform .6s ease-out'}}>
 <img alt="" className="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
 <div className="p-5">
 <h3 className="font-medium mb-2">Mythic Creatures Vol. 1</h3>
@@ -82,7 +124,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out,transform .6s .1s ease-out'}}>
+<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out, transform .6s .1s ease-out'}}>
 <img alt="" className="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
 <div className="p-5">
 <h3 className="font-medium mb-2">Botanical Souls</h3>
@@ -96,7 +138,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out,transform .6s .2s ease-out'}}>
+<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out, transform .6s .2s ease-out'}}>
 <img alt="" className="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <div className="p-5">
 <h3 className="font-medium mb-2">Sacred Symbols</h3>
@@ -116,7 +158,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h2 className="text-3xl font-semibold tracking-tight mb-8">Art Prints</h2>
 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out,transform .6s ease-out'}}>
+<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out, transform .6s ease-out'}}>
 <img alt="" className="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
 <div className="p-5">
 <h3 className="font-medium mb-2">Eternal Serpent</h3>
@@ -130,7 +172,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out,transform .6s .1s ease-out'}}>
+<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out, transform .6s .1s ease-out'}}>
 <img alt="" className="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
 <div className="p-5">
 <h3 className="font-medium mb-2">Winged Herald</h3>
@@ -144,7 +186,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out,transform .6s .2s ease-out'}}>
+<div className="border border-neutral-800 rounded-lg overflow-hidden" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out, transform .6s .2s ease-out'}}>
 <img alt="" className="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <div className="p-5">
 <h3 className="font-medium mb-2">Bloom &amp; Blade</h3>
@@ -184,7 +226,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <h2 className="text-3xl font-semibold tracking-tight mb-8">Available Designs</h2>
 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out,transform .6s ease-out'}}>
+<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s ease-out, transform .6s ease-out'}}>
 <img alt="" className="w-full h-60 object-cover rounded-md" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
 <div className="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-md transition-opacity">
 <button className="px-4 py-2 bg-rose-500 hover:bg-rose-600 rounded text-xs font-medium">
@@ -193,7 +235,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out,transform .6s .1s ease-out'}}>
+<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .1s ease-out, transform .6s .1s ease-out'}}>
 <img alt="" className="w-full h-60 object-cover rounded-md" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
 <div className="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-md transition-opacity">
 <button className="px-4 py-2 bg-rose-500 hover:bg-rose-600 rounded text-xs font-medium">
@@ -201,7 +243,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           </button>
 </div>
 </div>
-<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out,transform .6s .2s ease-out'}}>
+<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .2s ease-out, transform .6s .2s ease-out'}}>
 <img alt="" className="w-full h-60 object-cover rounded-md" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
 <div className="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-md transition-opacity">
 <button className="px-4 py-2 bg-rose-500 hover:bg-rose-600 rounded text-xs font-medium">
@@ -209,7 +251,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           </button>
 </div>
 </div>
-<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .3s ease-out,transform .6s .3s ease-out'}}>
+<div className="relative group" style={{opacity: '0', transform: 'translateY(20px)', transition: 'opacity .6s .3s ease-out, transform .6s .3s ease-out'}}>
 <img alt="" className="w-full h-60 object-cover rounded-md" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
 <div className="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-md transition-opacity">
 <button className="px-4 py-2 bg-rose-500 hover:bg-rose-600 rounded text-xs font-medium">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -49,6 +85,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -69,13 +111,13 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="text-sm font-medium hover:text-neutral-900/80 transition-colors" href="#api">API</a>
 
 <div className="relative group">
-<button aria-expanded="false" aria-haspopup="true" className="inline-flex items-center gap-2 text-sm font-medium hover:text-neutral-900/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded" style={{-RingColor: '#E14A2A'}} type="button">
+<button aria-expanded="false" aria-haspopup="true" className="inline-flex items-center gap-2 text-sm font-medium hover:text-neutral-900/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded" style={{'--ring-color': '#E14A2A'}} type="button">
 <span>Resources</span>
 <i className="h-4 w-4" data-lucide="chevron-down"></i>
 </button>
 <div className="absolute left-0 mt-3 w-72 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200">
 <div className="rounded-lg border shadow-sm overflow-hidden" style={{backgroundColor: '#FFFFFF', borderColor: '#EFEFEC'}}>
-<div className="p-3 divide-y" style={{-Divider: '#F5F5F3', borderColor: '#F5F5F3'}}>
+<div className="p-3 divide-y" style={{'--divider': '#F5F5F3', borderColor: '#F5F5F3'}}>
 <a className="flex items-start gap-3 p-3 rounded hover:bg-neutral-50 transition-colors" href="#docs">
 <i className="h-5 w-5" data-lucide="book-open" style={{color: '#E14A2A'}}></i>
 <div>

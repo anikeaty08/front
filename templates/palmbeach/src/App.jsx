@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -31,7 +73,7 @@ gtag('config', 'G-2M6V79H761');
           Book a Free Consultation
         </a>
 <button className="md:hidden" style={{color: '#537457'}}>
-<iconify-icon icon="solar:hamburger-menu-linear" style={{-IconifyStrokeWidth: '1.5'}} width="24"></iconify-icon>
+<iconify-icon icon="solar:hamburger-menu-linear" style={{'--iconify-stroke-width': '1.5'}} width="24"></iconify-icon>
 </button>
 </div>
 </header>
@@ -115,7 +157,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-lg max-w-xs border" style={{borderColor: '#e8e0d8'}}>
 <div className="flex items-center gap-3 mb-2">
 <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{backgroundColor: '#537457'}}>
-<iconify-icon icon="solar:verified-check-linear" style={{color: '#fff', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon icon="solar:verified-check-linear" style={{color: '#fff', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </div>
 <div className="">
 <p className="font-bold text-sm leading-tight" style={{color: '#332A24'}}>
@@ -156,7 +198,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 <div className="bg-white rounded-2xl p-8 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:clock-circle-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="24"></iconify-icon>
+<iconify-icon icon="solar:clock-circle-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-bold mb-3" style={{color: '#537457'}}>
               The Endless Wait
@@ -169,7 +211,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl p-8 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:user-cross-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="24"></iconify-icon>
+<iconify-icon icon="solar:user-cross-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-bold mb-3" style={{color: '#537457'}}>
               The Impersonal Visit
@@ -182,7 +224,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl p-8 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-6" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:moon-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="24"></iconify-icon>
+<iconify-icon icon="solar:moon-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="24"></iconify-icon>
 </div>
 <h3 className="text-lg font-bold mb-3" style={{color: '#537457'}}>
               The After-Hours Anxiety
@@ -399,7 +441,7 @@ gtag('config', 'G-2M6V79H761');
 <ul className="space-y-6">
 <li className="flex items-start gap-4">
 <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{backgroundColor: '#537457'}}>
-<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', -IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', '--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </div>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
                   You'll finally have a true partner in your health. Build a
@@ -410,7 +452,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 <li className="flex items-start gap-4">
 <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{backgroundColor: '#537457'}}>
-<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', -IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', '--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </div>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
                   You'll be able to access your doctor when you need them. No
@@ -421,7 +463,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 <li className="flex items-start gap-4">
 <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{backgroundColor: '#537457'}}>
-<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', -IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', '--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </div>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
                   You'll feel in control of your healthcare journey. With
@@ -432,7 +474,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 <li className="flex items-start gap-4">
 <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{backgroundColor: '#537457'}}>
-<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', -IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', '--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </div>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
                   You'll save your most valuable asset: time. Eliminate wasted
@@ -442,7 +484,7 @@ gtag('config', 'G-2M6V79H761');
 </li>
 <li className="flex items-start gap-4">
 <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{backgroundColor: '#537457'}}>
-<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', -IconifyStrokeWidth: '1.5'}} width="14"></iconify-icon>
+<iconify-icon icon="solar:check-read-linear" style={{color: '#fff', '--iconify-stroke-width': '1.5'}} width="14"></iconify-icon>
 </div>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
                   You'll have an expert advocate navigating the complex
@@ -476,7 +518,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 <div className="bg-white rounded-2xl p-7 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-11 h-11 rounded-full flex items-center justify-center mb-5" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:phone-calling-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon icon="solar:phone-calling-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 <h3 className="text-base font-bold mb-2" style={{color: '#537457'}}>
               True 24/7 Physician Access
@@ -488,7 +530,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl p-7 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-11 h-11 rounded-full flex items-center justify-center mb-5" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:calendar-minimalistic-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon icon="solar:calendar-minimalistic-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 <h3 className="text-base font-bold mb-2" style={{color: '#537457'}}>
               Same-Day or Next-Day Appointments
@@ -499,7 +541,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl p-7 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-11 h-11 rounded-full flex items-center justify-center mb-5" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:clock-square-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon icon="solar:clock-square-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 <h3 className="text-base font-bold mb-2" style={{color: '#537457'}}>
               Extended, Unhurried Visits
@@ -511,7 +553,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl p-7 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-11 h-11 rounded-full flex items-center justify-center mb-5" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:heart-pulse-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon icon="solar:heart-pulse-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 <h3 className="text-base font-bold mb-2" style={{color: '#537457'}}>
               Annual Comprehensive Wellness Exam
@@ -522,7 +564,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl p-7 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-11 h-11 rounded-full flex items-center justify-center mb-5" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:chart-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon icon="solar:chart-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 <h3 className="text-base font-bold mb-2" style={{color: '#537457'}}>
               Proactive Health and Longevity Planning
@@ -534,7 +576,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl p-7 border" style={{borderColor: '#e8e0d8'}}>
 <div className="w-11 h-11 rounded-full flex items-center justify-center mb-5" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:users-group-rounded-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon icon="solar:users-group-rounded-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 <h3 className="text-base font-bold mb-2" style={{color: '#537457'}}>
               Expert Specialist Coordination
@@ -547,7 +589,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="bg-white rounded-2xl p-7 border md:col-span-2 lg:col-span-3" style={{borderColor: '#e8e0d8'}}>
 <div className="flex items-start gap-5">
 <div className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style={{backgroundColor: '#f0ebe3'}}>
-<iconify-icon icon="solar:global-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="22"></iconify-icon>
+<iconify-icon icon="solar:global-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="22"></iconify-icon>
 </div>
 <div>
 <h3 className="text-base font-bold mb-2" style={{color: '#537457'}}>
@@ -649,7 +691,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-semibold text-base leading-snug" style={{color: '#332A24'}}>
                 What is the annual fee for membership?
               </span>
-<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </summary>
 <div className="px-6 pb-6" style={{background: '#fff'}}>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
@@ -666,7 +708,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-semibold text-base leading-snug" style={{color: '#332A24'}}>
                 Do you accept health insurance?
               </span>
-<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </summary>
 <div className="px-6 pb-6" style={{background: '#fff'}}>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
@@ -685,7 +727,7 @@ gtag('config', 'G-2M6V79H761');
                 What is the difference between concierge medicine and my current
                 primary care?
               </span>
-<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </summary>
 <div className="px-6 pb-6" style={{background: '#fff'}}>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
@@ -703,7 +745,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-semibold text-base leading-snug" style={{color: '#332A24'}}>
                 Who is Dr. Abeer Aziz-Siddiqui?
               </span>
-<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </summary>
 <div className="px-6 pb-6" style={{background: '#fff'}}>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
@@ -722,7 +764,7 @@ gtag('config', 'G-2M6V79H761');
                 What happens if I need to see a specialist or go to the
                 hospital?
               </span>
-<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </summary>
 <div className="px-6 pb-6" style={{background: '#fff'}}>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
@@ -739,7 +781,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-semibold text-base leading-snug" style={{color: '#332A24'}}>
                 Is this practice right for me if I am healthy?
               </span>
-<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </summary>
 <div className="px-6 pb-6" style={{background: '#fff'}}>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>
@@ -756,7 +798,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-semibold text-base leading-snug" style={{color: '#332A24'}}>
                 Does concierge medicine replace my health insurance?
               </span>
-<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', -IconifyStrokeWidth: '1.5'}} width="20"></iconify-icon>
+<iconify-icon className="faq-chevron flex-shrink-0" icon="solar:alt-arrow-down-linear" style={{color: '#537457', '--iconify-stroke-width': '1.5'}} width="20"></iconify-icon>
 </summary>
 <div className="px-6 pb-6" style={{background: '#fff'}}>
 <p className="text-base leading-relaxed" style={{color: '#332A24'}}>

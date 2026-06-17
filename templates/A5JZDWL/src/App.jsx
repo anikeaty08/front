@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -29,6 +65,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -50,7 +92,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <li className=""><a className="hover:text-orange-600 transition-colors duration-200 text-base font-medium text-gray-900" href="#">About</a></li>
 <li className=""><a className="hover:text-orange-600 transition-colors duration-200 text-base font-medium text-gray-900" href="#">Contact</a></li>
 </ul>
-<button className="relative cursor-pointer border-none overflow-hidden transition-all duration-200 hover:scale-105 text-sm font-medium text-white rounded-full pt-3 pr-6 pb-3 pl-6 shadow-lg left-4" style={{-Duration: '7s', -Easing: 'linear', -CColor-1: 'rgba(249, 115, 22, 0.7)', -CColor-2: '#dc2626', -CColor-3: '#e21bda', -CColor-4: 'rgba(251, 146, 60, 0.8)', -CShadow: 'rgba(249, 115, 22, 0.5)', -CShadowInsetTop: 'rgba(251, 146, 60, 0.9)', -CShadowInsetBottom: 'rgba(254, 215, 170, 0.8)', -CRadialInner: '#ea580c', -CRadialOuter: '#fb923c', background: 'radial-gradient(circle, var(--c-radial-inner), var(--c-radial-outer) 80%)', boxShadow: '0 0 14px var(--c-shadow)'}}>
+<button className="relative cursor-pointer border-none overflow-hidden transition-all duration-200 hover:scale-105 text-sm font-medium text-white rounded-full pt-3 pr-6 pb-3 pl-6 shadow-lg left-4" style={{'--duration': '7s', '--easing': 'linear', '--c-color-1': 'rgba(249, 115, 22, 0.7)', '--c-color-2': '#dc2626', '--c-color-3': '#e21bda', '--c-color-4': 'rgba(251, 146, 60, 0.8)', '--c-shadow': 'rgba(249, 115, 22, 0.5)', '--c-shadow-inset-top': 'rgba(251, 146, 60, 0.9)', '--c-shadow-inset-bottom': 'rgba(254, 215, 170, 0.8)', '--c-radial-inner': '#ea580c', '--c-radial-outer': '#fb923c', background: 'radial-gradient(circle, var(--c-radial-inner), var(--c-radial-outer) 80%)', boxShadow: '0 0 14px var(--c-shadow)'}}>
 <div className="absolute inset-0 rounded-full pointer-events-none z-10" style={{boxShadow: 'inset 0 3px 12px var(--c-shadow-inset-top), inset 0 -3px 4px var(--c-shadow-inset-bottom)'}}></div>
 <div className="relative overflow-hidden min-w-32 rounded-full pt-0 pb-0" style={{WebkitMaskImage: '-webkit-radial-gradient(white, black)'}}>
 <span className="relative z-10 inline-block">Download CV</span>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -45,7 +87,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="h-0 w-0 border-l-[0.9rem] border-r-[0.9rem] border-b-[1.5rem] border-l-transparent border-r-transparent border-b-[#E8860C]"></div>
 </div>
 <div className="leading-none">
-<div className="text-base font-semibold uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<div className="text-base font-semibold uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
 <span className="text-[#E8860C]">E</span><span className="text-white">LITE</span>
 <span className="ml-1 text-[#E8860C]">P</span><span className="text-white">ERFORMANCE</span>
 <span className="ml-1 text-[#E8860C]">A</span><span className="text-white">CADEMY</span>
@@ -75,7 +117,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute right-[-10%] top-[-10%] h-[38rem] w-[38rem] rounded-full bg-[#E8860C] opacity-10 blur-3xl"></div>
 <div className="absolute bottom-[-10%] left-1/2 h-[24rem] w-[24rem] -translate-x-1/2 rounded-full bg-[#C45A0B] opacity-10 blur-3xl"></div>
 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-<div className="text-[24rem] font-black uppercase leading-none tracking-tight text-transparent opacity-10 [text-stroke:1px_rgba(232,134,12,0.7)]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<div className="text-[24rem] font-black uppercase leading-none tracking-tight text-transparent opacity-10 [text-stroke:1px_rgba(232,134,12,0.7)]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
           EPA
         </div>
 </div>
@@ -85,7 +127,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-flex h-2 w-2 rounded-full bg-[#E8860C] shadow-[0_0_1rem_rgba(232,134,12,0.8)]"></span>
 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#E8860C]">Multi-Sport Performance Training</span>
 </div>
-<h1 className="max-w-4xl text-7xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-8xl lg:text-9xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h1 className="max-w-4xl text-7xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-8xl lg:text-9xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
             Elevate<br/>
             Your<br/>
 <span className="text-[#E8860C]">Game.</span>
@@ -104,19 +146,19 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="mt-12 grid max-w-5xl grid-cols-2 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur sm:grid-cols-4">
 <div className="border-b border-r border-white/10 p-5 sm:border-b-0">
-<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>500+</div>
+<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>500+</div>
 <div className="mt-2 text-xs font-medium uppercase tracking-[0.16em] text-[#666666]">Athletes Trained</div>
 </div>
 <div className="border-b border-white/10 p-5 sm:border-b-0 sm:border-r">
-<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>6+</div>
+<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>6+</div>
 <div className="mt-2 text-xs font-medium uppercase tracking-[0.16em] text-[#666666]">Years of Excellence</div>
 </div>
 <div className="border-r border-white/10 p-5">
-<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>2</div>
+<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>2</div>
 <div className="mt-2 text-xs font-medium uppercase tracking-[0.16em] text-[#666666]">Colorado Locations</div>
 </div>
 <div className="p-5">
-<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>4.9★</div>
+<div className="text-4xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>4.9★</div>
 <div className="mt-2 text-xs font-medium uppercase tracking-[0.16em] text-[#666666]">Avg. Rating</div>
 </div>
 </div>
@@ -125,7 +167,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 <section className="overflow-hidden bg-[#E8860C] py-3">
-<div className="whitespace-nowrap text-sm font-semibold uppercase tracking-[0.28em] text-black" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<div className="whitespace-nowrap text-sm font-semibold uppercase tracking-[0.28em] text-black" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
 <div className="inline-block min-w-full animate-[marquee_30s_linear_infinite]">
           DISCIPLINE ✦ TRAIN WITH PURPOSE ✦ ACHIEVE REAL RESULTS ✦ NO SHORTCUTS ✦ SPORT-SPECIFIC TRAINING ✦ COLORADO PROUD ✦ DISCIPLINE ✦ TRAIN WITH PURPOSE ✦ ACHIEVE REAL RESULTS ✦ NO SHORTCUTS ✦
         </div>
@@ -137,7 +179,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-14 grid gap-8 lg:grid-cols-2 lg:items-end">
 <div>
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">What We Offer</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
               Training<br/>Programs
             </h2>
 </div>
@@ -150,7 +192,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.96),rgba(10,10,10,0.3)),url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&amp;fit=crop&amp;w=1200&amp;q=80')] bg-cover bg-center"></div>
 <div className="relative mt-auto p-8">
 <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#E8860C]">01</div>
-<h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Soccer Training</h3>
+<h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Soccer Training</h3>
 <p className="mt-4 text-sm leading-7 text-[#9A9A9A]">Technical development, positional movement, speed, and game-ready performance for serious soccer athletes.</p>
 <a className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#E8860C]" href="#">Learn More <span>→</span></a>
 </div>
@@ -159,7 +201,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.96),rgba(10,10,10,0.3)),url('https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&amp;fit=crop&amp;w=1200&amp;q=80')] bg-cover bg-center"></div>
 <div className="relative mt-auto p-8">
 <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#E8860C]">02</div>
-<h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Lacrosse Training</h3>
+<h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Lacrosse Training</h3>
 <p className="mt-4 text-sm leading-7 text-[#9A9A9A]">High-level stick work, conditioning, mobility, and explosive power built for the demands of the game.</p>
 <a className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#E8860C]" href="#">Learn More <span>→</span></a>
 </div>
@@ -168,7 +210,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.96),rgba(10,10,10,0.3)),url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&amp;fit=crop&amp;w=1200&amp;q=80')] bg-cover bg-center"></div>
 <div className="relative mt-auto p-8">
 <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#E8860C]">03</div>
-<h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Strength &amp; Conditioning</h3>
+<h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Strength &amp; Conditioning</h3>
 <p className="mt-4 text-sm leading-7 text-[#9A9A9A]">Performance-focused training to improve speed, resilience, strength, and long-term athletic development.</p>
 <a className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#E8860C]" href="#">Learn More <span>→</span></a>
 </div>
@@ -190,13 +232,13 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 <section className="relative overflow-hidden bg-[#111111] py-24" id="locations">
-<div className="pointer-events-none absolute bottom-0 right-0 select-none text-[14rem] font-black uppercase leading-none tracking-tight text-white opacity-[0.015]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<div className="pointer-events-none absolute bottom-0 right-0 select-none text-[14rem] font-black uppercase leading-none tracking-tight text-white opacity-[0.015]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
         Colorado
       </div>
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mb-14 max-w-4xl">
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">Our Facilities</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
             Two Locations. One Standard.
           </h2>
 <p className="mt-6 max-w-3xl text-base leading-8 text-[#9A9A9A]">
@@ -210,7 +252,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-8">
 <div className="text-xs font-bold uppercase tracking-[0.26em] text-[#E8860C]">Flagship</div>
-<h3 className="mt-3 text-4xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Carbondale, CO</h3>
+<h3 className="mt-3 text-4xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Carbondale, CO</h3>
 <p className="mt-5 text-sm leading-7 text-[#9A9A9A]">
                 Our original 5,000 sq ft training facility featuring indoor turf, a dedicated weight area, private coaching, semi-private sessions, group clinics, and elite guest coaches.
               </p>
@@ -232,7 +274,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-8">
 <div className="text-xs font-bold uppercase tracking-[0.26em] text-[#E8860C]">Self-Service</div>
-<h3 className="mt-3 text-4xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Aspen, CO</h3>
+<h3 className="mt-3 text-4xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Aspen, CO</h3>
 <p className="mt-5 text-sm leading-7 text-[#9A9A9A]">
                 Flexible session-based access for athletes who want premium space on their own schedule. Purchase through the portal, unlock the facility, and train independently.
               </p>
@@ -255,30 +297,30 @@ gtag('config', 'G-2M6V79H761');
 <section className="bg-[#0A0A0A] py-24">
 <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">Get Started</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
           Your Path to Performance
         </h2>
 <div className="relative mt-16 grid gap-12 lg:grid-cols-3">
 <div className="hidden lg:block absolute left-[16.5%] right-[16.5%] top-12 h-px bg-gradient-to-r from-[#222222] via-[#E8860C]/50 to-[#222222]"></div>
 <div className="relative flex flex-col items-center">
 <div className="flex h-24 w-24 items-center justify-center rounded-full border border-[#E8860C]/20 bg-[#E8860C]/5">
-<span className="text-5xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>1</span>
+<span className="text-5xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>1</span>
 </div>
-<h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Choose Your Program</h3>
+<h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Choose Your Program</h3>
 <p className="mt-4 max-w-xs text-sm leading-7 text-[#9A9A9A]">Select the training path that fits your sport, goals, and competitive level.</p>
 </div>
 <div className="relative flex flex-col items-center">
 <div className="flex h-24 w-24 items-center justify-center rounded-full border border-[#E8860C]/20 bg-[#E8860C]/5">
-<span className="text-5xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>2</span>
+<span className="text-5xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>2</span>
 </div>
-<h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Book Through the Portal</h3>
+<h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Book Through the Portal</h3>
 <p className="mt-4 max-w-xs text-sm leading-7 text-[#9A9A9A]">Use the external booking portal to secure your session, package, or access slot.</p>
 </div>
 <div className="relative flex flex-col items-center">
 <div className="flex h-24 w-24 items-center justify-center rounded-full border border-[#E8860C]/20 bg-[#E8860C]/5">
-<span className="text-5xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>3</span>
+<span className="text-5xl font-black uppercase tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>3</span>
 </div>
-<h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Train. Track. Improve.</h3>
+<h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Train. Track. Improve.</h3>
 <p className="mt-4 max-w-xs text-sm leading-7 text-[#9A9A9A]">Show up with intent, stay consistent, and build measurable performance over time.</p>
 </div>
 </div>
@@ -293,7 +335,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
 <div>
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">In Your Corner</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
               Meet Your Coaches
             </h2>
 </div>
@@ -304,28 +346,28 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
 <article className="overflow-hidden rounded-2xl border border-[#222222] bg-[#161616] transition hover:border-[#E8860C]">
 <div className="flex h-72 items-center justify-center bg-[linear-gradient(to_bottom,rgba(255,255,255,0.04),rgba(10,10,10,0.3))]">
-<div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F5A623] to-[#C45A0B] text-3xl font-black uppercase tracking-tight text-black" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>JM</div>
+<div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F5A623] to-[#C45A0B] text-3xl font-black uppercase tracking-tight text-black" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>JM</div>
 </div>
 <div className="p-6">
-<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Jake Mitchell</h3>
+<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Jake Mitchell</h3>
 <p className="mt-2 text-sm text-[#9A9A9A]">Head Soccer Coach</p>
 </div>
 </article>
 <article className="overflow-hidden rounded-2xl border border-[#222222] bg-[#161616] transition hover:border-[#E8860C]">
 <div className="flex h-72 items-center justify-center bg-[linear-gradient(to_bottom,rgba(255,255,255,0.04),rgba(10,10,10,0.3))]">
-<div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F5A623] to-[#C45A0B] text-3xl font-black uppercase tracking-tight text-black" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>SR</div>
+<div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F5A623] to-[#C45A0B] text-3xl font-black uppercase tracking-tight text-black" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>SR</div>
 </div>
 <div className="p-6">
-<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Sarah Reynolds</h3>
+<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Sarah Reynolds</h3>
 <p className="mt-2 text-sm text-[#9A9A9A]">Lacrosse Director</p>
 </div>
 </article>
 <article className="overflow-hidden rounded-2xl border border-[#222222] bg-[#161616] transition hover:border-[#E8860C]">
 <div className="flex h-72 items-center justify-center bg-[linear-gradient(to_bottom,rgba(255,255,255,0.04),rgba(10,10,10,0.3))]">
-<div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F5A623] to-[#C45A0B] text-3xl font-black uppercase tracking-tight text-black" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>DV</div>
+<div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F5A623] to-[#C45A0B] text-3xl font-black uppercase tracking-tight text-black" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>DV</div>
 </div>
 <div className="p-6">
-<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Derek Vasquez</h3>
+<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Derek Vasquez</h3>
 <p className="mt-2 text-sm text-[#9A9A9A]">S&amp;C Specialist</p>
 </div>
 </article>
@@ -337,7 +379,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="p-6">
 <div className="mb-3 inline-flex rounded-full bg-[#E8860C]/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[#E8860C]">Guest Coaches</div>
-<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Visiting Pros</h3>
+<h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Visiting Pros</h3>
 <p className="mt-2 text-sm text-[#9A9A9A]">Specialized Clinics &amp; Camps</p>
 </div>
 </article>
@@ -349,7 +391,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mb-12">
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">Results Speak</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
             Why Athletes Choose EPA
           </h2>
 </div>
@@ -357,28 +399,28 @@ gtag('config', 'G-2M6V79H761');
 <div className="divide-y divide-[#222222] border-y border-[#222222]">
 <div className="py-6">
 <div className="flex items-center justify-between">
-<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Sport-Specific Expertise</h3>
+<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Sport-Specific Expertise</h3>
 <span className="text-[#E8860C]">→</span>
 </div>
 <p className="mt-3 max-w-xl text-sm leading-7 text-[#9A9A9A]">Programming tailored to the movement patterns, intensity demands, and technical realities of each sport.</p>
 </div>
 <div className="py-6">
 <div className="flex items-center justify-between">
-<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Proven Training Systems</h3>
+<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Proven Training Systems</h3>
 <span className="text-[#E8860C]">→</span>
 </div>
 <p className="mt-3 max-w-xl text-sm leading-7 text-[#9A9A9A]">A structured approach to development that prioritizes consistency, progression, and measurable performance gains.</p>
 </div>
 <div className="py-6">
 <div className="flex items-center justify-between">
-<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Community &amp; Culture</h3>
+<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Community &amp; Culture</h3>
 <span className="text-[#E8860C]">→</span>
 </div>
 <p className="mt-3 max-w-xl text-sm leading-7 text-[#9A9A9A]">Athletes train in a focused environment that values discipline, accountability, and long-term confidence.</p>
 </div>
 <div className="py-6">
 <div className="flex items-center justify-between">
-<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>World-Class Facilities</h3>
+<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>World-Class Facilities</h3>
 <span className="text-[#E8860C]">→</span>
 </div>
 <p className="mt-3 max-w-xl text-sm leading-7 text-[#9A9A9A]">Premium indoor training spaces designed to support technical work, speed, power, and all-around athletic growth.</p>
@@ -401,7 +443,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="bg-[#111111] py-24" id="pricing">
 <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">Invest in Your Game</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
           Flexible Plans for Every Goal
         </h2>
 <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-[#9A9A9A]">
@@ -409,10 +451,10 @@ gtag('config', 'G-2M6V79H761');
         </p>
 <div className="mt-14 grid gap-6 lg:grid-cols-3">
 <article className="rounded-2xl border border-[#222222] bg-[#161616] p-8 text-left">
-<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Single Session</h3>
+<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Single Session</h3>
 <p className="mt-3 text-sm leading-7 text-[#9A9A9A]">Ideal for first-time athletes or one-off training sessions.</p>
 <div className="mt-8 flex items-end gap-2">
-<span className="text-6xl font-black uppercase leading-none tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>$75</span>
+<span className="text-6xl font-black uppercase leading-none tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>$75</span>
 <span className="pb-2 text-xl text-[#9A9A9A]">/session</span>
 </div>
 <div className="mt-3 text-sm text-[#666666]">No commitment required</div>
@@ -428,10 +470,10 @@ gtag('config', 'G-2M6V79H761');
 <article className="relative rounded-2xl border border-[#E8860C] bg-[#161616] p-8 text-left shadow-[0_0_5rem_rgba(232,134,12,0.12)]">
 <div className="absolute inset-0 -z-10 rounded-2xl bg-[#E8860C] opacity-10 blur-3xl"></div>
 <div className="mb-4 inline-flex rounded-full bg-[#E8860C] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-black">Most Popular</div>
-<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Training Package</h3>
+<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Training Package</h3>
 <p className="mt-3 text-sm leading-7 text-[#9A9A9A]">Built for athletes committed to consistent progress.</p>
 <div className="mt-8 flex items-end gap-2">
-<span className="text-6xl font-black uppercase leading-none tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>$600</span>
+<span className="text-6xl font-black uppercase leading-none tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>$600</span>
 <span className="pb-2 text-xl text-[#9A9A9A]">/10 sessions</span>
 </div>
 <div className="mt-3 text-sm text-[#E8860C]">Save $150 vs. single sessions</div>
@@ -446,10 +488,10 @@ gtag('config', 'G-2M6V79H761');
             </a>
 </article>
 <article className="rounded-2xl border border-[#222222] bg-[#161616] p-8 text-left">
-<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Custom / Teams</h3>
+<h3 className="text-3xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Custom / Teams</h3>
 <p className="mt-3 text-sm leading-7 text-[#9A9A9A]">For teams, specialty clinics, camps, and performance groups.</p>
 <div className="mt-8 flex items-end gap-2">
-<span className="text-5xl font-black uppercase leading-none tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Custom</span>
+<span className="text-5xl font-black uppercase leading-none tracking-tight text-[#E8860C]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Custom</span>
 </div>
 <div className="mt-3 text-sm text-[#666666]">Let’s build your plan</div>
 <ul className="mt-8 space-y-4 text-sm text-[#CFCFCF]">
@@ -470,7 +512,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
 <div>
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">From the Field</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
               Training Tips &amp; Insights
             </h2>
 </div>
@@ -483,7 +525,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="h-72 bg-[linear-gradient(to_top,rgba(10,10,10,0.8),rgba(10,10,10,0.2)),url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')] bg-cover bg-center"></div>
 <div className="p-8">
 <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8860C]">● Nutrition</div>
-<h3 className="mt-4 text-4xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h3 className="mt-4 text-4xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
                 The 5 Eating Habits Every Serious Athlete Must Know
               </h3>
 <p className="mt-5 text-sm leading-7 text-[#9A9A9A]">
@@ -500,7 +542,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-40 shrink-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.8),rgba(10,10,10,0.2)),url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&amp;fit=crop&amp;w=900&amp;q=80')] bg-cover bg-center"></div>
 <div className="p-6">
 <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8860C]">Recovery</div>
-<h4 className="mt-3 text-2xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Why Rest Days Are Non-Negotiable</h4>
+<h4 className="mt-3 text-2xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Why Rest Days Are Non-Negotiable</h4>
 <p className="mt-3 text-sm leading-7 text-[#9A9A9A]">Recovery isn’t optional if performance is the goal.</p>
 </div>
 </article>
@@ -508,7 +550,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-40 shrink-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.8),rgba(10,10,10,0.2)),url('https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&amp;fit=crop&amp;w=900&amp;q=80')] bg-cover bg-center"></div>
 <div className="p-6">
 <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8860C]">Mindset</div>
-<h4 className="mt-3 text-2xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>How to Stay Motivated Long-Term</h4>
+<h4 className="mt-3 text-2xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>How to Stay Motivated Long-Term</h4>
 <p className="mt-3 text-sm leading-7 text-[#9A9A9A]">Build systems that outlast short bursts of motivation.</p>
 </div>
 </article>
@@ -516,7 +558,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-40 shrink-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.8),rgba(10,10,10,0.2)),url('https://images.unsplash.com/photo-1518459031867-a89b944bffe4?auto=format&amp;fit=crop&amp;w=900&amp;q=80')] bg-cover bg-center"></div>
 <div className="p-6">
 <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8860C]">Performance</div>
-<h4 className="mt-3 text-2xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>Speed Training Drills for Field Sports</h4>
+<h4 className="mt-3 text-2xl font-black uppercase leading-none tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>Speed Training Drills for Field Sports</h4>
 <p className="mt-3 text-sm leading-7 text-[#9A9A9A]">Practical drills to improve first-step quickness and power.</p>
 </div>
 </article>
@@ -527,14 +569,14 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="relative isolate overflow-hidden bg-[#111111] py-28">
 <div className="absolute inset-0 flex items-center justify-center">
-<div className="select-none text-center text-[10rem] font-black uppercase leading-none tracking-tight text-white opacity-[0.02]" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<div className="select-none text-center text-[10rem] font-black uppercase leading-none tracking-tight text-white opacity-[0.02]" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
           Elite Performance
         </div>
 </div>
 <div className="absolute left-1/2 top-1/2 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E8860C] opacity-[0.08] blur-3xl"></div>
 <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
 <div className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#E8860C]">Ready?</div>
-<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<h2 className="text-5xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
           Ready to Train With <span className="text-[#E8860C]">Purpose?</span>
 </h2>
 <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#9A9A9A]">
@@ -554,7 +596,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative flex h-10 w-10 items-center justify-center">
 <div className="h-0 w-0 border-l-[0.9rem] border-r-[0.9rem] border-b-[1.5rem] border-l-transparent border-r-transparent border-b-[#E8860C]"></div>
 </div>
-<div className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\',sans-serif'}}>
+<div className="text-2xl font-black uppercase tracking-tight text-white" style={{fontFamily: '\'Barlow Condensed\', sans-serif'}}>
 <span className="text-[#E8860C]">EPA</span>
 </div>
 </a>

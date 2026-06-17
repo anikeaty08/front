@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -412,6 +448,12 @@ import * as THREE from 'three';
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -478,7 +520,7 @@ import * as THREE from 'three';
 
 <div className="relative w-full max-w-5xl mx-auto animate-fade-up delay-200">
 
-<div className="hidden lg:flex -left-12 transform text-xs font-medium text-zinc-300 bg-black/40 border border-white/10 rounded-2xl p-3 absolute top-10 backdrop-blur-xl animate-float shadow-2xl gap-3 items-center" style={{-Rot: '-4deg'}}>
+<div className="hidden lg:flex -left-12 transform text-xs font-medium text-zinc-300 bg-black/40 border border-white/10 rounded-2xl p-3 absolute top-10 backdrop-blur-xl animate-float shadow-2xl gap-3 items-center" style={{'--rot': '-4deg'}}>
 <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/5 flex items-center justify-center border border-blue-500/20">
 <iconify-icon className="text-blue-400 text-lg" icon="solar:sitemap-linear"></iconify-icon>
 </div>
@@ -488,7 +530,7 @@ import * as THREE from 'three';
 </div>
 </div>
 
-<div className="hidden lg:flex -right-12 transform text-xs font-medium text-zinc-300 bg-black/40 border border-white/10 rounded-2xl p-3 absolute bottom-20 backdrop-blur-xl animate-float-delayed shadow-2xl gap-3 items-center" style={{-Rot: '3deg'}}>
+<div className="hidden lg:flex -right-12 transform text-xs font-medium text-zinc-300 bg-black/40 border border-white/10 rounded-2xl p-3 absolute bottom-20 backdrop-blur-xl animate-float-delayed shadow-2xl gap-3 items-center" style={{'--rot': '3deg'}}>
 <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-green-500/20 to-green-600/5 flex items-center justify-center border border-green-500/20">
 <iconify-icon className="text-green-400 text-lg" icon="solar:graph-up-linear"></iconify-icon>
 </div>
@@ -813,7 +855,7 @@ import * as THREE from 'three';
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="reveal bento-card flex flex-col rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" style={{-MouseX: '224px', -MouseY: '212.34999084472656px'}}>
+<div className="reveal bento-card flex flex-col rounded-2xl pt-6 pr-6 pb-6 pl-6 gap-x-4 gap-y-4" style={{'--mouse-x': '224px', '--mouse-y': '212.34999084472656px'}}>
 <div className="flex gap-1 text-blue-500">
 <iconify-icon className="text-sm" icon="solar:star-fall-minimalistic-bold"></iconify-icon>
 <iconify-icon className="text-sm" icon="solar:star-fall-minimalistic-bold"></iconify-icon>

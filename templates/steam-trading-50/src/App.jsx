@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -51,6 +87,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -297,7 +339,7 @@ addUtilities({
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-<div className="flashlight-card rounded-2xl p-1" style={{-MouseX: '0px', -MouseY: '0px'}}>
+<div className="flashlight-card rounded-2xl p-1" style={{'--mouse-x': '0px', '--mouse-y': '0px'}}>
 <div className="bg-[#0F1117] h-full rounded-xl p-6 flex flex-col relative overflow-hidden">
 <div className="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-6">
 <span className="iconify" data-icon="lucide:backpack" data-width="24"></span>
@@ -324,7 +366,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="flashlight-card rounded-2xl p-1" style={{-MouseX: '0px', -MouseY: '0px'}}>
+<div className="flashlight-card rounded-2xl p-1" style={{'--mouse-x': '0px', '--mouse-y': '0px'}}>
 <div className="bg-[#0F1117] h-full rounded-xl p-6 flex flex-col relative overflow-hidden">
 <div className="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6">
 <span className="iconify" data-icon="lucide:line-chart" data-width="24"></span>
@@ -346,7 +388,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="flashlight-card rounded-2xl p-1" style={{-MouseX: '0px', -MouseY: '0px'}}>
+<div className="flashlight-card rounded-2xl p-1" style={{'--mouse-x': '0px', '--mouse-y': '0px'}}>
 <div className="bg-[#0F1117] h-full rounded-xl p-6 flex flex-col relative overflow-hidden">
 <div className="w-12 h-12 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 mb-6">
 <span className="iconify" data-icon="lucide:shield-check" data-width="24"></span>

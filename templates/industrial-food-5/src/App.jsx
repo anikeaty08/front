@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -361,6 +397,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1348,7 +1390,7 @@ gtag('config', 'G-2M6V79H761');
 <label className="text-[10px] font-normal uppercase tracking-widest text-white/45">Kg frollata/settimana</label>
 <span className="font-['Syne'] font-bold text-xl text-white" id="roi-kg-val">50 kg</span>
 </div>
-<input className="roi-slider" id="roi-kg" max="300" min="10" step="5" style={{-Pct: '14%'}} type="range" value="50"/>
+<input className="roi-slider" id="roi-kg" max="300" min="10" step="5" style={{'--pct': '14%'}} type="range" value="50"/>
 <div className="flex justify-between mt-1.5">
 <span className="text-[9px] text-white/20">10 kg</span>
 <span className="text-[9px] text-white/20">300 kg</span>
@@ -1360,7 +1402,7 @@ gtag('config', 'G-2M6V79H761');
 <label className="text-[10px] font-normal uppercase tracking-widest text-white/45">Prezzo al kg (€)</label>
 <span className="font-['Syne'] font-bold text-xl text-white" id="roi-price-val">€ 35</span>
 </div>
-<input className="roi-slider" id="roi-price" max="120" min="15" step="1" style={{-Pct: '16%'}} type="range" value="35"/>
+<input className="roi-slider" id="roi-price" max="120" min="15" step="1" style={{'--pct': '16%'}} type="range" value="35"/>
 <div className="flex justify-between mt-1.5">
 <span className="text-[9px] text-white/20">€ 15</span>
 <span className="text-[9px] text-white/20">€ 120</span>
@@ -1372,7 +1414,7 @@ gtag('config', 'G-2M6V79H761');
 <label className="text-[10px] font-normal uppercase tracking-widest text-white/45">Margine operativo (%)</label>
 <span className="font-['Syne'] font-bold text-xl text-white" id="roi-margin-val">35%</span>
 </div>
-<input className="roi-slider" id="roi-margin" max="70" min="10" step="1" style={{-Pct: '40%'}} type="range" value="35"/>
+<input className="roi-slider" id="roi-margin" max="70" min="10" step="1" style={{'--pct': '40%'}} type="range" value="35"/>
 <div className="flex justify-between mt-1.5">
 <span className="text-[9px] text-white/20">10%</span>
 <span className="text-[9px] text-white/20">70%</span>

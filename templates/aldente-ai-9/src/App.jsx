@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -42,6 +78,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -94,7 +136,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <video className="w-full h-full object-cover" controls="" playsinline="" poster="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&amp;w=1600&amp;auto=format&amp;fit=crop">
 <source src="https://cdn.coverr.co/videos/coverr-the-evening-rush-0870/1080p.mp4" type="video/mp4"/>
 </video>
-<div aria-hidden="true" className="pointer-events-none absolute -right-24 -bottom-24 w-[420px] h-[420px] rounded-full" style={{background: 'rgba(228,87,46,.08)', filter: 'blur(36px)'}}></div>
+<div aria-hidden="true" className="pointer-events-none absolute -right-24 -bottom-24 w-[420px] h-[420px] rounded-full" style={{background: 'rgba(228, 87, 46, .08)', filter: 'blur(36px)'}}></div>
 </div>
 </div>
 </section>
@@ -159,8 +201,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <p className="sm:text-base text-sm text-neutral-300 mt-2 font-geist tracking-tight max-w-4xl">Aldente AI turns your existing cameras and POS systems into AI-powered coworkers that check every order and resolve disputes autonomously.</p>
 
-<div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-10 w-80 h-80 rounded-full" style={{background: 'rgba(228,87,46,.08)', filter: 'blur(42px)'}}></div>
-<div aria-hidden="true" className="pointer-events-none absolute -left-16 -bottom-10 w-72 h-72 rounded-full" style={{background: 'rgba(228,87,46,.06)', filter: 'blur(42px)'}}></div>
+<div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-10 w-80 h-80 rounded-full" style={{background: 'rgba(228, 87, 46, .08)', filter: 'blur(42px)'}}></div>
+<div aria-hidden="true" className="pointer-events-none absolute -left-16 -bottom-10 w-72 h-72 rounded-full" style={{background: 'rgba(228, 87, 46, .06)', filter: 'blur(42px)'}}></div>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mt-8">
 
 <div className="rounded-[28px] bg-white/5 border border-white/10 p-6 sm:p-8">
@@ -540,8 +582,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="z-10 sm:p-8 animate-scaleIn animation-delay-300 text-white w-full max-w-7xl border-white/10 border rounded-[28px] mt-16 mr-auto mb-6 ml-auto pt-6 pr-6 pb-6 pl-6 relative shadow-2xl" style={{background: 'linear-gradient(180deg, #0d0d0d, #0a0a0a)'}}>
 <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px] rounded-tr-[36px]">
 <div className="absolute inset-0" style={{background: 'radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)', backgroundSize: '10px 10px', opacity: '0.15'}}></div>
-<div className="absolute -right-20 -top-4 w-[420px] h-[420px] rounded-full" style={{background: 'rgba(228,87,46,.1)', filter: 'blur(48px)'}}></div>
-<div className="absolute -left-20 -bottom-20 w-[420px] h-[420px] rounded-full" style={{background: 'rgba(228,87,46,.06)', filter: 'blur(48px)'}}></div>
+<div className="absolute -right-20 -top-4 w-[420px] h-[420px] rounded-full" style={{background: 'rgba(228, 87, 46, .1)', filter: 'blur(48px)'}}></div>
+<div className="absolute -left-20 -bottom-20 w-[420px] h-[420px] rounded-full" style={{background: 'rgba(228, 87, 46, .06)', filter: 'blur(48px)'}}></div>
 </div>
 <div className="relative z-10">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 sm:p-8 border-white/10 border rounded-[24px] pt-6 pr-6 pb-6 pl-6 items-center" style={{background: 'linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.02))'}}>
@@ -602,7 +644,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div aria-hidden="true" className="pointer-events-none absolute -right-10 -bottom-10 w-40 h-40 rounded-full" style={{background: 'rgba(228,87,46,.12)', filter: 'blur(24px)'}}></div>
+<div aria-hidden="true" className="pointer-events-none absolute -right-10 -bottom-10 w-40 h-40 rounded-full" style={{background: 'rgba(228, 87, 46, .12)', filter: 'blur(24px)'}}></div>
 </div>
 </div>
 </div>

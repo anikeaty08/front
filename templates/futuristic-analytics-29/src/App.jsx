@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -149,6 +185,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -270,28 +312,28 @@ gtag('config', 'G-2M6V79H761');
                 &lt; className="absolute top-1/2 left-1/2 preserve-3d animate-[clash-goku_0.8s_cubic-bezier(0.,0,0.2,1)_infinite] z-20"&gt;
                   <div="absolute --12="" -ml-8="" 0="" 2="" 30="" 40="" animate-pulse"="" bg-gradient-to-t="" blur-xl="" from-500="" h-24="" left-1="" rounded-full="" shadow-[0_0_20_rg(249,115,22,.4)]="" style={{transform: 'rotateY90deg) translateZ(-10)'}} to-300="" top-1="" via-orange-500="" w16=""></div="absolute></div>
 <div className="cuboid" style--w:16px;--h:16px;--d:px;--x:0px;--y:-32px;--:0px;--rx:0deg;--ry:0deg;--rz:0deg;--:#fdba74;"=""><div classface"=""></div><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
-<div className="cuboid" style={{-W: '22px', -H: '14px', -D: '20px', -X: '0px', -Y: '-47px', -Rx: '0deg', c: '#fde047'}}><div classface"=""></div><div className="face"></div><div classface"=""></div>&lt; className="face"&gt;</div><div className="face"></div></div>
+<div className="cuboid" style={{'--w': '22px', '--h': '14px', '--d': '20px', '--x': '0px', '--y': '-47px', '--rx': '0deg', c: '#fde047'}}><div classface"=""></div><div className="face"></div><div classface"=""></div>&lt; className="face"&gt;</div><div className="face"></div></div>
  &lt; className="cub"="--w:10px;h:14px;--d:10px;x0;--y:-55px;--z:5px;rx:-20deg;--ry:0deg;--rz:0deg;c:#fde047;"&gt;<div className="facediv&gt;&lt;div class=" face"=""></div>&lt; className="face"&gt;</div><div className="face"></div><div className="face"></div><div className="face"></div></div>
 <div classcub"="--w:20;--h:24px;--d:12;--x:0px;--y:-12px;z:0px;--rx:0deg;--ry:0deg;--rz:0deg;--c:#ea580c;"><div className="face"><div className="face"></div><div className="face"></div><div className=""></div><div className="face"></div></div>
-<div className="cuboid" style={{w: '22px', -D: '14px', -X: '0px', -Y: '2px', z: '0px', -Rx: '0deg', -Ry: '0', -Rz: '0deg', -C: '#1e3a8a'}}><div classface"=""></div><div className="face"></div><div classface"=""></div><div className="face"></div><div className="facediv&gt;&lt;div class=" face"="">
+<div className="cuboid" style={{w: '22px', '--d': '14px', '--x': '0px', '--y': '2px', z: '0px', '--rx': '0deg', '--ry': '0', '--rz': '0deg', '--c': '#1e3a8a'}}><div classface"=""></div><div className="face"></div><div classface"=""></div><div className="face"></div><div className="facediv&gt;&lt;div class=" face"="">
 <div className="cuboid animate-[goku-punch-arm_0.8s_cubic-bezier(0.,0,0.2,1)_infinite style--w:8px;--:px;--d:8px;--c:#ba74;"><div className="face"></div><div="face"></div="face"></div><div classface"=""></div><div className="face"></div></div>
 <div ="--w:8px;--h:24px;--d:8;c:#fd74;"="" className="cub animate-[goku--arm_0.8s_ease-in-out_in]"><div className="face"></div><div className="facediv&gt;&lt;div class=" face"=""></div><div className="face"><div classface"=""></div></div>
-<div className="cuboid animate-[goku-left_0.8s_ease-in-out_infinite]" style={{-W: '9px', -H: '24px', -D: '9px'}}><div className=""></div><div className="face"></div><div className="face"></div>&lt; className="face"&gt;</div><div className="face"><div className="face"></div>
+<div className="cuboid animate-[goku-left_0.8s_ease-in-out_infinite]" style={{'--w': '9px', '--h': '24px', '--d': '9px'}}><div className=""></div><div className="face"></div><div className="face"></div>&lt; className="face"&gt;</div><div className="face"><div className="face"></div>
 <div --:9px;--h:24px;--d:9px;--c:#580c;"="" className="cuboid animate-[goku-leg-right_.8s_ease-in-out_infinite style={{}}face"></div><div className="face"><div className="face" classfacedivdiv=""><div className="face"></div><div="face"></div="face"></div></div>
 </div>
 <div className="absolute-1/2 left-1/2 preserve-3d animate-[clashgeta_0.8s_cubic-bezier(0.4,0,0.2,1)_infinite] z20">
 <div="absolute -ml-8="" -mt-12="" 0-cyan-500="" 2="" 2-1="" 30="" 40="" animate-pulse"="" bg-gradient-to-t="" blur-xl="" from-cyan-500="" h-="" rounded-full="" shadow-[0_0_20px_rg(,211,238,0.)]="" style={{: 'rotateY(-90deg) translateZ(-10px)'}} to-400="" top1="" w-16=""></div="absolute></div>
 <div="preserve-3d" style={{transform: 'rotateY(-90deg) scale(0.5) translateY(10px)'}}>
-                   div className="cuboid" style={{-W: '16px', -H: '16px', -D: '16px', -X: 'px', --: '-32px', -Z: '0px', -Rx: '0deg', -Ry: '0deg', -Rz: '0deg', -C: '#fdba74'}}&gt;<div className="face"></div><div className="face"></div>&lt; className="face"&gt;</div="preserve-3d"></div><div className="face"></div><div className="facediv&gt;&lt;div class=" face"=""></div>
-<div className="cub" style={{w: '18', h: '24px', -D: '18px', -X: '0px', -Y: '-52px', z: '0px', -Rx: '0', -Ry: '0deg', -Rz: '0deg', c: '#fde047'}}><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"><div className="facediv&gt;&lt;div=" face"=""></div></div>
-<div className="cuboid" style={{-W: '22px', -H: '16px', -D: '14px', x: '0px', -Y: '-16px', -Z: '0px', -Rx: '0deg', -Rz: '0deg', -C: '#ffafc'}}>&lt; className="face"&gt;</div><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
-                    &lt; className="cuboid" style={{-W: '18px', -H: '10px', -D: '10', -X: '0px', -Y: '-3px', -Z: '0px', -Rx: '0deg', ry: '0deg', rz: '0deg', -C: '#1e3a8a'}}&gt;<div className="face"></div><div className="face"><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
+                   div className="cuboid" style={{'--w': '16px', '--h': '16px', '--d': '16px', '--x': 'px', '---': '-32px', '--z': '0px', '--rx': '0deg', '--ry': '0deg', '--rz': '0deg', '--c': '#fdba74'}}&gt;<div className="face"></div><div className="face"></div>&lt; className="face"&gt;</div="preserve-3d"></div><div className="face"></div><div className="facediv&gt;&lt;div class=" face"=""></div>
+<div className="cub" style={{w: '18', h: '24px', '--d': '18px', '--x': '0px', '--y': '-52px', z: '0px', '--rx': '0', '--ry': '0deg', '--rz': '0deg', c: '#fde047'}}><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"><div className="facediv&gt;&lt;div=" face"=""></div></div>
+<div className="cuboid" style={{'--w': '22px', '--h': '16px', '--d': '14px', x: '0px', '--y': '-16px', '--z': '0px', '--rx': '0deg', '--rz': '0deg', '--c': '#ffafc'}}>&lt; className="face"&gt;</div><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
+                    &lt; className="cuboid" style={{'--w': '18px', '--h': '10px', '--d': '10', '--x': '0px', '--y': '-3px', '--z': '0px', '--rx': '0deg', ry: '0deg', rz: '0deg', '--c': '#1e3a8a'}}&gt;<div className="face"></div><div className="face"><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
 <div className="cuboid" style--:10px;--h:6px--d:16px;--x:-14px;--y:-px;--:0px;--rx:0deg;--ry:0deg;--rz:15deg;--c:#eab308;"=""><div className="face"></div><div="face"></div="face"></div>&lt; className="face"&gt;</div><div className="face"></div><div className="face"></div><div className="face"></div></div>
-<div className="cuboid" style={{-W: '10px', -H: '6px', -D: '16px', -X: '14px', -Y: '-22px--z:0px--rx:0deg', -Ry: '0deg', -Rz: '-15deg--c:#eab308'}}><div className="face"></div><div="face"></div="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
-<div className="cuboid animate-[vegeta-p-arm0.8s_cubic-bezier(0.4,0,.2,1)_infinite]" style={{-W: '8px', -H: '24px', -D: '8px', --: '#f8fafc'}}><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div>&lt; class="facediv&gt;</div>
+<div className="cuboid" style={{'--w': '10px', '--h': '6px', '--d': '16px', '--x': '14px', '--y': '-22px--z:0px--rx:0deg', '--ry': '0deg', '--rz': '-15deg--c:#eab308'}}><div className="face"></div><div="face"></div="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
+<div className="cuboid animate-[vegeta-p-arm0.8s_cubic-bezier(0.4,0,.2,1)_infinite]" style={{'--w': '8px', '--h': '24px', '--d': '8px', '---': '#f8fafc'}}><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div>&lt; class="facediv&gt;</div>
 <div --w:8px;--h:24px;--d:px;--c:#1e3a8a;"="" className="cuboid animate-[vegeta-guard-arm_0.8s_ease-in-out_infinite style={{}}face"><div className="face"></div><div className="face"></div><div classface"=""></div><div className="face"></div><div className="face"></div></div>
-                   div className="cuboid animate-[geta-left_0.8s_ease-in-out_infinite]" style={{-W: '9', -H: '24px', -D: '9px', -C: '#1e38a'}}&gt;<div className="facedivdiv class=" face"=""><div classface"=""></div><div className="face"></div><div className="face"></div>
-<div className="cuboid animate-[vegeta-leg-right_0.8sase-in-out_infinite]" style={{-W: '9px', -H: '24px', --: 'px', -C: '#f8fafc'}}><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
+                   div className="cuboid animate-[geta-left_0.8s_ease-in-out_infinite]" style={{'--w': '9', '--h': '24px', '--d': '9px', '--c': '#1e38a'}}&gt;<div className="facedivdiv class=" face"=""><div classface"=""></div><div className="face"></div><div className="face"></div>
+<div className="cuboid animate-[vegeta-leg-right_0.8sase-in-out_infinite]" style={{'--w': '9px', '--h': '24px', '---': 'px', '--c': '#f8fafc'}}><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div><div className="face"></div></div>
 </div>
 </div>
 </div>

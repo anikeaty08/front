@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -42,6 +78,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -57,7 +99,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="text-xs font-semibold tracking-tight text-[#020617]">IA</span>
 </div>
 <div className="flex flex-col leading-none">
-<span className="text-base font-semibold tracking-tight text-[#e5e7eb]" style={{fontFamily: '\'Financier Display\',serif'}}>Intellimed AI</span>
+<span className="text-base font-semibold tracking-tight text-[#e5e7eb]" style={{fontFamily: '\'Financier Display\', serif'}}>Intellimed AI</span>
 <span className="text-[0.625rem] font-medium text-[#9ca3af] tracking-[0.16em] uppercase">Clinical Automation</span>
 </div>
 </div>
@@ -97,7 +139,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>AI‑POWERED CLINICAL WORKFLOWS</span>
 </div>
 <div className="space-y-4">
-<h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\',serif'}}>
+<h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\', serif'}}>
                   An AI layer for every clinical workflow.
                 </h1>
 <p className="text-lg sm:text-xl text-[#e5e7eb]/80 max-w-xl">
@@ -327,7 +369,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="rounded-3xl border border-[#111827] bg-[#020617] p-4 sm:p-5 space-y-3" id="hero-form">
 <div className="flex items-center justify-between gap-2">
 <div>
-<p className="text-xs font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\',serif'}}>See if Intellimed fits your workflows</p>
+<p className="text-xs font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\', serif'}}>See if Intellimed fits your workflows</p>
 <p className="text-[0.6875rem] text-[#9ca3af]">
                       Tell us your role and EMR. We’ll tailor a live walkthrough.
                     </p>
@@ -376,7 +418,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 <div className="space-y-1">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">Measured outcomes</p>
-<h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\',serif'}}>
+<h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\', serif'}}>
                 Designed to move real metrics, not just pilots.
               </h2>
 </div>
@@ -410,7 +452,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="space-y-4">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">The burden</p>
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\', serif'}}>
                 Clinicians are drowning in clicks, not care.
               </h2>
 <p className="text-lg text-[#e5e7eb]/80">
@@ -438,7 +480,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="space-y-4">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">The Intellimed layer</p>
-<h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\',serif'}}>
+<h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\', serif'}}>
                 One AI platform from encounter to claim.
               </h3>
 <p className="text-lg text-[#e5e7eb]/80">
@@ -470,7 +512,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
 <div className="space-y-2">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">Platform</p>
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\', serif'}}>
                 Intellimed AI at a glance.
               </h2>
 <p className="text-lg text-[#e5e7eb]/80 max-w-xl">
@@ -584,7 +626,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-[0.625rem] font-medium tracking-[0.16em] uppercase text-[#60a5fa]">
               Meet your AI team
             </p>
-<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\', serif'}}>
               Eight agents. Complete coverage.
             </h2>
 <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#e5e7eb]/80">
@@ -886,7 +928,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
 <div className="space-y-2">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">How it works</p>
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\', serif'}}>
                 Built for real clinic days.
               </h2>
 <p className="text-lg text-[#e5e7eb]/80 max-w-xl">
@@ -947,7 +989,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="space-y-4">
 <div className="rounded-2xl border border-[#111827] bg-[#020617] p-4 sm:p-5 space-y-3">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">Integration &amp; data</p>
-<p className="text-base font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\',serif'}}>Lives inside your existing stack.</p>
+<p className="text-base font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\', serif'}}>Lives inside your existing stack.</p>
 <p className="text-base text-[#e5e7eb]/80">
                   HL7 and FHIR‑based integrations, role‑based access, and full audit trails.
                 </p>
@@ -986,7 +1028,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
 <div className="space-y-2">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">Why Intellimed AI</p>
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\',serif'}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Display\', serif'}}>
                 More than a scribe. A clinical automation layer.
               </h2>
 <p className="text-lg text-[#e5e7eb]/80 max-w-xl">
@@ -1019,7 +1061,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border border-[#111827] bg-gradient-to-br from-[#020617] to-[#020617] p-4 sm:p-5 space-y-3">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">What clinicians are saying</p>
-<p className="text-base text-[#e5e7eb]" style={{fontFamily: '\'Financier Text\',serif'}}>
+<p className="text-base text-[#e5e7eb]" style={{fontFamily: '\'Financier Text\', serif'}}>
                 “With Intellimed, my notes are ready before I sit down at the end of clinic. It feels like getting hours of my day back without sacrificing quality or control.”
               </p>
 <div className="flex items-center justify-between gap-2">
@@ -1070,7 +1112,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="pt-4 border-t border-[#111827] grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] gap-6 items-start">
 <div className="space-y-2">
 <p className="text-xs font-medium text-[#9ca3af] tracking-[0.16em] uppercase">Questions</p>
-<h3 className="text-xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\',serif'}}>
+<h3 className="text-xl font-semibold tracking-tight text-[#f9fafb]" style={{fontFamily: '\'Financier Text\', serif'}}>
                 What teams usually ask first.
               </h3>
 <p className="text-base text-[#e5e7eb]/80">
@@ -1136,7 +1178,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="h-7 w-7 rounded-full bg-[#00d4ff] flex items-center justify-center">
 <span className="text-[0.6875rem] font-semibold tracking-tight text-[#020617]">IA</span>
 </div>
-<span className="text-xs font-semibold tracking-tight text-[#e5e7eb]" style={{fontFamily: '\'Financier Text\',serif'}}>Intellimed AI</span>
+<span className="text-xs font-semibold tracking-tight text-[#e5e7eb]" style={{fontFamily: '\'Financier Text\', serif'}}>Intellimed AI</span>
 </div>
 <div className="flex flex-wrap items-center gap-4 text-[0.6875rem] text-[#9ca3af]">
 <span>© <span id="year"></span> Intellimed AI. All rights reserved.</span>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -135,6 +171,12 @@ ${message.value}
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -159,7 +201,7 @@ ${message.value}
 </div>
 
 <header className="fixed z-50 md:px-6 pr-4 pl-4 top-4 right-0 left-0">
-<div className="max-w-6xl mx-auto rounded-2xl border shadow-lg backdrop-blur-md" style={{background: 'rgba(255,255,255,0.7)', borderColor: 'var(--color-neutral-200)'}}>
+<div className="max-w-6xl mx-auto rounded-2xl border shadow-lg backdrop-blur-md" style={{background: 'rgba(255, 255, 255, 0.7)', borderColor: 'var(--color-neutral-200)'}}>
 <div className="flex md:px-6 pt-3 pr-4 pb-3 pl-4 items-center justify-between">
 
 <a aria-label="Home" className="flex items-center gap-3 group" href="#top">
@@ -220,7 +262,7 @@ ${message.value}
 <div className="mx-auto max-w-6xl">
 
 <div className="text-center mb-8">
-<div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest rounded-full px-3 py-1.5 mb-4" style={{background: 'linear-gradient(90deg, rgba(46,91,218,0.08), rgba(0,212,180,0.12))', color: 'var(--color-primary-emphasis)', border: '1px solid var(--color-neutral-200)'}}>
+<div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest rounded-full px-3 py-1.5 mb-4" style={{background: 'linear-gradient(90deg, rgba(46, 91, 218, 0.08), rgba(0, 212, 180, 0.12))', color: 'var(--color-primary-emphasis)', border: '1px solid var(--color-neutral-200)'}}>
 <svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M9 3v18"></path><path d="M15 3v18"></path></svg>
         System Architecture
       </div>
@@ -240,15 +282,15 @@ ${message.value}
 <h3 className="text-xl font-semibold mb-2" style={{color: 'var(--color-neutral-900)'}}>Central Intelligence Layer</h3>
 <p className="text-sm mb-4" style={{color: 'var(--color-neutral-700)'}}>Coordinates all agent activities, manages conversation flow, and ensures safe execution of scheduling tasks</p>
 <div className="flex flex-wrap gap-2">
-<span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md" style={{background: 'rgba(46,91,218,0.1)', color: 'var(--color-primary-emphasis)', border: '1px solid rgba(46,91,218,0.2)'}}>
+<span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md" style={{background: 'rgba(46, 91, 218, 0.1)', color: 'var(--color-primary-emphasis)', border: '1px solid rgba(46,91,218,0.2)'}}>
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 20v2M12 2v2M17 20v2M17 2v2M2 12h2M2 17h2M2 7h2M20 12h2M20 17h2M20 7h2M7 20v2M7 2v2"></path><rect height="16" rx="2" width="16" x="4" y="4"></rect><rect height="8" rx="1" width="8" x="8" y="8"></rect></svg>
                 Dynamic Prompting
               </span>
-<span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md" style={{background: 'rgba(0,212,180,0.1)', color: 'var(--color-accent-teal)', border: '1px solid rgba(0,212,180,0.2)'}}>
+<span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md" style={{background: 'rgba(0, 212, 180, 0.1)', color: 'var(--color-accent-teal)', border: '1px solid rgba(0,212,180,0.2)'}}>
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
                 Context Aware
               </span>
-<span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md" style={{background: 'rgba(255,107,107,0.1)', color: 'var(--color-accent-coral)', border: '1px solid rgba(255,107,107,0.2)'}}>
+<span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md" style={{background: 'rgba(255, 107, 107, 0.1)', color: 'var(--color-accent-coral)', border: '1px solid rgba(255,107,107,0.2)'}}>
 <svg fill="none" height="12" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 Safety First
               </span>
@@ -285,7 +327,7 @@ ${message.value}
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
-<div className="rounded-xl p-5 transition-all hover:shadow-md" style={{background: 'linear-gradient(135deg, rgba(0,212,180,0.08), rgba(0,212,180,0.02))', border: '1px solid var(--color-neutral-200)'}}>
+<div className="rounded-xl p-5 transition-all hover:shadow-md" style={{background: 'linear-gradient(135deg, rgba(0, 212, 180, 0.08), rgba(0, 212, 180, 0.02))', border: '1px solid var(--color-neutral-200)'}}>
 <div className="flex items-center gap-2 mb-3">
 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'var(--color-accent-teal)', color: 'white'}}>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline><polyline points="7.5 19.79 7.5 14.6 3 12"></polyline><polyline points="21 12 16.5 14.6 16.5 19.79"></polyline><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" x2="12" y1="22.08" y2="12"></line></svg>
@@ -306,7 +348,7 @@ ${message.value}
 </div>
 </div>
 
-<div className="rounded-xl p-5 transition-all hover:shadow-md" style={{background: 'linear-gradient(135deg, rgba(46,91,218,0.08), rgba(46,91,218,0.02))', border: '1px solid var(--color-neutral-200)'}}>
+<div className="rounded-xl p-5 transition-all hover:shadow-md" style={{background: 'linear-gradient(135deg, rgba(46, 91, 218, 0.08), rgba(46, 91, 218, 0.02))', border: '1px solid var(--color-neutral-200)'}}>
 <div className="flex items-center gap-2 mb-3">
 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'var(--color-primary-base)', color: 'white'}}>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
@@ -327,7 +369,7 @@ ${message.value}
 </div>
 </div>
 
-<div className="rounded-xl p-5 transition-all hover:shadow-md" style={{background: 'linear-gradient(135deg, rgba(255,107,107,0.08), rgba(255,107,107,0.02))', border: '1px solid var(--color-neutral-200)'}}>
+<div className="rounded-xl p-5 transition-all hover:shadow-md" style={{background: 'linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(255, 107, 107, 0.02))', border: '1px solid var(--color-neutral-200)'}}>
 <div className="flex items-center gap-2 mb-3">
 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'var(--color-accent-coral)', color: 'white'}}>
 <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4M16 2v4M3 10h18"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="m9 16 2 2 4-4"></path></svg>
@@ -350,7 +392,7 @@ ${message.value}
 </div>
 
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div className="rounded-xl p-4 flex items-center gap-4" style={{background: 'rgba(248,250,252,0.6)', border: '1px solid var(--color-neutral-200)'}}>
+<div className="rounded-xl p-4 flex items-center gap-4" style={{background: 'rgba(248, 250, 252, 0.6)', border: '1px solid var(--color-neutral-200)'}}>
 <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{background: 'white', border: '1px solid var(--color-neutral-200)'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'var(--color-primary-base)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 </div>
@@ -359,7 +401,7 @@ ${message.value}
 <div className="text-xs" style={{color: 'var(--color-neutral-700)'}}>Preferences, timezone, and behavioral patterns</div>
 </div>
 </div>
-<div className="rounded-xl p-4 flex items-center gap-4" style={{background: 'rgba(248,250,252,0.6)', border: '1px solid var(--color-neutral-200)'}}>
+<div className="rounded-xl p-4 flex items-center gap-4" style={{background: 'rgba(248, 250, 252, 0.6)', border: '1px solid var(--color-neutral-200)'}}>
 <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{background: 'white', border: '1px solid var(--color-neutral-200)'}}>
 <svg fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'var(--color-accent-teal)'}} viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
 </div>
@@ -386,7 +428,7 @@ ${message.value}
             Execution
           </span>
 </div>
-<div className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg" style={{background: 'linear-gradient(90deg, rgba(0,212,180,0.08), rgba(46,91,218,0.08))', color: 'var(--color-primary-emphasis)', border: '1px solid var(--color-neutral-200)'}}>
+<div className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg" style={{background: 'linear-gradient(90deg, rgba(0, 212, 180, 0.08), rgba(46, 91, 218, 0.08))', color: 'var(--color-primary-emphasis)', border: '1px solid var(--color-neutral-200)'}}>
 <svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 20v2M12 2v2M17 20v2M17 2v2M2 12h2M2 17h2M2 7h2M20 12h2M20 17h2M20 7h2M7 20v2M7 2v2"></path><rect height="16" rx="2" width="16" x="4" y="4"></rect><rect height="8" rx="1" width="8" x="8" y="8"></rect></svg>
           Architecture v3.2
         </div>
@@ -421,7 +463,7 @@ ${message.value}
 <div className="relative">
 <img alt="Agentic workflow planning UI" className="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80" style={{}}/>
 
-<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255,255,255,0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
+<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255, 255, 255, 0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
 <svg className="lucide lucide-workflow w-3.5 h-3.5" data-lucide="workflow" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="8" rx="2" width="8" x="3" y="3"></rect><path d="M7 11v4a2 2 0 0 0 2 2h4"></path><rect height="8" rx="2" width="8" x="13" y="13"></rect></svg>
                   Agentic UX
                 </div>
@@ -439,9 +481,9 @@ ${message.value}
                   Designed a planning surface for multi‑agent goal trees with guardrails and human-in-the-loop overrides.
                 </p>
 <div className="mt-3 flex flex-wrap gap-2">
-<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(46,91,218,0.12)', color: 'var(--color-primary-emphasis)', ringColor: 'rgba(46,91,218,0.20)'}}>Orchestration</span>
-<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(0,212,180,0.14)', color: 'var(--color-accent-teal)', ringColor: 'rgba(0                  ,212,180,0.25)'}}>Retrieval</span>
-<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(255,107,107,0.12)', color: 'var(--color-accent-coral)', ringColor: 'rgba(255,107,107,0.25)'}}>Guardrails</span>
+<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(46, 91, 218, 0.12)', color: 'var(--color-primary-emphasis)', ringColor: 'rgba(46,91,218,0.20)'}}>Orchestration</span>
+<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(0, 212, 180, 0.14)', color: 'var(--color-accent-teal)', ringColor: 'rgba(0                  ,212,180,0.25)'}}>Retrieval</span>
+<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(255, 107, 107, 0.12)', color: 'var(--color-accent-coral)', ringColor: 'rgba(255,107,107,0.25)'}}>Guardrails</span>
 </div>
 </div>
 </a>
@@ -449,7 +491,7 @@ ${message.value}
 <a className="group rounded-xl overflow-hidden border transition-all backdrop-blur-md bg-white/70 hover:bg-white/60 hover:backdrop-blur-lg hover:shadow-lg" href="#" style={{borderColor: 'var(--color-neutral-200)'}}>
 <div className="relative">
 <img alt="Retrieval augmented generation system" className="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80"/>
-<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255,255,255,0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
+<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255, 255, 255, 0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-6-6"></path><circle cx="10" cy="10" r="7"></circle></svg>
                   RAG
                 </div>
@@ -467,8 +509,8 @@ ${message.value}
                   Built a retrieval UX with query decomposition, vector + keyword fusion, and on‑the‑fly eval traces.
                 </p>
 <div className="mt-3 flex flex-wrap gap-2">
-<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(0,212,180,0.14)', color: 'var(--color-accent-teal)', ringColor: 'rgba(0,212,180,0.25)'}}>Retrieval</span>
-<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(46,91,218,0.12)', color: 'var(--color-primary-emphasis)', ringColor: 'rgba(46,91,218,0.20)'}}>Evaluation</span>
+<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(0, 212, 180, 0.14)', color: 'var(--color-accent-teal)', ringColor: 'rgba(0,212,180,0.25)'}}>Retrieval</span>
+<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(46, 91, 218, 0.12)', color: 'var(--color-primary-emphasis)', ringColor: 'rgba(46,91,218,0.20)'}}>Evaluation</span>
 </div>
 </div>
 </a>
@@ -476,7 +518,7 @@ ${message.value}
 <a className="group rounded-xl overflow-hidden border transition-all backdrop-blur-md bg-white/70 hover:bg-white/60 hover:backdrop-blur-lg hover:shadow-lg" href="#" style={{borderColor: 'var(--color-neutral-200)'}}>
 <div className="relative">
 <img alt="Safety governance dashboard" className="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80"/>
-<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255,255,255,0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
+<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255, 255, 255, 0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path></svg>
                   Safety &amp; Governance
                 </div>
@@ -494,8 +536,8 @@ ${message.value}
                   Designed a review workflow with automatic policy checks, annotator tools, and traceable approvals.
                 </p>
 <div className="mt-3 flex flex-wrap gap-2">
-<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(255,107,107,0.12)', color: 'var(--color-accent-coral)', ringColor: 'rgba(255,107,107,0.25)'}}>Safety</span>
-<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(148,163,184,0.18)', color: 'var(--color-neutral-700)', ringColor: 'rgba(148,163,184,0.28)'}}>Review</span>
+<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(255, 107, 107, 0.12)', color: 'var(--color-accent-coral)', ringColor: 'rgba(255,107,107,0.25)'}}>Safety</span>
+<span className="text-xs px-2 py-1 rounded-md ring-1" style={{background: 'rgba(148, 163, 184, 0.18)', color: 'var(--color-neutral-700)', ringColor: 'rgba(148,163,184,0.28)'}}>Review</span>
 </div>
 </div>
 </a>
@@ -506,7 +548,7 @@ ${message.value}
 <div className="group rounded-xl overflow-hidden border transition-all bg-white/70 hover:bg-white/60 hover:shadow-lg" style={{borderColor: 'var(--color-neutral-200)'}}>
 <div className="relative">
 <img alt="Agent debug console" className="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
-<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255,255,255,0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
+<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255, 255, 255, 0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="7" cy="7" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg>
                   Tools
                 </div>
@@ -524,7 +566,7 @@ ${message.value}
 <div className="group rounded-xl overflow-hidden border transition-all bg-white/70 hover:bg-white/60 hover:shadow-lg" style={{borderColor: 'var(--color-neutral-200)'}}>
 <div className="relative">
 <img alt="Prompt composer UI" className="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"/>
-<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255,255,255,0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
+<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255, 255, 255, 0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 2 7 3-7 3-7-3 7-3z"></path><path d="m19 8-7 3-7-3"></path><path d="m19 14-7 3-7-3"></path><path d="m19 20-7 3-7-3"></path></svg>
                   Prompting
                 </div>
@@ -542,7 +584,7 @@ ${message.value}
 <div className="group rounded-xl overflow-hidden border transition-all bg-white/70 hover:bg-white/60 hover:shadow-lg" style={{borderColor: 'var(--color-neutral-200)'}}>
 <div className="relative">
 <img alt="Evaluation dashboard" className="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80"/>
-<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255,255,255,0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
+<div className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] ring-1" style={{background: 'rgba(255, 255, 255, 0.92)', color: 'var(--color-primary-emphasis)', ringColor: 'var(--color-neutral-200)'}}>
 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m3 3 18 18"></path><path d="M9 5H5v14h14v-4"></path><path d="M17 9v6h-6"></path></svg>
                   Evals
                 </div>

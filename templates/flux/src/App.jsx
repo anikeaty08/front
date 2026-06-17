@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -358,6 +394,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -969,7 +1011,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="flex bg-white/5 border-white/5 border rounded-full p-1 backdrop-blur-sm items-center relative isolation-auto">
 
-<div className="absolute top-1 bottom-1 left-1 w-32 bg-[#ffffff]/10 rounded-full shadow-lg shadow-white/5 transition-transform duration-300 ease-out z-0" id="active-pill" style={{transform: 'translateX(0%)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}></div>
+<div className="absolute top-1 bottom-1 left-1 w-32 bg-[#ffffff]/10 rounded-full shadow-lg shadow-white/5 transition-transform duration-300 ease-out z-0" id="active-pill" style={{transform: 'translateX(0%)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}></div>
 <button className="relative z-10 w-32 py-2.5 text-xs font-semibold tracking-widest uppercase text-white transition-colors duration-300" id="btn-monthly" onclick="switchPlan('monthly')">
               Monthly
             </button>
@@ -1027,7 +1069,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </button>
 </div>
 
-<div className="md:p-10 flex flex-col overflow-hidden bg-orange-950/10 pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(270deg, rgba(255, 255, 255, 0), rgba(234, 88, 12, 0.5), rgba(255, 255, 255, 0))', maskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)'}}>
+<div className="md:p-10 flex flex-col overflow-hidden bg-orange-950/10 pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', '--border-gradient': 'linear-gradient(270deg, rgba(255, 255, 255, 0), rgba(234, 88, 12, 0.5), rgba(255, 255, 255, 0))', maskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)'}}>
 
 <div className="absolute inset-0 bg-gradient-to-b via-transparent to-transparent pointer-events-none from-orange-500/5"></div>
 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent to-transparent opacity-50 via-orange-500"></div>

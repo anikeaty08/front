@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -69,6 +105,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -94,7 +136,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="hidden md:flex items-center gap-3">
 <a className="text-sm font-medium text-white/80 hover:text-white" href="#">Sign in</a>
-<button className="group relative inline-flex items-center justify-center rounded-full text-xs font-semibold tracking-tight text-white/80 hover:text-white transition-all" style={{boxShadow: 'inset 0 0 0 1px rgba(99,102,241,0.3)', background: 'linear-gradient(135deg, rgba(99,102,241,0.6) 0%, rgba(79,70,229,0.4) 50%, rgba(99,102,241,0.2) 100%)', backdropFilter: 'blur(12px)', border: '0.5px solid rgba(99,102,241,0.2)', padding: '10px 16px'}}>
+<button className="group relative inline-flex items-center justify-center rounded-full text-xs font-semibold tracking-tight text-white/80 hover:text-white transition-all" style={{boxShadow: 'inset 0 0 0 1px rgba(99, 102, 241, 0.3)', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.6) 0%, rgba(79, 70, 229, 0.4) 50%, rgba(99, 102, 241, 0.2) 100%)', backdropFilter: 'blur(12px)', border: '0.5px solid rgba(99,102,241,0.2)', padding: '10px 16px'}}>
 <span className="relative z-10 text-sm font-normal">Sign Up</span>
 <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 opacity-20 transition-all group-hover:opacity-80" style={{background: 'linear-gradient(90deg, rgba(99,102,241,0) 0%, rgba(99,102,241,1) 50%, rgba(99,102,241,0) 100%)'}}></span>
 </button>
@@ -144,7 +186,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 </div>
-<div className="inline-flex gap-2 text-xs border-emerald-400/20 border rounded-full pt-1 pr-3 pb-1 pl-3 backdrop-blur items-center" style={{background: 'rgba(16,185,129,0.08)', color: 'rgb(110,231,183)'}}>
+<div className="inline-flex gap-2 text-xs border-emerald-400/20 border rounded-full pt-1 pr-3 pb-1 pl-3 backdrop-blur items-center" style={{background: 'rgba(16, 185, 129, 0.08)', color: 'rgb(110,231,183)'}}>
 <svg className="lucide lucide-badge-percent w-3.5 h-3.5" data-lucide="badge-percent" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m15 9-6 6"></path><path d="M9 9h.01"></path><path d="M15 15h.01"></path></svg>
 <span className="">Yearly — Save 20%</span>
 </div>
@@ -209,7 +251,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <article className="relative overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-b from-neutral-900/80 to-neutral-950/90 backdrop-blur-xl p-5 sm:p-6 shadow-[0_2px_10px_rgba(0,0,0,0.25)]">
 <div className="absolute right-4 top-4">
-<span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] border border-indigo-400/30" style={{background: 'rgba(99,102,241,0.12)', color: 'rgb(165,180,252)'}}>
+<span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] border border-indigo-400/30" style={{background: 'rgba(99, 102, 241, 0.12)', color: 'rgb(165,180,252)'}}>
 <svg className="lucide lucide-sparkles w-3.5 h-3.5" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
                 Most popular
               </span>

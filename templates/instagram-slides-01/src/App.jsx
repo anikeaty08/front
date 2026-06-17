@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -106,6 +142,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -191,12 +233,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </header>
 <div className="flex-grow space-y-6 md:space-y-8">
 
-<div className="overflow-hidden [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate bg-gradient-to-b from-white/30 to-white/0 rounded-lg p-6 md:p-8 relative shadow-inner backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="overflow-hidden [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll animate bg-gradient-to-b from-white/30 to-white/0 rounded-lg p-6 md:p-8 relative shadow-inner backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 
 <div className="space-y-4">
-<div className="animate-pulse bg-gradient-to-b from-white/10 to-white/0 w-1/3 h-4 rounded" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '4px'}}></div>
-<div className="animate-pulse delay-75 bg-gradient-to-b from-white/10 to-white/0 w-full h-24 md:h-32 rounded backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '4px'}}></div>
-<div className="animate-pulse delay-150 bg-gradient-to-b from-white/10 to-white/0 w-2/3 h-4 rounded" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '4px'}}></div>
+<div className="animate-pulse bg-gradient-to-b from-white/10 to-white/0 w-1/3 h-4 rounded" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '4px'}}></div>
+<div className="animate-pulse delay-75 bg-gradient-to-b from-white/10 to-white/0 w-full h-24 md:h-32 rounded backdrop-blur-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '4px'}}></div>
+<div className="animate-pulse delay-150 bg-gradient-to-b from-white/10 to-white/0 w-2/3 h-4 rounded" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '4px'}}></div>
 </div>
 <div className="absolute top-4 right-4">
 <span className="font-mono text-[8px] md:text-[10px] bg-white text-black px-1.5 py-0.5 rounded font-bold font-geist">VIEWPORT</span>
@@ -404,7 +446,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     </style>
 <div className="relative w-full max-w-[280px] md:max-w-[320px] aspect-square mb-8 md:mb-10">
 
-<div className="absolute inset-0 w-full h-full rounded-xl md:rounded-2xl bg-neutral-900 border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col justify-between overflow-hidden group" style={{animation: 'cardStackCycle 12s infinite ease-in-out', animationDelay: '-8s', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="absolute inset-0 w-full h-full rounded-xl md:rounded-2xl bg-neutral-900 border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col justify-between overflow-hidden group" style={{animation: 'cardStackCycle 12s infinite ease-in-out', animationDelay: '-8s', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1), transparent 40%)'}}></div>
 <div className="flex mix-blend-screen mb-8 items-start justify-between">
 <div className="flex text-white bg-white/5 w-10 h-10 md:w-12 md:h-12 rounded-full items-center justify-center border border-white/10">
@@ -422,7 +464,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="absolute inset-0 w-full h-full rounded-xl md:rounded-2xl bg-neutral-900 border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col justify-between overflow-hidden group" style={{animation: 'cardStackCycle 12s infinite ease-in-out', animationDelay: '-4s', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="absolute inset-0 w-full h-full rounded-xl md:rounded-2xl bg-neutral-900 border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col justify-between overflow-hidden group" style={{animation: 'cardStackCycle 12s infinite ease-in-out', animationDelay: '-4s', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1), transparent 40%)'}}></div>
 <div className="flex mix-blend-screen mb-8 items-start justify-between">
 <div className="flex text-white bg-white/5 w-10 h-10 md:w-12 md:h-12 rounded-full items-center justify-center border border-white/10">
@@ -440,7 +482,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="absolute inset-0 w-full h-full rounded-xl md:rounded-2xl bg-neutral-900 border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col justify-between overflow-hidden group" style={{animation: 'cardStackCycle 12s infinite ease-in-out', animationDelay: '0s', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="absolute inset-0 w-full h-full rounded-xl md:rounded-2xl bg-neutral-900 border border-white/10 p-6 md:p-8 shadow-2xl flex flex-col justify-between overflow-hidden group" style={{animation: 'cardStackCycle 12s infinite ease-in-out', animationDelay: '0s', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1), transparent 40%)'}}></div>
 <div className="flex mix-blend-screen mb-8 items-start justify-between">
 <div className="flex text-white bg-white/5 w-10 h-10 md:w-12 md:h-12 rounded-full items-center justify-center border border-white/10">

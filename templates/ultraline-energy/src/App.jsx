@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -76,6 +112,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -244,7 +286,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{backgroundImage: 'linear-gradient(rgba(0,113,206,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,206,0.08) 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
 
-<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{boxShadow: 'inset 0 0 40px rgba(0,113,206,0.15), 0 0 20px rgba(0,113,206,0.1)'}}></div>
+<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{boxShadow: 'inset 0 0 40px rgba(0, 113, 206, 0.15), 0 0 20px rgba(0,113,206,0.1)'}}></div>
 
 <svg className="absolute top-0 right-0 w-full h-full opacity-20 group-hover:opacity-40 transition-opacity duration-500" fill="none" preserveaspectratio="none" viewbox="0 0 400 280">
 <path d="M350 20 L350 260" stroke="#0071CE" stroke-dasharray="4 6" strokeWidth="0.5"></path>
@@ -1085,7 +1127,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </li>
 </ul>
 </div>
-<div className="relative bg-slate-100 border-2 border-slate-200 aspect-video overflow-hidden" style={{boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.05)'}}>
+<div className="relative bg-slate-100 border-2 border-slate-200 aspect-video overflow-hidden" style={{boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0,0,0,0.05)'}}>
 <div className="absolute inset-2 border border-slate-300/50"></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(0,113,206,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,206,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
 <div className="absolute inset-0 flex items-center justify-center">
@@ -1104,7 +1146,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="grid md:grid-cols-2 gap-8 md:gap-16 md:mb-24 mb-16 items-center">
-<div className="md:order-1 relative bg-slate-100 border-2 border-slate-200 aspect-video overflow-hidden" style={{boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.05)'}}>
+<div className="md:order-1 relative bg-slate-100 border-2 border-slate-200 aspect-video overflow-hidden" style={{boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0,0,0,0.05)'}}>
 <div className="absolute inset-2 border border-slate-300/50"></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(0,113,206,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,206,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
 <div className="absolute inset-0 flex items-center justify-center">
@@ -1179,7 +1221,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </li>
 </ul>
 </div>
-<div className="relative bg-slate-100 border-2 border-slate-200 aspect-video overflow-hidden" style={{boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.05)'}}>
+<div className="relative bg-slate-100 border-2 border-slate-200 aspect-video overflow-hidden" style={{boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0,0,0,0.05)'}}>
 <div className="absolute inset-2 border border-slate-300/50"></div>
 <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'linear-gradient(rgba(0,113,206,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,113,206,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
 <div className="absolute inset-0 flex items-center justify-center">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -103,6 +139,12 @@ document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -260,7 +302,7 @@ document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
 
-<div className="group relative bg-neutral-950 p-8 hover:bg-neutral-925 transition-colors duration-300 animate-on-scroll spotlight-group overflow-hidden" style={{-MouseX: '945px', -MouseY: '-663px'}}>
+<div className="group relative bg-neutral-950 p-8 hover:bg-neutral-925 transition-colors duration-300 animate-on-scroll spotlight-group overflow-hidden" style={{'--mouse-x': '945px', '--mouse-y': '-663px'}}>
 <div className="absolute inset-0 pointer-events-none spotlight-card opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 <div className="mb-6 text-accent-500">
 <svg className="" data-icon-set="lucide" data-lucide="network" height="32" style={{}} viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><rect height="6" rx="1" width="6" x="16" y="16"></rect><rect height="6" rx="1" width="6" x="2" y="16"></rect><rect height="6" rx="1" width="6" x="9" y="2"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3m-7-4V8"></path></g></svg>
@@ -274,7 +316,7 @@ document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe
 </div>
 </div>
 
-<div className="group relative bg-neutral-950 p-8 hover:bg-neutral-925 transition-colors duration-300 animate-on-scroll spotlight-group overflow-hidden" style={{-MouseX: '534.671875px', -MouseY: '-663px'}}>
+<div className="group relative bg-neutral-950 p-8 hover:bg-neutral-925 transition-colors duration-300 animate-on-scroll spotlight-group overflow-hidden" style={{'--mouse-x': '534.671875px', '--mouse-y': '-663px'}}>
 <div className="absolute inset-0 pointer-events-none spotlight-card opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 <div className="mb-6 text-accent-500">
 <svg className="w-[32px] h-[32px]" data-icon-replaced="true" data-icon-set="lucide" data-lucide="anvil" fill="none" height="32" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(217, 70, 239)', width: '32px', height: '32px'}} viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M7 10H6a4 4 0 0 1-4-4 1 1 0 0 1 1-1h4"></path><path d="M7 5a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1 7 7 0 0 1-7 7H8a1 1 0 0 1-1-1z"></path><path d="M9 12v5"></path><path d="M15 12v5"></path><path d="M5 20a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3 1 1 0 0 1-1 1H6a1 1 0 0 1-1-1"></path></svg>
@@ -288,7 +330,7 @@ document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe
 </div>
 </div>
 
-<div className="group relative bg-neutral-950 p-8 hover:bg-neutral-925 transition-colors duration-300 animate-on-scroll spotlight-group overflow-hidden" style={{-MouseX: '124.3359375px', -MouseY: '-663px'}}>
+<div className="group relative bg-neutral-950 p-8 hover:bg-neutral-925 transition-colors duration-300 animate-on-scroll spotlight-group overflow-hidden" style={{'--mouse-x': '124.3359375px', '--mouse-y': '-663px'}}>
 <div className="absolute inset-0 pointer-events-none spotlight-card opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 <div className="mb-6 text-accent-500">
 <svg className="w-[32px] h-[32px]" data-icon-replaced="true" data-icon-set="lucide" data-lucide="air-vent" fill="none" height="32" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(217, 70, 239)', width: '32px', height: '32px'}} viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M6 12H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 8h12"></path><path d="M18.3 17.7a2.5 2.5 0 0 1-3.16 3.83 2.53 2.53 0 0 1-1.14-2V12"></path><path d="M6.6 15.6A2 2 0 1 0 10 17v-5"></path></svg>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -436,7 +478,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
 <div className="flex flex-col items-start order-2 lg:order-1 max-w-xl">
 <div className="text-amber-400 mb-6">
-<iconify-icon className="text-5xl" icon="solar:card-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-5xl" icon="solar:card-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight uppercase text-slate-900 mb-6 leading-tight">
                 Finance Wheels or Tires with Easy Payments
@@ -463,7 +505,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex flex-col items-start order-2 lg:order-2 max-w-xl">
 <div className="text-amber-400 mb-6">
-<iconify-icon className="text-5xl" icon="solar:delivery-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-5xl" icon="solar:delivery-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </div>
 <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight uppercase text-slate-900 mb-6 leading-tight">
                 Packages Built, Balanced, Ready to Install
@@ -476,7 +518,7 @@ gtag('config', 'G-2M6V79H761');
                   Build a Package
                 </a>
 <a className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-900 hover:text-blue-700 transition-colors" href="#">
-                  Fitment Guide <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+                  Fitment Guide <iconify-icon className="text-lg" icon="solar:arrow-right-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </a>
 </div>
 </div>

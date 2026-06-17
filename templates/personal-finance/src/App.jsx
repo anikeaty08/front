@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -21,6 +57,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -119,7 +161,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="overflow-hidden flex bg-center bg-emerald-50 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/64ca547b-81d2-4430-ad64-ac776a77afb6_800w.webp)] bg-cover rounded-3xl items-center justify-center">
 </div>
 
-<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-6 pr-4 pb-6 pl-4 backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-6 pr-4 pb-6 pl-4 backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="bg-neutral-900 rounded-[2.4rem] w-full max-w-[260px] aspect-[9/19] shadow-2xl flex flex-col">
 <div className="px-4 pt-4 flex items-center justify-between text-[10px] text-neutral-300">
 <span className="">9:41</span>
@@ -217,7 +259,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex flex-col md:col-span-2 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-8 pr-4 pb-8 pl-4 backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col md:col-span-2 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-8 pr-4 pb-8 pl-4 backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-3 mb-4">
 <div className="h-10 w-14 rounded-2xl bg-amber-400 flex items-center justify-center">
 <div className="h-6 w-10 bg-neutral-950 rounded-xl rotate-[-8deg] flex items-center justify-center">
@@ -260,7 +302,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-6 pr-6 pb-6 pl-6 backdrop-blur-lg justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-start justify-between mb-6">
 <div className="">
 <p className="text-3xl md:text-4xl font-semibold tracking-tight text-amber-100">

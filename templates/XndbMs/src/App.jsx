@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -135,49 +171,55 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 <div className="boxes h-screen w-full overflow-hidden absolute preserve-3d perspective-800 touch-none">
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&amp'}}>
 <span className="sr-only">1</span>
 <img alt="MacBook Pro" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1592434134753-a70baf7979d5?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1592434134753-a70baf7979d5?w=500&amp'}}>
 <span className="sr-only">2</span>
 <img alt="iPhone" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1592434134753-a70baf7979d5?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1561154464-82e9adf32764?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1561154464-82e9adf32764?w=500&amp'}}>
 <span className="sr-only">3</span>
 <img alt="iPad" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1561154464-82e9adf32764?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1551816230-ef5deaed4a26?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1551816230-ef5deaed4a26?w=500&amp'}}>
 <span className="sr-only">4</span>
 <img alt="Apple Watch" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1551816230-ef5deaed4a26?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&amp'}}>
 <span className="sr-only">5</span>
 <img alt="iMac" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1537589376225-5405c60a5bd8?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1537589376225-5405c60a5bd8?w=500&amp'}}>
 <span className="sr-only">6</span>
 <img alt="MacBook Air" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1537589376225-5405c60a5bd8?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1606041011872-596597976b25?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1606041011872-596597976b25?w=500&amp'}}>
 <span className="sr-only">7</span>
 <img alt="iPhone Pro" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1606041011872-596597976b25?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&amp'}}>
 <span className="sr-only">8</span>
 <img alt="iPad Pro" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500&amp'}}>
 <span className="sr-only">9</span>
 <img alt="Apple Watch Series" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500&amp;h=500&amp;fit=crop"/>
 </div>
-<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{-Src: 'url(https://images.unsplash.com/photo-1494173853739-c21f58b16055?w=500&amp'}}>
+<div className="box absolute top-1/2 left-1/2 h-[20vmin] w-[20vmin] min-h-[200px] min-w-[200px] hidden" style={{'--src': 'url(https://images.unsplash.com/photo-1494173853739-c21f58b16055?w=500&amp'}}>
 <span className="sr-only">10</span>
 <img alt="iMac Pro" className="absolute h-full w-full top-0 left-0 object-cover" src="https://images.unsplash.com/photo-1494173853739-c21f58b16055?w=500&amp;h=500&amp;fit=crop"/>
 </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -29,6 +65,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -60,7 +102,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="hidden md:flex gap-x-3 gap-y-3 items-center">
 <a className="text-xs font-medium text-white/80 hover:text-white transition-colors" href="#projects">View Work</a>
 
-<button className="inline-flex overflow-hidden group text-xs font-semibold text-white tracking-tight rounded-full pt-2 pr-4 pb-2 pl-4 relative items-center justify-center" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56,189,248,0.7) 0%, rgba(56,189,248,0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244,114,182,0.7) 0%, rgba(244,114,182,0.1) 40%, transparent 70%), linear-gradient(135deg,#4f46e5,#6366f1,#ec4899)', boxShadow: '0 18px 45px rgba(15,23,42,0.75)'}} type="button">
+<button className="inline-flex overflow-hidden group text-xs font-semibold text-white tracking-tight rounded-full pt-2 pr-4 pb-2 pl-4 relative items-center justify-center" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56, 189, 248, 0.7) 0%, rgba(56, 189, 248, 0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244, 114, 182, 0.7) 0%, rgba(244, 114, 182, 0.1) 40%, transparent 70%), linear-gradient(135deg, #4f46e5, #6366f1, #ec4899)', boxShadow: '0 18px 45px rgba(15,23,42,0.75)'}} type="button">
 <span className="group-hover:opacity-100 transition-opacity duration-500 opacity-0 absolute top-0 right-0 bottom-0 left-0" style={{background: 'radial-gradient(circle at 0% 0%, rgba(248,250,252,0.25) 0, transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.55) 0, transparent 55%)'}}></span>
 <span className="relative flex items-center gap-1.5">
 <span className="">Let’s Collaborate</span>
@@ -83,7 +125,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <a className="block py-1 hover:text-white transition-colors" href="#projects">Projects</a>
 <a className="block py-1 hover:text-white transition-colors" href="#experience">Experience</a>
 <a className="block py-1 hover:text-white transition-colors" href="#contact">Contact</a>
-<button className="mt-2 w-full relative inline-flex items-center justify-center overflow-hidden rounded-full px-4 py-2 text-xs font-semibold tracking-tight text-white group" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56,189,248,0.7) 0%, rgba(56,189,248,0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244,114,182,0.7) 0%, rgba(244,114,182,0.1) 40%, transparent 70%), linear-gradient(135deg,#4f46e5,#6366f1,#ec4899)', boxShadow: '0 14px 35px rgba(15,23,42,0.7)'}} type="button">
+<button className="mt-2 w-full relative inline-flex items-center justify-center overflow-hidden rounded-full px-4 py-2 text-xs font-semibold tracking-tight text-white group" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56, 189, 248, 0.7) 0%, rgba(56, 189, 248, 0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244, 114, 182, 0.7) 0%, rgba(244, 114, 182, 0.1) 40%, transparent 70%), linear-gradient(135deg, #4f46e5, #6366f1, #ec4899)', boxShadow: '0 14px 35px rgba(15,23,42,0.7)'}} type="button">
 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(circle at 0% 0%, rgba(248,250,252,0.25) 0, transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.55) 0, transparent 55%)'}}></span>
 <span className="relative flex items-center justify-center gap-1.5">
 <span>Let’s Collaborate</span>
@@ -113,7 +155,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           </p>
 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
 
-<button className="inline-flex-base font-semibold text-white tracking-tight rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" onclick="document.querySelector('#projects')?.scrollIntoView({behavior:'smooth'});" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56,189,248,0.7) 0%, rgba(56,189,248,0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244,114,182,0.7) 0%, rgba(244,114,182,0.1) 40%, transparent 70%), linear-gradient(135deg,#4f46e5,#6366f1,#ec4899)', boxShadow: '0 18px 45px rgba(15,23,42,0.75)', minHeight: '56px', minWidth: '160px'}} type="button">
+<button className="inline-flex-base font-semibold text-white tracking-tight rounded-full pt-4 pr-8 pb-4 pl-8 relative items-center justify-center" onclick="document.querySelector('#projects')?.scrollIntoView({behavior:'smooth'});" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56, 189, 248, 0.7) 0%, rgba(56, 189, 248, 0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244, 114, 182, 0.7) 0%, rgba(244, 114, 182, 0.1) 40%, transparent 70%), linear-gradient(135deg, #4f46e5, #6366f1, #ec4899)', boxShadow: '0 18px 45px rgba(15,23,42,0.75)', minHeight: '56px', minWidth: '160px'}} type="button">
 <span className="group-hover:opacity-100 transition-opacity duration-500 opacity-0 absolute top-0 right-0 bottom-0 left-0" style={{background: 'radial-gradient(circle at 0% 0%, rgba(248,250,252,0.25) 0, transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.55) 0, transparent 55%)'}}></span>
 <span className="relative flex items-center gap-2">
 <span className="">View Selected Work</span>
@@ -364,7 +406,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="flex items-center justify-between gap-4 pt-2">
 <p className="text-[11px] text-zinc-500 font-geist">I’m typically available for 1–2 new projects per quarter.</p>
-<button className="relative inline-flex items-center justify-center overflow-hidden rounded-full px-5 py-2.5 text-xs font-semibold tracking-tight text-white group" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56,189,248,0.7) 0%, rgba(56,189,248,0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244,114,182,0.7) 0%, rgba(244,114,182,0.1) 40%, transparent 70%), linear-gradient(135deg,#4f46e5,#6366f1,#ec4899)', boxShadow: '0 14px 40px rgba(15,23,42,0.7)'}} type="submit">
+<button className="relative inline-flex items-center justify-center overflow-hidden rounded-full px-5 py-2.5 text-xs font-semibold tracking-tight text-white group" style={{background: 'radial-gradient(80% 200% at 0% 0%, rgba(56, 189, 248, 0.7) 0%, rgba(56, 189, 248, 0.1) 40%, transparent 70%), radial-gradient(80% 200% at 100% 100%, rgba(244, 114, 182, 0.7) 0%, rgba(244, 114, 182, 0.1) 40%, transparent 70%), linear-gradient(135deg, #4f46e5, #6366f1, #ec4899)', boxShadow: '0 14px 40px rgba(15,23,42,0.7)'}} type="submit">
 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{background: 'radial-gradient(circle at 0% 0%, rgba(248,250,252,0.25) 0, transparent 55%), radial-gradient(circle at 100% 100%, rgba(15,23,42,0.55) 0, transparent 55%)'}}></span>
 <span className="relative flex items-center gap-1.5">
 <span>Send Message</span>

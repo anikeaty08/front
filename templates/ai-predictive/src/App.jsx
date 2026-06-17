@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -235,6 +271,12 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -941,7 +983,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-0 border-t border-l border-white/5" onmousemove="for(const card of this.children){const rect=card.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;card.style.setProperty('--mouse-x', x + 'px');card.style.setProperty('--mouse-y', y + 'px');}">
 
-<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '856px', -MouseY: '48px'}}>
+<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '856px', '--mouse-y': '48px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
@@ -993,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '473px', -MouseY: '48px'}}>
+<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '473px', '--mouse-y': '48px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
@@ -1037,7 +1079,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '90px', -MouseY: '48px'}}>
+<div className="col-span-1 lg:col-span-2 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '90px', '--mouse-y': '48px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
@@ -1064,7 +1106,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '856px', -MouseY: '-314.5px'}}>
+<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '856px', '--mouse-y': '-314.5px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none -inset-px transition-opacity duration-300 group-hover:opacity-100 opacity-0 rounded-none absolute" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
@@ -1127,7 +1169,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', -MouseX: '281.5px', -MouseY: '-314.5px'}}>
+<div className="col-span-1 lg:col-span-3 group flex flex-col overflow-hidden transition-all hover:bg-white/[0.02] bg-zinc-900/50 border-r border-b border-white/5 rounded-none pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-md justify-between" style={{minHeight: '320px', animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal both running reveal-up', '--mouse-x': '281.5px', '--mouse-y': '-314.5px'}}>
 
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '0'}}></div>
 <div className="pointer-events-none absolute -inset-px rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '0', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
@@ -1579,7 +1621,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
   </style>
 <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused] w-max gap-x-6 gap-y-6">
 
-<div className="shrink-0 w-[340px] md:w-[380px] h-[520px] rounded-none bg-zinc-900 relative group overflow-hidden border border-white/5 cursor-pointer" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',(event.clientX-rect.left)+'px');this.style.setProperty('--mouse-y',(event.clientY-rect.top)+'px');" style={{-MouseX: '140.5px', -MouseY: '5px'}}>
+<div className="shrink-0 w-[340px] md:w-[380px] h-[520px] rounded-none bg-zinc-900 relative group overflow-hidden border border-white/5 cursor-pointer" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',(event.clientX-rect.left)+'px');this.style.setProperty('--mouse-y',(event.clientY-rect.top)+'px');" style={{'--mouse-x': '140.5px', '--mouse-y': '5px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '10'}}></div>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '10', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
 <img alt="Patrick Nawrocki" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 z-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg"/>
@@ -1603,7 +1645,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="shrink-0 w-[340px] md:w-[380px] h-[520px] rounded-none bg-zinc-900 relative group overflow-hidden border border-white/5 cursor-pointer" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',(event.clientX-rect.left)+'px');this.style.setProperty('--mouse-y',(event.clientY-rect.top)+'px');" style={{-MouseX: '348.5px', -MouseY: '37.5px'}}>
+<div className="shrink-0 w-[340px] md:w-[380px] h-[520px] rounded-none bg-zinc-900 relative group overflow-hidden border border-white/5 cursor-pointer" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',(event.clientX-rect.left)+'px');this.style.setProperty('--mouse-y',(event.clientY-rect.top)+'px');" style={{'--mouse-x': '348.5px', '--mouse-y': '37.5px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '10'}}></div>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '10', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
 <img alt="Pri Patel" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 z-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c543a9e1-f226-4ced-80b0-feb8445a75b9_1600w.jpg"/>
@@ -1624,7 +1666,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="shrink-0 md:w-[380px] group overflow-hidden cursor-pointer bg-zinc-900 w-[340px] h-[520px] border-white/5 border rounded-none relative" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',(event.clientX-rect.left)+'px');this.style.setProperty('--mouse-y',(event.clientY-rect.top)+'px');" style={{-MouseX: '28.5px', -MouseY: '5.5px'}}>
+<div className="shrink-0 md:w-[380px] group overflow-hidden cursor-pointer bg-zinc-900 w-[340px] h-[520px] border-white/5 border rounded-none relative" onmousemove="const rect=this.getBoundingClientRect();this.style.setProperty('--mouse-x',(event.clientX-rect.left)+'px');this.style.setProperty('--mouse-y',(event.clientY-rect.top)+'px');" style={{'--mouse-x': '28.5px', '--mouse-y': '5.5px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%)', zIndex: '10'}}></div>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%)', zIndex: '10', padding: '1px', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude'}}></div>
 <img alt="Rob West" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 z-0" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/30104e3c-5eea-4b93-93e9-5313698a7156_1600w.webp"/>
@@ -1774,7 +1816,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 scroll-animate w-full mb-12 gap-x-6 gap-y-6" data-delay="0.2s" style={{animation: '1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s 1 normal both running fadeSlideBlurIn'}}>
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:bg-zinc-900/80 z-10 bg-zinc-900/50 h-full border-white/5 border rounded-none relative" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{-MouseX: '343px', -MouseY: '366px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:bg-zinc-900/80 z-10 bg-zinc-900/50 h-full border-white/5 border rounded-none relative" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{'--mouse-x': '343px', '--mouse-y': '366px'}}>
 
 <div className="-inset-px transition-opacity duration-300 group-hover:opacity-100 z-10 opacity-0 rounded-none absolute" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.04), transparent 40%)', zIndex: '0'}}>
 </div>
@@ -1830,7 +1872,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:bg-zinc-900/80 z-10 bg-zinc-900 h-full border-white/10 border rounded-none relative shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)]" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{-MouseX: '316.671875px', -MouseY: '482px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:bg-zinc-900/80 z-10 bg-zinc-900 h-full border-white/10 border rounded-none relative shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)]" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{'--mouse-x': '316.671875px', '--mouse-y': '482px'}}>
 
 <div className="pointer-events-none -inset-px transition-opacity duration-300 group-hover:opacity-100 opacity-0 rounded-none absolute" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.04), transparent 40%)', zIndex: '0'}}>
 </div>
@@ -1893,7 +1935,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 
 <div className="flex flex-col gap-6 h-full gap-x-6 gap-y-6">
 
-<div className="group flex flex-col hover:border-white/10 transition-colors duration-300 flex-1 overflow-hidden hover:bg-zinc-900/80 bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative gap-x-6 gap-y-6" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{-MouseX: '105.3359375px', -MouseY: '384px'}}>
+<div className="group flex flex-col hover:border-white/10 transition-colors duration-300 flex-1 overflow-hidden hover:bg-zinc-900/80 bg-zinc-900/50 border-white/5 border rounded-none pt-8 pr-8 pb-8 pl-8 relative gap-x-6 gap-y-6" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{'--mouse-x': '105.3359375px', '--mouse-y': '384px'}}>
 
 <div className="pointer-events-none -inset-px transition-opacity duration-300 group-hover:opacity-100 opacity-0 rounded-none absolute gap-x-6 gap-y-6" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.04), transparent 40%)', zIndex: '0'}}>
 </div>
@@ -1916,7 +1958,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:bg-zinc-900/80 bg-zinc-900/50 border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 relative" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{-MouseX: '34.3359375px', -MouseY: '147.5px'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:bg-zinc-900/80 bg-zinc-900/50 border-white/5 border rounded-none pt-6 pr-6 pb-6 pl-6 relative" onmousemove="const rect=this.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;this.style.setProperty('--mouse-x', x + 'px');this.style.setProperty('--mouse-y', y + 'px');" style={{'--mouse-x': '34.3359375px', '--mouse-y': '147.5px'}}>
 
 <div className="pointer-events-none -inset-px transition-opacity duration-300 group-hover:opacity-100 opacity-0 rounded-none absolute" style={{background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.04), transparent 40%)', zIndex: '0'}}>
 </div>
@@ -1956,7 +1998,7 @@ document.addEventListener('DOMContentLoaded', () => { const observer = new Inter
 <footer className="pb-10">
 <div className="sm:px-6 lg:px-8 [animation:animationIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-7xl mr-auto ml-auto pr-4 pl-4">
 
-<div className="overflow-hidden sm:p-10 sm:mb-10 bg-center bg-white/5 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0bcb241d-7f62-4899-8da0-434927914200_1600w.webp)] bg-cover rounded-none mb-10 pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '0'}}>
+<div className="overflow-hidden sm:p-10 sm:mb-10 bg-center bg-white/5 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0bcb241d-7f62-4899-8da0-434927914200_1600w.webp)] bg-cover rounded-none mb-10 pt-6 pr-6 pb-6 pl-6 relative backdrop-blur-sm" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '0'}}>
 <div className="pointer-events-none absolute inset-0 opacity-70" style={{background: 'radial-gradient(120% 80% at 10% 10%, rgba(99,102,241,0.25) 0%, rgba(99,102,241,0.08) 35%, rgba(217,70,239,0.12) 60%, rgba(10,11,16,0) 85%)'}}></div>
 <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6 sm:gap-10 relative">
 <div className="">

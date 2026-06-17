@@ -10,6 +10,42 @@ export default function App() {
   const [activeNet, setActiveNet] = useState('mainnet');
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     // 3D Card Interactivity
     if (cardsWrapperRef.current) {
       gsap.set(cardsWrapperRef.current, {
@@ -113,7 +149,7 @@ export default function App() {
             </p>
 
             <div className="flex flex-wrap gap-6 mb-16 reveal-target">
-              <div style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.05) 100%)', padding: '1px' }} className="rounded-full shadow-lg">
+              <div style={{background: 'linear-gradient(145deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.05) 100%)', padding: '1px'}} className="rounded-full shadow-lg">
                 <button className="bg-white text-black px-8 py-4 rounded-full text-sm font-normal hover:bg-zinc-200 transition-all flex items-center gap-2">
                   Get Started
                   <iconify-icon icon="solar:arrow-right-linear" width="18" stroke-width="1.5"></iconify-icon>
@@ -152,12 +188,12 @@ export default function App() {
 
             {/* Isometric Staggered Cards */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div ref={cardsWrapperRef} id="cards-wrapper" className="relative w-48 md:w-56 aspect-[4/5] xl:scale-110" style={{ transformStyle: 'preserve-3d' }}>
+              <div ref={cardsWrapperRef} id="cards-wrapper" className="relative w-48 md:w-56 aspect-[4/5] xl:scale-110" style={{transformStyle: 'preserve-3d'}}>
 
                 {/* Card 3 (Back) */}
-                <div className="absolute inset-0 pointer-events-auto group z-10" style={{ transform: 'translate3d(65%, -40%, -80px)' }}>
+                <div className="absolute inset-0 pointer-events-auto group z-10" style={{transform: 'translate3d(65%, -40%, -80px)'}}>
                   <div className="w-full h-full transition-transform duration-700 ease-out group-hover:-translate-y-2 group-hover:translate-x-2">
-                    <div style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.01) 100%)', padding: '1px' }} className="w-full h-full rounded-xl shadow-2xl shadow-black/80">
+                    <div style={{background: 'linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.01) 100%)', padding: '1px'}} className="w-full h-full rounded-xl shadow-2xl shadow-black/80">
                       <div className="bg-[#101010]/90 backdrop-blur-md w-full h-full rounded-[calc(0.75rem-1px)] flex flex-col p-2.5 overflow-hidden relative">
                         <div className="flex justify-between items-center text-xs text-white/40 font-mono tracking-widest uppercase mb-2 px-1">
                           <span># SHARD_3</span>
@@ -172,9 +208,9 @@ export default function App() {
                 </div>
 
                 {/* Card 2 (Middle) */}
-                <div className="absolute inset-0 pointer-events-auto group z-20" style={{ transform: 'translate3d(0%, 0%, 0px)' }}>
+                <div className="absolute inset-0 pointer-events-auto group z-20" style={{transform: 'translate3d(0%, 0%, 0px)'}}>
                   <div className="w-full h-full transition-transform duration-700 ease-out group-hover:-translate-y-2 group-hover:translate-x-2">
-                    <div style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.02) 100%)', padding: '1px' }} className="w-full h-full rounded-xl shadow-2xl shadow-black/90">
+                    <div style={{background: 'linear-gradient(145deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.02) 100%)', padding: '1px'}} className="w-full h-full rounded-xl shadow-2xl shadow-black/90">
                       <div className="bg-[#121212] w-full h-full rounded-[calc(0.75rem-1px)] flex flex-col p-2.5 overflow-hidden">
                         <div className="flex justify-between items-center text-xs text-white/70 font-mono tracking-widest uppercase mb-2 px-1">
                           <span># SHARD_2</span>
@@ -189,9 +225,9 @@ export default function App() {
                 </div>
 
                 {/* Card 1 (Front) */}
-                <div className="absolute inset-0 pointer-events-auto group z-30" style={{ transform: 'translate3d(-65%, 40%, 80px)' }}>
+                <div className="absolute inset-0 pointer-events-auto group z-30" style={{transform: 'translate3d(-65%, 40%, 80px)'}}>
                   <div className="w-full h-full transition-transform duration-700 ease-out group-hover:-translate-y-2 group-hover:translate-x-2">
-                    <div style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 100%)', padding: '1px' }} className="w-full h-full rounded-xl shadow-2xl shadow-black drop-shadow-2xl">
+                    <div style={{background: 'linear-gradient(145deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 100%)', padding: '1px'}} className="w-full h-full rounded-xl shadow-2xl shadow-black drop-shadow-2xl">
                       <div className="bg-[#141414] w-full h-full rounded-[calc(0.75rem-1px)] flex flex-col p-2.5 overflow-hidden">
                         <div className="flex justify-between items-center text-xs text-white font-mono tracking-widest uppercase mb-2 px-1">
                           <span># MAIN_NET</span>
@@ -311,34 +347,34 @@ export default function App() {
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row mt-8 items-center justify-center reveal-target">
-              <button type="button" className="group hover:scale-95 transition-transform" style={{ cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0) 100%), linear-gradient(0deg, #2563eb, #2563eb)', borderRadius: '0.75rem', padding: '12px 18px', minHeight: '48px', minWidth: '102px' }}>
+              <button type="button" className="group hover:scale-95 transition-transform" style={{cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0) 100%), linear-gradient(0deg, #2563eb, #2563eb)', borderRadius: '0.75rem', padding: '12px 18px', minHeight: '48px', minWidth: '102px'}}>
                 {/* Background gradients / borders */}
-                <span style={{ position: 'absolute', inset: '1px', background: 'linear-gradient(177.95deg, rgba(255, 255, 255, 0.19) 0%, rgba(255, 255, 255, 0) 100%)', borderRadius: 'calc(0.75rem - 1px)', zIndex: 0 }}></span>
-                <span style={{ position: 'absolute', inset: '2px', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0) 100%), linear-gradient(0deg, #2563eb, #2563eb)', borderRadius: 'calc(0.75rem - 2px)', zIndex: 0 }}></span>
+                <span style={{position: 'absolute', inset: '1px', background: 'linear-gradient(177.95deg, rgba(255, 255, 255, 0.19) 0%, rgba(255, 255, 255, 0) 100%)', borderRadius: 'calc(0.75rem - 1px)', zIndex: 0}}></span>
+                <span style={{position: 'absolute', inset: '2px', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(34, 211, 238, 0.8) 0%, rgba(34, 211, 238, 0) 100%), linear-gradient(0deg, #2563eb, #2563eb)', borderRadius: 'calc(0.75rem - 2px)', zIndex: 0}}></span>
 
                 {/* Floating Points Container */}
-                <div style={{ overflow: 'hidden', width: '100%', height: '100%', pointerEvents: 'none', position: 'absolute', zIndex: 1 }}>
-                  <i style={{ bottom: '-10px', position: 'absolute', animation: 'floating-points 2.35s infinite ease-in-out 0.2s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '10%' }}></i>
-                  <i style={{ bottom: '-10px', position: 'absolute', animation: 'floating-points 2.5s infinite ease-in-out 0.5s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '30%', opacity: 0.7 }}></i>
-                  <i style={{ bottom: '-10px', position: 'absolute', animation: 'floating-points 2.2s infinite ease-in-out 0.1s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '25%', opacity: 0.8 }}></i>
-                  <i style={{ bottom: '-10px', position: 'absolute', animation: 'floating-points 2.05s infinite ease-in-out', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '44%', opacity: 0.6 }}></i>
-                  <i style={{ bottom: '-10px', position: 'absolute', animation: 'floating-points 1.9s infinite ease-in-out', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '50%' }}></i>
-                  <i style={{ bottom: '-10px', position: 'absolute', animation: 'floating-points 1.5s infinite ease-in-out 1.5s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '75%', opacity: 0.5 }}></i>
+                <div style={{overflow: 'hidden', width: '100%', height: '100%', pointerEvents: 'none', position: 'absolute', zIndex: 1}}>
+                  <i style={{bottom: '-10px', position: 'absolute', animation: 'floating-points 2.35s infinite ease-in-out 0.2s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '10%'}}></i>
+                  <i style={{bottom: '-10px', position: 'absolute', animation: 'floating-points 2.5s infinite ease-in-out 0.5s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '30%', opacity: 0.7}}></i>
+                  <i style={{bottom: '-10px', position: 'absolute', animation: 'floating-points 2.2s infinite ease-in-out 0.1s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '25%', opacity: 0.8}}></i>
+                  <i style={{bottom: '-10px', position: 'absolute', animation: 'floating-points 2.05s infinite ease-in-out', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '44%', opacity: 0.6}}></i>
+                  <i style={{bottom: '-10px', position: 'absolute', animation: 'floating-points 1.9s infinite ease-in-out', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '50%'}}></i>
+                  <i style={{bottom: '-10px', position: 'absolute', animation: 'floating-points 1.5s infinite ease-in-out 1.5s', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '75%', opacity: 0.5}}></i>
                 </div>
 
                 {/* Button Content */}
-                <span style={{ zIndex: 2, gap: '6px', position: 'relative', width: '100%', color: 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 400, transition: 'color 0.2s ease-in-out' }}>
+                <span style={{zIndex: 2, gap: '6px', position: 'relative', width: '100%', color: 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 400, transition: 'color 0.2s ease-in-out'}}>
                   Try for free
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" className="group-hover:translate-x-1 transition-transform" style={{ width: '16px', height: '16px' }}>
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" className="group-hover:translate-x-1 transition-transform" style={{width: '16px', height: '16px'}}>
                     <path d="M5 12h14"></path>
                     <path d="m12 5 7 7-7 7"></path>
                   </svg>
                 </span>
               </button>
 
-              <button className="group relative inline-flex items-center justify-center min-w-[120px] cursor-pointer rounded-xl px-[17px] py-[12px] text-white/70 tracking-tight font-normal transition-all duration-[1000ms] hover:-translate-y-[3px] hover:scale-[1.05] hover:text-white" style={{ boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)', background: 'radial-gradient(ellipse at bottom,rgba(71,81,92,1) 0%,rgba(0,0,0,1) 100%)' }}>
+              <button className="group relative inline-flex items-center justify-center min-w-[120px] cursor-pointer rounded-xl px-[17px] py-[12px] text-white/70 tracking-tight font-normal transition-all duration-[1000ms] hover:-translate-y-[3px] hover:scale-[1.05] hover:text-white" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)', background: 'radial-gradient(ellipse at bottom,rgba(71,81,92,1) 0%,rgba(0,0,0,1) 100%)'}}>
                 <span className="relative z-10 font-normal text-sm">Watch demo</span>
-                <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 opacity-20 transition-all duration-[1000ms] group-hover:opacity-80" style={{ background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)' }}></span>
+                <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 opacity-20 transition-all duration-[1000ms] group-hover:opacity-80" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
               </button>
             </div>
 

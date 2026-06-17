@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -479,6 +515,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -627,7 +669,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-7xl">
-<div className="card-1 glass-card rounded-2xl p-8 animate-fade-in-up delay-500" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,0.25), rgba(255,255,255,0.2), rgba(217,164,65,0.05))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255, 255, 255, 0.1)', transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>
+<div className="card-1 glass-card rounded-2xl p-8 animate-fade-in-up delay-500" style={{background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2), rgba(217, 164, 65, 0.05))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255, 255, 255, 0.1)', transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>
 <div className="icon-badge-1 w-12 h-12 rounded-xl flex items-center justify-center mb-6 border border-white/20 transition-all duration-500" style={{background: 'rgba(11, 28, 58, 0.3)', backdropFilter: 'blur(4px)'}}>
 <svg className="lucide lucide-building-2 w-6 h-6 text-white/60" data-lucide="building-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M10 12h4"></path>
@@ -645,7 +687,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               provision.
             </p>
 </div>
-<div className="card-2 glass-card rounded-2xl p-8 animate-fade-in-up delay-600" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,0.25), rgba(255,255,255,0.2), rgba(217,164,65,0.05))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255, 255, 255, 0.1)', transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>
+<div className="card-2 glass-card rounded-2xl p-8 animate-fade-in-up delay-600" style={{background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2), rgba(217, 164, 65, 0.05))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255, 255, 255, 0.1)', transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'}}>
 <div className="icon-badge-2 w-12 h-12 rounded-xl flex items-center justify-center mb-6 border border-white/20 transition-all duration-500" style={{background: 'rgba(11, 28, 58, 0.3)', backdropFilter: 'blur(4px)'}}>
 <svg className="lucide lucide-trending-up w-6 h-6 text-white/60" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M16 7h6v6"></path>
@@ -660,7 +702,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               act.
             </p>
 </div>
-<div className="card-3 glass-card animate-fade-in-up delay-700 rounded-2xl pt-8 pr-8 pb-8 pl-8" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,0.25), rgba(255,255,255,0.2), rgba(217,164,65,0.05))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255, 255, 255, 0.1)', transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)', color: '#D9A441'}}>
+<div className="card-3 glass-card animate-fade-in-up delay-700 rounded-2xl pt-8 pr-8 pb-8 pl-8" style={{background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2), rgba(217, 164, 65, 0.05))', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255, 255, 255, 0.1)', transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)', color: '#D9A441'}}>
 <div className="icon-badge-3 w-12 h-12 rounded-xl flex items-center justify-center mb-6 border border-white/20 transition-all duration-500" style={{background: 'rgba(11, 28, 58, 0.3)', backdropFilter: 'blur(4px)'}}>
 <svg className="lucide lucide-refresh-cw w-6 h-6 text-white/60" data-lucide="refresh-cw" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
@@ -755,7 +797,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           </p>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-<div className="scroll-reveal stagger-3 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,0.25), rgba(255,255,255,0.2), rgba(217,164,65,0.05))', backdropFilter: 'blur(24px)'}}>
+<div className="scroll-reveal stagger-3 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2), rgba(217, 164, 65, 0.05))', backdropFilter: 'blur(24px)'}}>
 <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-8 bg-white shadow-sm border border-white">
 <svg className="lucide lucide-lightbulb w-8 h-8 text-gold" data-lucide="lightbulb" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
@@ -776,7 +818,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               community needs.
             </p>
 </div>
-<div className="scroll-reveal stagger-4 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,0.25), rgba(255,255,255,0.2), rgba(217,164,65,0.05))', backdropFilter: 'blur(24px)'}}>
+<div className="scroll-reveal stagger-4 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2), rgba(217, 164, 65, 0.05))', backdropFilter: 'blur(24px)'}}>
 <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-8 bg-white shadow-sm border border-white">
 <svg className="lucide lucide-flask-conical w-8 h-8 text-gold" data-lucide="flask-conical" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"></path>
@@ -796,7 +838,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               Pilot solutions through controlled, real-world experimentation.
             </p>
 </div>
-<div className="scroll-reveal stagger-5 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,0.25), rgba(255,255,255,0.2), rgba(217,164,65,0.05))', backdropFilter: 'blur(24px)'}}>
+<div className="scroll-reveal stagger-5 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2), rgba(217, 164, 65, 0.05))', backdropFilter: 'blur(24px)'}}>
 <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-8 bg-white shadow-sm border border-white">
 <svg className="lucide lucide-rocket w-8 h-8 text-jade" data-lucide="rocket" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
@@ -817,7 +859,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               Engage corporates and markets once viability is proven.
             </p>
 </div>
-<div className="scroll-reveal stagger-6 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255,255,255,0.25), rgba(255,255,255,0.2), rgba(217,164,65,0.05))', backdropFilter: 'blur(24px)'}}>
+<div className="scroll-reveal stagger-6 studio-card p-8 rounded-2xl border border-white/30 shadow-sm h-full flex flex-col items-center text-center" style={{background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2), rgba(217, 164, 65, 0.05))', backdropFilter: 'blur(24px)'}}>
 <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-8 bg-white shadow-sm border border-white">
 <svg className="lucide lucide-refresh-cw w-8 h-8 text-jade" data-lucide="refresh-cw" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>

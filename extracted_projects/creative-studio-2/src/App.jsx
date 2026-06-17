@@ -8,6 +8,42 @@ export default function App() {
   const horizontalTrackRef = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     // 1. Sticky Nav Glassmorphism
     const handleNavScroll = () => {
       if (!navRef.current) return;
@@ -199,15 +235,15 @@ export default function App() {
                 // MJ DESIGN STUDIO — EST. 2018
               </span>
               
-              <h1 className="text-[clamp(3.5rem,8.5vw,8.5rem)] leading-[0.95] font-semibold tracking-tighter text-[#1A1A1A] max-w-[15ch] reveal-text" style={{ transitionDelay: '0.1s' }}>
+              <h1 className="text-[clamp(3.5rem,8.5vw,8.5rem)] leading-[0.95] font-semibold tracking-tighter text-[#1A1A1A] max-w-[15ch] reveal-text" style={{transitionDelay: '0.1s'}}>
                 Premium websites &amp; <span className="text-gradient">vibe-coded</span> apps for ambitious brands.
               </h1>
               
-              <p className="text-base md:text-lg text-gray-600 max-w-2xl font-normal leading-relaxed reveal-text" style={{ transitionDelay: '0.2s' }}>
+              <p className="text-base md:text-lg text-gray-600 max-w-2xl font-normal leading-relaxed reveal-text" style={{transitionDelay: '0.2s'}}>
                 Independent digital studio building custom websites, web applications, dynamic dashboards &amp; powerful CRM systems.
               </p>
               
-              <div className="flex flex-wrap items-center gap-4 pt-4 reveal-text" style={{ transitionDelay: '0.3s' }}>
+              <div className="flex flex-wrap items-center gap-4 pt-4 reveal-text" style={{transitionDelay: '0.3s'}}>
                 <button className="bg-[#1A1A1A] text-white text-sm font-medium px-6 py-3 rounded-full flex items-center gap-2 hover:scale-105 transition-transform magnetic interactive">
                   See our work <iconify-icon icon="solar:arrow-right-up-linear" stroke-width="1.5"></iconify-icon>
                 </button>
@@ -218,7 +254,7 @@ export default function App() {
             </div>
 
             {/* Client Strip */}
-            <div className="mt-32 border-t border-black/5 pt-8 reveal-text" style={{ transitionDelay: '0.4s' }}>
+            <div className="mt-32 border-t border-black/5 pt-8 reveal-text" style={{transitionDelay: '0.4s'}}>
               <p className="font-mono text-xs text-gray-400 mb-6 uppercase tracking-[0.1em]">Trusted by innovative teams</p>
               <div className="flex flex-wrap items-center gap-8 md:gap-16 opacity-40 grayscale">
                 <div className="text-xl font-semibold tracking-tight">Acme Corp</div>
@@ -613,7 +649,7 @@ export default function App() {
 
         {/* Massive Footer Text */}
         <div className="relative w-full overflow-hidden flex justify-center pb-[-5%] z-0 select-none pointer-events-none opacity-5">
-          <h1 className="text-[20vw] font-bold tracking-tighter leading-none whitespace-nowrap text-transparent" style={{ WebkitTextStroke: '2px #1A1A1A' }}>
+          <h1 className="text-[20vw] font-bold tracking-tighter leading-none whitespace-nowrap text-transparent" style={{WebkitTextStroke: '2px #1A1A1A'}}>
             MJ DESIGN
           </h1>
         </div>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -294,6 +330,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -441,7 +483,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 auto-rows-auto md:auto-rows-[24rem]">
 
-<div className="md:col-span-8 md:row-span-2 bg-surface border border-white/5 relative overflow-hidden transition-all duration-600 group hover:border-white/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)] p-8 md:p-12 flex flex-col justify-between reveal-up min-h-[24rem] bento-card" style={{-MouseX: '50%', -MouseY: '50%'}}>
+<div className="md:col-span-8 md:row-span-2 bg-surface border border-white/5 relative overflow-hidden transition-all duration-600 group hover:border-white/15 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)] p-8 md:p-12 flex flex-col justify-between reveal-up min-h-[24rem] bento-card" style={{'--mouse-x': '50%', '--mouse-y': '50%'}}>
 <div className="absolute inset-0 pointer-events-none z-[1] opacity-0 group-hover:opacity-100 transition-opacity duration-400 bg-[radial-gradient(circle_30rem_at_var(--mouse-x)_var(--mouse-y),rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
 
 <div className="absolute w-3 h-3 pointer-events-none z-20 transition-all duration-600 opacity-40 text-white group-hover:opacity-100 group-hover:text-accent group-hover:scale-125 group-hover:rotate-90 -top-1.5 -left-1.5"><div className="absolute top-1/2 left-0 w-full h-px bg-current -translate-y-1/2"></div><div className="absolute left-1/2 top-0 h-full w-px bg-current -translate-x-1/2"></div></div>
@@ -469,7 +511,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="md:col-span-4 md:row-span-2 bg-surface border border-white/5 relative overflow-hidden transition-all duration-600 group hover:border-white/15 p-8 flex flex-col justify-between reveal-up min-h-[24rem] bento-card" style={{transitionDelay: '0.1s', -MouseX: '50%', -MouseY: '50%'}}>
+<div className="md:col-span-4 md:row-span-2 bg-surface border border-white/5 relative overflow-hidden transition-all duration-600 group hover:border-white/15 p-8 flex flex-col justify-between reveal-up min-h-[24rem] bento-card" style={{transitionDelay: '0.1s', '--mouse-x': '50%', '--mouse-y': '50%'}}>
 <div className="absolute inset-0 pointer-events-none z-[1] opacity-0 group-hover:opacity-100 transition-opacity duration-400 bg-[radial-gradient(circle_30rem_at_var(--mouse-x)_var(--mouse-y),rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
 <div className="flex justify-between items-start z-10 mb-8 md:mb-12">
 <div className="font-mono text-xs font-light border border-white/10 px-3 py-1 rounded-full text-[#888]">SYSTEM_02</div>
@@ -489,7 +531,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="md:col-span-12 bg-surface border border-white/5 relative overflow-hidden transition-all duration-600 group hover:border-white/15 p-0 flex flex-col md:flex-row reveal-up bento-card" style={{transitionDelay: '0.2s', -MouseX: '50%', -MouseY: '50%'}}>
+<div className="md:col-span-12 bg-surface border border-white/5 relative overflow-hidden transition-all duration-600 group hover:border-white/15 p-0 flex flex-col md:flex-row reveal-up bento-card" style={{transitionDelay: '0.2s', '--mouse-x': '50%', '--mouse-y': '50%'}}>
 <div className="absolute inset-0 pointer-events-none z-[1] opacity-0 group-hover:opacity-100 transition-opacity duration-400 bg-[radial-gradient(circle_30rem_at_var(--mouse-x)_var(--mouse-y),rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
 <div className="p-8 md:p-12 flex-1 flex flex-col justify-center z-10 relative bg-panel">
 <div className="font-mono text-xs font-light border border-white/10 px-3 py-1 rounded-full text-[#888] self-start mb-6 group-hover:border-accent group-hover:text-accent transition-colors">FACILITY_03</div>

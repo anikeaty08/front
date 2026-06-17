@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -38,6 +74,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -65,7 +107,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </header>
 
-<section className="max-w-6xl mx-auto px-6 pt-36 reveal" style={{-D: '.05s'}}>
+<section className="max-w-6xl mx-auto px-6 pt-36 reveal" style={{'--d': '.05s'}}>
 <div className="flex flex-col-reverse lg:flex-row lg:items-center gap-12">
 <div className="flex-1">
 <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight mb-2 gradient-text">Segev Ohana</h1>
@@ -90,7 +132,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <main id="main">
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
 
-<section className="max-w-6xl mx-auto px-6 reveal" id="skills" style={{-D: '.1s'}}>
+<section className="max-w-6xl mx-auto px-6 reveal" id="skills" style={{'--d': '.1s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Technical Skills</h2>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 <div><h3 className="font-medium flex items-center gap-1 mb-2"><i className="h-4 w-4" data-lucide="code"></i> Programming</h3><p>Python, R, SQL</p></div>
@@ -117,7 +159,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
 
-<section className="max-w-6xl mx-auto px-6 reveal" id="projects" style={{-D: '.15s'}}>
+<section className="max-w-6xl mx-auto px-6 reveal" id="projects" style={{'--d': '.15s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Highlighted Projects</h2>
 <div className="grid gap-8 md:grid-cols-2">
 
@@ -156,7 +198,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
 
-<section className="max-w-6xl mx-auto px-6 reveal" id="experience" style={{-D: '.2s'}}>
+<section className="max-w-6xl mx-auto px-6 reveal" id="experience" style={{'--d': '.2s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Professional Journey</h2>
 <div className="mb-10">
 <div className="flex items-start justify-between flex-wrap gap-y-1">
@@ -182,7 +224,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
 
-<section className="max-w-6xl mx-auto px-6 reveal" id="education" style={{-D: '.25s'}}>
+<section className="max-w-6xl mx-auto px-6 reveal" id="education" style={{'--d': '.25s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Academic Background</h2>
 <div className="flex items-start justify-between flex-wrap gap-y-1">
 <h3 className="font-medium">B.Sc. Statistics &amp; Data Science • B.A. Middle Eastern History</h3>
@@ -195,7 +237,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
 
-<section className="max-w-6xl mx-auto px-6 reveal" style={{-D: '.3s'}}>
+<section className="max-w-6xl mx-auto px-6 reveal" style={{'--d': '.3s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Beyond Work</h2>
 <div className="grid sm:grid-cols-2 gap-8">
 <div>
@@ -212,7 +254,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </section>
-<footer className="max-w-6xl mx-auto px-6 py-16 text-center text-xs text-gray-500 dark:text-gray-400 reveal" style={{-D: '.35s'}}>
+<footer className="max-w-6xl mx-auto px-6 py-16 text-center text-xs text-gray-500 dark:text-gray-400 reveal" style={{'--d': '.35s'}}>
       © 2024 Segev — Hebrew, English
     </footer>
 </main>

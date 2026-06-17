@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
   // Lucide icons
@@ -116,6 +152,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -164,7 +206,7 @@ export default function App() {
 <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-xl mx-auto md:mx-0">Social Media Management, Software AI, Menu Digitali e Siti Web. Soluzioni innovative per la crescita digitale del tuo business.</p>
 <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
 <a className="cta-btn text-base" href="#servizi">Scopri i Servizi</a>
-<a className="cta-btn text-base" href="#contatti" style={{background: 'linear-gradient(90deg,#6366f1 0%,#2563eb 100%)', boxShadow: '0 4px 16px 0 rgba(99,102,241,.10)'}}>Contattaci</a>
+<a className="cta-btn text-base" href="#contatti" style={{background: 'linear-gradient(90deg, #6366f1 0%, #2563eb 100%)', boxShadow: '0 4px 16px 0 rgba(99,102,241,.10)'}}>Contattaci</a>
 </div>
 </div>
 

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -245,6 +281,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -281,7 +323,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[130px] mix-blend-screen animate-float-delayed"></div>
 </div>
 
-<nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-neutral-950/20 transition-all duration-300" style={{-FxFilter: 'blur(12px) saturate(1.2)'}}>
+<nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-neutral-950/20 transition-all duration-300" style={{'--fx-filter': 'blur(12px) saturate(1.2)'}}>
 <div className="max-w-7xl mx-auto px-6">
 <div className="flex h-16 items-center justify-between">
 <div className="text-lg font-medium tracking-tighter text-white select-none">
@@ -337,7 +379,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="lg:col-span-5 relative h-[500px] hidden md:block perspective-1000">
 
-<div className="gsap-hero-card animate-float absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[580px] liquid-panel rounded-[2.5rem] p-4 flex flex-col gap-4 z-20" style={{-FxFilter: 'blur(16px) liquid-glass(3, 25) saturate(1.2)'}}>
+<div className="gsap-hero-card animate-float absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[580px] liquid-panel rounded-[2.5rem] p-4 flex flex-col gap-4 z-20" style={{'--fx-filter': 'blur(16px) liquid-glass(3, 25) saturate(1.2)'}}>
 
 <div className="w-full flex justify-between items-center px-2 pt-2">
 <div className="w-16 h-4 rounded-full bg-white/10"></div>
@@ -359,10 +401,10 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="gsap-hero-card animate-float-delayed absolute top-20 right-0 w-32 h-32 liquid-panel rounded-2xl p-4 flex items-center justify-center z-10 rotate-12" style={{-FxFilter: 'blur(8px) liquid-glass(2, 10) saturate(1.5)'}}>
+<div className="gsap-hero-card animate-float-delayed absolute top-20 right-0 w-32 h-32 liquid-panel rounded-2xl p-4 flex items-center justify-center z-10 rotate-12" style={{'--fx-filter': 'blur(8px) liquid-glass(2, 10) saturate(1.5)'}}>
 <iconify-icon className="text-white/50" icon="solar:figma-linear" style={{strokeWidth: '1.5'}} width="40"></iconify-icon>
 </div>
-<div className="gsap-hero-card animate-float absolute bottom-20 left-0 w-40 h-24 liquid-panel rounded-2xl p-4 flex flex-col justify-center gap-2 z-30 -rotate-6" style={{-FxFilter: 'blur(12px) liquid-glass(4, 15) saturate(1.2)'}}>
+<div className="gsap-hero-card animate-float absolute bottom-20 left-0 w-40 h-24 liquid-panel rounded-2xl p-4 flex flex-col justify-center gap-2 z-30 -rotate-6" style={{'--fx-filter': 'blur(12px) liquid-glass(4, 15) saturate(1.2)'}}>
 <div className="w-8 h-2 rounded-full bg-cyan-400/40"></div>
 <div className="w-full h-2 rounded-full bg-white/10"></div>
 <div className="w-2/3 h-2 rounded-full bg-white/10"></div>
@@ -372,7 +414,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </header>
 
-<section className="border-y border-white/5 bg-black/20 py-8 overflow-hidden relative z-20 flex items-center" style={{-FxFilter: 'blur(4px) saturate(1.1)'}}>
+<section className="border-y border-white/5 bg-black/20 py-8 overflow-hidden relative z-20 flex items-center" style={{'--fx-filter': 'blur(4px) saturate(1.1)'}}>
 <div className="flex w-full items-center overflow-hidden opacity-50">
 <div className="flex items-center gap-12 md:gap-24 animate-scroll-left whitespace-nowrap min-w-full text-xs font-mono uppercase tracking-widest text-white">
 <span>User Interface Design</span>
@@ -415,7 +457,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="gallery-track flex gap-6 lg:gap-8 w-max items-center px-6 lg:px-8">
 
 <article className="w-[85vw] md:w-[50vw] lg:w-[40vw] shrink-0 group">
-<div className="aspect-[4/3] liquid-panel rounded-3xl overflow-hidden relative border border-white/10" style={{-FxFilter: 'blur(8px) liquid-glass(2, 12) saturate(1.1)'}}>
+<div className="aspect-[4/3] liquid-panel rounded-3xl overflow-hidden relative border border-white/10" style={{'--fx-filter': 'blur(8px) liquid-glass(2, 12) saturate(1.1)'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-black p-8 flex flex-col items-center justify-center">
 
 <div className="w-3/4 h-3/4 rounded-t-2xl border-x border-t border-white/10 bg-neutral-950 relative overflow-hidden flex flex-col">
@@ -446,7 +488,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 
 <article className="w-[85vw] md:w-[50vw] lg:w-[40vw] shrink-0 group">
-<div className="aspect-[4/3] liquid-panel rounded-3xl overflow-hidden relative border border-white/10" style={{-FxFilter: 'blur(8px) liquid-glass(2, 12) saturate(1.1)'}}>
+<div className="aspect-[4/3] liquid-panel rounded-3xl overflow-hidden relative border border-white/10" style={{'--fx-filter': 'blur(8px) liquid-glass(2, 12) saturate(1.1)'}}>
 <div className="absolute inset-0 bg-gradient-to-bl from-neutral-900 to-black p-8 flex flex-col items-center justify-center">
 
 <div className="w-1/2 h-full rounded-[2rem] border border-white/10 bg-neutral-950 relative overflow-hidden flex flex-col p-2">
@@ -474,7 +516,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 
 <article className="w-[85vw] md:w-[50vw] lg:w-[40vw] shrink-0 group">
-<div className="aspect-[4/3] liquid-panel rounded-3xl overflow-hidden relative border border-white/10" style={{-FxFilter: 'blur(8px) liquid-glass(2, 12) saturate(1.1)'}}>
+<div className="aspect-[4/3] liquid-panel rounded-3xl overflow-hidden relative border border-white/10" style={{'--fx-filter': 'blur(8px) liquid-glass(2, 12) saturate(1.1)'}}>
 <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 to-black p-8 flex flex-col items-center justify-center">
 
 <div className="w-full h-2/3 rounded-xl border border-white/10 bg-neutral-950 relative overflow-hidden p-6 flex flex-col justify-between">
@@ -518,7 +560,7 @@ gtag('config', 'G-2M6V79H761');
                     </p>
 </div>
 </div>
-<div className="w-full md:w-1/2 bg-black/40 relative z-10" style={{-FxFilter: 'blur(8px) saturate(1.1)'}}>
+<div className="w-full md:w-1/2 bg-black/40 relative z-10" style={{'--fx-filter': 'blur(8px) saturate(1.1)'}}>
 <div className="md:p-12 lg:p-24 py-20 px-6 space-y-12">
 <div className="gsap-reveal group">
 <div className="text-[10px] font-mono text-neutral-600 mb-2">01</div>
@@ -550,7 +592,7 @@ gtag('config', 'G-2M6V79H761');
                     Currently accepting new projects. Whether you have a specific idea or just want to explore possibilities, let's talk.
                 </p>
 <div className="gsap-reveal pt-8">
-<a className="inline-flex items-center justify-center gap-3 liquid-panel rounded-full px-8 py-4 text-sm font-medium text-white hover:bg-white/5 transition-all duration-300" href="mailto:hello@example.com" style={{-FxFilter: 'blur(10px) liquid-glass(2, 10) saturate(1.2)'}}>
+<a className="inline-flex items-center justify-center gap-3 liquid-panel rounded-full px-8 py-4 text-sm font-medium text-white hover:bg-white/5 transition-all duration-300" href="mailto:hello@example.com" style={{'--fx-filter': 'blur(10px) liquid-glass(2, 10) saturate(1.2)'}}>
 <iconify-icon icon="solar:letter-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
                         Start a Conversation
                     </a>

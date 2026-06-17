@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -489,6 +525,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2401,7 +2443,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 
 
-<div id="cookie-banner" style={{display: 'none', position: 'fixed', bottom: '0', left: '0', right: '0', zIndex: '9999', background: '#0f172a', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '16px 24px', fontFamily: '\'Manrope\',sans-serif'}}>
+<div id="cookie-banner" style={{display: 'none', position: 'fixed', bottom: '0', left: '0', right: '0', zIndex: '9999', background: '#0f172a', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '16px 24px', fontFamily: '\'Manrope\', sans-serif'}}>
 <div style={{maxWidth: '1100px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px'}}>
 <div style={{flex: '1', minWidth: '280px'}}>
 <p style={{fontSize: '13px', color: '#94a3b8', lineHeight: '1.6', margin: '0'}}>
@@ -2410,8 +2452,8 @@ gtag('config', 'G-2M6V79H761');
 </p>
 </div>
 <div style={{display: 'flex', gap: '10px', flexShrink: '0'}}>
-<button onclick="cookieDecline()" style={{fontFamily: '\'Manrope\',sans-serif', fontSize: '13px', fontWeight: '600', padding: '8px 18px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: '#94a3b8', cursor: 'pointer'}}>Ablehnen</button>
-<button onclick="cookieAccept()" style={{fontFamily: '\'Manrope\',sans-serif', fontSize: '13px', fontWeight: '700', padding: '8px 20px', borderRadius: '8px', border: 'none', background: '#7c3aed', color: '#fff', cursor: 'pointer'}}>Alle akzeptieren</button>
+<button onclick="cookieDecline()" style={{fontFamily: '\'Manrope\', sans-serif', fontSize: '13px', fontWeight: '600', padding: '8px 18px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: '#94a3b8', cursor: 'pointer'}}>Ablehnen</button>
+<button onclick="cookieAccept()" style={{fontFamily: '\'Manrope\', sans-serif', fontSize: '13px', fontWeight: '700', padding: '8px 20px', borderRadius: '8px', border: 'none', background: '#7c3aed', color: '#fff', cursor: 'pointer'}}>Alle akzeptieren</button>
 </div>
 </div>
 </div>

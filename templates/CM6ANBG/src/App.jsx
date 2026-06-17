@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     // Icon render
@@ -512,6 +548,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -942,7 +984,7 @@ export default function App() {
 <div className="text-neutral-100" id="gridFunding" style={{fontVariantNumeric: 'tabular-nums', fontWeight: '600'}}>Medium</div>
 </div>
 <div className="mt-3">
-<button className="w-full group relative inline-flex items-center justify-center overflow-hidden rounded-lg px-3 py-2.5 text-[13px] font-semibold tracking-tight text-black ring-1 ring-white/10 transition-all hover:opacity-95 active:opacity-90" id="startGrid" style={{background: 'linear-gradient(135deg,#A7F3D0 0%, #34D399 45%, #10B981 100%)', boxShadow: '0 12px 30px -10px rgba(16,185,129,0.55)'}}>
+<button className="w-full group relative inline-flex items-center justify-center overflow-hidden rounded-lg px-3 py-2.5 text-[13px] font-semibold tracking-tight text-black ring-1 ring-white/10 transition-all hover:opacity-95 active:opacity-90" id="startGrid" style={{background: 'linear-gradient(135deg, #A7F3D0 0%, #34D399 45%, #10B981 100%)', boxShadow: '0 12px 30px -10px rgba(16,185,129,0.55)'}}>
 <span className="relative z-10">Start Grid Bot</span>
 </button>
 <p className="mt-2 text-[11px] text-neutral-500 leading-4">Bot will place staggered orders within range and rebalance as the price oscillates. Monitor margin usage and risk parameters.</p>

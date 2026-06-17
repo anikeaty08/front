@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -172,6 +208,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -233,7 +275,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="login-card">
 <img alt="" className="" src="https://framerusercontent.com/images/fJDvIDyRVMU083oWzVbIgBwp0nY.jpg" style={{width: '120px', height: '120px', imageRendering: 'pixelated'}}/>
 <div style={{height: '12px'}}></div>
-<div className="" style={{fontFamily: '\'Handjet\',sans-serif', fontWeight: '700', fontSize: '17px', color: '#fff'}}>
+<div className="" style={{fontFamily: '\'Handjet\', sans-serif', fontWeight: '700', fontSize: '17px', color: '#fff'}}>
           Enter Password
         </div>
 <div style={{height: '8px'}}></div>
@@ -467,45 +509,45 @@ gtag('config', 'G-2M6V79H761');
 <h1 className="h-inter">Why Us</h1>
 <div className="" style={{height: '24px'}}></div>
 <div className="" style={{display: 'grid', gridTemplateColumns: 'repeat(4,152px)', gap: '16px'}}>
-<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A,inset 1px 1px 0 0 #FFFFFF,inset -2px -2px 0 0 #808080,inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
+<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A, inset 1px 1px 0 0 #FFFFFF, inset -2px -2px 0 0 #808080, inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
 <div className="" style={{width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', color: '#000'}}>
                         ✓
                       </div>
 <div className="body-text">
 <strong className="">7 Days</strong>
 </div>
-<div className="" style={{fontFamily: 'Georgia,serif', fontSize: '13px', color: '#808080'}}>
+<div className="" style={{fontFamily: 'Georgia, serif', fontSize: '13px', color: '#808080'}}>
                         Average Launch Time
                       </div>
 </div>
-<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A,inset 1px 1px 0 0 #FFFFFF,inset -2px -2px 0 0 #808080,inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
+<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A, inset 1px 1px 0 0 #FFFFFF, inset -2px -2px 0 0 #808080, inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
 <div style={{width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', color: '#000'}}>
                         ★
                       </div>
 <div className="body-text">
 <strong className="">4.9 / 5</strong>
 </div>
-<div className="" style={{fontFamily: 'Georgia,serif', fontSize: '13px', color: '#808080'}}>
+<div className="" style={{fontFamily: 'Georgia, serif', fontSize: '13px', color: '#808080'}}>
                         From 100+ Clients
                       </div>
 </div>
-<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A,inset 1px 1px 0 0 #FFFFFF,inset -2px -2px 0 0 #808080,inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
+<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A, inset 1px 1px 0 0 #FFFFFF, inset -2px -2px 0 0 #808080, inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
 <div style={{width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', color: '#000'}}>
                         🎯
                       </div>
 <div className="body-text">
 <strong className="">Conversion-First</strong>
 </div>
-<div className="" style={{fontFamily: 'Georgia,serif', fontSize: '13px', color: '#808080'}}>
+<div className="" style={{fontFamily: 'Georgia, serif', fontSize: '13px', color: '#808080'}}>
                         Strategy Before Design
                       </div>
 </div>
-<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A,inset 1px 1px 0 0 #FFFFFF,inset -2px -2px 0 0 #808080,inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
+<div className="tool-tile" style={{background: 'transparent', boxShadow: 'inset -1px -1px 0 0 #0A0A0A, inset 1px 1px 0 0 #FFFFFF, inset -2px -2px 0 0 #808080, inset 2px 2px 0 0 #DEDEDE', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
 <div style={{width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', color: '#000'}}>
                         🛠
                       </div>
 <div className="body-text"><strong>Modern Stack</strong></div>
-<div className="" style={{fontFamily: 'Georgia,serif', fontSize: '13px', color: '#808080'}}>
+<div className="" style={{fontFamily: 'Georgia, serif', fontSize: '13px', color: '#808080'}}>
                         Framer · WordPress · Shopify
                       </div>
 </div>
@@ -597,7 +639,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="ml">Help</span>
 </div>
 <div style={{padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px'}}>
-<div className="win98-sunken" style={{padding: '10px', background: '#000', color: '#00FF00', fontFamily: '\'VT323\',monospace', fontSize: '18px', lineHeight: '1.2', minHeight: '60px'}}>
+<div className="win98-sunken" style={{padding: '10px', background: '#000', color: '#00FF00', fontFamily: '\'VT323\', monospace', fontSize: '18px', lineHeight: '1.2', minHeight: '60px'}}>
 <div id="mp-track" style={{color: '#00FF00'}}>♪ Press Play to Begin</div>
 <div id="mp-artist" style={{color: '#808080', fontSize: '14px', marginTop: '4px'}}></div>
 </div>
@@ -619,7 +661,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="pixel-text" style={{fontSize: '13px'}}>Vol</span>
 <input id="mp-vol" max="1" min="0" step="0.05" style={{flex: '1'}} type="range" value="0.6"/>
 </div>
-<div className="win98-sunken" id="mp-playlist" style={{background: '#fff', maxHeight: '120px', overflowY: 'auto', fontFamily: 'Georgia,serif', fontSize: '14px'}}>
+<div className="win98-sunken" id="mp-playlist" style={{background: '#fff', maxHeight: '120px', overflowY: 'auto', fontFamily: 'Georgia, serif', fontSize: '14px'}}>
 <div style={{padding: '6px 10px', cursor: 'pointer', background: 'rgb(0, 0, 128)', color: 'rgb(255, 255, 255)'}}>
             1. Jesus, sometimes i..
           </div>

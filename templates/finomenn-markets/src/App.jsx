@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -29,6 +65,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -510,7 +552,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 gap-5 md:grid-cols-3 h-auto gap-x-5 gap-y-5">
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-[#151518]/80 bg-gradient-to-tl via-[#151518]/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-100 hover:shadow-[#5D458D]/10 hover:border-[#5D458D]/30 from-[#5D458D]/10 to-[#5D458D]/10" style={{-BorderGradient: 'linear-gradient(315deg, rgba(93, 69, 141, 0.2), rgba(93, 69, 141, 0), rgba(93, 69, 141, 0.2))', border: '1px solid rgba(255, 255, 255, 0.04)'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-[#151518]/80 bg-gradient-to-tl via-[#151518]/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-100 hover:shadow-[#5D458D]/10 hover:border-[#5D458D]/30 from-[#5D458D]/10 to-[#5D458D]/10" style={{'--border-gradient': 'linear-gradient(315deg, rgba(93, 69, 141, 0.2), rgba(93, 69, 141, 0), rgba(93, 69, 141, 0.2))', border: '1px solid rgba(255, 255, 255, 0.04)'}}>
 <div className="z-10 flex-1 flex flex-col mb-6 relative justify-center">
 <div className="relative rounded-xl border border-white/10 bg-[#0B0B0E]/50 p-4 shadow-2xl transition-colors group-hover:bg-[#0B0B0E]/80">
 
@@ -721,7 +763,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 gap-5 md:grid-cols-3 h-auto gap-x-5 gap-y-5">
 
-<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-[#151518]/80 bg-gradient-to-tl via-[#151518]/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-100 hover:shadow-[#5D458D]/10 hover:border-[#5D458D]/30 from-[#5D458D]/10 to-[#5D458D]/10" style={{-BorderGradient: 'linear-gradient(315deg, rgba(93, 69, 141, 0.2), rgba(93, 69, 141, 0), rgba(93, 69, 141, 0.2))', border: '1px solid rgba(255, 255, 255, 0.04)'}}>
+<div className="group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-[#151518]/80 bg-gradient-to-tl via-[#151518]/40 rounded-3xl p-6 relative backdrop-blur-md animate-enter delay-100 hover:shadow-[#5D458D]/10 hover:border-[#5D458D]/30 from-[#5D458D]/10 to-[#5D458D]/10" style={{'--border-gradient': 'linear-gradient(315deg, rgba(93, 69, 141, 0.2), rgba(93, 69, 141, 0), rgba(93, 69, 141, 0.2))', border: '1px solid rgba(255, 255, 255, 0.04)'}}>
 <div className="z-10 flex-1 flex flex-col mb-6 relative justify-center">
 <div className="relative rounded-xl border border-white/10 bg-[#0B0B0E]/50 p-4 shadow-2xl transition-colors group-hover:bg-[#0B0B0E]/80">
 

@@ -6,6 +6,42 @@ export default function App() {
   const heroTextRef = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     // Header Scroll Glassmorphism
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -124,9 +160,9 @@ export default function App() {
             alt="Lucas Prado"
             className="w-full h-full object-cover object-top opacity-60 mix-blend-luminosity hero-img"
           />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(5,13,26,0.95) 10%, rgba(5,13,26,0.7) 50%, transparent 100%)' }}></div>
+          <div className="absolute inset-0" style={{background: 'linear-gradient(90deg, rgba(5,13,26,0.95) 10%, rgba(5,13,26,0.7) 50%, transparent 100%)'}}></div>
           {/* Bottom Fade */}
-          <div className="absolute bottom-0 left-0 w-full h-32" style={{ background: 'linear-gradient(0deg, #050D1A 0%, transparent 100%)' }}></div>
+          <div className="absolute bottom-0 left-0 w-full h-32" style={{background: 'linear-gradient(0deg, #050D1A 0%, transparent 100%)'}}></div>
         </div>
 
         {/* Giant Text Background */}
@@ -215,7 +251,7 @@ export default function App() {
       </section>
 
       {/* SEÇÃO 02 · Strip de Prova Rápida */}
-      <section className="py-6 md:py-8 relative z-20" style={{ background: 'linear-gradient(135deg, #0B3D91 0%, #1565C0 100%)' }}>
+      <section className="py-6 md:py-8 relative z-20" style={{background: 'linear-gradient(135deg, #0B3D91 0%, #1565C0 100%)'}}>
         <div className="container mx-auto px-5 overflow-hidden">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 md:gap-10 text-center sm:text-left reveal-scale">
             <div className="flex-1">
@@ -244,7 +280,7 @@ export default function App() {
       {/* SEÇÃO 03 · Para Quem É / Especialidades */}
       <section className="py-24 md:py-32 relative bg-[#050D1A]" id="sobre-metodo">
         <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2000&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-5 pointer-events-none" alt="" />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #050D1A 0%, transparent 20%, transparent 80%, #050D1A 100%)', pointerEvents: 'none' }}></div>
+        <div className="absolute inset-0" style={{background: 'linear-gradient(180deg, #050D1A 0%, transparent 20%, transparent 80%, #050D1A 100%)', pointerEvents: 'none'}}></div>
 
         <div className="container mx-auto px-5 md:px-10 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
@@ -403,10 +439,10 @@ export default function App() {
           </div>
 
           <div className="columns-2 md:columns-3 gap-2 md:gap-4 space-y-2 md:space-y-4 mb-24 reveal-up delay-300">
-            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{ mixBlendMode: 'luminosity' }} alt="Treino" />
-            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{ mixBlendMode: 'luminosity' }} alt="Treino" />
-            <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{ mixBlendMode: 'luminosity' }} alt="Treino" />
-            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{ mixBlendMode: 'luminosity' }} alt="Treino" />
+            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{mixBlendMode: 'luminosity'}} alt="Treino" />
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{mixBlendMode: 'luminosity'}} alt="Treino" />
+            <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{mixBlendMode: 'luminosity'}} alt="Treino" />
+            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=600&auto=format&fit=crop" className="w-full rounded bg-[#0B1628] opacity-80 hover:opacity-100 transition-opacity" style={{mixBlendMode: 'luminosity'}} alt="Treino" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -428,7 +464,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="glass-card p-6 md:p-8 flex flex-col h-full reveal-up delay-200" style={{ borderColor: 'rgba(41,121,255,0.4)', boxShadow: '0 0 24px rgba(41,121,255,0.1)' }}>
+            <div className="glass-card p-6 md:p-8 flex flex-col h-full reveal-up delay-200" style={{borderColor: 'rgba(41, 121, 255, 0.4)', boxShadow: '0 0 24px rgba(41,121,255,0.1)'}}>
               <div className="flex gap-1 text-[#2979FF] mb-4">
                 {[...Array(5)].map((_, i) => <iconify-icon key={i} icon="solar:star-bold" width="16"></iconify-icon>)}
               </div>
@@ -517,10 +553,10 @@ export default function App() {
             </div>
 
             {/* Online */}
-            <div className="glass-card overflow-hidden flex flex-col h-full relative lg:scale-105 z-10 reveal-up delay-200" style={{ borderWidth: '2px', borderColor: '#2979FF', boxShadow: '0 0 32px rgba(41,121,255,0.2)' }}>
+            <div className="glass-card overflow-hidden flex flex-col h-full relative lg:scale-105 z-10 reveal-up delay-200" style={{borderWidth: '2px', borderColor: '#2979FF', boxShadow: '0 0 32px rgba(41,121,255,0.2)'}}>
               <div className="absolute top-4 right-4 z-30 bg-[#2979FF] px-3 py-1 rounded font-mono text-[0.6rem] text-white tracking-wider">MAIS ESCOLHIDO</div>
               <div className="h-48 w-full relative">
-                <div className="absolute inset-0 bg-[#0B3D91]/60 z-10" style={{ background: 'linear-gradient(0deg, #050D1A 0%, rgba(11,61,145,0.4) 100%)' }}></div>
+                <div className="absolute inset-0 bg-[#0B3D91]/60 z-10" style={{background: 'linear-gradient(0deg, #050D1A 0%, rgba(11,61,145,0.4) 100%)'}}></div>
                 <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="Online" />
                 <div className="absolute bottom-4 left-6 z-20">
                   <h3 className="font-display font-extrabold text-4xl text-white tracking-tight">ONLINE</h3>
@@ -668,7 +704,7 @@ export default function App() {
 
       {/* SEÇÃO 08 · FAQ */}
       <section className="py-24 md:py-32 bg-[#0B1628] relative overflow-hidden" id="faq">
-        <div className="absolute right-0 top-0 w-[40%] h-full opacity-[0.07] z-0 pointer-events-none" style={{ maskImage: 'linear-gradient(to right, transparent, rgba(0,0,0,0.8))', WebkitMaskImage: 'linear-gradient(to right, transparent, rgba(0,0,0,0.8))' }}>
+        <div className="absolute right-0 top-0 w-[40%] h-full opacity-[0.07] z-0 pointer-events-none" style={{maskImage: 'linear-gradient(to right, transparent, rgba(0,0,0,0.8))', WebkitMaskImage: 'linear-gradient(to right, transparent, rgba(0,0,0,0.8))'}}>
           <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="" />
         </div>
 
@@ -750,7 +786,7 @@ export default function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#050D1A] relative pt-20 pb-10 border-t" style={{ borderImage: 'linear-gradient(90deg, transparent, rgba(41,121,255,0.5), transparent) 1' }}>
+      <footer className="bg-[#050D1A] relative pt-20 pb-10 border-t" style={{borderImage: 'linear-gradient(90deg, transparent, rgba(41,121,255,0.5), transparent) 1'}}>
         <div className="container mx-auto px-5 md:px-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-16">
             <div className="md:col-span-5 flex flex-col items-start">

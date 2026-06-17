@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -30,6 +66,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -135,7 +177,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[minmax(240px,auto)]">
 
-<div className="md:col-span-2 glass-card rounded-xl p-8 flex flex-col justify-between group" style={{-MouseX: '-21px', -MouseY: '-424.75px'}}>
+<div className="md:col-span-2 glass-card rounded-xl p-8 flex flex-col justify-between group" style={{'--mouse-x': '-21px', '--mouse-y': '-424.75px'}}>
 <div className="absolute top-8 right-8 text-zinc-800 group-hover:text-zinc-600 transition-colors">
 <iconify-icon icon="lucide:code-2" width="24"></iconify-icon>
 </div>
@@ -165,7 +207,7 @@ gtag('config', 'G-2M6V79H761');
                 </div>
 </div>
 
-<div className="md:row-span-2 glass-card rounded-xl p-8 flex flex-col relative group" style={{-MouseX: '-885px', -MouseY: '-424.75px'}}>
+<div className="md:row-span-2 glass-card rounded-xl p-8 flex flex-col relative group" style={{'--mouse-x': '-885px', '--mouse-y': '-424.75px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sky-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
 </div>
 <div className="mb-auto">
@@ -206,7 +248,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="glass-card rounded-xl p-8 group" style={{-MouseX: '-21px', -MouseY: '-768px'}}>
+<div className="glass-card rounded-xl p-8 group" style={{'--mouse-x': '-21px', '--mouse-y': '-768px'}}>
 <div className="w-8 h-8 bg-white/5 rounded border border-white/10 flex items-center justify-center text-zinc-300 mb-6 font-mono text-xs">
                     03</div>
 <h4 className="text-xl text-white font-medium mb-3">Global Async</h4>
@@ -215,7 +257,7 @@ gtag('config', 'G-2M6V79H761');
                 </p>
 </div>
 
-<div className="glass-card rounded-xl p-8 group overflow-hidden" style={{-MouseX: '-453px', -MouseY: '-768px'}}>
+<div className="glass-card rounded-xl p-8 group overflow-hidden" style={{'--mouse-x': '-453px', '--mouse-y': '-768px'}}>
 <div className="absolute -right-6 -bottom-6 text-white/5 rotate-12 group-hover:scale-110 group-hover:text-white/10 transition-all duration-500">
 <iconify-icon icon="lucide:zap" width="120"></iconify-icon>
 </div>

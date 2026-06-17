@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -14,6 +50,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -375,7 +417,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <article className="min-w-[16rem] max-w-xs flex-1 rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.9)] transition-transform hover:-translate-y-1 hover:border-[#E0592A]/60">
 <div className="mb-3 flex items-center justify-between gap-2">
-<span className="rounded-full bg-[#E0592A]/15 px-2.5 py-1 text-[0.7rem] font-medium text-[#E0592A]" style={{fontFamily: '\'Inter\', system-ui, -apple-system,MacSystemFont'}}>
+<span className="rounded-full bg-[#E0592A]/15 px-2.5 py-1 text-[0.7rem] font-medium text-[#E0592A]" style={{fontFamily: '\'Inter\', system-ui, -apple-system, MacSystemFont'}}>
                     Yas Island
                   </span>
 <span className="text-[0.7rem] text-slate-400" style={{fontFamily: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont'}}>

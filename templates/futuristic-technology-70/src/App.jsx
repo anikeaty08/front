@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,6 +48,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -35,7 +77,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute z-0 top-1/2 left-1/2 w-[120vw] max-w-[1400px] h-[35vw] max-h-[400px] rounded-[100%] border-[12px] border-indigo-500/10 blur-[24px] mix-blend-screen" style={{animation: 'horizon-pulse 12s ease-in-out infinite'}}></div>
 <div className="absolute z-0 top-1/2 left-1/2 w-[120vw] max-w-[1400px] h-[35vw] max-h-[400px] rounded-[100%] border-[3px] border-white/20 blur-[8px] mix-blend-screen" style={{animation: 'horizon-pulse 12s ease-in-out infinite'}}></div>
 
-<div className="absolute z-10 top-1/2 left-1/2 w-[25vw] max-w-[300px] min-w-[150px] h-[25vw] max-h-[300px] min-h-[150px] rounded-full bg-[#030303]" style={{transform: 'translate(-50%, -50%)', boxShadow: 'inset 0 0 40px rgba(0,0,0,1), 0 0 80px 40px rgba(3,3,3,1)'}}></div>
+<div className="absolute z-10 top-1/2 left-1/2 w-[25vw] max-w-[300px] min-w-[150px] h-[25vw] max-h-[300px] min-h-[150px] rounded-full bg-[#030303]" style={{transform: 'translate(-50%, -50%)', boxShadow: 'inset 0 0 40px rgba(0, 0, 0, 1), 0 0 80px 40px rgba(3,3,3,1)'}}></div>
 
 <div className="absolute z-[15] top-1/2 left-1/2 w-[26vw] max-w-[312px] min-w-[156px] h-[26vw] max-h-[312px] min-h-[156px] rounded-full border-[2px] border-white/40 blur-[4px] mix-blend-screen" style={{animation: 'core-pulsar 8s ease-in-out infinite'}}></div>
 <div className="absolute z-[15] top-1/2 left-1/2 w-[28vw] max-w-[336px] min-w-[168px] h-[28vw] max-h-[336px] min-h-[168px] rounded-full border-[6px] border-indigo-400/30 blur-[16px] mix-blend-screen" style={{animation: 'core-pulsar 8s ease-in-out infinite reverse'}}></div>

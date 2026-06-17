@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1049,6 +1085,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1235,7 +1277,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <label className="text-xs font-medium text-neutral-400 mb-2 block">
                   Font Size
                 </label>
-<input className="w-full" id="font-size" max="72" min="12" style={{-Value: '25%'}} type="range" value="24"/>
+<input className="w-full" id="font-size" max="72" min="12" style={{'--value': '25%'}} type="range" value="24"/>
 <div className="flex justify-between text-xs text-neutral-500 mt-1">
 <span>12px</span>
 <span id="font-size-value">24px</span>
@@ -1304,7 +1346,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     100%
                   </span>
 </div>
-<input className="w-full" id="brightness" max="150" min="50" style={{-Value: '50%'}} type="range" value="100"/>
+<input className="w-full" id="brightness" max="150" min="50" style={{'--value': '50%'}} type="range" value="100"/>
 </div>
 <div>
 <div className="flex items-center justify-between mb-2">
@@ -1315,7 +1357,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     100%
                   </span>
 </div>
-<input className="w-full" id="contrast" max="150" min="50" style={{-Value: '50%'}} type="range" value="100"/>
+<input className="w-full" id="contrast" max="150" min="50" style={{'--value': '50%'}} type="range" value="100"/>
 </div>
 <div>
 <div className="flex items-center justify-between mb-2">
@@ -1326,7 +1368,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     100%
                   </span>
 </div>
-<input className="w-full" id="saturation" max="200" min="0" style={{-Value: '50%'}} type="range" value="100"/>
+<input className="w-full" id="saturation" max="200" min="0" style={{'--value': '50%'}} type="range" value="100"/>
 </div>
 <div>
 <div className="flex items-center justify-between mb-2">
@@ -1337,7 +1379,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     0px
                   </span>
 </div>
-<input className="w-full" id="blur" max="10" min="0" style={{-Value: '0%'}} type="range" value="0"/>
+<input className="w-full" id="blur" max="10" min="0" style={{'--value': '0%'}} type="range" value="0"/>
 </div>
 <button className="btn-hover w-full py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-medium text-neutral-300 hover:bg-white/10" id="reset-adjustments">
                 Reset to Default
@@ -1413,7 +1455,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                     1x
                   </span>
 </div>
-<input className="w-full" id="anim-speed" max="2" min="0.5" step="0.1" style={{-Value: '33%'}} type="range" value="1"/>
+<input className="w-full" id="anim-speed" max="2" min="0.5" step="0.1" style={{'--value': '33%'}} type="range" value="1"/>
 </div>
 </div>
 </div>
@@ -1620,7 +1662,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                   5
                 </span>
 </div>
-<input className="w-full" id="motion-strength" max="10" min="1" style={{-Value: '50%'}} type="range" value="5"/>
+<input className="w-full" id="motion-strength" max="10" min="1" style={{'--value': '50%'}} type="range" value="5"/>
 </div>
 
 <div className="mb-5">

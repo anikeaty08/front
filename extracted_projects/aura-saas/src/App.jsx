@@ -258,11 +258,7 @@ const FeatureStackCard = ({ id, dataId, index = 0, children }) => (
     id={id}
     data-id={dataId}
     className="relative"
-    style={{
-      height: index === 0 ? '150vh' : '130vh',
-      marginTop: index === 0 ? '0vh' : '-62vh',
-      zIndex: index + 1,
-    }}
+    style={{height: index === 0 ? '150vh' : '130vh', marginTop: index === 0 ? '0vh' : '-62vh', zIndex: index + 1}}
   >
     <div className="sticky top-24 h-[78vh] min-h-[560px] max-h-[760px]">
       <div className={cn(
@@ -400,7 +396,7 @@ const CollaborateVisual = () => (
 
     <div
       className="absolute top-[60%] right-[20%] animate-[bounce_4s_infinite] drop-shadow-2xl z-20"
-      style={{ animationDelay: '1.5s' }}
+      style={{animationDelay: '1.5s'}}
     >
       <iconify-icon icon="solar:cursor-bold" class="text-4xl text-[#ff0055]" />
       <div className="bg-[#ff0055] text-white text-xs px-3 py-1.5 rounded-full rounded-tl-none shadow-xl font-medium whitespace-nowrap mt-1 ml-5 border border-white/20 tracking-wide">
@@ -742,6 +738,42 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('ai');
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -835,12 +867,7 @@ export default function App() {
 
   <div
     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start"
-    style={{
-      WebkitMaskImage:
-        'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
-      maskImage:
-        'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)'
-    }}
+    style={{WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)', maskImage: 'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)'}}
   >
     {/* Column 1 */}
     <div className="relative h-[1400px] overflow-hidden">
@@ -1264,7 +1291,7 @@ export default function App() {
 
                       <div
                         className="absolute top-[60%] right-[20%] animate-[bounce_4s_infinite] drop-shadow-2xl z-20"
-                        style={{ animationDelay: "1.5s" }}
+                        style={{animationDelay: "1.5s"}}
                       >
                         <iconify-icon icon="solar:cursor-bold" class="text-4xl text-[#ff0055]" />
                         <div className="bg-[#ff0055] text-white text-xs px-3 py-1.5 rounded-full rounded-tl-none shadow-xl font-medium whitespace-nowrap mt-1 ml-5 border border-white/20 tracking-wide">

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 lucide.createIcons();
@@ -36,6 +72,12 @@ document.querySelectorAll('[style^="--d"]').forEach(el=>observer.observe(el));
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -60,7 +102,7 @@ document.querySelectorAll('[style^="--d"]').forEach(el=>observer.observe(el));
 </button>
 </div>
 </header>
-<section className="max-w-6xl mx-auto px-6 pt-36 animate" style={{-D: '.05s'}}>
+<section className="max-w-6xl mx-auto px-6 pt-36 animate" style={{'--d': '.05s'}}>
 <div className="flex flex-col-reverse lg:flex-row lg:items-center gap-12">
 <div className="flex-1">
 <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight mb-2 gradient-text">Segev</h1>
@@ -84,7 +126,7 @@ document.querySelectorAll('[style^="--d"]').forEach(el=>observer.observe(el));
 </section>
 <main id="main">
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
-<section className="max-w-6xl mx-auto px-6 animate" id="skills" style={{-D: '.1s'}}>
+<section className="max-w-6xl mx-auto px-6 animate" id="skills" style={{'--d': '.1s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Technical Skills</h2>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 <div><h3 className="font-medium flex items-center gap-1 mb-2"><i className="h-4 w-4" data-lucide="code"></i> Programming</h3><p>Python, R, SQL</p></div>
@@ -106,7 +148,7 @@ document.querySelectorAll('[style^="--d"]').forEach(el=>observer.observe(el));
 </div>
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
-<section className="max-w-6xl mx-auto px-6 animate" id="projects" style={{-D: '.15s'}}>
+<section className="max-w-6xl mx-auto px-6 animate" id="projects" style={{'--d': '.15s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Highlighted Projects</h2>
 <div className="grid gap-8 md:grid-cols-2">
 
@@ -144,7 +186,7 @@ document.querySelectorAll('[style^="--d"]').forEach(el=>observer.observe(el));
 </div>
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
-<section className="max-w-6xl mx-auto px-6 animate" id="experience" style={{-D: '.2s'}}>
+<section className="max-w-6xl mx-auto px-6 animate" id="experience" style={{'--d': '.2s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Professional Journey</h2>
 <div className="mb-10">
 <div className="flex items-start justify-between flex-wrap gap-y-1"><h3 className="font-medium">Data Science Analyst — Statutory Authority</h3><time className="text-sm text-gray-500 dark:text-gray-400">2022 – Present</time></div>
@@ -163,7 +205,7 @@ document.querySelectorAll('[style^="--d"]').forEach(el=>observer.observe(el));
 </div>
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
-<section className="max-w-6xl mx-auto px-6 animate" id="education" style={{-D: '.25s'}}>
+<section className="max-w-6xl mx-auto px-6 animate" id="education" style={{'--d': '.25s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Academic Background</h2>
 <div className="flex items-start justify-between flex-wrap gap-y-1">
 <h3 className="font-medium">B.Sc. Statistics &amp; Data Science • B.A. Middle Eastern History</h3>
@@ -176,14 +218,14 @@ document.querySelectorAll('[style^="--d"]').forEach(el=>observer.observe(el));
 </ul>
 </section>
 <div className="border-t border-gray-200 dark:border-gray-800 my-16 mx-6"></div>
-<section className="max-w-6xl mx-auto px-6 animate" style={{-D: '.3s'}}>
+<section className="max-w-6xl mx-auto px-6 animate" style={{'--d': '.3s'}}>
 <h2 className="text-2xl font-semibold tracking-tight mb-8">Beyond Work</h2>
 <div className="grid sm:grid-cols-2 gap-8">
 <div><h3 className="font-medium flex items-center gap-1 mb-2"><i className="h-4 w-4" data-lucide="flag"></i> Military Service</h3><p className="font-medium">Deputy Operations Division Officer<br/><span className="text-sm text-gray-500 dark:text-gray-400">Intelligence Corps, 2014 – 2017</span></p><p className="mt-1 text-sm">Led teams of 12 analysts in mission-critical environments.</p></div>
 <div><h3 className="font-medium flex items-center gap-1 mb-2"><i className="h-4 w-4" data-lucide="heart"></i> Community</h3><ul className="list-disc list-inside space-y-1"><li>Mentor, LAHAV STEM Program (2020 – 2021).</li><li>Volunteer Data Coach for non-profit grant analytics.</li></ul></div>
 </div>
 </section>
-<footer className="max-w-6xl mx-auto px-6 py-16 text-center text-xs text-gray-500 dark:text-gray-400 animate" style={{-D: '.35s'}}>© 2024 Segev — Hebrew, English</footer>
+<footer className="max-w-6xl mx-auto px-6 py-16 text-center text-xs text-gray-500 dark:text-gray-400 animate" style={{'--d': '.35s'}}>© 2024 Segev — Hebrew, English</footer>
 </main>
 <div className="copy-toast" id="toast">Email copied!</div>
 

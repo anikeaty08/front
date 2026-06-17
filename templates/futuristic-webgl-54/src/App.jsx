@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -74,6 +110,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -137,7 +179,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="absolute bottom-12 right-6 lg:right-16 z-30 flex flex-col items-end gap-2 text-right pointer-events-none reveal-on-scroll in-view" data-reveal="" style={{-RevealDelay: '0ms'}}>
+<div className="absolute bottom-12 right-6 lg:right-16 z-30 flex flex-col items-end gap-2 text-right pointer-events-none reveal-on-scroll in-view" data-reveal="" style={{'--reveal-delay': '0ms'}}>
 <p className="font-orbitron text-xs tracking-[0.3em] text-neutral-600 uppercase">Core Technologies</p>
 <div className="flex gap-3 text-xs font-mono text-cyan-500/70 mt-1">
 <span>[ WEBGL ]</span>
@@ -149,7 +191,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24 w-full border-b border-white/5 bg-black relative" id="experiments">
 <div className="max-w-7xl mx-auto">
-<div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6 reveal-on-scroll in-view" data-reveal="" style={{-RevealDelay: '0ms'}}>
+<div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6 reveal-on-scroll in-view" data-reveal="" style={{'--reveal-delay': '0ms'}}>
 <div className="">
 <p className="font-orbitron text-xs uppercase tracking-[0.4em] text-cyan-500 mb-3 flex items-center gap-3">
 <span className="w-6 md:w-8 h-[1px] bg-cyan-500"></span> 01 // Experiments
@@ -162,7 +204,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 
-<div className="group relative bg-neutral-950 border border-white/10 hover:border-cyan-500/50 transition-colors duration-500 p-5 md:p-6 flex flex-col justify-between min-h-[280px] rounded-none overflow-hidden cursor-crosshair reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{-RevealDelay: '90ms', -Mx: '0px', -My: '0px'}}>
+<div className="group relative bg-neutral-950 border border-white/10 hover:border-cyan-500/50 transition-colors duration-500 p-5 md:p-6 flex flex-col justify-between min-h-[280px] rounded-none overflow-hidden cursor-crosshair reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{'--reveal-delay': '90ms', '--mx': '0px', '--my': '0px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden"><div className="h-full w-1/3 bg-cyan-400 animate-scan-line hidden group-hover:block"></div></div>
 <div className="relative z-10">
@@ -182,7 +224,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative bg-neutral-950 border border-white/10 hover:border-cyan-500/50 transition-colors duration-500 p-5 md:p-6 flex flex-col justify-between min-h-[280px] rounded-none overflow-hidden cursor-crosshair reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{-RevealDelay: '180ms', -Mx: '0px', -My: '0px'}}>
+<div className="group relative bg-neutral-950 border border-white/10 hover:border-cyan-500/50 transition-colors duration-500 p-5 md:p-6 flex flex-col justify-between min-h-[280px] rounded-none overflow-hidden cursor-crosshair reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{'--reveal-delay': '180ms', '--mx': '0px', '--my': '0px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden"><div className="h-full w-1/3 bg-cyan-400 animate-scan-line hidden group-hover:block"></div></div>
 <div className="relative z-10">
@@ -202,7 +244,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group relative bg-neutral-950 border border-white/10 hover:border-cyan-500/50 transition-colors duration-500 p-5 md:p-6 flex flex-col justify-between min-h-[280px] rounded-none overflow-hidden cursor-crosshair reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{-RevealDelay: '270ms'}}>
+<div className="group relative bg-neutral-950 border border-white/10 hover:border-cyan-500/50 transition-colors duration-500 p-5 md:p-6 flex flex-col justify-between min-h-[280px] rounded-none overflow-hidden cursor-crosshair reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{'--reveal-delay': '270ms'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden"><div className="h-full w-1/3 bg-cyan-400 animate-scan-line hidden group-hover:block"></div></div>
 <div className="relative z-10">
@@ -227,7 +269,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="md:py-24 md:px-12 overflow-hidden bg-neutral-950/30 w-full border-white/5 border-b pt-16 pr-6 pb-16 pl-6 relative" id="demo-reel">
 <div className="max-w-[1300px] mx-auto">
-<div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 reveal-on-scroll border-b border-white/10 pb-6" data-reveal="" style={{-RevealDelay: '0ms'}}>
+<div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 reveal-on-scroll border-b border-white/10 pb-6" data-reveal="" style={{'--reveal-delay': '0ms'}}>
 <div className="">
 <p className="uppercase flex items-center gap-3 text-xs md:text-sm text-cyan-500 tracking-[0.4em] font-orbitron mb-3">
 <span className="bg-cyan-500 w-6 md:w-8 h-[1px]"></span> 04 // Interactive Simulation
@@ -239,7 +281,7 @@ gtag('config', 'G-2M6V79H761');
           </p>
 </div>
 
-<div className="border border-[#222] bg-[#0a0a0a] flex h-[800px] w-full overflow-hidden relative rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] reveal-on-scroll font-sans" data-reveal="" style={{-RevealDelay: '90ms'}}>
+<div className="border border-[#222] bg-[#0a0a0a] flex h-[800px] w-full overflow-hidden relative rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] reveal-on-scroll font-sans" data-reveal="" style={{'--reveal-delay': '90ms'}}>
 
 <aside className="w-64 border-r border-[#222] bg-[#0a0a0a] flex flex-col shrink-0 hidden lg:flex">
 
@@ -497,7 +539,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24 bg-neutral-950/30 w-full border-white/5 border-b relative" id="workforces">
 <div className="z-10 max-w-7xl mx-auto relative">
-<div className="flex flex-col md:flex-row md:items-end gap-6 reveal-on-scroll border-white/10 border-b mb-12 pb-6 justify-between" data-reveal="" style={{-RevealDelay: '0ms'}}>
+<div className="flex flex-col md:flex-row md:items-end gap-6 reveal-on-scroll border-white/10 border-b mb-12 pb-6 justify-between" data-reveal="" style={{'--reveal-delay': '0ms'}}>
 <div className="">
 <p className="uppercase flex items-center gap-3 text-xs md:text-sm text-cyan-500 tracking-[0.4em] font-orbitron mb-3">
 <span className="w-6 md:w-8 h-[1px] bg-cyan-500"></span> 01.5 // Active Units
@@ -510,7 +552,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
 
-<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{-RevealDelay: '90ms', -Mx: '0px', -My: '0px'}}>
+<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{'--reveal-delay': '90ms', '--mx': '0px', '--my': '0px'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] bg-white/5 group-hover:bg-cyan-500 transition-colors duration-500"></div>
 <div className="flex justify-between items-start mb-6">
 <div className="flex group-hover:scale-110 transition-transform duration-500 text-cyan-400 bg-neutral-950 w-8 h-8 md:w-10 md:h-10 border-white/10 border rounded-none items-center justify-center">
@@ -528,7 +570,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{-RevealDelay: '180ms', -Mx: '0px', -My: '0px'}}>
+<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{'--reveal-delay': '180ms', '--mx': '0px', '--my': '0px'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] bg-white/5 group-hover:bg-cyan-500 transition-colors duration-500"></div>
 <div className="flex justify-between items-start mb-6">
 <div className="w-8 h-8 md:w-10 md:h-10 border border-white/10 bg-neutral-950 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-500 rounded-none">
@@ -546,7 +588,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{-RevealDelay: '270ms', -Mx: '0px', -My: '0px'}}>
+<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{'--reveal-delay': '270ms', '--mx': '0px', '--my': '0px'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] bg-white/5 group-hover:bg-cyan-500 transition-colors duration-500"></div>
 <div className="flex justify-between items-start mb-6">
 <div className="w-8 h-8 md:w-10 md:h-10 border border-white/10 bg-neutral-950 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-500 rounded-none">
@@ -564,7 +606,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{-RevealDelay: '360ms', -Mx: '0px', -My: '0px'}}>
+<div className="group border border-white/10 bg-black p-5 md:p-6 relative overflow-hidden reveal-on-scroll magnetic-card" data-magnetic="" data-reveal="" style={{'--reveal-delay': '360ms', '--mx': '0px', '--my': '0px'}}>
 <div className="absolute top-0 left-0 w-full h-[2px] bg-white/5 group-hover:bg-cyan-500 transition-colors duration-500"></div>
 <div className="flex justify-between items-start mb-6">
 <div className="w-8 h-8 md:w-10 md:h-10 border border-white/10 bg-neutral-950 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-500 rounded-none">
@@ -583,7 +625,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="reveal-on-scroll overflow-hidden bg-black border-white/10 border mt-10 p-6 md:p-8 relative" data-reveal="" style={{-RevealDelay: '450ms'}}>
+<div className="reveal-on-scroll overflow-hidden bg-black border-white/10 border mt-10 p-6 md:p-8 relative" data-reveal="" style={{'--reveal-delay': '450ms'}}>
 
 <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden">
 <div className="h-full w-1/3 bg-cyan-400 animate-scan-line"></div>
@@ -797,7 +839,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="max-w-7xl mx-auto relative z-10">
 
-<div className="max-w-2xl mb-12 md:mb-16 reveal-on-scroll" data-reveal="" style={{-RevealDelay: '0ms'}}>
+<div className="max-w-2xl mb-12 md:mb-16 reveal-on-scroll" data-reveal="" style={{'--reveal-delay': '0ms'}}>
 <p className="font-orbitron text-xs md:text-sm uppercase tracking-[0.4em] text-cyan-500 mb-3 flex items-center gap-3">
 <span className="w-6 md:w-8 h-[1px] bg-cyan-500"></span> 11.5 // Specialized Units
           </p>
@@ -811,7 +853,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
 
-<div className="group border border-white/10 bg-neutral-950/60 backdrop-blur-md p-6 md:p-8 relative overflow-hidden reveal-on-scroll magnetic-card hover:border-blue-500/50 transition-colors duration-500" data-magnetic="" data-reveal="" style={{-RevealDelay: '90ms'}}>
+<div className="group border border-white/10 bg-neutral-950/60 backdrop-blur-md p-6 md:p-8 relative overflow-hidden reveal-on-scroll magnetic-card hover:border-blue-500/50 transition-colors duration-500" data-magnetic="" data-reveal="" style={{'--reveal-delay': '90ms'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden"><div className="h-full w-1/3 bg-blue-400 animate-scan-line hidden group-hover:block"></div></div>
 <div className="relative z-10">
@@ -840,7 +882,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group border border-white/10 bg-neutral-950/60 backdrop-blur-md p-6 md:p-8 relative overflow-hidden reveal-on-scroll magnetic-card hover:border-cyan-500/50 transition-colors duration-500" data-magnetic="" data-reveal="" style={{-RevealDelay: '180ms'}}>
+<div className="group border border-white/10 bg-neutral-950/60 backdrop-blur-md p-6 md:p-8 relative overflow-hidden reveal-on-scroll magnetic-card hover:border-cyan-500/50 transition-colors duration-500" data-magnetic="" data-reveal="" style={{'--reveal-delay': '180ms'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden"><div className="h-full w-1/3 bg-cyan-400 animate-scan-line hidden group-hover:block"></div></div>
 <div className="relative z-10">
@@ -869,7 +911,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group border border-white/10 bg-neutral-950/60 backdrop-blur-md p-6 md:p-8 relative overflow-hidden reveal-on-scroll magnetic-card hover:border-purple-500/50 transition-colors duration-500" data-magnetic="" data-reveal="" style={{-RevealDelay: '270ms'}}>
+<div className="group border border-white/10 bg-neutral-950/60 backdrop-blur-md p-6 md:p-8 relative overflow-hidden reveal-on-scroll magnetic-card hover:border-purple-500/50 transition-colors duration-500" data-magnetic="" data-reveal="" style={{'--reveal-delay': '270ms'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
 <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden"><div className="h-full w-1/3 bg-purple-400 animate-scan-line hidden group-hover:block"></div></div>
 <div className="relative z-10">

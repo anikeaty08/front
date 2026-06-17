@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -1031,6 +1067,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1101,7 +1143,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
 <div className="max-w-3xl">
 <p className="text-xs font-semibold uppercase tracking-[0.18rem] text-[#D4A017]">16 Years of Finance Excellence · BBBEEE Level 1</p>
-<h1 className="mt-5 text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl" style={{fontFamily: '\'DM Sans\',sans-serif'}}>We put you in the driver's seat of your financial future.</h1>
+<h1 className="mt-5 text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl" style={{fontFamily: '\'DM Sans\', sans-serif'}}>We put you in the driver's seat of your financial future.</h1>
 <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85 sm:text-xl">Vehicle finance, motorcycle finance, asset finance and insurance — structured around your life and your budget.</p>
 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
 <a className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#D4A017] px-6 py-3 text-sm font-semibold text-[#0A2342] hover:bg-[#c49314] focus:outline-none focus:ring-2 focus:ring-[#D4A017] focus:ring-offset-2" data-route="/apply" href="/apply">Get Pre-Qualified</a>
@@ -1141,13 +1183,13 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mx-auto text-center max-w-3xl">
 <p className="text-xs font-semibold uppercase tracking-[0.18rem] text-[#D4A017]">Services</p>
-<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\',sans-serif'}}>What we do for you</h2>
+<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\', sans-serif'}}>What we do for you</h2>
 <p className="mt-4 text-base leading-7 text-[#5A6478]">Four specialist service lines under one trusted group.</p>
 </div>
 <div className="mt-12 grid gap-6 md:grid-cols-2">
 <article className="rounded-xl border border-slate-200 bg-white p-7 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
 <iconify-icon className="text-4xl text-[#D4A017]" icon="solar:car-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
-<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Vehicle Finance</h3>
+<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Vehicle Finance</h3>
 <p className="mt-3 text-base leading-7 text-[#5A6478]">Structured repayments on new or pre-owned vehicles, tailored to your income and lifestyle.</p>
 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
 <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12rem] text-[#0A2342]">New &amp; Pre-owned</span>
@@ -1156,7 +1198,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="rounded-xl border border-slate-200 bg-white p-7 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
 <iconify-icon className="text-4xl text-[#D4A017]" icon="solar:scooter-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
-<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Motorcycle Finance</h3>
+<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Motorcycle Finance</h3>
 <p className="mt-3 text-base leading-7 text-[#5A6478]">Affordable monthly payments on any bike — it's not just a loan, it's a lifestyle.</p>
 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
 <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12rem] text-[#0A2342]">All makes &amp; models</span>
@@ -1165,7 +1207,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="rounded-xl border border-slate-200 bg-white p-7 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
 <iconify-icon className="text-4xl text-[#D4A017]" icon="solar:buildings-3-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
-<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Asset Finance</h3>
+<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Asset Finance</h3>
 <p className="mt-3 text-base leading-7 text-[#5A6478]">Unlock the capital in your business assets or finance new equipment for growth.</p>
 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
 <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12rem] text-[#0A2342]">Business &amp; Commercial</span>
@@ -1174,7 +1216,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="rounded-xl border border-slate-200 bg-white p-7 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
 <iconify-icon className="text-4xl text-[#D4A017]" icon="solar:shield-check-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
-<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Short-term Insurance</h3>
+<h3 className="mt-5 text-2xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Short-term Insurance</h3>
 <p className="mt-3 text-base leading-7 text-[#5A6478]">Comprehensive cover for your vehicle, bike, and other prized possessions.</p>
 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
 <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12rem] text-[#0A2342]">Multiple products</span>
@@ -1188,7 +1230,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mx-auto text-center max-w-3xl">
 <p className="text-xs font-semibold uppercase tracking-[0.18rem] text-[#D4A017]">Calculator</p>
-<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Calculate your monthly repayment</h2>
+<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Calculate your monthly repayment</h2>
 <p className="mt-4 text-base leading-7 text-[#5A6478]">Adjust the sliders to see an instant estimate — no impact on your credit score.</p>
 </div>
 <div className="mt-12 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.07)] sm:p-6 lg:p-8" data-assetmax="false" data-calculator="homeCalc" data-mode="Vehicle">
@@ -1201,14 +1243,14 @@ gtag('config', 'G-2M6V79H761');
 <label className="block">
 <div className="flex items-center justify-between gap-4">
 <span className="text-sm font-semibold text-[#0A2342]">Finance amount</span>
-<span className="text-2xl font-semibold tracking-tight text-[#0A2342]" data-price-output="" style={{fontFamily: '\'DM Sans\',sans-serif'}}>R 610 000</span>
+<span className="text-2xl font-semibold tracking-tight text-[#0A2342]" data-price-output="" style={{fontFamily: '\'DM Sans\', sans-serif'}}>R 610 000</span>
 </div>
 <input className="accent-[#D4A017] w-full h-3 mt-4" data-price="" max="2000000" min="50000" step="10000" type="range" value="350000"/>
 </label>
 <label className="block">
 <div className="flex items-center justify-between gap-4">
 <span className="text-sm font-semibold text-[#0A2342]">Deposit amount</span>
-<span className="text-xl font-semibold tracking-tight text-[#0A2342]" data-deposit-output="" style={{fontFamily: '\'DM Sans\',sans-serif'}}>R 61 000 · 10%</span>
+<span className="text-xl font-semibold tracking-tight text-[#0A2342]" data-deposit-output="" style={{fontFamily: '\'DM Sans\', sans-serif'}}>R 61 000 · 10%</span>
 </div>
 <input className="mt-4 h-3 w-full accent-[#D4A017]" data-deposit="" max="30" min="0" step="1" type="range" value="10"/>
 </label>
@@ -1238,7 +1280,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <aside className="rounded-2xl bg-[#0A2342] p-6 text-white lg:p-8">
 <p className="text-xs font-semibold uppercase tracking-[0.18rem] text-[#D4A017]">Estimated monthly repayment</p>
-<p className="mt-4 text-5xl font-semibold tracking-tight text-[#D4A017]" data-monthly="" style={{fontFamily: '\'DM Sans\',sans-serif'}}>R 12 351</p>
+<p className="mt-4 text-5xl font-semibold tracking-tight text-[#D4A017]" data-monthly="" style={{fontFamily: '\'DM Sans\', sans-serif'}}>R 12 351</p>
 <div className="mt-8 grid gap-4">
 <div className="flex justify-between border-b border-white/10 pb-4">
 <span className="text-sm text-white/70">Total amount payable</span>
@@ -1261,7 +1303,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mx-auto text-center max-w-3xl">
 <p className="text-xs font-semibold uppercase tracking-[0.18rem] text-[#D4A017]">Process</p>
-<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\',sans-serif'}}>How it works</h2>
+<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\', sans-serif'}}>How it works</h2>
 <p className="mt-4 text-base leading-7 text-[#5A6478]">From inquiry to keys in hand — we make it simple.</p>
 </div>
 <div className="mt-12 grid gap-6 lg:grid-cols-4">
@@ -1270,7 +1312,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-sm font-semibold text-[#D4A017]">01</span>
 <iconify-icon className="text-3xl text-[#0A2342]" icon="solar:pen-new-square-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
 </div>
-<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Apply in minutes</h3>
+<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Apply in minutes</h3>
 <p className="mt-3 text-sm leading-6 text-[#5A6478]">Complete our quick online form or WhatsApp us. No paperwork, no branch visit required.</p>
 </div>
 <div className="relative rounded-xl border border-slate-200 bg-white p-6">
@@ -1278,7 +1320,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-sm font-semibold text-[#D4A017]">02</span>
 <iconify-icon className="text-3xl text-[#0A2342]" icon="solar:shield-check-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
 </div>
-<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Get pre-qualified</h3>
+<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Get pre-qualified</h3>
 <p className="mt-3 text-sm leading-6 text-[#5A6478]">We assess your profile and come back with tailored options before the full lender process.</p>
 </div>
 <div className="relative rounded-xl border border-slate-200 bg-white p-6">
@@ -1286,7 +1328,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-sm font-semibold text-[#D4A017]">03</span>
 <iconify-icon className="text-3xl text-[#0A2342]" icon="solar:clipboard-check-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
 </div>
-<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Choose your deal</h3>
+<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Choose your deal</h3>
 <p className="mt-3 text-sm leading-6 text-[#5A6478]">Review your personalised offer. We compare lenders to find suitable rates and terms.</p>
 </div>
 <div className="relative rounded-xl border border-slate-200 bg-white p-6">
@@ -1294,7 +1336,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-sm font-semibold text-[#D4A017]">04</span>
 <iconify-icon className="text-3xl text-[#0A2342]" icon="solar:key-minimalistic-square-2-linear" style={{strokeWidth: '1.5'}}></iconify-icon>
 </div>
-<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Drive away</h3>
+<h3 className="mt-6 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Drive away</h3>
 <p className="mt-3 text-sm leading-6 text-[#5A6478]">Sign digitally, finalise with your lender, and collect your vehicle. We handle the admin.</p>
 </div>
 </div>
@@ -1303,19 +1345,19 @@ gtag('config', 'G-2M6V79H761');
 <section className="bg-[#0A2342] py-16">
 <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
 <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
-<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>16+</div>
+<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>16+</div>
 <p className="mt-3 text-sm font-medium text-white/70">Years of experience</p>
 </div>
 <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
-<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>2,000+</div>
+<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>2,000+</div>
 <p className="mt-3 text-sm font-medium text-white/70">Clients assisted</p>
 </div>
 <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
-<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>5,000+</div>
+<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>5,000+</div>
 <p className="mt-3 text-sm font-medium text-white/70">Finance applications processed</p>
 </div>
 <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
-<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>20+</div>
+<div className="text-5xl font-semibold tracking-tight text-[#D4A017]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>20+</div>
 <p className="mt-3 text-sm font-medium text-white/70">Lender &amp; OEM partners</p>
 </div>
 </div>
@@ -1324,7 +1366,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mx-auto text-center max-w-3xl">
 <p className="text-xs font-semibold uppercase tracking-[0.18rem] text-[#D4A017]">Client stories</p>
-<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\',sans-serif'}}>What our clients say</h2>
+<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\', sans-serif'}}>What our clients say</h2>
 <p className="mt-4 text-base leading-7 text-[#5A6478]">Real support from inquiry through approval.</p>
 </div>
 <div className="mt-12 grid gap-6 lg:grid-cols-3">
@@ -1367,13 +1409,13 @@ gtag('config', 'G-2M6V79H761');
 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="mx-auto text-center max-w-3xl">
 <p className="text-xs font-semibold uppercase tracking-[0.18rem] text-[#D4A017]">Insights</p>
-<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\',sans-serif'}}>News &amp; insights</h2>
+<h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0A2342] sm:text-4xl" style={{fontFamily: '\'DM Sans\', sans-serif'}}>News &amp; insights</h2>
 <p className="mt-4 text-base leading-7 text-[#5A6478]">Finance tips, industry updates, and Keaneo news.</p>
 </div>
 <div className="mt-12 grid gap-6 md:grid-cols-3">
 <article className="rounded-xl border border-slate-200 bg-white p-6">
 <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12rem] text-[#9A740E]">Vehicle Finance</span>
-<h3 className="mt-5 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>How to prepare for pre-owned car finance in South Africa</h3>
+<h3 className="mt-5 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>How to prepare for pre-owned car finance in South Africa</h3>
 <p className="mt-3 text-sm leading-6 text-[#5A6478]">Know what lenders look at before you apply for a pre-owned vehicle.</p>
 <div className="mt-5 flex items-center justify-between text-xs font-medium text-[#5A6478]">
 <span>12 Feb 2025</span>
@@ -1383,7 +1425,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="rounded-xl border border-slate-200 bg-white p-6">
 <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12rem] text-[#9A740E]">Market Update</span>
-<h3 className="mt-5 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>What SA prime rate changes mean for monthly repayments</h3>
+<h3 className="mt-5 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>What SA prime rate changes mean for monthly repayments</h3>
 <p className="mt-3 text-sm leading-6 text-[#5A6478]">A plain-language guide to rates, terms and affordability.</p>
 <div className="mt-5 flex items-center justify-between text-xs font-medium text-[#5A6478]">
 <span>28 Jan 2025</span>
@@ -1393,7 +1435,7 @@ gtag('config', 'G-2M6V79H761');
 </article>
 <article className="rounded-xl border border-slate-200 bg-white p-6">
 <span className="rounded-full bg-[#F7F8FA] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12rem] text-[#9A740E]">Asset Finance</span>
-<h3 className="mt-5 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Preserving working capital while financing business equipment</h3>
+<h3 className="mt-5 text-xl font-semibold tracking-tight text-[#0A2342]" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Preserving working capital while financing business equipment</h3>
 <p className="mt-3 text-sm leading-6 text-[#5A6478]">How SMEs can use structured asset finance to support growth.</p>
 <div className="mt-5 flex items-center justify-between text-xs font-medium text-[#5A6478]">
 <span>15 Jan 2025</span>
@@ -1407,7 +1449,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="bg-[#D4A017] py-16 text-[#0A2342]">
 <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-<h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{fontFamily: '\'DM Sans\',sans-serif'}}>Ready to get started? Let's talk.</h2>
+<h2 className="text-3xl font-semibold tracking-tight sm:text-4xl" style={{fontFamily: '\'DM Sans\', sans-serif'}}>Ready to get started? Let's talk.</h2>
 <p className="mx-auto mt-4 max-w-2xl text-base leading-7">WhatsApp us, fill in a quick application, or call us directly. We respond fast.</p>
 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
 <a className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#0A2342] px-6 py-3 text-sm font-semibold text-white" data-route="/apply" href="/apply">Apply Online</a>

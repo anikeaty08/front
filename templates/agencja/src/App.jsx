@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -623,6 +659,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -696,7 +738,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </header>
 <section className="grid min-h-[calc(100vh-7rem)] grid-cols-1 sm:px-8 sm:pt-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-4 lg:px-10 lg:pb-6 lg:pt-10 xl:px-12 w-full max-w-[92rem] z-20 mr-auto ml-auto pt-12 pr-5 pb-10 pl-5 relative gap-x-12 gap-y-12 items-center">
-<div className="pointer-events-none absolute inset-0 z-0" style={{backgroundImage: 'linear-gradient(90deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.82) 34%, rgba(0,0,0,0.22) 62%, rgba(0,0,0,0.08) 100%), url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e04d3e4d-8705-4b52-973b-f886f528af69_1600w.png\')', backgroundSize: 'cover', backgroundPosition: 'center right', backgroundRepeat: 'no-repeat', overflow: 'hidden', isolation: 'isolate'}}>
+<div className="pointer-events-none absolute inset-0 z-0" style={{backgroundImage: 'linear-gradient(90deg, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.82) 34%, rgba(0, 0, 0, 0.22) 62%, rgba(0, 0, 0, 0.08) 100%), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e04d3e4d-8705-4b52-973b-f886f528af69_1600w.png\')', backgroundSize: 'cover', backgroundPosition: 'center right', backgroundRepeat: 'no-repeat', overflow: 'hidden', isolation: 'isolate'}}>
 <video data-aura-generated-video="true" data-aura-generated-video-bg="true" data-aura-video-preset="loop-in-view" loop="" muted="" playsinline="" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e04d3e4d-8705-4b52-973b-f886f528af69_1600w.png" preload="metadata" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/8bd0314a-9525-4a13-996e-2c37cbd9e514/1779701761618-56a5e556-4fcb-4d80-8fcf-a03aa76ce68b.mp4" style={{position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', zIndex: '0'}}></video>
 </div>
 <div className="relative z-20 max-w-2xl">

@@ -8,7 +8,7 @@ export default function App() {
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5 flex items-center gap-2 text-white">
-              <iconify-icon icon="solar:microphone-2-linear" className="text-xl" style={{ strokeWidth: 1.5 }}></iconify-icon>
+              <iconify-icon icon="solar:microphone-2-linear" className="text-xl" style={{strokeWidth: 1.5}}></iconify-icon>
               <span className="text-lg font-semibold tracking-tighter uppercase">AMONG THE MAKERS</span>
             </a>
           </div>
@@ -20,7 +20,7 @@ export default function App() {
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="#" className="text-sm font-medium leading-6 text-zinc-900 bg-[#EBE9E1] px-4 py-2 rounded-full hover:bg-white transition-colors inline-flex items-center gap-2">
-              Subscribe <iconify-icon icon="solar:arrow-right-linear" style={{ strokeWidth: 1.5 }}></iconify-icon>
+              Subscribe <iconify-icon icon="solar:arrow-right-linear" style={{strokeWidth: 1.5}}></iconify-icon>
             </a>
           </div>
           {/* Mobile menu button (visual only) */}
@@ -434,10 +434,7 @@ export default function App() {
         <section 
           className="bg-[#111111] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2b8f6b7c-9c72-4eb4-83da-7219bb8dcf5a_1600w.png)] bg-cover bg-center border-white/5 border-t pt-24 pb-24 shadow-xl" 
           id="blog" 
-          style={{
-            maskImage: 'linear-gradient(180deg, transparent, black 0%, black 40%, transparent)',
-            WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 40%, transparent)'
-          }}
+          style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 40%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 40%, transparent)'}}
         >
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center mb-16">

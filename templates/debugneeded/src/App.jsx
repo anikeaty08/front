@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -78,7 +114,7 @@ gtag('config', 'G-2M6V79H761');
           return (
               <div
                   className={`relative bg-white rounded border border-slate-200 shadow-sm transition-all duration-200 hover:-translate-y-[5px] hover:shadow-md group opacity-0 ${className} ${onClick ? 'cursor-pointer' : ''}`}
-                  style={{ animation: `fadeSlideUp 350ms ease-out forwards ${index * 60}ms` }}
+                  style={{animation: `fadeSlideUp 350ms ease-out forwards ${index * 60}ms`}}
                   key={`card-${triggerAnim}-${index}`}
                   onClick={onClick}
               >
@@ -289,7 +325,7 @@ gtag('config', 'G-2M6V79H761');
                                   <div
                                       key={appt.id}
                                       className={`bg-white border border-slate-200 rounded-lg p-5 shadow-sm flex flex-col md:flex-row gap-4 justify-between transition-all duration-250 ${isDeleting ? 'scale-y-0 opacity-0 transform-origin-top mb-[-16px]' : 'animate-slide-in-left'}`}
-                                      style={{ animationDelay: `${isDeleting ? 0 : i * 80}ms` }}
+                                      style={{animationDelay: `${isDeleting ? 0 : i * 80}ms`}}
                                   >
                                       <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6">
                                           <div className="col-span-full flex items-center gap-2 mb-1">
@@ -371,7 +407,7 @@ gtag('config', 'G-2M6V79H761');
           // Non-stateful views can remain as functions
           const renderHome = () => (
               <div className="flex flex-col gap-16 pb-16">
-                  <div className="relative overflow-hidden bg-[#0a1f5c] text-white pt-24 pb-28 px-6 sm:px-12 rounded-b-[2rem] animate-gradient-drift" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(26, 58, 143, 0.4) 0%, transparent 50%)' }}>
+                  <div className="relative overflow-hidden bg-[#0a1f5c] text-white pt-24 pb-28 px-6 sm:px-12 rounded-b-[2rem] animate-gradient-drift" style={{backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(26, 58, 143, 0.4) 0%, transparent 50%)'}}>
                       <div className="max-w-6xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                           <div className="flex flex-col items-start space-y-6">
                               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-medium tracking-wide text-blue-200" style={{animation: 'fadeSlideUp 400ms ease-out forwards'}}>
@@ -512,7 +548,7 @@ gtag('config', 'G-2M6V79H761');
                           <div className="absolute inset-0 bg-slate-100 animate-pulse -z-10"></div>
                           <iframe
                               src="https://maps.google.com/maps?q=445+N+Hale+Ave,+Escondido,+CA+92029&output=embed"
-                              width="100%" height="100%" style={{border:0}} allowFullScreen="" loading="lazy"
+                              width="100%" height="100%" style={{border: 0}} allowFullScreen="" loading="lazy"
                               className="rounded-lg grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500">
                           </iframe>
                       </div>
@@ -612,7 +648,7 @@ gtag('config', 'G-2M6V79H761');
                           <div className="absolute inset-0 bg-slate-100 animate-pulse -z-10"></div>
                           <iframe
                               src="https://maps.google.com/maps?q=445+N+Hale+Ave,+Escondido,+CA+92029&output=embed"
-                              width="100%" height="100%" style={{border:0}} allowFullScreen="" loading="lazy"
+                              width="100%" height="100%" style={{border: 0}} allowFullScreen="" loading="lazy"
                               className="w-full h-full"
                           ></iframe>
                           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-max">
@@ -629,7 +665,7 @@ gtag('config', 'G-2M6V79H761');
           return (
               <>
                   {/* Scroll Progress Bar */}
-                  <div className="fixed top-0 left-0 h-1 bg-[#1a3a8f] z-50 transition-all duration-150 ease-out" style={{ width: `${scrollProgress}%` }}></div>
+                  <div className="fixed top-0 left-0 h-1 bg-[#1a3a8f] z-50 transition-all duration-150 ease-out" style={{width: `${scrollProgress}%`}}></div>
 
                   {/* Header */}
                   <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
@@ -712,6 +748,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

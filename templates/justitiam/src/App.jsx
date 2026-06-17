@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -111,6 +147,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -329,7 +371,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative max-w-7xl mx-auto px-6">
 <div className="grid lg:grid-cols-2 gap-16 items-center">
 <div>
-<div className="inline-flex items-center gap-2 badge-pill rounded-full px-3 py-1 text-xs mb-6" style={{background: 'rgba(192,132,252,0.1)', borderColor: 'rgba(192,132,252,0.25)', color: '#d8b4fe'}}>
+<div className="inline-flex items-center gap-2 badge-pill rounded-full px-3 py-1 text-xs mb-6" style={{background: 'rgba(192, 132, 252, 0.1)', borderColor: 'rgba(192,132,252,0.25)', color: '#d8b4fe'}}>
 <iconify-icon icon="solar:scale-linear" width="12"></iconify-icon>
               Practice Areas
             </div>
@@ -427,7 +469,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative max-w-7xl mx-auto px-6">
 <div className="grid lg:grid-cols-2 gap-16 items-center">
 <div className="lg:order-2">
-<div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs mb-6" style={{background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.25)', color: '#7dd3fc'}}>
+<div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs mb-6" style={{background: 'rgba(14, 165, 233, 0.1)', border: '1px solid rgba(14,165,233,0.25)', color: '#7dd3fc'}}>
 <iconify-icon icon="solar:chat-round-linear" width="12"></iconify-icon>
               Client Portal
             </div>

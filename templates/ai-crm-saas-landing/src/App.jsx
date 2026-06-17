@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -321,6 +357,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -342,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <header className="fixed top-0 right-0 left-0 px-12 z-50">
-<div className="flex [--fx-filter:blur(10px)_liquid-glass(5,10)_saturate(1.25)_noise(0.5,1,0)] bg-gradient-to-br from-black/10 to-black/0 max-w-full rounded-none pt-3 pr-8 pb-3 pl-8 backdrop-blur-md items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '0'}}>
+<div className="flex [--fx-filter:blur(10px)_liquid-glass(5,10)_saturate(1.25)_noise(0.5,1,0)] bg-gradient-to-br from-black/10 to-black/0 max-w-full rounded-none pt-3 pr-8 pb-3 pl-8 backdrop-blur-md items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '0'}}>
 
 <div className="flex items-center gap-3">
 <div className="flex bg-center w-9 h-9 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9a709b20-04a5-4855-b9c6-d0b74fdac8cb_1600w.png)] bg-cover rounded-none pt-6 pr-12 pb-6 pl-12 items-center justify-center">
@@ -800,7 +842,7 @@ document.addEventListener('DOMContentLoaded', () => {
   box-shadow: 0 30px 60px rgba(0,0,0,0.35);
 }
 </style>
-<div className="hover-3d flex flex-col [--fx-filter:blur(10px)_liquid-glass(2.3,10)_saturate(1.25)_noise(0.5,1,0)] text-center bg-gradient-to-tr from-white/0 via-white/10 to-white/0 max-w-3xl z-10 rounded-3xl mr-auto ml-auto pt-2 pr-6 pb-6 pl-6 relative items-center" style={{transform: 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)', position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="hover-3d flex flex-col [--fx-filter:blur(10px)_liquid-glass(2.3,10)_saturate(1.25)_noise(0.5,1,0)] text-center bg-gradient-to-tr from-white/0 via-white/10 to-white/0 max-w-3xl z-10 rounded-3xl mr-auto ml-auto pt-2 pr-6 pb-6 pl-6 relative items-center" style={{transform: 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)', position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="mb-12 flex items-center justify-center">
 </div>
@@ -872,7 +914,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">
 
-<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 flashlight-card reveal-on-scroll delay-0" style={{-MouseX: '848.2134399414062px', -MouseY: '-2157.828125px'}}>
+<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 flashlight-card reveal-on-scroll delay-0" style={{'--mouse-x': '848.2134399414062px', '--mouse-y': '-2157.828125px'}}>
 <div className="relative flex h-64 w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(255,255,255,0.03),transparent_70%)]"></div>
 
@@ -920,7 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-100 flashlight-card reveal-on-scroll" style={{-MouseX: '426.8851318359375px', -MouseY: '-2157.828125px'}}>
+<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-100 flashlight-card reveal-on-scroll" style={{'--mouse-x': '426.8851318359375px', '--mouse-y': '-2157.828125px'}}>
 <div className="relative flex h-64 w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.03),transparent_60%)]"></div>
 <div className="w-[85%] scale-90 transition-transform duration-500 ease-out group-hover:scale-95 group-hover:-translate-y-1">
@@ -964,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-200 flashlight-card reveal-on-scroll" style={{-MouseX: '5.5491943359375px', -MouseY: '-2157.828125px'}}>
+<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-200 flashlight-card reveal-on-scroll" style={{'--mouse-x': '5.5491943359375px', '--mouse-y': '-2157.828125px'}}>
 <div className="relative flex h-64 w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.03),transparent_70%)]"></div>
 <div className="w-[85%] h-full pt-12 px-6 bg-[#131316] rounded-t-2xl border-x border-t border-white/10 shadow-2xl translate-y-6 transition-transform duration-700 ease-out group-hover:translate-y-3">
@@ -991,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-300 flashlight-card reveal-on-scroll" style={{-MouseX: '848.2134399414062px', -MouseY: '-2596.078125px'}}>
+<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-300 flashlight-card reveal-on-scroll" style={{'--mouse-x': '848.2134399414062px', '--mouse-y': '-2596.078125px'}}>
 <div className="relative flex h-64 w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
 <div className="w-[200px] rounded-xl bg-[#131316] border border-white/10 p-5 shadow-2xl shadow-black/50 scale-95 transition-all duration-500 group-hover:scale-100 group-hover:border-white/15">
 <div className="flex items-center gap-2 mb-6 opacity-70">
@@ -1027,7 +1069,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-400 flashlight-card reveal-on-scroll" style={{-MouseX: '426.8851318359375px', -MouseY: '-2596.078125px'}}>
+<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-400 flashlight-card reveal-on-scroll" style={{'--mouse-x': '426.8851318359375px', '--mouse-y': '-2596.078125px'}}>
 <div className="relative flex h-64 w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
 <div className="relative h-28 w-28 flex items-center justify-center">
 
@@ -1055,7 +1097,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-500 flashlight-card reveal-on-scroll" style={{-MouseX: '5.5491943359375px', -MouseY: '-2596.078125px'}}>
+<div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 hover:border-white/10 transition-colors duration-700 animate-in fade-in slide-in-from-bottom-8 delay-500 flashlight-card reveal-on-scroll" style={{'--mouse-x': '5.5491943359375px', '--mouse-y': '-2596.078125px'}}>
 <div className="relative flex h-64 w-full items-center justify-center overflow-visible bg-gradient-to-b from-white/[0.02] to-transparent">
 <div className="w-[260px] relative">
 <div className="flex items-center gap-2 mb-3 px-1">
@@ -1128,7 +1170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="group flex flex-col reveal-on-scroll">
 
-<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex items-center justify-center group-hover:border-white/10 transition-colors duration-500" style={{-MouseX: '909.9599914550781px', -MouseY: '-3481.593017578125px'}}>
+<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex items-center justify-center group-hover:border-white/10 transition-colors duration-500" style={{'--mouse-x': '909.9599914550781px', '--mouse-y': '-3481.593017578125px'}}>
 
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.03),transparent_50%)]"></div>
 
@@ -1176,7 +1218,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="group flex flex-col reveal-on-scroll delay-100">
 
-<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex items-center justify-center group-hover:border-white/10 transition-colors duration-500" style={{-MouseX: '559.9599914550781px', -MouseY: '-3481.593017578125px'}}>
+<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex items-center justify-center group-hover:border-white/10 transition-colors duration-500" style={{'--mouse-x': '559.9599914550781px', '--mouse-y': '-3481.593017578125px'}}>
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_50%)]"></div>
 
 <div className="w-[85%] scale-90 transition-transform duration-500 ease-out group-hover:scale-95 group-hover:-translate-y-1">
@@ -1230,7 +1272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="group flex flex-col reveal-on-scroll delay-200">
 
-<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex items-center justify-center group-hover:border-white/10 transition-colors duration-500" style={{-MouseX: '209.9599609375px', -MouseY: '-3481.593017578125px'}}>
+<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex items-center justify-center group-hover:border-white/10 transition-colors duration-500" style={{'--mouse-x': '209.9599609375px', '--mouse-y': '-3481.593017578125px'}}>
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(139,92,246,0.03),transparent_50%)]"></div>
 
 <div className="w-[200px] relative z-10">
@@ -1270,7 +1312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="group flex flex-col reveal-on-scroll delay-300">
 
-<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex flex-col items-center justify-end group-hover:border-white/10 transition-colors duration-500" style={{-MouseX: '-140.0400390625px', -MouseY: '-3481.593017578125px'}}>
+<div className="flashlight-card relative h-[300px] w-full overflow-hidden rounded-[32px] bg-[#0a0a0c] border border-white/5 mb-8 flex flex-col items-center justify-end group-hover:border-white/10 transition-colors duration-500" style={{'--mouse-x': '-140.0400390625px', '--mouse-y': '-3481.593017578125px'}}>
 
 <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
 <span className="text-7xl font-bold text-white/10 tracking-tighter select-none">30+</span>
@@ -1327,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div className="w-2 h-2 rounded-full bg-blue-500 ml-auto animate-pulse"></div>
 </div>
 <nav className="space-y-2">
-<div className="flex cursor-pointer transition-all font-medium text-blue-400 bg-gradient-to-r from-white/10 to-white/0 rounded-xl pt-3 pr-3 pb-3 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex cursor-pointer transition-all font-medium text-blue-400 bg-gradient-to-r from-white/10 to-white/0 rounded-xl pt-3 pr-3 pb-3 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
                          Dashboard
                      </div>
@@ -1419,7 +1461,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="flex hover:border-blue-500/20 transition-all duration-300 group md:col-span-4 md:row-span-1 bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-6 pr-6 pb-6 pl-6 gap-x-5 gap-y-5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="flex hover:border-blue-500/20 transition-all duration-300 group md:col-span-4 md:row-span-1 bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-6 pr-6 pb-6 pl-6 gap-x-5 gap-y-5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 <button className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-blue-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all duration-300 flex-shrink-0">
 <svg className="w-5 h-5 ml-0.5" fill="currentColor" viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
 </button>
@@ -1435,7 +1477,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="flex hover:border-blue-500/20 transition-all duration-300 group md:col-span-5 md:row-span-1 bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-5 pr-5 pb-5 pl-5 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="flex hover:border-blue-500/20 transition-all duration-300 group md:col-span-5 md:row-span-1 bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-5 pr-5 pb-5 pl-5 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 <div className="flex items-center gap-5">
 <div className="p-3 bg-[#131316] rounded-2xl border border-white/5 text-center min-w-[64px] group-hover:border-blue-500/30 group-hover:bg-blue-500/5 transition-all">
 <div className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-0.5">Oct</div>
@@ -1454,7 +1496,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="overflow-hidden group hover:border-blue-500/20 transition-all duration-500 md:col-span-9 bg-gradient-to-br from-white/0 via-white/10 to-white/0 rounded-[32px] pt-8 pr-8 pb-24 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="overflow-hidden group hover:border-blue-500/20 transition-all duration-500 md:col-span-9 bg-gradient-to-br from-white/0 via-white/10 to-white/0 rounded-[32px] pt-8 pr-8 pb-24 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 <div className="flex justify-between items-start mb-10 relative z-10">
 <div className="">
 <h3 className="text-xl font-semibold text-white tracking-tight">Activity Overview</h3>
@@ -1546,7 +1588,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </p>
 </div>
 
-<div className="overflow-hidden shadow-black/80 group-hover:border-white/20 transition-all duration-500 bg-[#0a0a0c] w-full h-[520px] rounded-3xl relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="overflow-hidden shadow-black/80 group-hover:border-white/20 transition-all duration-500 bg-[#0a0a0c] w-full h-[520px] rounded-3xl relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="flex items-center justify-between p-6 border-b border-white/5">
 <div className="flex items-center gap-2 text-xs font-medium text-neutral-500">
@@ -1629,7 +1671,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </p>
 </div>
 
-<div className="overflow-hidden shadow-black/80 group-hover:border-white/20 transition-all duration-500 bg-[#0a0a0c] w-full h-[520px] rounded-3xl relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="overflow-hidden shadow-black/80 group-hover:border-white/20 transition-all duration-500 bg-[#0a0a0c] w-full h-[520px] rounded-3xl relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(225deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="flex border-white/5 border-b pt-6 pr-6 pb-6 pl-6 items-center">
 <div className="w-2 h-2 rounded-full bg-amber-500 mr-3"></div>
@@ -1715,7 +1757,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 <div className="isolate grid grid-cols-1 gap-y-16 lg:grid-cols-3 lg:gap-x-8">
 
-<div className="rounded-3xl p-8 ring-1 ring-white/10 bg-[#0a0a0c] flashlight-card reveal-on-scroll delay-100" style={{-MouseX: '840.3199920654297px', -MouseY: '-7094.88720703125px'}}>
+<div className="rounded-3xl p-8 ring-1 ring-white/10 bg-[#0a0a0c] flashlight-card reveal-on-scroll delay-100" style={{'--mouse-x': '840.3199920654297px', '--mouse-y': '-7094.88720703125px'}}>
 <h3 className="text-lg font-semibold leading-8 text-white">Starter</h3>
 <p className="mt-4 text-sm leading-6 text-neutral-400">
           Perfect for individuals and freelancers.
@@ -1749,7 +1791,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </a>
 </div>
 
-<div className="rounded-3xl p-8 ring-1 ring-indigo-500 bg-[#0a0a0c] relative flashlight-card reveal-on-scroll delay-200" style={{-MouseX: '424.32000732421875px', -MouseY: '-7094.88720703125px'}}>
+<div className="rounded-3xl p-8 ring-1 ring-indigo-500 bg-[#0a0a0c] relative flashlight-card reveal-on-scroll delay-200" style={{'--mouse-x': '424.32000732421875px', '--mouse-y': '-7094.88720703125px'}}>
 <h3 className="text-lg font-semibold leading-8 text-white">Pro</h3>
 <p className="mt-4 text-sm leading-6 text-neutral-400">
           For growing teams and startups.
@@ -1809,7 +1851,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </a>
 </div>
 
-<div className="rounded-3xl p-8 ring-1 ring-white/10 bg-[#0a0a0c] flashlight-card reveal-on-scroll delay-300" style={{-MouseX: '8.32000732421875px', -MouseY: '-7094.88720703125px'}}>
+<div className="rounded-3xl p-8 ring-1 ring-white/10 bg-[#0a0a0c] flashlight-card reveal-on-scroll delay-300" style={{'--mouse-x': '8.32000732421875px', '--mouse-y': '-7094.88720703125px'}}>
 <h3 className="text-lg font-semibold leading-8 text-white">Enterprise</h3>
 <p className="mt-4 text-sm leading-6 text-neutral-400">
           Custom solutions for large organizations.

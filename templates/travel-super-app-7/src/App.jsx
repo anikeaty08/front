@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -32,7 +74,7 @@ gtag('config', 'G-2M6V79H761');
 <h2 className="text-lg font-medium px-4 text-slate-400">1. Core Experience</h2>
 <div className="flex gap-8 overflow-x-auto no-scrollbar pb-8 px-4 items-start w-max">
 
-<div className="w-72 h-[38rem] shrink-0 bg-slate-900 rounded-[2.5rem] relative overflow-hidden flex flex-col items-center justify-center text-white shadow-2xl border-[6px] border-slate-800" style={{backgroundImage: 'linear-gradient(to bottom, rgba(15,23,42,0.4), rgba(15,23,42,0.9)), url(\'https://images.unsplash.com/photo-1585089849319-3eeebc058774?w=400\')', backgroundSize: 'cover'}}>
+<div className="w-72 h-[38rem] shrink-0 bg-slate-900 rounded-[2.5rem] relative overflow-hidden flex flex-col items-center justify-center text-white shadow-2xl border-[6px] border-slate-800" style={{backgroundImage: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.9)), url(\'https: //images.unsplash.com/photo-1585089849319-3eeebc058774?w=400\')', backgroundSize: 'cover'}}>
 <div className="font-semibold tracking-tighter text-4xl mb-2">PROXIMAGO</div>
 <div className="text-xs font-medium text-orange-400 tracking-widest uppercase">Explore Bangladesh</div>
 </div>

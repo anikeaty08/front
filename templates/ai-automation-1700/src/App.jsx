@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -44,6 +80,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -355,7 +397,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 z-10 mt-32 pt-0 relative gap-x-8 gap-y-6">
 
-<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-[#0E1B1B] h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(15, 74, 51, 0.5), rgba(15, 74, 51, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-[#0E1B1B] h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(15, 74, 51, 0.5), rgba(15, 74, 51, 0))', '--border-radius-before': '16px'}}>
 
 <style>
             @keyframes draw-chart-line {

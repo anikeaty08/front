@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -636,6 +672,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -688,7 +730,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-full blur-md opacity-30 bg-white/5"></span>
 <input autocomplete="email" className="flex-1 placeholder:text-white/60 outline-none text-base tracking-tight bg-transparent py-3 px-4 relative z-10 text-white/90" id="moneo-email" inputmode="email" placeholder="What's your work email?" required="" type="email"/>
 
-<a className="hidden md:inline-flex items-center justify-center gap-2 select-none ring-1 rounded-full px-6 py-3 backdrop-blur-xl transition-all duration-300 shadow-[0_8px_25px_rgba(0,0,0,0.4)] group relative overflow-hidden shrink-0 text-white/90 bg-white/5 hover:bg-white/10 ring-white/20 hover:ring-cyan-400/40" href="#" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.18), inset 0 -10px 25px rgba(0,0,0,0.3), 0 8px 25px rgba(0,0,0,0.35)'}}>
+<a className="hidden md:inline-flex items-center justify-center gap-2 select-none ring-1 rounded-full px-6 py-3 backdrop-blur-xl transition-all duration-300 shadow-[0_8px_25px_rgba(0,0,0,0.4)] group relative overflow-hidden shrink-0 text-white/90 bg-white/5 hover:bg-white/10 ring-white/20 hover:ring-cyan-400/40" href="#" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 -10px 25px rgba(0, 0, 0, 0.3), 0 8px 25px rgba(0,0,0,0.35)'}}>
 
 <span aria-hidden="true" className="absolute inset-px rounded-full bg-gradient-to-b from-white/[0.18] via-white/[0.08] to-white/[0.05] pointer-events-none"></span>
 
@@ -704,7 +746,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </svg>
 </a>
 
-<a className="md:hidden relative inline-flex items-center justify-center select-none ring-1 rounded-full w-12 h-12 backdrop-blur-xl transition-all duration-300 shadow-[0_8px_25px_rgba(0,0,0,0.4)] group overflow-hidden shrink-0 text-white/90 bg-white/5 hover:bg-white/10 ring-white/20 hover:ring-cyan-400/40" href="#" style={{boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.18), inset 0 -10px 25px rgba(0,0,0,0.3), 0 8px 25px rgba(0,0,0,0.35)'}}>
+<a className="md:hidden relative inline-flex items-center justify-center select-none ring-1 rounded-full w-12 h-12 backdrop-blur-xl transition-all duration-300 shadow-[0_8px_25px_rgba(0,0,0,0.4)] group overflow-hidden shrink-0 text-white/90 bg-white/5 hover:bg-white/10 ring-white/20 hover:ring-cyan-400/40" href="#" style={{boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 -10px 25px rgba(0, 0, 0, 0.3), 0 8px 25px rgba(0,0,0,0.35)'}}>
 
 <span aria-hidden="true" className="absolute inset-px rounded-full bg-gradient-to-b from-white/[0.18] via-white/[0.08] to-white/[0.05] pointer-events-none"></span>
 
@@ -950,7 +992,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 
 <div className="h-full flex flex-col w-full rounded-2xl ring-1 p-5 border bg-neutral-900/95 ring-white/10 border-white/10">
-<div className="rounded-2xl p-5 ring-1 ring-white/10" style={{background: 'radial-gradient(120% 120% at 20% 0%, rgba(240,240,240,0.12) 0%, rgba(163,163,163,0.06) 35%, rgba(20,20,20,0.45) 70%), linear-gradient(135deg, rgba(115,115,115,0.15), rgba(163,163,163,0.08))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)'}}>
+<div className="rounded-2xl p-5 ring-1 ring-white/10" style={{background: 'radial-gradient(120% 120% at 20% 0%, rgba(240, 240, 240, 0.12) 0%, rgba(163, 163, 163, 0.06) 35%, rgba(20, 20, 20, 0.45) 70%), linear-gradient(135deg, rgba(115, 115, 115, 0.15), rgba(163, 163, 163, 0.08))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)'}}>
 <div className="flex items-center justify-between">
 <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white">
 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect height="14" rx="2" width="20" x="2" y="5"></rect><path d="M2 10h20"></path></svg>
@@ -1070,7 +1112,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </section>
 
 <section className="sm:px-8 sm:mt-32 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-7xl mt-32 mr-auto ml-auto pr-6 pl-6 animate">
-<div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-16 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-y-12 gap-y-12 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-16 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-y-12 gap-y-12 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="lg:col-span-6">
 <span className="inline-flex items-center gap-2 text-xs font-medium text-emerald-300 tracking-tight font-geist bg-emerald-600/10 rounded-full ring-emerald-500/30 ring-1 pt-1.5 pr-4 pb-1.5 pl-4">SMART AI FEATURE</span>
@@ -1183,7 +1225,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 </section><section className="sm:px-8 sm:mt-32 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-7xl mt-32 mr-auto ml-auto pr-6 pl-6 animate">
-<div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-16 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-y-12 gap-y-12 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-16 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-y-12 gap-y-12 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="lg:col-span-6">
 <div className="relative">
@@ -1244,7 +1286,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 </section><section className="sm:px-8 sm:mt-32 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-7xl mt-32 mr-auto ml-auto pr-6 pl-6 animate">
-<div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-16 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-y-12 gap-y-12 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-16 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl pt-8 pr-8 pb-8 pl-8 gap-x-y-12 gap-y-12 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <div className="lg:col-span-6">
 <span className="inline-flex items-center gap-2 text-xs font-medium text-emerald-300 tracking-tight font-geist bg-emerald-600/10 ring-emerald-500/30 ring-1 rounded-full pt-1.5 pr-4 pb-1.5 pl-4">SMART CARDS</span>
@@ -1397,7 +1439,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 </section><section className="sm:px-8 sm:mt-32 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-7xl mt-32 mr-auto ml-auto pr-6 pl-6">
-<section className="overflow-hidden sm:mt-32 sm:pl-8 sm:pr-8 sm:pt-8 sm:pb-8 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 max-w-7xl rounded-3xl ring-0 mt-24 pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<section className="overflow-hidden sm:mt-32 sm:pl-8 sm:pr-8 sm:pt-8 sm:pb-8 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 max-w-7xl rounded-3xl ring-0 mt-24 pt-6 pr-6 pb-6 pl-6 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/5"></span>
 <div className="grid grid-cols-1 md:grid-cols-2 md:gap-16 gap-8 gap-x-8 gap-y-8">
@@ -1412,17 +1454,17 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
       </p>
 
 <div className="flex gap-3 mt-8 gap-x-3 gap-y-3 items-center">
-<button aria-label="Previous testimonial" className="inline-flex border-neutral-700 hover:bg-neutral-800 transition bg-gradient-to-br w-11 h-11 rounded-full items-center justify-center from-white/10 to-white/0" id="t-prev" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button aria-label="Previous testimonial" className="inline-flex border-neutral-700 hover:bg-neutral-800 transition bg-gradient-to-br w-11 h-11 rounded-full items-center justify-center from-white/10 to-white/0" id="t-prev" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
 </button>
-<button aria-label="Next testimonial" className="inline-flex border-neutral-700 hover:bg-neutral-800 transition bg-gradient-to-br w-11 h-11 rounded-full items-center justify-center from-white/10 to-white/0" id="t-next" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button aria-label="Next testimonial" className="inline-flex border-neutral-700 hover:bg-neutral-800 transition bg-gradient-to-br w-11 h-11 rounded-full items-center justify-center from-white/10 to-white/0" id="t-next" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </button>
 </div>
 </div>
 
 <div className="md:pl-4">
-<figure className="sm:p-8 bg-gradient-to-br rounded-2xl ring-0 px-6 py-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur from-white/10 to-white/0" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<figure className="sm:p-8 bg-gradient-to-br rounded-2xl ring-0 px-6 py-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur from-white/10 to-white/0" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 
 <svg className="w-[34px] h-[34px] mb-4" data-icon-replaced="true" fill="currentColor" strokeWidth="2" style={{width: '34px', height: '34px', color: 'rgb(52, 211, 153)'}} viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="M7.17 6.18C5.2 7.62 4 9.76 4 12.1c0 3.4 2.38 5.9 5.6 5.9 2.1 0 3.4-1.05 3.4-2.63 0-1.36-1.02-2.36-2.44-2.36-1 0-1.76.45-2.18 1.24.06-2.06 1.36-3.76 3.4-4.54V6c-1.3.05-2.92.4-4.65 1.18Zm10 0C15.2 7.62 14 9.76 14 12.1c0 3.4 2.38 5.9 5.6 5.9 2.1 0 3.4-1.05 3.4-2.63 0-1.36-1.02-2.36-2.44-2.36-1 0-1.76.45-2.18 1.24.06-2.06 1.36-3.76 3.4-4.54V6c-1.3.05-2.92.4-4.65 1.18Z"></path>
@@ -1445,7 +1487,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 </section><section className="sm:px-8 sm:mt-32 [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll max-w-7xl mt-32 mr-auto ml-auto pr-6 pl-6 animate">
-<div className="sm:pt-8 sm:pl-8 sm:pr-8 sm:pb-8 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl ring-0 pt-6 pr-8 pb-6 pl-8" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="sm:pt-8 sm:pl-8 sm:pr-8 sm:pb-8 bg-gradient-to-br from-gray-500/10 via-gray-500/0 to-gray-500/10 rounded-3xl ring-0 pt-6 pr-8 pb-6 pl-8" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-10 gap-8">
 
 <div className="lg:col-span-5">

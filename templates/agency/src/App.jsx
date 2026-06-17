@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 // Configure Tailwind to include our custom 3D transform utilities
@@ -498,6 +534,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -508,13 +550,13 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0 bg-grid-light mask-image-gradient opacity-60"></div>
 
 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-<div className="sun-beam sun-beam-wide" style={{-Angle: '25deg', -BeamColor: 'rgba(249, 115, 22, 0.05)', left: '10%', animationDelay: '0s'}}></div>
-<div className="sun-beam" style={{-Angle: '15deg', -BeamColor: 'rgba(249, 115, 22, 0.1)', left: '20%', animationDelay: '1s'}}></div>
-<div className="sun-beam" style={{-Angle: '-10deg', -BeamColor: 'rgba(161, 161, 170, 0.1)', left: '80%', animationDelay: '3s'}}></div>
-<div className="sun-beam sun-beam-wide" style={{-Angle: '-20deg', -BeamColor: 'rgba(161, 161, 170, 0.05)', left: '70%', animationDelay: '2s'}}></div>
-<div className="sun-beam" style={{-Angle: '35deg', -BeamColor: 'rgba(251, 146, 60, 0.08)', left: '40%', animationDelay: '5s'}}></div>
-<div className="sun-beam" style={{-Angle: '-25deg', -BeamColor: 'rgba(212, 212, 216, 0.1)', left: '60%', animationDelay: '2s'}}></div>
-<div className="sun-beam" style={{-Angle: '5deg', -BeamColor: 'rgba(0, 0, 0, 0.02)', left: '10%', animationDelay: '4s'}}></div>
+<div className="sun-beam sun-beam-wide" style={{'--angle': '25deg', '--beam-color': 'rgba(249, 115, 22, 0.05)', left: '10%', animationDelay: '0s'}}></div>
+<div className="sun-beam" style={{'--angle': '15deg', '--beam-color': 'rgba(249, 115, 22, 0.1)', left: '20%', animationDelay: '1s'}}></div>
+<div className="sun-beam" style={{'--angle': '-10deg', '--beam-color': 'rgba(161, 161, 170, 0.1)', left: '80%', animationDelay: '3s'}}></div>
+<div className="sun-beam sun-beam-wide" style={{'--angle': '-20deg', '--beam-color': 'rgba(161, 161, 170, 0.05)', left: '70%', animationDelay: '2s'}}></div>
+<div className="sun-beam" style={{'--angle': '35deg', '--beam-color': 'rgba(251, 146, 60, 0.08)', left: '40%', animationDelay: '5s'}}></div>
+<div className="sun-beam" style={{'--angle': '-25deg', '--beam-color': 'rgba(212, 212, 216, 0.1)', left: '60%', animationDelay: '2s'}}></div>
+<div className="sun-beam" style={{'--angle': '5deg', '--beam-color': 'rgba(0, 0, 0, 0.02)', left: '10%', animationDelay: '4s'}}></div>
 </div>
 </div>
 

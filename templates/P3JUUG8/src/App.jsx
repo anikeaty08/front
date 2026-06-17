@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-1,1,1,-1,0,1),renderer=new THREE.WebGLRenderer({canvas:document.getElementById("aurora-canvas")});renderer.setSize(innerWidth,innerHeight);const material=new THREE.ShaderMaterial({uniforms:{iTime:{value:0},iResolution:{value:new THREE.Vector2(innerWidth,innerHeight)}},vertexShader:"void main(){gl_Position=vec4(position,1.0);} ",fragmentShader:`uniform float iTime;uniform vec2 iResolution;float rand(vec2 n){return fract(sin(dot(n,vec2(12.9898,4.1414)))*43758.5453);}float noise(vec2 p){vec2 ip=floor(p),u=fract(p);u=u*u*(3.0-2.0*u);float res=mix(mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);return res*res;}float fbm(vec2 x){float v=0.0,a=0.3;vec2 shift=vec2(100);mat2 rot=mat2(cos(0.5),sin(0.5),-sin(0.5),cos(0.5));for(int i=0;i<3;++i){v+=a*noise(x);x=rot*x*2.0+shift;a*=0.4;}return v;}void main(){vec2 p=(gl_FragCoord.xy-iResolution.xy*0.5)/iResolution.y;vec4 o=vec4(0.0);for(float i=1.0;i<35.0;i++){vec2 v=p+cos(i*i+iTime*0.025+i*vec2(13.0,11.0))*3.5;float d=length(v);o+=vec4(0.1,0.8,1.0,1.0)*exp(-d*2.0);}gl_FragColor=o/5.0;} `}),geometry=new THREE.PlaneGeometry(2,2),mesh=new THREE.Mesh(geometry,material);scene.add(mesh);function animate(){requestAnimationFrame(animate);material.uniforms.iTime.value+=.016;renderer.render(scene,camera);}addEventListener("resize",()=>{renderer.setSize(innerWidth,innerHeight);material.uniforms.iResolution.value.set(innerWidth,innerHeight)});animate();
@@ -9,6 +45,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -76,7 +118,7 @@ export default function App() {
 <div className="relative glass overflow-hidden rounded-3xl border border-white/10 backdrop-blur-3xl">
 <div className="xl:p-10 pt-8 pr-8 pb-8 pl-8">
 <div className="w-full h-80 xl:h-96 rounded-2xl overflow-hidden relative">
-<img alt="Дерево" className="w-full h-full object-cover rounded-2xl shadow-inner" src="https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&amp;q=80" style={{boxShadow: 'inset 0 0 20px rgba(79,70,229,.3), inset 0 0 40px rgba(59,130,246,.2), 0 0 30px rgba(139,92,246,.4)'}}/>
+<img alt="Дерево" className="w-full h-full object-cover rounded-2xl shadow-inner" src="https://images.unsplash.com/photo-1640906152676-dace6710d24b?w=2160&amp;q=80" style={{boxShadow: 'inset 0 0 20px rgba(79, 70, 229, .3), inset 0 0 40px rgba(59, 130, 246, .2), 0 0 30px rgba(139,92,246,.4)'}}/>
 
 <div className="absolute inset-0 w-full h-full bg-[url(https://www.blackforesttrees.com.au/wp-content/uploads/2023/02/Planting-Trees-3.jpg?w=800&amp;q=80)] bg-cover">
 <div className="absolute top-6 left-1/2 -translate-x-1/2">

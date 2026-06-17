@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -262,6 +298,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -319,7 +361,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 rounded-full opacity-20 transition-all duration-300 group-hover:opacity-60" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0) 100%)'}}></span>
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 rounded-full" style={{boxShadow: '0 0 0 1px rgba(56,189,248,0.45), 0 18px 60px rgba(56,189,248,0.25)', background: 'radial-gradient(140% 160% at 50% -20%, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.06) 55%, rgba(255,255,255,0.00) 60%)'}}></span>
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 rounded-full" style={{background: 'radial-gradient(120% 80% at 50% -20%, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.06) 55%, rgba(255,255,255,0) 50%), radial-gradient(90% 80% at 50% 120%, rgba(56,189,248,0.18) 0%, rgba(56,189,248,0) 60%)'}}></span>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-60" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139,92,246,.55), rgba(139,92,246,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-60" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139, 92, 246, .55), rgba(139, 92, 246, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </a>
 </div>
 <a className="group inline-flex min-w-[140px] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105 border-gradient hover:text-white gap-2 gap-x-2 gap-y-2 items-center justify-center hidden md:inline-flex text-sm font-medium text-white/80 tracking-tight bg-white/5 rounded-full pt-3 pr-5 pb-3 pl-5 relative backdrop-blur-xl" href="mailto:consult@pathologyadvantage.com">
@@ -383,15 +425,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="block text-[8vw] sm:text-6xl lg:text-8xl text-blue-400" style={{}}></span>
 </h1>
 
-<p className="md:text-xl type-words is-in text-lg text-white/80 max-w-3xl mr-auto ml-auto" data-duration="1.5s" data-stagger=".1s" style={{-Stagger: '0.1s', -Dur: '1.5s', -Ease: 'ease-in-out', -Delay: '0.4s'}}>
-<span className="w" style={{-I: '0'}}>
+<p className="md:text-xl type-words is-in text-lg text-white/80 max-w-3xl mr-auto ml-auto" data-duration="1.5s" data-stagger=".1s" style={{'--stagger': '0.1s', '--dur': '1.5s', '--ease': 'ease-in-out', '--delay': '0.4s'}}>
+<span className="w" style={{'--i': '0'}}>
             End-to-end digital pathology leadership
           </span>
-<span className="w" style={{-I: '1'}}>
+<span className="w" style={{'--i': '1'}}>
             for clinical and research operations,
           </span>
-<span className="w" style={{-I: '2'}}>trusted across 120+ enterprise</span>
-<span className="w" style={{-I: '3'}}>transformations over 15 years.</span>
+<span className="w" style={{'--i': '2'}}>trusted across 120+ enterprise</span>
+<span className="w" style={{'--i': '3'}}>transformations over 15 years.</span>
 </p>
 
 <div className="flex gap-4 mt-10 gap-x-4 gap-y-4 items-center justify-center">
@@ -410,7 +452,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="cursor-pointer relative" onclick="window.location.href='https://cal.com/pathologyadvantage/30min'" role="button">Schedule Consultation</span>
 <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 rounded-full opacity-20 transition-all duration-300 group-hover:opacity-80" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </a>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139,92,246,.55), rgba(139,92,246,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139, 92, 246, .55), rgba(139, 92, 246, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 <div className="flex flex-wrap xl:py-24 text-base text-white/60 mt-8 pt-24 pb-24 gap-x-6 gap-y-6 items-center justify-center" style={{animation: 'fadeSlideIn 0.5s ease-in-out 0.5s both'}}>
@@ -1228,7 +1270,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-[1px] w-[70%] -translate-x-1/2 rounded-full opacity-20 transition-all duration-300 group-hover:opacity-60" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0) 100%)'}}></span>
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 rounded-full" style={{boxShadow: '0 0 0 1px rgba(56,189,248,0.45), 0 18px 60px rgba(56,189,248,0.25)', background: 'radial-gradient(140% 160% at 50% -20%, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.06) 55%, rgba(255,255,255,0.00) 60%)'}}></span>
 <span aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 rounded-full" style={{background: 'radial-gradient(120% 80% at 50% -20%, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.06) 55%, rgba(255,255,255,0) 50%), radial-gradient(90% 80% at 50% 120%, rgba(56,189,248,0.18) 0%, rgba(56,189,248,0) 60%)'}}></span>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-60" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139,92,246,.55), rgba(139,92,246,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-60" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139, 92, 246, .55), rgba(139, 92, 246, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </a>
 </div>
 </div>

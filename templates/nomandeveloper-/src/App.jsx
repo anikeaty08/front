@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -283,6 +319,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -875,20 +917,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid gap-4 sm:grid-cols-2">
 <label className="grid gap-2">
 <span className="text-xs font-medium text-slate-100">Full Name</span>
-<input className="h-11 rounded-lg border border-white/15 bg-white/10 px-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="Your Name" required="" style={{-TwRingColor: 'rgba(96,165,250,.28)'}}/>
+<input className="h-11 rounded-lg border border-white/15 bg-white/10 px-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="Your Name" required="" style={{'--tw-ring-color': 'rgba(96,165,250,.28)'}}/>
 </label>
 <label className="grid gap-2">
 <span className="text-xs font-medium text-slate-100">Email Address</span>
-<input className="h-11 rounded-lg border border-white/15 bg-white/10 px-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="your@email.com" required="" style={{-TwRingColor: 'rgba(96,165,250,.28)'}} type="email"/>
+<input className="h-11 rounded-lg border border-white/15 bg-white/10 px-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="your@email.com" required="" style={{'--tw-ring-color': 'rgba(96,165,250,.28)'}} type="email"/>
 </label>
 </div>
 <label className="grid gap-2">
 <span className="text-xs font-medium text-slate-100">Subject</span>
-<input className="h-11 rounded-lg border border-white/15 bg-white/10 px-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="Project Discussion" style={{-TwRingColor: 'rgba(96,165,250,.28)'}}/>
+<input className="h-11 rounded-lg border border-white/15 bg-white/10 px-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="Project Discussion" style={{'--tw-ring-color': 'rgba(96,165,250,.28)'}}/>
 </label>
 <label className="grid gap-2">
 <span className="text-xs font-medium text-slate-100">Message</span>
-<textarea className="rounded-lg border border-white/15 bg-white/10 px-3 py-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="Tell me about your project..." required="" rows="6" style={{-TwRingColor: 'rgba(96,165,250,.28)'}}></textarea>
+<textarea className="rounded-lg border border-white/15 bg-white/10 px-3 py-3 text-sm text-white placeholder:text-slate-300/70 outline-none transition focus:border-blue-400 focus:ring-2" placeholder="Tell me about your project..." required="" rows="6" style={{'--tw-ring-color': 'rgba(96,165,250,.28)'}}></textarea>
 </label>
 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <p className="text-xs text-slate-200" id="formStatus"></p>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -51,6 +87,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -350,7 +392,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 z-10 mt-32 pt-0 relative gap-x-8 gap-y-6">
 
-<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/5 to-transparent h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/5 to-transparent h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.3s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 
 <style>
             @keyframes draw-chart-line {
@@ -372,7 +414,7 @@ gtag('config', 'G-2M6V79H761');
             }
           </style>
 
-<div className="overflow-hidden flex-1 bg-gradient-to-br from-[#B11226]/10 to-transparent w-full rounded-xl mb-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(177, 18, 38, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="overflow-hidden flex-1 bg-gradient-to-br from-[#B11226]/10 to-transparent w-full rounded-xl mb-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(177, 18, 38, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="overflow-hidden w-full h-full relative" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 80%, transparent)'}}>
 
 <div className="absolute top-4 left-4 px-3 py-1.5 bg-black/70 border border-white/10 rounded-full text-xs text-white shadow-xl backdrop-blur-sm z-20 flex items-center gap-2">
@@ -424,8 +466,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/5 to-transparent h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
-<div className="flex-1 overflow-y-auto custom-scrollbar bg-black/40 rounded-lg pt-4 pr-4 pb-4 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/5 to-transparent h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md [animation:animationIn_0.8s_ease-out_0.4s_both] animate-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
+<div className="flex-1 overflow-y-auto custom-scrollbar bg-black/40 rounded-lg pt-4 pr-4 pb-4 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <div className="relative flex flex-col items-center w-full max-w-md mx-auto">
 
 <div className="flex gap-3 transition-all duration-200 hover:border-white/20 bg-gradient-to-b from-white/5 to-transparent w-full border-white/10 border rounded-xl px-4 py-3 relative shadow-lg items-center">
@@ -484,8 +526,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="flex flex-col gap-6 h-[540px] [animation:animationIn_0.8s_ease-out_0.5s_both] animate-on-scroll">
-<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/5 to-transparent h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
-<div className="flex-1 overflow-y-auto custom-scrollbar bg-black/40 rounded-lg pt-4 pr-4 pb-4 pl-4 flex items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="group flex flex-col transition-all duration-500 overflow-hidden shadow-black/50 bg-gradient-to-r from-white/5 to-transparent h-[540px] rounded-2xl pt-2 pr-2 pb-2 pl-2 relative shadow-2xl backdrop-blur-md" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
+<div className="flex-1 overflow-y-auto custom-scrollbar bg-black/40 rounded-lg pt-4 pr-4 pb-4 pl-4 flex items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 
 <div className="grid grid-cols-3 z-10 w-full relative gap-2">
 <div className="aspect-[4/3] rounded-lg border border-white/5 bg-white/[0.02]"></div>

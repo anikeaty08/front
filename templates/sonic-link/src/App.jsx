@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -976,6 +1012,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1057,7 +1099,7 @@ gtag('config', 'G-2M6V79H761');
 <section aria-label="Pulsewave cinematic intro film" className="flex overflow-hidden antialiased selection:bg-lime-300 selection:text-black text-white w-full h-screen relative items-center justify-center" style={{fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
 <div aria-hidden="true" className="absolute inset-0 opacity-30" style={{backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.45) 0px, rgba(255, 255, 255, 0.45) 0.055rem, transparent 0.075rem)', backgroundSize: '0.7rem 0.7rem', maskImage: 'linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.15) 19%, rgba(0, 0, 0, 0.12) 81%, rgba(0, 0, 0, 0.85))'}}></div>
 <div aria-hidden="true" className="opacity-20 absolute top-0 right-0 bottom-0 left-0"></div>
-<div className="relative h-[91vh] w-[96vw] overflow-hidden rounded-[1.4rem] border border-white/10 bg-black shadow-2xl sm:rounded-[2rem] md:h-[89vh] md:w-[95vw]" id="filmStage" style={{boxShadow: '0 2rem 8rem rgba(0,0,0,.48), inset 0 0 0 .0625rem rgba(255,255,255,.08)'}}>
+<div className="relative h-[91vh] w-[96vw] overflow-hidden rounded-[1.4rem] border border-white/10 bg-black shadow-2xl sm:rounded-[2rem] md:h-[89vh] md:w-[95vw]" id="filmStage" style={{boxShadow: '0 2rem 8rem rgba(0, 0, 0, .48), inset 0 0 0 .0625rem rgba(255,255,255,.08)'}}>
 <canvas aria-hidden="true" className="absolute inset-0 h-full w-full opacity-90" height="1770" id="webglLayer" width="2112"></canvas>
 <img alt="" className="absolute inset-0 h-full w-full scale-125 object-cover opacity-0 blur-xl" id="abstractBase" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fa51902b-c2a4-4c33-a96e-a8f1ef67edc6_1600w.jpg" style={{filter: 'blur(24px)'}}/>
 <div aria-hidden="true" className="absolute inset-0" style={{background: 'radial-gradient(circle at 50% 56%, rgba(197,255,92,.22), transparent 18%), radial-gradient(circle at 63% 45%, rgba(210,111,255,.32), transparent 25%), linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.12) 38%, rgba(0,0,0,.76))'}}></div>
@@ -1094,7 +1136,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="mx-auto mt-3 max-w-2xl text-xs font-normal uppercase tracking-[.32rem] text-lime-100/80 sm:text-sm">A shared music universe in motion</p>
 </div>
 <div className="absolute left-1/2 top-[34%] z-30 h-[49vh] min-h-[20rem] w-[min(25rem,58vw)] -translate-x-1/2 opacity-0 sm:top-[31%] md:w-[min(27rem,30vw)]" id="phoneWrap" style={{perspective: '80rem'}}>
-<div className="relative mx-auto h-full w-full overflow-hidden rounded-[2.25rem] border border-white/15 bg-black shadow-2xl" id="phone" style={{boxShadow: '0 0 0 .45rem rgba(154,134,202,.45), 0 2rem 5rem rgba(0,0,0,.68), 0 0 3rem rgba(214,126,255,.28)'}}>
+<div className="relative mx-auto h-full w-full overflow-hidden rounded-[2.25rem] border border-white/15 bg-black shadow-2xl" id="phone" style={{boxShadow: '0 0 0 .45rem rgba(154, 134, 202, .45), 0 2rem 5rem rgba(0, 0, 0, .68), 0 0 3rem rgba(214,126,255,.28)'}}>
 <div className="absolute inset-x-[18%] top-0 z-20 h-6 rounded-b-2xl bg-black"></div>
 <div className="absolute inset-0 bg-black"></div>
 <div aria-hidden="true" className="absolute inset-0 opacity-35" style={{background: 'radial-gradient(circle at 82% 12%, rgba(212,132,255,.45), transparent 16%), radial-gradient(circle at 12% 72%, rgba(196,255,96,.22), transparent 22%)'}}></div>
@@ -1143,7 +1185,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div aria-label="Animated music memory image sequence" className="absolute inset-0 z-40 pointer-events-none" id="cardsLayer">
-<figure className="mediaCard absolute left-[8%] top-[55%] h-[21vh] w-[20rem] max-w-[36vw] overflow-hidden rounded-xl border border-white/10 opacity-0 shadow-2xl sm:left-[11%] sm:top-[55%]" style={{boxShadow: '0 1.5rem 4rem rgba(0,0,0,.62), 0 0 2rem rgba(219,45,255,.2)'}}>
+<figure className="mediaCard absolute left-[8%] top-[55%] h-[21vh] w-[20rem] max-w-[36vw] overflow-hidden rounded-xl border border-white/10 opacity-0 shadow-2xl sm:left-[11%] sm:top-[55%]" style={{boxShadow: '0 1.5rem 4rem rgba(0, 0, 0, .62), 0 0 2rem rgba(219,45,255,.2)'}}>
 <img alt="Artist in magenta club light" className="h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c920d31f-46c8-4f39-957b-9a8d8e511a1a_800w.jpg"/>
 <div className="absolute inset-0 bg-fuchsia-600/25 mix-blend-screen"></div>
 </figure>
@@ -1151,7 +1193,7 @@ gtag('config', 'G-2M6V79H761');
 <img alt="Warm studio portrait in motion" className="h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/36420201-a4f1-4395-ad84-184870350dd7_800w.webp"/>
 <div className="absolute inset-0 bg-orange-400/20 mix-blend-screen"></div>
 </figure>
-<figure className="mediaCard absolute left-1/2 top-[59%] h-[22vh] w-[30rem] max-w-[45vw] -translate-x-1/2 overflow-hidden rounded-xl border border-white/10 opacity-0 shadow-2xl" style={{boxShadow: '0 1.5rem 4rem rgba(0,0,0,.62), 0 0 2.5rem rgba(197,255,90,.18)'}}>
+<figure className="mediaCard absolute left-1/2 top-[59%] h-[22vh] w-[30rem] max-w-[45vw] -translate-x-1/2 overflow-hidden rounded-xl border border-white/10 opacity-0 shadow-2xl" style={{boxShadow: '0 1.5rem 4rem rgba(0, 0, 0, .62), 0 0 2.5rem rgba(197,255,90,.18)'}}>
 <img alt="Hands forming a heart at a concert" className="h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6e1fbf28-831e-4d42-a71f-a33bc90ff8fc_800w.webp"/>
 <div className="absolute inset-0 bg-lime-300/20 mix-blend-screen"></div>
 </figure>
@@ -1159,7 +1201,7 @@ gtag('config', 'G-2M6V79H761');
 <img alt="Performer under yellow studio lighting" className="h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c7cfb2bf-d3f2-4dfc-aa1e-e0ef5c561134_800w.webp"/>
 <div className="absolute inset-0 bg-yellow-300/30 mix-blend-screen"></div>
 </figure>
-<figure className="mediaCard absolute right-[8%] top-[51%] h-[23vh] w-[21rem] max-w-[37vw] overflow-hidden rounded-xl border border-white/10 opacity-0 shadow-2xl sm:right-[11%]" style={{boxShadow: '0 1.5rem 4rem rgba(0,0,0,.62), 0 0 2rem rgba(44,193,255,.18)'}}>
+<figure className="mediaCard absolute right-[8%] top-[51%] h-[23vh] w-[21rem] max-w-[37vw] overflow-hidden rounded-xl border border-white/10 opacity-0 shadow-2xl sm:right-[11%]" style={{boxShadow: '0 1.5rem 4rem rgba(0, 0, 0, .62), 0 0 2rem rgba(44,193,255,.18)'}}>
 <img alt="Producer working with headphones" className="h-full w-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b4a03f35-290f-42a3-b369-97df97142786_800w.webp"/>
 <div className="absolute inset-0 bg-cyan-400/20 mix-blend-screen"></div>
 </figure>

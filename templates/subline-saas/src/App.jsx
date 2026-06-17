@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -301,7 +343,7 @@ gtag('config', 'G-2M6V79H761');
 </h2>
 <div className="grid md:grid-cols-3 gap-12 gap-x-12 gap-y-12">
 <div className="flex flex-col gap-6 group">
-<div className="aspect-square flex overflow-hidden [perspective:1500px] bg-gradient-to-br from-white/10 to-white/0 rounded-xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="aspect-square flex overflow-hidden [perspective:1500px] bg-gradient-to-br from-white/10 to-white/0 rounded-xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="relative w-48 h-48 [transform-style:preserve-3d] [transform:rotateX(60deg)_rotateZ(45deg)] transition-transform duration-700 group-hover:[transform:rotateX(50deg)_rotateZ(45deg)_scale(1.05)]">
 <div className="absolute inset-0 border border-[#2e2e32] bg-[#0c0d0f] [transform:translateZ(-48px)]"></div>
 <div className="absolute inset-0 border border-[#2e2e32] bg-[#0c0d0f] [transform:translateZ(-24px)]"></div>
@@ -317,7 +359,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="flex flex-col gap-6 group">
-<div className="aspect-square flex overflow-hidden [perspective:1500px] bg-gradient-to-br from-white/10 to-white/0 rounded-xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="aspect-square flex overflow-hidden [perspective:1500px] bg-gradient-to-br from-white/10 to-white/0 rounded-xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="relative grid grid-cols-2 gap-2 transform rotate-[45deg] scale-90 transition-transform duration-700 group-hover:scale-100">
 <div className="w-24 h-24 border border-[#2e2e32]"></div>
 <div className="w-24 h-24 border-2 border-white shadow-[0_0_25px_rgba(255,255,255,0.2)] relative z-10 bg-[#0c0d0f]">
@@ -333,7 +375,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="flex flex-col gap-6 group">
-<div className="aspect-square flex overflow-hidden [perspective:1500px] bg-gradient-to-br from-white/10 to-white/0 rounded-xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="aspect-square flex overflow-hidden [perspective:1500px] bg-gradient-to-br from-white/10 to-white/0 rounded-xl relative items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="aspect-square flex overflow-hidden [perspective:1500px] bg-gradient-to-br from-white/10 to-white/0 border-[#2e2e32] border rounded-xl relative items-center justify-center">
 </div>
 <div className="relative w-64 h-64 border border-[#2e2e32] rounded-full flex justify-center items-center shadow-[inset_0_0_40px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:scale-105">
@@ -1182,7 +1224,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid md:grid-cols-2 gap-6">
-<div className="flex flex-col overflow-hidden group transition-transform duration-300 hover:-translate-y-1 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 px-10 py-10 relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col overflow-hidden group transition-transform duration-300 hover:-translate-y-1 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 px-10 py-10 relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.1)_0%,transparent_50%)] opacity-40 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none z-0"></div>
 <div className="relative z-10 flex-1">
 <div className="flex justify-between items-center mb-4">
@@ -1220,7 +1262,7 @@ gtag('config', 'G-2M6V79H761');
 </ul>
 </div>
 </div>
-<div className="flex flex-col overflow-hidden group transition-transform duration-300 hover:-translate-y-1 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 px-10 py-10 relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col overflow-hidden group transition-transform duration-300 hover:-translate-y-1 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 px-10 py-10 relative shadow-2xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.1)_0%,transparent_50%)] opacity-40 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none z-0"></div>
 <div className="relative z-10 flex-1">
 <div className="flex justify-between items-center mb-4">
@@ -1271,7 +1313,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.08)_0%,transparent_50%)] opacity-50 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none">
 </div>
 <h3 className="leading-relaxed md:text-lg z-10 text-xl font-normal text-white tracking-tight relative font-geist">
@@ -1287,7 +1329,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-0 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-0 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.08)_0%,transparent_50%)] opacity-50 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none">
 </div>
 <h3 className="leading-relaxed md:text-lg z-10 text-xl font-normal text-white tracking-tight relative font-geist">
@@ -1302,7 +1344,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.08)_0%,transparent_50%)] opacity-50 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none">
 </div>
 <h3 className="leading-relaxed md:text-lg z-10 text-xl font-normal text-white tracking-tight relative font-geist">
@@ -1317,7 +1359,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.08)_0%,transparent_50%)] opacity-50 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none">
 </div>
 <h3 className="leading-relaxed md:text-lg z-10 text-xl font-normal text-white tracking-tight relative font-geist">
@@ -1332,7 +1374,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(244,63,94,0.08)_0%,transparent_50%)] opacity-50 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none">
 </div>
 <h3 className="leading-relaxed md:text-lg z-10 text-xl font-normal text-white tracking-tight relative font-geist">
@@ -1347,7 +1389,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col aspect-square overflow-hidden group cursor-pointer md:p-10 md:aspect-auto md:h-[300px] bg-gradient-to-br from-white/10 to-white/0 rounded-2xl ring-white/5 ring-1 pt-8 pr-8 pb-8 pl-8 relative shadow-2xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute top-0 right-0 w-[120%] h-[120%] bg-[radial-gradient(circle_at_top_right,rgba(6,182,212,0.08)_0%,transparent_50%)] opacity-50 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none">
 </div>
 <h3 className="leading-relaxed md:text-lg z-10 text-xl font-normal text-white tracking-tight relative font-geist">

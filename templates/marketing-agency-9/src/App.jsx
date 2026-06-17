@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -78,6 +114,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -400,7 +442,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiLz48L3N2Zz4=')] opacity-30 pointer-events-none">
 </div>
-<div className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center reveal-on-scroll" data-reveal="" style={{-RevealDelay: '0ms'}}>
+<div className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center reveal-on-scroll" data-reveal="" style={{'--reveal-delay': '0ms'}}>
 <p className="uppercase bg-clip-text text-base font-bold text-transparent tracking-[0.5em] font-orbitron bg-gradient-to-l from-white/100 via-white/50 to-white/100 border-cyan-500/20 border mb-8 pt-1 pr-4 pb-1 pl-4">04 // БЕСПЛАТНАЯ КОНСУЛЬТАЦИЯ</p>
 <h2 className="md:text-6xl lg:text-7xl uppercase text-4xl font-medium text-white tracking-tight font-orbitron mb-6">Готовы обсудить <br/><span className="bg-clip-text text-transparent font-oswald bg-gradient-to-r from-cyan-400 to-white/30">ваш проект?</span></h2>
 <p className="text-lg text-neutral-500 tracking-widest font-oswald max-w-md mb-12">Не платите за дизайн. Платите за бизнес-инструмент. Напишите мне в WhatsApp, расскажите о вашей задаче, и я бесплатно предложу 3 идеи, как улучшить ваши продажи в интернете. Это ни к чему вас не объязывает</p>

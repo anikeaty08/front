@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -180,6 +216,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -227,7 +269,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="hidden md:hidden" id="mobileMenu" style={{background: 'rgba(5,5,5,0.97)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.04)'}}>
+<div className="hidden md:hidden" id="mobileMenu" style={{background: 'rgba(5, 5, 5, 0.97)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.04)'}}>
 <div className="px-5 py-5 space-y-4">
 <a className="block text-sm text-neutral-400 hover:text-white transition-colors" href="#work">Work</a>
 <a className="block text-sm text-neutral-400 hover:text-white transition-colors" href="#services">Services</a>
@@ -338,7 +380,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative aspect-[4/3] overflow-hidden" style={{background: 'linear-gradient(145deg, #0d0d0d, #141414)'}}>
 <div className="absolute inset-0" style={{background: 'linear-gradient(145deg, rgba(171,255,0,0.06), rgba(171,255,0,0.01))'}}></div>
 <div className="absolute inset-0 flex items-center justify-center p-8">
-<div className="w-full max-w-xs rounded-xl border border-white/[0.06] overflow-hidden" style={{background: 'rgba(20,20,20,0.9)', boxShadow: '0 32px 64px rgba(0,0,0,0.4)'}}>
+<div className="w-full max-w-xs rounded-xl border border-white/[0.06] overflow-hidden" style={{background: 'rgba(20, 20, 20, 0.9)', boxShadow: '0 32px 64px rgba(0,0,0,0.4)'}}>
 <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/[0.04]">
 <div className="w-2 h-2 rounded-full" style={{background: 'rgba(255,95,87,0.7)'}}></div>
 <div className="w-2 h-2 rounded-full" style={{background: 'rgba(255,189,46,0.7)'}}></div>
@@ -350,7 +392,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex-1 space-y-2">
 <div className="h-2.5 bg-white/[0.06] rounded w-full"></div>
 <div className="h-2 bg-white/[0.04] rounded w-3/4"></div>
-<div className="h-8 rounded-lg mt-2" style={{background: 'rgba(171,255,0,0.06)', border: '1px solid rgba(171,255,0,0.08)'}}></div>
+<div className="h-8 rounded-lg mt-2" style={{background: 'rgba(171, 255, 0, 0.06)', border: '1px solid rgba(171,255,0,0.08)'}}></div>
 </div>
 </div>
 <div className="grid grid-cols-3 gap-2">
@@ -418,15 +460,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute inset-0 flex items-center justify-center p-6">
 <div className="w-full max-w-[200px] space-y-2.5">
 <div className="flex items-start gap-2">
-<div className="w-7 h-7 rounded-lg flex-shrink-0" style={{background: 'rgba(6,182,212,0.08)', border: '1px solid rgba(6,182,212,0.12)'}}></div>
+<div className="w-7 h-7 rounded-lg flex-shrink-0" style={{background: 'rgba(6, 182, 212, 0.08)', border: '1px solid rgba(6,182,212,0.12)'}}></div>
 <div className="flex-1 rounded-lg border border-white/[0.05] p-2.5" style={{background: 'rgba(20,20,20,0.8)'}}><div className="h-1.5 bg-white/[0.06] rounded w-full mb-1"></div><div className="h-1.5 bg-white/[0.03] rounded w-2/3"></div></div>
 </div>
 <div className="flex items-start gap-2 justify-end">
-<div className="flex-1 rounded-lg p-2.5" style={{background: 'rgba(6,182,212,0.04)', border: '1px solid rgba(6,182,212,0.08)'}}><div className="h-1.5 rounded w-full mb-1" style={{background: 'rgba(6,182,212,0.08)'}}></div><div className="h-1.5 rounded w-1/2" style={{background: 'rgba(6,182,212,0.05)'}}></div></div>
-<div className="w-7 h-7 rounded-lg flex-shrink-0" style={{background: 'rgba(6,182,212,0.08)', border: '1px solid rgba(6,182,212,0.12)'}}></div>
+<div className="flex-1 rounded-lg p-2.5" style={{background: 'rgba(6, 182, 212, 0.04)', border: '1px solid rgba(6,182,212,0.08)'}}><div className="h-1.5 rounded w-full mb-1" style={{background: 'rgba(6,182,212,0.08)'}}></div><div className="h-1.5 rounded w-1/2" style={{background: 'rgba(6,182,212,0.05)'}}></div></div>
+<div className="w-7 h-7 rounded-lg flex-shrink-0" style={{background: 'rgba(6, 182, 212, 0.08)', border: '1px solid rgba(6,182,212,0.12)'}}></div>
 </div>
 <div className="flex items-start gap-2">
-<div className="w-7 h-7 rounded-lg flex-shrink-0" style={{background: 'rgba(6,182,212,0.08)', border: '1px solid rgba(6,182,212,0.12)'}}></div>
+<div className="w-7 h-7 rounded-lg flex-shrink-0" style={{background: 'rgba(6, 182, 212, 0.08)', border: '1px solid rgba(6,182,212,0.12)'}}></div>
 <div className="flex-1 rounded-lg border border-white/[0.05] p-2.5" style={{background: 'rgba(20,20,20,0.8)'}}><div className="h-1.5 bg-white/[0.06] rounded w-3/4 mb-1"></div><div className="h-1.5 bg-white/[0.03] rounded w-1/2"></div></div>
 </div>
 </div>
@@ -462,7 +504,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rv glass glass-hover mouse-glow rounded-2xl p-7 group">
 <div className="glow-spot"></div>
-<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171,255,0,0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
+<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171, 255, 0, 0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
 <iconify-icon height="20" icon="solar:smartphone-2-linear" style={{color: '#ABFF00'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-base font-semibold tracking-tight mb-2">Mobile Development</h3>
@@ -477,7 +519,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rv glass glass-hover mouse-glow rounded-2xl p-7 group">
 <div className="glow-spot"></div>
-<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171,255,0,0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
+<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171, 255, 0, 0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
 <iconify-icon height="20" icon="solar:magic-stick-3-linear" style={{color: '#ABFF00'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-base font-semibold tracking-tight mb-2">AI Products</h3>
@@ -492,7 +534,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rv glass glass-hover mouse-glow rounded-2xl p-7 group">
 <div className="glow-spot"></div>
-<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171,255,0,0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
+<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171, 255, 0, 0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
 <iconify-icon height="20" icon="solar:monitor-linear" style={{color: '#ABFF00'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-base font-semibold tracking-tight mb-2">SaaS &amp; Web Apps</h3>
@@ -506,7 +548,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rv glass glass-hover mouse-glow rounded-2xl p-7 group">
 <div className="glow-spot"></div>
-<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171,255,0,0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
+<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171, 255, 0, 0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
 <iconify-icon height="20" icon="solar:palette-linear" style={{color: '#ABFF00'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-base font-semibold tracking-tight mb-2">Product Design</h3>
@@ -520,7 +562,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rv glass glass-hover mouse-glow rounded-2xl p-7 group">
 <div className="glow-spot"></div>
-<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171,255,0,0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
+<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171, 255, 0, 0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
 <iconify-icon height="20" icon="solar:rocket-2-linear" style={{color: '#ABFF00'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-base font-semibold tracking-tight mb-2">MVP Development</h3>
@@ -534,7 +576,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rv glass glass-hover mouse-glow rounded-2xl p-7 group">
 <div className="glow-spot"></div>
-<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171,255,0,0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
+<div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5" style={{background: 'rgba(171, 255, 0, 0.08)', border: '1px solid rgba(171,255,0,0.1)'}}>
 <iconify-icon height="20" icon="solar:server-linear" style={{color: '#ABFF00'}} width="20"></iconify-icon>
 </div>
 <h3 className="text-base font-semibold tracking-tight mb-2">Backend &amp; Infrastructure</h3>
@@ -561,7 +603,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
 <div className="rv glass glass-hover rounded-2xl p-6 relative">
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'rgba(171,255,0,0.1)', border: '1px solid rgba(171,255,0,0.15)', color: '#ABFF00'}}>01</div>
+<div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'rgba(171, 255, 0, 0.1)', border: '1px solid rgba(171,255,0,0.15)', color: '#ABFF00'}}>01</div>
 <div className="hidden lg:block flex-1 h-px" style={{background: 'linear-gradient(90deg,rgba(171,255,0,0.15),transparent)'}}></div>
 </div>
 <h3 className="text-sm font-semibold tracking-tight mb-2">Discovery</h3>
@@ -570,7 +612,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rv glass glass-hover rounded-2xl p-6 relative">
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'rgba(171,255,0,0.1)', border: '1px solid rgba(171,255,0,0.15)', color: '#ABFF00'}}>02</div>
+<div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'rgba(171, 255, 0, 0.1)', border: '1px solid rgba(171,255,0,0.15)', color: '#ABFF00'}}>02</div>
 <div className="hidden lg:block flex-1 h-px" style={{background: 'linear-gradient(90deg,rgba(171,255,0,0.15),transparent)'}}></div>
 </div>
 <h3 className="text-sm font-semibold tracking-tight mb-2">Design</h3>
@@ -579,7 +621,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="rv glass glass-hover rounded-2xl p-6 relative">
 <div className="flex items-center gap-3 mb-5">
-<div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'rgba(171,255,0,0.1)', border: '1px solid rgba(171,255,0,0.15)', color: '#ABFF00'}}>03</div>
+<div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'rgba(171, 255, 0, 0.1)', border: '1px solid rgba(171,255,0,0.15)', color: '#ABFF00'}}>03</div>
 <div className="hidden lg:block flex-1 h-px" style={{background: 'linear-gradient(90deg,rgba(171,255,0,0.15),transparent)'}}></div>
 </div>
 <h3 className="text-sm font-semibold tracking-tight mb-2">Develop</h3>
@@ -644,7 +686,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <p className="text-sm text-neutral-300 leading-relaxed mb-6 font-light">"The design quality is world-class. They made our complex AI features feel effortless and beautiful. Best studio we've ever worked with."</p>
 <div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'linear-gradient(135deg,rgba(139,92,246,0.15),rgba(59,130,246,0.05))', color: 'rgb(167,139,250)'}}>SR</div>
+<div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.05))', color: 'rgb(167,139,250)'}}>SR</div>
 <div>
 <div className="text-xs font-medium">Sarah Rodriguez</div>
 <div className="text-xs text-neutral-600">CEO, Align</div>
@@ -661,7 +703,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <p className="text-sm text-neutral-300 leading-relaxed mb-6 font-light">"They don't just build — they think. Every decision was backed by real reasoning. It felt like having a co-founder, not a contractor."</p>
 <div className="flex items-center gap-3">
-<div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'linear-gradient(135deg,rgba(6,182,212,0.15),rgba(20,184,166,0.05))', color: 'rgb(103,232,249)'}}>JM</div>
+<div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold" style={{background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(20, 184, 166, 0.05))', color: 'rgb(103,232,249)'}}>JM</div>
 <div>
 <div className="text-xs font-medium">James Mitchell</div>
 <div className="text-xs text-neutral-600">CTO, Nextra</div>
@@ -679,7 +721,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl" style={{background: 'rgba(171,255,0,0.03)'}}></div>
 <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-3xl" style={{background: 'rgba(171,255,0,0.03)'}}></div>
 <div className="relative">
-<div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-7" style={{background: 'rgba(171,255,0,0.08)', border: '1px solid rgba(171,255,0,0.12)'}}>
+<div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-7" style={{background: 'rgba(171, 255, 0, 0.08)', border: '1px solid rgba(171,255,0,0.12)'}}>
 <iconify-icon height="22" icon="solar:chat-round-call-linear" style={{color: '#ABFF00'}} width="22"></iconify-icon>
 </div>
 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">

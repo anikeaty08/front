@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -280,6 +316,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -366,7 +408,7 @@ addUtilities({
 <div className="flashlight-card relative h-80 rounded-xl bg-stone-900 border border-orange-800 overflow-hidden p-8 flex flex-col justify-end group hover:border-orange-700/50 transition-colors">
 
 <div className="glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%)'}}></div>
-<div className="border-glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none z-10" style={{background: 'radial-gradient(400px circle at var(--x) var(--y), rgba(255,255,255,0.15), transparent 40%)', maskImage: 'linear-gradient(black, black), linear-gradient(black, black)', maskClip: 'content-box, border-box', maskComposite: 'exclude', padding: '1px'}}></div>
+<div className="border-glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none z-10" style={{background: 'radial-gradient(400px circle at var(--x) var(--y), rgba(255, 255, 255, 0.15), transparent 40%)', maskImage: 'linear-gradient(black, black), linear-gradient(black, black)', maskClip: 'content-box, border-box', maskComposite: 'exclude', padding: '1px'}}></div>
 <iconify-icon className="text-stone-500 mb-auto" icon="solar:code-circle-linear" width="40"></iconify-icon>
 <h3 className="text-xl text-white mb-2 font-medium tracking-tight">Optimized Code</h3>
 <p className="text-sm text-stone-400 leading-relaxed">Engineered for maximum performance with minimal overhead using modern standards.</p>
@@ -374,7 +416,7 @@ addUtilities({
 
 <div className="flashlight-card relative h-80 rounded-xl bg-stone-900 border border-orange-800 overflow-hidden p-8 flex flex-col justify-end group hover:border-orange-700/50 transition-colors">
 <div className="glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%)'}}></div>
-<div className="border-glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none z-10" style={{background: 'radial-gradient(400px circle at var(--x) var(--y), rgba(255,255,255,0.15), transparent 40%)', maskImage: 'linear-gradient(black, black), linear-gradient(black, black)', maskClip: 'content-box, border-box', maskComposite: 'exclude', padding: '1px'}}></div>
+<div className="border-glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none z-10" style={{background: 'radial-gradient(400px circle at var(--x) var(--y), rgba(255, 255, 255, 0.15), transparent 40%)', maskImage: 'linear-gradient(black, black), linear-gradient(black, black)', maskClip: 'content-box, border-box', maskComposite: 'exclude', padding: '1px'}}></div>
 <iconify-icon className="text-stone-500 mb-auto" icon="solar:graph-up-linear" width="40"></iconify-icon>
 <h3 className="text-xl text-white mb-2 font-medium tracking-tight">Real-time Analytics</h3>
 <p className="text-sm text-stone-400 leading-relaxed">Visualize data streams instantly with our high-fidelity rendering engine.</p>
@@ -382,7 +424,7 @@ addUtilities({
 
 <div className="flashlight-card relative h-80 rounded-xl bg-stone-900 border border-orange-800 overflow-hidden p-8 flex flex-col justify-end group hover:border-orange-700/50 transition-colors">
 <div className="glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%)'}}></div>
-<div className="border-glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none z-10" style={{background: 'radial-gradient(400px circle at var(--x) var(--y), rgba(255,255,255,0.15), transparent 40%)', maskImage: 'linear-gradient(black, black), linear-gradient(black, black)', maskClip: 'content-box, border-box', maskComposite: 'exclude', padding: '1px'}}></div>
+<div className="border-glow absolute inset-0 opacity-0 group-hover/grid:opacity-100 transition-opacity duration-500 pointer-events-none z-10" style={{background: 'radial-gradient(400px circle at var(--x) var(--y), rgba(255, 255, 255, 0.15), transparent 40%)', maskImage: 'linear-gradient(black, black), linear-gradient(black, black)', maskClip: 'content-box, border-box', maskComposite: 'exclude', padding: '1px'}}></div>
 <iconify-icon className="text-stone-500 mb-auto" icon="solar:shield-check-linear" width="40"></iconify-icon>
 <h3 className="text-xl text-white mb-2 font-medium tracking-tight">Secure by Design</h3>
 <p className="text-sm text-stone-400 leading-relaxed">Enterprise-grade security protocols embedded directly into the core infrastructure.</p>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 function toggleView() { const grid = document.getElementById('grid-view'); const btn = document.getElementById('view-toggle-btn'); if (grid.classList.contains('hidden')) { grid.classList.remove('hidden'); btn.innerHTML = '<iconify-icon icon="solar:map-linear" width="18" stroke-width="1.5"></iconify-icon> Map View'; } else { grid.classList.add('hidden'); btn.innerHTML = '<iconify-icon icon="solar:widget-5-linear" width="18" stroke-width="1.5"></iconify-icon> Grid View'; } }
@@ -177,6 +213,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -377,7 +419,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -483,7 +525,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -589,7 +631,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div className="" style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div className="" style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div className="" style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -695,7 +737,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -801,7 +843,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -907,7 +949,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -1013,7 +1055,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -1119,7 +1161,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>
@@ -1225,7 +1267,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="leaflet-marker-icon map-marker-property leaflet-zoom-animated leaflet-interactive" role="button" style={{marginLeft: '-16px', marginTop: '-16px', width: '32px', height: '32px', zIndex: '432'}} tabindex="0">
 <div className="" style={{position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-<div className="" style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
+<div className="" style={{position: 'absolute', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.2)', animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite'}}></div>
 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', position: 'relative', zIndex: '10'}}></div>
 </div>
 </div>

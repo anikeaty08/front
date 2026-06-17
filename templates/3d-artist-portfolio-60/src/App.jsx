@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -352,6 +388,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -441,7 +483,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </h1><h2 className="text-[14vw] sm:text-[10vw] lg:text-[7vw] leading-[0.9] font-semibold tracking-tight">создаем дизайн</h2>
 <span className="block text-[10vw] sm:text-7xl lg:text-8xl font-bold" style={{}}>со смыслом</span>
 
-<p aria-label="Specializing in cinematic CGI, product visualization, and character design. Bringing imagination to life through cutting-edge 3D artistry." className="max-w-3xl mx-auto text-lg md:text-xl type-words is-in text-white/80" data-delay=".4s" data-duration="2s" data-ease="ease-in-out" data-stagger=".2s" style={{-Stagger: '0.2s', -Dur: '2s', -Ease: 'ease-in-out', -Delay: '0.4s'}}><span className="w" style={{-I: '0'}}>Specializing </span><span className="w" style={{-I: '1'}}>in </span><span className="w" style={{-I: '2'}}>cinematic </span><span className="w" style={{-I: '3'}}>CGI, </span><span className="w" style={{-I: '4'}}>product </span><span className="w" style={{-I: '5'}}>visualization, </span><span className="w" style={{-I: '6'}}>and </span><span className="w" style={{-I: '7'}}>character </span><span className="w" style={{-I: '8'}}>design. </span><span className="w" style={{-I: '9'}}>Bringing </span><span className="w" style={{-I: '10'}}>imagination </span><span className="w" style={{-I: '11'}}>to </span><span className="w" style={{-I: '12'}}>life </span><span className="w" style={{-I: '13'}}>through </span><span className="w" style={{-I: '14'}}>cutting-edge </span><span className="w" style={{-I: '15'}}>3D </span><span className="w" style={{-I: '16'}}>artistry. </span></p>
+<p aria-label="Specializing in cinematic CGI, product visualization, and character design. Bringing imagination to life through cutting-edge 3D artistry." className="max-w-3xl mx-auto text-lg md:text-xl type-words is-in text-white/80" data-delay=".4s" data-duration="2s" data-ease="ease-in-out" data-stagger=".2s" style={{'--stagger': '0.2s', '--dur': '2s', '--ease': 'ease-in-out', '--delay': '0.4s'}}><span className="w" style={{'--i': '0'}}>Specializing </span><span className="w" style={{'--i': '1'}}>in </span><span className="w" style={{'--i': '2'}}>cinematic </span><span className="w" style={{'--i': '3'}}>CGI, </span><span className="w" style={{'--i': '4'}}>product </span><span className="w" style={{'--i': '5'}}>visualization, </span><span className="w" style={{'--i': '6'}}>and </span><span className="w" style={{'--i': '7'}}>character </span><span className="w" style={{'--i': '8'}}>design. </span><span className="w" style={{'--i': '9'}}>Bringing </span><span className="w" style={{'--i': '10'}}>imagination </span><span className="w" style={{'--i': '11'}}>to </span><span className="w" style={{'--i': '12'}}>life </span><span className="w" style={{'--i': '13'}}>through </span><span className="w" style={{'--i': '14'}}>cutting-edge </span><span className="w" style={{'--i': '15'}}>3D </span><span className="w" style={{'--i': '16'}}>artistry. </span></p>
 
 <div className="mt-10 flex items-center justify-center gap-4">
 <span className="">
@@ -461,7 +503,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="relative" style={{}}>Start a project</span>
 <span aria-hidden="true" className="transition-all duration-300 group-hover:opacity-80 opacity-20 w-[70%] h-[1px] rounded-full absolute bottom-0 left-1/2 -translate-x-1/2" style={{background: 'linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 100%)'}}></span>
 </button>
-<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139,92,246,.55), rgba(139,92,246,.28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
+<span aria-hidden="true" className="pointer-events-none absolute -bottom-3 left-1/2 z-0 h-6 w-44 -translate-x-1/2 rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" style={{background: 'radial-gradient(60% 100% at 50% 50%, rgba(139, 92, 246, .55), rgba(139, 92, 246, .28) 35%, transparent 70%)', filter: 'blur(10px) saturate(120%)'}}></span>
 </div>
 </div>
 <div className="flex flex-wrap xl:py-24 text-xs mt-8 pt-24 pb-24 gap-x-6 gap-y-6 items-center justify-center text-white/30" style={{animation: '0.5s ease-in-out 0.5s both fadeSlideIn'}}>

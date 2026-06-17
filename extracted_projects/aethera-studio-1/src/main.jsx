@@ -7,7 +7,7 @@ import './styles/theme.css'
 import 'iconify-icon'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <App />
-  </React.StrictMode>,
+  ,
 )

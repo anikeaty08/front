@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -721,6 +757,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2134,7 +2176,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative max-w-4xl mx-auto mt-16">
 <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2 overflow-hidden" data-timeline-rail="">
 <div className="absolute top-0 left-0 w-full opacity-70" data-timeline-trace="" style={{height: '0px', background: 'linear-gradient(to bottom, rgba(244,63,94,0.82), rgba(244,63,94,0.82))', backgroundSize: '100% 100%'}}></div>
-<div className="absolute top-0 w-[2px] h-32 -left-[0.5px] will-change-transform timeline-glow" data-timeline-glow="" style={{background: 'linear-gradient(to bottom, rgba(244,63,94,0) 0%, rgba(244,63,94,0.72) 48%, rgba(244,63,94,0) 100%)', boxShadow: '0 0 28px rgba(244,63,94,0.36)'}}></div>
+<div className="absolute top-0 w-[2px] h-32 -left-[0.5px] will-change-transform timeline-glow" data-timeline-glow="" style={{background: 'linear-gradient(to bottom, rgba(244, 63, 94, 0) 0%, rgba(244, 63, 94, 0.72) 48%, rgba(244, 63, 94, 0) 100%)', boxShadow: '0 0 28px rgba(244,63,94,0.36)'}}></div>
 </div>
 
 <div className="relative flex flex-col md:flex-row items-start md:justify-between mb-16 md:mb-24 pl-12 md:pl-0 group">

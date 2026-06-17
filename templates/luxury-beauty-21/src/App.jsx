@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -123,6 +159,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -157,7 +199,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             Menu zabiegów
           </button>
 
-<button className="inline-flex transition overflow-hidden group text-xs md:text-sm font-medium rounded-full pt-2.5 pr-4 md:pt-3 md:pr-5 pb-2.5 pl-4 md:pb-3 md:pl-5 relative gap-x-2 items-center text-white" onclick="document.getElementById('rezerwacja').scrollIntoView({behavior:'smooth'});" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 40px rgba(67, 46, 24, 0.35), inset 0 1px 0 rgba(255,255,255,0.35)';" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 14px 55px rgba(68,42,16,0.6), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(236, 214, 170, 0.6)';" style={{background: 'linear-gradient(135deg, #b8895e 0%, #e0c39a 35%, #c39b6a 70%, #aa7a4a 100%)', border: '1px solid rgba(255, 255, 255, 0.35)', boxShadow: '0 10px 40px rgba(67, 46, 24, 0.35), inset 0 1px 0 rgba(255,255,255,0.35)', transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1)', transform: 'translateY(0px)', height: '46px', scale: '1'}}>
+<button className="inline-flex transition overflow-hidden group text-xs md:text-sm font-medium rounded-full pt-2.5 pr-4 md:pt-3 md:pr-5 pb-2.5 pl-4 md:pb-3 md:pl-5 relative gap-x-2 items-center text-white" onclick="document.getElementById('rezerwacja').scrollIntoView({behavior:'smooth'});" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 40px rgba(67, 46, 24, 0.35), inset 0 1px 0 rgba(255,255,255,0.35)';" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 14px 55px rgba(68,42,16,0.6), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(236, 214, 170, 0.6)';" style={{background: 'linear-gradient(135deg, #b8895e 0%, #e0c39a 35%, #c39b6a 70%, #aa7a4a 100%)', border: '1px solid rgba(255, 255, 255, 0.35)', boxShadow: '0 10px 40px rgba(67, 46, 24, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35)', transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1)', transform: 'translateY(0px)', height: '46px', scale: '1'}}>
 <div className="loader" style={{position: 'absolute', top: '0', left: '0', height: '100%', width: '100%', zIndex: '1', backgroundColor: 'transparent', mask: 'repeating-linear-gradient(90deg, transparent 0, transparent 10px, black 11px, black 13px)', WebkitMask: 'repeating-linear-gradient(90deg, transparent 0, transparent 10px, black 11px, black 13px)', opacity: '0.9'}}>
 <div style={{content: '\'\'', position: 'absolute', top: '0', left: '0', width: '130%', height: '100%', backgroundImage: 'radial-gradient(circle at 50% 50%, #fff4d6 0%, transparent 55%), radial-gradient(circle at 45% 45%, #ffe1a1 0%, transparent 55%), radial-gradient(circle at 55% 55%, #f6d18b 0%, transparent 55%), radial-gradient(circle at 45% 55%, #f5c67a 0%, transparent 55%), radial-gradient(circle at 55% 45%, #f9e2b1 0%, transparent 55%)', mask: 'radial-gradient(circle at 50% 50%, transparent 0%, transparent 15%, black 25%)', WebkitMask: 'radial-gradient(circle at 50% 50%, transparent 0%, transparent 15%, black 25%)', animation: 'transform-animation 3s infinite alternate, opacity-animation 6s infinite', animationTimingFunction: 'cubic-bezier(0.6, 0.8, 0.5, 1)', filter: 'drop-shadow(0 0 12px rgba(255, 241, 196, 0.7))'}}>
 </div>
@@ -244,7 +286,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </svg>
 </div>
 <div className="">
-<h3 className="text-[18px] font-medium tracking-tight text-[#3a2820]" style={{fontFamily: '\'Playfair Display\',serif'}}>Rytuał Lumière</h3>
+<h3 className="text-[18px] font-medium tracking-tight text-[#3a2820]" style={{fontFamily: '\'Playfair Display\', serif'}}>Rytuał Lumière</h3>
 <p className="text-[11px] text-[#8e7b6c]">
                       Autorski zabieg rozświetlający
                     </p>
@@ -297,7 +339,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
 <div className="">
 <p className="text-[11px] uppercase tracking-[0.26em] text-[#8c7a6a] mb-2">Oferta</p>
-<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Pielęgnacja skrojona na miarę Twojej skóry
               </h2>
 <p className="text-[13px] md:text-[14px] text-[#74665e] max-w-xl mt-2">
@@ -331,7 +373,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex text-[10px] uppercase tracking-[0.2em] text-[#b8925b] px-2 py-1 rounded-full bg-[#f7ecdf] border border-[#e5d0bd]">
                     Pielęgnacja skóry
                   </span>
-<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Terapia Glow Balance
                   </h3>
 <p className="text-[13px] leading-relaxed text-[#74675f]">
@@ -359,7 +401,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex text-[10px] uppercase tracking-[0.2em] text-[#b8925b] px-2 py-1 rounded-full bg-[#f7ecdf] border border-[#e5d0bd]">
                     Makijaż
                   </span>
-<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Makijaż ślubny Couture
                   </h3>
 <p className="text-[13px] leading-relaxed text-[#74675f]">
@@ -387,7 +429,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex text-[10px] uppercase tracking-[0.2em] text-[#b8925b] px-2 py-1 rounded-full bg-[#f7ecdf] border border-[#e5d0bd]">
                     Zabiegi SPA
                   </span>
-<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Rytuał Jedwabne Spa
                   </h3>
 <p className="text-[13px] leading-relaxed text-[#74675f]">
@@ -415,7 +457,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex text-[10px] uppercase tracking-[0.2em] text-[#b8925b] px-2 py-1 rounded-full bg-[#f7ecdf] border border-[#e5d0bd]">
                     Pielęgnacja skóry
                   </span>
-<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Anti-Ageing Sculpt Lift
                   </h3>
 <p className="text-[13px] leading-relaxed text-[#74675f]">
@@ -443,7 +485,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex text-[10px] uppercase tracking-[0.2em] text-[#b8925b] px-2 py-1 rounded-full bg-[#f7ecdf] border border-[#e5d0bd]">
                     Makijaż
                   </span>
-<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Makijaż wieczorowy Luminescent
                   </h3>
 <p className="text-[13px] leading-relaxed text-[#74675f]">
@@ -471,7 +513,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span className="inline-flex text-[10px] uppercase tracking-[0.2em] text-[#b8925b] px-2 py-1 rounded-full bg-[#f7ecdf] border border-[#e5d0bd]">
                     Zabiegi SPA
                   </span>
-<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[17px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Rytuał Duo Harmony
                   </h3>
 <p className="text-[13px] leading-relaxed text-[#74675f]">
@@ -499,7 +541,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
 <div>
 <p className="text-[11px] uppercase tracking-[0.26em] text-[#8c7a6a] mb-2">Galeria</p>
-<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Efekty naszych rytuałów
               </h2>
 <p className="text-[13px] md:text-[14px] text-[#74665e] max-w-xl mt-2">
@@ -607,7 +649,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
 <div>
 <p className="text-[11px] uppercase tracking-[0.26em] text-[#8c7a6a] mb-2">Opinie</p>
-<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Głosy naszych Klientek
               </h2>
 <p className="text-[13px] md:text-[14px] text-[#74665e] max-w-xl mt-2">
@@ -721,7 +763,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
 <div>
 <p className="text-[11px] uppercase tracking-[0.26em] text-[#8c7a6a] mb-2">Blog</p>
-<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Nowinki z świata beauty
               </h2>
 <p className="text-[13px] md:text-[14px] text-[#74665e] max-w-xl mt-2">
@@ -739,7 +781,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4 md:p-5 space-y-2.5">
 <p className="text-[11px] text-[#a29183] uppercase tracking-[0.18em]">Pielęgnacja • 6 min czytania</p>
-<h3 className="text-[16px] tracking-tight font-medium text-[#30221c] group-hover:text-[#b98960] transition-colors" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[16px] tracking-tight font-medium text-[#30221c] group-hover:text-[#b98960] transition-colors" style={{fontFamily: '\'Playfair Display\', serif'}}>
                   Skin cycling – jak ułożyć plan na 4 noce bez podrażnień
                 </h3>
 <p className="text-[13px] text-[#73665d]">
@@ -753,7 +795,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4 md:p-5 space-y-2.5">
 <p className="text-[11px] text-[#a29183] uppercase tracking-[0.18em]">Makijaż • 4 min czytania</p>
-<h3 className="text-[16px] tracking-tight font-medium text-[#30221c] group-hover:text-[#b98960] transition-colors" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[16px] tracking-tight font-medium text-[#30221c] group-hover:text-[#b98960] transition-colors" style={{fontFamily: '\'Playfair Display\', serif'}}>
                   Soft glow zamiast ciężkiego konturowania – makijaż 2025
                 </h3>
 <p className="text-[13px] text-[#73665d]">
@@ -767,7 +809,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="p-4 md:p-5 space-y-2.5">
 <p className="text-[11px] text-[#a29183] uppercase tracking-[0.18em]">SPA • 5 min czytania</p>
-<h3 className="text-[16px] tracking-tight font-medium text-[#30221c] group-hover:text-[#b98960] transition-colors" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h3 className="text-[16px] tracking-tight font-medium text-[#30221c] group-hover:text-[#b98960] transition-colors" style={{fontFamily: '\'Playfair Display\', serif'}}>
                   Mikro-rytuały spa w domu, które naprawdę obniżają stres
                 </h3>
 <p className="text-[13px] text-[#73665d]">
@@ -784,7 +826,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid gap-10 md:grid-cols-[1.1fr,1fr] items-start">
 <div>
 <p className="text-[11px] uppercase tracking-[0.26em] text-[#8c7a6a] mb-2">Rezerwacja</p>
-<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl md:text-[28px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Zarezerwuj swój rytuał
               </h2>
 <p className="text-[13px] md:text-[14px] text-[#74665e] max-w-xl mt-2 mb-5">
@@ -924,7 +966,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="flex items-center justify-between mb-3">
 <div>
 <p className="text-[11px] uppercase tracking-[0.2em] text-[#8c7a6a]">Dostępność</p>
-<h3 className="text-[16px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\',serif'}}>Kalendarz salonu</h3>
+<h3 className="text-[16px] tracking-tight font-medium text-[#30221c]" style={{fontFamily: '\'Playfair Display\', serif'}}>Kalendarz salonu</h3>
 </div>
 <div className="inline-flex items-center gap-1 rounded-full border border-[#ddcdbf] px-2 py-1 text-[11px] text-[#7a6858] bg-[#fbf7f2]">
 <span className="w-2 h-2 rounded-full bg-neutral-400"></span> Wysoka dostępność

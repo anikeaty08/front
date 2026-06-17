@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -150,6 +186,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -519,7 +561,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6" onmousemove="for(const card of this.children){const rect=card.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;card.style.setProperty('--mouse-x', x + 'px');card.style.setProperty('--mouse-y', y + 'px');}">
 
-<div className="scroll-reveal delay-200 col-span-1 lg:col-span-2 group hover:bg-white transition-all duration-300 flex flex-col hover:border-slate-300 h-full border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{-MouseX: '881.8828125px', -MouseY: '468.75px'}}>
+<div className="scroll-reveal delay-200 col-span-1 lg:col-span-2 group hover:bg-white transition-all duration-300 flex flex-col hover:border-slate-300 h-full border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{'--mouse-x': '881.8828125px', '--mouse-y': '468.75px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(15, 23, 42, 0.03), transparent 40%)', zIndex: '0'}}></div>
 <div className="h-12 w-12 bg-teal-50 rounded-lg flex items-center justify-center text-teal-600 mb-8 relative z-10">
 <span className="iconify w-6 h-6" data-icon="solar:stethoscope-linear"></span>
@@ -535,7 +577,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="scroll-reveal delay-300 col-span-1 lg:col-span-2 group hover:bg-white transition-all duration-300 flex flex-col hover:border-slate-300 h-full border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{-MouseX: '477.296875px', -MouseY: '468.75px'}}>
+<div className="scroll-reveal delay-300 col-span-1 lg:col-span-2 group hover:bg-white transition-all duration-300 flex flex-col hover:border-slate-300 h-full border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{'--mouse-x': '477.296875px', '--mouse-y': '468.75px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(15, 23, 42, 0.03), transparent 40%)', zIndex: '0'}}></div>
 <div className="h-12 w-12 bg-sky-50 rounded-lg flex items-center justify-center text-sky-600 mb-8 relative z-10">
 <span className="iconify w-6 h-6" data-icon="solar:document-medicine-linear"></span>
@@ -551,7 +593,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="scroll-reveal delay-500 col-span-1 lg:col-span-2 group hover:bg-white transition-all duration-300 flex flex-col hover:border-slate-300 h-full border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{-MouseX: '72.7109375px', -MouseY: '468.75px'}}>
+<div className="scroll-reveal delay-500 col-span-1 lg:col-span-2 group hover:bg-white transition-all duration-300 flex flex-col hover:border-slate-300 h-full border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{'--mouse-x': '72.7109375px', '--mouse-y': '468.75px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(15, 23, 42, 0.03), transparent 40%)', zIndex: '0'}}></div>
 <div className="h-12 w-12 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600 mb-8 relative z-10">
 <span className="iconify w-6 h-6" data-icon="solar:test-tube-linear"></span>
@@ -567,7 +609,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="scroll-reveal delay-200 col-span-1 lg:col-span-3 group hover:bg-white transition-all duration-300 flex flex-col min-h-[300px] hover:border-slate-300 border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{-MouseX: '881.8828125px', -MouseY: '217.25px'}}>
+<div className="scroll-reveal delay-200 col-span-1 lg:col-span-3 group hover:bg-white transition-all duration-300 flex flex-col min-h-[300px] hover:border-slate-300 border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{'--mouse-x': '881.8828125px', '--mouse-y': '217.25px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(15, 23, 42, 0.03), transparent 40%)', zIndex: '0'}}></div>
 <div className="absolute top-8 right-8 text-slate-200 group-hover:text-teal-100 transition-colors">
 <span className="iconify w-16 h-16" data-icon="solar:monitor-camera-linear"></span>
@@ -592,7 +634,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="scroll-reveal delay-300 col-span-1 lg:col-span-3 group hover:bg-white transition-all duration-300 flex flex-col min-h-[300px] hover:border-slate-300 border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{-MouseX: '275.0078125px', -MouseY: '217.25px'}}>
+<div className="scroll-reveal delay-300 col-span-1 lg:col-span-3 group hover:bg-white transition-all duration-300 flex flex-col min-h-[300px] hover:border-slate-300 border-slate-200 border rounded-sm p-8 relative bg-white/40 backdrop-blur-sm justify-between overflow-hidden shadow-sm hover:shadow-md" style={{'--mouse-x': '275.0078125px', '--mouse-y': '217.25px'}}>
 <div className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(15, 23, 42, 0.03), transparent 40%)', zIndex: '0'}}></div>
 <div className="absolute top-8 right-8 text-slate-200 group-hover:text-sky-100 transition-colors">
 <span className="iconify w-16 h-16" data-icon="solar:users-group-two-rounded-linear"></span>

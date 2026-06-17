@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -499,6 +535,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2319,7 +2361,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="relative z-10 -ml-8 sm:-ml-10 flex-1 min-w-0">
-<div className="sm:pl-14 sm:pr-8 sm:py-5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-500 flex gap-4 bg-gradient-to-r from-white/[0.07] to-transparent rounded-2xl pt-3 pr-4 pb-3 pl-10 shadow-lg backdrop-blur-md gap-x-4 gap-y-4 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="sm:pl-14 sm:pr-8 sm:py-5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-500 flex gap-4 bg-gradient-to-r from-white/[0.07] to-transparent rounded-2xl pt-3 pr-4 pb-3 pl-10 shadow-lg backdrop-blur-md gap-x-4 gap-y-4 items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex flex-col gap-1 min-w-0">
 <div className="flex items-center gap-2">
 <h4 className="text-sm sm:text-base font-medium text-white group-hover:text-indigo-200 transition-colors">
@@ -2347,7 +2389,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="relative z-10 -mr-8 sm:-mr-10 flex-1 min-w-0">
-<div className="sm:pr-14 sm:pl-8 sm:py-5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-500 flex flex-row-reverse gap-4 bg-gradient-to-l from-white/[0.07] to-transparent rounded-2xl pt-3 pl-4 pb-3 pr-10 shadow-lg backdrop-blur-md items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(-45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="sm:pr-14 sm:pl-8 sm:py-5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-500 flex flex-row-reverse gap-4 bg-gradient-to-l from-white/[0.07] to-transparent rounded-2xl pt-3 pl-4 pb-3 pr-10 shadow-lg backdrop-blur-md items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(-45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex flex-col gap-1 min-w-0 text-right">
 <div className="flex items-center gap-2 justify-end">
 <span className="text-xs text-white/40 font-light hidden sm:inline-block">StartupLabs •</span>
@@ -2401,7 +2443,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="relative z-10 -mr-8 sm:-mr-10 flex-1 min-w-0">
-<div className="sm:pr-14 sm:pl-8 sm:py-5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-500 flex flex-row-reverse gap-4 bg-gradient-to-l from-white/[0.07] to-transparent rounded-2xl pt-3 pl-4 pb-3 pr-10 shadow-lg backdrop-blur-md items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(-45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="sm:pr-14 sm:pl-8 sm:py-5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-500 flex flex-row-reverse gap-4 bg-gradient-to-l from-white/[0.07] to-transparent rounded-2xl pt-3 pl-4 pb-3 pr-10 shadow-lg backdrop-blur-md items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(-45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex flex-col gap-1 min-w-0 text-right">
 <div className="flex items-center gap-2 justify-end">
 <span className="text-xs text-white/40 font-light hidden sm:inline-block">DataViz •</span>

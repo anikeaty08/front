@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -88,6 +124,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -126,7 +168,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </button>
 </div>
 
-<div className="md:hidden hidden border-t border-white/10 mt-2 pt-2 pb-3" data-reveal="" id="mobileNav" style={{transform: 'translateY(10px)', filter: 'blur(6px)', opacity: '.9', transition: 'transform 700ms cubic-bezier(.22,1,.36,1), filter 700ms cubic-bezier(.22,1,.36,1), opacity 700ms cubic-bezier(.22,1,.36,1)'}}>
+<div className="md:hidden hidden border-t border-white/10 mt-2 pt-2 pb-3" data-reveal="" id="mobileNav" style={{transform: 'translateY(10px)', filter: 'blur(6px)', opacity: '.9', transition: 'transform 700ms cubic-bezier(.22, 1, .36, 1), filter 700ms cubic-bezier(.22, 1, .36, 1), opacity 700ms cubic-bezier(.22,1,.36,1)'}}>
 <div className="grid gap-2">
 <a className="px-3 py-2 rounded-lg bg-white/5 ring-1 ring-white/10 text-sm font-medium text-white/90 font-geist hover:bg-white/10 hover:ring-white/20 transition" href="#">Discover</a>
 <a className="px-3 py-2 rounded-lg bg-white/5 ring-1 ring-white/10 text-sm font-medium text-white/80 font-geist hover:bg-white/10 hover:text-white/90 hover:ring-white/20 transition" href="#">Toolkit</a>
@@ -455,14 +497,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 </div></section>
 
-<section className="w-full mr-auto mb-8 ml-auto" data-reveal="" id="contact" style={{transform: 'translateY(16px)', filter: 'blur(8px)', opacity: '.92', transition: 'transform 900ms cubic-bezier(.22,1,.36,1), filter 900ms cubic-bezier(.22,1,.36,1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
+<section className="w-full mr-auto mb-8 ml-auto" data-reveal="" id="contact" style={{transform: 'translateY(16px)', filter: 'blur(8px)', opacity: '.92', transition: 'transform 900ms cubic-bezier(.22, 1, .36, 1), filter 900ms cubic-bezier(.22, 1, .36, 1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
 <div className="max-w-7xl sm:px-6 lg:px-8 mr-auto ml-auto pr-4 pl-4">
 <div className="relative overflow-hidden ring-1 ring-white/10 bg-white/5 rounded-3xl backdrop-blur">
 
 <div className="relative z-10 md:p-12 lg:p-16 p-8">
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-<div className="lg:col-span-5" data-reveal="" style={{transform: 'translateY(12px)', filter: 'blur(6px)', opacity: '.94', transition: 'transform 900ms cubic-bezier(.22,1,.36,1), filter 900ms cubic-bezier(.22,1,.36,1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
+<div className="lg:col-span-5" data-reveal="" style={{transform: 'translateY(12px)', filter: 'blur(6px)', opacity: '.94', transition: 'transform 900ms cubic-bezier(.22, 1, .36, 1), filter 900ms cubic-bezier(.22, 1, .36, 1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
 <div className="rounded-2xl bg-white/95 backdrop-blur ring-1 ring-white/20 shadow-lg p-6">
 <div className="flex items-center justify-between">
 <div>
@@ -498,7 +540,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:col-span-7" data-reveal="" style={{transform: 'translateY(14px)', filter: 'blur(6px)', opacity: '.94', transition: 'transform 950ms cubic-bezier(.22,1,.36,1), filter 950ms cubic-bezier(.22,1,.36,1), opacity 950ms cubic-bezier(.22,1,.36,1)'}}>
+<div className="lg:col-span-7" data-reveal="" style={{transform: 'translateY(14px)', filter: 'blur(6px)', opacity: '.94', transition: 'transform 950ms cubic-bezier(.22, 1, .36, 1), filter 950ms cubic-bezier(.22, 1, .36, 1), opacity 950ms cubic-bezier(.22,1,.36,1)'}}>
 <h2 className="text-4xl sm:text-5xl lg:text-6xl leading-[1.05] font-semibold text-white tracking-tight font-geist">Let's talk.</h2>
 <p className="text-base sm:text-lg max-w-2xl text-white/80 mt-4 font-geist">Tell us about your travel needs—support, partnerships, or bulk bookings. We reply within one business day.</p>
 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -522,7 +564,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="mt-8" data-reveal="" style={{transform: 'translateY(10px)', filter: 'blur(4px)', opacity: '.96', transition: 'transform 900ms cubic-bezier(.22,1,.36,1), filter 900ms cubic-bezier(.22,1,.36,1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
+<div className="mt-8" data-reveal="" style={{transform: 'translateY(10px)', filter: 'blur(4px)', opacity: '.96', transition: 'transform 900ms cubic-bezier(.22, 1, .36, 1), filter 900ms cubic-bezier(.22, 1, .36, 1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
 <div className="inline-flex items-center gap-3 rounded-2xl bg-white/95 backdrop-blur ring-1 ring-white/20 shadow-lg p-3 hover:shadow-md transition">
 <img alt="Team lead" className="h-12 w-12 rounded-xl object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <div className="min-w-0">
@@ -538,7 +580,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="lg:col-span-12">
-<div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3" data-reveal="" style={{transform: 'translateY(14px)', filter: 'blur(6px)', opacity: '.94', transition: 'transform 950ms cubic-bezier(.22,1,.36,1), filter 950ms cubic-bezier(.22,1,.36,1), opacity 950ms cubic-bezier(.22,1,.36,1)'}}>
+<div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3" data-reveal="" style={{transform: 'translateY(14px)', filter: 'blur(6px)', opacity: '.94', transition: 'transform 950ms cubic-bezier(.22, 1, .36, 1), filter 950ms cubic-bezier(.22, 1, .36, 1), opacity 950ms cubic-bezier(.22,1,.36,1)'}}>
 <img alt="Cityscape" className="rounded-xl ring-1 ring-white/10 hover:ring-white/25 transition" src="https://images.unsplash.com/photo-1531875456634-3f5418280d20?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <img alt="Mountains" className="rounded-xl ring-1 ring-white/10 hover:ring-white/25 transition" src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
 <img alt="Cafe" className="rounded-xl ring-1 ring-white/10 hover:ring-white/25 transition" src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&amp;w=800&amp;auto=format&amp;fit=crop"/>
@@ -552,7 +594,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </section>
 
 <footer className="max-w-7xl mr-auto ml-auto pr-6 pb-12 pl-6">
-<div className="p-12 lg:p-16 border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-2xl" data-reveal="" style={{transform: 'translateY(16px)', filter: 'blur(8px)', opacity: '.92', transition: 'transform 900ms cubic-bezier(.22,1,.36,1), filter 900ms cubic-bezier(.22,1,.36,1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
+<div className="p-12 lg:p-16 border border-white/10 rounded-3xl bg-white/[0.03] backdrop-blur-2xl" data-reveal="" style={{transform: 'translateY(16px)', filter: 'blur(8px)', opacity: '.92', transition: 'transform 900ms cubic-bezier(.22, 1, .36, 1), filter 900ms cubic-bezier(.22, 1, .36, 1), opacity 900ms cubic-bezier(.22,1,.36,1)'}}>
 <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
 <div className="lg:col-span-1">
 <div className="flex items-center mb-6">

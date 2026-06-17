@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -196,13 +232,19 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
 <header className="fixed left-0 right-0 top-0 z-50 px-4 py-4 sm:px-6 lg:px-12">
-<nav className="flex transition-all duration-500 hover:bg-[#1C1917]/90 sm:px-2 bg-[#1C1917]/50 max-w-4xl rounded-full mx-auto px-2 py-2 backdrop-blur-2xl items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3))', -BorderRadiusBefore: '9999px'}}>
+<nav className="flex transition-all duration-500 hover:bg-[#1C1917]/90 sm:px-2 bg-[#1C1917]/50 max-w-4xl rounded-full mx-auto px-2 py-2 backdrop-blur-2xl items-center justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3))', '--border-radius-before': '9999px'}}>
 <a aria-label="Auric home" className="group flex items-center gap-3" href="#hero">
 <span className="flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105">
 <img alt="Auric Logo" className="h-7 w-7" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/user-files/9109ecbb-cdc4-4815-981e-2ea83be13765/f3e95bef-b903-4e6b-8c7e-9c8041ed35c7-logo3-2.svg?v=1775483939804"/>
@@ -242,7 +284,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="absolute inset-0" style={{backgroundImage: 'linear-gradient(to right, rgba(242,240,235,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(242,240,235,0.05) 1px, transparent 1px)', backgroundSize: '4rem 4rem'}}></div>
 </div>
 <div className="relative mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-12 lg:items-end">
-<div className="reveal lg:col-span-8" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal lg:col-span-8" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div className="mb-8 flex flex-wrap items-center gap-3">
 <span className="border-gradient relative rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.16rem] text-[#F2F0EB]/70 backdrop-blur-xl font-geist">
                 Private beta now open
@@ -279,7 +321,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="reveal lg:col-span-4" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '140ms'}}>
+<div className="reveal lg:col-span-4" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '140ms'}}>
 <div className="rounded-3xl border border-[#F2F0EB]/10 bg-[#050505]/45 p-4 backdrop-blur-2xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#050505]/60">
 <div className="rounded-2xl bg-[#1C1917] p-5 text-[#F2F0EB]">
 <div className="flex items-center justify-between">
@@ -360,7 +402,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32 lg:px-12" id="features">
 <div className="mx-auto max-w-7xl">
-<div className="reveal mb-16 grid gap-10 border-b border-[#1C1917]/10 pb-12 lg:grid-cols-12" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal mb-16 grid gap-10 border-b border-[#1C1917]/10 pb-12 lg:grid-cols-12" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div className="lg:col-span-4">
 <p className="text-xs font-medium uppercase tracking-[0.18rem] text-[#A8A29E] font-geist">
                 // Capabilities into outcomes
@@ -374,7 +416,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div className="mb-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F0EB] text-[#1C1917] transition-transform duration-700 group-hover:rotate-12 group-hover:scale-105">
 <iconify-icon aria-hidden="true" className="text-2xl" icon="solar:radar-2-linear"></iconify-icon>
 </div>
@@ -386,7 +428,7 @@ gtag('config', 'G-2M6V79H761');
                 with daily model refreshes.
               </p>
 </article>
-<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
+<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
 <div className="mb-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F0EB] text-[#1C1917] transition-transform duration-700 group-hover:rotate-12 group-hover:scale-105">
 <iconify-icon aria-hidden="true" className="text-2xl" icon="solar:card-transfer-linear"></iconify-icon>
 </div>
@@ -398,7 +440,7 @@ gtag('config', 'G-2M6V79H761');
                 debt payoff rails automatically.
               </p>
 </article>
-<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
+<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
 <div className="mb-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F0EB] text-[#1C1917] transition-transform duration-700 group-hover:rotate-12 group-hover:scale-105">
 <iconify-icon aria-hidden="true" className="text-2xl" icon="solar:lock-keyhole-linear"></iconify-icon>
 </div>
@@ -410,7 +452,7 @@ gtag('config', 'G-2M6V79H761');
                 trails, and anomaly detection.
               </p>
 </article>
-<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '300ms'}}>
+<article className="reveal group rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917]/45 p-6 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/70" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '300ms'}}>
 <div className="mb-10 flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F0EB] text-[#1C1917] transition-transform duration-700 group-hover:rotate-12 group-hover:scale-105">
 <iconify-icon aria-hidden="true" className="text-2xl" icon="solar:chat-round-money-linear"></iconify-icon>
 </div>
@@ -423,7 +465,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </article>
 </div>
-<div className="reveal mt-20 grid gap-6 rounded-[2rem] bg-[#1C1917] p-4 text-[#F2F0EB] md:grid-cols-12 md:p-6" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal mt-20 grid gap-6 rounded-[2rem] bg-[#1C1917] p-4 text-[#F2F0EB] md:grid-cols-12 md:p-6" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div className="overflow-hidden rounded-[1.5rem] md:col-span-5">
 <img alt="Financial analytics workspace" className="h-full min-h-80 w-full object-cover opacity-80 transition-transform duration-1000 hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/823d4d2f-0217-4d66-a400-d1d4c3bc2906_3840w.png"/>
 </div>
@@ -468,7 +510,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="relative overflow-hidden bg-[#0A0A0A] px-4 py-24 sm:px-6 md:py-32 lg:px-12" id="testimonials">
 <div className="mx-auto max-w-7xl">
-<div className="reveal mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div className="">
 <p className="text-xs font-medium uppercase tracking-[0.18rem] text-[#A8A29E] font-geist">
                 // Trusted by disciplined teams
@@ -487,7 +529,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid gap-4 lg:grid-cols-3">
-<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917] p-7 transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/80" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917] p-7 transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/80" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div className="mb-8 flex items-center gap-1 text-[#F2F0EB]">
 <iconify-icon aria-hidden="true" className="text-base" icon="solar:star-linear"></iconify-icon>
 <iconify-icon aria-hidden="true" className="text-base" icon="solar:star-linear"></iconify-icon>
@@ -509,7 +551,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </article>
-<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917] p-7 transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/80 lg:translate-y-10" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
+<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917] p-7 transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/80 lg:translate-y-10" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
 <div className="mb-8 flex items-center gap-1 text-[#F2F0EB]">
 <iconify-icon aria-hidden="true" className="text-base" icon="solar:star-linear"></iconify-icon>
 <iconify-icon aria-hidden="true" className="text-base" icon="solar:star-linear"></iconify-icon>
@@ -531,7 +573,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </article>
-<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917] p-7 transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/80" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
+<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-[#1C1917] p-7 transition-all duration-700 hover:-translate-y-2 hover:bg-[#1C1917]/80" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
 <div className="mb-8 flex items-center gap-1 text-[#F2F0EB]">
 <iconify-icon aria-hidden="true" className="text-base" icon="solar:star-linear"></iconify-icon>
 <iconify-icon aria-hidden="true" className="text-base" icon="solar:star-linear"></iconify-icon>
@@ -558,7 +600,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="relative overflow-hidden bg-[#0A0A0A] px-4 py-24 text-[#F2F0EB] sm:px-6 md:py-32 lg:px-12" id="pricing">
 <div className="relative mx-auto max-w-7xl">
-<div className="reveal mx-auto mb-16 max-w-3xl text-center" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal mx-auto mb-16 max-w-3xl text-center" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <p className="text-xs font-medium uppercase tracking-[0.18rem] text-[#F2F0EB]/45 font-geist">
               // Clear value, no financial fog
             </p>
@@ -567,7 +609,7 @@ gtag('config', 'G-2M6V79H761');
             </h2>
 </div>
 <div className="grid gap-4 lg:grid-cols-3">
-<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-white/5 p-7 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-white/10 dark-glass-gradient" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-white/5 p-7 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-white/10 dark-glass-gradient" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <p className="text-sm font-medium text-white font-geist">Solo</p>
 <p className="mt-4 text-sm leading-relaxed text-[#F2F0EB]/50 font-geist">
                 For founders and independent operators who want calm visibility.
@@ -599,7 +641,7 @@ gtag('config', 'G-2M6V79H761');
                 </li>
 </ul>
 </article>
-<article className="reveal rounded-3xl border border-[#F2F0EB]/25 bg-[#1C1917] p-7 text-[#F2F0EB] transition-all duration-700 hover:-translate-y-2 hover:bg-[#292524]" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
+<article className="reveal rounded-3xl border border-[#F2F0EB]/25 bg-[#1C1917] p-7 text-[#F2F0EB] transition-all duration-700 hover:-translate-y-2 hover:bg-[#292524]" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
 <div className="flex items-center justify-between">
 <p className="text-sm font-medium font-geist">Studio</p>
 <span className="rounded-full bg-[#F2F0EB] px-3 py-1.5 text-xs font-medium uppercase tracking-[0.16rem] text-[#1C1917] font-geist">
@@ -639,7 +681,7 @@ gtag('config', 'G-2M6V79H761');
                 </li>
 </ul>
 </article>
-<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-white/5 p-7 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-white/10 dark-glass-gradient" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
+<article className="reveal rounded-3xl border border-[#F2F0EB]/10 bg-white/5 p-7 backdrop-blur-xl transition-all duration-700 hover:-translate-y-2 hover:bg-white/10 dark-glass-gradient" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
 <p className="text-sm font-medium text-white font-geist">
                 Institution
               </p>
@@ -676,7 +718,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32 lg:px-12" id="contact">
 <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
-<div className="reveal lg:col-span-5" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal lg:col-span-5" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <p className="text-xs font-medium uppercase tracking-[0.18rem] text-[#A8A29E] font-geist">
               // Low-friction inquiry
             </p>
@@ -716,7 +758,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<form className="reveal rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917]/55 p-5 backdrop-blur-xl lg:col-span-7 md:p-8" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '120ms'}}>
+<form className="reveal rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917]/55 p-5 backdrop-blur-xl lg:col-span-7 md:p-8" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '120ms'}}>
 <div className="grid gap-4 sm:grid-cols-2">
 <label className="group block">
 <span className="mb-2 block text-xs font-medium uppercase tracking-[0.16rem] text-[#A8A29E] font-geist">
@@ -770,7 +812,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 <section className="relative overflow-hidden bg-[#0A0A0A] px-4 py-24 sm:px-6 md:py-32 lg:px-12" id="gallery">
 <div className="mx-auto max-w-7xl">
-<div className="reveal mb-16 grid gap-8 lg:grid-cols-12" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal mb-16 grid gap-8 lg:grid-cols-12" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div className="lg:col-span-4">
 <p className="text-xs font-medium uppercase tracking-[0.18rem] text-[#A8A29E] font-geist">
                 // Product imagery
@@ -783,13 +825,13 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="grid gap-4 md:grid-cols-6 md:grid-rows-2">
-<figure className="reveal group overflow-hidden rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917] md:col-span-4 md:row-span-2" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<figure className="reveal group overflow-hidden rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917] md:col-span-4 md:row-span-2" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <img alt="Auric financial dashboard" className="h-full min-h-96 w-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/073c5421-0096-4796-b626-20d7f4ea105e_3840w.png"/>
 </figure>
-<figure className="reveal group overflow-hidden rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917] md:col-span-2" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
+<figure className="reveal group overflow-hidden rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917] md:col-span-2" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '100ms'}}>
 <img alt="Finance controls on desk" className="h-72 w-full object-cover transition-transform duration-1000 group-hover:scale-105 md:h-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/93dd1301-c1d8-45c4-b376-9502e45fe3d3_3840w.png"/>
 </figure>
-<figure className="reveal group overflow-hidden rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917] p-6 text-[#F2F0EB] md:col-span-2" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
+<figure className="reveal group overflow-hidden rounded-[2rem] border border-[#F2F0EB]/10 bg-[#1C1917] p-6 text-[#F2F0EB] md:col-span-2" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)', transitionDelay: '200ms'}}>
 <div className="flex h-full min-h-72 flex-col justify-between">
 <div className="flex items-center justify-between">
 <span className="text-xs font-medium uppercase tracking-[0.18rem] text-[#F2F0EB]/45 font-geist">
@@ -814,7 +856,7 @@ gtag('config', 'G-2M6V79H761');
 </main>
 <footer className="relative z-10 bg-[#050505] px-4 pb-8 pt-24 text-[#F2F0EB] sm:px-6 md:pt-32 lg:px-12">
 <div className="mx-auto max-w-7xl">
-<div className="reveal mb-20 flex flex-col items-start justify-between gap-10 border-b border-[#F2F0EB]/10 pb-16 lg:flex-row lg:items-end" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2,0.6,0.2,1), transform 1.2s cubic-bezier(0.2,0.6,0.2,1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
+<div className="reveal mb-20 flex flex-col items-start justify-between gap-10 border-b border-[#F2F0EB]/10 pb-16 lg:flex-row lg:items-end" style={{opacity: '0', transform: 'translateY(2.5rem)', filter: 'blur(0.75rem)', transition: 'opacity 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.6, 0.2, 1), filter 1.2s cubic-bezier(0.2,0.6,0.2,1)'}}>
 <div>
 <p className="text-xs font-medium uppercase tracking-[0.18rem] text-[#F2F0EB]/40 font-geist">
               // The next close starts now

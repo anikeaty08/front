@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -256,6 +292,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -549,7 +591,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-blue-400">+87 HP</span>
 </div>
 <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-<div className="h-full rounded-full bg-gradient-to-r from-blue-600 to-blue-400 bar-animate" style={{-TargetWidth: '78%', width: '0'}}></div>
+<div className="h-full rounded-full bg-gradient-to-r from-blue-600 to-blue-400 bar-animate" style={{'--target-width': '78%', width: '0'}}></div>
 </div>
 </div>
 <div>
@@ -558,7 +600,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-purple-400">+112 NM</span>
 </div>
 <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-<div className="h-full rounded-full bg-gradient-to-r from-purple-600 to-purple-400 bar-animate" style={{-TargetWidth: '85%', width: '0', animationDelay: '0.2s'}}></div>
+<div className="h-full rounded-full bg-gradient-to-r from-purple-600 to-purple-400 bar-animate" style={{'--target-width': '85%', width: '0', animationDelay: '0.2s'}}></div>
 </div>
 </div>
 <div>
@@ -567,7 +609,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-cyan-400">+45%</span>
 </div>
 <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-<div className="h-full rounded-full bg-gradient-to-r from-cyan-600 to-cyan-400 bar-animate" style={{-TargetWidth: '65%', width: '0', animationDelay: '0.4s'}}></div>
+<div className="h-full rounded-full bg-gradient-to-r from-cyan-600 to-cyan-400 bar-animate" style={{'--target-width': '65%', width: '0', animationDelay: '0.4s'}}></div>
 </div>
 </div>
 </div>

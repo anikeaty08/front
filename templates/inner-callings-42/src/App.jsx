@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -77,7 +113,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             return (
                 <span 
                     className="inline-flex items-center justify-center px-3 py-1 text-[10px] font-semibold tracking-wide-custom uppercase rounded-sm transition-colors"
-                    style={{ backgroundColor: config.color, color: 'white' }}
+                    style={{backgroundColor: config.color, color: 'white'}}
                 >
                     {config.label}
                 </span>
@@ -136,7 +172,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
                                 <div className="text-center mb-8">
                                     <span className="text-xs font-semibold tracking-widest text-[#9C9790] uppercase">Today's Inner Calling</span>
                                 </div>
-                                <div className="bg-white/80 backdrop-blur-sm p-8 md:p-12 shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-sm border-l-[3px]" style={{ borderColor: '#8B7355' }}>
+                                <div className="bg-white/80 backdrop-blur-sm p-8 md:p-12 shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-sm border-l-[3px]" style={{borderColor: '#8B7355'}}>
                                     <div className="flex flex-col gap-6">
                                         <div className="flex justify-between items-start">
                                             <TonePill tone={featured.tone} />
@@ -546,6 +582,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

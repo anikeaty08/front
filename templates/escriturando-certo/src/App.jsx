@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -184,6 +220,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -521,7 +563,7 @@ addUtilities({
                 Entrega física em todo o Brasil
             </li>
 </ul>
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', -BorderRadiusBefore: '8px'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', '--border-radius-before': '8px'}}>
 <div className="group-hover:translate-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full" style={{}}></div>
 <span className="flex items-center gap-2 relative" onclick="window.location.href='https://escriturandocerto.hotmart.host/vade-mecum-enac-2-2025-produto-fisico-d52fe2f5-d8e2-4f08-8398-9d86f22e3d9d?_hi=eyJjaWQiOiIxNzYzNzUxOTcyNDI4Mzg3MjA3NTg4Mzc2NjIzMzAwIiwiYmlkIjoiMTc2Mzc1MTk3MjQyODM4NzIwNzU4ODM3NjYyMzMwMCIsInNpZCI6IjI3NDIzZDMxZGIyYjQ1ZDNiNWYwMTVlODQ0ODQ2NTlkIn0=.1764186783401'" role="button">Compre Agora</span>
 </button>
@@ -548,7 +590,7 @@ addUtilities({
                                 Ideal para etapa objetiva
                             </li>
 </ul>
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', -BorderRadiusBefore: '8px'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', '--border-radius-before': '8px'}}>
 <div className="group-hover:translate-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full" style={{}}></div>
 <span className="flex items-center gap-2 relative" onclick="window.location.href='https://hotmart.com/pt-br/marketplace/produtos/vade-mecum-cartorios-leis-estaduais-roraima-17x25/L101211672I?_hi=eyJjaWQiOiIxNzYzNzUxOTcyNDI4Mzg3MjA3NTg4Mzc2NjIzMzAwIiwiYmlkIjoiMTc2Mzc1MTk3MjQyODM4NzIwNzU4ODM3NjYyMzMwMCIsInNpZCI6IjI3NDIzZDMxZGIyYjQ1ZDNiNWYwMTVlODQ0ODQ2NTlkIn0=.1764187050470'" role="button">Compre Agora</span>
 </button>
@@ -1030,11 +1072,11 @@ addUtilities({
 <h2 className="md:text-5xl bg-clip-text text-4xl font-semibold text-transparent tracking-tight font-geist bg-gradient-to-br from-yellow-400 to-yellow-600 mb-6">O ENAC não é competitivo. Sua preparação também deve ser.</h2>
 <p className="text-lg font-black text-slate-50 mb-10">Garanta agora o material certo para estudar com clareza, confiança e estratégia.</p>
 <div className="flex flex-col sm:flex-row justify-center gap-4">
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', -BorderRadiusBefore: '8px'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', '--border-radius-before': '8px'}}>
 <div className="group-hover:translate-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full cursor-pointer" onclick="window.location.href='https://escriturandocerto.hotmart.host/vade-mecum-enac-2-2025-produto-fisico-d52fe2f5-d8e2-4f08-8398-9d86f22e3d9d?_hi=eyJjaWQiOiIxNzYzNzUxOTcyNDI4Mzg3MjA3NTg4Mzc2NjIzMzAwIiwiYmlkIjoiMTc2Mzc1MTk3MjQyODM4NzIwNzU4ODM3NjYyMzMwMCIsInNpZCI6IjI3NDIzZDMxZGIyYjQ1ZDNiNWYwMTVlODQ0ODQ2NTlkIn0=.1764186783401'" role="button" style={{}}></div>
 <span className="flex items-center gap-2 relative">VADE MECUM CARTÓRIO ENAC</span>
 </button>
-<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', -BorderRadiusBefore: '8px'}}>
+<button className="group shadow-orange-500/30 hover:shadow-orange-500/60 transition-all duration-300 overflow-hidden hover:bg-orange-600 font-medium text-white bg-orange-500 rounded-lg pt-4 pr-8 pb-4 pl-8 relative shadow-lg" style={{boxShadow: 'rgba(234, 88, 12, 0.85) 0px 18px 40px -15px, rgba(255, 247, 237, 0.9) 0px 2px 4px inset', borderRadius: '0.5rem', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.5))', '--border-radius-before': '8px'}}>
 <div className="group-hover:translate-y-0 group-hover:opacity-0 transition-all duration-300 bg-white/10 absolute top-0 right-0 bottom-0 left-0 translate-y-full" style={{}}></div>
 <span className="flex items-center gap-2 relative">VADE MECUM CARTÓRIOS LEIS ESTADUAIS RORAIMA</span>
 </button>

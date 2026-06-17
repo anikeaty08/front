@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -180,6 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -262,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div className="group-hover:translate-y-0 transition-transform duration-300 bg-white/20 absolute top-0 right-0 bottom-0 left-0 translate-y-full" style={{}}></div>
 <span className="flex items-center gap-2 relative">Start building<svg className="lucide lucide-send w-4 h-4" data-lucide="send" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path className="" d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path className="" d="m21.854 2.147-10.94 10.939"></path></svg></span>
 </button>
-<button className="hover:bg-slate-800 hover:text-slate- transition-all flex text-sm font-medium text-slate-600 bg-gradient-to-b from-black/10 via-black/20 to-black/10 from-white/80 via-black/40 to-white/80 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] gap-x-2 gap-y-2 items-center reveal-on-scroll is-visible" style={{boxShadow: 'rgba(31, 41, 55, 0.25) 0px 18px 35px, rgba(209, 213, 219, 0.3) 0px 0px 0px 1px', color: 'rgb(229, 231, 235)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', -BorderRadiusBefore: '9999px'}}>
+<button className="hover:bg-slate-800 hover:text-slate- transition-all flex text-sm font-medium text-slate-600 bg-gradient-to-b from-black/10 via-black/20 to-black/10 from-white/80 via-black/40 to-white/80 rounded-full pt-3 pr-6 pb-3 pl-6 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.06),0px_3px_3px_-1.5px_rgba(0,0,0,0.06),_0px_6px_6px_-3px_rgba(0,0,0,0.06),0px_12px_12px_-6px_rgba(0,0,0,0.06),0px_24px_24px_-12px_rgba(0,0,0,0.06)] gap-x-2 gap-y-2 items-center reveal-on-scroll is-visible" style={{boxShadow: 'rgba(31, 41, 55, 0.25) 0px 18px 35px, rgba(209, 213, 219, 0.3) 0px 0px 0px 1px', color: 'rgb(229, 231, 235)', position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8))', '--border-radius-before': '9999px'}}>
 <span className="text-sm font-medium text-slate-50 tracking-tight" style={{}}>Nexus AI for GitHub</span><svg className="" data-icon-replaced="true" data-icon-set="lucide" data-lucide="arrow-right" fill="none" height="16" stroke="#666" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 <style id="border-gradient-shared-style">
   [style*="--border-gradient"]::before {
@@ -497,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="group flex flex-col overflow-hidden hover:border-white/10 transition-colors bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[480px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:border-white/10 transition-colors bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[480px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 
 <div className="flex-1 flex relative items-center justify-center" style={{}}>
@@ -519,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:border-white/10 transition-colors bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[480px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:border-white/10 transition-colors bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[480px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 
 <div className="relative flex-1 flex items-center justify-center">
@@ -552,7 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:border-white/10 transition-colors bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[480px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:border-white/10 transition-colors bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[480px] rounded-3xl pt-8 pr-8 pb-8 pl-8 relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 
 <div className="relative flex-1 flex items-center justify-center">
@@ -616,10 +658,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.05)] bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] z-10 rounded-3xl relative justify-between reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.05)] bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] z-10 rounded-3xl relative justify-between reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 <div className="z-10 pt-8 pr-8 pl-8 relative perspective-distant">
-<div className="overflow-hidden transform transition-all duration-500 ease-out group-hover:-translate-y-3 group-hover:rotate-x-2 group-hover:scale-[1.02] bg-gradient-to-b from-white/10 to-white/0 w-full rounded-xl shadow-2xl translate-y-2 group-hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px', maskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)'}}>
+<div className="overflow-hidden transform transition-all duration-500 ease-out group-hover:-translate-y-3 group-hover:rotate-x-2 group-hover:scale-[1.02] bg-gradient-to-b from-white/10 to-white/0 w-full rounded-xl shadow-2xl translate-y-2 group-hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)]" style={{position: 'relative', '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px', maskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)'}}>
 
 <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/5" style={{}}>
 <div className="flex space-x-2 group/traffic">
@@ -657,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] rounded-3xl relative justify-end reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] rounded-3xl relative justify-end reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-slate-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" style={{}}></div>
 
 <div className="flex group-hover:opacity-100 transition-opacity duration-700 overflow-hidden opacity-60 w-full h-3/4 absolute top-0 left-0 items-center justify-center">
@@ -705,10 +747,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] rounded-3xl relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] rounded-3xl relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 <div className="flex-1 flex pt-8 pr-8 pl-8 relative items-center justify-center">
-<div className="glass-panel bg-gradient-to-b from-white/10 to-white/0 w-full max-w-md rounded-2xl px-6 py-6 shadow-2xl transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px', maskImage: 'linear-gradient(90deg, transparent, black 0%, black 75%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 75%, transparent)'}}>
+<div className="glass-panel bg-gradient-to-b from-white/10 to-white/0 w-full max-w-md rounded-2xl px-6 py-6 shadow-2xl transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-2" style={{position: 'relative', '--border-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '16px', maskImage: 'linear-gradient(90deg, transparent, black 0%, black 75%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 75%, transparent)'}}>
 <div className="flex items-center justify-between mb-8">
 <div className="">
 <p className="text-xs font-mono text-slate-500 mb-1 reveal-on-scroll" style={{}}>Deployment health</p>
@@ -769,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] z-10 rounded-3xl relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="group flex flex-col overflow-hidden hover:border-white/20 transition-all duration-500 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 h-[32rem] z-10 rounded-3xl relative reveal-on-scroll" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 <div className="flex-1 overflow-hidden relative perspective-midrange">
 
@@ -777,7 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="-translate-x-1/2 transition-all duration-700 ease-out group-hover:translate-y-4 group-hover:scale-95 group-hover:-rotate-2 group-hover:opacity-80 bg-slate-50/10 opacity-70 w-3/4 h-48 z-20 border-white/10 border rounded-xl absolute top-20 left-1/2 shadow-2xl backdrop-blur scale-95" style={{}}></div><div className="-translate-x-1/2 transition-all duration-700 ease-out group-hover:translate-y-4 group-hover:scale-95 group-hover:-rotate-2 group-hover:opacity-80 bg-slate-50/10 opacity-70 w-2/3 h-48 border-white/10 border rounded-xl absolute top-16 left-1/2 shadow-2xl scale-95" style={{}}></div>
 
-<div className="glass-panel z-20 -translate-x-1/2 transition-all duration-700 ease-out group-hover:-translate-y-2 group-hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] bg-gradient-to-b from-white/20 to-white/0 w-3/4 h-52 rounded-xl pt-5 pr-5 pb-8 pl-5 absolute top-28 left-1/2 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="glass-panel z-20 -translate-x-1/2 transition-all duration-700 ease-out group-hover:-translate-y-2 group-hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] bg-gradient-to-b from-white/20 to-white/0 w-3/4 h-52 rounded-xl pt-5 pr-5 pb-8 pl-5 absolute top-28 left-1/2 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 
 <div className="flex items-center gap-4 mb-4">
 <div className="w-10 h-10 rounded-full bg-slate-50/10 opacity-80 transition-colors duration-500 flex items-center justify-center group-hover:bg-amber-500/10 group-hover:text-amber-400" style={{}}>
@@ -905,7 +947,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Streamline your product development workflows with AI assistance for routine, manual tasks and triage.
             </p>
 
-<div className="overflow-hidden min-h-[400px] flex flex-col hover:border-white/20 transition-all duration-500 ease-out group/card hover:shadow-2xl hover:-translate-y-1 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 rounded-3xl relative hover:shadow-amber-500/10" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="overflow-hidden min-h-[400px] flex flex-col hover:border-white/20 transition-all duration-500 ease-out group/card hover:shadow-2xl hover:-translate-y-1 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 rounded-3xl relative hover:shadow-amber-500/10" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 <div className="absolute top-0 right-0 w-[300px] h-[300px] blur-[80px] rounded-full pointer-events-none transition-all duration-700 group-hover/card:blur-[100px] group-hover/card:scale-110 bg-amber-500/5 group-hover/card:bg-amber-500/10" style={{}}></div>
 <div className="p-8 relative z-10 flex flex-col h-full">
@@ -956,7 +998,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Connect Nexus to your favorite tools including Cursor, Claude, and ChatGPT for seamless context sharing.
             </p>
 
-<div className="overflow-hidden min-h-[400px] flex flex-col hover:border-white/20 transition-all duration-500 ease-out group/card hover:shadow-2xl hover:-translate-y-1 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 z-10 rounded-3xl relative hover:shadow-amber-500/10" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+<div className="overflow-hidden min-h-[400px] flex flex-col hover:border-white/20 transition-all duration-500 ease-out group/card hover:shadow-2xl hover:-translate-y-1 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 z-10 rounded-3xl relative hover:shadow-amber-500/10" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 
 <div className="absolute bottom-0 left-0 w-[300px] h-[300px] blur-[80px] rounded-full pointer-events-none transition-all duration-700 group-hover/card:blur-[100px] group-hover/card:scale-110 bg-amber-500/5 group-hover/card:bg-amber-500/10" style={{}}></div>
 <div className="z-10 flex flex-col h-full pt-8 pr-8 pb-8 pl-8 relative">
@@ -1004,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 </div>
-</section><section className="sm:p-8 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 w-full max-w-7xl rounded-3xl mt-24 mr-auto ml-auto pt-6 pr-6 pb-6 pl-6 relative backdrop-blur" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '24px'}}>
+</section><section className="sm:p-8 bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-white/10 to-white/0 w-full max-w-7xl rounded-3xl mt-24 mr-auto ml-auto pt-6 pr-6 pb-6 pl-6 relative backdrop-blur" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))', '--border-radius-before': '24px'}}>
 <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 sm:gap-10">
 
 <div className="lg:col-span-6">

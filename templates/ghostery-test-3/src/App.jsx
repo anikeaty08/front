@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -158,6 +194,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -450,7 +492,7 @@ addUtilities({
 <span className="font-manrope" style={{}}>Tracker Protection</span>
 </div>
 
-<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors overflow-hidden" style={{-MouseX: '152px', -MouseY: '142px'}}>
+<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors overflow-hidden" style={{'--mouse-x': '152px', '--mouse-y': '142px'}}>
 <div className="p-4 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
 <h3 className="text-slate-200 text-sm font-manrope" style={{}}>Blocked Items</h3>
 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
@@ -494,7 +536,7 @@ addUtilities({
 <span className="font-manrope" style={{}}>Ad Blocker</span>
 </div>
 
-<div className="flashlight-card bg-[#11131A] border border-indigo-500/20 rounded-xl p-0 shadow-2xl hover:border-indigo-500/30 transition-all duration-300" style={{-MouseX: '161.671875px', -MouseY: '142px'}}>
+<div className="flashlight-card bg-[#11131A] border border-indigo-500/20 rounded-xl p-0 shadow-2xl hover:border-indigo-500/30 transition-all duration-300" style={{'--mouse-x': '161.671875px', '--mouse-y': '142px'}}>
 <div className="p-4 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
 <div className="flex items-center gap-3">
 <span className="text-white text-sm tracking-tight font-manrope" style={{}}>wired.com</span>
@@ -551,7 +593,7 @@ addUtilities({
 <span className="font-manrope" style={{}}>Privacy Impact</span>
 </div>
 
-<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors" style={{-MouseX: '175.34375px', -MouseY: '149px'}}>
+<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors" style={{'--mouse-x': '175.34375px', '--mouse-y': '149px'}}>
 <div className="p-4 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
 <div className="flex items-center gap-3">
 <span className="text-white text-sm font-manrope" style={{}}>Never-Consent</span>
@@ -572,7 +614,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors opacity-80 hover:opacity-100" style={{-MouseX: '28.34375px', -MouseY: '26px'}}>
+<div className="flashlight-card bg-[#11131A] border border-white/5 rounded-xl p-0 shadow-lg hover:border-white/10 transition-colors opacity-80 hover:opacity-100" style={{'--mouse-x': '28.34375px', '--mouse-y': '26px'}}>
 <div className="p-3 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
 <div className="flex items-center gap-3">
 <span className="text-white text-sm font-manrope" style={{}}>WhoTracks.me</span>

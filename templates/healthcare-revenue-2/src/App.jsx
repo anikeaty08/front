@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1642,6 +1678,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -2060,15 +2102,15 @@ gtag('config', 'G-2M6V79H761');
 <section className="md:py-20 pt-10 pb-10" id="calculator">
 <div className="max-w-[1000px] mx-auto px-4 sm:px-6">
 <div className="text-center mb-10 md:mb-12 px-2">
-<h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-extrabold text-navy mb-3 tracking-tight leading-tight" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Calculate Your Exact Revenue Leak</h2>
-<p className="text-[15px] md:text-[18px] text-sub font-medium max-w-2xl mx-auto" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-extrabold text-navy mb-3 tracking-tight leading-tight" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Calculate Your Exact Revenue Leak</h2>
+<p className="text-[15px] md:text-[18px] text-sub font-medium max-w-2xl mx-auto" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <span className="text-primary" style={{color: '#0EA5E9'}}>(Net Profit &amp; Capacity Adjusted)</span>
 </p>
 </div>
-<div className="glass-card bg-white p-5 sm:p-8 md:p-10 rounded-[20px] md:rounded-[24px] border border-white/60 relative overflow-hidden" style={{boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05),0 8px 10px -6px rgba(0,0,0,0.01)'}}>
+<div className="glass-card bg-white p-5 sm:p-8 md:p-10 rounded-[20px] md:rounded-[24px] border border-white/60 relative overflow-hidden" style={{boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0,0,0,0.01)'}}>
 <div className="flex justify-center mb-8 md:mb-10">
 <div className="" style={{background: '#F1F5F9', padding: '5px', borderRadius: '12px', display: 'inline-flex', border: '1px solid #E2E8F0', width: '100%', maxWidth: '340px'}}>
-<button className="px-6 md:px-8 py-2.5 rounded-lg text-[14px] font-bold text-slate-900 bg-white shadow-sm ring-1 ring-slate-200 transition-all" id="btn-aesthetics" style={{flex: '1', padding: '10px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', background: '#ffffff', color: '#0B1120', boxShadow: '0 1px 3px rgba(0,0,0,0.12)', transition: 'all 0.2s', whiteSpace: 'nowrap', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">Aesthetics Clinic</button>
+<button className="px-6 md:px-8 py-2.5 rounded-lg text-[14px] font-bold text-slate-900 bg-white shadow-sm ring-1 ring-slate-200 transition-all" id="btn-aesthetics" style={{flex: '1', padding: '10px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', background: '#ffffff', color: '#0B1120', boxShadow: '0 1px 3px rgba(0,0,0,0.12)', transition: 'all 0.2s', whiteSpace: 'nowrap', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">Aesthetics Clinic</button>
 <button className="px-6 md:px-8 py-2.5 rounded-lg text-[14px] font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-all" id="btn-dental" style={{flex: '1 1 0%', padding: '10px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', border: 'none', cursor: 'pointer', background: 'transparent', color: 'rgb(100, 116, 139)', transition: '0.2s', whiteSpace: 'nowrap', fontFamily: 'Inter, "Helvetica Neue", sans-serif', boxShadow: 'none'}} type="button">Dental Practice</button>
 </div>
 </div>
@@ -2076,73 +2118,73 @@ gtag('config', 'G-2M6V79H761');
 <div className="space-y-7">
 <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
 <iconify-icon className="text-primary text-lg" icon="ph:funnel-bold" style={{color: '#0EA5E9'}}></iconify-icon>
-<h3 className="text-[12px] font-bold uppercase text-sub tracking-widest" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Funnel Inputs</h3>
+<h3 className="text-[12px] font-bold uppercase text-sub tracking-widest" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Funnel Inputs</h3>
 </div>
 <div className="">
-<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Monthly Enquiries (New Leads)</label>
-<input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-enquiries" min="1" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif', boxShadow: '0 0 0 3px rgba(14,165,233,0.15)'}} type="number" value="160"/>
+<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Monthly Enquiries (New Leads)</label>
+<input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-enquiries" min="1" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif', boxShadow: '0 0 0 3px rgba(14,165,233,0.15)'}} type="number" value="160"/>
 </div>
 <div className="">
 <div className="flex justify-between mb-3 items-end">
-<label className="block text-[14px] font-semibold" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Conversion Rate</label>
-<span className="text-[22px] font-bold" id="display-rate" style={{color: '#0EA5E9', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>25%</span>
+<label className="block text-[14px] font-semibold" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Conversion Rate</label>
+<span className="text-[22px] font-bold" id="display-rate" style={{color: '#0EA5E9', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>25%</span>
 </div>
 <input className="w-full mb-3" id="input-rate" max="99" min="1" type="range" value="25"/>
 <div className="flex items-start justify-between flex-wrap gap-2">
 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-colors duration-300 bg-orange-50 text-orange-600 border-orange-100" id="benchmark-badge">
 <iconify-icon className="text-sm" icon="ph:trophy-bold"></iconify-icon>
-<span className="text-[11px] font-bold" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Below Average</span>
+<span className="text-[11px] font-bold" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Below Average</span>
 </div>
-<span className="text-[11px] text-slate-400 font-medium mt-1.5" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Based on segment data</span>
+<span className="text-[11px] text-slate-400 font-medium mt-1.5" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Based on segment data</span>
 </div>
 </div>
 <div className="">
-<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Avg. Treatment Value</label>
+<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Avg. Treatment Value</label>
 <div className="relative">
-<span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-[15px]" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>£</span>
-<input className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-value" min="1" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="number" value="1500"/>
+<span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-[15px]" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>£</span>
+<input className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-value" min="1" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="number" value="1500"/>
 </div>
 </div>
 </div>
 <div className="space-y-7">
 <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
 <iconify-icon className="text-primary text-lg" icon="ph:scales-bold" style={{color: '#0EA5E9'}}></iconify-icon>
-<h3 className="text-[12px] font-bold uppercase text-sub tracking-widest" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Economic Constraints</h3>
+<h3 className="text-[12px] font-bold uppercase text-sub tracking-widest" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Economic Constraints</h3>
 </div>
 <div className="">
 <label className="flex justify-between items-center mb-2 flex-wrap gap-1">
-<span className="text-[14px] font-semibold" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Profit Margin (Contribution)</span>
-<span className="text-[11px] font-medium text-slate-400 italic" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Net after COGS/Ads</span>
+<span className="text-[14px] font-semibold" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Profit Margin (Contribution)</span>
+<span className="text-[11px] font-medium text-slate-400 italic" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Net after COGS/Ads</span>
 </label>
 <div className="relative">
-<input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-margin" max="99" min="1" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="number" value="30"/>
-<span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>%</span>
+<input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-margin" max="99" min="1" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="number" value="30"/>
+<span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>%</span>
 </div>
 </div>
 <div className="">
-<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Spare Capacity (Slots/Month)</label>
-<input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-capacity" min="0" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="number" value="25"/>
-<p className="text-[11px] text-slate-400 mt-2" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Maximum additional patients you can handle.</p>
+<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Spare Capacity (Slots/Month)</label>
+<input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-[16px] font-bold focus:outline-none transition-all" id="input-capacity" min="0" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="number" value="25"/>
+<p className="text-[11px] text-slate-400 mt-2" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Maximum additional patients you can handle.</p>
 </div>
 <div className="">
-<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Recovery Potential</label>
+<label className="block text-[14px] font-semibold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Recovery Potential</label>
 <div className="" style={{background: '#F1F5F9', borderRadius: '8px', padding: '4px', display: 'flex', gap: '2px'}}>
-<button className="recovery-btn" data-val="0.2" style={{flex: '1', padding: '10px 4px', borderRadius: '6px', fontSize: '12px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#64748B', textAlign: 'center', lineHeight: '1.4', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">
+<button className="recovery-btn" data-val="0.2" style={{flex: '1', padding: '10px 4px', borderRadius: '6px', fontSize: '12px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#64748B', textAlign: 'center', lineHeight: '1.4', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">
 <br/>
 <span style={{fontSize: '10px', opacity: '0.7'}}>20%</span>
 </button>
-<button className="recovery-btn is-active" data-val="0.35" style={{flex: '1', padding: '10px 4px', borderRadius: '6px', fontSize: '12px', border: 'none', cursor: 'pointer', background: '#0B1120', color: '#ffffff', fontWeight: '700', textAlign: 'center', lineHeight: '1.4', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">
+<button className="recovery-btn is-active" data-val="0.35" style={{flex: '1', padding: '10px 4px', borderRadius: '6px', fontSize: '12px', border: 'none', cursor: 'pointer', background: '#0B1120', color: '#ffffff', fontWeight: '700', textAlign: 'center', lineHeight: '1.4', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">
 <br/>
 <span style={{fontSize: '10px', opacity: '0.7'}}>35%</span>
 </button>
-<button className="recovery-btn" data-val="0.5" style={{flex: '1', padding: '10px 4px', borderRadius: '6px', fontSize: '12px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#64748B', textAlign: 'center', lineHeight: '1.4', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">
+<button className="recovery-btn" data-val="0.5" style={{flex: '1', padding: '10px 4px', borderRadius: '6px', fontSize: '12px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#64748B', textAlign: 'center', lineHeight: '1.4', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">
 <br/>
 <span style={{fontSize: '10px', opacity: '0.7'}}>50%</span>
 </button>
 </div>
 </div>
 <div className="pt-1">
-<button className="" id="btn-calculate" style={{width: '100%', padding: '16px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '16px', fontWeight: '700', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s', minHeight: '54px', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">
+<button className="" id="btn-calculate" style={{width: '100%', padding: '16px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '16px', fontWeight: '700', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s', minHeight: '54px', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">
 <iconify-icon icon="ph:arrow-right-bold"></iconify-icon>
 </button>
 </div>
@@ -2151,20 +2193,20 @@ gtag('config', 'G-2M6V79H761');
 <div className="mt-10 md:mt-12 transition-all duration-700 ease-out overflow-hidden border-t border-slate-100 pt-8 md:pt-10 opacity-0 pointer-events-none" id="results-panel" style={{pointerEvents: 'none', maxHeight: '0px', overflow: 'hidden'}}>
 <div className="flex justify-center mb-8 md:mb-10">
 <div className="bg-white p-1 rounded-full inline-flex items-center cursor-pointer select-none border border-slate-200 shadow-sm" id="toggle-wrapper">
-<span className="px-4 sm:px-5 py-2 rounded-full text-[12px] sm:text-[13px] font-semibold text-sub transition-all" id="label-gross" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Gross Revenue</span>
+<span className="px-4 sm:px-5 py-2 rounded-full text-[12px] sm:text-[13px] font-semibold text-sub transition-all" id="label-gross" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Gross Revenue</span>
 <div className="w-12 sm:w-14 h-7 bg-slate-200 rounded-full mx-1 relative transition-colors duration-300 flex-shrink-0" id="toggle-track">
 <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow-md transition-all duration-300 transform" id="toggle-knob"></div>
 </div>
-<span className="px-4 sm:px-5 py-2 rounded-full text-[12px] sm:text-[13px] font-bold bg-slate-50 shadow-inner transition-all" id="label-net" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Net Profit (Realizable)</span>
+<span className="px-4 sm:px-5 py-2 rounded-full text-[12px] sm:text-[13px] font-bold bg-slate-50 shadow-inner transition-all" id="label-net" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Net Profit (Realizable)</span>
 </div>
 </div>
 <div className="mb-8" id="quiz-section">
 <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" id="quiz-prompt">
 <div>
-<h4 className="text-[15px] font-bold mb-1" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Refine your diagnosis?</h4>
-<p className="text-[13px]" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Answer 3 quick questions to personalise your Leak Map.</p>
+<h4 className="text-[15px] font-bold mb-1" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Refine your diagnosis?</h4>
+<p className="text-[13px]" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Answer 3 quick questions to personalise your Leak Map.</p>
 </div>
-<button className="px-4 py-2.5 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors shadow-sm whitespace-nowrap self-start sm:self-auto" id="btn-start-quiz" style={{color: '#0EA5E9', fontSize: '13px', fontWeight: '700', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">Start 30s Diagnostic</button>
+<button className="px-4 py-2.5 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors shadow-sm whitespace-nowrap self-start sm:self-auto" id="btn-start-quiz" style={{color: '#0EA5E9', fontSize: '13px', fontWeight: '700', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">Start 30s Diagnostic</button>
 </div>
 <div className="hidden bg-white border border-slate-200 rounded-xl p-5 sm:p-6 relative mt-2" id="quiz-panel">
 <button className="absolute top-4 right-4 text-slate-300 hover:text-navy transition-colors p-1" id="btn-quiz-close" type="button">
@@ -2175,8 +2217,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm mb-6">
 <div className="mb-6">
-<h3 className="text-[18px] font-bold mb-1" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Your Leak Map</h3>
-<p className="text-[14px] mt-1 leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<h3 className="text-[18px] font-bold mb-1" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Your Leak Map</h3>
+<p className="text-[14px] mt-1 leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <span className="italic text-slate-400" id="leak-source">Based on industry heuristics.</span>
 </p>
 </div>
@@ -2188,25 +2230,25 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
 <div className="relative pl-5 border-l-[3px] border-emerald-100 hover:border-emerald-300 transition-colors group">
 <div className="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-white"></div>
-<div className="text-[14px] font-bold mb-1 group-hover:text-emerald-700 transition-colors" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Qualification &amp; Fit</div>
-<div className="text-[17px] font-bold text-emerald-600 mb-2 tracking-tight" id="val-q" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>£11,250 / month</div>
-<p className="text-[13px] leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Enquiries that never become viable opportunities.</p>
+<div className="text-[14px] font-bold mb-1 group-hover:text-emerald-700 transition-colors" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Qualification &amp; Fit</div>
+<div className="text-[17px] font-bold text-emerald-600 mb-2 tracking-tight" id="val-q" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>£11,250 / month</div>
+<p className="text-[13px] leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Enquiries that never become viable opportunities.</p>
 </div>
 <div className="relative pl-5 border-l-[3px] border-teal-100 hover:border-teal-300 transition-colors group">
 <div className="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-teal-500 ring-4 ring-white"></div>
-<div className="text-[14px] font-bold mb-1 group-hover:text-teal-700 transition-colors" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Engagement &amp; Follow-up</div>
-<div className="text-[17px] font-bold text-teal-600 mb-2 tracking-tight" id="val-e" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>£16,875 / month</div>
-<p className="text-[13px] leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Leak caused by slow response and inconsistent follow-up.</p>
+<div className="text-[14px] font-bold mb-1 group-hover:text-teal-700 transition-colors" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Engagement &amp; Follow-up</div>
+<div className="text-[17px] font-bold text-teal-600 mb-2 tracking-tight" id="val-e" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>£16,875 / month</div>
+<p className="text-[13px] leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Leak caused by slow response and inconsistent follow-up.</p>
 </div>
 <div className="relative pl-5 border-l-[3px] border-orange-100 hover:border-orange-300 transition-colors group">
 <div className="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-orange-500 ring-4 ring-white"></div>
-<div className="text-[14px] font-bold mb-1 group-hover:text-orange-700 transition-colors" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>No-shows &amp; Drop-off</div>
-<div className="text-[17px] font-bold text-orange-600 mb-2 tracking-tight" id="val-n" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>£9,375 / month</div>
-<p className="text-[13px] leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Leak caused by appointment drop-off and missed confirmations.</p>
+<div className="text-[14px] font-bold mb-1 group-hover:text-orange-700 transition-colors" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>No-shows &amp; Drop-off</div>
+<div className="text-[17px] font-bold text-orange-600 mb-2 tracking-tight" id="val-n" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>£9,375 / month</div>
+<p className="text-[13px] leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Leak caused by appointment drop-off and missed confirmations.</p>
 </div>
 </div>
 <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-<div className="text-[14px]" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<div className="text-[14px]" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <span className="text-[16px] font-bold" id="result-recoverable-inline" style={{color: '#0B1120'}}>~£37,500/month</span>
 </div>
 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-50 text-red-600 text-[11px] font-bold rounded-full border border-red-100" id="capacity-warning">
@@ -2216,14 +2258,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm mb-6">
 <div className="mb-5">
-<h3 className="text-[18px] font-bold" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Your Fastest Wins</h3>
-<p className="text-[14px] mt-1" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<h3 className="text-[18px] font-bold" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Your Fastest Wins</h3>
+<p className="text-[14px] mt-1" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <span className="font-semibold" style={{color: '#0B1120'}}>biggest leakage points</span>
 </p>
 </div>
 <div className="grid gap-4" id="wins-container"><div className="bg-white p-5 rounded-xl border-l-[4px] border-teal-500 shadow-sm hover:shadow-md transition-all"><div className="flex justify-between items-start mb-1"><div className="text-[14px] font-bold text-slate-900" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', Arial, sans-serif'}}>Speed-to-lead + follow-up sequence<span className="block text-[11px] font-normal text-slate-600 mt-0.5">Recover up to <span className="font-bold text-slate-900">£16,875/mo</span></span></div><span className="bg-slate-900 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wide" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', Arial, sans-serif'}}>High Impact</span></div><div className="text-[13px] text-slate-600 mb-3 leading-relaxed mt-2" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', Arial, sans-serif'}}>Automate the first-touch + structured follow-up so enquiries don't go cold.</div><div className="flex items-center gap-2"><iconify-icon className="text-emerald-500 text-sm" icon="ph:check-circle-fill"></iconify-icon><span className="text-[12px] font-semibold text-slate-900" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', Arial, sans-serif'}}>Fixes Engagement Leak</span></div></div><div className="bg-white p-5 rounded-xl border-l-[4px] border-emerald-500 shadow-sm hover:shadow-md transition-all"><div className="flex justify-between items-start mb-1"><div className="text-[14px] font-bold text-slate-900" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', Arial, sans-serif'}}>Pre-qualification + message clarity<span className="block text-[11px] font-normal text-slate-600 mt-0.5">Recover up to <span className="font-bold text-slate-900">£11,250/mo</span></span></div></div><div className="text-[13px] text-slate-600 mb-3 leading-relaxed mt-2" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', Arial, sans-serif'}}>Filter and route enquiries to the right pathway to stop wasting time on low-fit leads.</div><div className="flex items-center gap-2"><iconify-icon className="text-emerald-500 text-sm" icon="ph:check-circle-fill"></iconify-icon><span className="text-[12px] font-semibold text-slate-900" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', Arial, sans-serif'}}>Fixes Qualification Leak</span></div></div></div>
 </div>
-<button className="" id="btn-get-report" style={{width: '100%', padding: '17px', borderRadius: '12px', background: '#059669', color: '#ffffff', fontSize: '16px', fontWeight: '700', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s', minHeight: '56px', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">
+<button className="" id="btn-get-report" style={{width: '100%', padding: '17px', borderRadius: '12px', background: '#059669', color: '#ffffff', fontSize: '16px', fontWeight: '700', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s', minHeight: '56px', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">
 <iconify-icon className="" icon="ph:arrow-right-bold"></iconify-icon>
 </button>
 </div>
@@ -2234,45 +2276,45 @@ gtag('config', 'G-2M6V79H761');
 <div className="" id="pcp-modal-content">
 <div className="" id="pcp-state-form">
 <div className="mb-6">
-<h3 className="text-[20px] sm:text-[22px] font-extrabold mb-1" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Get your personalised leak report</h3>
-<p className="text-[14px]" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>We'll email your full breakdown — no pitch, just the numbers.</p>
+<h3 className="text-[20px] sm:text-[22px] font-extrabold mb-1" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Get your personalised leak report</h3>
+<p className="text-[14px]" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>We'll email your full breakdown — no pitch, just the numbers.</p>
 </div>
 <div className="space-y-4">
 <div className="">
-<label className="text-[13px] block font-bold mb-1.5" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<label className="text-[13px] block font-bold mb-1.5" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <span className="text-red-500">Email *</span>
 </label>
-<input className="text-[14px] focus:outline-none transition-all w-full border-slate-200 border rounded-xl pt-3.5 pr-4 pb-3.5 pl-4" id="pcp-email" placeholder="name@clinic.com" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="email"/>
-<div className="text-[11px] hidden font-medium text-red-500 mt-1" id="pcp-email-error" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Please enter a valid email address.</div>
+<input className="text-[14px] focus:outline-none transition-all w-full border-slate-200 border rounded-xl pt-3.5 pr-4 pb-3.5 pl-4" id="pcp-email" placeholder="name@clinic.com" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="email"/>
+<div className="text-[11px] hidden font-medium text-red-500 mt-1" id="pcp-email-error" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Please enter a valid email address.</div>
 </div>
 <div className="">
-<label className="text-[13px] block font-bold mb-1.5" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<label className="text-[13px] block font-bold mb-1.5" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <span className="text-[11px] font-normal text-slate-400">Clinic Name (optional)</span>
 </label>
-<input className="text-[14px] focus:outline-none transition-all w-full border-slate-200 border rounded-xl pt-3.5 pr-4 pb-3.5 pl-4" id="pcp-clinic" placeholder="Your Practice" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="text"/>
+<input className="text-[14px] focus:outline-none transition-all w-full border-slate-200 border rounded-xl pt-3.5 pr-4 pb-3.5 pl-4" id="pcp-clinic" placeholder="Your Practice" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="text"/>
 </div>
 <div className="pt-1">
 <div className="flex gap-3 items-start">
 <input className="flex-shrink-0 mt-0.5" id="pcp-privacy-check" type="checkbox"/>
-<label className="text-[12px] leading-snug cursor-pointer" htmlFor="pcp-privacy-check" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<label className="text-[12px] leading-snug cursor-pointer" htmlFor="pcp-privacy-check" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <button className="underline hover:text-primary transition-colors font-semibold ml-0.5" id="pcp-open-privacy" style={{color: '#0B1120'}} type="button">Privacy Policy</button>
 <span className="font-bold text-red-500 ml-0.5">*</span>
 </label>
 </div>
-<div className="text-[11px] hidden font-medium text-red-500 mt-1.5 ml-7" id="pcp-privacy-error" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Please accept the privacy policy to continue.</div>
+<div className="text-[11px] hidden font-medium text-red-500 mt-1.5 ml-7" id="pcp-privacy-error" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Please accept the privacy policy to continue.</div>
 </div>
 <div className="flex gap-3 items-start">
 <input className="flex-shrink-0 mt-0.5" id="pcp-marketing-check" type="checkbox"/>
-<label className="text-[12px] leading-snug cursor-pointer" htmlFor="pcp-marketing-check" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<label className="text-[12px] leading-snug cursor-pointer" htmlFor="pcp-marketing-check" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <span className="text-slate-400">Send me insights to improve patient bookings (optional)</span>
 </label>
 </div>
 </div>
 <div className="flex gap-3 mt-7">
-<button id="pcp-btn-cancel" style={{flex: '1', padding: '13px', borderRadius: '12px', background: '#F8FAFC', color: '#64748B', fontSize: '14px', fontWeight: '700', border: '1px solid #E2E8F0', cursor: 'pointer', transition: 'all 0.2s', minHeight: '50px', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">Cancel</button>
-<button id="pcp-btn-submit" style={{flex: '1', padding: '13px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', transition: 'all 0.2s', minHeight: '50px', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">Send my report</button>
+<button id="pcp-btn-cancel" style={{flex: '1', padding: '13px', borderRadius: '12px', background: '#F8FAFC', color: '#64748B', fontSize: '14px', fontWeight: '700', border: '1px solid #E2E8F0', cursor: 'pointer', transition: 'all 0.2s', minHeight: '50px', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">Cancel</button>
+<button id="pcp-btn-submit" style={{flex: '1', padding: '13px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', transition: 'all 0.2s', minHeight: '50px', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">Send my report</button>
 </div>
-<div className="text-[12px] text-red-600 mt-4 hidden font-semibold text-center" id="pcp-submit-error" style={{fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}></div>
+<div className="text-[12px] text-red-600 mt-4 hidden font-semibold text-center" id="pcp-submit-error" style={{fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}></div>
 </div>
 <div className="hidden text-center py-4" id="pcp-state-success">
 <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-5 ring-8 ring-emerald-100">
@@ -2280,17 +2322,17 @@ gtag('config', 'G-2M6V79H761');
 <polyline points="20 6 9 17 4 12"></polyline>
 </svg>
 </div>
-<h3 className="text-[19px] sm:text-[20px] font-extrabold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Request received — thank you</h3>
-<p className="text-[14px] mb-8 px-2 leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>We'll be in touch shortly with your personalised breakdown.</p>
+<h3 className="text-[19px] sm:text-[20px] font-extrabold mb-2" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Request received — thank you</h3>
+<p className="text-[14px] mb-8 px-2 leading-relaxed" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>We'll be in touch shortly with your personalised breakdown.</p>
 <div className="grid gap-3">
-<button id="pcp-btn-see-pricing" style={{width: '100%', padding: '13px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', transition: 'all 0.2s', minHeight: '50px', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">See pricing</button>
-<a className="w-full py-3.5 border border-slate-200 rounded-xl text-[14px] font-bold text-center block hover:bg-slate-50 transition-colors" href="/" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Back to homepage</a>
-<button id="pcp-btn-close-success" style={{width: '100%', padding: '10px', background: 'transparent', color: '#94A3B8', fontSize: '12px', fontWeight: '600', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">Close</button>
+<button id="pcp-btn-see-pricing" style={{width: '100%', padding: '13px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', transition: 'all 0.2s', minHeight: '50px', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">See pricing</button>
+<a className="w-full py-3.5 border border-slate-200 rounded-xl text-[14px] font-bold text-center block hover:bg-slate-50 transition-colors" href="/" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Back to homepage</a>
+<button id="pcp-btn-close-success" style={{width: '100%', padding: '10px', background: 'transparent', color: '#94A3B8', fontSize: '12px', fontWeight: '600', border: 'none', cursor: 'pointer', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">Close</button>
 </div>
 </div>
 <div id="pcp-privacy-panel">
 <div className="flex items-center justify-between mb-4 flex-shrink-0">
-<h4 className="text-[16px] sm:text-[17px] font-extrabold" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>Privacy Policy</h4>
+<h4 className="text-[16px] sm:text-[17px] font-extrabold" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>Privacy Policy</h4>
 <button className="text-slate-300 hover:text-navy transition-colors p-2 -mr-1" id="pcp-close-privacy" type="button">
 <svg fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <line x1="18" x2="6" y1="6" y2="18"></line>
@@ -2298,7 +2340,7 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </button>
 </div>
-<div className="text-[12px] leading-relaxed pr-2" id="pcp-privacy-scroll" style={{color: '#64748B', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}}>
+<div className="text-[12px] leading-relaxed pr-2" id="pcp-privacy-scroll" style={{color: '#64748B', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}}>
 <p className="mb-3">
 <span className="font-bold" style={{color: '#0B1120'}}>Peak Clarity Point Ltd</span>
 </p>
@@ -2335,7 +2377,7 @@ gtag('config', 'G-2M6V79H761');
 <br/>
 </p>
 </div>
-<a className="flex items-center justify-center gap-2 w-full py-3 border border-slate-200 rounded-xl text-[13px] font-bold hover:bg-slate-50 transition-colors mb-2" href="/privacy-policy-page" rel="noopener" style={{color: '#0B1120', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} target="_blank">
+<a className="flex items-center justify-center gap-2 w-full py-3 border border-slate-200 rounded-xl text-[13px] font-bold hover:bg-slate-50 transition-colors mb-2" href="/privacy-policy-page" rel="noopener" style={{color: '#0B1120', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} target="_blank">
 <svg fill="none" height="13" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" viewbox="0 0 24 24" width="13" xmlns="http://www.w3.org/2000/svg">
 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
 <polyline points="15 3 21 3 21 9"></polyline>
@@ -2344,7 +2386,7 @@ gtag('config', 'G-2M6V79H761');
 </a>
 </div>
 <div className="flex-shrink-0 mt-4">
-<button id="pcp-accept-privacy" style={{width: '100%', padding: '13px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', minHeight: '50px', fontFamily: '\'Inter\',\'Helvetica Neue\',sans-serif'}} type="button">Got it — close</button>
+<button id="pcp-accept-privacy" style={{width: '100%', padding: '13px', borderRadius: '12px', background: '#0B1120', color: '#ffffff', fontSize: '14px', fontWeight: '700', border: 'none', cursor: 'pointer', minHeight: '50px', fontFamily: '\'Inter\', \'Helvetica Neue\', sans-serif'}} type="button">Got it — close</button>
 </div>
 </div>
 </div>

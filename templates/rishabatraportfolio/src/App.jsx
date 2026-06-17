@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -216,6 +252,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -511,12 +553,12 @@ gtag('config', 'G-2M6V79H761');
 <div className="spotlight" style={{opacity: '0'}}></div>
 <section className="lg:px-24 md:px-12 md:pt-12 md:pb-12 bg-zinc-300/30 w-full border-white/5 border-b pt-24 pr-6 pb-24 pl-6 relative" id="evaluations">
 <div className="max-w-7xl mx-auto">
-<div className="mb-20 reveal-on-scroll" data-reveal="" style={{-RevealDelay: '0ms'}}>
+<div className="mb-20 reveal-on-scroll" data-reveal="" style={{'--reveal-delay': '0ms'}}>
 <h2 className="text-[color:var(--text)] uppercase leading-none md:text-5xl text-3xl font-medium text-gray-700 tracking-tighter font-display mb-4">MOMENTS THAT CHANGED ME</h2>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-<div className="group hover:border-cyan-500/30 transition-colors duration-500 reveal-on-scroll border-white/10 border px-8 py-8 relative" data-reveal="" style={{-RevealDelay: '90ms'}}>
+<div className="group hover:border-cyan-500/30 transition-colors duration-500 reveal-on-scroll border-white/10 border px-8 py-8 relative" data-reveal="" style={{'--reveal-delay': '90ms'}}>
 <iconify-icon className="text-white/10 absolute top-6 right-6" icon="solar:quote-left-linear" width="24"></iconify-icon>
 <p className="leading-relaxed z-10 text-sm font-light text-neutral-900 mb-8 relative">I watched a senior colleague close deals not by pushing harder, but by asking better questions. People leaned in because they felt genuinely understood. Sales wasn't about persuasion—it was about alignment.</p>
 <div className="flex gap-4 border-white/5 border-t mt-auto pt-6 gap-x-4 gap-y-4 items-center">
@@ -526,7 +568,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group hover:border-cyan-500/30 transition-colors duration-500 reveal-on-scroll border-white/10 border px-8 py-8 relative" data-reveal="" style={{-RevealDelay: '180ms'}}>
+<div className="group hover:border-cyan-500/30 transition-colors duration-500 reveal-on-scroll border-white/10 border px-8 py-8 relative" data-reveal="" style={{'--reveal-delay': '180ms'}}>
 <iconify-icon className="text-white/10 absolute top-6 right-6" icon="solar:quote-left-linear" width="24"></iconify-icon>
 <p className="leading-relaxed z-10 text-sm font-light text-neutral-900 mb-8 relative">A customer once told me that our little bakery was her weekly escape. It wasn't about the pastries—it was about how we made her feel. That's when I understood: every touchpoint is an opportunity to create joy.</p>
 <div className="flex items-center gap-4 border-t border-white/5 pt-6 mt-auto">
@@ -537,7 +579,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group hover:border-cyan-500/30 transition-colors duration-500 reveal-on-scroll border-white/10 border px-8 py-8 relative" data-reveal="" style={{-RevealDelay: '270ms'}}>
+<div className="group hover:border-cyan-500/30 transition-colors duration-500 reveal-on-scroll border-white/10 border px-8 py-8 relative" data-reveal="" style={{'--reveal-delay': '270ms'}}>
 <iconify-icon className="text-white/10 absolute top-6 right-6" icon="solar:quote-left-linear" width="24"></iconify-icon>
 <p className="leading-relaxed z-10 text-sm font-light text-neutral-900 mb-8 relative">At Kroolo, I stopped seeing myself as just a success manager. I became part educator, part advisor, part partner. Product mockups, process improvements, real conversations—it all blended into creating genuine value.</p>
 <div className="flex items-center gap-4 border-t border-white/5 pt-6 mt-auto">
@@ -547,7 +589,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 reveal-on-scroll" data-reveal="" style={{-RevealDelay: '360ms'}}>
+<div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 reveal-on-scroll" data-reveal="" style={{'--reveal-delay': '360ms'}}>
 </div>
 </div>
 </section>
@@ -568,7 +610,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-teal-200/60 pt-4 pr-4 pb-4 pl-4">
 <h4 className="text-sm font-medium text-slate-100" style={{fontFamily: 'Inter, sans-serif'}}>Traditional Jewels, desert, and the poetry of heritage</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}></p>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}></p>
 </div>
 </div>
 </article>
@@ -580,8 +622,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="bg-teal-200/60 pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>A mother’s embrace, the purest form of love</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}></p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>A mother’s embrace, the purest form of love</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}></p>
 </div>
 </div>
 </article>
@@ -593,8 +635,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="bg-teal-200/60 pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Books, butterflies, and a heart full of joy</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}></p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Books, butterflies, and a heart full of joy</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}></p>
 </div>
 </div>
 </article>
@@ -606,8 +648,8 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="bg-teal-200/60 pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Jewels of tradition, captured in pencil</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}></p>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Jewels of tradition, captured in pencil</h4>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}></p>
 </div>
 </div>
 </article>
@@ -632,7 +674,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="bg-teal-200/60 pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Rustic charm painted in bold strokes</h4>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Rustic charm painted in bold strokes</h4>
 <p className="text-xs text-slate-400 mt-1" style={{fontFamily: 'Inter, sans-serif'}}></p>
 </div>
 </div>
@@ -645,7 +687,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="bg-teal-200/60 pt-4 pr-4 pb-4 pl-4">
-<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\',sans-serif'}}>Lord Ganesha, sketched on the gentlest of textures</h4>
+<h4 className="text-sm font-medium text-slate-100" style={{fontFamily: '\'Inter\', sans-serif'}}>Lord Ganesha, sketched on the gentlest of textures</h4>
 <p className="text-xs text-slate-400 mt-1" style={{fontFamily: 'Inter, sans-serif'}}></p>
 </div>
 </div>
@@ -659,7 +701,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="bg-teal-200/60 pt-4 pr-4 pb-4 pl-4">
 <h4 className="text-sm font-medium text-slate-100" style={{fontFamily: 'Inter, sans-serif'}}>Her presence lingers in petals and patterns</h4>
-<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}></p>
+<p className="text-xs text-slate-400 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}></p>
 </div>
 </div>
 </article>
@@ -672,8 +714,8 @@ gtag('config', 'G-2M6V79H761');
 <circle className="" cx="11" cy="11" r="8"></circle>
 </svg>
 </div>
-<h4 className="text-lg font-medium mb-1" style={{fontFamily: '\'Inter\',sans-serif'}}>No results found</h4>
-<p className="text-sm text-slate-400" style={{fontFamily: '\'Inter\',sans-serif'}}>Try a different keyword or filter.</p>
+<h4 className="text-lg font-medium mb-1" style={{fontFamily: '\'Inter\', sans-serif'}}>No results found</h4>
+<p className="text-sm text-slate-400" style={{fontFamily: '\'Inter\', sans-serif'}}>Try a different keyword or filter.</p>
 </div>
 </div>
 </main><div className="sm:px-6 md:px-10 bg-center bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cd7a5603-9d41-49aa-9d18-f92f1417605f_1600w.jpg)] max-w-7xl bg-cover mr-auto ml-auto pt-16 pr-4 pb-16 pl-4 relative">

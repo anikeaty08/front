@@ -79,6 +79,42 @@ const Toggle = ({ label, description, checked, onChange }) => (
 
 const AuraBackground = () => {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     if (typeof window === 'undefined') return;
 
     const initUnicornStudio = () => {
@@ -478,7 +514,7 @@ const FeaturesPage = () => {
                   <span className="text-xs text-slate-500">4,200 / 10,000</span>
                 </div>
                 <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: '42%' }}></div>
+                  <div className="h-full bg-blue-500 rounded-full" style={{width: '42%'}}></div>
                 </div>
               </div>
             </div>
@@ -716,5 +752,5 @@ function __auraEnsureRenderableChild(candidate) {
     return renderedChildren[0];
   }
 
-  return <div style={{ display: "contents" }}>{renderedChildren}</div>;
+  return <div style={{display: "contents"}}>{renderedChildren}</div>;
 }

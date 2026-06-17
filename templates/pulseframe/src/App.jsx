@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -15,6 +51,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -25,7 +67,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <header className="relative z-10">
 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-8">
 <a className="flex items-center gap-3" href="#">
-<span className="inline-flex items-center justify-center bg-white/10 w-9 h-9 rounded-full backdrop-blur" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="inline-flex items-center justify-center bg-white/10 w-9 h-9 rounded-full backdrop-blur" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="text-white/90 w-[16px] h-[16px]" data-icon-replaced="true" data-icon-set="solar" data-solar="window-frame-bold-duotone" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" style={{color: 'rgb(255, 255, 255)', width: '16px', height: '16px'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2" fill="#ffffff" opacity=".5"></path><path d="M13 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-3 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0M7 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0" fill="#ffffff"></path><path d="M2 12c0 4.714 0 7.071 1.464 8.535c1.01 1.01 2.446 1.324 4.786 1.421L9 22V9.5H2.026l-.023.75Q2 11.066 2 12" fill="#ffffff" opacity=".7"></path><path d="M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22c-.819 0-2.316 0-3-.008V9.5h13l-.003.75Q22 11.066 22 12" fill="#ffffff"></path></svg>
 </span>
 <span className="text-lg tracking-tight font-semibold font-sans">Pulseframe</span>
@@ -73,7 +115,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
 <button className="inline-flex hover:-translate-y-0.5 transition will-change-transform bg-gradient-to-r from-[#FF6B35] via-[#F7931E] to-[#FFA500] rounded-full px-[2px] py-[2px] relative shadow-[0_0_48px_rgba(255,107,53,0.45)] items-center w-full sm:w-auto">
-<span className="inline-flex items-center justify-between gap-3 leading-[1] text-sm font-medium text-white tracking-tight z-0 rounded-full pt-3 pr-5 pb-3 pl-5 relative w-full" style={{background: 'linear-gradient(90deg,#FF6B35 0%, #F7931E 50%, #FFA500 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.25)'}}>
+<span className="inline-flex items-center justify-between gap-3 leading-[1] text-sm font-medium text-white tracking-tight z-0 rounded-full pt-3 pr-5 pb-3 pl-5 relative w-full" style={{background: 'linear-gradient(90deg, #FF6B35 0%, #F7931E 50%, #FFA500 100%)', boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0,0,0,0.25)'}}>
 <span className="pointer-events-none absolute inset-0 rounded-full" style={{background: 'radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0) 60%)', mixBlendMode: 'screen'}}></span>
 <span className="z-10 relative">Start free</span>
 <span className="relative z-10 inline-flex items-center justify-center w-7 h-7 rounded-lg bg-white/10 ring-1 ring-white/10">
@@ -81,7 +123,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </span>
 </span>
 </button>
-<button className="inline-flex hover:bg-white/15 transition text-sm text-white/90 bg-white/10 rounded-full pt-3 pr-5 pb-3 pl-5 backdrop-blur gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="inline-flex hover:bg-white/15 transition text-sm text-white/90 bg-white/10 rounded-full pt-3 pr-5 pb-3 pl-5 backdrop-blur gap-x-2 gap-y-2 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>
         How it works
       </button>
@@ -89,12 +131,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="mt-44">
-<div className="bg-gradient-to-b from-white/5 to-black/20 w-full max-w-5xl rounded-3xl mr-auto ml-auto pt-3 pr-3 pb-3 pl-3 shadow-2xl backdrop-blur" style={{boxShadow: '0 30px 60px rgba(0,0,0,0.45), 0 10px 20px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.15)', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '24px'}}>
-<div className="rounded-2xl" style={{background: 'linear-gradient(135deg, rgba(22,22,22,0.98), rgba(12,12,12,0.98))', backdropFilter: 'saturate(1.25) blur(4px)', WebkitBackdropFilter: 'saturate(1.25) blur(4px)', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="bg-gradient-to-b from-white/5 to-black/20 w-full max-w-5xl rounded-3xl mr-auto ml-auto pt-3 pr-3 pb-3 pl-3 shadow-2xl backdrop-blur" style={{boxShadow: '0 30px 60px rgba(0,0,0,0.45), 0 10px 20px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.15)', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '24px'}}>
+<div className="rounded-2xl" style={{background: 'linear-gradient(135deg, rgba(22,22,22,0.98), rgba(12,12,12,0.98))', backdropFilter: 'saturate(1.25) blur(4px)', WebkitBackdropFilter: 'saturate(1.25) blur(4px)', position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '16px'}}>
 
 <div className="flex border-white/10 border-b pt-3 pr-4 pb-3 pl-4 items-center justify-between">
 <div className="flex items-center gap-3">
-<span className="inline-flex h-8 w-8 items-center justify-center rounded-md ring-1 ring-white/10" style={{background: 'linear-gradient(135deg, rgba(36,36,36,0.85), rgba(20,20,20,0.85))', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)'}}>
+<span className="inline-flex h-8 w-8 items-center justify-center rounded-md ring-1 ring-white/10" style={{background: 'linear-gradient(135deg, rgba(36, 36, 36, 0.85), rgba(20, 20, 20, 0.85))', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)'}}>
 <svg className="h-4 w-4 text-white/90" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
 </span>
 <span className="text-sm font-medium tracking-tight font-sans">Pulseframe</span>
@@ -326,7 +368,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </path>
 </svg>
 <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-<span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#FF6B35]/20 ring-2 ring-[#FF6B35]/40" style={{boxShadow: '0 0 20px rgba(255,107,53,0.6), 0 0 40px rgba(255,107,53,0.3)'}}>
+<span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#FF6B35]/20 ring-2 ring-[#FF6B35]/40" style={{boxShadow: '0 0 20px rgba(255, 107, 53, 0.6), 0 0 40px rgba(255,107,53,0.3)'}}>
 <svg className="h-6 w-6 text-[#FF6B35]" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
 </span>
 </div>

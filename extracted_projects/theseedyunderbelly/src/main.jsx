@@ -5,7 +5,7 @@ import './index.css';
 import 'iconify-icon'; // Register the raw <iconify-icon> web component
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <App />
-  </React.StrictMode>
+  
 );

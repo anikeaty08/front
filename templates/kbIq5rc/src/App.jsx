@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -38,7 +80,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="M15 12L9 18m6 0l-6-6m6 6l6 6m-6-6l-6-6m6 6a9 9 0 110-18 9 9 0 010 18z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
 </svg>
 </div>
-<h3 className="text-xl font-semibold mb-2 text-gray-900" style={{fontFamily: '\'Clash Display\',sans-serif'}}>Generate Instantly</h3>
+<h3 className="text-xl font-semibold mb-2 text-gray-900" style={{fontFamily: '\'Clash Display\', sans-serif'}}>Generate Instantly</h3>
 <p className="text-gray-700 text-base">
           Transform your ideas into interactive prototypes in seconds with AI-assisted generation.
         </p>
@@ -51,7 +93,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="M8 7V3m8 4V3m-4 4V3m4 18v-4m-8 4v-4m4 4v-4m-7.07-7.07a7 7 0 018.486 0l.07.07a7 7 0 010 9.9l-.07.07a7 7 0 01-8.486 0l-.07-.07a7 7 0 010-9.9l.07-.07z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
 </svg>
 </div>
-<h3 className="text-xl font-semibold mb-2 text-gray-900" style={{fontFamily: '\'Clash Display\',sans-serif'}}>Seamless Integration</h3>
+<h3 className="text-xl font-semibold mb-2 text-gray-900" style={{fontFamily: '\'Clash Display\', sans-serif'}}>Seamless Integration</h3>
 <p className="text-gray-700 text-base">
           Easily connect with your favorite tools and platforms for a unified workflow.
         </p>
@@ -64,7 +106,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <path d="M20 21V10M12 21V3m-8 18v-6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
 </svg>
 </div>
-<h3 className="text-xl font-semibold mb-2 text-gray-900" style={{fontFamily: '\'Clash Display\',sans-serif'}}>Insights &amp; Analytics</h3>
+<h3 className="text-xl font-semibold mb-2 text-gray-900" style={{fontFamily: '\'Clash Display\', sans-serif'}}>Insights &amp; Analytics</h3>
 <p className="text-gray-700 text-base">
           Monitor usage and performance with real-time analytics and actionable insights.
         </p>

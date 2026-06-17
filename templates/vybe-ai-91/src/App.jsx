@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -66,6 +102,12 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -77,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 
 
 <div className="fixed z-50 bg-transparent pt-6 pr-6 pb-6 pl-6 top-0 right-0 left-0">
-<div className="xl:pr-3 xl:pl-3 [animation:fadeSlideIn_1s_ease-out_0.1s_both] max-w-4xl border-white/10 border rounded-2xl mr-auto ml-auto pt-3 pr-3 pb-3 pl-3" style={{background: 'linear-gradient(180deg, rgba(14,16,26,0.55), rgba(14,16,26,0.35)) padding-box, linear-gradient(120deg, rgba(255,255,255,0.35), rgba(255,255,255,0.08)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
+<div className="xl:pr-3 xl:pl-3 [animation:fadeSlideIn_1s_ease-out_0.1s_both] max-w-4xl border-white/10 border rounded-2xl mr-auto ml-auto pt-3 pr-3 pb-3 pl-3" style={{background: 'linear-gradient(180deg, rgba(14, 16, 26, 0.55), rgba(14, 16, 26, 0.35)) padding-box, linear-gradient(120deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.04)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center">
 <a className="inline-flex items-center justify-center bg-center mix-blend-screen w-[100px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/ab707825-6adb-4b45-8319-4de9275950e8_800w.png)] bg-cover rounded invert-0" href="/home"></a>
@@ -880,7 +922,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 <div className="relative sm:h-96 w-full h-400 max-w-7xl max-h-full">
 <div className="container max-w-full" style={{position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
 
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: 'rgba(0, 0, 0, 0.25) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-10deg)', -R: '-32', [animation: 'fadeSlideIn_1s_ease-out_0.3s_both] animate-on-scroll'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: 'rgba(0, 0, 0, 0.25) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-10deg)', '--r': '-32', [animation: 'fadeSlideIn_1s_ease-out_0.3s_both] animate-on-scroll'}}>
 <div className="absolute inset-4 rounded-xl bg-neutral-900 text-white shadow-2xl ring-1 ring-white/10 overflow-hidden border border-white/5">
 <div className="px-6 py-6">
 
@@ -912,7 +954,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: 'rgba(0, 0, 0, 0.25) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-6deg)', -R: '-6', [animation: 'fadeSlideIn_1s_ease-out_0.4s_both] animate-on-scroll'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: 'rgba(0, 0, 0, 0.25) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(-6deg)', '--r': '-6', [animation: 'fadeSlideIn_1s_ease-out_0.4s_both] animate-on-scroll'}}>
 <div className="absolute inset-4 rounded-xl bg-neutral-900/95 text-white shadow-xl ring-1 ring-white/10 backdrop-blur overflow-hidden border border-white/5">
 <div className="px-6 py-6">
 
@@ -944,7 +986,7 @@ document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
 </div>
 </div>
 </div>
-<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.06), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: 'rgba(0, 0, 0, 0.25) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(0deg)', -R: '0', [animation: 'fadeSlideIn_1s_ease-out_0.5s_both] animate-on-scroll'}}>
+<div className="glass" style={{position: 'relative', width: '340px', height: '340px', background: 'linear-gradient(rgba(255, 255, 255, 0.06), transparent)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: 'rgba(0, 0, 0, 0.25) 0px 25px 25px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1rem', margin: '0px -50px', backdropFilter: 'blur(10px)', transform: 'rotate(0deg)', '--r': '0', [animation: 'fadeSlideIn_1s_ease-out_0.5s_both] animate-on-scroll'}}>
 <div className="ring-1 ring-white/10 overflow-hidden xl:bg-neutral-900/90 text-white bg-neutral-900/90 border-white/5 border rounded-xl absolute top-4 right-4 bottom-4 left-4 shadow-lg backdrop-blur">
 <div className="pt-6 pr-6 pb-6 pl-6 xl:bg-neutral-900">
 

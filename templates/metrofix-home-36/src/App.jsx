@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -256,6 +292,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -269,7 +311,7 @@ gtag('config', 'G-2M6V79H761');
 
 <header className="fixed z-50 px-4 sm:px-6 top-4 right-0 left-0">
 <div className="max-w-[88rem] mx-auto">
-<div className="flex sm:px-4 h-16 border border-white/70 rounded-full px-3 relative backdrop-blur-xl items-center justify-between" id="navShell" style={{backgroundColor: 'rgba(244,247,248,0.96)', boxShadow: 'rgba(14,23,32,0.1) 0px 16px 40px'}}>
+<div className="flex sm:px-4 h-16 border border-white/70 rounded-full px-3 relative backdrop-blur-xl items-center justify-between" id="navShell" style={{backgroundColor: 'rgba(244, 247, 248, 0.96)', boxShadow: 'rgba(14,23,32,0.1) 0px 16px 40px'}}>
 <div className="pointer-events-none h-px bg-gradient-to-r from-transparent via-white to-transparent absolute top-0 right-8 left-8"></div>
 <a className="relative z-10 flex items-center gap-3 min-w-0" href="#hero">
 <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d6e3e0] bg-white/80 text-[0.65rem] font-medium tracking-[0.28em] text-[#0d6e63]">
@@ -279,7 +321,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="uppercase text-xs text-[#6c7b84] tracking-[0.26em]">
                 Metro Utility Care
               </span>
-<span className="text-lg tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<span className="text-lg tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\', serif'}}>
                 METROFIX
               </span>
 </div>
@@ -343,7 +385,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative z-10 max-w-[88rem] mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-12 sm:pt-36 sm:pb-12 lg:pt-40 lg:pb-16">
 <div className="max-w-[58rem] pl-4 sm:pl-8 lg:pl-8 mt-8 sm:mt-10">
-<div className="hero-item inline-flex bg-white/60 w-max rounded-full mb-1 py-1.5 pl-1.5 pr-5 shadow-sm items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.92),rgba(17,24,39,0.08))', -BorderRadiusBefore: '9999px'}}>
+<div className="hero-item inline-flex bg-white/60 w-max rounded-full mb-1 py-1.5 pl-1.5 pr-5 shadow-sm items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.92),rgba(17,24,39,0.08))', '--border-radius-before': '9999px'}}>
 <div className="flex -space-x-2 mr-3">
 <img alt="MetroFix plumber" className="w-6 h-6 object-cover border-2 border-white rounded-full" src="https://images.unsplash.com/photo-1507101105822-7472b28e22ac?w=320&amp;q=80"/>
 <img alt="MetroFix technician" className="w-6 h-6 object-cover border-2 border-white rounded-full" src="https://images.unsplash.com/photo-1644437687093-8a01d1721fae?w=320&amp;q=80"/>
@@ -360,7 +402,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="hero-item uppercase text-xs text-slate-300 tracking-[0.24em] mt-4">
               Plumbing &amp; Maintenance. Dispatched.
             </p>
-<h1 className="hero-item mt-4 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.9] text-slate-50 tracking-tight" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h1 className="hero-item mt-4 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.9] text-slate-50 tracking-tight" style={{fontFamily: '\'Instrument Serif\', serif'}}>
               Your NYC home,
               <span className="italic">engineered</span>
               to flow.
@@ -371,7 +413,7 @@ gtag('config', 'G-2M6V79H761');
               in under an hour for most urgent jobs.
             </p>
 <div className="hero-item flex flex-col sm:flex-row gap-4 mt-9 gap-x-4 gap-y-4">
-<a className="inline-flex items-center justify-center gap-3 uppercase text-xs tracking-[0.22em] rounded-full px-6 py-3.5 transition-all duration-300 hover:-translate-y-0.5" href="/booknow" style={{background: 'radial-gradient(circle at 10% 0%,#d9fbf2 0%,#59d6bb 45%,#0d6e63 100%)', boxShadow: '0 15px 25px -10px rgba(13,110,99,.55),inset 0 4px 8px rgba(255,255,255,.55),inset 0 -4px 8px rgba(7,91,82,.4)'}}>
+<a className="inline-flex items-center justify-center gap-3 uppercase text-xs tracking-[0.22em] rounded-full px-6 py-3.5 transition-all duration-300 hover:-translate-y-0.5" href="/booknow" style={{background: 'radial-gradient(circle at 10% 0%, #d9fbf2 0%, #59d6bb 45%, #0d6e63 100%)', boxShadow: '0 15px 25px -10px rgba(13, 110, 99, .55), inset 0 4px 8px rgba(255, 255, 255, .55), inset 0 -4px 8px rgba(7,91,82,.4)'}}>
 <span className="font-medium text-[#072a28] tracking-tight">
                   Book now
                 </span>
@@ -379,7 +421,7 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-lg text-[#072a28]" icon="solar:arrow-right-up-linear" strokeWidth="1.5"></iconify-icon>
 </span>
 </a>
-<a className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#0e1720] bg-slate-50 rounded-full px-6 py-3.5 transition-all hover:bg-white/90" href="/pricing" style={{boxShadow: '0 18px 35px rgba(31,41,55,.08),0 0 0 1px rgba(209,213,219,.32)', position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.95),rgba(17,24,39,0.16),rgba(255,255,255,0.85))', -BorderRadiusBefore: '9999px'}}>
+<a className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#0e1720] bg-slate-50 rounded-full px-6 py-3.5 transition-all hover:bg-white/90" href="/pricing" style={{boxShadow: '0 18px 35px rgba(31,41,55,.08),0 0 0 1px rgba(209,213,219,.32)', position: 'relative', -BorderGradient: 'linear-gradient(180deg,rgba(255,255,255,0.95),rgba(17,24,39,0.16),rgba(255,255,255,0.85))', '--border-radius-before': '9999px'}}>
 <span className="tracking-tight">View plans</span>
 <iconify-icon className="text-base text-[#0d6e63]" icon="solar:arrow-right-linear" strokeWidth="1.5"></iconify-icon>
 </a>
@@ -428,7 +470,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 <div className="">
-<h2 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h2 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\', serif'}}>
                 What do you need fixed?
               </h2>
 <p className="mt-5 max-w-[42rem] text-base leading-8 text-[#52636b] font-light">
@@ -588,7 +630,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="lg:py-24 bg-white border-b border-[#dce7e5] pt-16 pb-16" id="process">
 <div className="max-w-[88rem] mx-auto px-4 sm:px-6 lg:px-8">
 <div className="mb-12 lg:mb-20 max-w-2xl">
-<h2 className="text-4xl lg:text-5xl text-[#0d1720]" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h2 className="text-4xl lg:text-5xl text-[#0d1720]" style={{fontFamily: '\'Instrument Serif\', serif'}}>
               How it works
             </h2>
 </div>
@@ -643,7 +685,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[#0d6e63] font-medium text-lg uppercase tracking-widest">
                   01. Request
                 </span>
-<h3 className="text-3xl lg:text-4xl mt-4" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h3 className="text-3xl lg:text-4xl mt-4" style={{fontFamily: '\'Instrument Serif\', serif'}}>
                   Describe the Problem
                 </h3>
 <p className="text-gray-600 mt-4 lg:mt-6 text-lg leading-relaxed">
@@ -658,7 +700,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[#0d6e63] font-medium text-lg uppercase tracking-widest">
                   02. Dispatch
                 </span>
-<h3 className="text-3xl lg:text-4xl mt-4" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h3 className="text-3xl lg:text-4xl mt-4" style={{fontFamily: '\'Instrument Serif\', serif'}}>
                   Matched with a Local Pro
                 </h3>
 <p className="text-gray-600 mt-4 lg:mt-6 text-lg leading-relaxed">
@@ -673,7 +715,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-[#0d6e63] font-medium text-lg uppercase tracking-widest">
                   03. Fix
                 </span>
-<h3 className="text-3xl lg:text-4xl mt-4" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h3 className="text-3xl lg:text-4xl mt-4" style={{fontFamily: '\'Instrument Serif\', serif'}}>
                   Transparent Resolution
                 </h3>
 <p className="text-gray-600 mt-4 lg:mt-6 text-lg leading-relaxed">
@@ -694,7 +736,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-block h-2 w-2 rounded-full bg-[#0d6e63]"></span>
                 Trusted in your neighborhood
               </div>
-<h2 className="text-4xl sm:text-5xl text-[#0e1720] tracking-tight" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h2 className="text-4xl sm:text-5xl text-[#0e1720] tracking-tight" style={{fontFamily: '\'Instrument Serif\', serif'}}>
                 Ready to fix it?
               </h2>
 <div className="grid gap-4 mt-8">
@@ -749,7 +791,7 @@ gtag('config', 'G-2M6V79H761');
                   Master Liability Coverage
                 </p>
 <div className="flex flex-col sm:flex-row sm:items-end gap-1 sm:gap-3">
-<span style={{fontFamily: '\'Instrument Serif\',serif', fontSize: 'clamp(2.5rem,5vw,4.2rem)', color: '#0e1720', lineHeight: '1'}}>
+<span style={{fontFamily: '\'Instrument Serif\', serif', fontSize: 'clamp(2.5rem,5vw,4.2rem)', color: '#0e1720', lineHeight: '1'}}>
                     $5M+
                   </span>
 <span className="text-[#5f6f77] text-xs sm:text-sm mb-1 sm:mb-2 font-medium">
@@ -766,7 +808,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-[0.55rem] uppercase tracking-[0.2em] text-[#5f6f77] mb-2 font-semibold">
                     NYC License #
                   </p>
-<p style={{fontFamily: '\'Instrument Serif\',serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
+<p style={{fontFamily: '\'Instrument Serif\', serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
                     MP-1042
                   </p>
 <p className="text-[#5f6f77] text-[0.65rem] mt-1 font-medium">
@@ -777,7 +819,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-[0.55rem] uppercase tracking-[0.2em] text-[#5f6f77] mb-2 font-semibold">
                     DOB Registered
                   </p>
-<p style={{fontFamily: '\'Instrument Serif\',serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
+<p style={{fontFamily: '\'Instrument Serif\', serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
                     2019
                   </p>
 <p className="text-[#5f6f77] text-[0.65rem] mt-1 font-medium">
@@ -788,7 +830,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-[0.55rem] uppercase tracking-[0.2em] text-[#5f6f77] mb-2 font-semibold">
                     BG Checks
                   </p>
-<p style={{fontFamily: '\'Instrument Serif\',serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
+<p style={{fontFamily: '\'Instrument Serif\', serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
                     100%
                   </p>
 <p className="text-[#5f6f77] text-[0.65rem] mt-1 font-medium">
@@ -799,7 +841,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-[0.55rem] uppercase tracking-[0.2em] text-[#5f6f77] mb-2 font-semibold">
                     Digital Records
                   </p>
-<p style={{fontFamily: '\'Instrument Serif\',serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
+<p style={{fontFamily: '\'Instrument Serif\', serif', fontSize: 'clamp(1.75rem,3vw,2rem)', color: '#0e1720', lineHeight: '1'}}>
                     PDF
                   </p>
 <p className="text-[#5f6f77] text-[0.65rem] mt-1 font-medium">
@@ -819,7 +861,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="inline-block h-2 w-2 rounded-full bg-[#0d6e63]"></span>
               Maintenance plans
             </div>
-<h2 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<h2 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\', serif'}}>
               Prevent the emergency.
             </h2>
 <p className="mt-5 max-w-[42rem] text-base leading-8 text-[#52636b] font-light">
@@ -837,7 +879,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="dot-light w-1 h-1 rounded-full bg-black opacity-20"></div>
 <div className="dot-light w-1 h-1 rounded-full bg-black opacity-20"></div>
 </div>
-<div className="w-14 h-14 bg-gradient-to-b from-white to-[#f4f4f5] rounded-2xl flex items-center justify-center" style={{boxShadow: 'inset 0 2px 5px rgba(0,0,0,0.02),inset 0 0 0 1px rgba(0,0,0,0.04),0 10px 15px -3px rgba(0,0,0,0.05)'}}>
+<div className="w-14 h-14 bg-gradient-to-b from-white to-[#f4f4f5] rounded-2xl flex items-center justify-center" style={{boxShadow: 'inset 0 2px 5px rgba(0, 0, 0, 0.02), inset 0 0 0 1px rgba(0, 0, 0, 0.04), 0 10px 15px -3px rgba(0,0,0,0.05)'}}>
 <iconify-icon className="text-2xl text-[#0d6e63]" icon="solar:shield-check-linear"></iconify-icon>
 </div>
 <div className="flex gap-1.5 opacity-60">
@@ -873,7 +915,7 @@ gtag('config', 'G-2M6V79H761');
 <p className="text-sm text-[#52525b] font-light mb-8">
                   Ideal for apartments, co-ops, and everyday home protection.
                 </p>
-<a className="text-sm font-light text-[#18181b] text-center bg-gradient-to-b from-white to-[#f4f4f5] w-full rounded-full mb-8 py-3 transition-all active:scale-[0.98]" href="#dispatch" style={{boxShadow: 'inset 0 1px 1px #fff,0 5px 15px -5px rgba(0,0,0,0.1),0 0 0 1px rgba(0,0,0,0.06)'}}>
+<a className="text-sm font-light text-[#18181b] text-center bg-gradient-to-b from-white to-[#f4f4f5] w-full rounded-full mb-8 py-3 transition-all active:scale-[0.98]" href="#dispatch" style={{boxShadow: 'inset 0 1px 1px #fff, 0 5px 15px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0,0,0,0.06)'}}>
                   Start Home Plan
                 </a>
 <div className="h-px w-full mb-8" style={{background: 'linear-gradient(90deg,transparent,rgba(0,0,0,0.08),transparent)'}}></div>
@@ -913,7 +955,7 @@ gtag('config', 'G-2M6V79H761');
                   Built for landlords, brownstones, and small multi-unit
                   operations.
                 </p>
-<a className="text-sm font-light text-white text-center bg-gradient-to-b from-[#1bbf9d] to-[#0d6e63] w-full rounded-full mb-8 py-3 transition-all active:scale-[0.98]" href="#dispatch" style={{boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.4),0 10px 20px -5px rgba(13,110,99,0.35),0 0 0 1px #0d6e63'}}>
+<a className="text-sm font-light text-white text-center bg-gradient-to-b from-[#1bbf9d] to-[#0d6e63] w-full rounded-full mb-8 py-3 transition-all active:scale-[0.98]" href="#dispatch" style={{boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 10px 20px -5px rgba(13,110,99,0.35), 0 0 0 1px #0d6e63'}}>
                   Choose Property Flow
                 </a>
 <div className="h-px w-full mb-8" style={{background: 'linear-gradient(90deg,transparent,rgba(13,110,99,0.2),transparent)'}}></div>
@@ -951,7 +993,7 @@ gtag('config', 'G-2M6V79H761');
                   For larger facilities, mixed-use buildings, and recurring site
                   operations.
                 </p>
-<a className="text-sm font-light text-[#18181b] text-center bg-gradient-to-b from-white to-[#f4f4f5] w-full rounded-full mb-8 py-3 transition-all active:scale-[0.98]" href="#dispatch" style={{boxShadow: 'inset 0 1px 1px #fff,0 5px 15px -5px rgba(0,0,0,0.1),0 0 0 1px rgba(0,0,0,0.06)'}}>
+<a className="text-sm font-light text-[#18181b] text-center bg-gradient-to-b from-white to-[#f4f4f5] w-full rounded-full mb-8 py-3 transition-all active:scale-[0.98]" href="#dispatch" style={{boxShadow: 'inset 0 1px 1px #fff, 0 5px 15px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0,0,0,0.06)'}}>
                   Talk to MetroFix
                 </a>
 <div className="h-px w-full mb-8" style={{background: 'linear-gradient(90deg,transparent,rgba(0,0,0,0.08),transparent)'}}></div>
@@ -993,7 +1035,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 </div>
-<div className="lg:col-span-8 relative overflow-hidden" style={{maskImage: 'linear-gradient(90deg,transparent,black 18%,black 82%,transparent)', WebkitMaskImage: 'linear-gradient(90deg,transparent,black 18%,black 82%,transparent)'}}>
+<div className="lg:col-span-8 relative overflow-hidden" style={{maskImage: 'linear-gradient(90deg, transparent, black 18%, black 82%, transparent)', WebkitMaskImage: 'linear-gradient(90deg,transparent,black 18%,black 82%,transparent)'}}>
 <div className="testimonial-marquee flex pb-4 gap-6">
 <div className="group min-w-[300px] md:min-w-[340px] bg-white p-4 border border-neutral-100 shadow-sm">
 <div className="relative h-48 w-full mb-4 overflow-hidden bg-neutral-100">
@@ -3969,7 +4011,7 @@ gtag('config', 'G-2M6V79H761');
               <span className="h-1.5 w-1.5 rounded-full bg-[#1dd1a1] shadow-[0_0_10px_rgba(29,209,161,0.9)]"></span>
 </div>
 
-<h2 className="text-5xl tracking-tight text-white mb-7 sm:text-6xl lg:text-7xl" style={{fontFamily: '\'Instrument Serif\',serif', lineHeight: '0.92'}}>
+<h2 className="text-5xl tracking-tight text-white mb-7 sm:text-6xl lg:text-7xl" style={{fontFamily: '\'Instrument Serif\', serif', lineHeight: '0.92'}}>
               Ready to experience
               <br/>
 <em className="italic text-white/70">engineered maintenance?</em>
@@ -3983,7 +4025,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 
 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-<a className="inline-flex items-center justify-center gap-3 uppercase transition-all duration-300 hover:-translate-y-0.5 text-xs tracking-[0.22em] rounded-full pt-3.5 pr-6 pb-3.5 pl-6 -multi" href="/booknow" style={{background: 'radial-gradient(circle at 10% 0%,#d9fbf2 0%,#59d6bb 45%,#0d6e63 100%)', boxShadow: '0 15px 25px -10px rgba(13,110,99,.55),inset 0 4px 8px rgba(255,255,255,.55),inset 0 -4px 8px rgba(7,91,82,.4)'}}>
+<a className="inline-flex items-center justify-center gap-3 uppercase transition-all duration-300 hover:-translate-y-0.5 text-xs tracking-[0.22em] rounded-full pt-3.5 pr-6 pb-3.5 pl-6 -multi" href="/booknow" style={{background: 'radial-gradient(circle at 10% 0%, #d9fbf2 0%, #59d6bb 45%, #0d6e63 100%)', boxShadow: '0 15px 25px -10px rgba(13, 110, 99, .55), inset 0 4px 8px rgba(255, 255, 255, .55), inset 0 -4px 8px rgba(7,91,82,.4)'}}>
 <span className="font-medium text-[#072a28] tracking-tight">
                   Book now
                 </span>
@@ -4033,7 +4075,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs uppercase tracking-[0.26em] text-[#6c7b84]">
                     Metro Utility Care
                   </span>
-<span className="text-lg tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\',serif'}}>
+<span className="text-lg tracking-tight text-[#0e1720]" style={{fontFamily: '\'Instrument Serif\', serif'}}>
                     METROFIX
                   </span>
 </div>

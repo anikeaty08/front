@@ -10,6 +10,42 @@ function useInView(threshold = 0.15) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
@@ -93,7 +129,7 @@ function Reveal({ children, delay = 0, className = "" }) {
     <div
       ref={ref}
       className={`reveal ${visible ? "is-visible" : ""} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={{transitionDelay: `${delay}ms`}}
     >
       {children}
     </div>
@@ -130,7 +166,7 @@ function ScrollProgress() {
     <div className="fixed top-0 left-0 right-0 h-0.5 z-[60] bg-cyan-950/40">
       <div
         className="h-full bg-gradient-to-r from-cyan-500 to-teal-300 transition-[width] duration-100"
-        style={{ width: `${p * 100}%` }}
+        style={{width: `${p * 100}%`}}
       />
     </div>
   );
@@ -184,10 +220,7 @@ function Hero() {
     <section id="top" className="relative min-h-screen flex items-center grid-bg overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(34,211,238,0.10), transparent 70%)",
-          transform: `translateY(${offset * 0.4}px)`,
-        }}
+        style={{background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(34, 211, 238, 0.10), transparent 70%)", transform: `translateY(${offset * 0.4}px)`}}
       />
       <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-20 w-full">
         <Reveal>
@@ -483,7 +516,7 @@ function Program() {
                 <span className={`absolute -left-8 top-1 w-4 h-4 border-2 bg-[#04060a] ${
                   item.status === "COMPLETE" ? "border-emerald-400" :
                   item.status === "IN PROGRESS" ? "border-cyan-400 node-active" : "border-slate-600"
-                }`} style={{ marginLeft: "1px" }} />
+                }`} style={{marginLeft: "1px"}} />
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="font-mono text-sm text-cyan-300 tracking-wider">{item.period}</span>
                   <span className={`font-mono text-xs px-2 py-0.5 border tracking-widest ${STATUS_STYLE[item.status]}`}>

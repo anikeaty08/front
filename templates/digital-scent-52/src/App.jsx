@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -936,6 +972,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1029,43 +1071,43 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <g className="cursor-pointer" id="segments">
 
 <g transform="rotate(0)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="0" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="0" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(36)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="1" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="1" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(72)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="2" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="2" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(108)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="3" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="3" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(144)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="4" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="4" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(180)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="5" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="5" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(216)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="6" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="6" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(252)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="7" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="7" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(288)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="8" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="8" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 
 <g transform="rotate(324)">
-<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="9" style={{fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
+<path className="transition-all duration-300 ease-out" d="M0,0 L114.127,-37.082 A120,120 0 0,1 114.127,37.082 Z" data-index="9" style={{fill: 'rgba(255, 255, 255, 0.04)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: '1.5'}}></path>
 </g>
 </g>
 
@@ -1106,7 +1148,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <g>
 <circle className="fill-white/5 stroke-white/10" cx="0" cy="0" r="62" strokeWidth="1.5"></circle>
-<circle className="fill-transparent animate-pulse" cx="0" cy="0" id="aura" r="74" style={{stroke: 'rgba(255,255,255,0.15)', strokeWidth: '10', filter: 'blur(0.5px)'}}></circle>
+<circle className="fill-transparent animate-pulse" cx="0" cy="0" id="aura" r="74" style={{stroke: 'rgba(255, 255, 255, 0.15)', strokeWidth: '10', filter: 'blur(0.5px)'}}></circle>
 <foreignobject height="112" width="112" x="-56" y="-56">
 <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-center">
 <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/10 ring-1 ring-white/15">

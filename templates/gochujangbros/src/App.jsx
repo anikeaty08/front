@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -191,6 +227,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -385,7 +427,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="min-h-[80vh] md:min-h-[100vh] py-24 md:py-32 relative flex items-center justify-center overflow-hidden bg-black border-y border-white/5">
 <div className="parallax-zoom bg-center opacity-30 bg-cover absolute top-0 right-0 bottom-0 left-0" style={{backgroundImage: 'url(\'https://images.unsplash.com/photo-1596649281566-b33a763864a7?q=80&amp', transform: 'scale(1)', transition: 'transform 0.1s ease-out'}}></div>
 <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#050505]/70 to-transparent pointer-events-none"></div>
-<div className="parallax-content text-center max-w-3xl mx-auto px-6 relative z-10" style={{opacity: '0', filter: 'blur(15px)', transition: 'opacity 0.1s ease-out, filter 0.1s ease-out', textShadow: '0 4px 30px rgba(0,0,0,1), 0 2px 8px rgba(0,0,0,0.8)'}}>
+<div className="parallax-content text-center max-w-3xl mx-auto px-6 relative z-10" style={{opacity: '0', filter: 'blur(15px)', transition: 'opacity 0.1s ease-out, filter 0.1s ease-out', textShadow: '0 4px 30px rgba(0, 0, 0, 1), 0 2px 8px rgba(0,0,0,0.8)'}}>
 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-8 leading-[1.3]">순창 고추장 원물의<br/>압도적 존재감</h2>
 <p className="text-zinc-300 text-base md:text-lg lg:text-xl font-medium leading-relaxed px-4">
                 '고추장 향'만 입힌 과자가 아닙니다. 한국인이 가장 사랑하는 발효된 매운맛의 정수를 보여줍니다. 칩 한 조각에서 비빔밥의 그 짜릿한 첫 입을 느낄 수 있습니다.

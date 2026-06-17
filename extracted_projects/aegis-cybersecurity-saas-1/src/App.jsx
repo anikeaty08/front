@@ -6,6 +6,42 @@ import Landing from './pages/Landing';
 
 function UnicornBackground() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     // Natively load the Unicorn Studio script to avoid undeclared npm dependencies
     if (!document.querySelector('script[src="https://cdn.unicorn.studio/v1.3.2/unicornStudio.umd.js"]')) {
       const script = document.createElement('script');
@@ -25,10 +61,7 @@ function UnicornBackground() {
   return (
     <div
       className="aura-background-component fixed top-0 w-full h-screen -z-10"
-      style={{
-        maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'
-      }}
+      style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}
     >
       <div className="aura-background-component top-0 w-full -z-10 absolute h-full">
         <div data-us-project="EET25BiXxR2StNXZvAzF" className="absolute w-full h-full left-0 top-0 -z-10"></div>

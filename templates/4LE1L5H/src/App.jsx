@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -133,6 +169,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -190,7 +232,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
           Transform your marketing data into actionable insights with advanced attribution modeling, real-time analytics, and predictive intelligence that scales with your growth.
         </p>
 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-[slideUp_0.8s_ease-out_0.8s_both]">
-<a className="inline-flex items-center justify-center gap-2 animate-float tracking-tight pt-4 pr-8 pb-4 pl-8 font-sans" href="#" style={{-Green: '#1BFD9C', fontSize: '18px', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '1rem', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'rgba(27, 253, 156, 0.4) 0px 0px 10px inset, rgba(27, 253, 156, 0.1) 0px 0px 9px 3px'}} title="Link disabled in preview mode">Get Started Free</a>
+<a className="inline-flex items-center justify-center gap-2 animate-float tracking-tight pt-4 pr-8 pb-4 pl-8 font-sans" href="#" style={{'--green': '#1BFD9C', fontSize: '18px', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '1rem', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--green)', background: 'linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%)', color: 'var(--green)', boxShadow: 'rgba(27, 253, 156, 0.4) 0px 0px 10px inset, rgba(27, 253, 156, 0.1) 0px 0px 9px 3px'}} title="Link disabled in preview mode">Get Started Free</a>
 <button className="inline-flex items-center gap-3 px-8 py-4 bg-white/[0.06] hover:bg-white/[0.12] text-white font-medium rounded-2xl transition-all duration-200 ring-1 ring-white/10 hover:ring-white/20 text-lg backdrop-blur-sm font-sans">
             
             Watch Demo

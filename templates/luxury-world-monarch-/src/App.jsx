@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -266,6 +302,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -300,7 +342,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <iconify-icon className="" height="19" icon="solar:hamburger-menu-linear" strokeWidth="1.5" style={{fontSize: '1.25rem', color: 'rgb(245, 245, 245)'}} width="19"></iconify-icon>
 </button>
 <a className="group inline-flex items-baseline gap-2" href="#">
-<span className="text-lg font-semibold tracking-tight" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\',\'Segoe UI Emoji\''}}>MONARCH WORLD</span>
+<span className="text-lg font-semibold tracking-tight" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\', \'Segoe UI Emoji\''}}>MONARCH WORLD</span>
 <span className="hidden sm:inline text-xs text-neutral-400 group-hover:text-neutral-300 transition" style={{letterSpacing: '-0.01em'}}>Luxury Store</span>
 </a>
 </div>
@@ -339,7 +381,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <aside className="absolute left-0 top-0 h-full w-[85%] max-w-sm border-r border-white/10 bg-neutral-950">
 <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
 <div className="inline-flex items-baseline gap-2">
-<span className="font-semibold tracking-tight text-lg" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\',\'Segoe UI Emoji\''}}>MI</span>
+<span className="font-semibold tracking-tight text-lg" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\', \'Segoe UI Emoji\''}}>MI</span>
 <span className="text-xs text-neutral-400" style={{letterSpacing: '-0.01em'}}>Menu</span>
 </div>
 <button aria-label="Close menu" className="rounded-xl border border-white/10 bg-white/5 p-2 hover:bg-white/10 transition" id="closeMobile">
@@ -508,7 +550,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8" id="collections">
 <div className="flex items-end justify-between gap-6">
 <div>
-<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-100" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\',\'Segoe UI Emoji\''}}>
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-100" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\', \'Segoe UI Emoji\''}}>
             Shop by category
           </h2>
 <p className="mt-2 text-sm text-neutral-400">Refined selections with subtle, modern silhouettes.</p>
@@ -717,7 +759,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid gap-8 lg:grid-cols-12">
 <div className="lg:col-span-5">
 <div className="inline-flex items-baseline gap-2">
-<span className="text-lg font-semibold tracking-tight" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\',\'Segoe UI Emoji\''}}>MONARCH WORLD </span>
+<span className="text-lg font-semibold tracking-tight" style={{fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \'Apple Color Emoji\', \'Segoe UI Emoji\''}}>MONARCH WORLD </span>
 <span className="text-xs text-neutral-500" style={{letterSpacing: '-0.01em'}}>Luxury Shopping</span>
 </div>
 <p className="mt-3 text-sm text-neutral-400 max-w-md">

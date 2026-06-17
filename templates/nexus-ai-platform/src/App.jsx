@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -639,6 +675,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1416,7 +1458,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="flex-1 min-w-0">
 <div className="progress-track">
-<div className="progress-fill bg-zinc-400" style={{-Target: '78%'}}></div>
+<div className="progress-fill bg-zinc-400" style={{'--target': '78%'}}></div>
 </div>
 <div className="text-xs font-mono text-zinc-500 mt-3 tracking-wider uppercase">
                 INPUT_RATE: 512GB/s
@@ -1561,7 +1603,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.6)] shrink-0"></div>
 </div>
 <div className="progress-track">
-<div className="progress-fill bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.45)]" style={{-Target: '97%'}}></div>
+<div className="progress-fill bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.45)]" style={{'--target': '97%'}}></div>
 </div>
 </div>
 </div>
@@ -1796,7 +1838,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="text-xs font-mono text-zinc-300">80%</span>
 </div>
 <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden shadow-inner">
-<div className="pb-fill h-full bg-zinc-400 rounded-full shadow-[0_0_10px_rgba(161,161,170,0.5)] relative overflow-hidden" style={{-Pb: '80%'}}>
+<div className="pb-fill h-full bg-zinc-400 rounded-full shadow-[0_0_10px_rgba(161,161,170,0.5)] relative overflow-hidden" style={{'--pb': '80%'}}>
 <div className="pb-sheen absolute top-0 bottom-0 w-[50%] bg-gradient-to-r from-transparent via-white/40 to-transparent">
 </div>
 <div className="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-r from-transparent to-white/30">

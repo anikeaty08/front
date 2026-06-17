@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1005,6 +1041,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1057,7 +1099,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <canvas className="absolute inset-0 w-full h-full pointer-events-none z-[6]" id="paintOverlay"></canvas>
 
-<div className="pointer-events-none absolute z-10 hidden items-center justify-center rounded-full border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" id="lens" style={{width: '160px', height: '160px', boxShadow: 'inset 0 0 30px rgba(255,255,255,0.05), 0 8px 24px rgba(0,0,0,0.4)', background: 'radial-gradient(transparent 60%, rgba(255,255,255,0.05) 61%), rgba(0,0,0,0.15)'}}>
+<div className="pointer-events-none absolute z-10 hidden items-center justify-center rounded-full border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]" id="lens" style={{width: '160px', height: '160px', boxShadow: 'inset 0 0 30px rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.4)', background: 'radial-gradient(transparent 60%, rgba(255, 255, 255, 0.05) 61%), rgba(0,0,0,0.15)'}}>
 <canvas className="rounded-full" height="160" id="lensCanvas" width="160"></canvas>
 <div className="absolute inset-0 rounded-full" style={{background: 'radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 35%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05), transparent 40%)'}}></div>
 </div>

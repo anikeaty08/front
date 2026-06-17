@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -20,7 +62,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur dark:bg-neutral-900/80" style={{borderColor: '#E5E7EB'}}>
 <div className="flex items-center justify-between px-4 md:px-6 h-14">
 <div className="flex items-center gap-2">
-<button className="md:hidden inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="navToggle" style={{borderColor: '#E5E7EB', color: '#00412D', -TwRingColor: '#00412D', -TwRingOffsetColor: '#ffffff'}}>
+<button className="md:hidden inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="navToggle" style={{borderColor: '#E5E7EB', color: '#00412D', '--tw-ring-color': '#00412D', '--tw-ring-offset-color': '#ffffff'}}>
 <i data-lucide="menu"></i>
 </button>
 <div className="flex items-center gap-2">
@@ -32,7 +74,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="hidden md:flex items-center gap-3 flex-1 max-w-2xl mx-4">
 <div className="relative w-full">
 <i className="absolute left-3 top-2.5 h-5 w-5" data-lucide="search" style={{color: '#5A5A5A'}}></i>
-<input className="w-full pl-10 pr-10 py-2 rounded-xl border focus:outline-none focus:ring-2" id="globalSearch" placeholder="Search people, KRAs, KPIs, contracts..." style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D'}} type="search"/>
+<input className="w-full pl-10 pr-10 py-2 rounded-xl border focus:outline-none focus:ring-2" id="globalSearch" placeholder="Search people, KRAs, KPIs, contracts..." style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D'}} type="search"/>
 <kbd className="absolute right-3 top-2.5 hidden lg:inline-flex items-center rounded px-1.5 py-0.5 text-[11px]" style={{border: '1px solid #E5E7EB', color: '#5A5A5A'}}>/</kbd>
 </div>
 </div>
@@ -40,7 +82,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="hidden md:flex items-center gap-2">
 <div className="relative">
-<select className="appearance-none pr-8 pl-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2" id="roleSelect" style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D'}}>
+<select className="appearance-none pr-8 pl-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2" id="roleSelect" style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D'}}>
 <option value="employee">Employee / Appraisee</option>
 <option value="supervisor">Supervisor / Line Manager</option>
 <option value="director">Director / HOD</option>
@@ -52,21 +94,21 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <i className="pointer-events-none absolute right-2 top-2.5 h-5 w-5" data-lucide="chevron-down" style={{color: '#5A5A5A'}}></i>
 </div>
 </div>
-<button aria-label="Notifications" className="relative inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D', -TwRingOffsetColor: '#ffffff'}}>
+<button aria-label="Notifications" className="relative inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D', '--tw-ring-offset-color': '#ffffff'}}>
 <i data-lucide="bell"></i>
 <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full" style={{backgroundColor: '#E5B331'}}></span>
 </button>
-<button className="hidden md:inline-flex items-center rounded-xl border px-3 py-2 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="helpBtn" style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D', -TwRingOffsetColor: '#ffffff', color: '#00412D'}}>
+<button className="hidden md:inline-flex items-center rounded-xl border px-3 py-2 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="helpBtn" style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D', '--tw-ring-offset-color': '#ffffff', color: '#00412D'}}>
 <i className="mr-1.5" data-lucide="circle-help"></i> Help
           </button>
-<button aria-label="Toggle theme" className="inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="themeToggle" style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D', -TwRingOffsetColor: '#ffffff'}}>
+<button aria-label="Toggle theme" className="inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="themeToggle" style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D', '--tw-ring-offset-color': '#ffffff'}}>
 <i data-lucide="moon"></i>
 </button>
-<button aria-label="Open context panel" className="inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="contextOpen" style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D', -TwRingOffsetColor: '#ffffff'}}>
+<button aria-label="Open context panel" className="inline-flex items-center justify-center rounded-xl p-2 border hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="contextOpen" style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D', '--tw-ring-offset-color': '#ffffff'}}>
 <i data-lucide="panel-right"></i>
 </button>
 <div className="relative">
-<button className="inline-flex items-center gap-2 rounded-xl border px-2.5 py-1.5 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="profileBtn" style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D', -TwRingOffsetColor: '#ffffff'}}>
+<button className="inline-flex items-center gap-2 rounded-xl border px-2.5 py-1.5 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2" id="profileBtn" style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D', '--tw-ring-offset-color': '#ffffff'}}>
 <img alt="Avatar" className="h-7 w-7 rounded-full object-cover" src="https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&amp;w=64&amp;auto=format&amp;fit=crop"/>
 <span className="hidden md:inline text-sm">Adaobi</span>
 <i className="h-4 w-4" data-lucide="chevron-down" style={{color: '#5A5A5A'}}></i>
@@ -94,7 +136,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <aside className="w-72 shrink-0 border-r bg-white dark:bg-neutral-950 hidden md:flex flex-col" id="sidebar" style={{borderColor: '#E5E7EB'}}>
 <nav className="p-3 space-y-1">
-<button className="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-neutral-50 focus:outline-none focus:ring-2" data-route="home" style={{-TwRingColor: '#00412D'}}>
+<button className="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-neutral-50 focus:outline-none focus:ring-2" data-route="home" style={{'--tw-ring-color': '#00412D'}}>
 <i data-lucide="home"></i> <span>Home</span>
 </button>
 <button className="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-neutral-50 focus:outline-none focus:ring-2" data-route="contract">
@@ -468,7 +510,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="rounded-2xl border p-4 md:p-5" style={{borderColor: '#E5E7EB'}}>
 <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-<button className="step-btn rounded-xl border px-3 py-2 text-left focus:outline-none focus:ring-2" data-step="1" style={{borderColor: '#E5E7EB', -TwRingColor: '#00412D'}}>
+<button className="step-btn rounded-xl border px-3 py-2 text-left focus:outline-none focus:ring-2" data-step="1" style={{borderColor: '#E5E7EB', '--tw-ring-color': '#00412D'}}>
 <div className="text-xs" style={{color: '#5A5A5A'}}>Step 1</div>
 <div className="font-medium">Inherit KRAs</div>
 </button>

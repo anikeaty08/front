@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -283,6 +319,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -308,7 +350,7 @@ gtag('config', 'G-2M6V79H761');
           </span>
 </a>
 <nav className="hidden gap-1 lg:flex text-sm font-medium text-[#191919] bg-white/72 border-black/5 border rounded-2xl pt-1 pr-1 pb-1 pl-1 shadow-[0_14px_38px_rgba(20,20,20,0.06)] backdrop-blur gap-x-1 gap-y-1 items-center">
-<a className="rounded-xl px-4 py-2 text-white font-sans tracking-tight font-medium transition hover:-translate-y-0.5 hover-track" href="/home" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255,107,53,0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
+<a className="rounded-xl px-4 py-2 text-white font-sans tracking-tight font-medium transition hover:-translate-y-0.5 hover-track" href="/home" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255, 107, 53, 0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
             Home
           </a>
 <a className="rounded-xl px-4 py-2 text-[#4d4d4d] hover:text-[#111] font-sans tracking-tight font-medium transition hover-track" href="/about">
@@ -325,7 +367,7 @@ gtag('config', 'G-2M6V79H761');
           </a>
 </nav>
 <div className="hidden items-center gap-4 text-sm font-semibold sm:flex">
-<a className="rounded-xl px-5 py-3 text-white font-sans tracking-tight font-semibold transition hover:-translate-y-0.5 ds-btn" href="/get-proposal" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255,107,53,0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
+<a className="rounded-xl px-5 py-3 text-white font-sans tracking-tight font-semibold transition hover:-translate-y-0.5 ds-btn" href="/get-proposal" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255, 107, 53, 0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
             Get a Proposal
           </a>
 </div>
@@ -362,7 +404,7 @@ gtag('config', 'G-2M6V79H761');
               into loyal customers.
             </p>
 <div className="mt-10 flex flex-col gap-4 sm:flex-row items-center hero-cta">
-<a className="inline-flex w-full sm:w-auto items-center justify-center rounded-2xl px-8 py-4 text-base text-white font-sans tracking-tight font-medium transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-[#F97316]/25 ds-btn icon-nudge" href="#" style={{background: 'linear-gradient(135deg, #FF6B35, #E55A1F)', border: '1px solid rgba(229,90,31,0.3)', boxShadow: '0px 4px 8px rgba(255,107,53,0.2)'}}>
+<a className="inline-flex w-full sm:w-auto items-center justify-center rounded-2xl px-8 py-4 text-base text-white font-sans tracking-tight font-medium transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-[#F97316]/25 ds-btn icon-nudge" href="#" style={{background: 'linear-gradient(135deg, #FF6B35, #E55A1F)', border: '1px solid rgba(229, 90, 31, 0.3)', boxShadow: '0px 4px 8px rgba(255,107,53,0.2)'}}>
                 Start a Project
               </a>
 <a className="inline-flex w-full sm:w-auto items-center justify-center rounded-2xl border border-black/10 bg-white/80 px-8 py-4 text-base text-[#111] shadow-sm backdrop-blur-md transition-all hover:-translate-y-1 hover:bg-white hover:shadow-md font-sans tracking-tight font-medium group ds-btn icon-nudge" href="#">
@@ -379,7 +421,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="sm:col-span-2 rounded-[2rem] overflow-hidden relative shadow-[0_25px_50px_rgba(0,0,0,0.25)] border border-white/10 card-shell ds-card">
 <div className="absolute right-0 top-0 h-full w-2/3 opacity-60" style={{background: 'radial-gradient(circle at 70% 45%, rgba(255,255,255,0.18) 0%, rgba(120,120,150,0.12) 30%, transparent 60%)'}}></div>
-<div className="absolute right-[10%] top-[15%] h-56 w-56 rounded-full" style={{boxShadow: 'inset 0 0 60px rgba(255,255,255,0.15), 0 0 80px rgba(160,170,200,0.12)', border: '1px solid rgba(255,255,255,0.06)'}}></div>
+<div className="absolute right-[10%] top-[15%] h-56 w-56 rounded-full" style={{boxShadow: 'inset 0 0 60px rgba(255, 255, 255, 0.15), 0 0 80px rgba(160, 170, 200, 0.12)', border: '1px solid rgba(255,255,255,0.06)'}}></div>
 <div className="flex flex-col bg-center h-full bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7cec5dcf-de34-4f95-9ccf-89fdd95f3fb7_3840w.jpg?w=800&amp;q=80)] bg-cover z-10 p-6 sm:p-8 relative group">
 
 <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/60 to-transparent z-0 transition-opacity duration-700 ease-in-out group-hover:opacity-95"></div>
@@ -604,7 +646,7 @@ gtag('config', 'G-2M6V79H761');
               </p>
 </div>
 <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-<a className="inline-flex items-center justify-center rounded-xl px-6 py-4 text-sm font-semibold tracking-tight text-white transition hover:-translate-y-0.5 ds-btn" href="#" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255,107,53,0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
+<a className="inline-flex items-center justify-center rounded-xl px-6 py-4 text-sm font-semibold tracking-tight text-white transition hover:-translate-y-0.5 ds-btn" href="#" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255, 107, 53, 0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
                 Grow My Audience
               </a>
 <a className="inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/[0.06] px-6 py-4 text-sm font-semibold tracking-tight text-white/80 transition hover:-translate-y-0.5 hover:bg-white/[0.09] ds-btn hover-track" href="#">
@@ -890,7 +932,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="font-sans text-sm font-normal text-gray-900">Time Decay</span>
 </div>
 <div className="relative h-2 w-32 rounded-full bg-gray-100 overflow-hidden">
-<div className="absolute left-0 top-0 h-full rounded-full bg-gray-400 aura-shimmer-wrap" style={{animation: 'auraSlide 4s cubic-bezier(.2,.8,.3,1) .6s infinite', -W: '60%'}}></div>
+<div className="absolute left-0 top-0 h-full rounded-full bg-gray-400 aura-shimmer-wrap" style={{animation: 'auraSlide 4s cubic-bezier(.2,.8,.3,1) .6s infinite', '--w': '60%'}}></div>
 </div>
 </div>
 </div>
@@ -988,7 +1030,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-4 gap-y-4 reveal-hidden" data-reveal="">
 
-<div className="lg:col-span-7 relative flex flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-cover bg-center p-7 sm:p-8 min-h-[26rem] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.4)] card-shell" style={{backgroundImage: 'linear-gradient(160deg, rgba(17,17,17,0.55), rgba(17,17,17,0.85)), url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f977af0d-56e2-48e9-a72d-0382f04e5cdf_3840w.webp)', position: 'relative', overflow: 'hidden', isolation: 'isolate'}}>
+<div className="lg:col-span-7 relative flex flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-cover bg-center p-7 sm:p-8 min-h-[26rem] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.4)] card-shell" style={{backgroundImage: 'linear-gradient(160deg, rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.85)), url(https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f977af0d-56e2-48e9-a72d-0382f04e5cdf_3840w.webp)', position: 'relative', overflow: 'hidden', isolation: 'isolate'}}>
 <video data-aura-generated-video="true" data-aura-generated-video-bg="true" data-aura-video-preset="loop-in-view" loop="" muted="" playsinline="" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f977af0d-56e2-48e9-a72d-0382f04e5cdf_3840w.webp" preload="metadata" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/6069c980-7469-4c7c-8788-40b445c8d609/1780681923376-28015673-6967-46e9-93d6-18f3e2c795f6.mp4" style={{position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', zIndex: '0'}}></video>
 <h3 className="relative z-10 font-sora text-2xl font-normal tracking-tight text-white max-w-[20rem]">
               Say goodbye to manual reporting
@@ -1362,7 +1404,7 @@ gtag('config', 'G-2M6V79H761');
                 A systematic approach to scaling your brand. We don't guess—we
                 test, measure, and optimize to ensure every dollar works harder.
               </p>
-<a className="inline-flex items-center justify-center rounded-xl px-6 py-4 text-sm font-semibold tracking-tight text-white transition hover:-translate-y-0.5 shadow-[0_4px_14px_rgba(234,88,12,0.3)] ds-btn" href="#" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255,107,53,0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
+<a className="inline-flex items-center justify-center rounded-xl px-6 py-4 text-sm font-semibold tracking-tight text-white transition hover:-translate-y-0.5 shadow-[0_4px_14px_rgba(234,88,12,0.3)] ds-btn" href="#" style={{background: 'linear-gradient(145deg, #FF6B35, #E55A1F)', boxShadow: '0px 4px 8px rgba(255, 107, 53, 0.2)', border: '1px solid rgba(229,90,31,0.4)'}}>
                 Start Your Journey
               </a>
 </div>

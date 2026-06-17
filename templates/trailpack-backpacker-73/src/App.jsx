@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -176,7 +218,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="h-8"></div>
 </div>
 
-<div className="bg-white/95 border-slate-200 border-t pt-3 pr-6 pb-3 pl-6 absolute right-0 bottom-0 left-0 backdrop-blur-xl" style={{boxShadow: '0 -1px 0 0 rgba(0,0,0,0.05), 0 -4px 12px -2px rgba(0,0,0,0.08)'}}>
+<div className="bg-white/95 border-slate-200 border-t pt-3 pr-6 pb-3 pl-6 absolute right-0 bottom-0 left-0 backdrop-blur-xl" style={{boxShadow: '0 -1px 0 0 rgba(0, 0, 0, 0.05), 0 -4px 12px -2px rgba(0,0,0,0.08)'}}>
 <div className="flex items-center justify-around">
 <button className="tab-left flex flex-col items-center gap-1 py-2 px-4" data-tab="home">
 <svg className="w-6 h-6 text-slate-900" data-lucide="home" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
@@ -303,7 +345,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="mt-auto py-6"></div>
 </div>
 
-<div className="bg-white/95 border-slate-200 border-t pt-3 pr-6 pb-3 pl-6 absolute right-0 bottom-0 left-0 backdrop-blur-xl" style={{boxShadow: '0 -1px 0 0 rgba(0,0,0,0.05), 0 -4px 12px -2px rgba(0,0,0,0.08)'}}>
+<div className="bg-white/95 border-slate-200 border-t pt-3 pr-6 pb-3 pl-6 absolute right-0 bottom-0 left-0 backdrop-blur-xl" style={{boxShadow: '0 -1px 0 0 rgba(0, 0, 0, 0.05), 0 -4px 12px -2px rgba(0,0,0,0.08)'}}>
 <div className="flex items-center justify-around">
 <button className="tab-mid flex flex-col items-center gap-1 py-2 px-4" data-tab="home">
 <svg className="w-6 h-6 text-slate-900" data-lucide="home" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>

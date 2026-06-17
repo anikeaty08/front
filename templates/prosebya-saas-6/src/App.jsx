@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -225,11 +261,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             
             <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
               
-              <div className="relative w-full max-w-6xl h-full flex items-center justify-center" style={{ perspective: "800px" }}>
+              <div className="relative w-full max-w-6xl h-full flex items-center justify-center" style={{perspective: "800px"}}>
 
                 {/* === ТЕКСТ 1: СТАРТОВЫЙ === */}
                 <motion.div 
-                  style={{ opacity: text1Opacity, y: text1Y, scale: text1Scale }} 
+                  style={{opacity: text1Opacity, y: text1Y, scale: text1Scale}} 
                   className="absolute top-[15%] md:top-[12%] left-0 right-0 z-10 text-center px-4 flex flex-col items-center"
                 >
                   <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6">Заголовок лэндоса</h1>
@@ -241,11 +277,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
                 {/* === ТЕКСТ 2: ФИНАЛЬНЫЙ === */}
                 <motion.div 
-                  style={{ 
-                    opacity: text2Opacity, 
-                    x: isMobile ? 0 : text2MoveX,
-                    y: isMobile ? text2MoveY : 0
-                  }} 
+                  style={{opacity: text2Opacity, x: isMobile ? 0 : text2MoveX, y: isMobile ? text2MoveY : 0}} 
                   className={`
                     absolute z-30 flex flex-col justify-center 
                     
@@ -277,12 +309,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
                 {/* === ТЕЛЕФОН === */}
                 <motion.div 
-                  style={{ 
-                    x: phoneX, 
-                    y: phoneY, 
-                    scale: phoneScale,
-                    rotateX: phoneRotateX, 
-                  }}
+                  style={{x: phoneX, y: phoneY, scale: phoneScale, rotateX: phoneRotateX}}
                   className="absolute z-20 origin-bottom"
                 >
                   <div className="w-[280px] h-[580px] md:w-[300px] md:h-[600px] lg:w-[320px] lg:h-[650px] bg-white rounded-[40px] md:rounded-[50px] border-[8px] md:border-[10px] border-gray-900 shadow-2xl overflow-hidden relative transition-all duration-300">
@@ -341,6 +368,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

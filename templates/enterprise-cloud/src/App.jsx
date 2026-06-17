@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -1435,6 +1471,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -1767,7 +1809,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-<div className="lg:col-span-6 group flex flex-col overflow-hidden md:p-8 hover:border-white/20 transition-all duration-300 bg-neutral-950 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="lg:col-span-6 group flex flex-col overflow-hidden md:p-8 hover:border-white/20 transition-all duration-300 bg-neutral-950 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div className="flex justify-between items-start mb-6 relative z-10">
 <span className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-medium text-neutral-300 backdrop-blur-sm">
@@ -1806,7 +1848,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="lg:col-span-6 group flex flex-col overflow-hidden md:p-8 hover:border-white/20 transition-all duration-300 bg-neutral-950 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="lg:col-span-6 group flex flex-col overflow-hidden md:p-8 hover:border-white/20 transition-all duration-300 bg-neutral-950 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(45deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 <div className="flex justify-between items-start mb-6 relative z-10">
 <span className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-medium text-neutral-300 backdrop-blur-sm">
@@ -1952,7 +1994,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
 
 <div className="lg:col-span-6 lg:sticky lg:top-24">
-<div className="relative overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 shadow-[0_0_70px_rgba(0,0,0,0.65)]" id="casePreview" style={{-Mx: '50%', -My: '50%'}}>
+<div className="relative overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 shadow-[0_0_70px_rgba(0,0,0,0.65)]" id="casePreview" style={{'--mx': '50%', '--my': '50%'}}>
 
 <div className="absolute top-0 left-0 right-0 h-14 border-b border-white/10 bg-white/[0.03] backdrop-blur-xl z-20 flex items-center justify-between px-5">
 <div className="flex items-center gap-3">
@@ -2611,7 +2653,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
 
 <div className="lg:col-span-7" data-co-reveal="">
-<div aria-label="Nexus company blueprint" className="bp-wrap" data-bp-idle="1" style={{-SweepX: '50%', -SweepY: '50%'}} tabindex="0">
+<div aria-label="Nexus company blueprint" className="bp-wrap" data-bp-idle="1" style={{'--sweep-x': '50%', '--sweep-y': '50%'}} tabindex="0">
 
 <svg aria-hidden="true" className="co-trace" fill="none" viewbox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg">
 <path d="M140 740 C260 650, 320 620, 420 560 C560 470, 690 470, 820 420 C980 360, 1040 280, 1080 170" stroke="rgba(255,255,255,0.14)" strokeLinecap="round" strokeWidth="2"></path>
@@ -2824,7 +2866,7 @@ gtag('config', 'G-2M6V79H761');
 <section className="relative overflow-hidden bg-black pt-32 pb-32" id="pricing">
 
 <div className="absolute inset-0 pointer-events-none">
-<div className="absolute inset-0 opacity-[0.15]" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '50px 50px', maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'}}>
+<div className="absolute inset-0 opacity-[0.15]" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', backgroundSize: '50px 50px', maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'}}>
 </div>
 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-900/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none">
 </div>

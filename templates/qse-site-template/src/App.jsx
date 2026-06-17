@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -134,6 +170,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -338,7 +380,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid md:grid-cols-3 gap-6">
 
-<div className="glass-panel p-8 rounded-2xl flex flex-col hover-glow transition-all duration-500 reveal hover:-translate-y-1" style={{-X: '1277px', -Y: '-1754.296875px'}}>
+<div className="glass-panel p-8 rounded-2xl flex flex-col hover-glow transition-all duration-500 reveal hover:-translate-y-1" style={{'--x': '1277px', '--y': '-1754.296875px'}}>
 <div className="w-12 h-12 bg-neutral-100 dark:bg-white/5 rounded-xl flex items-center justify-center text-indigo-600 dark:text-white mb-6 border border-neutral-200 dark:border-white/10 shadow-sm">
 <iconify-icon icon="solar:water-drops-linear" width="24"></iconify-icon>
 </div>
@@ -351,7 +393,7 @@ gtag('config', 'G-2M6V79H761');
 </button>
 </div>
 
-<div className="glass-panel p-8 rounded-2xl flex flex-col hover-glow transition-all duration-500 reveal delay-100 relative overflow-hidden ring-1 ring-indigo-500/10 dark:ring-white/10 hover:-translate-y-1" style={{-X: '858.3359375px', -Y: '-1754.296875px'}}>
+<div className="glass-panel p-8 rounded-2xl flex flex-col hover-glow transition-all duration-500 reveal delay-100 relative overflow-hidden ring-1 ring-indigo-500/10 dark:ring-white/10 hover:-translate-y-1" style={{'--x': '858.3359375px', '--y': '-1754.296875px'}}>
 <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/5 to-transparent opacity-100"></div>
 <div className="relative z-10 flex flex-col h-full">
 <div className="w-12 h-12 bg-neutral-100 dark:bg-white/5 rounded-xl flex items-center justify-center text-blue-600 dark:text-white mb-6 border border-neutral-200 dark:border-white/10 shadow-sm">
@@ -367,7 +409,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="glass-panel p-8 rounded-2xl flex flex-col hover-glow transition-all duration-500 reveal delay-200 hover:-translate-y-1" style={{-X: '439.671875px', -Y: '-1754.296875px'}}>
+<div className="glass-panel p-8 rounded-2xl flex flex-col hover-glow transition-all duration-500 reveal delay-200 hover:-translate-y-1" style={{'--x': '439.671875px', '--y': '-1754.296875px'}}>
 <div className="w-12 h-12 bg-neutral-100 dark:bg-white/5 rounded-xl flex items-center justify-center text-indigo-600 dark:text-white mb-6 border border-neutral-200 dark:border-white/10 shadow-sm">
 <iconify-icon icon="solar:shield-warning-linear" width="24"></iconify-icon>
 </div>

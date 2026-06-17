@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -107,6 +143,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -124,7 +166,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white" style={{background: 'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>
 <iconify-icon icon="solar:water-linear" width="18"></iconify-icon>
 </div>
-<span className="text-white text-lg font-semibold tracking-tight" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Flowdesk</span>
+<span className="text-white text-lg font-semibold tracking-tight" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Flowdesk</span>
 </div>
 <nav className="hidden md:flex items-center gap-8 text-sm text-slate-400">
 <a className="hover:text-white transition" href="#features">Features</a>
@@ -143,13 +185,13 @@ gtag('config', 'G-2M6V79H761');
 <span className="w-1.5 h-1.5 rounded-full" style={{background: '#34d399'}}></span>
     Now with real-time AI summaries
   </div>
-<h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-white leading-[1.05]" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>
+<h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-white leading-[1.05]" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>
     Work flows
     <span className="" style={{background: 'linear-gradient(135deg,#818cf8,#c084fc)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>here.</span>
 </h1>
 <p className="mt-6 text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">The smart workspace that helps remote teams organize tasks, track progress, and collaborate in real time all in one calm, focused place.</p>
 <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-<a className="w-full sm:w-auto text-white font-medium px-6 py-3 rounded-xl hover:opacity-90 transition flex items-center justify-center gap-2" href="#" style={{background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', boxShadow: '0 8px 30px rgba(99,102,241,0.35)'}}>
+<a className="w-full sm:w-auto text-white font-medium px-6 py-3 rounded-xl hover:opacity-90 transition flex items-center justify-center gap-2" href="#" style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', boxShadow: '0 8px 30px rgba(99,102,241,0.35)'}}>
       Get Started Free
       <iconify-icon className="" icon="solar:arrow-right-linear" width="18"></iconify-icon>
 </a>
@@ -163,18 +205,18 @@ gtag('config', 'G-2M6V79H761');
 <section className="relative z-10 max-w-6xl mx-auto px-6 pb-16">
 <p className="text-center text-xs uppercase tracking-widest text-slate-500 mb-8">Trusted by 10,000+ teams worldwide</p>
 <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-60">
-<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Northwind</span>
-<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Lumio</span>
-<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Pulse</span>
-<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Vertex</span>
-<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Cobalt</span>
+<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Northwind</span>
+<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Lumio</span>
+<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Pulse</span>
+<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Vertex</span>
+<span className="text-xl font-semibold tracking-tight text-slate-400" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Cobalt</span>
 </div>
 </section>
 </div>
 
 <section className="max-w-6xl mx-auto px-6 py-24" id="features">
 <div className="max-w-2xl mx-auto text-center mb-16">
-<h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Everything your team needs</h2>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Everything your team needs</h2>
 <p className="mt-4 text-slate-400">Three core capabilities that keep work moving without the noise.</p>
 </div>
 <div className="grid md:grid-cols-3 gap-6">
@@ -283,7 +325,7 @@ gtag('config', 'G-2M6V79H761');
 
 <section className="max-w-6xl mx-auto px-6 py-24" id="pricing">
 <div className="max-w-2xl mx-auto text-center mb-16">
-<h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Simple, scalable pricing</h2>
+<h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Simple, scalable pricing</h2>
 <p className="mt-4 text-slate-400">Start free. Upgrade as your team grows.</p>
 </div>
 <div className="grid md:grid-cols-3 gap-6 items-start">
@@ -298,7 +340,7 @@ gtag('config', 'G-2M6V79H761');
 <li className="flex gap-2"><iconify-icon className="text-indigo-400" icon="solar:check-circle-linear" width="18"></iconify-icon>Basic dashboards</li>
 </ul>
 </div>
-<div className="p-7 rounded-2xl border border-indigo-500/40 relative" style={{background: 'linear-gradient(180deg,rgba(99,102,241,0.12),rgba(139,92,246,0.04))', boxShadow: '0 12px 40px rgba(99,102,241,0.2)'}}>
+<div className="p-7 rounded-2xl border border-indigo-500/40 relative" style={{background: 'linear-gradient(180deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.04))', boxShadow: '0 12px 40px rgba(99,102,241,0.2)'}}>
 <span className="absolute -top-3 left-7 text-xs text-white px-3 py-1 rounded-full" style={{background: 'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>Most popular</span>
 <h3 className="text-white font-semibold tracking-tight">Pro</h3>
 <p className="text-sm text-slate-400 mt-1">For growing remote teams</p>
@@ -331,7 +373,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white" style={{background: 'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>
 <iconify-icon icon="solar:water-linear" width="16"></iconify-icon>
 </div>
-<span className="text-white font-semibold tracking-tight" style={{fontFamily: '\'Space Grotesk\',sans-serif'}}>Flowdesk</span>
+<span className="text-white font-semibold tracking-tight" style={{fontFamily: '\'Space Grotesk\', sans-serif'}}>Flowdesk</span>
 </div>
 <nav className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-400">
 <a className="hover:text-white transition" href="#features">Features</a>

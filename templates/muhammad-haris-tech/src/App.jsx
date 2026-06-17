@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -9,6 +45,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -43,11 +85,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </nav>
 <div className="flex items-center gap-2">
 <a className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 ring-1 ring-white/10 shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-white/8 hover:shadow-lg hover:shadow-indigo-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60" href="#contact">
-<iconify-icon className="text-base" icon="solar:chat-square-call-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-base" icon="solar:chat-square-call-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
           Let’s talk
         </a>
 <button aria-controls="mobileMenu" aria-expanded="false" aria-label="Open menu" className="md:hidden inline-flex items-center justify-center rounded-xl bg-white/5 p-2 ring-1 ring-white/10 shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-white/8 hover:shadow-lg hover:shadow-indigo-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60" id="menuBtn">
-<iconify-icon className="text-xl" icon="solar:hamburger-menu-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-xl" icon="solar:hamburger-menu-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 </button>
 </div>
 </div>
@@ -86,11 +128,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-500/90 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-indigo-500/20 ring-1 ring-indigo-400/30 transition duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300/70" href="#projects">
-<iconify-icon className="text-lg" icon="solar:folder-open-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:folder-open-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 View Projects
               </a>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/5 px-5 py-3 text-sm font-semibold text-slate-100 ring-1 ring-white/10 shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-white/8 hover:shadow-lg hover:shadow-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60" href="#contact">
-<iconify-icon className="text-lg" icon="solar:letter-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:letter-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Contact Me
               </a>
 </div>
@@ -130,7 +172,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-xs text-slate-300">Optimized performance, clean UI, analytics ready.</p>
 </div>
 <span className="inline-flex items-center gap-2 rounded-full bg-indigo-500/15 px-3 py-1 text-xs font-semibold text-indigo-200 ring-1 ring-indigo-400/20">
-<iconify-icon className="text-sm" icon="solar:bolt-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:bolt-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                         Fast
                       </span>
 </div>
@@ -148,7 +190,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-xs text-slate-300">APIs, data handling, scheduled runs.</p>
 </div>
 <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200 ring-1 ring-emerald-400/20">
-<iconify-icon className="text-sm" icon="solar:code-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:code-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                         Reliable
                       </span>
 </div>
@@ -167,7 +209,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-2 text-xs text-slate-300">Automations, lead lifecycle, dashboards.</p>
 </div>
 <span className="inline-flex items-center gap-2 rounded-full bg-sky-500/15 px-3 py-1 text-xs font-semibold text-sky-200 ring-1 ring-sky-400/20">
-<iconify-icon className="text-sm" icon="solar:diagram-up-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:diagram-up-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                         Scalable
                       </span>
 </div>
@@ -199,7 +241,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
             </p>
 </div>
 <a className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-100 ring-1 ring-white/10 shadow-sm transition duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-white/8 hover:shadow-lg hover:shadow-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60" href="https://www.linkedin.com/in/muhammadharis-tech/" rel="noreferrer" target="_blank">
-<iconify-icon className="text-lg" icon="solar:link-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-lg" icon="solar:link-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
             View LinkedIn
           </a>
 </div>
@@ -211,7 +253,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-xs font-medium text-slate-300">Paste your LinkedIn summary here</p>
 </div>
 <span className="inline-flex items-center gap-2 rounded-full bg-indigo-500/15 px-3 py-1 text-xs font-semibold text-indigo-200 ring-1 ring-indigo-400/20">
-<iconify-icon className="text-sm" icon="solar:user-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:user-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Profile
               </span>
 </header>
@@ -222,15 +264,15 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
               </p>
 <ul className="grid gap-2 text-sm">
 <li className="flex gap-2">
-<iconify-icon className="mt-0.5 text-base text-emerald-300" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="mt-0.5 text-base text-emerald-300" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>Value proposition: faster delivery, clean builds, scalable automations.</span>
 </li>
 <li className="flex gap-2">
-<iconify-icon className="mt-0.5 text-base text-emerald-300" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="mt-0.5 text-base text-emerald-300" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>Strengths: performance optimization, integrations, CRM workflows.</span>
 </li>
 <li className="flex gap-2">
-<iconify-icon className="mt-0.5 text-base text-emerald-300" icon="solar:check-circle-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="mt-0.5 text-base text-emerald-300" icon="solar:check-circle-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
 <span>Outcomes: conversion-focused pages, automation-driven operations.</span>
 </li>
 </ul>
@@ -243,7 +285,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-xs font-medium text-slate-300">Add roles exactly as in LinkedIn</p>
 </div>
 <span className="inline-flex items-center gap-2 rounded-full bg-sky-500/15 px-3 py-1 text-xs font-semibold text-sky-200 ring-1 ring-sky-400/20">
-<iconify-icon className="text-sm" icon="solar:case-minimalistic-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:case-minimalistic-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Work
               </span>
 </header>
@@ -295,7 +337,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-xs font-medium text-slate-300">Paste certifications from LinkedIn</p>
 </div>
 <span className="inline-flex items-center gap-2 rounded-full bg-amber-400/15 px-3 py-1 text-xs font-semibold text-amber-200 ring-1 ring-amber-300/20">
-<iconify-icon className="text-sm" icon="solar:medal-ribbon-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:medal-ribbon-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Verified
               </span>
 </header>
@@ -319,7 +361,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-xs font-medium text-slate-300">Paste education entries from LinkedIn</p>
 </div>
 <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200 ring-1 ring-emerald-400/20">
-<iconify-icon className="text-sm" icon="solar:book-linear" style={{-IconifyStrokeWidth: '1.5'}}></iconify-icon>
+<iconify-icon className="text-sm" icon="solar:book-linear" style={{'--iconify-stroke-width': '1.5'}}></iconify-icon>
                 Academics
               </span>
 </header>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -108,6 +144,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -116,10 +158,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <canvas id="shader-canvas"></canvas>
 <div className="relative z-10 w-full min-h-screen flex flex-col items-center justify-center px-4 py-8">
 <div className="w-full max-w-5xl mx-auto text-center mb-14">
-<h1 className="text-[48px] md:text-[64px] font-[200] leading-tight tracking-[-0.03em] gradient-text bg-gradient-to-r from-white via-cyan-300 to-blue-400" style={{fontFamily: '\'Manrope\',sans-serif'}}>
+<h1 className="text-[48px] md:text-[64px] font-[200] leading-tight tracking-[-0.03em] gradient-text bg-gradient-to-r from-white via-cyan-300 to-blue-400" style={{fontFamily: '\'Manrope\', sans-serif'}}>
         Simple, transparent pricing
       </h1>
-<p className="mt-3 text-[16px] md:text-[20px] text-white/80 max-w-2xl mx-auto" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<p className="mt-3 text-[16px] md:text-[20px] text-white/80 max-w-2xl mx-auto" style={{fontFamily: '\'Inter\', sans-serif'}}>
         Choose a plan that fits your needs. Upgrade or downgrade anytime. No hidden fees, ever.
       </p>
 </div>
@@ -127,77 +169,77 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="glass-effect bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-2xl shadow-xl flex-1 max-w-xs px-7 py-8 flex flex-col">
 <div className="mb-3">
-<h2 className="text-[48px] font-[200] tracking-[-0.03em] text-white" style={{fontFamily: '\'Manrope\',sans-serif'}}>
+<h2 className="text-[48px] font-[200] tracking-[-0.03em] text-white" style={{fontFamily: '\'Manrope\', sans-serif'}}>
             Starter
           </h2>
-<p className="text-[16px] text-white/70 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<p className="text-[16px] text-white/70 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>
             All the basics to get started for individuals.
           </p>
 </div>
 <div className="my-6 flex items-baseline gap-2">
-<span className="text-[48px] font-[200] text-white" style={{fontFamily: '\'Manrope\',sans-serif'}}>$9</span>
-<span className="text-[14px] text-white/70" style={{fontFamily: '\'Inter\',sans-serif'}}>/mo</span>
+<span className="text-[48px] font-[200] text-white" style={{fontFamily: '\'Manrope\', sans-serif'}}>$9</span>
+<span className="text-[14px] text-white/70" style={{fontFamily: '\'Inter\', sans-serif'}}>/mo</span>
 </div>
 <div className="card-divider w-full mb-5"></div>
-<ul className="flex flex-col gap-2 text-[14px] text-white/90 mb-6" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<ul className="flex flex-col gap-2 text-[14px] text-white/90 mb-6" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> 1 Project</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> 5GB Storage</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> Community Support</li>
 </ul>
-<button className="mt-auto w-full py-2.5 rounded-xl bg-cyan-400/80 hover:bg-cyan-300 text-slate-900 font-semibold text-[14px] transition" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<button className="mt-auto w-full py-2.5 rounded-xl bg-cyan-400/80 hover:bg-cyan-300 text-slate-900 font-semibold text-[14px] transition" style={{fontFamily: '\'Inter\', sans-serif'}}>
           Start Free
         </button>
 </div>
 
 <div className="glass-effect bg-gradient-to-br from-white/20 to-white/10 border border-cyan-400/30 rounded-2xl shadow-2xl flex-1 max-w-xs px-7 py-8 flex flex-col scale-105 relative ring-2 ring-cyan-400/20">
-<div className="absolute -top-4 right-4 px-3 py-1 text-[12px] font-semibold rounded-full bg-cyan-400 text-slate-900 shadow" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<div className="absolute -top-4 right-4 px-3 py-1 text-[12px] font-semibold rounded-full bg-cyan-400 text-slate-900 shadow" style={{fontFamily: '\'Inter\', sans-serif'}}>
           Most Popular
         </div>
 <div className="mb-3">
-<h2 className="text-[48px] font-[200] tracking-[-0.03em] text-white" style={{fontFamily: '\'Manrope\',sans-serif'}}>
+<h2 className="text-[48px] font-[200] tracking-[-0.03em] text-white" style={{fontFamily: '\'Manrope\', sans-serif'}}>
             Pro
           </h2>
-<p className="text-[16px] text-white/70 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<p className="text-[16px] text-white/70 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>
             For professionals scaling their operations.
           </p>
 </div>
 <div className="my-6 flex items-baseline gap-2">
-<span className="text-[48px] font-[200] text-white" style={{fontFamily: '\'Manrope\',sans-serif'}}>$29</span>
-<span className="text-[14px] text-white/70" style={{fontFamily: '\'Inter\',sans-serif'}}>/mo</span>
+<span className="text-[48px] font-[200] text-white" style={{fontFamily: '\'Manrope\', sans-serif'}}>$29</span>
+<span className="text-[14px] text-white/70" style={{fontFamily: '\'Inter\', sans-serif'}}>/mo</span>
 </div>
 <div className="card-divider w-full mb-5"></div>
-<ul className="flex flex-col gap-2 text-[14px] text-white/90 mb-6" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<ul className="flex flex-col gap-2 text-[14px] text-white/90 mb-6" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> 10 Projects</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> 50GB Storage</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> Priority Support</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> Team Collaboration</li>
 </ul>
-<button className="mt-auto w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-semibold text-[14px] transition" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<button className="mt-auto w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-900 font-semibold text-[14px] transition" style={{fontFamily: '\'Inter\', sans-serif'}}>
           Try Pro
         </button>
 </div>
 
 <div className="glass-effect bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-2xl shadow-xl flex-1 max-w-xs px-7 py-8 flex flex-col">
 <div className="mb-3">
-<h2 className="text-[48px] font-[200] tracking-[-0.03em] text-white" style={{fontFamily: '\'Manrope\',sans-serif'}}>
+<h2 className="text-[48px] font-[200] tracking-[-0.03em] text-white" style={{fontFamily: '\'Manrope\', sans-serif'}}>
             Enterprise
           </h2>
-<p className="text-[16px] text-white/70 mt-1" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<p className="text-[16px] text-white/70 mt-1" style={{fontFamily: '\'Inter\', sans-serif'}}>
             Custom solutions for growing teams.
           </p>
 </div>
 <div className="my-6 flex items-baseline gap-2">
-<span className="text-[48px] font-[200] text-white" style={{fontFamily: '\'Manrope\',sans-serif'}}>$99</span>
-<span className="text-[14px] text-white/70" style={{fontFamily: '\'Inter\',sans-serif'}}>/mo</span>
+<span className="text-[48px] font-[200] text-white" style={{fontFamily: '\'Manrope\', sans-serif'}}>$99</span>
+<span className="text-[14px] text-white/70" style={{fontFamily: '\'Inter\', sans-serif'}}>/mo</span>
 </div>
 <div className="card-divider w-full mb-5"></div>
-<ul className="flex flex-col gap-2 text-[14px] text-white/90 mb-6" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<ul className="flex flex-col gap-2 text-[14px] text-white/90 mb-6" style={{fontFamily: '\'Inter\', sans-serif'}}>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> Unlimited Projects</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> 1TB Storage</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> 24/7 Support</li>
 <li className="flex items-center gap-2"><i className="fa fa-check text-cyan-400"></i> Dedicated Manager</li>
 </ul>
-<button className="mt-auto w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-[14px] border border-white/20 transition" style={{fontFamily: '\'Inter\',sans-serif'}}>
+<button className="mt-auto w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-[14px] border border-white/20 transition" style={{fontFamily: '\'Inter\', sans-serif'}}>
           Contact Sales
         </button>
 </div>

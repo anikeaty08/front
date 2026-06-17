@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -309,6 +345,12 @@ lucide.createIcons();
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -325,7 +367,7 @@ lucide.createIcons();
 
 <div className="pointer-events-none absolute left-0 top-[700px] z-[1] h-[180px] w-full bg-gradient-to-b from-transparent via-[#030610]/55 to-[#030610]"></div>
 <div className="relative z-20 mx-auto max-w-7xl">
-<header className="relative z-50 -mx-8 w-[calc(100%+4rem)] border-b border-white/15 bg-[#02050d]/90 px-8 backdrop-blur-xl sm:-mx-6 sm:w-[calc(100%+3rem)] sm:px-6 lg:-mx-8 lg:w-[calc(100%+4rem)] lg:px-8 load-fade is-visible" style={{-LoadDelay: '80ms'}}>
+<header className="relative z-50 -mx-8 w-[calc(100%+4rem)] border-b border-white/15 bg-[#02050d]/90 px-8 backdrop-blur-xl sm:-mx-6 sm:w-[calc(100%+3rem)] sm:px-6 lg:-mx-8 lg:w-[calc(100%+4rem)] lg:px-8 load-fade is-visible" style={{'--load-delay': '80ms'}}>
 <div className="flex sm:px-4 lg:px-2 w-full h-[76px] max-w-7xl mr-auto ml-auto pr-2 pl-2 gap-x-4 gap-y-4 items-center justify-between">
 
 <a className="group flex items-center gap-3" href="/home">
@@ -383,17 +425,17 @@ lucide.createIcons();
 </header>
 
 <div className="flex flex-col sm:pt-24 text-center max-w-5xl mx-auto pt-12 items-center" id="hero-p">
-<div className="inline-flex text-sm font-normal text-white/80 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-full mb-8 px-5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md gap-x-2 gap-y-2 items-center load-fade is-visible" data-load="eyebrow" id="hero-tag" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px', -LoadDelay: '180ms'}}>
+<div className="inline-flex text-sm font-normal text-white/80 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-full mb-8 px-5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md gap-x-2 gap-y-2 items-center load-fade is-visible" data-load="eyebrow" id="hero-tag" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px', '--load-delay': '180ms'}}>
 <svg aria-hidden="true" className="lucide lucide-sparkles h-4 w-4 text-cyan-300" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
               Early Access opens this Fall
             </div>
-<h1 className="max-w-4xl text-5xl font-normal leading-[0.98] tracking-tight text-white sm:text-6xl lg:text-7xl load-fade is-visible" data-load="headline" id="hero-h1" style={{-LoadDelay: '280ms'}}>Scale faster with<br className="hidden sm:block"/>intelligent AI <span className="bg-gradient-to-r from-teal-200 via-cyan-300 to-violet-400 bg-clip-text text-transparent">workflows</span></h1>
-<p className="leading-8 text-lg font-normal text-white max-w-2xl mt-8 load-fade is-visible" style={{-LoadDelay: '390ms'}}>
+<h1 className="max-w-4xl text-5xl font-normal leading-[0.98] tracking-tight text-white sm:text-6xl lg:text-7xl load-fade is-visible" data-load="headline" id="hero-h1" style={{'--load-delay': '280ms'}}>Scale faster with<br className="hidden sm:block"/>intelligent AI <span className="bg-gradient-to-r from-teal-200 via-cyan-300 to-violet-400 bg-clip-text text-transparent">workflows</span></h1>
+<p className="leading-8 text-lg font-normal text-white max-w-2xl mt-8 load-fade is-visible" style={{'--load-delay': '390ms'}}>
               Automate operations, surface insights, and empower your team
               <br className="hidden sm:block"/>
               with a unified AI platform built for modern businesses.
             </p>
-<a className="group relative mt-12 inline-flex items-center justify-center overflow-hidden rounded-[28px] border border-cyan-200/80 bg-slate-950/90 px-10 py-4 text-base font-semibold text-white shadow-[0_0_30px_rgba(34,211,238,0.65),0_0_70px_rgba(37,99,235,0.45),inset_0_0_22px_rgba(34,211,238,0.22)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_42px_rgba(34,211,238,0.85),0_0_90px_rgba(37,99,235,0.65),inset_0_0_28px_rgba(34,211,238,0.28)] load-fade is-visible" data-load="cta" href="#" id="hero-cta" style={{-LoadDelay: '500ms'}}>
+<a className="group relative mt-12 inline-flex items-center justify-center overflow-hidden rounded-[28px] border border-cyan-200/80 bg-slate-950/90 px-10 py-4 text-base font-semibold text-white shadow-[0_0_30px_rgba(34,211,238,0.65),0_0_70px_rgba(37,99,235,0.45),inset_0_0_22px_rgba(34,211,238,0.22)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_42px_rgba(34,211,238,0.85),0_0_90px_rgba(37,99,235,0.65),inset_0_0_28px_rgba(34,211,238,0.28)] load-fade is-visible" data-load="cta" href="#" id="hero-cta" style={{'--load-delay': '500ms'}}>
 <span className="absolute inset-0 rounded-[28px] bg-gradient-to-r from-cyan-300 via-blue-500 to-cyan-300 opacity-80 blur-[2px]"></span>
 <span className="absolute inset-[2px] rounded-[26px] bg-gradient-to-b from-slate-900 via-slate-950 to-black"></span>
 <span className="absolute left-4 right-4 top-2 h-1/2 rounded-full bg-gradient-to-b from-cyan-200/25 via-blue-300/10 to-transparent blur-sm"></span>
@@ -407,9 +449,9 @@ lucide.createIcons();
 </div>
 
 <div className="flex min-h-[520px] flex-col sm:px-6 lg:mt-24 lg:flex-col items-center lg:px-8 lg:mb-0 w-full z-30 mt-32 mb-12 px-4 relative">
-<div className="overflow-hidden bg-[#050914] w-full max-w-7xl border-blue-500/20 border rounded-xl mr-auto ml-auto pt-0 pr-0 pb-0 pl-0 relative load-fade is-visible" data-load="dashboard" id="hero-dashboard" style={{-LoadDelay: '660ms'}}>
+<div className="overflow-hidden bg-[#050914] w-full max-w-7xl border-blue-500/20 border rounded-xl mr-auto ml-auto pt-0 pr-0 pb-0 pl-0 relative load-fade is-visible" data-load="dashboard" id="hero-dashboard" style={{'--load-delay': '660ms'}}>
 <div className="overflow-hidden bg-[#050914] w-full max-w-7xl border-blue-500/20 border rounded-xl mr-auto ml-auto pt-1.5 pr-1.5 pb-1.5 pl-1.5 relative" data-dashboard-frame="true">
-<div className="flex min-h-[520px] overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex min-h-[520px] overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 
 <aside className="hidden w-[210px] shrink-0 flex-col justify-between border-r border-white/10 bg-[#06111f]/60 p-4 lg:flex">
 
@@ -489,7 +531,7 @@ lucide.createIcons();
 
 <div className="">
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-3 pb-3 pl-3 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-3 pr-3 pb-3 pl-3 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="relative">
 <div className="mb-3 flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.05] text-cyan-200">
 <svg className="h-3.5 w-3.5" fill="none" viewbox="0 0 24 24">
@@ -508,7 +550,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<button className="flex transition hover:bg-white/[0.04] text-left bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-4 pt-2 pr-2 pb-2 pl-2 gap-x-2.5 gap-y-2.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<button className="flex transition hover:bg-white/[0.04] text-left bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-4 pt-2 pr-2 pb-2 pl-2 gap-x-2.5 gap-y-2.5 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="min-w-0 flex-1">
 <p className="truncate text-[11px] font-medium text-white/80">
                           Nexora Studio
@@ -555,7 +597,7 @@ lucide.createIcons();
 </header>
 
 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Workflow Runs</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">
@@ -572,7 +614,7 @@ lucide.createIcons();
 <path className="" d="M2 34 L15 22 L26 27 L39 15 L52 20 L65 9 L78 17 L91 6 L104 12 L117 3 L138 22" fill="none" stroke="#2dd4bf" strokeWidth="2"></path>
 </svg>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Tasks Automated</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">
@@ -587,7 +629,7 @@ lucide.createIcons();
 <div className="h-11 w-11 rounded-full border-[5px] border-cyan-300/80 border-l-white/10"></div>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Time Saved</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">320h</span>
@@ -607,7 +649,7 @@ lucide.createIcons();
 <span className="h-6 w-1.5 rounded-full bg-indigo-400/80"></span>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <p className="text-xs text-white/55">Cost Savings</p>
 <div className="mt-2 flex items-end gap-2">
 <span className="text-xl font-normal text-white">
@@ -624,7 +666,7 @@ lucide.createIcons();
 </div>
 
 <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-3">
-<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', '--border-radius-before': '8px'}}>
 
 <div className="mb-2 flex items-center justify-between">
 <div className="flex items-center gap-1">
@@ -825,7 +867,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-3 font-sans bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-blue-500/10 to-blue-500/0 rounded-lg pt-3 pr-3 pb-3 pl-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 
 <div className="mb-4 flex items-center justify-between">
 <div className="flex items-center gap-1.5">
@@ -982,7 +1024,7 @@ lucide.createIcons();
 </div>
 
 <div className="grid grid-cols-1 gap-3 xl:grid-cols-5 mt-3">
-<div className="xl:col-span-3 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-3 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <div className="mb-3 flex items-center justify-between">
 <h3 className="text-sm font-normal tracking-[-0.02em] text-white">
                 Active Workflows
@@ -1024,7 +1066,7 @@ lucide.createIcons();
 </div>
 </div>
 </div>
-<div className="xl:col-span-2 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="xl:col-span-2 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-lg px-3 py-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '8px'}}>
 <div className="mb-3 flex items-center justify-between">
 <h3 className="text-sm font-normal tracking-[-0.02em] text-white">
                 Recent Activity
@@ -1145,7 +1187,7 @@ lucide.createIcons();
 </div>
 <div className="pointer-events-none absolute bottom-0 left-0 h-16 w-full overflow-hidden border-t border-white/25" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent 55%), repeating-linear-gradient(to right, rgba(255, 255, 255, 0.24) 0px, rgba(255, 255, 255, 0.24) 1px, transparent 1px, transparent 16px)'}}></div>
 </section>
-<section className="overflow-hidden sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 lg:pt-12 text-white bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-20 pl-8 relative scroll-reveal" style={{-RevealDelay: '0ms'}}>
+<section className="overflow-hidden sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 lg:pt-12 text-white bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-20 pl-8 relative scroll-reveal" style={{'--reveal-delay': '0ms'}}>
 
 <div className="relative mx-auto max-w-6xl">
 
@@ -1180,7 +1222,7 @@ lucide.createIcons();
 
 <div className="grid gap-3">
 
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="">
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
@@ -1194,7 +1236,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="">
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
@@ -1237,7 +1279,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="">
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
@@ -1270,7 +1312,7 @@ lucide.createIcons();
 </div>
 
 <div className="grid gap-3">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="flex gap-3">
 <div className="">
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
@@ -1308,7 +1350,7 @@ lucide.createIcons();
 </svg>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
                     Active Workflows
                   </h3>
@@ -1354,7 +1396,7 @@ lucide.createIcons();
 </div>
 
 <div className="grid gap-3">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <div className="mb-4 flex items-center justify-between">
 <div className="flex gap-2.5 gap-x-2.5 gap-y-2.5 items-center">
 <span className="text-base font-medium tracking-[-0.02em] text-white">
@@ -1406,7 +1448,7 @@ lucide.createIcons();
 </div>
 </div>
 <div className="grid gap-3 md:grid-cols-[0.9fr_1.4fr]">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
                       Performance
                     </h3>
@@ -1422,7 +1464,7 @@ lucide.createIcons();
                       </p>
 </div>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl pt-4 pr-4 pb-4 pl-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <h3 className="text-base font-medium tracking-[-0.02em] text-white">
                       Recent Activity
                     </h3>
@@ -1471,7 +1513,7 @@ lucide.createIcons();
         transparent 1px,
         transparent 16px
       )"></div>
-</section><section className="overflow-hidden sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 lg:pt-12 text-white bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-20 pl-8 relative scroll-reveal" style={{-RevealDelay: '40ms'}}>
+</section><section className="overflow-hidden sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 lg:pt-12 text-white bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-20 pl-8 relative scroll-reveal" style={{'--reveal-delay': '40ms'}}>
 
 <div className="relative mx-auto max-w-6xl">
 
@@ -1712,7 +1754,7 @@ lucide.createIcons();
         transparent 16px
       )"></div>
 </section>
-<section className="sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 font-sans bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-20 pl-8 relative scroll-reveal" style={{-RevealDelay: '80ms'}}>
+<section className="sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 font-sans bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-20 pl-8 relative scroll-reveal" style={{'--reveal-delay': '80ms'}}>
 <div className="relative mx-auto max-w-6xl">
 <div className="mb-24 flex w-full flex-col gap-8 border-b border-white/10 pb-10 lg:flex-row lg:items-end lg:justify-between gap-x-8 gap-y-8">
 <div className="max-w-xl">
@@ -2444,7 +2486,7 @@ lucide.createIcons();
         transparent 16px
       )"></div>
 </section>
-<section className="flex flex-col lg:flex-row lg:items-end lg:justify-between border-white/15 border-b pt-16 pb-0 relative gap-x-8 gap-y-8 scroll-reveal" style={{-RevealDelay: '120ms'}}>
+<section className="flex flex-col lg:flex-row lg:items-end lg:justify-between border-white/15 border-b pt-16 pb-0 relative gap-x-8 gap-y-8 scroll-reveal" style={{'--reveal-delay': '120ms'}}>
 <section className="relative w-full border-b border-white/15 pt-16 pb-32">
 <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
 
@@ -2724,7 +2766,7 @@ lucide.createIcons();
 
 
 </section>
-</section><section className="flex flex-col lg:flex-row lg:items-end lg:justify-between border-white/15 border-b pt-16 pb-0 relative gap-x-8 gap-y-8 scroll-reveal" style={{-RevealDelay: '160ms'}}>
+</section><section className="flex flex-col lg:flex-row lg:items-end lg:justify-between border-white/15 border-b pt-16 pb-0 relative gap-x-8 gap-y-8 scroll-reveal" style={{'--reveal-delay': '160ms'}}>
 <section className="relative w-full border-b border-white/15 pt-16 pb-32">
 <div className="relative mx-auto w-full max-w-6xl">
 
@@ -2769,7 +2811,7 @@ lucide.createIcons();
 <div className="absolute inset-x-0 top-0 flex flex-col gap-6 hover:[animation-play-state:paused]" style={{animation: 'marquee-vertical-down 40s linear infinite'}}>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2808,7 +2850,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2848,7 +2890,7 @@ lucide.createIcons();
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2887,7 +2929,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2927,7 +2969,7 @@ lucide.createIcons();
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -2966,7 +3008,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3006,7 +3048,7 @@ lucide.createIcons();
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3045,7 +3087,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3124,7 +3166,7 @@ lucide.createIcons();
 <div className="absolute inset-x-0 top-0 flex flex-col gap-6 hover:[animation-play-state:paused]" style={{animation: 'marquee-vertical-down 40s linear infinite'}}>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3162,7 +3204,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3202,7 +3244,7 @@ lucide.createIcons();
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3240,7 +3282,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3280,7 +3322,7 @@ lucide.createIcons();
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3318,7 +3360,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3358,7 +3400,7 @@ lucide.createIcons();
 </div>
 
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3396,7 +3438,7 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '1.75rem'}}>
+<div className="group transition duration-300 hover:border-white/20 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[1.75rem] px-7 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '1.75rem'}}>
 <div className="flex items-start justify-between gap-5">
 <div className="flex min-w-0 items-center gap-3.5">
 <div className="relative shrink-0">
@@ -3441,7 +3483,7 @@ lucide.createIcons();
 <div className="pointer-events-none absolute bottom-0 left-0 h-16 w-full overflow-hidden border-t border-white/25" style={{backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.08), transparent 55%), repeating-linear-gradient(to right, rgba(255, 255, 255, 0.24) 0px, rgba(255, 255, 255, 0.24) 1px, transparent 1px, transparent 16px)'}}></div>
 </section>
 </section>
-<section className="flex flex-col lg:flex-row lg:items-end lg:justify-between border-white/15 border-b pt-16 pb-32 relative gap-x-8 gap-y-8 scroll-reveal" style={{-RevealDelay: '160ms'}}>
+<section className="flex flex-col lg:flex-row lg:items-end lg:justify-between border-white/15 border-b pt-16 pb-32 relative gap-x-8 gap-y-8 scroll-reveal" style={{'--reveal-delay': '160ms'}}>
 <div className="relative mx-auto max-w-6xl">
 
 <div className="flex w-full flex-col gap-8 border-b border-white/10 pb-10 lg:flex-row lg:items-end lg:justify-between gap-x-8 gap-y-8">
@@ -3471,7 +3513,7 @@ lucide.createIcons();
 
 <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr] mt-12 gap-x-5 gap-y-5">
 
-<div className="flex flex-col overflow-hidden lg:p-7 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col overflow-hidden lg:p-7 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-6 pr-6 pb-6 pl-6 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="relative flex flex-1 flex-col">
 <div className="flex items-start justify-between gap-6">
 <div>
@@ -3499,7 +3541,7 @@ lucide.createIcons();
                   collaborate at scale.
                 </p>
 <div className="mt-7 grid gap-3 sm:grid-cols-3">
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <p className="text-lg font-light tracking-tight text-white">
                       Unlimited
                     </p>
@@ -3507,7 +3549,7 @@ lucide.createIcons();
                       Workflows
                     </p>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
 <p className="text-lg font-light tracking-tight text-white">
                       Advanced
                     </p>
@@ -3515,7 +3557,7 @@ lucide.createIcons();
                       AI Models
                     </p>
 </div>
-<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', -BorderRadiusBefore: '12px'}}>
+<div className="bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-xl px-4 py-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.1))', '--border-radius-before': '12px'}}>
 <p className="text-lg font-light tracking-tight text-white">
                       24/7
                     </p>
@@ -3553,7 +3595,7 @@ lucide.createIcons();
 <div className="grid gap-5">
 <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
 
-<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="">
 <div className="flex items-center justify-between">
 <h3 className="text-xl font-light tracking-tight text-white">
@@ -3591,12 +3633,12 @@ lucide.createIcons();
                       </li>
 </ul>
 </div>
-<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
                     Get Started
                   </button>
 </div>
 
-<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex flex-col bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl justify-between" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="">
 <div className="flex items-center justify-between">
 <h3 className="text-xl font-light tracking-tight text-white">
@@ -3631,13 +3673,13 @@ lucide.createIcons();
                       </li>
 </ul>
 </div>
-<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '12px'}}>
+<button className="transition-colors hover:bg-white/10 text-sm font-light text-white bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-xl mt-6 px-4 py-3.5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '12px'}}>
                     Contact Sales
                   </button>
 </div>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-2xl pt-5 pr-5 pb-5 pl-5 relative shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '16px'}}>
 <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 <div className="">
 <p className="text-sm font-light text-white/50">Trusted by</p>
@@ -3672,7 +3714,7 @@ lucide.createIcons();
 </div>
 <div className="pointer-events-none absolute bottom-0 left-0 h-16 w-full overflow-hidden border-t border-white/25" style={{backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.08), transparent 55%), repeating-linear-gradient(to right, rgba(255, 255, 255, 0.24) 0px, rgba(255, 255, 255, 0.24) 1px, transparent 1px, transparent 16px)'}}></div>
 </section>
-<section className="relative overflow-hidden border-b border-white/15 bg-[#030711] px-8 pb-28 pt-24 font-sans sm:px-6 lg:px-8 lg:pb-32 lg:pt-16 scroll-reveal" style={{-RevealDelay: '160ms'}}>
+<section className="relative overflow-hidden border-b border-white/15 bg-[#030711] px-8 pb-28 pt-24 font-sans sm:px-6 lg:px-8 lg:pb-32 lg:pt-16 scroll-reveal" style={{'--reveal-delay': '160ms'}}>
 <div className="pointer-events-none absolute inset-0"></div>
 
 <div className="relative z-10 mx-auto max-w-6xl">
@@ -3688,7 +3730,7 @@ lucide.createIcons();
                 Everything you need to know about Nexora, billing, security, and
                 team support.
               </p>
-<div className="mt-10 overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-blue-500/0 p-6 shadow-[0_0_40px_rgba(34,211,238,0.03),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="mt-10 overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-blue-500/0 p-6 shadow-[0_0_40px_rgba(34,211,238,0.03),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px'}}>
 <h3 className="text-xl font-normal tracking-tight text-white">
                   Still need help?
                 </h3>
@@ -3710,11 +3752,11 @@ lucide.createIcons();
 </div>
 </div>
 
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[2rem] pt-3 pr-3 pb-3 pl-3 relative shadow-[0_0_60px_rgba(34,211,238,0.045),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2rem'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-[2rem] pt-3 pr-3 pb-3 pl-3 relative shadow-[0_0_60px_rgba(34,211,238,0.045),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2rem'}}>
 <details className="group relative border-b border-white/10 px-5 py-6 transition-colors duration-300 sm:px-6" open="">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span className="">Is there a free trial available?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3732,7 +3774,7 @@ lucide.createIcons();
 <details className="group relative border-b border-white/10 px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none gap-6 [&amp;::-webkit-details-marker]:hidden sm:text-lg text-base font-normal text-white gap-x-6 gap-y-6 items-center justify-between">
 <span className="">Can I change my plan later?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="w-[16px] h-[16px]" data-icon-replaced="true" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: 'rgb(103, 232, 249)', width: '16px', height: '16px'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path className="" d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3749,7 +3791,7 @@ lucide.createIcons();
 <details className="group relative border-b border-white/10 px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span className="">What is your cancellation policy?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3766,7 +3808,7 @@ lucide.createIcons();
 <details className="group relative border-b border-white/10 px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span>Do you offer custom enterprise plans?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3783,7 +3825,7 @@ lucide.createIcons();
 <details className="group relative px-5 py-6 open:bg-white/[0.025] transition-colors duration-300 hover:bg-white/[0.018] sm:px-6">
 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-normal text-white [&amp;::-webkit-details-marker]:hidden sm:text-lg">
 <span className="">How secure is my data?</span>
-<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '9999px'}}>
+<span className="flex shrink-0 items-center justify-center transition-all duration-300 group-open:rotate-180 group-hover:border-cyan-300/30 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-9 h-9 rounded-full" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '9999px'}}>
 <svg className="h-4 w-4 text-cyan-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <path d="m6 9 6 6 6-6"></path>
 </svg>
@@ -3810,7 +3852,7 @@ lucide.createIcons();
         transparent 16px
       )"></div>
 </section>
-<section className="overflow-hidden sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 lg:pt-16 font-sans bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-32 pl-8 relative scroll-reveal" style={{-RevealDelay: '160ms'}}>
+<section className="overflow-hidden sm:px-6 lg:pl-8 lg:pr-8 lg:pb-32 lg:pt-16 font-sans bg-[#030711] border-white/15 border-b pt-16 pr-8 pb-32 pl-8 relative scroll-reveal" style={{'--reveal-delay': '160ms'}}>
 
 <div className="relative z-10 mx-auto max-w-3xl text-center">
 <div className="inline-flex items-center justify-center gap-3 text-xs font-normal uppercase tracking-[0.24em] text-cyan-300/90">
@@ -3871,7 +3913,7 @@ lucide.createIcons();
         transparent 16px
       )"></div>
 </section>
-<section className="relative overflow-hidden rounded-b-2xl bg-[#020712] px-4 py-12 font-sans text-white sm:px-6 lg:px-8 scroll-reveal" style={{-RevealDelay: '160ms'}}>
+<section className="relative overflow-hidden rounded-b-2xl bg-[#020712] px-4 py-12 font-sans text-white sm:px-6 lg:px-8 scroll-reveal" style={{'--reveal-delay': '160ms'}}>
 
 <div className="pointer-events-none absolute inset-0 opacity-[0.05]" style={{backgroundImage: 'radial-gradient(rgba(255,255,255,0.55) 0.0625rem, transparent 0.0625rem)', backgroundSize: '1.25rem 1.25rem'}}></div>
 <div className="relative mx-auto max-w-6xl">

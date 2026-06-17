@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -417,6 +453,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -425,8 +467,8 @@ gtag('config', 'G-2M6V79H761');
 
 <canvas className="fixed inset-0 pointer-events-none z-0 opacity-60" height="893" id="particle-canvas" width="1331"></canvas>
 
-<div className="fixed top-[-10%] right-[10%] w-[60vw] h-[120vh] pointer-events-none z-0" style={{background: 'linear-gradient(180deg, rgba(74,222,128,0.03) 0%, rgba(255,255,255,0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(80px)', transformOrigin: 'top center'}}></div>
-<div className="fixed top-[-5%] right-[20%] w-[30vw] h-[100vh] pointer-events-none z-0" style={{background: 'linear-gradient(180deg, rgba(167,243,208,0.02) 0%, rgba(255,255,255,0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(40px)', transformOrigin: 'top center'}}></div>
+<div className="fixed top-[-10%] right-[10%] w-[60vw] h-[120vh] pointer-events-none z-0" style={{background: 'linear-gradient(180deg, rgba(74, 222, 128, 0.03) 0%, rgba(255, 255, 255, 0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(80px)', transformOrigin: 'top center'}}></div>
+<div className="fixed top-[-5%] right-[20%] w-[30vw] h-[100vh] pointer-events-none z-0" style={{background: 'linear-gradient(180deg, rgba(167, 243, 208, 0.02) 0%, rgba(255, 255, 255, 0) 100%)', transform: 'rotate(-35deg)', filter: 'blur(40px)', transformOrigin: 'top center'}}></div>
 
 <nav className="absolute top-0 w-full z-50 px-6 py-4 lg:px-24 flex justify-between items-center border-b border-white/[0.04] bg-background/50 backdrop-blur-md">
 <div className="text-white font-medium tracking-tighter text-lg flex items-center gap-2">

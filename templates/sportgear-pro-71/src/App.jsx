@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -101,6 +137,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -120,7 +162,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </nav>
 </header>
-<section className="relative min-h-screen flex items-center justify-center text-center pt-20 px-6" id="home" style={{backgroundImage: 'url(\'data:image/svg+xml,&lt', svg xmlns=%22http: '//www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22&gt', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<section className="relative min-h-screen flex items-center justify-center text-center pt-20 px-6" id="home" style={{backgroundImage: 'url(\'data:image/svg+xml, &lt', svg xmlns=%22http: '//www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22&gt', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="backdrop-blur-[2px] bg-blue-950/80 mix-blend-multiply absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="z-10 animate-fade-in-up max-w-3xl mr-auto ml-auto relative">
 <h1 className="md:text-5xl lg:text-6xl leading-tight text-4xl font-semibold text-white tracking-tight mb-6">Premium Sports Equipment</h1>

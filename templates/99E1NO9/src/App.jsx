@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
           const slides = [
@@ -303,6 +339,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -315,7 +357,7 @@ export default function App() {
 </div>
 
 <div className="fixed top-0 left-0 right-0 z-50 pt-6 px-6">
-<div className="max-w-6xl mx-auto border border-white/10 rounded-3xl px-6 sm:px-8 py-4" style={{background: 'linear-gradient(135deg, rgba(234,179,8,0.10) 0%, rgba(34,197,94,0.10) 100%)', backdropFilter: 'blur(28px)', WebkitBackdropFilter: 'blur(28px)'}}>
+<div className="max-w-6xl mx-auto border border-white/10 rounded-3xl px-6 sm:px-8 py-4" style={{background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.10) 0%, rgba(34, 197, 94, 0.10) 100%)', backdropFilter: 'blur(28px)', WebkitBackdropFilter: 'blur(28px)'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-3">
 <div className="h-8 w-8 rounded-xl bg-white/10 ring-1 ring-white/15 flex items-center justify-center">
@@ -678,7 +720,7 @@ export default function App() {
 <div className="relative" id="badgesLayer"></div>
 </div>
 <p className="mt-5 text-neutral-400 leading-relaxed max-w-prose text-[17px] sm:text-lg font-manrope" id="bodyCopy">
-                  Choose from <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(245,158,11,0.18)', boxShadow: 'inset 0 0 0 1px rgba(245,158,11,0.35)'}}>al pastor</span>, chicken tinga, carne asada, and more. All grilled to order.
+                  Choose from <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: 'rgba(245, 158, 11, 0.18)', boxShadow: 'inset 0 0 0 1px rgba(245,158,11,0.35)'}}>al pastor</span>, chicken tinga, carne asada, and more. All grilled to order.
                 </p>
 
 <div className="mt-8 space-y-2">

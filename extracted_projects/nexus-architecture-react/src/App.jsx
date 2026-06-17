@@ -8,6 +8,42 @@ const AnimatedImage = ({ src, alt, className }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const ctx = gsap.context(() => {
       const columns = gsap.utils.toArray('.anim-column');
 
@@ -62,16 +98,13 @@ const AnimatedImage = ({ src, alt, className }) => {
           <div
             key={i}
             className="anim-column absolute inset-0 overflow-hidden"
-            style={{
-              clipPath: `inset(0 ${right}% 0 ${left}%)`,
-              WebkitClipPath: `inset(0 ${right}% 0 ${left}%)`,
-            }}
+            style={{clipPath: `inset(0 ${right}% 0 ${left}%)`, WebkitClipPath: `inset(0 ${right}% 0 ${left}%)`}}
           >
             <img
               src={src}
               alt={alt}
               className="absolute w-full object-cover max-w-none"
-              style={{ height: '140%', top: '-20%', left: '0' }}
+              style={{height: '140%', top: '-20%', left: '0'}}
             />
           </div>
         );
@@ -119,14 +152,14 @@ export default function App() {
           <a href="#" className="text-sm font-medium hover:text-[#8c7b66] transition-colors font-sans hidden sm:flex">Our Story</a>
         </nav>
         <a href="#contact" className="flex items-center gap-1 text-sm font-semibold border-b border-[#3b3631] pb-0.5 hover:text-[#8c7b66] hover:border-[#8c7b66] transition-all font-sans hidden sm:flex">
-          GET IN TOUCH <iconify-icon icon="solar:arrow-right-up-linear" width="16" height="16" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+          GET IN TOUCH <iconify-icon icon="solar:arrow-right-up-linear" width="16" height="16" style={{strokeWidth: "1.5px"}}></iconify-icon>
         </a>
       </header>
 
       {/* Hero Section */}
       <section className="relative pt-12 pb-24 overflow-hidden z-10">
         {/* Background Massive Text */}
-        <h1 className="gsap-fade-up absolute top-0 w-full text-center text-9xl tracking-tighter text-[#3b3631] select-none z-0 mt-8 opacity-10 font-google-sans-flex font-normal" style={{ fontSize: "18vw", lineHeight: "0.8" }}>
+        <h1 className="gsap-fade-up absolute top-0 w-full text-center text-9xl tracking-tighter text-[#3b3631] select-none z-0 mt-8 opacity-10 font-google-sans-flex font-normal" style={{fontSize: "18vw", lineHeight: "0.8"}}>
           NEXUS<sup className="text-5xl align-top font-google-sans-flex font-normal">®</sup>
         </h1>
 
@@ -155,7 +188,7 @@ export default function App() {
               </p>
               <div>
                 <a href="#contact" className="inline-flex items-center gap-1 text-sm font-semibold border-b border-[#3b3631] pb-0.5 hover:text-[#8c7b66] hover:border-[#8c7b66] transition-all font-sans">
-                  CONNECT WITH US <iconify-icon icon="solar:arrow-right-up-linear" width="16" height="16" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                  CONNECT WITH US <iconify-icon icon="solar:arrow-right-up-linear" width="16" height="16" style={{strokeWidth: "1.5px"}}></iconify-icon>
                 </a>
               </div>
             </div>
@@ -198,7 +231,7 @@ export default function App() {
               
               {/* Search Input */}
               <div className="gsap-fade-up relative max-w-sm">
-                <iconify-icon icon="solar:map-point-linear" width="16" height="16" className="absolute left-4 top-1/2 -translate-y-1/2 text-[#a69c91]" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:map-point-linear" width="16" height="16" className="absolute left-4 top-1/2 -translate-y-1/2 text-[#a69c91]" style={{strokeWidth: "1.5px"}}></iconify-icon>
                 <input type="text" placeholder="Search region..." className="w-full bg-transparent border border-[#6b645c] rounded-full py-3 pl-12 pr-4 text-sm text-[#ece9e4] placeholder-[#a69c91] focus:outline-none focus:border-[#8c7b66] transition-colors" />
               </div>
 
@@ -206,7 +239,7 @@ export default function App() {
                 <div className="bg-[#322d28] border border-[#4a453f] rounded-lg p-4 flex flex-col gap-2">
                   <span className="text-xs text-[#a69c91] font-medium font-sans">Certified Partner</span>
                   <div className="flex items-center gap-2 font-semibold text-lg tracking-tight font-sans">
-                    <iconify-icon icon="solar:hexagon-linear" width="20" height="20" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                    <iconify-icon icon="solar:hexagon-linear" width="20" height="20" style={{strokeWidth: "1.5px"}}></iconify-icon>
                     VANGUARD
                   </div>
                 </div>
@@ -222,7 +255,7 @@ export default function App() {
                     Leveraging extensive regional intelligence and a partner-centric strategy, we navigate investors seamlessly.
                   </p>
                   <a href="#" className="inline-flex items-center gap-1 text-xs font-semibold text-[#8c7b66] border-b border-[#8c7b66]/50 pb-0.5 hover:border-[#8c7b66] transition-all uppercase tracking-wider font-sans">
-                    Explore Details <iconify-icon icon="solar:arrow-right-up-linear" width="12" height="12" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                    Explore Details <iconify-icon icon="solar:arrow-right-up-linear" width="12" height="12" style={{strokeWidth: "1.5px"}}></iconify-icon>
                   </a>
                 </div>
               </div>
@@ -237,7 +270,7 @@ export default function App() {
                 <div className="col-span-12 h-1 border-b border-dashed border-[#544e47]"></div>
                 <div className="col-span-12 h-1 border-b border-dashed border-[#544e47]"></div>
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#3b3631] via-transparent to-transparent"></div>
-                <iconify-icon icon="solar:square-double-alt-arrow-up-outline" width="96" height="96" className="-translate-x-1/2 -translate-y-1/2 text-[#544e47] absolute top-1/2 left-1/2" style={{ strokeWidth: "0.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:square-double-alt-arrow-up-outline" width="96" height="96" className="-translate-x-1/2 -translate-y-1/2 text-[#544e47] absolute top-1/2 left-1/2" style={{strokeWidth: "0.5px"}}></iconify-icon>
               </div>
             </div>
           </div>
@@ -247,7 +280,7 @@ export default function App() {
             <div className="border border-[#4a453f] rounded-xl p-8 bg-[#322d28]/50 hover:bg-[#322d28] transition-colors group">
               <div className="flex justify-between items-start mb-6">
                 <p className="text-5xl tracking-tighter group-hover:text-[#8c7b66] transition-colors font-google-sans-flex font-normal">2500<span className="text-2xl text-[#a69c91] font-google-sans-flex font-normal">sq ft</span></p>
-                <iconify-icon icon="solar:arrow-right-up-linear" width="20" height="20" className="text-[#a69c91] group-hover:text-[#8c7b66] transition-colors" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:arrow-right-up-linear" width="20" height="20" className="text-[#a69c91] group-hover:text-[#8c7b66] transition-colors" style={{strokeWidth: "1.5px"}}></iconify-icon>
               </div>
               <p className="text-sm text-[#a69c91] font-sans">Our signature expansive lofts are designed to maximize natural illumination and airflow.</p>
             </div>
@@ -255,7 +288,7 @@ export default function App() {
             <div className="border border-[#4a453f] rounded-xl p-8 bg-[#322d28]/50 hover:bg-[#322d28] transition-colors group">
               <div className="flex justify-between items-start mb-6">
                 <p className="text-5xl tracking-tighter group-hover:text-[#8c7b66] transition-colors font-google-sans-flex font-normal">82<span className="text-4xl text-[#a69c91] font-google-sans-flex font-normal">%</span></p>
-                <iconify-icon icon="solar:arrow-right-up-linear" width="20" height="20" className="text-[#a69c91] group-hover:text-[#8c7b66] transition-colors" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:arrow-right-up-linear" width="20" height="20" className="text-[#a69c91] group-hover:text-[#8c7b66] transition-colors" style={{strokeWidth: "1.5px"}}></iconify-icon>
               </div>
               <p className="text-sm text-[#a69c91] font-sans">The structure's dynamic facade is influenced by contemporary minimalist art forms.</p>
             </div>
@@ -263,7 +296,7 @@ export default function App() {
             <div className="border border-[#4a453f] rounded-xl p-8 bg-[#322d28]/50 hover:bg-[#322d28] transition-colors group">
               <div className="flex justify-between items-start mb-6">
                 <p className="group-hover:text-[#8c7b66] transition-colors text-5xl font-normal tracking-tighter font-google-sans-flex">99.5<span className="text-4xl text-[#a69c91] font-google-sans-flex font-normal">%</span></p>
-                <iconify-icon icon="solar:arrow-right-up-linear" width="20" height="20" className="text-[#a69c91] group-hover:text-[#8c7b66] transition-colors" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:arrow-right-up-linear" width="20" height="20" className="text-[#a69c91] group-hover:text-[#8c7b66] transition-colors" style={{strokeWidth: "1.5px"}}></iconify-icon>
               </div>
               <p className="text-sm text-[#a69c91] font-sans">Of partners assisted within the first 24 hours across multiple international time zones.</p>
             </div>
@@ -331,7 +364,7 @@ export default function App() {
                 EMBODIES THE <br/>RAW ESSENCE
               </h2>
               <a href="#" className="inline-flex items-center gap-1 text-xs font-semibold border-b border-[#a69c91] pb-0.5 hover:text-[#8c7b66] hover:border-[#8c7b66] transition-all uppercase tracking-wider mt-6 w-fit text-[#a69c91] font-sans">
-                BROWSE PORTFOLIO <iconify-icon icon="solar:arrow-right-up-linear" width="12" height="12" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                BROWSE PORTFOLIO <iconify-icon icon="solar:arrow-right-up-linear" width="12" height="12" style={{strokeWidth: "1.5px"}}></iconify-icon>
               </a>
             </div>
 
@@ -368,7 +401,7 @@ export default function App() {
             {/* Testimonial Card 1 */}
             <div className="gsap-fade-up border border-[#cdc9c1] rounded-xl p-8 bg-[#dfdcd5]/30 flex flex-col justify-between group hover:border-[#8c7b66] transition-colors duration-300">
               <div>
-                <iconify-icon icon="solar:quote-right-linear" width="32" height="32" className="text-[#8c7b66] mb-8 opacity-40 group-hover:opacity-100 transition-opacity" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:quote-right-linear" width="32" height="32" className="text-[#8c7b66] mb-8 opacity-40 group-hover:opacity-100 transition-opacity" style={{strokeWidth: "1.5px"}}></iconify-icon>
                 <p className="text-sm text-[#6b645c] leading-relaxed mb-10 font-sans">
                   "Nexus didn't just find us a property; they orchestrated a seamless transition into our new corporate headquarters. Their architectural foresight and ability to curate spaces is truly unmatched."
                 </p>
@@ -385,7 +418,7 @@ export default function App() {
             {/* Testimonial Card 2 */}
             <div className="gsap-fade-up border border-[#cdc9c1] rounded-xl p-8 bg-[#dfdcd5]/30 flex flex-col justify-between group hover:border-[#8c7b66] transition-colors duration-300">
               <div>
-                <iconify-icon icon="solar:quote-right-linear" width="32" height="32" className="text-[#8c7b66] mb-8 opacity-40 group-hover:opacity-100 transition-opacity" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:quote-right-linear" width="32" height="32" className="text-[#8c7b66] mb-8 opacity-40 group-hover:opacity-100 transition-opacity" style={{strokeWidth: "1.5px"}}></iconify-icon>
                 <p className="text-sm text-[#6b645c] leading-relaxed mb-10 font-sans">
                   "The level of insight and market intelligence provided was exceptional. They turned what is usually a complex international acquisition into a profoundly refined and elegant experience."
                 </p>
@@ -402,7 +435,7 @@ export default function App() {
             {/* Testimonial Card 3 */}
             <div className="gsap-fade-up border border-[#cdc9c1] rounded-xl p-8 bg-[#dfdcd5]/30 flex flex-col justify-between group hover:border-[#8c7b66] transition-colors duration-300">
               <div>
-                <iconify-icon icon="solar:quote-right-linear" width="32" height="32" className="text-[#8c7b66] mb-8 opacity-40 group-hover:opacity-100 transition-opacity" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                <iconify-icon icon="solar:quote-right-linear" width="32" height="32" className="text-[#8c7b66] mb-8 opacity-40 group-hover:opacity-100 transition-opacity" style={{strokeWidth: "1.5px"}}></iconify-icon>
                 <p className="text-sm text-[#6b645c] leading-relaxed mb-10 font-sans">
                   "From spatial planning to final execution, their commitment is absolute. We now operate in a space that perfectly reflects our brand identity while optimizing daily operational flow."
                 </p>
@@ -472,7 +505,7 @@ export default function App() {
                     <option value="commercial" className="bg-[#322d28]">Commercial Assets</option>
                     <option value="development" className="bg-[#322d28]">Development Partnerships</option>
                   </select>
-                  <iconify-icon icon="solar:alt-arrow-down-linear" width="16" height="16" className="absolute right-0 bottom-3 text-[#a69c91] pointer-events-none" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                  <iconify-icon icon="solar:alt-arrow-down-linear" width="16" height="16" className="absolute right-0 bottom-3 text-[#a69c91] pointer-events-none" style={{strokeWidth: "1.5px"}}></iconify-icon>
                 </div>
                 <div className="flex flex-col gap-2 relative mb-2">
                   <label className="text-xs font-semibold tracking-wider text-[#a69c91] uppercase font-sans">Message</label>
@@ -482,13 +515,13 @@ export default function App() {
                 <div className="flex items-center gap-3 mb-2">
                   <div className="relative flex items-center justify-center w-4 h-4">
                     <input type="checkbox" id="terms" className="peer appearance-none w-4 h-4 border border-[#544e47] rounded-sm checked:bg-[#8c7b66] checked:border-[#8c7b66] cursor-pointer transition-colors bg-transparent" />
-                    <iconify-icon icon="solar:check-read-linear" width="12" height="12" className="absolute text-[#ece9e4] opacity-0 peer-checked:opacity-100 pointer-events-none" style={{ strokeWidth: "2px" }}></iconify-icon>
+                    <iconify-icon icon="solar:check-read-linear" width="12" height="12" className="absolute text-[#ece9e4] opacity-0 peer-checked:opacity-100 pointer-events-none" style={{strokeWidth: "2px"}}></iconify-icon>
                   </div>
                   <label htmlFor="terms" className="text-xs text-[#a69c91] font-sans cursor-pointer">I agree to the Terms & Privacy Policy</label>
                 </div>
 
                 <button type="button" className="bg-[#ece9e4] hover:bg-[#8c7b66] hover:text-[#ece9e4] text-[#3b3631] text-xs font-semibold tracking-wider uppercase py-4 rounded transition-colors font-sans w-full flex justify-center items-center gap-2">
-                  SUBMIT INQUIRY <iconify-icon icon="solar:arrow-right-up-linear" width="14" height="14" style={{ strokeWidth: "1.5px" }}></iconify-icon>
+                  SUBMIT INQUIRY <iconify-icon icon="solar:arrow-right-up-linear" width="14" height="14" style={{strokeWidth: "1.5px"}}></iconify-icon>
                 </button>
               </form>
             </div>
@@ -527,7 +560,7 @@ export default function App() {
 
         {/* Massive Footer Graphic Text */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none pointer-events-none opacity-[0.03] transform translate-y-1/4">
-          <h1 className="text-center tracking-tighter text-[#ece9e4] select-none font-google-sans-flex font-normal" style={{ fontSize: "25vw" }}>
+          <h1 className="text-center tracking-tighter text-[#ece9e4] select-none font-google-sans-flex font-normal" style={{fontSize: "25vw"}}>
             NEXUS
           </h1>
         </div>

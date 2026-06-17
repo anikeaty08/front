@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{
@@ -331,6 +367,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -520,32 +562,32 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid-visual" id="gridVisual" style={{height: '100%'}}><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell active"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell active"></div><div className="grid-visual__cell active"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell active"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell active"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell"></div><div className="grid-visual__cell active"></div><div className="grid-visual__cell"></div></div>
 </div>
 <div style={{marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
-<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)'}}>
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, .03)', border: '1px solid rgba(255,255,255,.06)'}}>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}><span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#FF5F57', flexShrink: '0'}}></span><span style={{fontSize: '13px', color: 'var(--muted)'}}>error-rate · payment-svc</span></div>
-<span style={{fontSize: '11px', fontFamily: '\'Space Mono\',monospace', color: 'rgba(255,95,87,.7)'}}>4.8σ</span>
+<span style={{fontSize: '11px', fontFamily: '\'Space Mono\', monospace', color: 'rgba(255,95,87,.7)'}}>4.8σ</span>
 </div>
-<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)'}}>
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, .03)', border: '1px solid rgba(255,255,255,.06)'}}>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}><span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#FEBC2E', flexShrink: '0'}}></span><span style={{fontSize: '13px', color: 'var(--muted)'}}>cpu-usage · api-gateway</span></div>
-<span style={{fontSize: '11px', fontFamily: '\'Space Mono\',monospace', color: 'rgba(254,188,46,.7)'}}>3.2σ</span>
+<span style={{fontSize: '11px', fontFamily: '\'Space Mono\', monospace', color: 'rgba(254,188,46,.7)'}}>3.2σ</span>
 </div>
-<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)'}}>
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, .03)', border: '1px solid rgba(255,255,255,.06)'}}>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}><span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#FEBC2E', flexShrink: '0'}}></span><span style={{fontSize: '13px', color: 'var(--muted)'}}>mem-alloc · worker-pool</span></div>
-<span style={{fontSize: '11px', fontFamily: '\'Space Mono\',monospace', color: 'rgba(254,188,46,.7)'}}>2.7σ</span>
+<span style={{fontSize: '11px', fontFamily: '\'Space Mono\', monospace', color: 'rgba(254,188,46,.7)'}}>2.7σ</span>
 </div>
-<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)'}}>
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, .03)', border: '1px solid rgba(255,255,255,.06)'}}>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}><span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#28C840', flexShrink: '0'}}></span><span style={{fontSize: '13px', color: 'var(--muted)'}}>latency · db-replica</span></div>
-<span style={{fontSize: '11px', fontFamily: '\'Space Mono\',monospace', color: 'rgba(40,200,64,.7)'}}>resolved</span>
+<span style={{fontSize: '11px', fontFamily: '\'Space Mono\', monospace', color: 'rgba(40,200,64,.7)'}}>resolved</span>
 </div>
-<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)'}}>
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, .03)', border: '1px solid rgba(255,255,255,.06)'}}>
 <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}><span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#28C840', flexShrink: '0'}}></span><span style={{fontSize: '13px', color: 'var(--muted)'}}>throughput · ingest-pipe</span></div>
-<span style={{fontSize: '11px', fontFamily: '\'Space Mono\',monospace', color: 'rgba(40,200,64,.7)'}}>resolved</span>
+<span style={{fontSize: '11px', fontFamily: '\'Space Mono\', monospace', color: 'rgba(40,200,64,.7)'}}>resolved</span>
 </div>
 </div>
 
 <div style={{marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,.06)'}}>
 <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
-<span style={{fontSize: '11px', color: 'var(--dim)', fontFamily: '\'Space Mono\',monospace'}}>Model confidence</span>
-<span style={{fontSize: '11px', color: 'var(--accent)', fontFamily: '\'Space Mono\',monospace'}}>97.3%</span>
+<span style={{fontSize: '11px', color: 'var(--dim)', fontFamily: '\'Space Mono\', monospace'}}>Model confidence</span>
+<span style={{fontSize: '11px', color: 'var(--accent)', fontFamily: '\'Space Mono\', monospace'}}>97.3%</span>
 </div>
 <div style={{height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,.06)', overflow: 'hidden'}}>
 <div style={{width: '97.3%', height: '100%', borderRadius: '2px', background: 'linear-gradient(90deg,var(--primary),var(--accent))'}}></div>
@@ -603,9 +645,9 @@ gtag('config', 'G-2M6V79H761');
 </svg>
 </div>
 <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '6px'}}>
-<span style={{fontSize: '10px', fontFamily: '\'Space Mono\',monospace', color: 'var(--dim)'}}>-30m</span>
-<span style={{fontSize: '10px', fontFamily: '\'Space Mono\',monospace', color: 'rgba(254,188,46,.7)'}}>breach ~18m</span>
-<span style={{fontSize: '10px', fontFamily: '\'Space Mono\',monospace', color: 'var(--dim)'}}>+30m</span>
+<span style={{fontSize: '10px', fontFamily: '\'Space Mono\', monospace', color: 'var(--dim)'}}>-30m</span>
+<span style={{fontSize: '10px', fontFamily: '\'Space Mono\', monospace', color: 'rgba(254,188,46,.7)'}}>breach ~18m</span>
+<span style={{fontSize: '10px', fontFamily: '\'Space Mono\', monospace', color: 'var(--dim)'}}>+30m</span>
 </div>
 </div>
 </div>
@@ -685,30 +727,30 @@ gtag('config', 'G-2M6V79H761');
 <div className="dash__dot" style={{background: '#FF5F57'}}></div>
 <div className="dash__dot" style={{background: '#FEBC2E'}}></div>
 <div className="dash__dot" style={{background: '#28C840'}}></div>
-<span style={{marginLeft: '8px', fontFamily: '\'Space Mono\',monospace', fontSize: '12px', color: 'var(--dim)'}}>signalis · production</span>
+<span style={{marginLeft: '8px', fontFamily: '\'Space Mono\', monospace', fontSize: '12px', color: 'var(--dim)'}}>signalis · production</span>
 <div className="glow-dot" style={{marginLeft: 'auto'}}></div>
-<span style={{fontSize: '12px', color: 'var(--accent)', fontFamily: '\'Space Mono\',monospace', marginLeft: '6px'}}>LIVE</span>
+<span style={{fontSize: '12px', color: 'var(--accent)', fontFamily: '\'Space Mono\', monospace', marginLeft: '6px'}}>LIVE</span>
 </div>
 <div className="dash__metrics">
 <div className="dash__metric">
-<div className="dash__metric-val text-gradient" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontSize: '22px', fontWeight: '800'}}>2.1ms</div>
+<div className="dash__metric-val text-gradient" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontSize: '22px', fontWeight: '800'}}>2.1ms</div>
 <div className="dash__metric-label">P99 Latency</div>
 </div>
 <div className="dash__metric">
-<div className="dash__metric-val" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontSize: '22px', fontWeight: '800', color: 'rgba(40,200,100,.9)'}}>99.98%</div>
+<div className="dash__metric-val" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontSize: '22px', fontWeight: '800', color: 'rgba(40,200,100,.9)'}}>99.98%</div>
 <div className="dash__metric-label">Uptime</div>
 </div>
 <div className="dash__metric">
-<div className="dash__metric-val" style={{fontFamily: '\'Bricolage Grotesque\',sans-serif', fontSize: '22px', fontWeight: '800', color: 'var(--accent)'}}>0</div>
+<div className="dash__metric-val" style={{fontFamily: '\'Bricolage Grotesque\', sans-serif', fontSize: '22px', fontWeight: '800', color: 'var(--accent)'}}>0</div>
 <div className="dash__metric-label">Open P1s</div>
 </div>
 </div>
 <div className="dash__chart">
-<div style={{fontSize: '11px', color: 'var(--dim)', fontFamily: '\'Space Mono\',monospace', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '.06em'}}>Request rate · 24h</div>
+<div style={{fontSize: '11px', color: 'var(--dim)', fontFamily: '\'Space Mono\', monospace', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '.06em'}}>Request rate · 24h</div>
 <div className="dash__chart-bars" id="dashBars"><div className="dash__bar" style={{height: '45%', animationDelay: '0s'}}></div><div className="dash__bar" style={{height: '62%', animationDelay: '0.04s'}}></div><div className="dash__bar" style={{height: '78%', animationDelay: '0.08s'}}></div><div className="dash__bar" style={{height: '55%', animationDelay: '0.12s'}}></div><div className="dash__bar" style={{height: '82%', animationDelay: '0.16s'}}></div><div className="dash__bar" style={{height: '70%', animationDelay: '0.2s'}}></div><div className="dash__bar" style={{height: '90%', animationDelay: '0.24s'}}></div><div className="dash__bar" style={{height: '65%', animationDelay: '0.28s'}}></div><div className="dash__bar" style={{height: '75%', animationDelay: '0.32s'}}></div><div className="dash__bar" style={{height: '50%', animationDelay: '0.36s'}}></div><div className="dash__bar" style={{height: '88%', animationDelay: '0.4s'}}></div><div className="dash__bar" style={{height: '60%', animationDelay: '0.44s'}}></div><div className="dash__bar" style={{height: '72%', animationDelay: '0.48s'}}></div><div className="dash__bar" style={{height: '45%', animationDelay: '0.52s'}}></div><div className="dash__bar" style={{height: '85%', animationDelay: '0.56s'}}></div><div className="dash__bar" style={{height: '68%', animationDelay: '0.6s'}}></div><div className="dash__bar" style={{height: '92%', animationDelay: '0.64s'}}></div><div className="dash__bar" style={{height: '55%', animationDelay: '0.68s'}}></div><div className="dash__bar" style={{height: '78%', animationDelay: '0.72s'}}></div><div className="dash__bar" style={{height: '65%', animationDelay: '0.76s'}}></div><div className="dash__bar" style={{height: '80%', animationDelay: '0.8s'}}></div><div className="dash__bar" style={{height: '70%', animationDelay: '0.84s'}}></div><div className="dash__bar" style={{height: '88%', animationDelay: '0.88s'}}></div><div className="dash__bar" style={{height: '60%', animationDelay: '0.92s'}}></div><div className="dash__bar" style={{height: '45%', animationDelay: '0s'}}></div><div className="dash__bar" style={{height: '62%', animationDelay: '0.04s'}}></div><div className="dash__bar" style={{height: '78%', animationDelay: '0.08s'}}></div><div className="dash__bar" style={{height: '55%', animationDelay: '0.12s'}}></div><div className="dash__bar" style={{height: '82%', animationDelay: '0.16s'}}></div><div className="dash__bar" style={{height: '70%', animationDelay: '0.2s'}}></div><div className="dash__bar" style={{height: '90%', animationDelay: '0.24s'}}></div><div className="dash__bar" style={{height: '65%', animationDelay: '0.28s'}}></div><div className="dash__bar" style={{height: '75%', animationDelay: '0.32s'}}></div><div className="dash__bar" style={{height: '50%', animationDelay: '0.36s'}}></div><div className="dash__bar" style={{height: '88%', animationDelay: '0.4s'}}></div><div className="dash__bar" style={{height: '60%', animationDelay: '0.44s'}}></div><div className="dash__bar" style={{height: '72%', animationDelay: '0.48s'}}></div><div className="dash__bar" style={{height: '45%', animationDelay: '0.52s'}}></div><div className="dash__bar" style={{height: '85%', animationDelay: '0.56s'}}></div><div className="dash__bar" style={{height: '68%', animationDelay: '0.6s'}}></div><div className="dash__bar" style={{height: '92%', animationDelay: '0.64s'}}></div><div className="dash__bar" style={{height: '55%', animationDelay: '0.68s'}}></div><div className="dash__bar" style={{height: '78%', animationDelay: '0.72s'}}></div><div className="dash__bar" style={{height: '65%', animationDelay: '0.76s'}}></div><div className="dash__bar" style={{height: '80%', animationDelay: '0.8s'}}></div><div className="dash__bar" style={{height: '70%', animationDelay: '0.84s'}}></div><div className="dash__bar" style={{height: '88%', animationDelay: '0.88s'}}></div><div className="dash__bar" style={{height: '60%', animationDelay: '0.92s'}}></div></div>
 </div>
 <div className="dash__alerts">
-<div style={{fontSize: '11px', color: 'var(--dim)', fontFamily: '\'Space Mono\',monospace', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '.06em'}}>Recent signals</div>
+<div style={{fontSize: '11px', color: 'var(--dim)', fontFamily: '\'Space Mono\', monospace', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '.06em'}}>Recent signals</div>
 <div className="dash__alert">
 <div className="dash__alert-dot" style={{background: 'rgba(40,200,100,.9)'}}></div>
 <span className="dash__alert-text">api-gateway · latency normalized</span>

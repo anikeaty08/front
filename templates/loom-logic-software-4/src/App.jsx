@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -253,6 +289,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -363,7 +405,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 <div className="relative hero-art perspective-card">
-<div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.35)] backdrop-blur-sm tilt-card will-change-transform transition-transform duration-300 ease-out [transform-style:preserve-3d] bg-slate-600/5" style={{-Mx: '25.841151806693084%', -My: '24.687226020164736%'}}>
+<div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.35)] backdrop-blur-sm tilt-card will-change-transform transition-transform duration-300 ease-out [transform-style:preserve-3d] bg-slate-600/5" style={{'--mx': '25.841151806693084%', '--my': '24.687226020164736%'}}>
 <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
 <video autoplay="" className="hero-mask-video absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-screen" loop="" muted="" playsinline="" preload="auto">
 <source src="https://cdn.coverr.co/videos/coverr-programming-at-night-1560676832149?download=1080p" type="video/mp4"/>

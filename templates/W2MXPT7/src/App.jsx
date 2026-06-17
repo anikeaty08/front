@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -195,6 +231,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -360,7 +402,7 @@ addUtilities({
       transform: translate(-50%, -50%) scale(1.2);
     }
   </style>
-<button className="cursor-follow-cta focus:outline-none" id="cursor-follow-button" style={{position: 'relative', overflow: 'hidden', cursor: 'pointer', padding: '1rem 2rem', height: 'auto', width: 'fit-content', backgroundColor: 'rgb(122, 48, 143)', fontSize: '1.125rem', color: 'white', border: 'none', borderRadius: '9999px', boxShadow: 'rgb(122, 48, 143) 0px 0px 2px 1px', transition: '0.5s cubic-bezier(1, 0, 0, 1)', fontFamily: 'Inter, "Helvetica Neue", sans-serif', fontWeight: '500', lineHeight: '1.2', -CursorX: '91.59015557255802%', -CursorY: '74.63556851311954%'}}>
+<button className="cursor-follow-cta focus:outline-none" id="cursor-follow-button" style={{position: 'relative', overflow: 'hidden', cursor: 'pointer', padding: '1rem 2rem', height: 'auto', width: 'fit-content', backgroundColor: 'rgb(122, 48, 143)', fontSize: '1.125rem', color: 'white', border: 'none', borderRadius: '9999px', boxShadow: 'rgb(122, 48, 143) 0px 0px 2px 1px', transition: '0.5s cubic-bezier(1, 0, 0, 1)', fontFamily: 'Inter, "Helvetica Neue", sans-serif', fontWeight: '500', lineHeight: '1.2', '--cursor-x': '91.59015557255802%', '--cursor-y': '74.63556851311954%'}}>
 <span className="" style={{position: 'relative', zIndex: '10', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
     Download for Mac
     <svg className="h-4 w-4" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7,10 12,15 17,10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
@@ -459,7 +501,7 @@ addUtilities({
 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-600/20 rounded-2xl blur-xl"></div>
 <div className="glass-card" style={{width: '300px', height: '250px', borderRadius: '10px', padding: '1px', position: 'relative', transform: 'translateX(30px)'}}>
 <div className="dot" style={{width: '5px', aspectRatio: '1', position: 'absolute', backgroundColor: '#fff', boxShadow: '0 0 10px #ffffff', borderRadius: '100px', zIndex: '2', right: '10%', top: '10%', animation: 'moveDot 6s linear infinite'}}></div>
-<div className="card" style={{zIndex: '1', width: '100%', height: '100%', borderRadius: '9px', border: 'solid 1px rgba(255,255,255,0.1)', background: 'rgba(255, 255, 255, 0.02)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', flexDirection: 'column', color: '#fff'}}>
+<div className="card" style={{zIndex: '1', width: '100%', height: '100%', borderRadius: '9px', border: 'solid 1px rgba(255, 255, 255, 0.1)', background: 'rgba(255, 255, 255, 0.02)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', flexDirection: 'column', color: '#fff'}}>
 <div className="ray" style={{width: '220px', height: '45px', borderRadius: '100px', position: 'absolute', backgroundColor: '#c7c7c7', opacity: '0.4', boxShadow: '0 0 50px #fff', filter: 'blur(10px)', transformOrigin: '10%', top: '0%', left: '0', transform: 'rotate(40deg)'}}></div>
 <div className="text" style={{fontWeight: 'bolder', fontSize: '4rem', background: 'linear-gradient(45deg, #000000 4%, #fff, #000)', backgroundClip: 'text', color: 'transparent'}}>750k</div>
 <div className="view-text" style={{fontSize: '1rem', color: '#888888', fontWeight: 'normal', marginTop: '0.5rem'}}>Views</div>
@@ -1350,7 +1392,7 @@ addUtilities({
       transform: translate(-50%, -50%) scale(1.2);
     }
   </style>
-<button className="cursor-follow-cta focus:outline-none" id="cursor-follow-button" style={{position: 'relative', overflow: 'hidden', cursor: 'pointer', padding: '1rem 2rem', height: 'auto', width: 'fit-content', backgroundColor: 'rgb(122, 48, 143)', fontSize: '1.125rem', color: 'white', border: 'none', borderRadius: '9999px', boxShadow: 'rgb(122, 48, 143) 0px 0px 2px 1px', fontFamily: 'Inter, "Helvetica Neue", sans-serif', fontWeight: '500', lineHeight: '1.2', -CursorX: '70.37107880642694%', -CursorY: '67.17201166180759%'}}>
+<button className="cursor-follow-cta focus:outline-none" id="cursor-follow-button" style={{position: 'relative', overflow: 'hidden', cursor: 'pointer', padding: '1rem 2rem', height: 'auto', width: 'fit-content', backgroundColor: 'rgb(122, 48, 143)', fontSize: '1.125rem', color: 'white', border: 'none', borderRadius: '9999px', boxShadow: 'rgb(122, 48, 143) 0px 0px 2px 1px', fontFamily: 'Inter, "Helvetica Neue", sans-serif', fontWeight: '500', lineHeight: '1.2', '--cursor-x': '70.37107880642694%', '--cursor-y': '67.17201166180759%'}}>
 <span className="" style={{position: 'relative', zIndex: '10', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>Download Nexus <svg className="w-[16px] h-[16px]" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{width: '16px', height: '16px', color: 'rgb(255, 255, 255)'}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path className="" d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline className="" points="7,10 12,15 17,10"></polyline><line className="" x1="12" x2="12" y1="15" y2="3"></line></svg></span>
 <div style={{content: '""', position: 'absolute', top: '0px', left: '0px', width: '100%', height: '100%', backgroundImage: 'radial-gradient(circle at 0% 45%, rgb(16, 5, 36) 19%, rgba(16, 5, 36, 0.26) 46%, rgba(16, 5, 36, 0) 100%)', pointerEvents: 'none'}}></div>
 <div style={{content: '""', position: 'absolute', top: '0px', right: '0px', width: '100%', height: '100%', backgroundImage: 'radial-gradient(circle at 100% 45%, rgb(16, 5, 36) 19%, rgba(16, 5, 36, 0.26) 46%, rgba(16, 5, 36, 0) 100%)', pointerEvents: 'none'}}></div>

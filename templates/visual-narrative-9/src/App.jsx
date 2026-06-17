@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -16,6 +52,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -31,7 +73,7 @@ gtag('config', 'G-2M6V79H761');
 <header className="border-slate-800/20 border-b">
 <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
 <div className="flex items-center gap-3">
-<div className="flex bg-gradient-to-br from-white/10 via-white/0 to-white/10 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', -BorderRadiusBefore: '9999px'}}>
+<div className="flex bg-gradient-to-br from-white/10 via-white/0 to-white/10 w-8 h-8 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1))', '--border-radius-before': '9999px'}}>
 <svg className="lucide lucide-arrow-up-right w-[14px] h-[14px]" data-icon-replaced="true" data-icon-set="solar" data-solar="share-circle-bold-duotone" height="14" strokeWidth="2" style={{color: 'rgb(148, 163, 184)', width: '14px', height: '14px'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M7.205 7.562a.75.75 0 0 0-.993-1.124A8.73 8.73 0 0 0 3.25 13a.75.75 0 0 0 1.5 0a7.23 7.23 0 0 1 2.455-5.438m10.583-1.124a.75.75 0 0 0-.993 1.124A7.23 7.23 0 0 1 19.25 13a.75.75 0 0 0 1.5 0a8.73 8.73 0 0 0-2.962-6.562m-7.601 13.584a.75.75 0 1 0-.374 1.452a8.8 8.8 0 0 0 4.374 0a.75.75 0 1 0-.374-1.452A7.3 7.3 0 0 1 12 20.25a7.3 7.3 0 0 1-1.813-.228" fill="#94a3b8" opacity=".5"></path><path d="M9 6a3 3 0 1 0 6 0a3 3 0 0 0-6 0M2.5 18a3 3 0 1 0 6 0a3 3 0 0 0-6 0m16 3a3 3 0 1 1 0-6a3 3 0 0 1 0 6" fill="#94a3b8"></path></svg>
 </div>
 <span className="text-lg font-semibold text-slate-50 tracking-tighter">
@@ -82,7 +124,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="flex flex-col lg:gap-5 gap-x-4 gap-y-8">
 
-<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-5 pb-4 pl-5 backdrop-blur-xl gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-5 pb-4 pl-5 backdrop-blur-xl gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center gap-4">
 <img alt="Portrait of Nova Keller" className="w-12 h-12 object-cover ring-slate-700/90 ring-2 rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/483d492c-49f6-4e55-94ba-ed82fdf89abf_320w.webp"/>
 <div className="">
@@ -115,7 +157,7 @@ gtag('config', 'G-2M6V79H761');
 <span className="mt-1 font-semibold tracking-tight">5</span>
 </div>
 </div>
-<button className="inline-flex hover:bg-cyan-500/20 transition text-xs font-medium text-cyan-100 bg-cyan-500/10 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="inline-flex hover:bg-cyan-500/20 transition text-xs font-medium text-cyan-100 bg-cyan-500/10 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg className="lucide lucide-play h-3.5 w-3.5 w-[14px] h-[14px]" data-icon-replaced="true" data-icon-set="solar" data-solar="arrow-right-down-outline" height="14" strokeWidth="2" style={{color: 'rgb(207, 250, 254)', width: '14px', height: '14px'}} viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path className="" clip-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0l10.72 10.72V9a.75.75 0 0 1 1.5 0v9a.75.75 0 0 1-.75.75H9a.75.75 0 0 1 0-1.5h7.19L5.47 6.53a.75.75 0 0 1 0-1.06" fill="#cffafe" fill-rule="evenodd"></path></svg>
                   View 2025 reel
                 </button>
@@ -123,7 +165,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-<div className="md:col-span-3 flex flex-col gap-3 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-5 pb-4 pl-5 backdrop-blur-xl gap-x-3 gap-y-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="md:col-span-3 flex flex-col gap-3 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-5 pb-4 pl-5 backdrop-blur-xl gap-x-3 gap-y-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <p className="leading-relaxed text-sm text-slate-300">I craft cinematic portraits and minimal editorials that
             explore the space between stillness and motion. Each frame is built as a small world—quiet, intentional, and
             lit to echo the feeling long after the moment fades. I craft cinematic portraits and minimal editorials that
@@ -148,7 +190,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 </div>
-<div className="md:col-span-2 flex flex-col gap-2 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl gap-x-2 gap-y-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="md:col-span-2 flex flex-col gap-2 bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl gap-x-2 gap-y-2" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex flex-col gap-2 text-xs text-slate-200">
 <button className="flex items-center justify-between rounded-2xl bg-slate-900/80 border border-slate-700/80 px-3 py-2 hover:bg-slate-800/80 transition">
 <span className="">Instagram</span>
@@ -191,7 +233,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl gap-x-3 gap-y-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl gap-x-3 gap-y-3" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
@@ -245,7 +287,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="flex-1 flex flex-col gap-6">
 
 <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
-<div className="inline-flex bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<div className="inline-flex bg-gradient-to-br from-white/10 to-white/0 rounded-full pt-1.5 pr-3 pb-1.5 pl-3 gap-x-2 gap-y-2 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <span className="inline-block h-1.5 w-1.5 rounded-full bg-lime-400"></span>
 <span className="font-medium uppercase tracking-[0.18em] text-slate-300">
               Trusted by creative teams
@@ -268,7 +310,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 
 <div className="mt-2 grid grid-cols-2 sm:flex sm:flex-row gap-4 text-xs sm:text-sm">
-<div className="flex gap-3 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-2 pr-3 pb-2 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex gap-3 bg-gradient-to-br from-white/10 to-white/0 rounded-2xl pt-2 pr-3 pb-2 pl-3 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-950/90">
 <svg className="w-[15px] h-[15px]" data-icon-set="solar" data-solar="chart-square-bold-duotone" height="15" viewbox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg">
 <g fill="currentColor">
@@ -289,7 +331,7 @@ gtag('config', 'G-2M6V79H761');
                 </span>
 </div>
 </div>
-<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-2xl px-3 py-2 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-2xl px-3 py-2 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-950/90">
 <svg className="w-[15px] h-[15px]" data-icon-set="solar" data-solar="user-heart-rounded-bold-duotone" height="15" viewbox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg">
 <g className="" fill="currentColor">
@@ -312,7 +354,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="w-full max-w-xs sm:max-w-sm lg:max-w-xs">
-<div className="flex flex-col gap-4 rounded-3xl bg-gradient-to-br from-lime-400/10 via-slate-900/90 to-slate-900 border border-lime-400/30 px-5 py-5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(190, 242, 100, 0.6), rgba(148, 163, 184, 0.1))', -BorderRadiusBefore: '24px'}}>
+<div className="flex flex-col gap-4 rounded-3xl bg-gradient-to-br from-lime-400/10 via-slate-900/90 to-slate-900 border border-lime-400/30 px-5 py-5" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(190, 242, 100, 0.6), rgba(148, 163, 184, 0.1))', '--border-radius-before': '24px'}}>
 <div className="flex items-center justify-between gap-3">
 <div className="flex flex-col">
 <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-lime-300">
@@ -358,7 +400,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
 
-<article className="group flex flex-col gap-4 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-4 pb-5 pl-4 relative gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="group flex flex-col gap-4 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-4 pb-5 pl-4 relative gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex flex-col gap-4">
 <div className="relative h-32 w-full rounded-2xl overflow-hidden border border-slate-800/80">
 <img alt="Storyboarding and creative planning" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2a4c99cb-3cb2-427f-9725-5ee423f65681_800w.webp"/>
@@ -419,7 +461,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </article>
 
-<article className="group flex flex-col gap-4 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-4 pb-5 pl-4 relative gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="group flex flex-col gap-4 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-4 pb-5 pl-4 relative gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex flex-col gap-4">
 <div className="relative h-32 w-full rounded-2xl overflow-hidden border border-slate-800/80">
 <img alt="Analytics dashboard for content performance" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9f2abe16-498b-4678-90c6-245f3a0ca3ee_800w.webp"/>
@@ -447,7 +489,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </article>
 
-<article className="group flex flex-col gap-4 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-4 pb-5 pl-4 relative gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '24px'}}>
+<article className="group flex flex-col gap-4 overflow-hidden bg-gradient-to-br from-white/10 to-white/0 rounded-3xl pt-5 pr-4 pb-5 pl-4 relative gap-x-4 gap-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '24px'}}>
 <div className="flex flex-col gap-4">
 <div className="relative h-32 w-full rounded-2xl overflow-hidden border border-slate-800/80">
 <img alt="Creative team reviewing content system" className="w-full h-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/09dc0e81-3730-4910-9053-26ecec7a3816_800w.webp"/>

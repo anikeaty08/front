@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -132,6 +168,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -387,7 +429,7 @@ gtag('config', 'G-2M6V79H761');
 
 <div className="relative group mb-24">
 <div className="absolute -inset-1 bg-gradient-to-r from-primary to-orange-400 rounded-full blur opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-<button className="group inline-flex text-[13px] sm:text-sm uppercase whitespace-nowrap transition-all duration-500 hover:scale-[1.02] outline-none font-semibold tracking-widest pt-4 pr-10 pb-4 pl-10 relative items-center justify-center" onmouseenter="this.style.setProperty('--glow-opacity', '1');" onmouseleave="this.style.setProperty('--glow-opacity', '0');" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{-X: '50%', -Y: '50%', -GlowOpacity: '0'}}>
+<button className="group inline-flex text-[13px] sm:text-sm uppercase whitespace-nowrap transition-all duration-500 hover:scale-[1.02] outline-none font-semibold tracking-widest pt-4 pr-10 pb-4 pl-10 relative items-center justify-center" onmouseenter="this.style.setProperty('--glow-opacity', '1');" onmouseleave="this.style.setProperty('--glow-opacity', '0');" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--x', (event.clientX - rect.left) + 'px'); this.style.setProperty('--y', (event.clientY - rect.top) + 'px');" style={{'--x': '50%', '--y': '50%', '--glow-opacity': '0'}}>
 
 <span className="absolute -inset-10 z-[-2] rounded-full opacity-[var(--glow-opacity)] transition-opacity duration-500 pointer-events-none" style={{background: 'radial-gradient(180px circle at var(--x) var(--y), rgba(255, 116, 44, 0.22) 0%, rgba(255, 116, 44, 0.12) 32%, transparent 70%)', filter: 'blur(22px)'}}></span>
 

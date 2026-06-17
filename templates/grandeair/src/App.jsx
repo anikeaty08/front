@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -52,6 +88,12 @@ observer.observe(heroSection);
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -339,7 +381,7 @@ observer.observe(heroSection);
 <div className="mb-6 opacity-20">
 <iconify-icon height="48" icon="solar:chat-round-like-linear" style={{color: 'white'}} width="48"></iconify-icon>
 </div>
-<blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed font-medium text-white mb-8" style={{fontFamily: '\'Manrope\',sans-serif'}}>
+<blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed font-medium text-white mb-8" style={{fontFamily: '\'Manrope\', sans-serif'}}>
       "I really appreciate skilled professionals that respect someone's property and take the time to explain what's going on. I've chosen to be part of their maintenance membership plan for years and have never been disappointed, even when I had an unexpected system failure while on vacation. These guys care about the quality of work they perform."
     </blockquote>
 <div className="flex items-center justify-center gap-2 mb-3">

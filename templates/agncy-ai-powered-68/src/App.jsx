@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -113,7 +149,7 @@ gtag('config', 'G-2M6V79H761');
         const zContent = useTransform(scrollY, [0, 1000], [0, 1000]);
 
         return (
-        <section className="relative h-[1000px] w-full overflow-hidden flex flex-col justify-start pt-[150px] items-center" style={{ perspective: "1000px" }}>
+        <section className="relative h-[1000px] w-full overflow-hidden flex flex-col justify-start pt-[150px] items-center" style={{perspective: "1000px"}}>
           <motion.div className="absolute top-0 left-0 w-full h-full z-0 flex items-center justify-center transform-gpu origin-center">
             <video autoPlay loop muted playsInline className="absolute top-[20%] left-0 w-full h-auto min-h-screen object-cover opacity-90 mix-blend-screen" poster="/images/hero_bg.jpeg">
               <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260325_132944_a0d124bb-eaa1-4082-aa30-2310efb42b4b.mp4" type="video/mp4" />
@@ -122,7 +158,7 @@ gtag('config', 'G-2M6V79H761');
           <div className="absolute inset-0 bg-black/5 z-0 pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-b from-transparent to-black z-0 pointer-events-none"></div>
 
-          <motion.div style={{ z: zContent, opacity: opacityContent, transformStyle: "preserve-3d" }} className="relative z-10 flex flex-col items-center text-center px-4 w-full">
+          <motion.div style={{z: zContent, opacity: opacityContent, transformStyle: "preserve-3d"}} className="relative z-10 flex flex-col items-center text-center px-4 w-full">
             <div className="liquid-glass rounded-full p-1 flex items-center gap-3 pr-5 mb-8">
               <span className="bg-white text-black rounded-full px-3 py-1 text-xs font-semibold tracking-tight">New</span>
               <span className="text-xs text-white/90 font-body font-medium">Introducing AI-powered web design.</span>
@@ -364,6 +400,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

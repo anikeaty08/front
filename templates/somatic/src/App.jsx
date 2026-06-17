@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -42,6 +78,12 @@ document.body.style.overflow = '';
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -496,7 +538,7 @@ document.body.style.overflow = '';
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-<div className="hover:border-slate-900 transition-colors animate-on-scroll bg-cover bg-center border-slate-200 border rounded-sm pt-10 pr-10 pb-10 pl-10" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.20)), url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/46916c7a-828c-4b95-826f-b7af016e08fb_1600w.jpg\')'}}>
+<div className="hover:border-slate-900 transition-colors animate-on-scroll bg-cover bg-center border-slate-200 border rounded-sm pt-10 pr-10 pb-10 pl-10" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.20)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/46916c7a-828c-4b95-826f-b7af016e08fb_1600w.jpg\')'}}>
 <h3 className="text-lg font-medium text-slate-900 mb-1 uppercase tracking-wide font-sans">
               Essential
             </h3>
@@ -524,7 +566,7 @@ document.body.style.overflow = '';
             </button>
 </div>
 
-<div className="shadow-slate-900/10 animate-on-scroll text-white bg-slate-900 bg-cover bg-center rounded-sm pt-10 pr-10 pb-10 pl-10 relative shadow-2xl" style={{backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.10)), url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c97513ff-e6a8-4f4d-b276-8d1de935740f_1600w.jpg\')'}}>
+<div className="shadow-slate-900/10 animate-on-scroll text-white bg-slate-900 bg-cover bg-center rounded-sm pt-10 pr-10 pb-10 pl-10 relative shadow-2xl" style={{backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.10)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c97513ff-e6a8-4f4d-b276-8d1de935740f_1600w.jpg\')'}}>
 <div className="absolute top-0 right-0 -mt-3 mr-6 bg-cyan-500 text-black text-[9px] uppercase font-bold px-3 py-1.5 rounded-sm tracking-widest font-sans">
               Recommended
             </div>
@@ -559,7 +601,7 @@ document.body.style.overflow = '';
             </button>
 </div>
 
-<div className="hover:border-slate-900 transition-colors animate-on-scroll bg-cover bg-center border-slate-200 border rounded-sm pt-10 pr-10 pb-10 pl-10" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.20)), url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c396622e-2acf-40fd-a5de-4e0448603187_1600w.jpg\')'}}>
+<div className="hover:border-slate-900 transition-colors animate-on-scroll bg-cover bg-center border-slate-200 border rounded-sm pt-10 pr-10 pb-10 pl-10" style={{backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.20)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c396622e-2acf-40fd-a5de-4e0448603187_1600w.jpg\')'}}>
 <h3 className="text-lg font-medium text-slate-900 mb-1 uppercase tracking-wide font-sans">
               Transform
             </h3>
@@ -746,7 +788,7 @@ document.body.style.overflow = '';
 
 <section className="py-24 px-6" id="book">
 <div className="max-w-screen-2xl mx-auto">
-<div className="relative rounded-sm p-16 md:p-24 border border-slate-800 text-center animate-on-scroll rounded-2xl overflow-hidden" style={{backgroundImage: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url(\'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ec98cf5f-b17c-4041-8da0-e229cbdc6689_3840w.jpg?w=800&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+<div className="relative rounded-sm p-16 md:p-24 border border-slate-800 text-center animate-on-scroll rounded-2xl overflow-hidden" style={{backgroundImage: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url(\'https: //hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ec98cf5f-b17c-4041-8da0-e229cbdc6689_3840w.jpg?w=800&amp', backgroundSize: 'cover', backgroundPosition: 'center'}}>
 <div className="relative z-10 max-w-3xl mx-auto">
 <h2 className="text-4xl md:text-6xl text-white tracking-tighter mb-8 font-google-sans-flex font-normal" style={{transition: 'outline 0.1s ease-in-out'}}>
               Make space for

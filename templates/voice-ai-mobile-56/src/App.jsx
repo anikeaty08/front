@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -83,6 +119,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -141,8 +183,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="space-y-3 mb-8">
-<button className="w-full h-14 rounded-2xl font-sans" style={{-Cyan: '#00D4FF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--cyan)', background: 'linear-gradient(to right, rgba(0, 212, 255, 0.4) 1%, rgba(0, 212, 255, 0.6) 40%, rgba(0, 212, 255, 0.6) 60%, rgba(0, 212, 255, 0.4) 100%)', color: 'white', boxShadow: 'rgba(0, 212, 255, 0.4) 0px 0px 10px inset, rgba(0, 212, 255, 0.1) 0px 0px 9px 3px'}}>Sign Up</button>
-<button className="w-full h-14 rounded-2xl font-sans" onmouseout="this.style.background='linear-gradient(to right, rgba(0, 180, 255, 0.1) 1%, transparent 40%,transparent 60% , rgba(0, 180, 255, 0.1) 100%)'; this.style.boxShadow='inset 0 0 10px rgba(0, 180, 255, 0.4), 0 0 9px 3px rgba(0, 180, 255, 0.1)'; this.style.transform='scale(1)'" onmouseover="this.style.background='linear-gradient(to right, rgba(0, 180, 255, 0.2) 1%, rgba(0, 180, 255, 0.1) 40%, rgba(0, 180, 255, 0.1) 60%, rgba(0, 180, 255, 0.2) 100%)'; this.style.boxShadow='inset 0 0 15px rgba(0, 180, 255, 0.6), 0 0 15px 5px rgba(0, 180, 255, 0.2)'; this.style.transform='scale(1.02)'" style={{-Blue: '#00B4FF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--blue)', background: 'linear-gradient(to right, rgba(0, 180, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(0, 180, 255, 0.1) 100%)', color: 'var(--blue)', boxShadow: 'rgba(0, 180, 255, 0.4) 0px 0px 10px inset, rgba(0, 180, 255, 0.1) 0px 0px 9px 3px', cursor: 'pointer'}}>
+<button className="w-full h-14 rounded-2xl font-sans" style={{'--cyan': '#00D4FF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--cyan)', background: 'linear-gradient(to right, rgba(0, 212, 255, 0.4) 1%, rgba(0, 212, 255, 0.6) 40%, rgba(0, 212, 255, 0.6) 60%, rgba(0, 212, 255, 0.4) 100%)', color: 'white', boxShadow: 'rgba(0, 212, 255, 0.4) 0px 0px 10px inset, rgba(0, 212, 255, 0.1) 0px 0px 9px 3px'}}>Sign Up</button>
+<button className="w-full h-14 rounded-2xl font-sans" onmouseout="this.style.background='linear-gradient(to right, rgba(0, 180, 255, 0.1) 1%, transparent 40%,transparent 60% , rgba(0, 180, 255, 0.1) 100%)'; this.style.boxShadow='inset 0 0 10px rgba(0, 180, 255, 0.4), 0 0 9px 3px rgba(0, 180, 255, 0.1)'; this.style.transform='scale(1)'" onmouseover="this.style.background='linear-gradient(to right, rgba(0, 180, 255, 0.2) 1%, rgba(0, 180, 255, 0.1) 40%, rgba(0, 180, 255, 0.1) 60%, rgba(0, 180, 255, 0.2) 100%)'; this.style.boxShadow='inset 0 0 15px rgba(0, 180, 255, 0.6), 0 0 15px 5px rgba(0, 180, 255, 0.2)'; this.style.transform='scale(1.02)'" style={{'--blue': '#00B4FF', fontSize: '15px', padding: '0.7em 2.7em', letterSpacing: '0.06em', position: 'relative', fontFamily: 'inherit', borderRadius: '0.6em', overflow: 'hidden', lineHeight: '1.4em', border: '2px solid var(--blue)', background: 'linear-gradient(to right, rgba(0, 180, 255, 0.1) 1%, transparent 40%, transparent 60%, rgba(0, 180, 255, 0.1) 100%)', color: 'var(--blue)', boxShadow: 'rgba(0, 180, 255, 0.4) 0px 0px 10px inset, rgba(0, 180, 255, 0.1) 0px 0px 9px 3px', cursor: 'pointer'}}>
 Sign in
 </button>
 </div>

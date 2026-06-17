@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -12,6 +48,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -51,7 +93,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="hidden lg:hidden" id="mobileMenu" style={{background: 'rgba(8,8,8,0.98)', backdropFilter: 'blur(30px)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="hidden lg:hidden" id="mobileMenu" style={{background: 'rgba(8, 8, 8, 0.98)', backdropFilter: 'blur(30px)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
 <div className="px-4 py-5 space-y-1">
 <button className="w-full text-left py-3 px-4 rounded-xl text-sm font-medium hover:bg-white/5 transition" onclick="showPage('home');toggleMobile()">Home</button>
 <button className="w-full text-left py-3 px-4 rounded-xl text-sm font-medium hover:bg-white/5 transition" onclick="showPage('fleet');toggleMobile()">Fleet</button>
@@ -89,7 +131,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid lg:grid-cols-[1fr_520px] gap-8 items-center flex-1 py-12 lg:py-16">
 
 <div className="relative z-10">
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{background: 'rgba(226,255,0,0.08)', border: '1px solid rgba(226,255,0,0.15)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6" style={{background: 'rgba(226, 255, 0, 0.08)', border: '1px solid rgba(226,255,0,0.15)'}}>
 <span className="w-1.5 h-1.5 rounded-full relative pulse-ring" style={{background: '#e2ff00', color: '#e2ff00'}}></span>
 <span className="text-xs font-medium" style={{color: '#e2ff00'}}>200+ Premium Vehicles Available</span>
 </div>
@@ -553,7 +595,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="text-xs text-white/50 mt-1">Expert Support</div>
 </div>
 </div>
-<div className="col-span-1 rounded-3xl p-6 flex flex-col justify-between" style={{background: 'linear-gradient(135deg,rgba(226,255,0,0.1),rgba(168,204,0,0.05))', border: '1px solid rgba(226,255,0,0.15)'}}>
+<div className="col-span-1 rounded-3xl p-6 flex flex-col justify-between" style={{background: 'linear-gradient(135deg, rgba(226, 255, 0, 0.1), rgba(168, 204, 0, 0.05))', border: '1px solid rgba(226,255,0,0.15)'}}>
 <iconify-icon icon="solar:star-linear" style={{color: '#e2ff00'}} width="26"></iconify-icon>
 <div>
 <div className="text-3xl font-black syne">4.9★</div>
@@ -575,7 +617,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="col-span-2 relative rounded-3xl overflow-hidden group" style={{background: 'linear-gradient(135deg,#0f0f0f,#1a1a1a)', border: '1px solid rgba(255,255,255,0.05)'}}>
+<div className="col-span-2 relative rounded-3xl overflow-hidden group" style={{background: 'linear-gradient(135deg, #0f0f0f, #1a1a1a)', border: '1px solid rgba(255,255,255,0.05)'}}>
 <div className="p-7 h-full flex flex-col justify-between">
 <iconify-icon icon="solar:delivery-linear" style={{color: '#e2ff00'}} width="28"></iconify-icon>
 <div>
@@ -688,7 +730,7 @@ gtag('config', 'G-2M6V79H761');
 <div><div className="text-sm font-semibold">James Carter</div><div className="text-xs text-white/40">Los Angeles, CA</div></div>
 </div>
 </div>
-<div className="flex-shrink-0 w-80 sm:w-96 rounded-3xl p-6" style={{background: 'linear-gradient(135deg,rgba(226,255,0,0.08),rgba(168,204,0,0.04))', border: '1px solid rgba(226,255,0,0.12)'}}>
+<div className="flex-shrink-0 w-80 sm:w-96 rounded-3xl p-6" style={{background: 'linear-gradient(135deg, rgba(226, 255, 0, 0.08), rgba(168, 204, 0, 0.04))', border: '1px solid rgba(226,255,0,0.12)'}}>
 <div className="flex items-center gap-1 mb-4">
 <iconify-icon icon="solar:star-bold" style={{color: '#e2ff00'}} width="14"></iconify-icon>
 <iconify-icon icon="solar:star-bold" style={{color: '#e2ff00'}} width="14"></iconify-icon>
@@ -864,7 +906,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="px-4 sm:px-6 lg:px-10 pb-16">
 <div className="max-w-[1400px] mx-auto space-y-5">
 
-<div className="rounded-3xl overflow-hidden relative group" style={{background: 'linear-gradient(135deg,rgba(249,115,22,0.06),rgba(239,68,68,0.04))', border: '1px solid rgba(249,115,22,0.12)'}}>
+<div className="rounded-3xl overflow-hidden relative group" style={{background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(239, 68, 68, 0.04))', border: '1px solid rgba(249,115,22,0.12)'}}>
 <div className="grid md:grid-cols-5 gap-0">
 <div className="md:col-span-2 relative overflow-hidden" style={{minHeight: '240px'}}>
 <img alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 absolute inset-0" src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&amp;h=400&amp;fit=crop"/>
@@ -872,7 +914,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="md:col-span-3 p-7 sm:p-10 flex flex-col justify-between">
 <div>
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style={{background: 'rgba(249,115,22,0.15)', color: '#f97316', border: '1px solid rgba(249,115,22,0.2)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style={{background: 'rgba(249, 115, 22, 0.15)', color: '#f97316', border: '1px solid rgba(249,115,22,0.2)'}}>
 <iconify-icon icon="solar:fire-linear" width="12"></iconify-icon> Weekend Special
                                 </div>
 <h2 className="text-2xl sm:text-3xl font-black syne tracking-tight mb-3">Sports Car Weekend</h2>
@@ -893,14 +935,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="rounded-3xl overflow-hidden relative group" style={{background: 'linear-gradient(135deg,rgba(34,197,94,0.06),rgba(6,182,212,0.04))', border: '1px solid rgba(34,197,94,0.12)'}}>
+<div className="rounded-3xl overflow-hidden relative group" style={{background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.06), rgba(6, 182, 212, 0.04))', border: '1px solid rgba(34,197,94,0.12)'}}>
 <div className="grid md:grid-cols-5 gap-0">
 <div className="md:col-span-2 relative overflow-hidden" style={{minHeight: '240px'}}>
 <img alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 absolute inset-0" src="https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=600&amp;h=400&amp;fit=crop"/>
 </div>
 <div className="md:col-span-3 p-7 sm:p-10 flex flex-col justify-between">
 <div>
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style={{background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.2)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style={{background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.2)'}}>
 <iconify-icon icon="solar:bolt-linear" width="12"></iconify-icon> Go Green
                                 </div>
 <h2 className="text-2xl sm:text-3xl font-black syne tracking-tight mb-3">Electric First Month</h2>
@@ -921,14 +963,14 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="rounded-3xl overflow-hidden relative group" style={{background: 'linear-gradient(135deg,rgba(168,85,247,0.06),rgba(99,102,241,0.04))', border: '1px solid rgba(168,85,247,0.12)'}}>
+<div className="rounded-3xl overflow-hidden relative group" style={{background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(99, 102, 241, 0.04))', border: '1px solid rgba(168,85,247,0.12)'}}>
 <div className="grid md:grid-cols-5 gap-0">
 <div className="md:col-span-2 relative overflow-hidden" style={{minHeight: '240px'}}>
 <img alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 absolute inset-0" src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&amp;h=400&amp;fit=crop"/>
 </div>
 <div className="md:col-span-3 p-7 sm:p-10 flex flex-col justify-between">
 <div>
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style={{background: 'rgba(168,85,247,0.15)', color: '#a855f7', border: '1px solid rgba(168,85,247,0.2)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5" style={{background: 'rgba(168, 85, 247, 0.15)', color: '#a855f7', border: '1px solid rgba(168,85,247,0.2)'}}>
 <iconify-icon icon="solar:crown-linear" width="12"></iconify-icon> VIP
                                 </div>
 <h2 className="text-2xl sm:text-3xl font-black syne tracking-tight mb-3">Luxury 7-Day Package</h2>
@@ -1081,7 +1123,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div><div className="text-sm font-semibold mb-1">Email</div><div className="text-sm text-white/40">hello@drve.com<br/>support@drve.com</div></div>
 </div>
-<div className="rounded-3xl p-6" style={{background: 'linear-gradient(135deg,rgba(226,255,0,0.08),rgba(168,204,0,0.04))', border: '1px solid rgba(226,255,0,0.1)'}}>
+<div className="rounded-3xl p-6" style={{background: 'linear-gradient(135deg, rgba(226, 255, 0, 0.08), rgba(168, 204, 0, 0.04))', border: '1px solid rgba(226,255,0,0.1)'}}>
 <div className="text-sm font-semibold mb-3">Follow us</div>
 <div className="flex gap-3">
 <a className="w-10 h-10 glass rounded-xl flex items-center justify-center hover:bg-white/10 transition" href="#"><iconify-icon icon="solar:instagram-linear" width="16"></iconify-icon></a>
@@ -1095,24 +1137,24 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid sm:grid-cols-2 gap-4 mb-4">
 <div>
 <label className="text-xs font-medium text-white/40 mb-1.5 block">First Name</label>
-<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="John" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="text"/>
+<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="John" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="text"/>
 </div>
 <div>
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Last Name</label>
-<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="Doe" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="text"/>
+<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="Doe" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="text"/>
 </div>
 </div>
 <div className="mb-4">
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Email</label>
-<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="john@example.com" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="email"/>
+<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="john@example.com" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="email"/>
 </div>
 <div className="mb-4">
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Subject</label>
-<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="How can we help?" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="text"/>
+<input className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="How can we help?" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}} type="text"/>
 </div>
 <div className="mb-7">
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Message</label>
-<textarea className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition resize-none" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="Your message..." rows="5" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}></textarea>
+<textarea className="w-full rounded-2xl px-4 py-3 text-sm outline-none text-white placeholder-white/20 transition resize-none" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(226,255,0,0.3)'" placeholder="Your message..." rows="5" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}></textarea>
 </div>
 <button className="w-full py-4 rounded-2xl text-sm font-black syne text-black flex items-center justify-center gap-2 transition hover:opacity-90" style={{background: 'linear-gradient(135deg,#e2ff00,#a8cc00)'}}>
 <iconify-icon icon="solar:letter-linear" width="16"></iconify-icon> Send Message
@@ -1145,28 +1187,28 @@ gtag('config', 'G-2M6V79H761');
 <div className="grid sm:grid-cols-2 gap-4">
 <div>
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Pick-up Location</label>
-<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <iconify-icon className="text-white/30 flex-shrink-0" icon="solar:map-point-linear" width="16"></iconify-icon>
 <input className="text-sm w-full outline-none bg-transparent text-white placeholder-white/20" placeholder="City or Airport" type="text"/>
 </div>
 </div>
 <div>
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Drop-off Location</label>
-<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <iconify-icon className="text-white/30 flex-shrink-0" icon="solar:map-point-linear" width="16"></iconify-icon>
 <input className="text-sm w-full outline-none bg-transparent text-white placeholder-white/20" placeholder="City or Airport" type="text"/>
 </div>
 </div>
 <div>
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Pick-up Date</label>
-<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <iconify-icon className="text-white/30 flex-shrink-0" icon="solar:calendar-linear" width="16"></iconify-icon>
 <input className="text-sm w-full outline-none bg-transparent text-white" style={{colorScheme: 'dark'}} type="date"/>
 </div>
 </div>
 <div>
 <label className="text-xs font-medium text-white/40 mb-1.5 block">Return Date</label>
-<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
+<div className="flex items-center gap-2 rounded-2xl px-4 py-3" style={{background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255,255,255,0.08)'}}>
 <iconify-icon className="text-white/30 flex-shrink-0" icon="solar:calendar-linear" width="16"></iconify-icon>
 <input className="text-sm w-full outline-none bg-transparent text-white" style={{colorScheme: 'dark'}} type="date"/>
 </div>

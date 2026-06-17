@@ -7,6 +7,42 @@ const useMagnetic = () => {
   const ref = useRef(null);
   
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     const el = ref.current;
     if (!el) return;
 
@@ -174,7 +210,7 @@ const Accordion = () => {
           >
             {/* Vertical Title (Hidden when active) */}
             <div className={`absolute inset-[1px] bg-[#080808] flex flex-col items-center py-8 z-10 transition-colors duration-500 rounded-lg ${isActive ? 'opacity-0 pointer-events-none' : 'group-hover:bg-[#0a0a0a]'}`}>
-              <span className="text-2xl font-normal text-zinc-600 group-hover:text-zinc-400 transition-colors duration-300 tracking-tight" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+              <span className="text-2xl font-normal text-zinc-600 group-hover:text-zinc-400 transition-colors duration-300 tracking-tight" style={{writingMode: 'vertical-rl', transform: 'rotate(180deg)'}}>
                 {item.phase}
               </span>
             </div>
@@ -294,7 +330,7 @@ export default function App() {
                 <div className="flex items-center gap-6 mt-4">
                   <a href="#features" className="text-sm font-medium text-zinc-100 flex items-center gap-2 group hover:text-indigo-400 transition-colors duration-300">
                     Explore Framework 
-                    <iconify-icon icon="solar:arrow-right-linear" width="18" height="18" class="transform group-hover:translate-x-1 transition-transform duration-300" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                    <iconify-icon icon="solar:arrow-right-linear" width="18" height="18" class="transform group-hover:translate-x-1 transition-transform duration-300" style={{strokeWidth: 1.5}}></iconify-icon>
                   </a>
                 </div>
               </div>
@@ -326,7 +362,7 @@ export default function App() {
               {/* Left Stats */}
               <div className="lg:col-span-4 flex flex-col gap-12 pb-4">
                 <div className="flex flex-col gap-3 group">
-                  <iconify-icon icon="solar:target-linear" width="24" height="24" class="text-zinc-500 group-hover:text-indigo-400 transition-colors duration-300" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                  <iconify-icon icon="solar:target-linear" width="24" height="24" class="text-zinc-500 group-hover:text-indigo-400 transition-colors duration-300" style={{strokeWidth: 1.5}}></iconify-icon>
                   <h3 className="text-xl font-normal text-zinc-100 tracking-tight">Zero Fragmentation</h3>
                   <p className="text-sm text-zinc-500 leading-relaxed max-w-[260px] font-light">
                     Consolidate courses, communities, and coaching into a single owned platform optimized for retention.
@@ -334,7 +370,7 @@ export default function App() {
                 </div>
 
                 <div className="flex flex-col gap-3 group">
-                  <iconify-icon icon="solar:server-path-linear" width="24" height="24" class="text-zinc-500 group-hover:text-indigo-400 transition-colors duration-300" style={{ strokeWidth: 1.5 }}></iconify-icon>
+                  <iconify-icon icon="solar:server-path-linear" width="24" height="24" class="text-zinc-500 group-hover:text-indigo-400 transition-colors duration-300" style={{strokeWidth: 1.5}}></iconify-icon>
                   <h3 className="text-xl font-normal text-zinc-100 tracking-tight">AI-Native Stacks</h3>
                   <p className="text-sm text-zinc-500 leading-relaxed max-w-[260px] font-light">
                     Leveraging modern LLMs to build features that feel like magic, scaling your specialized knowledge asynchronously.

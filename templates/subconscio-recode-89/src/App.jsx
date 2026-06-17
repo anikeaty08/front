@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -51,6 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -66,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 <div className="w-full bg-[#050a15] rounded-full h-10 relative overflow-hidden border border-white/10 shadow-inner flex items-center justify-center">
 <div className="absolute left-0 top-0 h-full w-[85%] bg-[linear-gradient(90deg,#967534_0%,#C5A059_100%)] overflow-hidden transition-all duration-1000">
-<div className="absolute inset-0 w-full h-full" style={{animation: 'shimmer 2.5s infinite', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)', transform: 'skewX(-20deg)'}}></div>
+<div className="absolute inset-0 w-full h-full" style={{animation: 'shimmer 2.5s infinite', background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)', transform: 'skewX(-20deg)'}}></div>
 </div>
 <div className="absolute inset-0 flex items-center justify-center w-full h-full z-10 pointer-events-none px-2 text-center">
 <span className="text-[10px] sm:text-xs uppercase tracking-widest font-medium text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
@@ -83,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <main className="flex-grow flex flex-col sm:px-6 sm:pt-6 z-10 text-center w-full max-w-[900px] mr-auto ml-auto pt-1 pr-4 pb-20 pl-4 relative items-center">
-<h1 className="leading-[1.2] sm:text-4xl md:text-5xl text-3xl font-medium text-white tracking-tight pb-5" style={{fontFamily: '\'Playfair Display\',serif'}}>Bist du bereit All In zu gehen? Dann schau dir dieses kurze Video an — so beschleunigst du deinen Prozess massiv.</h1>
+<h1 className="leading-[1.2] sm:text-4xl md:text-5xl text-3xl font-medium text-white tracking-tight pb-5" style={{fontFamily: '\'Playfair Display\', serif'}}>Bist du bereit All In zu gehen? Dann schau dir dieses kurze Video an — so beschleunigst du deinen Prozess massiv.</h1>
 <p className="sm:text-lg leading-relaxed text-base font-light text-slate-300 max-w-2xl mr-auto mb-8 ml-auto">
         Das Video erklärt warum die meisten nur halb so schnell vorankommen — und wie du das änderst.
     </p>
@@ -128,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <div className="w-full mt-24">
-<h2 className="text-3xl sm:text-4xl text-white font-medium tracking-tight mb-14" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-3xl sm:text-4xl text-white font-medium tracking-tight mb-14" style={{fontFamily: '\'Playfair Display\', serif'}}>
             Dein 4-Stufen Transformations-System im Detail
         </h2>
 <div className="flex flex-col gap-10 text-left max-w-4xl mx-auto">
@@ -213,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <iconify-icon className="text-lg" icon="solar:history-linear"></iconify-icon>
                     Die Entstehungsgeschichte
                 </span>
-<h2 className="text-3xl sm:text-4xl text-white font-medium tracking-tight text-center" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-3xl sm:text-4xl text-white font-medium tracking-tight text-center" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Wach auf <span className="text-[#C5A059] font-light mx-2 text-2xl">×</span> Mind Solutions
                 </h2>
 </div>
@@ -228,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     Irgendwann war es nur noch eine logische Entscheidung: ihr beider Wissen zu bündeln. Marcels tiefes Verständnis für Bewusstsein, Identität und Manifestation — kombiniert mit Abbas' therapeutischer Expertise im Bereich Hypnose und Unterbewusstsein.
                 </p>
 <div className="mt-10 pt-8 border-t border-white/[0.05]">
-<p className="text-lg md:text-xl text-white font-medium italic" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<p className="text-lg md:text-xl text-white font-medium italic" style={{fontFamily: '\'Playfair Display\', serif'}}>
                         "Das Subconscious Recode ist das Ergebnis. Mit Herz erschaffen. Von zwei Menschen, die selbst erlebt haben, was möglich ist, wenn man wirklich bereit ist, sich zu verändern."
                     </p>
 </div>
@@ -239,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div className="w-full mt-24">
 
 <div className="flex flex-col items-center justify-center mb-12">
-<h2 className="text-3xl sm:text-4xl text-white font-medium tracking-tight mb-8 text-center" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-3xl sm:text-4xl text-white font-medium tracking-tight mb-8 text-center" style={{fontFamily: '\'Playfair Display\', serif'}}>
                 Das sagen Menschen die mit Abbas gearbeitet haben
             </h2>
 <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/[0.02] border border-white/[0.08] px-6 py-4 rounded-3xl w-fit mx-auto shadow-lg backdrop-blur-sm">
@@ -563,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <iconify-icon className="text-lg" icon="solar:alarm-linear"></iconify-icon>
                     Aktion endet, wenn du die Seite verlässt
                 </span>
-<h2 className="text-2xl md:text-4xl text-white font-medium tracking-tight mb-2" style={{fontFamily: '\'Playfair Display\',serif'}}>
+<h2 className="text-2xl md:text-4xl text-white font-medium tracking-tight mb-2" style={{fontFamily: '\'Playfair Display\', serif'}}>
                     Sichere dir jetzt deinen unfairen Vorteil
                 </h2>
 <h3 className="text-[#C5A059] text-xl font-light tracking-wide">Subconscious Recode</h3>
@@ -643,7 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div className="absolute -top-10 -right-10 w-40 h-40 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.15)_0%,transparent_70%)] rounded-full blur-2xl pointer-events-none"></div>
 <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[radial-gradient(circle_at_center,rgba(40,54,86,0.3)_0%,transparent_70%)] rounded-full blur-2xl pointer-events-none"></div>
 <p className="text-sm sm:text-base font-light text-slate-300 leading-relaxed italic relative z-10">
-<span className="font-medium text-[#DFB76C] not-italic pr-1 text-lg" style={{fontFamily: '\'Playfair Display\',serif'}}>Wichtig —</span> 
+<span className="font-medium text-[#DFB76C] not-italic pr-1 text-lg" style={{fontFamily: '\'Playfair Display\', serif'}}>Wichtig —</span> 
             Wenn du diese Seite verlässt, verfällt diese exklusive Chance für immer. Du wirst das komplette 4-Stufen System nie wieder für 111€ (statt 396€) sehen. Triff jetzt die Entscheidung für deinen schnellsten Weg zum Ziel.
         </p>
 </div>

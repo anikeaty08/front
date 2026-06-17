@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -220,6 +256,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -263,7 +305,7 @@ addUtilities({
 <span className="text-xs font-mono text-neutral-400">01 / 08</span>
 </div>
 <div className="relative z-10 space-y-6 md:space-y-10">
-<div className="flex animate-on-scroll [animation:animationIn_0.8s_ease-out_0.2s_both] animate bg-gradient-to-br from-white/10 to-white/0 w-12 h-12 md:w-14 md:h-14 rounded-lg mb-4 md:mb-6 backdrop-blur-md items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex animate-on-scroll [animation:animationIn_0.8s_ease-out_0.2s_both] animate bg-gradient-to-br from-white/10 to-white/0 w-12 h-12 md:w-14 md:h-14 rounded-lg mb-4 md:mb-6 backdrop-blur-md items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 
 <iconify-icon className="text-2xl md:text-3xl text-white" icon="solar:stars-minimalistic-bold-duotone"></iconify-icon>
 </div>
@@ -428,10 +470,10 @@ addUtilities({
 <div className="bg-gradient-to-br from-white/10 to-white/0 w-2/3 h-3 rounded-sm"></div>
 </div>
 <div className="absolute -bottom-12 flex gap-6">
-<button className="flex hover:bg-white hover:text-black transition-colors text-neutral-400 bg-neutral-900 w-12 h-12 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="flex hover:bg-white hover:text-black transition-colors text-neutral-400 bg-neutral-900 w-12 h-12 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="text-xl" icon="solar:arrow-left-bold-duotone"></iconify-icon>
 </button>
-<button className="flex hover:bg-white hover:text-black transition-colors text-neutral-400 bg-neutral-900 w-12 h-12 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="flex hover:bg-white hover:text-black transition-colors text-neutral-400 bg-neutral-900 w-12 h-12 rounded-full items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <iconify-icon className="text-xl" icon="solar:arrow-right-bold-duotone"></iconify-icon>
 </button>
 </div>
@@ -451,7 +493,7 @@ addUtilities({
 <iconify-icon className="text-3xl md:text-5xl text-neutral-500 mb-2 md:mb-4 group-hover:text-white transition-colors duration-500" icon="solar:layers-minimalistic-bold-duotone"></iconify-icon>
 <div className="text-xs md:text-sm text-neutral-400 font-medium tracking-wide">Hover Me</div>
 </div>
-<div className="flashlight-card aspect-square flex flex-col group overflow-hidden animate-on-scroll [animation:animationIn_0.8s_ease-out_0.6s_both] bg-neutral-900/60 border-0 ring-white/5 ring-1 rounded-none p-4 md:p-6 relative backdrop-blur justify-end" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--mouse-x', `${event.clientX - rect.left}px`); this.style.setProperty('--mouse-y', `${event.clientY - rect.top}px`);" style={{-MouseX: '106.5px', -MouseY: '219px'}}>
+<div className="flashlight-card aspect-square flex flex-col group overflow-hidden animate-on-scroll [animation:animationIn_0.8s_ease-out_0.6s_both] bg-neutral-900/60 border-0 ring-white/5 ring-1 rounded-none p-4 md:p-6 relative backdrop-blur justify-end" onmousemove="const rect = this.getBoundingClientRect(); this.style.setProperty('--mouse-x', `${event.clientX - rect.left}px`); this.style.setProperty('--mouse-y', `${event.clientY - rect.top}px`);" style={{'--mouse-x': '106.5px', '--mouse-y': '219px'}}>
 <iconify-icon className="text-3xl md:text-5xl text-neutral-500 mb-2 md:mb-4 group-hover:text-white transition-colors duration-500" icon="solar:cpu-bold-duotone"></iconify-icon>
 <div className="text-xs md:text-sm text-neutral-400 font-medium tracking-wide">Trace Border</div>
 </div>

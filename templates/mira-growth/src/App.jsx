@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 (function() {
@@ -253,6 +289,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -365,7 +407,7 @@ gtag('config', 'G-2M6V79H761');
 <main className="z-10 pb-0 relative">
 
 <section className="flex flex-col max-w-6xl mr-auto ml-auto pt-16 pr-4 pl-4 lg:px-8 lg:pt-32 relative isolate overflow-hidden">
-<div className="aura-background-component pointer-events-none absolute inset-0 z-0 w-full h-full overflow-hidden saturate-150 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none" data-alpha-mask="80" style={{position: 'absolute', inset: '0', zIndex: '0', width: '100%', height: '100%', overflow: 'hidden', pointerEvents: 'none', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0', WebkitMaskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)', maskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)'}}>
+<div className="aura-background-component pointer-events-none absolute inset-0 z-0 w-full h-full overflow-hidden saturate-150 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none" data-alpha-mask="80" style={{position: 'absolute', inset: '0', zIndex: '0', width: '100%', height: '100%', overflow: 'hidden', pointerEvents: 'none', '--border-gradient': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0', WebkitMaskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)', maskImage: 'linear-gradient(transparent, black 0%, black 80%, transparent)'}}>
 <div className="absolute inset-0 z-0 w-full h-full" data-us-project="bcBYZIStYXwiogchBNHO" style={{position: 'absolute', inset: '0', zIndex: '0', width: '100%', height: '100%'}}></div>
 
 </div>
@@ -484,7 +526,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 
 <div className="[animation:fadeSlideIn_0.8s_ease-out_0.7s_both] w-full mt-14 relative z-10">
-<div className="sm:pr-4 sm:pl-4 bg-gradient-to-br from-black/10 to-black/0 max-w-5xl rounded-3xl mr-auto ml-auto pt-4 pr-2 pb-4 pl-2 relative shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur space-y-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '24px', maskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)'}}>
+<div className="sm:pr-4 sm:pl-4 bg-gradient-to-br from-black/10 to-black/0 max-w-5xl rounded-3xl mr-auto ml-auto pt-4 pr-2 pb-4 pl-2 relative shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur space-y-4" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '24px', maskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 80%, transparent)'}}>
 
 <div className="flex bg-slate-900/80 rounded-2xl px-4 py-3 items-center justify-between">
 <div className="flex items-center space-x-2">
@@ -1085,7 +1127,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 <div className="grid md:grid-cols-2 max-w-5xl z-10 mt-12 mr-auto ml-auto relative gap-x-6 gap-y-6">
 
-<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 <div className="w-full h-[280px] rounded-none relative border border-white/5 bg-[#05080F] flex items-center justify-center overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1),transparent_60%)]"></div>
 <svg className="absolute inset-0 w-full h-full pointer-events-none" fill="none" viewbox="0 0 400 280">
@@ -1208,7 +1250,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0px'}}>
+<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0px'}}>
 <div className="w-full h-[280px] rounded-none border border-white/5 bg-[#05080F] p-5 flex flex-col justify-between shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] relative z-10">
 <style>
     @keyframes aura-bar { 
@@ -1374,7 +1416,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0px'}}>
+<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0px'}}>
 <div className="w-full h-[280px] rounded-none relative border border-white/5 bg-[#05080F] flex items-center justify-center overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.1),transparent_60%)]">
 <div className="absolute inset-0 animate-[pulse_4s_ease-in-out_infinite] bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15),transparent_50%)]"></div>
@@ -1434,7 +1476,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </div>
 
-<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0px'}}>
+<div className="group overflow-hidden transition-all duration-500 bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-none p-5 relative shadow-xl" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0px'}}>
 <div className="w-full h-[280px] rounded-none relative border border-white/5 bg-[#05080F] p-5 overflow-hidden flex flex-col justify-between shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
 <div className="relative z-10 flex justify-between px-2 w-full max-w-[95%] mx-auto">
 <div className="w-12 text-center text-xs font-medium text-slate-300">
@@ -1606,7 +1648,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 <section className="flex flex-col [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-8 lg:pt-32 max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="overflow-hidden sm:px-8 sm:py-10 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="overflow-hidden sm:px-8 sm:py-10 bg-gradient-to-br from-blue-500/10 to-blue-500/0 w-full rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
 <span className="text-[11px] uppercase font-medium text-sky-300 tracking-[0.2em]" style={{fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
               HOW IT WORKS
@@ -1625,7 +1667,7 @@ gtag('config', 'G-2M6V79H761');
             </p>
 </div>
 <div className="grid md:grid-cols-3 sm:gap-x-6 sm:gap-y-6 mt-10">
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 <div className="flex items-center justify-between text-[10px] text-slate-400" style={{fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
 <span className="uppercase tracking-[0.16em] text-slate-300">
                   CONNECT SIGNALS
@@ -1649,7 +1691,7 @@ gtag('config', 'G-2M6V79H761');
                 Unified customer context across your stack.
               </div>
 </div>
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 <div className="flex items-center justify-between text-[10px] text-slate-400">
 <span className="uppercase tracking-[0.16em] text-slate-300">
                   SCORE INTENT
@@ -1676,7 +1718,7 @@ gtag('config', 'G-2M6V79H761');
                 </li>
 </ul>
 </div>
-<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '2px'}}>
+<div className="overflow-hidden bg-gradient-to-br from-blue-500/10 to-blue-500/0 rounded-sm pt-5 pr-5 pb-5 pl-5 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '2px'}}>
 <div className="flex items-center justify-between text-[10px] text-slate-400">
 <span className="uppercase tracking-[0.16em] text-slate-300">
                   LAUNCH PLAYBOOKS
@@ -1705,7 +1747,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 <section className="flex flex-col [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-8 lg:pt-32 max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="overflow-hidden sm:px-8 sm:py-10 bg-center bg-slate-950/95 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1ebff6d5-cc57-4279-972f-e83f6c19894e_1600w.jpg)] bg-cover rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="overflow-hidden sm:px-8 sm:py-10 bg-center bg-slate-950/95 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1ebff6d5-cc57-4279-972f-e83f6c19894e_1600w.jpg)] bg-cover rounded-none pt-8 pr-4 pb-8 pl-4 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 
 <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
 <span className="text-[11px] uppercase font-medium text-sky-300 tracking-[0.2em]" style={{fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif'}}>
@@ -1838,7 +1880,7 @@ gtag('config', 'G-2M6V79H761');
 
 
 <section className="flex flex-col [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-8 lg:pt-32 max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 <div className="grid gap-6 sm:gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1.1fr)_minmax(0,1.1fr)] items-stretch">
 
 <div className="flex flex-col justify-between gap-8">
@@ -2000,7 +2042,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 <section className="flex flex-col [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-8 lg:pt-32 max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 <div className="grid gap-8 lg:grid-cols-12 items-start">
 
 <div className="lg:col-span-5 flex flex-col gap-4">
@@ -2107,7 +2149,7 @@ gtag('config', 'G-2M6V79H761');
 </div>
 </section>
 <section className="flex flex-col [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-8 lg:pt-32 max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="sm:px-10 sm:py-20 lg:py-24 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-16 pr-4 pb-16 pl-4 text-center flex flex-col items-center justify-center relative overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="sm:px-10 sm:py-20 lg:py-24 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-none pt-16 pr-4 pb-16 pl-4 text-center flex flex-col items-center justify-center relative overflow-hidden" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 
 <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none"></div>
 <div className="relative z-10 flex flex-col items-center w-full">
@@ -2158,7 +2200,7 @@ gtag('config', 'G-2M6V79H761');
 </section>
 
 <section className="flex flex-col [animation:fadeSlideIn_0.8s_ease-out_0.1s_both] animate-on-scroll lg:px-8 lg:pt-32 max-w-6xl mr-auto ml-auto pt-20 pr-4 pl-4">
-<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 w-full rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', -BorderRadiusBefore: '0'}}>
+<div className="sm:px-10 sm:py-10 lg:py-12 bg-gradient-to-br from-blue-500/10 via-blue-500/0 to-blue-500/10 w-full rounded-none pt-8 pr-4 pb-8 pl-4" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0))', '--border-radius-before': '0'}}>
 
 <footer className="text-[11px] uppercase font-medium text-sky-300 tracking-[0.2em] w-full">
 <div className="flex flex-col items-center">

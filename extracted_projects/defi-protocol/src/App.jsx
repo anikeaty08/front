@@ -3,6 +3,42 @@ import UnicornScene from 'unicornstudio-react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     // Simple Intersection Observer for scroll animations matching the original HTML
     const observerOptions = {
       root: null,
@@ -34,10 +70,7 @@ export default function App() {
       <div 
         className="aura-background-component top-0 w-full h-screen -z-10 absolute" 
         data-alpha-mask="80" 
-        style={{ 
-          maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', 
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)' 
-        }}
+        style={{maskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 0%, black 80%, transparent)'}}
       >
         <div className="aura-background-component top-0 w-full -z-10 absolute h-full">
           <div className="absolute w-full h-full left-0 top-0 -z-10">
@@ -311,7 +344,7 @@ export default function App() {
                 {/* Visual: Nodes Graph */}
                 <div className="relative h-48 w-full mt-auto border border-white/5 rounded-xl bg-black/40 p-4 overflow-hidden">
                   {/* SVG Connections */}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ opacity: 0.3 }}>
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{opacity: 0.3}}>
                     <path d="M70 120 C 120 120, 120 60, 170 60" stroke="#525252" strokeWidth="1" fill="none"></path>
                     <path d="M260 60 L 320 60" stroke="#525252" strokeWidth="1" fill="none"></path>
                     <path d="M70 120 C 120 120, 120 140, 170 140" stroke="#525252" strokeWidth="1" fill="none"></path>

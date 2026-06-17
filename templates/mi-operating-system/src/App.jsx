@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -68,6 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -161,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div className="absolute inset-0 z-10 text-slate-400 bg-[#020617]">
 
-<div className="absolute bg-[#0f172a] border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col" style={{-FinalTop: '0', -FinalLeft: '0', -FinalWidth: '240px', -FinalHeight: '100%', -FinalRadius: '0', animation: 'blockExpand 12s infinite ease-in-out'}}>
+<div className="absolute bg-[#0f172a] border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col" style={{'--final-top': '0', '--final-left': '0', '--final-width': '240px', '--final-height': '100%', '--final-radius': '0', animation: 'blockExpand 12s infinite ease-in-out'}}>
 <div className="flex-1 p-6 opacity-0 flex flex-col h-full" style={{animation: 'uiContentFade 12s infinite'}}>
 <div className="flex items-center gap-3 mb-8 px-2">
 <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-[0_4px_12px_rgba(99,102,241,0.3)]">
@@ -195,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="absolute bg-[#0f172a]/90 backdrop-blur-md border-b border-white/5 flex items-center px-8 justify-between z-10" style={{-FinalTop: '0', -FinalLeft: '240px', -FinalWidth: 'calc(100% - 240px)', -FinalHeight: '64px', -FinalRadius: '0', animation: 'blockExpand 12s infinite ease-in-out'}}>
+<div className="absolute bg-[#0f172a]/90 backdrop-blur-md border-b border-white/5 flex items-center px-8 justify-between z-10" style={{'--final-top': '0', '--final-left': '240px', '--final-width': 'calc(100% - 240px)', '--final-height': '64px', '--final-radius': '0', animation: 'blockExpand 12s infinite ease-in-out'}}>
 <div className="opacity-0 w-full flex justify-between items-center" style={{animation: 'uiContentFade 12s infinite'}}>
 <div className="flex flex-col gap-1">
 <h2 className="text-sm font-semibold text-white">Симуляция стратегии Q4</h2>
@@ -216,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 </div>
 
-<div className="absolute bg-[#020617]" style={{-FinalTop: '64px', -FinalLeft: '240px', -FinalWidth: 'calc(100% - 240px)', -FinalHeight: 'calc(100% - 64px)', -FinalRadius: '0', animation: 'blockExpand 12s infinite ease-in-out'}}>
+<div className="absolute bg-[#020617]" style={{'--final-top': '64px', '--final-left': '240px', '--final-width': 'calc(100% - 240px)', '--final-height': 'calc(100% - 64px)', '--final-radius': '0', animation: 'blockExpand 12s infinite ease-in-out'}}>
 <div className="p-8 opacity-0 h-full overflow-hidden" style={{animation: 'uiContentFade 12s infinite'}}>
 
 <div className="flex gap-4 mb-6">

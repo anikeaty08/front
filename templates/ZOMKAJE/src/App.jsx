@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
     lucide.createIcons({attr: {stroke: 'currentColor', 'stroke-width': 1.5}})
@@ -28,6 +64,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -58,7 +100,7 @@ export default function App() {
 
 <img alt="" className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full" src="https://assets.codepen.io/605876/keypad-base.png?quality=86"/>
 
-<button className="absolute w-[42%] h-[46%] bottom-[55%] left-[28%] [clip-path:polygon(0_0,54%_0,89%_24%,100%_70%,54%_100%,46%_100%,0_69%,12%_23%,47%_0%)] origin-bottom active:translate-y-1 transition-transform" id="one" style={{-Travel: '26', perspective: '800px'}}>
+<button className="absolute w-[42%] h-[46%] bottom-[55%] left-[28%] [clip-path:polygon(0_0,54%_0,89%_24%,100%_70%,54%_100%,46%_100%,0_69%,12%_23%,47%_0%)] origin-bottom active:translate-y-1 transition-transform" id="one" style={{'--travel': '26', perspective: '800px'}}>
 <span className="block w-full h-full relative">
 <span className="absolute inset-0 flex items-start pl-3 pt-3 text-lg font-medium" style={{transform: 'rotateX(36deg) rotateY(45deg) rotateX(-90deg)'}}>
             ok

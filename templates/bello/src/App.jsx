@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -15,6 +51,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -856,7 +898,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
 
-<div className="rounded-2xl relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px', maskImage: 'linear-gradient(90deg, transparent, black 0%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 100%, transparent)'}}>
+<div className="rounded-2xl relative" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px', maskImage: 'linear-gradient(90deg, transparent, black 0%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 100%, transparent)'}}>
 <div className="rounded-3xl absolute top-0 right-0 bottom-0 left-0 blur-3xl" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 100%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 100%, transparent)'}}></div>
 <div className="bg-white/5 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm" style={{maskImage: 'linear-gradient(90deg, transparent, black 0%, black 50%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 0%, black 50%, transparent)'}}>
 <div className="flex items-center justify-between mb-6">
@@ -970,7 +1012,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </li>
 </ul>
 </div>
-<div className="order-1 lg:order-2 rounded-2xl relative gap-x-12 gap-y-12" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 114, 182, 0.05), rgba(219, 39, 119, 0.1))', -BorderRadiusBefore: '16px'}}>
+<div className="order-1 lg:order-2 rounded-2xl relative gap-x-12 gap-y-12" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(244, 114, 182, 0.05), rgba(219, 39, 119, 0.1))', '--border-radius-before': '16px'}}>
 <div className="bg-gradient-to-br from-indigo-600/5 to-purple-600/5 rounded-3xl absolute top-0 right-0 bottom-0 left-0 blur-3xl" style={{}}></div>
 <div className="bg-white/5 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative backdrop-blur-sm" style={{maskImage: 'linear-gradient(180deg, transparent, black 0%, black 50%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, black 0%, black 50%, transparent)'}}>
 <div className="flex items-center justify-between mb-6">
@@ -1040,7 +1082,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
 
-<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px', maskImage: 'linear-gradient(0deg, transparent, black 0%, black 100%, transparent)'}}>
+<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', '--border-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px', maskImage: 'linear-gradient(0deg, transparent, black 0%, black 100%, transparent)'}}>
 <div className="flex items-center gap-1 mb-4">
 <svg className="w-4 h-4 text-slate-400" fill="currentColor" height="24" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -1072,7 +1114,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center gap-1 mb-4">
 <svg className="w-4 h-4 text-slate-400" fill="currentColor" height="24" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -1104,7 +1146,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center gap-1 mb-4">
 <svg className="w-4 h-4 text-slate-400" fill="currentColor" height="24" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -1136,7 +1178,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center gap-1 mb-4">
 <svg className="w-4 h-4 text-slate-400" fill="currentColor" height="24" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -1168,7 +1210,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center gap-1 mb-4">
 <svg className="w-4 h-4 text-slate-400" fill="currentColor" height="24" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon className="" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -1200,7 +1242,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group hover:bg-white/[0.07] transition-all hover:border-white/20 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex items-center gap-1 mb-4">
 <svg className="w-4 h-4 text-slate-400" fill="currentColor" height="24" style={{}} viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
@@ -1332,7 +1374,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="group bg-gradient-to-br from-indigo-400/25 to-indigo-600/30 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-[0_0_40px_rgba(99,102,241,0.2)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="group bg-gradient-to-br from-indigo-400/25 to-indigo-600/30 rounded-2xl pt-8 pr-8 pb-8 pl-8 relative shadow-[0_0_40px_rgba(99,102,241,0.2)]" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-xs font-medium text-white" style={{}}>
           Most Popular
         </div>

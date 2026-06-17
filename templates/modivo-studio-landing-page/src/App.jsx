@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -159,6 +195,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -852,7 +894,7 @@ addUtilities({
 <div className="relative flex items-center justify-center py-10 sm:py-16">
 <div className="relative flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
 
-<div className="glass" style={{position: 'relative', width: '18rem', height: '18rem', maxWidth: '100%', background: 'linear-gradient(rgba(255,255,255,0.08), transparent)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: 'rgba(0,0,0,0.5) 0 25px 45px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -1.75rem', backdropFilter: 'blur(18px)', transform: 'rotate(-6deg)'}}>
+<div className="glass" style={{position: 'relative', width: '18rem', height: '18rem', maxWidth: '100%', background: 'linear-gradient(rgba(255, 255, 255, 0.08), transparent)', border: '1px solid rgba(255, 255, 255, 0.12)', boxShadow: 'rgba(0, 0, 0, 0.5) 0 25px 45px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -1.75rem', backdropFilter: 'blur(18px)', transform: 'rotate(-6deg)'}}>
 <div className="absolute inset-4 rounded-2xl bg-neutral-950/70 text-neutral-50 shadow-2xl ring-1 ring-white/10 overflow-hidden backdrop-blur-xl">
 <div className="p-5 sm:p-6 flex h-full flex-col">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-neutral-900 ring-1 ring-white/10 mb-4">
@@ -889,7 +931,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="glass" style={{position: 'relative', width: '18rem', height: '18rem', maxWidth: '100%', background: 'linear-gradient(rgba(255,255,255,0.1), transparent)', border: '1px solid rgba(255,255,255,0.16)', boxShadow: 'rgba(0,0,0,0.6) 0 30px 55px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -1.75rem', backdropFilter: 'blur(20px)', transform: 'rotate(0deg)'}}>
+<div className="glass" style={{position: 'relative', width: '18rem', height: '18rem', maxWidth: '100%', background: 'linear-gradient(rgba(255, 255, 255, 0.1), transparent)', border: '1px solid rgba(255, 255, 255, 0.16)', boxShadow: 'rgba(0, 0, 0, 0.6) 0 30px 55px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -1.75rem', backdropFilter: 'blur(20px)', transform: 'rotate(0deg)'}}>
 <div className="absolute inset-4 rounded-2xl bg-neutral-950/65 text-neutral-50 shadow-2xl ring-1 ring-white/10 overflow-hidden backdrop-blur-xl">
 <div className="p-5 sm:p-6 flex h-full flex-col">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-neutral-900 ring-1 ring-white/10 mb-4">
@@ -926,7 +968,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="glass" style={{position: 'relative', width: '18rem', height: '18rem', maxWidth: '100%', background: 'linear-gradient(rgba(255,255,255,0.07), transparent)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: 'rgba(0,0,0,0.55) 0 25px 45px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -1.75rem', backdropFilter: 'blur(18px)', transform: 'rotate(5deg)'}}>
+<div className="glass" style={{position: 'relative', width: '18rem', height: '18rem', maxWidth: '100%', background: 'linear-gradient(rgba(255, 255, 255, 0.07), transparent)', border: '1px solid rgba(255, 255, 255, 0.12)', boxShadow: 'rgba(0, 0, 0, 0.55) 0 25px 45px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '1.25rem', margin: '0 -1.75rem', backdropFilter: 'blur(18px)', transform: 'rotate(5deg)'}}>
 <div className="absolute inset-4 rounded-2xl bg-neutral-950/70 text-neutral-50 shadow-2xl ring-1 ring-white/10 overflow-hidden backdrop-blur-xl">
 <div className="p-5 sm:p-6 flex h-full flex-col">
 <div className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-neutral-900 ring-1 ring-white/10 mb-4">

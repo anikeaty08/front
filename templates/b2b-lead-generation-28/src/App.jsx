@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -20,15 +56,21 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
     <>
       
-<div className="fixed inset-0 pointer-events-none -z-10" style={{backgroundSize: '40px 40px', backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)', maskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)'}}></div>
+<div className="fixed inset-0 pointer-events-none -z-10" style={{backgroundSize: '40px 40px', backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', maskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)'}}></div>
 <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[800px] h-[600px] rounded-full blur-[80px] md:blur-[120px] -z-10 bg-sky-400/10"></div>
 <nav className="top-4 md:top-6 left-1/2 -translate-x-1/2 w-[95%] md:w-[92%] max-w-5xl z-50 transition-all duration-300 absolute">
-<div className="md:pl-6 flex rounded-full pt-2 pr-2 pb-2 pl-4 shadow-2xl items-center justify-between" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2), 0 25px 50px rgba(14,165,233,0.08)'}}>
+<div className="md:pl-6 flex rounded-full pt-2 pr-2 pb-2 pl-4 shadow-2xl items-center justify-between" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2), 0 25px 50px rgba(14,165,233,0.08)'}}>
 <div className="flex items-center gap-3">
 <svg className="w-8 h-8 md:w-10 md:h-10 shrink-0" fill="none" viewbox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
 <defs>
@@ -521,7 +563,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
 </div>
 <div className="grid grid-cols-1 gap-8 gap-x-8 gap-y-8">
 <div className="grid gap-x-6 gap-y-8 grid-cols-1">
-<div className="rounded-3xl pt-8 pr-8 pb-0 pl-8" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="rounded-3xl pt-8 pr-8 pb-0 pl-8" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <svg className="md:h-14 mb-6 w-[346px] h-[70px]" data-icon-replaced="true" strokeWidth="2" style={{width: '346px', height: '70px', color: 'rgb(255, 255, 255)'}} viewbox="0 0 680 160" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <lineargradient id="pill-grad" x1="0%" x2="100%" y1="0%" y2="100%">
@@ -553,7 +595,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
                 In 1 year
               </div>
 </div>
-<div className="rounded-3xl pt-8 pr-8 pb-0 pl-8" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="rounded-3xl pt-8 pr-8 pb-0 pl-8" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <svg className="md:h-14 mb-6 w-[299px] h-[60px]" data-icon-replaced="true" strokeWidth="2" style={{width: '299px', height: '60px', color: 'rgb(255, 255, 255)'}} viewbox="0 0 470 110" xmlns="http://www.w3.org/2000/svg">
 <text className="" fill="#3d3393" fontFamily="'Nunito', sans-serif" fontSize="100" font-weight="800" letter-spacing="-2" x="10" y="90">
                   acclaim
@@ -574,7 +616,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
                 In 30 days
               </div>
 </div>
-<div className="rounded-3xl pt-8 pr-8 pb-8 pl-8" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="rounded-3xl pt-8 pr-8 pb-8 pl-8" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <svg className="md:h-14 mb-6 w-[233px] h-[60px]" data-icon-replaced="true" strokeWidth="1.5" style={{width: '233px', height: '60px', color: 'rgb(255, 255, 255)'}} viewbox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
 <g className="" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="5">
 
@@ -750,7 +792,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
 <div className="flex items-center justify-center w-10 h-10 rounded-full border bg-[#0A0B10] shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 border-white/10 text-sky-400">
 <span className="font-mono text-base font-medium">1</span>
 </div>
-<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <h3 className="text-lg font-normal text-white mb-2">
                 Email &amp; LinkedIn Infrastructure Setup
               </h3>
@@ -766,7 +808,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
 <div className="flex items-center justify-center w-10 h-10 rounded-full border bg-[#0A0B10] shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 border-white/10 text-sky-400">
 <span className="font-mono text-base font-medium">2</span>
 </div>
-<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <h3 className="text-lg font-normal text-white mb-2">
                 Lead Scraping &amp; Enrichment
               </h3>
@@ -781,7 +823,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
 <div className="flex items-center justify-center w-10 h-10 rounded-full border bg-[#0A0B10] shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 border-white/10 text-sky-400">
 <span className="font-mono text-base font-medium">3</span>
 </div>
-<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <h3 className="text-lg font-normal text-white mb-2">
                 Copywriting &amp; Strategy
               </h3>
@@ -796,7 +838,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
 <div className="flex items-center justify-center w-10 h-10 rounded-full border bg-[#0A0B10] shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 border-white/10 text-sky-400">
 <span className="font-mono text-base font-medium">4</span>
 </div>
-<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <h3 className="text-lg font-normal text-white mb-2">
                 Campaign Launch &amp; Optimization
               </h3>
@@ -811,7 +853,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
 <div className="flex items-center justify-center w-10 h-10 rounded-full border bg-[#0A0B10] shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 border-white/10 text-sky-400">
 <span className="font-mono text-base font-medium">5</span>
 </div>
-<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <h3 className="text-lg font-normal text-white mb-2">
                 Inbox Management &amp; Booking
               </h3>
@@ -831,7 +873,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
           </h2>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div className="p-8 rounded-3xl border border-white/10" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="p-8 rounded-3xl border border-white/10" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <div className="w-12 h-12 rounded-full bg-sky-500/10 flex items-center justify-center mb-6 border border-sky-500/20">
 <i className="w-6 h-6 text-sky-400" data-lucide="trending-up"></i>
 </div>
@@ -840,7 +882,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
               predictably
             </p>
 </div>
-<div className="p-8 rounded-3xl border border-white/10" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="p-8 rounded-3xl border border-white/10" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <div className="w-12 h-12 rounded-full bg-sky-500/10 flex items-center justify-center mb-6 border border-sky-500/20">
 <i className="w-6 h-6 text-sky-400" data-lucide="clock"></i>
 </div>
@@ -848,7 +890,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
               Don’t have time to handle prospecting yourself
             </p>
 </div>
-<div className="border-white/10 border rounded-3xl pt-8 pr-8 pb-8 pl-8" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="border-white/10 border rounded-3xl pt-8 pr-8 pb-8 pl-8" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <div className="w-12 h-12 rounded-full bg-sky-500/10 flex items-center justify-center mb-6 border border-sky-500/20">
 <i className="w-6 h-6 text-sky-400" data-lucide="calendar-plus"></i>
 </div>
@@ -856,7 +898,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
               Can take on an additional 5-30 qualified meetings per month
             </p>
 </div>
-<div className="p-8 rounded-3xl border border-white/10" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="p-8 rounded-3xl border border-white/10" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <div className="w-12 h-12 rounded-full bg-sky-500/10 flex items-center justify-center mb-6 border border-sky-500/20">
 <i className="w-6 h-6 text-sky-400" data-lucide="target"></i>
 </div>
@@ -998,7 +1040,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
             </p>
 </div>
 <div className="flex flex-col gap-6">
-<div className="rounded-3xl p-8 border border-white/10" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<div className="rounded-3xl p-8 border border-white/10" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.005) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <div className="mb-6 pb-6 border-b border-white/5">
 <h3 className="text-xl font-normal tracking-tight mb-2 text-white">
                   Traditional Inbound
@@ -1022,7 +1064,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
 </li>
 </ul>
 </div>
-<div className="rounded-3xl p-8 border border-sky-500/20 relative overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.05) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
+<div className="rounded-3xl p-8 border border-sky-500/20 relative overflow-hidden" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)'}}>
 <div className="absolute top-0 right-0 w-32 h-32 bg-sky-400/10 blur-3xl rounded-full"></div>
 <div className="mb-6 pb-6 border-b border-sky-500/10 relative z-10">
 <h3 className="text-xl font-normal tracking-tight mb-2 text-sky-400">
@@ -1057,7 +1099,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
           </h2>
 </div>
 <div className="space-y-4">
-<details className="rounded-2xl group" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<details className="rounded-2xl group" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <summary className="flex cursor-pointer transition-colors duration-300 text-lg font-normal pt-6 pr-6 pb-6 pl-6 items-center justify-between hover:text-sky-400 text-white" style={{listStyle: 'none'}}>
 <span className="tracking-tight pr-4">
                 What will be needed from me?
@@ -1079,7 +1121,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
               everything from A-Z. So, it's all up to you.
             </div>
 </details>
-<details className="rounded-2xl group" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<details className="rounded-2xl group" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <summary className="flex cursor-pointer transition-colors duration-300 hover:text-sky-400 text-lg font-normal text-white pt-6 pr-6 pb-6 pl-6 items-center justify-between" style={{listStyle: 'none'}}>
 <span className="tracking-tight pr-4">
                 How quickly do we see results?
@@ -1091,7 +1133,7 @@ src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAA
               you'll start seeing results in just 3-5 days after the start.
             </div>
 </details>
-<details className="rounded-2xl group" style={{background: 'linear-gradient(180deg, rgba(56,189,248,0.03) 0%, rgba(255,255,255,0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
+<details className="rounded-2xl group" style={{background: 'linear-gradient(180deg, rgba(56, 189, 248, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', boxShadow: '0 4px 30px rgba(0,0,0,0.2)'}}>
 <summary className="flex cursor-pointer transition-colors duration-300 text-lg font-normal pt-6 pr-6 pb-6 pl-6 items-center justify-between hover:text-sky-400 text-white" style={{listStyle: 'none'}}>
 <span className="tracking-tight pr-4">
                 Will this damage my brand reputation?

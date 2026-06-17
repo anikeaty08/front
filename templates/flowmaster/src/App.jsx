@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -27,6 +63,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -77,7 +119,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 
-<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-32 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '1494.5px', -MouseY: '3875px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 lg:mt-32 xl:ml-auto xl:mr-auto max-w-7xl z-10 rounded-[40px] mt-32 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '1494.5px', '--mouse-y': '3875px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col min-h-[1000px] z-10 rounded-[40px] justify-center">
 
 <div className="absolute top-8 right-8 z-20 pointer-events-none">
@@ -130,7 +172,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-arrow-right relative z-10 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 </button>
 
-<button className="hover:bg-white/5 transition-all flex text-base font-medium text-gray-300 bg-white/5 rounded-full py-4 px-8 items-center justify-center font-geist relative overflow-hidden group/btn" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.5)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))', -BorderRadiusBefore: '9999px'}}>
+<button className="hover:bg-white/5 transition-all flex text-base font-medium text-gray-300 bg-white/5 rounded-full py-4 px-8 items-center justify-center font-geist relative overflow-hidden group/btn" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.5)', -BorderGradient: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))', '--border-radius-before': '9999px'}}>
 <span className="text-base font-medium text-gray-200 tracking-tight relative z-10 font-geist">
             View Curriculum
         </span>
@@ -189,7 +231,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="w-1 bg-white/20 rounded-full h-5"></div>
 </div>
 <div className="relative w-full">
-<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-xl pt-3 pr-4 pb-3 pl-4 relative shadow-lg backdrop-blur-xl gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '12px'}}>
+<div className="flex bg-gradient-to-br from-white/10 to-white/0 rounded-xl pt-3 pr-4 pb-3 pl-4 relative shadow-lg backdrop-blur-xl gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '12px'}}>
 <div className="w-8 h-8 rounded bg-orange-500/20 flex items-center justify-center text-orange-500">
 <svg aria-hidden="true" className="text-slate-50 w-[16px] h-[16px]" data-icon="solar:code-square-bold-duotone" data-icon-replaced="true" height="1em" role="img" strokeWidth="2" style={{width: '16px', height: '16px'}} viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path className="" d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12" fill="currentColor" opacity=".5"></path><path className="" d="M13.488 6.446a.75.75 0 0 1 .53.918l-2.588 9.66a.75.75 0 0 1-1.449-.389l2.589-9.659a.75.75 0 0 1 .918-.53M14.97 8.47a.75.75 0 0 1 1.06 0l.209.208c.635.635 1.165 1.165 1.529 1.642c.384.504.654 1.036.654 1.68s-.27 1.176-.654 1.68c-.364.477-.894 1.007-1.53 1.642l-.208.208a.75.75 0 1 1-1.06-1.06l.171-.172c.682-.682 1.139-1.14 1.434-1.528c.283-.37.347-.586.347-.77s-.064-.4-.347-.77c-.295-.387-.752-.846-1.434-1.528l-.171-.172a.75.75 0 0 1 0-1.06m-7 0a.75.75 0 0 1 1.06 1.06l-.171.172c-.682.682-1.138 1.14-1.434 1.528c-.283.37-.346.586-.346.77s.063.4.346.77c.296.387.752.846 1.434 1.528l.172.172a.75.75 0 1 1-1.061 1.06l-.208-.208c-.636-.635-1.166-1.165-1.53-1.642c-.384-.504-.653-1.036-.653-1.68s.27-1.176.653-1.68c.364-.477.894-1.007 1.53-1.642z" fill="currentColor"></path></svg>
 </div>
@@ -202,7 +244,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<button className="flex hover:scale-110 transition-all cursor-pointer text-orange-500 bg-orange-500/10 w-10 h-10 rounded-full mt-2 backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '9999px'}}>
+<button className="flex hover:scale-110 transition-all cursor-pointer text-orange-500 bg-orange-500/10 w-10 h-10 rounded-full mt-2 backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '9999px'}}>
 <svg aria-hidden="true" className="w-[16px] h-[16px]" data-icon="solar:bolt-bold-duotone" data-icon-replaced="true" height="1em" role="img" strokeWidth="2" style={{width: '16px', height: '16px', color: 'rgb(249, 115, 22)'}} viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path className="" clip-rule="evenodd" d="M8.732 5.771L5.67 9.914c-1.285 1.739-1.928 2.608-1.574 3.291l.018.034c.375.673 1.485.673 3.704.673c1.233 0 1.85 0 2.236.363l.02.02l3.872-4.57l-.02-.02c-.379-.371-.379-.963-.379-2.148v-.31c0-3.285 0-4.927-.923-5.21s-1.913 1.056-3.892 3.734" fill="currentColor" fill-rule="evenodd"></path><path className="" d="M10.453 16.443v.31c0 3.284 0 4.927.923 5.21s1.913-1.056 3.893-3.734l3.062-4.143c1.284-1.739 1.927-2.608 1.573-3.291l-.018-.034c-.375-.673-1.485-.673-3.704-.673c-1.233 0-1.85 0-2.236-.363l-3.872 4.57c.379.371.379.963.379 2.148" fill="currentColor" opacity=".5"></path></svg>
 </button>
 </div>
@@ -218,10 +260,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative z-10 w-full flex justify-center mt-auto h-24 items-end">
 <div className="relative w-full max-w-[140px] h-full flex items-center justify-center">
 <div className="absolute w-20 h-px bg-white/10 top-1/2 left-1/2 -translate-x-1/2"></div>
-<div className="flex -translate-x-12 z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex -translate-x-12 z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <svg aria-hidden="true" className="text-zinc-50 w-[16px] h-[16px]" data-icon="solar:database-bold-duotone" data-icon-replaced="true" height="1em" role="img" strokeWidth="2" style={{width: '16px', height: '16px'}} viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 10c4.418 0 8-1.79 8-4s-3.582-4-8-4s-8 1.79-8 4s3.582 4 8 4" fill="currentColor"></path><path className="" d="M4 12v6c0 2.21 3.582 4 8 4s8-1.79 8-4v-6c0 2.21-3.582 4-8 4s-8-1.79-8-4" fill="currentColor" opacity=".5"></path><path className="" d="M4 6v6c0 2.21 3.582 4 8 4s8-1.79 8-4V6c0 2.21-3.582 4-8 4S4 8.21 4 6" fill="currentColor" opacity=".7"></path></svg>
 </div>
-<div className="flex z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg translate-x-12 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '8px'}}>
+<div className="flex z-10 text-gray-400 bg-gradient-to-br from-white/10 to-white/0 w-10 h-10 rounded-lg absolute shadow-lg backdrop-blur-lg translate-x-12 items-center justify-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0))', '--border-radius-before': '8px'}}>
 <svg aria-hidden="true" className="w-[16px] h-[16px] text-slate-50" data-icon="solar:users-group-rounded-bold-duotone" data-icon-replaced="true" height="1em" role="img" strokeWidth="2" style={{width: '16px', height: '16px'}} viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="6" fill="currentColor" opacity=".4" r="3"></circle><ellipse className="" cx="16" cy="17" fill="currentColor" opacity=".4" rx="5" ry="3"></ellipse><circle cx="9.001" cy="6" fill="currentColor" r="4"></circle><ellipse className="" cx="9.001" cy="17.001" fill="currentColor" rx="7" ry="4"></ellipse></svg>
 </div>
 <div className="absolute w-3 h-3 bg-orange-500 rounded-full z-20 animate-[ping_2s_linear_infinite]"></div>
@@ -229,10 +271,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="flex flex-col overflow-hidden group hover:border-white/20 transition-all duration-500 text-center bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative shadow-xl items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '32px'}}>
+<div className="flex flex-col overflow-hidden group hover:border-white/20 transition-all duration-500 text-center bg-gradient-to-br from-white/10 to-white/0 rounded-[32px] pt-6 pr-6 pb-6 pl-6 relative shadow-xl items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))', '--border-radius-before': '32px'}}>
 <h3 className="relative z-10 text-base font-medium text-gray-200 mb-4 font-geist">API Integration</h3>
 <div className="z-10 flex w-full mt-auto relative justify-center">
-<div className="flex transition-colors bg-gradient-to-br from-white/10 to-white/0 w-full max-w-[200px] rounded-2xl pt-2 pr-5 pb-2 pl-2 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', -BorderRadiusBefore: '16px'}}>
+<div className="flex transition-colors bg-gradient-to-br from-white/10 to-white/0 w-full max-w-[200px] rounded-2xl pt-2 pr-5 pb-2 pl-2 gap-x-3 gap-y-3 items-center" style={{position: 'relative', -BorderGradient: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))', '--border-radius-before': '16px'}}>
 <div className="flex shrink-0 bg-[#303030] w-10 h-10 border-white/10 border rounded-lg items-center justify-center">
 <svg aria-hidden="true" className="w-[16px] h-[16px]" data-icon="solar:bolt-bold-duotone" data-icon-replaced="true" data-icon-set="solar" data-solar="global-bold-duotone" height="16" role="img" strokeWidth="2" style={{color: 'rgb(249, 115, 22)', width: '16px', height: '16px'}} viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M2.028 11.25A10 10 0 0 1 12 2c-.83 0-1.57.364-2.18.921c-.605.554-1.116 1.328-1.53 2.242c-.416.92-.74 1.996-.959 3.163a20 20 0 0 0-.318 2.924zm0 1.5h4.985c.036 1.002.143 1.988.318 2.924c.22 1.167.543 2.243.959 3.163c.414.914.925 1.688 1.53 2.242c.61.557 1.35.921 2.18.921c-5.27 0-9.589-4.077-9.972-9.25" fill="#f97316" fill-rule="evenodd"></path><path d="M12 2c.831 0 1.57.364 2.18.921c.605.554 1.117 1.328 1.53 2.242c.417.92.74 1.996.959 3.163c.175.936.282 1.922.318 2.924h4.985A10 10 0 0 0 12 2m4.669 13.674c-.219 1.167-.542 2.243-.959 3.163c-.413.914-.925 1.688-1.53 2.242c-.61.557-1.349.921-2.18.921c5.27 0 9.589-4.077 9.972-9.25h-4.985a20 20 0 0 1-.318 2.924" fill="#f97316"></path><path d="M12 3.396c-.275 0-.63.117-1.043.495c-.416.38-.833.977-1.201 1.79c-.366.808-.663 1.784-.867 2.873c-.16.859-.26 1.768-.296 2.696h6.814a18.5 18.5 0 0 0-.296-2.696c-.204-1.09-.5-2.065-.867-2.872c-.368-.814-.784-1.41-1.2-1.791c-.414-.378-.769-.495-1.044-.495m-3.111 12.05c.204 1.09.501 2.065.867 2.873c.368.813.785 1.41 1.2 1.79c.414.379.77.496 1.044.496c.275 0 .63-.117 1.044-.495c.416-.381.832-.978 1.2-1.791c.366-.808.663-1.783.867-2.873c.161-.858.261-1.768.296-2.696H8.593c.035.928.135 1.838.296 2.696" fill="#f97316" opacity=".5"></path></svg>
 </div>
@@ -282,7 +324,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '1494.5px', -MouseY: '2850.6015625px'}}>
+<div className="spotlight-card group mx-4 sm:mx-6 xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '1494.5px', '--mouse-y': '2850.6015625px'}}>
 <div className="spotlight-inner sm:p-12 flex flex-col lg:flex-row lg:items-center gap-8 rounded-[40px] pt-8 pr-8 pb-8 pl-8 gap-x-8 gap-y-8 items-start justify-between">
 <div className="absolute top-6 right-8 z-20 pointer-events-none">
 <span className="font-mono text-sm font-bold text-white/10 tracking-widest font-geist">02</span>
@@ -318,7 +360,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="sm:mx-6 grid grid-cols-1 lg:grid-cols-12 xl:ml-auto xl:mr-auto max-w-7xl z-10 mt-4 mr-3 ml-3 relative gap-x-4 gap-y-4">
 
-<div className="lg:col-span-5 p-[1px] spotlight-card rounded-[40px] relative group" style={{-MouseX: '1494.5px', -MouseY: '2640.6015625px'}}>
+<div className="lg:col-span-5 p-[1px] spotlight-card rounded-[40px] relative group" style={{'--mouse-x': '1494.5px', '--mouse-y': '2640.6015625px'}}>
 <div className="spotlight-inner rounded-[40px] p-8 sm:p-10 relative overflow-hidden" style={{}}>
 <div className="absolute top-8 right-8 z-20 pointer-events-none">
 <span className="font-mono text-sm font-bold text-white/10 tracking-widest font-geist">03</span>
@@ -348,7 +390,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:col-span-3 p-[1px] spotlight-card rounded-[40px] relative group h-full" style={{-MouseX: '954.5px', -MouseY: '2640.6015625px'}}>
+<div className="lg:col-span-3 p-[1px] spotlight-card rounded-[40px] relative group h-full" style={{'--mouse-x': '954.5px', '--mouse-y': '2640.6015625px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col min-h-[300px] rounded-[40px] pt-6 pr-6 pb-6 pl-6 relative justify-end">
 <div className="bg-center bg-orange-600 bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3d80181f-00cd-4e1e-9a4b-d2a9c4811268_1600w.webp)] bg-cover absolute top-0 right-0 bottom-0 left-0"></div>
 <div className="z-10 flex flex-col gap-4 text-center mt-auto relative gap-x-4 gap-y-4 items-center">
@@ -367,7 +409,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="lg:col-span-4 p-[1px] spotlight-card rounded-[40px] relative group h-full" style={{-MouseX: '630.5px', -MouseY: '2640.6015625px'}}>
+<div className="lg:col-span-4 p-[1px] spotlight-card rounded-[40px] relative group h-full" style={{'--mouse-x': '630.5px', '--mouse-y': '2640.6015625px'}}>
 <div className="spotlight-inner rounded-[40px] p-8 flex flex-col justify-between" style={{}}>
 <div className="mb-8">
 <h3 className="text-xl font-medium text-white font-geist mb-2">Ready-made Blueprints</h3>
@@ -408,7 +450,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-</div><div className="sm:mx-6 spotlight-card group xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '1494.5px', -MouseY: '2242.6015625px'}}>
+</div><div className="sm:mx-6 spotlight-card group xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '1494.5px', '--mouse-y': '2242.6015625px'}}>
 <div className="spotlight-inner sm:p-12 lg:p-16 overflow-hidden bg-[#0A0A0A] rounded-[40px] pt-8 pr-8 pb-8 pl-8 relative">
 
 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/5 blur-[120px] rounded-full pointer-events-none mix-blend-screen"></div>
@@ -532,7 +574,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-</div><div className="sm:mx-6 spotlight-card group xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '1494.5px', -MouseY: '1656.6015625px'}}>
+</div><div className="sm:mx-6 spotlight-card group xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '1494.5px', '--mouse-y': '1656.6015625px'}}>
 <div className="spotlight-inner sm:p-16 lg:p-24 overflow-hidden flex flex-col bg-[#0A0A0A] rounded-[40px] pt-8 pr-8 pb-8 pl-8 relative items-center">
 
 <div className="absolute top-8 right-8 z-20 pointer-events-none opacity-30">
@@ -654,7 +696,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-</div><div className="sm:mx-6 spotlight-card group xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{-MouseX: '1783px', -MouseY: '515.1015625px'}}>
+</div><div className="sm:mx-6 spotlight-card group xl:ml-auto xl:mr-auto max-w-7xl rounded-[40px] mt-4 mr-3 ml-3 pt-[1px] pr-[1px] pb-[1px] pl-[1px] relative" style={{'--mouse-x': '1783px', '--mouse-y': '515.1015625px'}}>
 <div className="spotlight-inner overflow-hidden flex flex-col bg-[#0A0A0A] rounded-[40px] relative">
 
 <div className="relative z-10 px-8 py-24 sm:py-32 flex flex-col items-center text-center max-w-4xl mx-auto">

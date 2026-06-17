@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -157,6 +193,12 @@ addUtilities({
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -226,7 +268,7 @@ addUtilities({
 
 <div className="relative w-full aspect-square md:aspect-[4/3] grid grid-cols-2 grid-rows-3 gap-4 perspective-1000">
 
-<div className="mosaic-card rounded-xl p-6 col-span-2 row-span-1 flex items-center justify-between group" style={{-MouseX: '391.5999755859375px', -MouseY: '2027.9000244140625px'}}>
+<div className="mosaic-card rounded-xl p-6 col-span-2 row-span-1 flex items-center justify-between group" style={{'--mouse-x': '391.5999755859375px', '--mouse-y': '2027.9000244140625px'}}>
 <div className="space-y-2">
 <div className="flex items-center gap-2 text-xs text-emerald-400 font-mono mb-1">
 <iconify-icon icon="lucide:terminal" width="12"></iconify-icon> ATS_Engine.tex
@@ -243,7 +285,7 @@ addUtilities({
 <div className="scanline"></div>
 </div>
 
-<div className="mosaic-card rounded-xl p-5 row-span-2 flex flex-col justify-between" style={{-MouseX: '391.5999755859375px', -MouseY: '1859.5750732421875px'}}>
+<div className="mosaic-card rounded-xl p-5 row-span-2 flex flex-col justify-between" style={{'--mouse-x': '391.5999755859375px', '--mouse-y': '1859.5750732421875px'}}>
 <div className="flex justify-between items-start">
 <div className="w-8 h-8 rounded bg-zinc-800/50 flex items-center justify-center text-zinc-400 border border-zinc-700/50">
 <iconify-icon icon="lucide:component" width="16"></iconify-icon>
@@ -263,7 +305,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="mosaic-card rounded-xl p-6 row-span-2 bg-white/5 relative overflow-hidden" style={{-MouseX: '57.5999755859375px', -MouseY: '1859.5750732421875px'}}>
+<div className="mosaic-card rounded-xl p-6 row-span-2 bg-white/5 relative overflow-hidden" style={{'--mouse-x': '57.5999755859375px', '--mouse-y': '1859.5750732421875px'}}>
 <div className="absolute inset-0 bg-white opacity-[0.02]"></div>
 <div className="font-serif text-zinc-300 space-y-4 text-xs leading-relaxed relative z-10">
 <div>
@@ -321,7 +363,7 @@ addUtilities({
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[360px]">
 
-<div className="mosaic-card rounded-2xl p-8 col-span-1 md:col-span-2 group relative" style={{-MouseX: '1091.599998474121px', -MouseY: '877.6000366210938px'}}>
+<div className="mosaic-card rounded-2xl p-8 col-span-1 md:col-span-2 group relative" style={{'--mouse-x': '1091.599998474121px', '--mouse-y': '877.6000366210938px'}}>
 <div className="absolute top-8 right-8 z-10">
 <iconify-icon className="text-zinc-600 group-hover:text-emerald-400 transition-colors" icon="lucide:git-branch" width="24"></iconify-icon>
 </div>
@@ -353,7 +395,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="mosaic-card rounded-2xl p-8 flex flex-col justify-between group" style={{-MouseX: '174.27496337890625px', -MouseY: '877.6000366210938px'}}>
+<div className="mosaic-card rounded-2xl p-8 flex flex-col justify-between group" style={{'--mouse-x': '174.27496337890625px', '--mouse-y': '877.6000366210938px'}}>
 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-emerald-900/5"></div>
 <div>
 <h3 className="text-xl font-medium text-white mb-2">Machine Readable</h3>
@@ -370,7 +412,7 @@ addUtilities({
 </div>
 </div>
 
-<div className="mosaic-card rounded-2xl p-8 col-span-1 md:col-span-3 flex flex-col md:flex-row items-center gap-12 overflow-hidden" style={{-MouseX: '1091.599998474121px', -MouseY: '493.6000061035156px'}}>
+<div className="mosaic-card rounded-2xl p-8 col-span-1 md:col-span-3 flex flex-col md:flex-row items-center gap-12 overflow-hidden" style={{'--mouse-x': '1091.599998474121px', '--mouse-y': '493.6000061035156px'}}>
 <div className="w-full md:w-1/3 z-10">
 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-white">
 <iconify-icon icon="lucide:layout-grid" width="20"></iconify-icon>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
   // Navigation functionality
@@ -68,6 +104,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -457,7 +499,7 @@ export default function App() {
 
 <div className="demo-content active" id="demo-metrics">
 <div className="dashboard-grid mb-8">
-<div className="metric-card" style={{-AccentGradient: 'linear-gradient(90deg, #10b981, #34d399)'}}>
+<div className="metric-card" style={{'--accent-gradient': 'linear-gradient(90deg, #10b981, #34d399)'}}>
 <div className="flex items-center gap-2 mb-2">
 <svg className="lucide lucide-dollar-sign w-5 h-5 text-green-400"></svg>
 <span className="text-gray-300 font-medium">Cost Savings</span>
@@ -468,7 +510,7 @@ export default function App() {
 <span>+35% this quarter</span>
 </div>
 </div>
-<div className="metric-card" style={{-AccentGradient: 'linear-gradient(90deg, #3b82f6, #60a5fa)'}}>
+<div className="metric-card" style={{'--accent-gradient': 'linear-gradient(90deg, #3b82f6, #60a5fa)'}}>
 <div className="flex items-center gap-2 mb-2">
 <svg className="lucide lucide-zap w-5 h-5 text-blue-400"></svg>
 <span className="text-gray-300 font-medium">Processing Speed</span>
@@ -479,7 +521,7 @@ export default function App() {
 <span>faster than baseline</span>
 </div>
 </div>
-<div className="metric-card" style={{-AccentGradient: 'linear-gradient(90deg, #8b5cf6, #a78bfa)'}}>
+<div className="metric-card" style={{'--accent-gradient': 'linear-gradient(90deg, #8b5cf6, #a78bfa)'}}>
 <div className="flex items-center gap-2 mb-2">
 <svg className="lucide lucide-shield-check w-5 h-5 text-purple-400"></svg>
 <span className="text-gray-300 font-medium">Data Quality</span>
@@ -490,7 +532,7 @@ export default function App() {
 <span>accuracy maintained</span>
 </div>
 </div>
-<div className="metric-card" style={{-AccentGradient: 'linear-gradient(90deg, #f59e0b, #fbbf24)'}}>
+<div className="metric-card" style={{'--accent-gradient': 'linear-gradient(90deg, #f59e0b, #fbbf24)'}}>
 <div className="flex items-center gap-2 mb-2">
 <svg className="lucide lucide-users w-5 h-5 text-yellow-400"></svg>
 <span className="text-gray-300 font-medium">Active Agents</span>

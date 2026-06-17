@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -341,6 +377,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -349,7 +391,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="parallax-bg top-0 w-full -z-10 bg-cover bg-center brightness-50 blur-sm absolute h-3/4 image-hover-subtle" id="parallaxBg" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1522623349500-de37a56ea2a5?w=3840&amp'}}></div>
 
-<header className="fixed inset-x-0 top-0 z-50 backdrop-blur-md animate-in show" style={{-Delay: '100ms'}}>
+<header className="fixed inset-x-0 top-0 z-50 backdrop-blur-md animate-in show" style={{'--delay': '100ms'}}>
 <div className="mx-auto max-w-7xl px-4">
 <div className="flex bg-neutral-900/80 border-white/10 border rounded-2xl mt-4 pt-3 pr-4 pb-3 pl-4 shadow-sm backdrop-blur-2xl items-center justify-between">
 <div className="flex items-center gap-3">
@@ -394,7 +436,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="max-w-7xl mr-auto ml-auto pr-4 pl-4">
 <div className="grid grid-cols-12 gap-4 md:gap-6">
 
-<div className="col-span-12 lg:col-span-8 animate-in slide-right show" style={{-Delay: '200ms'}}>
+<div className="col-span-12 lg:col-span-8 animate-in slide-right show" style={{'--delay': '200ms'}}>
 <div className="relative overflow-hidden rounded-3xl border border-white/10 hero-container">
 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505575972945-281dd7fc4e1c?q=80&amp;w=1600&amp;auto=format&amp;fit=crop')] bg-cover bg-center image-hover-subtle" style={{}}></div>
 <div className="relative z-10 bg-neutral-950/90">
@@ -402,23 +444,23 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent z-5"></div>
 
-<div className="pointer-events-none absolute inset-0 flex items-center justify-center animate-in fade-scale show" style={{-Delay: '800ms'}}>
+<div className="pointer-events-none absolute inset-0 flex items-center justify-center animate-in fade-scale show" style={{'--delay': '800ms'}}>
 <img alt="Signature sushi bowl" className="hero-image md:max-w-2xl shadow-black/50 aspect-square w-3/4 max-w-xl object-cover ring-white/20 ring-1 rounded-full shadow-2xl" src="https://images.unsplash.com/photo-1534482421-64566f976cfa?w=3840&amp;q=80"/>
 </div>
 
 <div className="z-10 md:p-10 pt-6 pr-6 pb-6 pl-6 relative">
 <div className="max-w-xl animate-stagger">
-<p className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-neutral-900/60 px-3 py-1 text-xs text-neutral-300 animate-in show" style={{-Delay: '400ms'}}>
+<p className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-neutral-900/60 px-3 py-1 text-xs text-neutral-300 animate-in show" style={{'--delay': '400ms'}}>
 <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
       Tonight: Chef's Omakase seats available
     </p>
-<h1 className="font-serif tracking-tight text-5xl md:text-6xl lg:text-7xl leading-[0.95] animate-in show" style={{fontFamily: '\'Cormorant Garamond\', serif', -Delay: '500ms'}}>
+<h1 className="font-serif tracking-tight text-5xl md:text-6xl lg:text-7xl leading-[0.95] animate-in show" style={{fontFamily: '\'Cormorant Garamond\', serif', '--delay': '500ms'}}>
       Sushi Sensation
     </h1>
-<p className="animate-in show text-neutral-300 mix-blend-lighten max-w-md mt-4 saturate-100 brightness-100" style={{-Delay: '600ms'}}>
+<p className="animate-in show text-neutral-300 mix-blend-lighten max-w-md mt-4 saturate-100 brightness-100" style={{'--delay': '600ms'}}>
       Seasonal fish, precise technique, and a touch of smoke. Experience contemporary Japanese dining in the heart of the city.
     </p>
-<div className="mt-6 flex flex-wrap items-center gap-3 animate-in show" style={{-Delay: '700ms'}}>
+<div className="mt-6 flex flex-wrap items-center gap-3 animate-in show" style={{'--delay': '700ms'}}>
 <button className="inline-flex items-center gap-2 rounded-xl bg-emerald-500/90 px-4 py-2.5 text-sm font-medium text-neutral-900 hover:bg-emerald-400" id="openReservationHero">
 <svg className="lucide lucide-calendar-check h-4 w-4" data-lucide="calendar-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>
         Reserve now
@@ -531,7 +573,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative z-10 flex items-center justify-between border-t border-white/10 px-6 md:px-10 py-4 text-xs text-neutral-300 animate-in show" style={{-Delay: '900ms'}}>
+<div className="relative z-10 flex items-center justify-between border-t border-white/10 px-6 md:px-10 py-4 text-xs text-neutral-300 animate-in show" style={{'--delay': '900ms'}}>
 <div className="flex items-center gap-4">
 <span className="inline-flex items-center gap-1.5">
 <svg className="lucide lucide-map-pin h-3.5 w-3.5" data-lucide="map-pin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg> 124 Minami Ave
@@ -550,9 +592,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<aside className="col-span-12 lg:col-span-4 flex flex-col lg:flex-col gap-4 md:gap-6 overflow-x-auto lg:overflow-visible animate-in slide-left animate-stagger show pb-1" style={{-Delay: '300ms'}}>
+<aside className="col-span-12 lg:col-span-4 flex flex-col lg:flex-col gap-4 md:gap-6 overflow-x-auto lg:overflow-visible animate-in slide-left animate-stagger show pb-1" style={{'--delay': '300ms'}}>
 
-<a className="group relative flex-1 min-w-[260px] lg:min-w-0 h-64 md:h-72 overflow-hidden rounded-3xl border border-white/10 animate-in show" href="#menu" style={{-Delay: '400ms'}}>
+<a className="group relative flex-1 min-w-[260px] lg:min-w-0 h-64 md:h-72 overflow-hidden rounded-3xl border border-white/10 animate-in show" href="#menu" style={{'--delay': '400ms'}}>
 <img alt="Plated sushi roll with greens" className="absolute inset-0 h-full w-full object-cover image-hover transition-all duration-300 group-hover:blur-sm" src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?w=3840&amp;q=80"/>
 <div className="bg-gradient-to-b from-black/10 via-black/40 to-black/70 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/be4c469a-0090-4702-b71e-fd45162a29c6_800w.jpg)] bg-cover absolute top-0 right-0 bottom-0 left-0 image-hover-subtle transition-all duration-300 group-hover:blur-sm" style={{}}></div>
 
@@ -564,7 +606,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </a>
 
-<button className="group flex-1 min-w-[260px] lg:min-w-0 md:h-72 overflow-hidden relative text-left h-64 border-white/10 border rounded-3xl top-0 right-0 bottom-0 left-0 animate-in show" id="openReservationRail" style={{-Delay: '500ms'}}>
+<button className="group flex-1 min-w-[260px] lg:min-w-0 md:h-72 overflow-hidden relative text-left h-64 border-white/10 border rounded-3xl top-0 right-0 bottom-0 left-0 animate-in show" id="openReservationRail" style={{'--delay': '500ms'}}>
 <img alt="Guest seated at dinner with wine" className="absolute inset-0 h-full w-full object-cover image-hover transition-all duration-300 group-hover:blur-sm" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/c61614d6-d4ab-402c-ad91-48ebadf6e6ba_800w.jpg"/>
 <div className="bg-gradient-to-b from-black/10 via-black/40 to-black/70 absolute top-0 right-0 bottom-0 left-0 transition-all duration-300 group-hover:blur-sm"></div>
 
@@ -576,7 +618,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </button>
 
-<a className="group relative flex-1 min-w-[260px] lg:min-w-0 h-64 md:h-72 overflow-hidden rounded-3xl border border-white/10 animate-in show" href="#space" style={{-Delay: '600ms'}}>
+<a className="group relative flex-1 min-w-[260px] lg:min-w-0 h-64 md:h-72 overflow-hidden rounded-3xl border border-white/10 animate-in show" href="#space" style={{'--delay': '600ms'}}>
 <img alt="Warm modern restaurant interior" className="absolute inset-0 h-full w-full object-cover image-hover transition-all duration-300 group-hover:blur-sm" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/69b12c7c-bd2f-41ee-8a25-97100d9ab96f_800w.jpg" style={{}}/>
 <div className="absolute bg-gradient-to-b from-black/10 via-black/40 to-black/70 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/69b12c7c-bd2f-41ee-8a25-97100d9ab96f_800w.jpg)] bg-cover top-0 right-0 bottom-0 left-0 image-hover-subtle transition-all duration-300 group-hover:blur-sm" style={{}}></div>
 
@@ -594,7 +636,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="md:py-24 pt-16 pb-16 relative" id="menu">
 <div className="max-w-7xl mr-auto ml-auto pr-4 pl-4">
-<div className="flex items-end justify-between gap-6 animate-in show" style={{-Delay: '100ms'}}>
+<div className="flex items-end justify-between gap-6 animate-in show" style={{'--delay': '100ms'}}>
 <div className="">
 <h2 className="md:text-5xl text-4xl tracking-tight font-serif" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>The Menu</h2>
 <p className="mt-2 text-neutral-300">Crafted daily from Tokyo market selections and local catch.</p>
@@ -604,7 +646,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     </a>
 </div>
 
-<div className="mt-8 flex justify-center animate-in show" style={{-Delay: '150ms'}}>
+<div className="mt-8 flex justify-center animate-in show" style={{'--delay': '150ms'}}>
 <div className="inline-flex overflow-x-auto bg-neutral-900/50 border-white/10 border rounded-2xl pt-1.5 pr-1.5 pb-1.5 pl-1.5 space-x-2">
 <button className="tab-btn flex-shrink-0 rounded-xl px-4 py-2.5ald-400 hover:bg-emerald-500/30 transition whitespace-nowrap bg-neutral-900/50 text-neutral-300" data-tab="appetizers">
 <div className="flex items-center gap-2">
@@ -658,7 +700,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="overflow-y-auto max-h-[600px] mt-8 space-y-6" id="tabContentContainer">
 
 <div className="tab-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 animate-stagger" id="appetizers">
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '200ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '200ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Tempura" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1750308250159-eabb42417e0c?w=3840&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -675,7 +717,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Crisp batter, tentsuyu, daikon oroshi.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '300ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '300ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Gyoza" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1738681336104-608b4e7dc3b0?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -692,7 +734,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Pan-fried dumplings, black vinegar.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '400ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '400ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Edamame" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1611810174991-5cdd99a2c6b2?w=800&amp;q=80" style={{}}/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -710,7 +752,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div><div className="tab-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 animate-stagger" id="appetizers">
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '200ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '200ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Tuna Tataki" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1596189181426-7f63a1737f0d?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -727,7 +769,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Sesame crust, ponzu, micro greens.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '300ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '300ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Agedashi Tofu" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1745582763219-1a5259056ba3?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -744,7 +786,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Crispy tofu, dashi broth, bonito.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '400ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '400ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Hamachi Crudo" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1643639946354-7a04bd9a6129?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -761,14 +803,14 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Jalapeño oil, citrus soy, radish.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '700ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '700ms'}}>
 <div className="relative overflow-hidden">
 </div>
 </div>
 </div>
 
 <div className="tab-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 animate-stagger active" id="food">
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '200ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '200ms'}}>
 <div className="overflow-hidden relative top-0 right-0 bottom-0 left-0">
 <img alt="Omakase flight" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
 <div className="group-hover:opacity-100 transition-opacity duration-300 flex bg-black/60 opacity-0 pt-4 pr-4 pb-4 pl-4 absolute top-0 right-0 bottom-0 left-0 items-center justify-center">
@@ -786,7 +828,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">10-course progression of nigiri and small plates.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '300ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '300ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Toro Nigiri" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1562158074-d49fbeffcc91?w=3840&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -803,7 +845,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Bluefin belly, brushed soy, fresh wasabi.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '400ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '400ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Salmon sashimi" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1599253336132-b3d7cc7799eb?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -820,7 +862,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Citrus kosho, shiso oil.</p>
 </div>
 </div>
-<div className="menu-card overflow-hidden animate-in show group bg-neutral-900/50 border-white/10 border rounded-2xl" style={{-Delay: '500ms'}}>
+<div className="menu-card overflow-hidden animate-in show group bg-neutral-900/50 border-white/10 border rounded-2xl" style={{'--delay': '500ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Dragon roll" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1728691192936-096ed468762c?w=3840&amp;q=80" style={{}}/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -837,7 +879,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Eel, avocado, torched glaze.</p>
 </div>
 </div>
-<div className="menu-card overflow-hidden animate-in show group bg-neutral-900/50 border-white/10 border rounded-2xl" style={{-Delay: '600ms'}}>
+<div className="menu-card overflow-hidden animate-in show group bg-neutral-900/50 border-white/10 border rounded-2xl" style={{'--delay': '600ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Sea urchin nigiri" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1719789254386-1dd65f30bf4e?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -854,7 +896,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Sea urchin, warm rice, nori.</p>
 </div>
 </div>
-<div className="menu-card overflow-hidden animate-in show group bg-neutral-900/50 border-white/10 border rounded-2xl" style={{-Delay: '700ms'}}>
+<div className="menu-card overflow-hidden animate-in show group bg-neutral-900/50 border-white/10 border rounded-2xl" style={{'--delay': '700ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Chirashi bowl" className="menu-image h-48 w-full object-cover" src="https://images.unsplash.com/photo-1638866381709-071747b518c8?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -1051,7 +1093,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="tab-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" id="desserts">
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '200ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '200ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Matcha dessert" className="menu-image w-full h-48 object-cover" src="https://images.unsplash.com/photo-1736195676924-162ed0fac50b?w=3840&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -1068,7 +1110,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Toasted sesame brittle, yuzu.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '300ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '300ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Mochi ice cream" className="menu-image w-full h-48 object-cover" src="https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=3840&amp;q=80" style={{}}/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -1085,7 +1127,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Black sesame, red bean, yuzu.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '400ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '400ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Dorayaki" className="menu-image w-full h-48 object-cover" src="https://images.unsplash.com/photo-1626497132810-f38eb29c5385?w=800&amp;q=80" style={{}}/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -1103,7 +1145,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div><div className="tab-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" id="desserts">
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '200ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '200ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Matcha dessert" className="menu-image w-full h-48 object-cover" src="https://images.unsplash.com/photo-1586590830950-2f308452eebc?w=800&amp;q=80"/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -1120,7 +1162,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Toasted sesame brittle, yuzu.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '300ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '300ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Chocolate fondant" className="menu-image w-full h-48 object-cover" src="https://images.unsplash.com/photo-1702692534041-227a18ac52de?w=800&amp;q=80" style={{}}/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -1137,7 +1179,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="mt-1 text-sm text-neutral-400">Molten center, vanilla ice cream.</p>
 </div>
 </div>
-<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{-Delay: '400ms'}}>
+<div className="menu-card rounded-2xl border border-white/10 overflow-hidden bg-neutral-900/50 animate-in show group" style={{'--delay': '400ms'}}>
 <div className="relative overflow-hidden">
 <img alt="Cheesecake" className="menu-image w-full h-48 object-cover" src="https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=800&amp;q=80" style={{transition: 'outline 0.1s ease-in-out'}}/>
 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
@@ -1156,8 +1198,8 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 </div>
-<div className="flex flex-wrap gap-3 animate-in show mt-8 items-center justify-center" style={{-Delay: '800ms'}}>
-<button className="inline-flex gap-2 hover:bg-emerald-400 text-sm font-medium text-neutral-900 bg-emerald-500/90 rounded-xl pt-2.5 pr-4 pb-2.5 pl-4 items-center" id="openReservationMenu">Book your reservation<svg className="lucide lucide-calendar-plus h-4 w-4" data-lucide="calendar-plus" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 19h6"></path><path d="M16 2v4"></path><path d="M19 16v6"></path><path d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"></path><path d="M3 10h18"></path><path d="M8 2v4"></path></svg></button><button className="liquid-glass-button relative inline-flex items-center justify-center h-10 px-6 rounded-xl text-white/90 font-medium text-sm cursor-pointer outline-none overflow-hidden bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-xl border border-white/15 shadow-lg hover:scale-105 hover:shadow-xl hover:-translate-y-0.5 active:scale-98 active:translate-y-px transition-all duration-300 ease-out" style={{boxShadow: '0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.2), inset -3px -3px 0.5px -3px rgba(255,255,255,0.1), inset 1px 1px 1px -0.5px rgba(255,255,255,0.3), inset -1px -1px 1px -0.5px rgba(255,255,255,0.15), inset 0 0 6px 6px rgba(255,255,255,0.05), inset 0 0 2px 2px rgba(255,255,255,0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
+<div className="flex flex-wrap gap-3 animate-in show mt-8 items-center justify-center" style={{'--delay': '800ms'}}>
+<button className="inline-flex gap-2 hover:bg-emerald-400 text-sm font-medium text-neutral-900 bg-emerald-500/90 rounded-xl pt-2.5 pr-4 pb-2.5 pl-4 items-center" id="openReservationMenu">Book your reservation<svg className="lucide lucide-calendar-plus h-4 w-4" data-lucide="calendar-plus" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 19h6"></path><path d="M16 2v4"></path><path d="M19 16v6"></path><path d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"></path><path d="M3 10h18"></path><path d="M8 2v4"></path></svg></button><button className="liquid-glass-button relative inline-flex items-center justify-center h-10 px-6 rounded-xl text-white/90 font-medium text-sm cursor-pointer outline-none overflow-hidden bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-xl border border-white/15 shadow-lg hover:scale-105 hover:shadow-xl hover:-translate-y-0.5 active:scale-98 active:translate-y-px transition-all duration-300 ease-out" style={{boxShadow: '0 0 6px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.08), inset 3px 3px 0.5px -3px rgba(255, 255, 255, 0.2), inset -3px -3px 0.5px -3px rgba(255, 255, 255, 0.1), inset 1px 1px 1px -0.5px rgba(255, 255, 255, 0.3), inset -1px -1px 1px -0.5px rgba(255, 255, 255, 0.15), inset 0 0 6px 6px rgba(255, 255, 255, 0.05), inset 0 0 2px 2px rgba(255, 255, 255, 0.02), 0 0 12px rgba(0,0,0,0.1)'}}>
 <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
 <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-white/3"></div>
 </div>
@@ -1185,30 +1227,30 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="md:py-24 pt-16 pb-16 relative" id="about">
 <div className="mx-auto max-w-7xl px-4">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-<div className="relative overflow-hidden rounded-3xl border border-white/10 animate-in slide-right show" style={{-Delay: '100ms'}}>
+<div className="relative overflow-hidden rounded-3xl border border-white/10 animate-in slide-right show" style={{'--delay': '100ms'}}>
 <img alt="Chef preparing fish" className="h-full w-full object-cover image-hover" src="https://images.unsplash.com/photo-1711991022613-63df8929f311?w=3840&amp;q=80" style={{}}/>
 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 <span className="absolute bottom-4 left-4 rounded-full bg-neutral-900/70 px-3 py-1 text-xs border border-white/10">Since 2016</span>
 </div>
-<div className="animate-in slide-left animate-stagger show" style={{-Delay: '200ms'}}>
-<h2 className="font-serif text-4xl md:text-5xl tracking-tight animate-in show" style={{fontFamily: '\'Cormorant Garamond\', serif', -Delay: '300ms'}}>Craft, Seasonality, Respect</h2>
-<p className="mt-3 text-neutral-300 animate-in show" style={{-Delay: '400ms'}}>
+<div className="animate-in slide-left animate-stagger show" style={{'--delay': '200ms'}}>
+<h2 className="font-serif text-4xl md:text-5xl tracking-tight animate-in show" style={{fontFamily: '\'Cormorant Garamond\', serif', '--delay': '300ms'}}>Craft, Seasonality, Respect</h2>
+<p className="mt-3 text-neutral-300 animate-in show" style={{'--delay': '400ms'}}>
             We source from small fisheries and local farms, aging and curing in-house for depth and balance. Our menu shifts with the market—no two evenings are the same.
           </p>
 <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 animate-stagger">
-<div className="rounded-2xl border border-white/10 bg-neutral-900/50 p-4 animate-in show" style={{-Delay: '500ms'}}>
+<div className="rounded-2xl border border-white/10 bg-neutral-900/50 p-4 animate-in show" style={{'--delay': '500ms'}}>
 <div className="flex items-center gap-2 text-sm text-neutral-300">
 <svg className="lucide lucide-fish h-4 w-4" data-lucide="fish" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6s-7.56-2.53-8.5-6Z"></path><path d="M18 12v.5"></path><path d="M16 17.93a9.77 9.77 0 0 1 0-11.86"></path><path d="M7 10.67C7 8 5.58 5.97 2.73 5.5c-1 1.5-1 5 .23 6.5-1.24 1.5-1.24 5-.23 6.5C5.58 18.03 7 16 7 13.33"></path><path d="M10.46 7.26C10.2 5.88 9.17 4.24 8 3h5.8a2 2 0 0 1 1.98 1.67l.23 1.4"></path><path d="m16.01 17.93-.23 1.4A2 2 0 0 1 13.8 21H9.5a5.96 5.96 0 0 0 1.49-3.98"></path></svg> Wild catch
               </div>
 <p className="mt-2 text-xs text-neutral-400">Line-caught, flash chilled.</p>
 </div>
-<div className="rounded-2xl border border-white/10 bg-neutral-900/50 p-4 animate-in show" style={{-Delay: '600ms'}}>
+<div className="rounded-2xl border border-white/10 bg-neutral-900/50 p-4 animate-in show" style={{'--delay': '600ms'}}>
 <div className="flex items-center gap-2 text-sm text-neutral-300">
 <svg className="lucide lucide-leaf h-4 w-4" data-lucide="leaf" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg> Seasonal greens
               </div>
 <p className="mt-2 text-xs text-neutral-400">Market herbs and microgreens.</p>
 </div>
-<div className="rounded-2xl border border-white/10 bg-neutral-900/50 p-4 animate-in show" style={{-Delay: '700ms'}}>
+<div className="rounded-2xl border border-white/10 bg-neutral-900/50 p-4 animate-in show" style={{'--delay': '700ms'}}>
 <div className="flex items-center gap-2 text-sm text-neutral-300">
 <svg className="lucide lucide-flame h-4 w-4" data-lucide="flame" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg> Char &amp; smoke
               </div>
@@ -1222,11 +1264,11 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section className="md:py-24 relative pt-16 pb-16" id="space">
 <div className="max-w-7xl mr-auto ml-auto pr-4 pl-4">
-<div className="animate-in show" style={{-Delay: '100ms'}}>
+<div className="animate-in show" style={{'--delay': '100ms'}}>
 <h2 className="font-serif text-4xl md:text-5xl tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Our Space</h2>
 <p className="mt-2 text-neutral-300 max-w-2xl">An intimate cedar bar for omakase, soft stone textures, and a low, golden glow. Designed for focus and ease.</p>
 </div>
-<div className="mt-8 relative overflow-hidden rounded-3xl border border-white/10 animate-in show" style={{-Delay: '200ms'}}>
+<div className="mt-8 relative overflow-hidden rounded-3xl border border-white/10 animate-in show" style={{'--delay': '200ms'}}>
 <div className="flex transition-transform duration-700 ease-in-out" id="imageCarousel" style={{transform: 'translateX(-100%)'}}>
 <div className="min-w-full h-96 relative">
 <img alt="Bar counter" className="w-full h-full object-cover image-hover-subtle" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/69b12c7c-bd2f-41ee-8a25-97100d9ab96f_3840w.jpg" style={{}}/>
@@ -1288,7 +1330,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <section className="md:py-24 pt-16 pb-16 relative" id="hours">
 <div className="mx-auto max-w-7xl px-4">
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-stagger">
-<div className="rounded-3xl border border-white/10 bg-neutral-900/50 p-6 animate-in show" style={{-Delay: '100ms'}}>
+<div className="rounded-3xl border border-white/10 bg-neutral-900/50 p-6 animate-in show" style={{'--delay': '100ms'}}>
 <h3 className="font-serif text-2xl tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Hours</h3>
 <ul className="mt-3 space-y-2 text-sm text-neutral-300">
 <li className="flex items-center justify-between"><span>Mon–Thu</span><span>12:00–22:00</span></li>
@@ -1299,7 +1341,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <svg className="lucide lucide-calendar h-4 w-4" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg> Book for tonight
           </button>
 </div>
-<div className="rounded-3xl border border-white/10 bg-neutral-900/50 p-6 animate-in show" style={{-Delay: '200ms'}}>
+<div className="rounded-3xl border border-white/10 bg-neutral-900/50 p-6 animate-in show" style={{'--delay': '200ms'}}>
 <h3 className="font-serif text-2xl tracking-tight" style={{fontFamily: '\'Cormorant Garamond\', serif'}}>Location</h3>
 <p className="mt-2 text-neutral-300 text-sm">124 Minami Ave, Suite B, River District</p>
 <div className="mt-4 flex items-center gap-2 text-sm text-neutral-300">
@@ -1311,7 +1353,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span>Street + garage parking</span>
 </div>
 </div>
-<div className="rounded-3xl border border-white/10 overflow-hidden animate-in show" style={{-Delay: '300ms'}}>
+<div className="rounded-3xl border border-white/10 overflow-hidden animate-in show" style={{'--delay': '300ms'}}>
 <div className="w-full h-64 relative top-0 right-0 bottom-0 left-0">
 <img alt="City map placeholder" className="absolute inset-0 h-full w-full object-cover image-hover-subtle" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dd358ba6-8fe1-427a-addd-3ba9abf64f43_3840w.jpg" style={{}}/>
 <div className="bg-center absolute bg-gradient-to-t from-black/40 to-transparent top-0 right-0 bottom-0 left-0"></div>
@@ -1325,7 +1367,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </section>
 
-<footer className="border-t border-white/10 py-10 animate-in show" style={{-Delay: '100ms'}}>
+<footer className="border-t border-white/10 py-10 animate-in show" style={{'--delay': '100ms'}}>
 <div className="mx-auto max-w-7xl px-4">
 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
 <div className="flex items-center gap-3">

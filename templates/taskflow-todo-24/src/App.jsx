@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -584,6 +620,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -608,7 +650,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <header className="fixed z-40 top-0 left-0 right-0 pt-6 pr-6 pb-6 pl-6 bg-transparent">
-<div className="max-w-7xl mx-auto border border-black/10 rounded-full" style={{background: 'linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.65)) padding-box, linear-gradient(120deg, rgba(0,0,0,0.08), rgba(0,0,0,0.03)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)'}}>
+<div className="max-w-7xl mx-auto border border-black/10 rounded-full" style={{background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65)) padding-box, linear-gradient(120deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.03)) border-box', border: '1px solid transparent', backdropFilter: 'blur(16px) saturate(120%)', WebkitBackdropFilter: 'blur(16px) saturate(120%)', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.6)'}}>
 <div className="flex h-16 items-center justify-between px-6">
 <div className="flex items-center gap-3">
 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -646,7 +688,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <aside className="lg:col-span-1">
 <div className="bg-white border border-gray-200 rounded-lg p-4 sticky top-24">
-<button className="shiny-cta focus:outline-none w-full mb-6" onclick="openAddTaskModal()" style={{-GradientAngle: '0deg', -GradientAngleOffset: '0deg', -GradientPercent: '20%', -GradientShine: '#8484ff', -ShadowSize: '2px', position: 'relative', overflow: 'hidden', borderRadius: '9999px', padding: '0.625rem 1rem', fontSize: '0.875rem', lineHeight: '1.2', fontWeight: '500', color: 'rgb(255, 255, 255)', background: 'linear-gradient(#000000, #000000) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #1d4ed8 5%, var(--gradient-shine) 15%, #1d4ed8 30%, transparent 40%, transparent 100%) border-box', border: '2px solid transparent', boxShadow: 'rgb(26, 24, 24) 0px 0px 0px 1px inset', cursor: 'pointer', isolation: 'isolate', fontFamily: 'Inter, "Helvetica Neue", sans-serif', zIndex: '0', animation: '2.5s linear 0s infinite normal none running border-spin', display: 'flex', gap: '0.5rem', alignItems: 'center', justifyContent: 'center'}}>
+<button className="shiny-cta focus:outline-none w-full mb-6" onclick="openAddTaskModal()" style={{'--gradient-angle': '0deg', '--gradient-angle-offset': '0deg', '--gradient-percent': '20%', '--gradient-shine': '#8484ff', '--shadow-size': '2px', position: 'relative', overflow: 'hidden', borderRadius: '9999px', padding: '0.625rem 1rem', fontSize: '0.875rem', lineHeight: '1.2', fontWeight: '500', color: 'rgb(255, 255, 255)', background: 'linear-gradient(#000000, #000000) padding-box, conic-gradient(from calc(var(--gradient-angle) - var(--gradient-angle-offset)), transparent 0%, #1d4ed8 5%, var(--gradient-shine) 15%, #1d4ed8 30%, transparent 40%, transparent 100%) border-box', border: '2px solid transparent', boxShadow: 'rgb(26, 24, 24) 0px 0px 0px 1px inset', cursor: 'pointer', isolation: 'isolate', fontFamily: 'Inter, "Helvetica Neue", sans-serif', zIndex: '0', animation: '2.5s linear 0s infinite normal none running border-spin', display: 'flex', gap: '0.5rem', alignItems: 'center', justifyContent: 'center'}}>
 <style>
     @property --gradient-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; } @property --gradient-angle-offset { syntax: "<angle>"; initial-value: 0deg; inherits: false; } @property --gradient-percent { syntax: "<percentage>"; initial-value: 20%; inherits: false; } @property --gradient-shine { syntax: "<color>"; initial-value: #8484ff; inherits: false; } .shiny-cta::before { content: ''; pointer-events: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 0; --size: calc(100% - 6px); --position: 2px; --space: 4px; width: var(--size); height: var(--size); background: radial-gradient(circle at var(--position) var(--position), white 0.5px, transparent 0) padding-box; background-size: var(--space) var(--space); background-repeat: space; mask-image: conic-gradient(from calc(var(--gradient-angle) + 45deg), black, transparent 10% 90%, black); border-radius: inherit; opacity: 0.4; pointer-events: none; } .shiny-cta::after { content: ''; pointer-events: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1; width: 100%; aspect-ratio: 1; background: linear-gradient(-50deg, transparent, #1d4ed8, transparent); mask-image: radial-gradient(circle at bottom, transparent 40%, black); opacity: 0.6; animation: shimmer 4s linear infinite; animation-play-state: running; } .shiny-cta span { position: relative; z-index: 2; display: inline-block; } .shiny-cta span::before { content: ''; pointer-events: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: -1; --size: calc(100% + 1rem); width: var(--size); height: var(--size); box-shadow: inset 0 -1ex 2rem 4px #1d4ed8; opacity: 0; border-radius: inherit; transition: opacity 800ms cubic-bezier(0.25, 1, 0.5, 1); animation: breathe 4.5s linear infinite; } .shiny-cta:active { transform: translateY(1px); } @keyframes border-spin { to { --gradient-angle: 360deg; } } @keyframes shimmer { to { transform: translate(-50%, -50%) rotate(360deg);} } @keyframes breathe { 0%, 100% { transform: translate(-50%, -50%) scale(1);} 50% { transform: translate(-50%, -50%) scale(1.20);} }
   </style>

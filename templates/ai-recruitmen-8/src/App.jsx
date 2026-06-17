@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -264,6 +300,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -281,7 +323,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <main className="relative z-10 min-h-screen flex flex-col items-center justify-start px-4 pt-16 md:pt-20 pb-12">
 
-<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5 cursor-default" style={{border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(12px)'}}>
+<div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5 cursor-default" style={{border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(12px)'}}>
 <span className="relative flex h-2 w-2">
 <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{background: '#f87171'}}></span>
 <span className="relative inline-flex rounded-full h-2 w-2" style={{background: '#ef233c'}}></span>
@@ -297,16 +339,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <iconify-icon icon="solar:code-square-linear" style={{color: '#ef233c'}} width="16"></iconify-icon>
                 Método 1 — plugin.js
             </button>
-<button className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200" id="btn-m2" onclick="switchMethod(2)" style={{fontFamily: '\'Manrope\', sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#a1a1aa'}}>
+<button className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200" id="btn-m2" onclick="switchMethod(2)" style={{fontFamily: '\'Manrope\', sans-serif', background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#a1a1aa'}}>
 <iconify-icon icon="solar:code-square-linear" style={{color: '#71717a'}} width="16"></iconify-icon>
                 Método 2 — plugin.js?v=5
             </button>
-<button className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200" id="btn-m3" onclick="switchMethod(3)" style={{fontFamily: '\'Manrope\', sans-serif', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#a1a1aa'}}>
+<button className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200" id="btn-m3" onclick="switchMethod(3)" style={{fontFamily: '\'Manrope\', sans-serif', background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#a1a1aa'}}>
 <iconify-icon icon="solar:monitor-linear" style={{color: '#71717a'}} width="16"></iconify-icon>
                 Método 3 — iframe
             </button>
 
-<div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full ml-2" id="status-pill" style={{background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)'}}>
+<div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full ml-2" id="status-pill" style={{background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255,255,255,0.06)'}}>
 <span className="w-2 h-2 rounded-full" id="status-dot" style={{background: '#facc15'}}></span>
 <span className="text-[10px] font-medium tracking-wide uppercase" id="status-text" style={{fontFamily: '\'Manrope\', sans-serif', color: '#a1a1aa'}}>Cargando...</span>
 </div>
@@ -333,12 +375,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 
 <div className="w-full max-w-5xl mt-4">
-<button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 mb-2" onclick="toggleLog()" style={{fontFamily: '\'Manrope\', sans-serif', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', color: '#71717a'}}>
+<button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 mb-2" onclick="toggleLog()" style={{fontFamily: '\'Manrope\', sans-serif', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.06)', color: '#71717a'}}>
 <iconify-icon icon="solar:programming-linear" width="14"></iconify-icon>
 <span>Registro de pruebas</span>
 <iconify-icon icon="solar:alt-arrow-down-linear" id="log-arrow" style={{transition: 'transform 0.2s'}} width="12"></iconify-icon>
 </button>
-<div className="hidden rounded-lg overflow-hidden" id="log-panel" style={{background: 'rgba(10, 10, 10, 0.8)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(12px)'}}>
+<div className="hidden rounded-lg overflow-hidden" id="log-panel" style={{background: 'rgba(10, 10, 10, 0.8)', border: '1px solid rgba(255, 255, 255, 0.06)', backdropFilter: 'blur(12px)'}}>
 <div className="p-3 border-b border-white/5 flex items-center justify-between">
 <span className="text-[10px] uppercase tracking-wider font-medium" style={{fontFamily: '\'Manrope\', sans-serif', color: '#52525b'}}>Console Output</span>
 <button className="text-[10px] uppercase tracking-wider font-medium px-2 py-0.5 rounded" onclick="clearLog()" style={{color: '#71717a', background: 'rgba(255,255,255,0.04)'}}>Limpiar</button>

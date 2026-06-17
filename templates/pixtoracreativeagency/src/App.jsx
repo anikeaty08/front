@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -157,6 +193,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -207,7 +249,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="relative">
 <h1 className="md:text-8xl lg:text-9xl leading-[0.9] flex flex-col bg-clip-text text-6xl text-transparent tracking-tighter bg-gradient-to-b from-white via-[#fcf6ba] to-[#d4af37]">
 <span className="md:text-5xl lg:text-6xl text-4xl text-[#f3e3a8]/70 font-serif-italic mb-1 ml-4">Crafting</span>
-<span className="md:text-9xl lg:text-[10rem] text-7-tighter font-bold text-[#d4af37]" style={{textShadow: '0 0 60px rgba(212,175,55,0.4), 0 0 120px rgba(212,175,55,0.2)'}}>DIGITAL</span>
+<span className="md:text-9xl lg:text-[10rem] text-7-tighter font-bold text-[#d4af37]" style={{textShadow: '0 0 60px rgba(212, 175, 55, 0.4), 0 0 120px rgba(212,175,55,0.2)'}}>DIGITAL</span>
 <span className="md:text-5xl lg:text-6xl -mt-2 text-4xl text-[#f3e3a8]/70 font-serif-italic text-right mr-4">Legacies</span>
 </h1>
 </div>

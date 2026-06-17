@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -13,6 +49,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -25,10 +67,10 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="absolute bottom-[-10%] right-[-10%] w-3/4 h-3/4 bg-blue-900/10 rounded-full blur-[120px]"></div>
 <div className="absolute top-[40%] left-[30%] w-1/2 h-1/2 bg-pink-900/10 rounded-full blur-[100px]"></div>
 
-<div className="star top-12 left-1/4 w-1 h-1" style={{-Duration: '3s'}}></div>
-<div className="star top-1/3 left-10 w-0.5 h-0.5" style={{-Duration: '4s'}}></div>
-<div className="star bottom-20 right-20 w-1 h-1" style={{-Duration: '5s'}}></div>
-<div className="star top-20 right-1/3 w-0.5 h-0.5" style={{-Duration: '2s'}}></div>
+<div className="star top-12 left-1/4 w-1 h-1" style={{'--duration': '3s'}}></div>
+<div className="star top-1/3 left-10 w-0.5 h-0.5" style={{'--duration': '4s'}}></div>
+<div className="star bottom-20 right-20 w-1 h-1" style={{'--duration': '5s'}}></div>
+<div className="star top-20 right-1/3 w-0.5 h-0.5" style={{'--duration': '2s'}}></div>
 </div>
 
 <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-2xl">

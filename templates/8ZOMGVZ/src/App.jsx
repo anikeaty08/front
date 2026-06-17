@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -17,6 +53,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -157,9 +199,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
 
-<div className="relative group rounded-3xl bg-white/5 p-7 lg:p-8 ring-1 ring-white/15 backdrop-blur-sm overflow-hidden" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.1), 0 6px 22px rgba(0,0,0,0.14)', minHeight: '360px'}}>
+<div className="relative group rounded-3xl bg-white/5 p-7 lg:p-8 ring-1 ring-white/15 backdrop-blur-sm overflow-hidden" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 22px rgba(0,0,0,0.14)', minHeight: '360px'}}>
 
-<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(110,231,183,0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite', transform: 'translateX(-100%)'}}></div>
+<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(110, 231, 183, 0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite', transform: 'translateX(-100%)'}}></div>
 
 <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-emerald-300/20 blur-3xl"></div>
 
@@ -188,9 +230,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative group lg:p-8 ring-1 ring-white/15 overflow-hidden bg-white/5 rounded-3xl pt-7 pr-7 pb-7 pl-7 backdrop-blur-sm" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.1), 0 6px 22px rgba(0,0,0,0.14)', minHeight: '360px'}}>
+<div className="relative group lg:p-8 ring-1 ring-white/15 overflow-hidden bg-white/5 rounded-3xl pt-7 pr-7 pb-7 pl-7 backdrop-blur-sm" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 22px rgba(0,0,0,0.14)', minHeight: '360px'}}>
 
-<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(147,197,253,0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 1s', transform: 'translateX(-100%)'}}></div>
+<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(147, 197, 253, 0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 1s', transform: 'translateX(-100%)'}}></div>
 
 <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-blue-300/20 blur-3xl"></div>
 
@@ -219,9 +261,9 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 </div>
 
-<div className="relative group lg:p-8 ring-1 ring-white/15 overflow-hidden bg-white/5 rounded-3xl pt-7 pr-7 pb-7 pl-7 backdrop-blur-sm" style={{boxShadow: '0 0 0 1px rgba(255,255,255,0.1), 0 6px 22px rgba(0,0,0,0.14)', minHeight: '360px'}}>
+<div className="relative group lg:p-8 ring-1 ring-white/15 overflow-hidden bg-white/5 rounded-3xl pt-7 pr-7 pb-7 pl-7 backdrop-blur-sm" style={{boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 22px rgba(0,0,0,0.14)', minHeight: '360px'}}>
 
-<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(252,211,77,0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 2s', transform: 'translateX(-100%)'}}></div>
+<div className="absolute inset-0 opacity-10" style={{background: 'linear-gradient(90deg, transparent 0%, rgba(252, 211, 77, 0.3) 50%, transparent 100%)', animation: 'shimmer 3s ease-in-out infinite 2s', transform: 'translateX(-100%)'}}></div>
 
 <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-amber-300/20 blur-3xl"></div>
 

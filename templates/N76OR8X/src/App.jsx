@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -29,6 +65,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -59,7 +101,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="relative z-10 w-full flex flex-col-reverse sm:flex-row items-center justify-center gap-12 max-w-6xl hero-content mx-auto px-8 sm:px-16 lg:px-24 py-16">
 
 <div className="w-full sm:w-1/2 flex flex-col items-center sm:items-start sm:text-left text-center">
-<h1 className="sm:text-6xl text-3xl font-extrabold mb-4 leading-tight drop-shadow-[0_2px_18px_rgba(67,199,255,0.17)]" style={{fontFamily: '\'Sora\',sans-serif', color: '#fff'}}>
+<h1 className="sm:text-6xl text-3xl font-extrabold mb-4 leading-tight drop-shadow-[0_2px_18px_rgba(67,199,255,0.17)]" style={{fontFamily: '\'Sora\', sans-serif', color: '#fff'}}>
 <span className="headline-mask">
 <span className="hero-headline-part headline-delay-1" style={{display: 'inline-block'}}>Smarter </span>
 </span>

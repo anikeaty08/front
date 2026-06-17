@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -108,6 +144,12 @@ to: { backgroundPosition: '-200% 0' },
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -307,7 +349,7 @@ to: { backgroundPosition: '-200% 0' },
 <span className="h-px flex-1 bg-gray-200 dark:bg-gray-800" style={{}}></span>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[200px]">
-<div className="gradient-border-card md:col-span-2 row-span-1 p-8 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 flex flex-col justify-center" style={{-MouseX: '1255px', -MouseY: '789.25px'}}>
+<div className="gradient-border-card md:col-span-2 row-span-1 p-8 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 flex flex-col justify-center" style={{'--mouse-x': '1255px', '--mouse-y': '789.25px'}}>
 <h3 className="text-lg font-bold mb-6">Development Arsenal</h3>
 <div className="flex flex-wrap gap-6">
 <svg aria-hidden="true" className="iconify text-3xl opacity-80 hover:opacity-100 transition-opacity iconify--logos" data-icon="logos:nextjs-icon" height="1em" role="img" viewbox="0 0 256 256" width="1em" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="IconifyId19b25a1106d7487130" x1="55.633%" x2="83.228%" y1="56.385%" y2="96.08%"><stop offset="0%" stop-color="#FFF"></stop><stop offset="100%" stop-color="#FFF" stop-opacity="0"></stop></lineargradient><lineargradient id="IconifyId19b25a1106d7487131" x1="50%" x2="49.953%" y1="0%" y2="73.438%"><stop offset="0%" stop-color="#FFF"></stop><stop offset="100%" stop-color="#FFF" stop-opacity="0"></stop></lineargradient><circle cx="128" cy="128" id="IconifyId19b25a1106d7487132" r="128"></circle></defs><mask fill="#fff" id="IconifyId19b25a1106d7487133"><use href="#IconifyId19b25a1106d7487132"></use></mask><g mask="url(#IconifyId19b25a1106d7487133)"><circle cx="128" cy="128" r="128"></circle><path d="M212.634 224.028L98.335 76.8H76.8v102.357h17.228V98.68L199.11 234.446a128 128 0 0 0 13.524-10.418" fill="url(#IconifyId19b25a1106d7487130)"></path><path d="M163.556 76.8h17.067v102.4h-17.067z" fill="url(#IconifyId19b25a1106d7487131)"></path></g></svg>
@@ -320,7 +362,7 @@ to: { backgroundPosition: '-200% 0' },
 <svg aria-hidden="true" className="iconify text-3xl opacity-80 hover:opacity-100 transition-opacity iconify--logos" data-icon="logos:figma" height="1em" role="img" viewbox="0 0 256 384" width="0.67em" xmlns="http://www.w3.org/2000/svg"><path d="M64 384c35.328 0 64-28.672 64-64v-64H64c-35.328 0-64 28.672-64 64s28.672 64 64 64" fill="#0ACF83"></path><path d="M0 192c0-35.328 28.672-64 64-64h64v128H64c-35.328 0-64-28.672-64-64" fill="#A259FF"></path><path d="M0 64C0 28.672 28.672 0 64 0h64v128H64C28.672 128 0 99.328 0 64" fill="#F24E1E"></path><path d="M128 0h64c35.328 0 64 28.672 64 64s-28.672 64-64 64h-64z" fill="#FF7262"></path><path d="M256 192c0 35.328-28.672 64-64 64s-64-28.672-64-64s28.672-64 64-64s64 28.672 64 64" fill="#1ABCFE"></path></svg>
 </div>
 </div>
-<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 flex flex-col justify-center items-center text-center" style={{-MouseX: '476.33331298828125px', -MouseY: '789.25px'}}>
+<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 flex flex-col justify-center items-center text-center" style={{'--mouse-x': '476.33331298828125px', '--mouse-y': '789.25px'}}>
 <svg aria-hidden="true" className="iconify text-4xl text-blue-500 mb-3 iconify--solar" data-icon="solar:code-circle-bold" height="1em" role="img" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10m-8.512-5.554a.75.75 0 0 1 .53.918l-2.588 9.66a.75.75 0 0 1-1.449-.389l2.589-9.659a.75.75 0 0 1 .918-.53M14.97 8.47a.75.75 0 0 1 1.06 0l.209.208c.635.635 1.165 1.165 1.529 1.642c.384.504.654 1.036.654 1.68s-.27 1.176-.654 1.68c-.364.477-.894 1.007-1.53 1.642l-.208.208a.75.75 0 1 1-1.06-1.06l.171-.172c.682-.682 1.139-1.14 1.434-1.528c.283-.37.347-.586.347-.77s-.064-.4-.347-.77c-.295-.387-.752-.846-1.434-1.528l-.171-.172a.75.75 0 0 1 0-1.06m-7 0a.75.75 0 0 1 1.06 1.06l-.171.172c-.682.682-1.138 1.14-1.434 1.528c-.283.37-.346.586-.346.77s.063.4.346.77c.296.387.752.846 1.434 1.528l.172.172a.75.75 0 1 1-1.061 1.06l-.208-.208c-.636-.635-1.166-1.165-1.53-1.642c-.384-.504-.653-1.036-.653-1.68s.27-1.176.653-1.68c.364-.477.894-1.007 1.53-1.642z" fill="currentColor" fill-rule="evenodd"></path></svg>
 <div className="text-sm font-semibold">Clean Code</div>
 <p className="text-xs text-gray-500 mt-1" style={{}}>Obsessed with linting and type safety.</p>
@@ -384,7 +426,7 @@ to: { backgroundPosition: '-200% 0' },
 <section className="max-w-6xl mx-auto mb-32">
 <h2 className="text-3xl font-bold mb-12 text-center">Testimonials</h2>
 <div className="grid md:grid-cols-3 gap-6">
-<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{-MouseX: '1255px', -MouseY: '-265.75px'}}>
+<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{'--mouse-x': '1255px', '--mouse-y': '-265.75px'}}>
 <div className="mb-4 text-blue-500">
 <span className="iconify text-xl" data-icon="solar:quote-up-square-bold"></span>
 </div>
@@ -399,7 +441,7 @@ to: { backgroundPosition: '-200% 0' },
 </div>
 </div>
 </div>
-<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{-MouseX: '863px', -MouseY: '-265.75px'}}>
+<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{'--mouse-x': '863px', '--mouse-y': '-265.75px'}}>
 <div className="mb-4 text-blue-500">
 <span className="iconify text-xl" data-icon="solar:quote-up-square-bold"></span>
 </div>
@@ -414,7 +456,7 @@ to: { backgroundPosition: '-200% 0' },
 </div>
 </div>
 </div>
-<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{-MouseX: '471px', -MouseY: '-265.75px'}}>
+<div className="gradient-border-card p-6 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{'--mouse-x': '471px', '--mouse-y': '-265.75px'}}>
 <div className="mb-4 text-blue-500">
 <span className="iconify text-xl" data-icon="solar:quote-up-square-bold"></span>
 </div>
@@ -433,7 +475,7 @@ to: { backgroundPosition: '-200% 0' },
 </section>
 
 <section className="max-w-4xl mx-auto mb-20" id="contact">
-<div className="gradient-border-card p-8 md:p-12 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{-MouseX: '1127px', -MouseY: '-584px'}}>
+<div className="gradient-border-card p-8 md:p-12 border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50" style={{'--mouse-x': '1127px', '--mouse-y': '-584px'}}>
 <div className="grid md:grid-cols-2 gap-12">
 <div>
 <h2 className="text-2xl font-bold mb-2">Get in touch</h2>

@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 tailwind.config = {
@@ -103,7 +139,7 @@ gtag('config', 'G-2M6V79H761');
                         const opacity = useTransform(scrollYProgress, [start, end], [0.2, 1]);
                         
                         return (
-                            <motion.span key={i} style={{ opacity }}>
+                            <motion.span key={i} style={{opacity}}>
                                 {char}
                             </motion.span>
                         );
@@ -155,7 +191,7 @@ gtag('config', 'G-2M6V79H761');
                                         key={idx} 
                                         href="#" 
                                         className="text-[10px] sm:text-xs md:text-sm font-medium tracking-wide transition-colors duration-300 whitespace-nowrap"
-                                        style={{ color: 'rgba(225, 224, 204, 0.8)' }}
+                                        style={{color: 'rgba(225, 224, 204, 0.8)'}}
                                         onMouseEnter={(e) => e.target.style.color = '#E1E0CC'}
                                         onMouseLeave={(e) => e.target.style.color = 'rgba(225, 224, 204, 0.8)'}
                                     >
@@ -172,7 +208,7 @@ gtag('config', 'G-2M6V79H761');
                                 <div className="col-span-12 md:col-span-8 flex items-end">
                                     <div 
                                         className="font-medium leading-[0.85] tracking-[-0.07em] select-none"
-                                        style={{ color: '#E1E0CC' }}
+                                        style={{color: '#E1E0CC'}}
                                     >
                                         <div className="text-[26vw] sm:text-[24vw] md:text-[22vw] lg:text-[20vw] xl:text-[19vw] 2xl:text-[20vw]">
                                             <WordsPullUp text="Prisma" showAsterisk={true} />
@@ -199,7 +235,7 @@ gtag('config', 'G-2M6V79H761');
                                     >
                                         <span>Join the lab</span>
                                         <div className="bg-black rounded-full w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                                            <iconify-icon icon="solar:arrow-right-linear" style={{ color: '#DEDBC8' }} width="20" stroke-width="1.5"></iconify-icon>
+                                            <iconify-icon icon="solar:arrow-right-linear" style={{color: '#DEDBC8'}} width="20" stroke-width="1.5"></iconify-icon>
                                         </div>
                                     </motion.button>
                                 </div>
@@ -225,7 +261,7 @@ gtag('config', 'G-2M6V79H761');
                             Visual arts
                         </span>
 
-                        <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl max-w-4xl mx-auto leading-[1.1] sm:leading-[0.95] tracking-tight mb-12 md:mb-20" style={{ color: '#E1E0CC' }}>
+                        <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl max-w-4xl mx-auto leading-[1.1] sm:leading-[0.95] tracking-tight mb-12 md:mb-20" style={{color: '#E1E0CC'}}>
                             <WordsPullUpMultiStyle segments={headingSegments} />
                         </div>
 
@@ -354,6 +390,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (

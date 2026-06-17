@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -29,6 +65,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -240,7 +282,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </span>
 </h2>
 <div className="mt-10">
-<a className="button hover:from-indigo-400 hover:to-indigo-400 shadow-indigo-500/25 ring-1 ring-white/10 transition-colors text-sm font-medium text-white rounded-xl shadow-lg" href="#" style={{-HButton: '48px', -WButton: '102px', -Round: '0.75rem', cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(30, 64, 175, 0.8) 0%, rgba(30, 64, 175, 0) 100%), linear-gradient(0deg, rgb(30, 58, 138), rgb(30, 58, 138))', borderRadius: 'var(--round)', border: 'none', padding: '12px 18px'}}>
+<a className="button hover:from-indigo-400 hover:to-indigo-400 shadow-indigo-500/25 ring-1 ring-white/10 transition-colors text-sm font-medium text-white rounded-xl shadow-lg" href="#" style={{'--h-button': '48px', '--w-button': '102px', '--round': '0.75rem', cursor: 'pointer', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'radial-gradient(65.28% 65.28% at 50% 100%, rgba(30, 64, 175, 0.8) 0%, rgba(30, 64, 175, 0) 100%), linear-gradient(0deg, rgb(30, 58, 138), rgb(30, 58, 138))', borderRadius: 'var(--round)', border: 'none', padding: '12px 18px'}}>
 <div className="fold" style={{zIndex: '1', position: 'absolute', top: '0px', right: '0px', height: '1rem', width: '1rem', display: 'inline-block', background: 'radial-gradient(100% 75% at 55% center, rgba(30, 64, 175, 0.8) 0%, rgba(30, 64, 175, 0) 100%)', boxShadow: 'black 0px 0px 3px', borderBottomLeftRadius: '0.5rem', borderTopRightRadius: 'var(--round)'}}></div>
 <div className="points_wrapper" style={{overflow: 'hidden', width: '100%', height: '100%', pointerEvents: 'none', position: 'absolute', zIndex: '1'}}>
 <div className="point" style={{bottom: '-10px', position: 'absolute', animation: 'floating-points infinite ease-in-out', pointerEvents: 'none', width: '2px', height: '2px', backgroundColor: '#fff', borderRadius: '9999px', left: '10%', opacity: '1', animationDuration: '2.35s', animationDelay: '0.2s'}}></div>

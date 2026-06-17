@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
@@ -343,6 +379,12 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -355,7 +397,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <div id="scroll-container" style={{position: 'relative', zIndex: '2'}}>
 
-<nav style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: '50', backdropFilter: 'blur(20px)', background: 'rgba(10,10,11,0.4)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
+<nav style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: '50', backdropFilter: 'blur(20px)', background: 'rgba(10, 10, 11, 0.4)', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
 <div className="max-w-7xl mx-auto flex items-center justify-between" style={{padding: '1.25rem 2rem'}}>
 <div className="tracking-tighter" style={{fontFamily: '\'Space Grotesk\', sans-serif', fontWeight: '600', letterSpacing: '-0.05em', fontSize: '1.25rem'}}>
                     MONOLITH
@@ -374,7 +416,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 
 <section id="hero" style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'}}>
 <div className="text-center" style={{maxWidth: '900px', padding: '0 2rem'}}>
-<div id="hero-badge" style={{display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.375rem 1rem', border: '1px solid rgba(255,69,0,0.3)', marginBottom: '2rem', opacity: '0', transform: 'translateY(20px)'}}>
+<div id="hero-badge" style={{display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.375rem 1rem', border: '1px solid rgba(255, 69, 0, 0.3)', marginBottom: '2rem', opacity: '0', transform: 'translateY(20px)'}}>
 <div style={{width: '6px', height: '6px', background: '#ff4500', borderRadius: '50', animation: 'pulse 2s infinite'}}></div>
 <span className="text-xs" style={{color: 'rgba(232,230,227,0.7)', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: '500'}}>Now Accepting Projects</span>
 </div>
@@ -383,7 +425,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <span style={{fontWeight: '600'}}>Digital</span>
 <span style={{color: '#ff4500', fontWeight: '600'}}>Form</span>
 </h1>
-<p className="text-sm sm:text-base" id="hero-sub" style={{color: 'rgba(232,230,227,0.45)', maxWidth: '480px', margin: '2rem auto 0', lineHeight: '1.7', fontWeight: '300', opacity: '0', transform: 'translateY(30px)'}}>
+<p className="text-sm sm:text-base" id="hero-sub" style={{color: 'rgba(232, 230, 227, 0.45)', maxWidth: '480px', margin: '2rem auto 0', lineHeight: '1.7', fontWeight: '300', opacity: '0', transform: 'translateY(30px)'}}>
                     We craft immersive digital experiences at the intersection of architectural thinking and computational design.
                 </p>
 </div>
@@ -404,7 +446,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </h2>
 </div>
 
-<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(40px)', border: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(40px)', border: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
 <div>
 <div style={{width: '48px', height: '48px', border: '1px solid rgba(255,69,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
 <iconify-icon icon="solar:compass-linear" style={{color: '#ff4500'}} width="22"></iconify-icon>
@@ -414,7 +456,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs" style={{color: 'rgba(232,230,227,0.4)', lineHeight: '1.8', fontWeight: '300'}}>Mapping constraints, identifying opportunities, and establishing the architectural brief.</p>
 </div>
 </div>
-<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(40px)', border: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(40px)', border: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
 <div>
 <div style={{width: '48px', height: '48px', border: '1px solid rgba(255,69,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
 <iconify-icon icon="solar:ruler-angular-linear" style={{color: '#ff4500'}} width="22"></iconify-icon>
@@ -424,7 +466,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <p className="text-xs" style={{color: 'rgba(232,230,227,0.4)', lineHeight: '1.8', fontWeight: '300'}}>Iterative prototyping through wireframes, 3D spatial mapping, and high-fidelity visual systems.</p>
 </div>
 </div>
-<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(40px)', border: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+<div className="process-card" style={{minWidth: '340px', maxWidth: '340px', flexShrink: '0', background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(40px)', border: '1px solid rgba(255,255,255,0.06)', padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
 <div>
 <div style={{width: '48px', height: '48px', border: '1px solid rgba(255,69,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem'}}>
 <iconify-icon icon="solar:code-square-linear" style={{color: '#ff4500'}} width="22"></iconify-icon>
@@ -692,16 +734,16 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div>
 <label className="text-xs" style={{color: 'rgba(232,230,227,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Name</label>
-<input onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" placeholder="Your name" style={{width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.875rem 1rem', color: '#e8e6e3', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', boxSizing: 'border-box'}} type="text"/>
+<input onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" placeholder="Your name" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.875rem 1rem', color: '#e8e6e3', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', boxSizing: 'border-box'}} type="text"/>
 </div>
 <div>
 <label className="text-xs" style={{color: 'rgba(232,230,227,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Email</label>
-<input onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" placeholder="hello@company.com" style={{width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.875rem 1rem', color: '#e8e6e3', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', boxSizing: 'border-box'}} type="email"/>
+<input onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" placeholder="hello@company.com" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.875rem 1rem', color: '#e8e6e3', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', boxSizing: 'border-box'}} type="email"/>
 </div>
 </div>
 <div>
 <label className="text-xs" style={{color: 'rgba(232,230,227,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Project Type</label>
-<select onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" style={{width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.875rem 1rem', color: 'rgba(232,230,227,0.5)', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', appearance: 'none', cursor: 'pointer', boxSizing: 'border-box'}}>
+<select onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '0.875rem 1rem', color: 'rgba(232,230,227,0.5)', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', appearance: 'none', cursor: 'pointer', boxSizing: 'border-box'}}>
 <option value="">Select a service</option>
 <option value="web">Web Experience</option>
 <option value="brand">Brand System</option>
@@ -711,7 +753,7 @@ try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral=
 </div>
 <div>
 <label className="text-xs" style={{color: 'rgba(232,230,227,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: '500', display: 'block', marginBottom: '0.5rem'}}>Message</label>
-<textarea onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" placeholder="Tell us about your vision..." rows="4" style={{width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.875rem 1rem', color: '#e8e6e3', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', resize: 'vertical', boxSizing: 'border-box'}}></textarea>
+<textarea onblur="this.style.borderColor='rgba(255,255,255,0.08)'" onfocus="this.style.borderColor='rgba(255,69,0,0.5)'" placeholder="Tell us about your vision..." rows="4" style={{width: '100%', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.875rem 1rem', color: '#e8e6e3', fontFamily: '\'Inter\', sans-serif', fontSize: '0.875rem', outline: 'none', transition: 'border-color 0.3s', resize: 'vertical', boxSizing: 'border-box'}}></textarea>
 </div>
 <button onmouseout="this.style.background='#ff4500'" onmouseover="this.style.background='#ff6633'" style={{width: '100%', background: '#ff4500', color: '#0a0a0b', padding: '1rem', fontFamily: '\'Inter\', sans-serif', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'}} type="submit">
                         Send Message

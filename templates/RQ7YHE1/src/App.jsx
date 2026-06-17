@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
       // Initialize icons with 1.5 stroke width
@@ -106,6 +142,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -153,7 +195,7 @@ export default function App() {
 <button aria-label="Connect Wallet" className="group relative inline-flex items-center gap-2 rounded-xl bg-[#52EDC7]/90 px-4 py-2.5 text-[#0B0D13] font-medium shadow-[0_0_24px_rgba(82,237,199,0.35)] ring-1 ring-[#52EDC7]/50 hover:bg-[#52EDC7] hover:ring-[#52EDC7] transition" id="connectBtnTop">
 <i className="w-4 h-4 text-[#0B0D13]" data-lucide="zap"></i>
 <span>Connect Wallet</span>
-<span className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition" style={{boxShadow: '0 0 0 1px rgba(82,237,199,0.35), 0 10px 40px rgba(82,237,199,0.30), 0 0 60px rgba(82,237,199,0.25)'}}></span>
+<span className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition" style={{boxShadow: '0 0 0 1px rgba(82, 237, 199, 0.35), 0 10px 40px rgba(82, 237, 199, 0.30), 0 0 60px rgba(82,237,199,0.25)'}}></span>
 </button>
 </div>
 </nav>
@@ -182,7 +224,7 @@ export default function App() {
 <button className="group relative inline-flex items-center gap-2 rounded-xl bg-[#52EDC7]/90 px-5 py-3 text-[#0B0D13] font-medium shadow-[0_0_30px_rgba(82,237,199,0.35)] ring-1 ring-[#52EDC7]/50 hover:bg-[#52EDC7] hover:ring-[#52EDC7] transition" id="connectBtnHero">
 <i className="w-5 h-5 text-[#0B0D13]" data-lucide="zap"></i>
               Connect Wallet
-              <span className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition" style={{boxShadow: '0 0 0 1px rgba(82,237,199,0.45), 0 16px 60px rgba(82,237,199,0.35), 0 0 80px rgba(82,237,199,0.3)'}}></span>
+              <span className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition" style={{boxShadow: '0 0 0 1px rgba(82, 237, 199, 0.45), 0 16px 60px rgba(82, 237, 199, 0.35), 0 0 80px rgba(82,237,199,0.3)'}}></span>
 </button>
 <a className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-white/90 ring-1 ring-white/15 hover:ring-white/30 bg-white/5 hover:bg-white/10 transition" href="#features">
 <i className="w-5 h-5 text-white/80" data-lucide="play"></i>
@@ -473,7 +515,7 @@ export default function App() {
 <button className="group relative inline-flex items-center gap-2 rounded-xl bg-[#52EDC7]/90 px-5 py-3 text-[#0B0D13] font-medium shadow-[0_0_30px_rgba(82,237,199,0.35)] ring-1 ring-[#52EDC7]/50 hover:bg-[#52EDC7] hover:ring-[#52EDC7] transition" id="connectBtnCTA">
 <i className="w-5 h-5 text-[#0B0D13]" data-lucide="zap"></i>
               Connect Wallet
-              <span className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition" style={{boxShadow: '0 0 0 1px rgba(82,237,199,0.45), 0 16px 60px rgba(82,237,199,0.35), 0 0 80px rgba(82,237,199,0.3)'}}></span>
+              <span className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition" style={{boxShadow: '0 0 0 1px rgba(82, 237, 199, 0.45), 0 16px 60px rgba(82, 237, 199, 0.35), 0 0 80px rgba(82,237,199,0.3)'}}></span>
 </button>
 </div>
 </div>

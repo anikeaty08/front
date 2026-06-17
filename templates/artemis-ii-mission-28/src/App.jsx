@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
 window.dataLayer = window.dataLayer || [];
@@ -93,6 +129,12 @@ gtag('config', 'G-2M6V79H761');
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -236,7 +278,7 @@ gtag('config', 'G-2M6V79H761');
 <div className="satellite-field">
 <div className="glow-pulse-ring"></div>
 <div className="ring-satellites" style={{width: '480px', height: '480px', left: '50%', top: '50%', transform: 'translate(-50%,-50%)'}}></div>
-<div className="ring-satellites" style={{width: '560px', height: '560px', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', border: '1px dotted rgba(30,144,255,0.15)'}}></div>
+<div className="ring-satellites" style={{width: '560px', height: '560px', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', border: '1px dotted rgba(30,144,255,0.15)'}}></div>
 <div className="orbiting-sat" style={{top: '50%', left: '50%', transformOrigin: 'center', animationDuration: '18s', width: '6px', height: '6px', background: '#1E90FF', boxShadow: '0 0 6px #1E90FF'}}></div>
 <div className="orbiting-sat" style={{top: '50%', left: '50%', transformOrigin: 'center', animationDuration: '24s', animationDelay: '-4s', width: '10px', height: '10px', background: '#00aaff', filter: 'blur(0.5px)'}}></div>
 <div className="star-particle" style={{top: '15%', left: '25%', width: '2px', height: '2px', animationDuration: '6s'}}></div>
@@ -248,18 +290,18 @@ gtag('config', 'G-2M6V79H761');
 <iconify-icon className="text-3xl text-[#1E90FF]" icon="solar:moon-linear"></iconify-icon>
 </div>
 
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '0deg'}}><div className="node-content" data-day-index="0"><span className="node-icon">🚀</span><span className="node-number">01</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '30deg'}}><div className="node-content" data-day-index="1"><span className="node-icon">📈</span><span className="node-number">02</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '60deg'}}><div className="node-content" data-day-index="2"><span className="node-icon">🛸</span><span className="node-number">03</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '90deg'}}><div className="node-content" data-day-index="3"><span className="node-icon">⚡</span><span className="node-number">04</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '120deg'}}><div className="node-content" data-day-index="4"><span className="node-icon">🌌</span><span className="node-number">05</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '150deg'}}><div className="node-content" data-day-index="5"><span className="node-icon">🛰️</span><span className="node-number">06</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '180deg'}}><div className="node-content" data-day-index="6"><span className="node-icon">🌕</span><span className="node-number">07</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '210deg'}}><div className="node-content" data-day-index="7"><span className="node-icon">🔄</span><span className="node-number">08</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '240deg'}}><div className="node-content" data-day-index="8"><span className="node-icon">📡</span><span className="node-number">09</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '270deg'}}><div className="node-content" data-day-index="9"><span className="node-icon">🤝</span><span className="node-number">10</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '300deg'}}><div className="node-content" data-day-index="10"><span className="node-icon">🔥</span><span className="node-number">11</span></div></div>
-<div className="node-wrapper absolute left-1/2 top-1/2" style={{-Deg: '330deg'}}><div className="node-content" data-day-index="11"><span className="node-icon">🌊</span><span className="node-number">12</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '0deg'}}><div className="node-content" data-day-index="0"><span className="node-icon">🚀</span><span className="node-number">01</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '30deg'}}><div className="node-content" data-day-index="1"><span className="node-icon">📈</span><span className="node-number">02</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '60deg'}}><div className="node-content" data-day-index="2"><span className="node-icon">🛸</span><span className="node-number">03</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '90deg'}}><div className="node-content" data-day-index="3"><span className="node-icon">⚡</span><span className="node-number">04</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '120deg'}}><div className="node-content" data-day-index="4"><span className="node-icon">🌌</span><span className="node-number">05</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '150deg'}}><div className="node-content" data-day-index="5"><span className="node-icon">🛰️</span><span className="node-number">06</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '180deg'}}><div className="node-content" data-day-index="6"><span className="node-icon">🌕</span><span className="node-number">07</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '210deg'}}><div className="node-content" data-day-index="7"><span className="node-icon">🔄</span><span className="node-number">08</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '240deg'}}><div className="node-content" data-day-index="8"><span className="node-icon">📡</span><span className="node-number">09</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '270deg'}}><div className="node-content" data-day-index="9"><span className="node-icon">🤝</span><span className="node-number">10</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '300deg'}}><div className="node-content" data-day-index="10"><span className="node-icon">🔥</span><span className="node-number">11</span></div></div>
+<div className="node-wrapper absolute left-1/2 top-1/2" style={{'--deg': '330deg'}}><div className="node-content" data-day-index="11"><span className="node-icon">🌊</span><span className="node-number">12</span></div></div>
 </div>
 <div className="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center gap-3 z-20 pointer-events-none">
 <span className="indicator-text text-[#1E90FF] text-[10px] uppercase tracking-widest font-medium">ACTIVE NODE</span>

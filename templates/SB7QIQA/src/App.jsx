@@ -2,6 +2,42 @@ import React, { useEffect } from 'react';
 
 export default function App() {
   useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
     try {
       
   // Initialize Lucide icons
@@ -28,6 +64,12 @@ export default function App() {
     } catch (error) {
       console.error("Error executing template scripts:", error);
     }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
   }, []);
 
   return (
@@ -64,7 +106,7 @@ export default function App() {
 <h1 className="sm:text-5xl max-w-3xl text-5xl font-normal text-neutral-100 tracking-tight font-poppins mr-auto ml-auto" style={{}}>Secure your software supply chain with confidence</h1>
 <p className="mt-4 text-lg max-w-2xl mx-auto text-neutral-400 font-geist" style={{}}>Comprehensive visibility across 847 repositories, 23 cloud accounts, and 156 CI/CD pipelines. Prevent vulnerabilities before they reach production.</p>
 <div className="mt-8 flex justify-center space-x-4">
-<a className="inline-flex items-center space-x-2 rounded-md text-base font-medium focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer pt-3 pr-6 pb-3 pl-6" href="#" onblur="this.style.boxShadow='0px 0px 20px rgba(71, 184, 255, 0.5), 0px 5px 5px -1px rgba(58, 125, 233, 0.25), inset 4px 4px 8px rgba(175, 230, 255, 0.5), inset -4px -4px 8px rgba(19, 95, 216, 0.35)';" onfocus="this.style.outline='none'; this.style.boxShadow='0 0 0 3px var(--btn-bg-color), 0 0 0 6px var(--btn-bg-2)';" onmouseout="this.style.backgroundPosition='left top';" onmouseover="this.style.backgroundPosition='right top';" style={{-ClrFontMain: 'hsla(0 0% 20% / 1)', -BtnBg-1: 'hsla(194 100% 69% / 1)', -BtnBg-2: 'hsla(217 100% 56% / 1)', -BtnBgColor: 'hsla(360 100% 100% / 1)', -Radii: '0.5em', backgroundSize: '280%', backgroundImage: 'linear-gradient(325deg, var(--btn-bg-2) 0%, var(--btn-bg-1) 55%, var(--btn-bg-2) 90%)', border: 'none', borderRadius: '0.5em', color: 'var(--btn-bg-color)', boxShadow: 'rgba(71, 184, 255, 0.5) 0px 0px 20px, rgba(58, 125, 233, 0.25) 0px 5px 5px -1px, rgba(175, 230, 255, 0.5) 4px 4px 8px inset, rgba(19, 95, 216, 0.35) -4px -4px 8px inset', minWidth: '120px', minHeight: '44px', fontWeight: '500', fontSize: '1rem', backgroundPosition: 'left top'}}>
+<a className="inline-flex items-center space-x-2 rounded-md text-base font-medium focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer pt-3 pr-6 pb-3 pl-6" href="#" onblur="this.style.boxShadow='0px 0px 20px rgba(71, 184, 255, 0.5), 0px 5px 5px -1px rgba(58, 125, 233, 0.25), inset 4px 4px 8px rgba(175, 230, 255, 0.5), inset -4px -4px 8px rgba(19, 95, 216, 0.35)';" onfocus="this.style.outline='none'; this.style.boxShadow='0 0 0 3px var(--btn-bg-color), 0 0 0 6px var(--btn-bg-2)';" onmouseout="this.style.backgroundPosition='left top';" onmouseover="this.style.backgroundPosition='right top';" style={{'--clr-font-main': 'hsla(0 0% 20% / 1)', '--btn-bg-1': 'hsla(194 100% 69% / 1)', '--btn-bg-2': 'hsla(217 100% 56% / 1)', '--btn-bg-color': 'hsla(360 100% 100% / 1)', '--radii': '0.5em', backgroundSize: '280%', backgroundImage: 'linear-gradient(325deg, var(--btn-bg-2) 0%, var(--btn-bg-1) 55%, var(--btn-bg-2) 90%)', border: 'none', borderRadius: '0.5em', color: 'var(--btn-bg-color)', boxShadow: 'rgba(71, 184, 255, 0.5) 0px 0px 20px, rgba(58, 125, 233, 0.25) 0px 5px 5px -1px, rgba(175, 230, 255, 0.5) 4px 4px 8px inset, rgba(19, 95, 216, 0.35) -4px -4px 8px inset', minWidth: '120px', minHeight: '44px', fontWeight: '500', fontSize: '1rem', backgroundPosition: 'left top'}}>
 <svg className="lucide lucide-rocket w-4 h-4" data-lucide="rocket" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
 <span className="font-geist" style={{}}>Get Started</span>
 </a>

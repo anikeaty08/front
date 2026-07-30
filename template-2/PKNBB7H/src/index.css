@@ -1,0 +1,26 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Inter', sans-serif; background: #16161A; }
+    .card-container { opacity: 0; transform: scale(0.97); animation: fadeInScale 0.7s cubic-bezier(.46,.03,.52,.96) forwards; }
+    @keyframes fadeInScale { 0% { opacity: 0; transform: scale(0.97); } 100% { opacity: 1; transform: scale(1); } }
+    .cell { animation: fadeUpCell 0.7s cubic-bezier(.64,.09,.08,1) forwards; opacity: 0; transform: translateY(30px);}
+    .cell-1 { animation-delay: 0.2s; }
+    .cell-2 { animation-delay: 0.35s; }
+    .cell-3 { animation-delay: 0.5s; }
+    .cell-4 { animation-delay: 0.65s; }
+    @keyframes fadeUpCell { 0% { opacity:0; transform: translateY(30px);} 100% {opacity:1; transform:translateY(0);} }
+    .progress-dot { transition: background 0.3s; }
+    /* Subtle outlines */
+    .subtle-outline { outline: 1.5px solid rgba(100,112,140,0.10); }
+    .subtle-outline-inner { border-color: rgba(120,130,150,0.09); }
+  

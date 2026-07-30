@@ -1,0 +1,807 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+      // State
+      let tasks = [];
+      const STORAGE_KEY = "eisenhower.tasks.v1";
+      const THEME_KEY = "eisenhower.theme";
+      let theme = "dark";
+
+      const byId = (id) => document.getElementById(id);
+
+      const els = {
+        input: byId("taskInput"),
+        addBtn: byId("addBtn"),
+        inbox: byId("inbox"),
+        q1: byId("q1"),
+        q2: byId("q2"),
+        q3: byId("q3"),
+        q4: byId("q4"),
+        counts: {
+          q1: byId("count-q1"),
+          q2: byId("count-q2"),
+          q3: byId("count-q3"),
+          q4: byId("count-q4"),
+        },
+        printBtn: byId("printBtn"),
+        clearBtn: byId("clearBtn"),
+        tipsBtn: byId("tipsBtn"),
+        tipsModal: byId("tipsModal"),
+        closeTips: byId("closeTips"),
+        okTips: byId("okTips"),
+        confirmClearModal: byId("confirmClearModal"),
+        cancelClear: byId("cancelClear"),
+        confirmClear: byId("confirmClear"),
+        themeToggle: byId("themeToggle"),
+        iconMoon: byId("iconMoon"),
+        iconSun: byId("iconSun"),
+        themeThumb: byId("themeThumb"),
+        header: byId("appHeader"),
+      };
+
+      // Util
+      const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+
+      const save = () => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        updateCounts();
+      };
+
+      const load = () => {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        tasks = raw ? JSON.parse(raw) : [];
+      };
+
+      const quadrantContainers = {
+        inbox: els.inbox,
+        q1: els.q1,
+        q2: els.q2,
+        q3: els.q3,
+        q4: els.q4,
+      };
+
+      const quadrantColors = {
+        inbox: "neutral",
+        q1: "red",
+        q2: "emerald",
+        q3: "amber",
+        q4: "neutral",
+      };
+
+      // THEME
+      const darkBody = ["bg-neutral-950","text-neutral-100","selection:bg-indigo-500/30","selection:text-indigo-200"];
+      const lightBody = ["bg-neutral-50","text-neutral-900","selection:bg-indigo-500/20","selection:text-indigo-900"];
+
+      function switchClasses(el, removeArr, addArr) {
+        removeArr.forEach(c => el.classList.remove(c));
+        addArr.forEach(c => el.classList.add(c));
+      }
+
+      function applyTheme(next) {
+        theme = next;
+        localStorage.setItem(THEME_KEY, theme);
+        // Body
+        if (theme === "light") {
+          switchClasses(document.body, darkBody, lightBody);
+          // Header surface
+          switchClasses(els.header, ["border-neutral-900/80","bg-neutral-950/60"], ["border-neutral-200/80","bg-white/70"]);
+          // Header title and subtitle for readability
+          const titleEl = els.header.querySelector("h1");
+          const subEl = els.header.querySelector("p");
+          titleEl && switchClasses(titleEl, ["text-neutral-50"], ["text-neutral-900"]);
+          subEl && switchClasses(subEl, ["text-neutral-400"], ["text-neutral-500"]);
+          // Cards
+          document.querySelectorAll('[data-surface="card"]').forEach(card => {
+            switchClasses(card,
+              ["border-neutral-900","border-neutral-800","bg-neutral-950/60","bg-neutral-950/70","ring-white/5","shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)]"],
+              ["border-neutral-200","bg-white","ring-black/5","shadow-[0_10px_30px_-15px_rgba(0,0,0,0.15)]"]
+            );
+          });
+          // Inbox droppable
+          switchClasses(els.inbox, ["border-neutral-800","bg-neutral-950/40"], ["border-neutral-300","bg-white"]);
+          // Input
+          switchClasses(els.input,
+            ["bg-neutral-900/70","border-neutral-800","text-neutral-200","placeholder-neutral-500"],
+            ["bg-white","border-neutral-300","text-neutral-900","placeholder-neutral-400"]
+          );
+          // Buttons
+          const buttonPairs = [
+            [els.addBtn, { remove: ["border-neutral-800","bg-neutral-900/70","hover:bg-neutral-900","hover:border-neutral-700","text-neutral-100"], add: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-neutral-900"] }],
+            [els.clearBtn, { remove: ["border-neutral-800","bg-neutral-950","hover:bg-neutral-900/80","hover:border-neutral-700","text-red-300/90","hover:text-red-200"], add: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-red-600","hover:text-red-700"] }],
+            [els.printBtn, { remove: ["border-neutral-800","bg-neutral-950","hover:bg-neutral-900/80","hover:border-neutral-700","text-neutral-200"], add: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-neutral-900"] }],
+            [els.themeToggle, { remove: ["border-neutral-800","bg-neutral-950","hover:bg-neutral-900/80","hover:border-neutral-700","text-neutral-200"], add: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-neutral-900"] }],
+          ];
+          buttonPairs.forEach(([btn, sets]) => btn && switchClasses(btn, sets.remove, sets.add));
+          // Modals
+          document.querySelectorAll("#tipsModal > div + div, #confirmClearModal > div + div").forEach(modal =>
+            switchClasses(modal, ["border-neutral-800","bg-neutral-950"], ["border-neutral-200","bg-white"])
+          );
+          document.querySelectorAll("#tipsModal .border-b, #tipsModal .border-t, #confirmClearModal .border-t").forEach(div =>
+            switchClasses(div, ["border-neutral-900"], ["border-neutral-200"])
+          );
+          // Toggle visuals
+          els.themeThumb?.classList.add("translate-x-[36px]");
+          els.iconSun?.classList.remove("text-neutral-500");
+          els.iconSun?.classList.add("text-neutral-900");
+          els.iconMoon?.classList.remove("text-neutral-200");
+          els.iconMoon?.classList.add("text-neutral-400");
+        } else {
+          switchClasses(document.body, lightBody, darkBody);
+          switchClasses(els.header, ["border-neutral-200/80","bg-white/70"], ["border-neutral-900/80","bg-neutral-950/60"]);
+          const titleEl = els.header.querySelector("h1");
+          const subEl = els.header.querySelector("p");
+          titleEl && switchClasses(titleEl, ["text-neutral-900"], ["text-neutral-50"]);
+          subEl && switchClasses(subEl, ["text-neutral-500"], ["text-neutral-400"]);
+          document.querySelectorAll('[data-surface="card"]').forEach(card => {
+            switchClasses(card,
+              ["border-neutral-200","bg-white","ring-black/5","shadow-[0_10px_30px_-15px_rgba(0,0,0,0.15)]"],
+              ["border-neutral-800","bg-neutral-950/70","ring-white/5","shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)]"]
+            );
+          });
+          switchClasses(els.inbox, ["border-neutral-300","bg-white"], ["border-neutral-800","bg-neutral-950/40"]);
+          switchClasses(els.input,
+            ["bg-white","border-neutral-300","text-neutral-900","placeholder-neutral-400"],
+            ["bg-neutral-900/70","border-neutral-800","text-neutral-200","placeholder-neutral-500"]
+          );
+          const buttonPairs = [
+            [els.addBtn, { remove: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-neutral-900"], add: ["border-neutral-800","bg-neutral-900/70","hover:bg-neutral-900","hover:border-neutral-700","text-neutral-100"] }],
+            [els.clearBtn, { remove: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-red-600","hover:text-red-700"], add: ["border-neutral-800","bg-neutral-950","hover:bg-neutral-900/80","hover:border-neutral-700","text-red-300/90","hover:text-red-200"] }],
+            [els.printBtn, { remove: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-neutral-900"], add: ["border-neutral-800","bg-neutral-950","hover:bg-neutral-900/80","hover:border-neutral-700","text-neutral-200"] }],
+            [els.themeToggle, { remove: ["border-neutral-300","bg-white","hover:bg-neutral-50","hover:border-neutral-300","text-neutral-900"], add: ["border-neutral-800","bg-neutral-950","hover:bg-neutral-900/80","hover:border-neutral-700","text-neutral-200"] }],
+          ];
+          buttonPairs.forEach(([btn, sets]) => btn && switchClasses(btn, sets.remove, sets.add));
+          document.querySelectorAll("#tipsModal > div + div, #confirmClearModal > div + div").forEach(modal =>
+            switchClasses(modal, ["border-neutral-200","bg-white"], ["border-neutral-800","bg-neutral-950"])
+          );
+          document.querySelectorAll("#tipsModal .border-b, #tipsModal .border-t, #confirmClearModal .border-t").forEach(div =>
+            switchClasses(div, ["border-neutral-200"], ["border-neutral-900"])
+          );
+          // Toggle visuals
+          els.themeThumb?.classList.remove("translate-x-[36px]");
+          els.iconSun?.classList.remove("text-neutral-900");
+          els.iconSun?.classList.add("text-neutral-500");
+          els.iconMoon?.classList.remove("text-neutral-400");
+          els.iconMoon?.classList.add("text-neutral-200");
+        }
+
+        // Re-render tags to apply tag-level theme classes
+        renderAll();
+      }
+
+      function initTheme() {
+        const stored = localStorage.getItem(THEME_KEY);
+        if (stored === "light" || stored === "dark") {
+          applyTheme(stored);
+        } else {
+          // Default is dark (ignora preferência do sistema)
+          applyTheme("dark");
+        }
+      }
+
+      // Render a single tag element
+      function renderTag(task) {
+        const el = document.createElement("div");
+        const baseTag = "group/tag inline-flex items-center gap-2 rounded-full transition-colors px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing select-none border";
+        const darkTag = "border-neutral-800 bg-neutral-900/60 hover:bg-neutral-900/80 hover:border-neutral-700 text-neutral-100";
+        const lightTag = "border-neutral-300 bg-white hover:bg-neutral-50 hover:border-neutral-300 text-neutral-800";
+        el.className = baseTag + " " + (theme === "light" ? lightTag : darkTag);
+        el.setAttribute("draggable", "true");
+        el.dataset.id = task.id;
+        el.title = "Arraste para outro quadrante";
+
+        // Accent dot by quadrant
+        const color = quadrantColors[task.quadrant] || "neutral";
+        const dot = document.createElement("span");
+        dot.className =
+          "h-1.5 w-1.5 rounded-full " +
+          (color === "red" ? "bg-red-500" :
+           color === "emerald" ? "bg-emerald-500" :
+           color === "amber" ? "bg-amber-500" : "bg-neutral-500");
+
+        const handle = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        handle.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        handle.setAttribute("viewBox", "0 0 24 24");
+        handle.setAttribute("fill", "none");
+        handle.setAttribute("stroke", "currentColor");
+        handle.setAttribute("stroke-width", "1.5");
+        handle.classList.add("h-4","w-4", theme === "light" ? "text-neutral-500" : "text-neutral-500","group-hover/tag:text-neutral-300");
+        handle.innerHTML = '<path d="M9 7h.01M9 12h.01M9 17h.01M15 7h.01M15 12h.01M15 17h.01"/>';
+
+        const text = document.createElement("span");
+        text.className = "max-w-[200px] md:max-w-[240px] truncate" + (task.italic ? " italic" : "");
+        text.textContent = task.text;
+
+        const actions = document.createElement("div");
+        actions.className = "flex items-center gap-1 ml-1";
+
+        const editBtn = document.createElement("button");
+        editBtn.className = "p-1 rounded-md " + (theme === "light"
+          ? "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100 border border-transparent hover:border-neutral-300"
+          : "text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800/80 border border-transparent hover:border-neutral-700");
+        editBtn.title = "Renomear";
+        editBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+          </svg>
+        `;
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "p-1 rounded-md " + (theme === "light"
+          ? "text-neutral-500 hover:text-red-700 hover:bg-red-500/10 border border-transparent hover:border-red-500/30"
+          : "text-neutral-500 hover:text-red-200 hover:bg-red-500/10 border border-transparent hover:border-red-500/30");
+        delBtn.title = "Remover";
+        delBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 6h18"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <path d="M10 11v6"/>
+            <path d="M14 11v6"/>
+          </svg>
+        `;
+
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+
+        el.appendChild(handle);
+        el.appendChild(dot);
+        el.appendChild(text);
+        el.appendChild(actions);
+
+        // Drag events
+        el.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", task.id);
+          requestAnimationFrame(() => {
+            el.classList.add("opacity-70","ring-2","ring-indigo-500/40","dragging");
+          });
+        });
+        el.addEventListener("dragend", () => {
+          el.classList.remove("opacity-70","ring-2","ring-indigo-500/40","dragging");
+        });
+
+        // Inline edit on double click or edit button
+        function startInlineEdit(ev) {
+          if (ev && (ev.target.closest("button") || ev.target.closest("svg"))) return;
+
+          const prevText = task.text;
+          // Temporariamente desabilita drag e permite seleção
+          el.draggable = false;
+          el.classList.remove("cursor-grab","select-none");
+          el.classList.add("cursor-text","select-text");
+
+          // Preparar span para edição
+          text.setAttribute("contenteditable", "true");
+          text.classList.remove("truncate");
+          text.classList.add("outline-none","border","rounded","px-1.5","py-0.5");
+          if (theme === "light") {
+            text.classList.add("border-neutral-300","bg-neutral-50");
+          } else {
+            text.classList.add("border-neutral-700","bg-neutral-800/70");
+          }
+
+          // Foco e seleção total
+          text.focus();
+          const range = document.createRange();
+          range.selectNodeContents(text);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+
+          function endInlineEdit(commit) {
+            text.removeEventListener("keydown", onKey);
+            text.removeEventListener("blur", onBlur);
+
+            // Limpar visuais
+            text.removeAttribute("contenteditable");
+            text.classList.remove("outline-none","border","rounded","px-1.5","py-0.5","border-neutral-300","bg-neutral-50","border-neutral-700","bg-neutral-800/70");
+            text.classList.add("truncate");
+
+            el.draggable = true;
+            el.classList.add("cursor-grab","select-none");
+            el.classList.remove("cursor-text","select-text");
+
+            const newVal = text.textContent.trim();
+            if (commit) {
+              if (newVal) {
+                task.text = newVal;
+                save();
+              } else {
+                // Reverte se vazio
+                task.text = prevText;
+                text.textContent = prevText;
+              }
+            } else {
+              text.textContent = prevText;
+            }
+          }
+
+          function onKey(e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              endInlineEdit(true);
+            } else if (e.key === "Escape") {
+              e.preventDefault();
+              endInlineEdit(false);
+            }
+          }
+          function onBlur() {
+            endInlineEdit(true);
+          }
+
+          text.addEventListener("keydown", onKey);
+          text.addEventListener("blur", onBlur);
+        }
+
+        el.addEventListener("dblclick", startInlineEdit);
+
+        // Edit button now triggers inline editing
+        editBtn.addEventListener("click", () => {
+          startInlineEdit(null);
+        });
+
+        // Delete
+        delBtn.addEventListener("click", () => {
+          tasks = tasks.filter(t => t.id !== task.id);
+          el.remove();
+          save();
+        });
+
+        return el;
+      }
+
+      function renderAll() {
+        Object.values(quadrantContainers).forEach(c => c.innerHTML = "");
+        tasks.forEach(task => {
+          const container = quadrantContainers[task.quadrant] || els.inbox;
+          container.appendChild(renderTag(task));
+        });
+        updateCounts();
+      }
+
+      function updateCounts() {
+        const counts = { q1:0, q2:0, q3:0, q4:0 };
+        tasks.forEach(t => {
+          if (counts[t.quadrant] !== undefined) counts[t.quadrant]++;
+        });
+        els.counts.q1.textContent = counts.q1;
+        els.counts.q2.textContent = counts.q2;
+        els.counts.q3.textContent = counts.q3;
+        els.counts.q4.textContent = counts.q4;
+      }
+
+      function addTask(text, quadrant = "inbox", opts = {}) {
+        const t = { id: uid(), text: text.trim(), quadrant, italic: !!opts.italic };
+        tasks.push(t);
+        save();
+        const container = quadrantContainers[quadrant] || els.inbox;
+        container.appendChild(renderTag(t));
+      }
+
+      // Helper: calcula o elemento após o qual devemos inserir baseado no Y do mouse
+      function getDragAfterElement(container, y) {
+        const draggables = [...container.querySelectorAll('[data-id]:not(.dragging)')];
+        let closest = { offset: Number.NEGATIVE_INFINITY, element: null };
+        for (const child of draggables) {
+          const box = child.getBoundingClientRect();
+          const offset = y - (box.top + box.height / 2);
+          if (offset < 0 && offset > closest.offset) {
+            closest = { offset, element: child };
+          }
+        }
+        return closest.element;
+      }
+
+      // Persiste a ordem atual lida do DOM (por quadrante)
+      function syncOrderFromDOM() {
+        const newOrder = [];
+        for (const [q, container] of Object.entries(quadrantContainers)) {
+          container.querySelectorAll("[data-id]").forEach(node => {
+            const t = tasks.find(tt => tt.id === node.dataset.id);
+            if (t) {
+              t.quadrant = q;
+              newOrder.push(t);
+            }
+          });
+        }
+        tasks = newOrder.concat(tasks.filter(t => !newOrder.find(n => n.id === t.id)));
+        save();
+      }
+
+      // Drop handling
+      function setupDropzone(el) {
+        el.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          el.classList.add("border","border-dashed","border-indigo-500/40","bg-indigo-500/5");
+        });
+        el.addEventListener("dragleave", () => {
+          el.classList.remove("border","border-dashed","border-indigo-500/40","bg-indigo-500/5");
+        });
+        el.addEventListener("drop", (e) => {
+          e.preventDefault();
+          el.classList.remove("border","border-dashed","border-indigo-500/40","bg-indigo-500/5");
+          const id = e.dataTransfer.getData("text/plain");
+          const dragEl = document.querySelector('[data-id="'+id+'"]');
+          if (!dragEl) return;
+
+          const afterEl = getDragAfterElement(el, e.clientY);
+          if (afterEl == null) {
+            el.appendChild(dragEl);
+          } else {
+            el.insertBefore(dragEl, afterEl);
+          }
+
+          const q = el.dataset.quadrant;
+          const task = tasks.find(t => t.id === id);
+          if (task) task.quadrant = q;
+
+          syncOrderFromDOM();
+        });
+      }
+
+      // Examples (single, italic)
+      const EXAMPLES = [
+        "Documentar processo X",
+      ];
+
+      function addExamples() {
+        const sample = EXAMPLES.slice(0, 1);
+        sample.forEach(t => addTask(t, "inbox", { italic: true }));
+      }
+
+      // Clear quadrants only
+      function clearQuadrants() {
+        tasks = tasks.filter(t => t.quadrant === "inbox");
+        save();
+        renderAll();
+      }
+
+      // Print matrix
+      async function printMatrix() {
+        const node = document.getElementById("matrixCapture");
+        if (!node) return;
+        const bg = theme === "light" ? "#ffffff" : "#0a0a0a";
+        const canvas = await html2canvas(node, { backgroundColor: bg, scale: 2, useCORS: true });
+        const dataURL = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = dataURL;
+        a.download = "eisenhower-quadrantes.png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+
+      // Init
+      document.addEventListener("DOMContentLoaded", () => {
+        load();
+
+        // Dropzones
+        Object.values(quadrantContainers).forEach(setupDropzone);
+
+        // Input handlers
+        els.input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            const val = els.input.value.trim();
+            if (!val) return;
+            addTask(val, "inbox");
+            els.input.value = "";
+            els.input.focus();
+          }
+        });
+        els.addBtn.addEventListener("click", () => {
+          const val = els.input.value.trim();
+          if (!val) return;
+          addTask(val, "inbox");
+          els.input.value = "";
+          els.input.focus();
+        });
+
+        renderAll();
+        initTheme(); // aplica tema (padrão dark)
+
+        // Print
+        els.printBtn?.addEventListener("click", printMatrix);
+
+        // Clear with modal
+        const openClear = () => els.confirmClearModal.classList.remove("hidden");
+        const closeClear = () => els.confirmClearModal.classList.add("hidden");
+        els.clearBtn?.addEventListener("click", openClear);
+        els.cancelClear?.addEventListener("click", closeClear);
+        els.confirmClear?.addEventListener("click", () => {
+          clearQuadrants();
+          closeClear();
+        });
+
+        // Tips modal
+        const openTips = () => els.tipsModal.classList.remove("hidden");
+        const closeTips = () => els.tipsModal.classList.add("hidden");
+        els.tipsBtn?.addEventListener("click", openTips);
+        els.closeTips?.addEventListener("click", closeTips);
+        els.okTips?.addEventListener("click", closeTips);
+
+        // Theme toggle
+        els.themeToggle?.addEventListener("click", () => {
+          applyTheme(theme === "light" ? "dark" : "light");
+        });
+
+        // First time empty? Offer example in italics
+        if (tasks.length === 0) {
+          addExamples();
+        }
+      });
+    
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<div className="min-h-screen">
+
+<header className="border-b border-neutral-900/80 backdrop-blur bg-neutral-950/60" id="appHeader">
+<div className="mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
+<div className="flex items-center gap-3">
+<div className="h-9 w-9 rounded-md bg-neutral-900 border border-neutral-800 grid place-items-center tracking-tight">
+<span className="text-[11px] font-semibold text-neutral-200">EM</span>
+</div>
+<div>
+<h1 className="text-xl md:text-2xl tracking-tight font-semibold text-neutral-50">Matriz de Eisenhower</h1>
+<p className="text-sm text-neutral-400">Organize suas tarefas por importância e urgência</p>
+</div>
+</div>
+
+<div className="hidden md:flex items-center gap-3">
+<button aria-label="Alternar tema" className="relative inline-flex items-center w-[68px] h-8 rounded-full border border-neutral-800 bg-neutral-950 hover:bg-neutral-900/80 hover:border-neutral-700 transition-colors" id="themeToggle">
+
+<span className="absolute left-1 top-1 h-6 w-6 rounded-full bg-neutral-800 shadow-sm transition-transform duration-300 ease-out" id="themeThumb"></span>
+
+<svg className="pointer-events-none absolute left-2 h-4 w-4 text-neutral-200 transition-colors" fill="none" id="iconMoon" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 3a6 6 0 0 0 9 9A9 9 0 1 1 12 3Z"></path>
+</svg>
+
+<svg className="pointer-events-none absolute right-2 h-4 w-4 text-neutral-500 transition-colors" fill="none" id="iconSun" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="4"></circle>
+<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+</svg>
+</button>
+</div>
+</div>
+</header>
+
+<main className="mx-auto max-w-7xl px-6 py-8 space-y-8">
+
+<section className="space-y-3">
+<div className="flex items-center justify-between">
+<h2 className="text-lg md:text-xl tracking-tight font-semibold text-neutral-100">Tarefas a priorizar</h2>
+</div>
+
+<div className="rounded-lg border border-neutral-900 bg-neutral-950/60 p-4 md:p-5" data-surface="card">
+<div className="flex flex-col md:flex-row md:items-center gap-3">
+<div className="flex-1 relative">
+<input className="w-full placeholder-neutral-500 bg-neutral-900/70 border border-neutral-800 focus:border-indigo-500/60 outline-none rounded-md px-3.5 py-3 text-sm text-neutral-200 transition-colors" id="taskInput" placeholder="Digite uma tarefa e pressione Enter..." type="text" />
+<div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+<span className="text-[10px] text-neutral-500">Enter</span>
+</div>
+</div>
+<div className="flex items-center gap-2">
+<button className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900/70 hover:bg-neutral-900 hover:border-neutral-700 transition-colors px-3.5 py-2.5 text-sm text-neutral-100" id="addBtn">
+
+<svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 5v14"></path>
+<path d="M5 12h14"></path>
+</svg>
+                  Adicionar
+                </button>
+</div>
+</div>
+</div>
+<div className="min-h-[72px] rounded-lg border border-dashed border-neutral-800 bg-neutral-950/40 p-3 flex flex-wrap gap-2" data-quadrant="inbox" id="inbox">
+
+</div>
+<p className="text-xs text-neutral-500">Dica: arraste as tags para os quadrantes. Dê duplo clique nelas para editar. Clique no ícone de lixeira para remover.</p>
+</section>
+
+<div className="flex items-center justify-end gap-2 md:gap-3">
+<button className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-950 hover:bg-neutral-900/80 hover:border-neutral-700 transition-colors px-3.5 py-2 text-sm text-neutral-200" id="printBtn">
+            Tirar print
+          </button>
+<button className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-950 hover:bg-neutral-900/80 hover:border-neutral-700 transition-colors px-3.5 py-2 text-sm text-red-300/90 hover:text-red-200" id="clearBtn">
+
+<svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 6h18"></path>
+<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+<path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+<path d="M10 11v6"></path>
+<path d="M14 11v6"></path>
+</svg>
+            Limpar
+          </button>
+</div>
+
+<section className="grid grid-cols-1 md:grid-cols-2 gap-4" id="matrixCapture">
+
+<div className="rounded-lg border border-neutral-800 bg-neutral-950/70 ring-1 ring-white/5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)]" data-surface="card">
+<div className="flex items-center justify-between border-b border-neutral-900 px-4 py-3">
+<div className="flex items-center gap-2">
+<span className="h-2.5 w-2.5 rounded-full bg-red-500/80 shadow-[0_0_0_3px_rgba(239,68,68,0.15)]"></span>
+<div>
+<h3 className="text-base tracking-tight font-semibold">Importante & Urgente</h3>
+<p className="text-xs text-neutral-500">Fazer agora</p>
+</div>
+</div>
+<span className="text-xs text-neutral-400" id="count-q1">0</span>
+</div>
+<div className="min-h-[180px] p-3 border-dashed border-transparent hover:border-neutral-800 rounded-b-lg flex flex-wrap items-start gap-2" data-quadrant="q1" id="q1">
+
+</div>
+</div>
+
+<div className="rounded-lg border border-neutral-800 bg-neutral-950/70 ring-1 ring-white/5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)]" data-surface="card">
+<div className="flex items-center justify-between border-b border-neutral-900 px-4 py-3">
+<div className="flex items-center gap-2">
+<span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]"></span>
+<div>
+<h3 className="text-base tracking-tight font-semibold">Importante & Não Urgente</h3>
+<p className="text-xs text-neutral-500">Agendar</p>
+</div>
+</div>
+<span className="text-xs text-neutral-400" id="count-q2">0</span>
+</div>
+<div className="min-h-[180px] p-3 border-dashed border-transparent hover:border-neutral-800 rounded-b-lg flex flex-wrap items-start gap-2" data-quadrant="q2" id="q2">
+
+</div>
+</div>
+
+<div className="rounded-lg border border-neutral-800 bg-neutral-950/70 ring-1 ring-white/5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)]" data-surface="card">
+<div className="flex items-center justify-between border-b border-neutral-900 px-4 py-3">
+<div className="flex items-center gap-2">
+<span className="h-2.5 w-2.5 rounded-full bg-amber-500/80 shadow-[0_0_0_3px_rgba(245,158,11,0.15)]"></span>
+<div>
+<h3 className="text-base tracking-tight font-semibold">Não Importante & Urgente</h3>
+<p className="text-xs text-neutral-500">Delegar</p>
+</div>
+</div>
+<span className="text-xs text-neutral-400" id="count-q3">0</span>
+</div>
+<div className="min-h-[180px] p-3 border-dashed border-transparent hover:border-neutral-800 rounded-b-lg flex flex-wrap items-start gap-2" data-quadrant="q3" id="q3">
+
+</div>
+</div>
+
+<div className="rounded-lg border border-neutral-800 bg-neutral-950/70 ring-1 ring-white/5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)]" data-surface="card">
+<div className="flex items-center justify-between border-b border-neutral-900 px-4 py-3">
+<div className="flex items-center gap-2">
+<span className="h-2.5 w-2.5 rounded-full bg-neutral-500/80 shadow-[0_0_0_3px_rgba(115,115,115,0.15)]"></span>
+<div>
+<h3 className="text-base tracking-tight font-semibold">Não Importante & Não Urgente</h3>
+<p className="text-xs text-neutral-500">Eliminar</p>
+</div>
+</div>
+<span className="text-xs text-neutral-400" id="count-q4">0</span>
+</div>
+<div className="min-h-[180px] p-3 border-dashed border-transparent hover:border-neutral-800 rounded-b-lg flex flex-wrap items-start gap-2" data-quadrant="q4" id="q4">
+
+</div>
+</div>
+</section>
+</main>
+
+<footer className="mt-10 border-t border-neutral-900/80">
+<div className="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
+<p className="text-xs text-neutral-500">Arraste e solte para priorizar. Seus dados ficam somente no seu navegador.</p>
+<div className="flex items-center gap-4">
+<button className="inline-flex items-center gap-2 text-xs text-neutral-400 hover:text-neutral-200 transition-colors" id="tipsBtn">
+
+<svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="10"></circle>
+<path d="M12 16v-4"></path>
+<path d="M12 8h.01"></path>
+</svg>
+              Como usar
+            </button>
+</div>
+</div>
+</footer>
+</div>
+
+<div className="fixed inset-0 z-[60] hidden" id="tipsModal">
+<div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+<div className="relative z-[61] mx-auto max-w-md mt-24 rounded-lg border border-neutral-800 bg-neutral-950 shadow-2xl">
+<div className="flex items-center justify-between px-4 py-3 border-b border-neutral-900">
+<h4 className="text-base tracking-tight font-semibold">Como usar</h4>
+<button className="p-1 rounded-md hover:bg-neutral-900/80 border border-transparent hover:border-neutral-800 transition-colors" id="closeTips">
+
+<svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M18 6L6 18"></path>
+<path d="M6 6l12 12"></path>
+</svg>
+</button>
+</div>
+<div className="px-4 py-4 space-y-3 text-sm text-neutral-300">
+<p>1. Digite uma tarefa no campo acima e pressione Enter ou clique em Adicionar.</p>
+<p>2. Arraste a tag da Caixa de entrada para um quadrante.</p>
+<p>3. Dê duplo clique na tag para renomear. Use o ícone de lixeira para remover.</p>
+<p>4. Você pode alternar entre tema escuro e claro no topo. Também é possível tirar um print dos quadrantes.</p>
+</div>
+<div className="px-4 py-3 border-t border-neutral-900 flex justify-end">
+<button className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900/70 hover:bg-neutral-900 hover:border-neutral-700 transition-colors px-3.5 py-2 text-sm text-neutral-100" id="okTips">Entendi</button>
+</div>
+</div>
+</div>
+
+<div className="fixed inset-0 z-[70] hidden" id="confirmClearModal">
+<div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+<div className="relative z-[71] mx-auto max-w-md mt-28 rounded-lg border border-neutral-800 bg-neutral-950 shadow-2xl">
+<div className="px-4 py-4">
+<h4 className="text-base tracking-tight font-semibold text-neutral-100">Limpar quadrantes?</h4>
+<p className="mt-2 text-sm text-neutral-400">Isso removerá todas as tarefas dos 4 quadrantes. A caixa de entrada permanecerá intacta.</p>
+</div>
+<div className="px-4 py-3 border-t border-neutral-900 flex items-center justify-end gap-2">
+<button className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900/70 hover:bg-neutral-900 hover:border-neutral-700 transition-colors px-3.5 py-2 text-sm text-neutral-100" id="cancelClear">Cancelar</button>
+<button className="inline-flex items-center gap-2 rounded-md border border-red-600/30 bg-red-600/10 hover:bg-red-600/15 hover:border-red-600/50 text-red-200 transition-colors px-3.5 py-2 text-sm" id="confirmClear">
+
+<svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 6h18"></path>
+<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+<path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+<path d="M10 11v6"></path>
+<path d="M14 11v6"></path>
+</svg>
+            Limpar
+          </button>
+</div>
+</div>
+</div>
+
+
+    </>
+  );
+}

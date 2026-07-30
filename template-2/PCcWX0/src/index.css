@@ -1,0 +1,48 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { font-family: 'Nunito Sans', sans-serif; }
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            overflow: auto;
+            border-radius: 40px;
+        }
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 4px;
+            width: 50px;
+            background-color: #5A67D8;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .tab-indicator-1 { left: 45px; }
+        .tab-indicator-2 { left: 143px; }
+        .tab-indicator-3 { left: 241px; }
+        .tab-indicator-4 { left: 339px; }
+        .toggle-bg {
+            transition: background-color 0.2s;
+        }
+        .toggle-dot {
+            top: 0.15rem;
+            left: 0.15rem;
+            transition: all 0.2s;
+        }
+        input:checked ~ .toggle-bg {
+            background-color: #5A67D8;
+        }
+        input:checked ~ .toggle-bg .toggle-dot {
+            transform: translateX(1.4rem);
+            background-color: white;
+        }
+    

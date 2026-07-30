@@ -1,0 +1,18 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+@keyframes fadeUp{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+.animate-fadeUp{animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both}
+.suggestion-active{background:#eef2ff}
+.no-scrollbar::-webkit-scrollbar{display:none;}
+.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+

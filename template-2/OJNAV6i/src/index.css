@@ -1,0 +1,22 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        .fade-in {opacity:0;transform:translateY(10px);animation:fadeIn 0.5s forwards}
+        @keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
+        .segment-hover {cursor:pointer;transition:all 0.3s ease;transform-origin:center}
+        .segment-hover:hover {stroke-width:22;transform:scale(1.05)}
+        .tooltip {position:absolute;background-color:white;border-radius:8px;padding:10px;
+            box-shadow:0 4px 16px rgba(0,0,0,0.12);opacity:0;visibility:hidden;
+            transition:all 0.2s ease;z-index:20;pointer-events:none;min-width:120px;
+            transform:translateY(5px);border:1px solid rgba(0,0,0,0.05)}
+        .tooltip.visible {opacity:1;visibility:visible;transform:translateY(0)}
+    

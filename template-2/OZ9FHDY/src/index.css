@@ -1,0 +1,17 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html,body{height:100%;font-family:'Inter',sans-serif;background:#0a0a0a}
+.card-animate{opacity:0;transform:translateY(40px);filter:blur(8px);animation:fade 0.8s ease-out forwards}
+.card-animate:nth-child(1){animation-delay:.4s}.card-animate:nth-child(2){animation-delay:.5s}.card-animate:nth-child(3){animation-delay:.6s}.card-animate:nth-child(4){animation-delay:.7s}.card-animate:nth-child(5){animation-delay:.8s}.card-animate:nth-child(6){animation-delay:.9s}
+@keyframes fade{to{opacity:1;transform:translateY(0);filter:blur(0)}}
+

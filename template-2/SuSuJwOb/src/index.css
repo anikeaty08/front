@@ -1,0 +1,44 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Inter', sans-serif; background-color: #000; color: white; }
+    .particle {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      pointer-events: none;
+      transition: transform 0.1s ease-out;
+    }
+    .faq-item {
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .faq-content {
+      max-height: 0;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .faq-item.active .faq-content {
+      max-height: 300px;
+      opacity: 1;
+      padding-top: 1rem;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+    .animate-slide-in {
+      opacity: 0;
+      transform: translateY(40px);
+      animation: slide-in 0.5s cubic-bezier(0.42,0,0.58,1) forwards;
+    }
+    @keyframes slide-in { to { opacity: 1; transform: none; } }
+  

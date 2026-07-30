@@ -1,0 +1,18 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{font-family:'Inter',system-ui,sans-serif}.section-title{letter-spacing:-0.02em}
+body[data-lang='jp'] .lang-en{display:none!important}
+body[data-lang='jp'] .lang-jp{display:inline!important}
+body[data-lang='en'] .lang-jp{display:none!important}
+.lang-toggle-active{background:#111;color:#fff}
+

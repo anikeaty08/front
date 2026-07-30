@@ -1,0 +1,16 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+@keyframes fadeIn {from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);} }
+.reveal{opacity:0;}
+.reveal.visible{animation:fadeIn .8s cubic-bezier(.25,.5,.35,1) forwards;}
+

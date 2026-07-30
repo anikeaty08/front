@@ -1,0 +1,18 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+      #ba-range { height: 24px; }
+      #ba-range::-webkit-slider-runnable-track { height: 4px; background: rgba(0,0,0,0.15); border-radius: 999px; }
+      #ba-range::-moz-range-track { height: 4px; background: rgba(0,0,0,0.15); border-radius: 999px; }
+      #ba-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -8px; height: 20px; width: 20px; background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 999px; box-shadow: 0 1px 1px rgba(0,0,0,0.04); }
+      #ba-range::-moz-range-thumb { height: 20px; width: 20px; background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 999px; }
+    

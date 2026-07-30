@@ -1,0 +1,229 @@
+import React, { useEffect } from 'react';
+
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      {
+
+    function createShader(gl, type, source) {
+      var shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(shader));
+      }
+      return shader;
+    }
+    function createProgram(gl, vsrc, fsrc) {
+      var vshader = createShader(gl, gl.VERTEX_SHADER, vsrc);
+      var fshader = createShader(gl, gl.FRAGMENT_SHADER, fsrc);
+      var prog = gl.createProgram();
+      gl.attachShader(prog, vshader);
+      gl.attachShader(prog, fshader);
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+        throw new Error(gl.getProgramInfoLog(prog));
+      }
+      return prog;
+    }
+    const vert = `
+      attribute vec2 position;
+      void main() { gl_Position = vec4(position, 0, 1); }
+    `;
+    const frag = document.getElementById('fragShader').textContent;
+    const canvas = document.getElementById('gl-canvas');
+    const gl = canvas.getContext('webgl');
+    let prog, posBuf, positionLoc, iTimeLoc, iResolutionLoc;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    }
+    window.addEventListener('resize', resize);
+
+    function main() {
+      resize();
+      prog = createProgram(gl, vert, frag);
+      positionLoc = gl.getAttribLocation(prog, 'position');
+      iTimeLoc = gl.getUniformLocation(prog, 'iTime');
+      iResolutionLoc = gl.getUniformLocation(prog, 'iResolution');
+      posBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1,-1, 1,-1, -1,1, 1,1
+      ]), gl.STATIC_DRAW);
+      render();
+    }
+
+    function render(t=0) {
+      gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+      gl.enableVertexAttribArray(positionLoc);
+      gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+      gl.uniform1f(iTimeLoc, t*0.001);
+      gl.uniform2f(iResolutionLoc, canvas.width, canvas.height);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      requestAnimationFrame(render);
+    }
+
+    main();
+  
+}
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<canvas id="gl-canvas"></canvas>
+<div className="overlay"></div>
+
+<div className="fixed inset-0 flex items-center justify-center z-10 pointer-events-none">
+<div className="pointer-events-auto bg-white/20 backdrop-blur-md border border-white/30 rounded-xl shadow-2xl w-[370px] max-w-full">
+<div className="flex items-center px-4 pt-3 pb-2 rounded-t-xl border-b border-white/20">
+
+<div className="flex gap-2">
+<span className="inline-block w-3 h-3 rounded-full bg-red-500 border border-white/30 shadow"></span>
+<span className="inline-block w-3 h-3 rounded-full bg-yellow-400 border border-white/30 shadow"></span>
+<span className="inline-block w-3 h-3 rounded-full bg-green-500 border border-white/30 shadow"></span>
+</div>
+<div className="flex-1 text-center font-medium tracking-wide text-gray-100 text-sm ml-[-36px] select-none pointer-events-none">
+          The Future is coming.
+        </div>
+</div>
+<div className="px-6 py-10 text-center text-2xl font-semibold text-white drop-shadow-lg select-none">
+        The Future is coming.
+      </div>
+</div>
+</div>
+<script id="fragShader" type="x-shader/x-fragment" dangerouslySetInnerHTML={{
+  __html: `
+    precision highp float;
+    uniform float iTime;
+    uniform vec2 iResolution;
+    #define filmGrainIntensity 0.1
+
+    mat2 Rot(float a) {
+        float s = sin(a);
+        float c = cos(a);
+        return mat2(c, -s, s, c);
+    }
+
+    vec2 hash(vec2 p) {
+        p = vec2(dot(p, vec2(2127.1, 81.17)), dot(p, vec2(1269.5, 283.37)));
+        return fract(sin(p)*43758.5453);
+    }
+
+    float noise(in vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f*f*(3.0-2.0*f);
+        float n = mix(mix(dot(-1.0+2.0*hash(i + vec2(0.0, 0.0)), f - vec2(0.0, 0.0)),
+                          dot(-1.0+2.0*hash(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0)), u.x),
+                     mix(dot(-1.0+2.0*hash(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0)),
+                          dot(-1.0+2.0*hash(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0)), u.x), u.y);
+        return 0.5 + 0.5*n;
+    }
+
+    float filmGrainNoise(in vec2 uv) {
+        return length(hash(vec2(uv.x, uv.y)));
+    }
+
+    void main() {
+        vec2 fragCoord = gl_FragCoord.xy;
+        vec2 uv = fragCoord / iResolution.xy;
+        float aspectRatio = iResolution.x / iResolution.y;
+
+        vec2 tuv = uv - .5;
+        float degree = noise(vec2(iTime*.05, tuv.x*tuv.y));
+        tuv.y *= 1./aspectRatio;
+        tuv = Rot(radians((degree-.5)*720.+180.)) * tuv;
+        tuv.y *= aspectRatio;
+
+        float frequency = 5.;
+        float amplitude = 30.;
+        float speed = iTime * 2.;
+        tuv.x += sin(tuv.y*frequency+speed)/amplitude;
+        tuv.y += sin(tuv.x*frequency*1.5+speed)/(amplitude*.5);
+
+        // Aurora-inspired colors
+        vec3 auroraGreen = vec3(80.0, 255.0, 130.0)/255.0;
+        vec3 auroraCyan = vec3(70.0, 230.0, 255.0)/255.0;
+        vec3 auroraMagenta = vec3(220.0, 100.0, 255.0)/255.0;
+        vec3 auroraBlue = vec3(30.0, 60.0, 200.0)/255.0;
+
+        vec3 auroraPurple = vec3(120.0, 60.0, 200.0)/255.0;
+        vec3 auroraPink = vec3(255.0, 110.0, 180.0)/255.0;
+        vec3 auroraYellowGreen = vec3(180.0, 255.0, 120.0)/255.0;
+        vec3 auroraMidnight = vec3(10.0, 30.0, 60.0)/255.0;
+
+        // Animate between two sets of gradients
+        float cycle = sin(iTime * 0.5);
+        float t = (sign(cycle) * pow(abs(cycle), 0.6) + 1.) / 2.;
+        vec3 color1 = mix(auroraGreen, auroraPurple, t);
+        vec3 color2 = mix(auroraCyan, auroraMidnight, t);
+        vec3 color3 = mix(auroraMagenta, auroraYellowGreen, t);
+        vec3 color4 = mix(auroraBlue, auroraPink, t);
+
+        vec3 layer1 = mix(color3, color2, smoothstep(-.3, .2, (Rot(radians(-5.))*tuv).x));
+        vec3 layer2 = mix(color4, color1, smoothstep(-.3, .2, (Rot(radians(-5.))*tuv).x));
+        vec3 color = mix(layer1, layer2, smoothstep(.5, -.3, tuv.y));
+
+        color = color - filmGrainNoise(uv) * filmGrainIntensity;
+
+        gl_FragColor = vec4(color, 1.0);
+    }
+  `
+}} />
+
+
+    </>
+  );
+}

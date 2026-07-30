@@ -1,0 +1,21 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+@keyframes fade-slide-up{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fade-slide-up .9s cubic-bezier(.4,0,.2,1) forwards}
+.animate-delay-1{animation-delay:.15s}.animate-delay-2{animation-delay:.3s}
+.animate-delay-3{animation-delay:.45s}.animate-delay-4{animation-delay:.6s}
+::selection{background:#3b82f6;color:#fff}
+pre::-webkit-scrollbar{height:6px}pre::-webkit-scrollbar-track{background:transparent}
+pre::-webkit-scrollbar-thumb{background:#525252;border-radius:3px}
+.icon-btn:hover{background:#27272a}
+

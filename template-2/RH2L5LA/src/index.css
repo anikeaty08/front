@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Comic+Neue:wght@400;700&display=swap');
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        
+        .wiggle { animation: wiggle 1s ease-in-out infinite; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+        .bounce-slow { animation: bounce 2s infinite; }
+        .food-card:hover { transform: rotate(2deg) scale(1.05); }
+        .goofy-shadow { box-shadow: 0 10px 25px -5px rgba(251, 146, 60, 0.4), 0 10px 10px -5px rgba(251, 146, 60, 0.04); }
+        .food-preview-overlay { backdrop-filter: blur(20px); }
+        .preview-card { backdrop-filter: blur(20px); }
+        .floating-ingredient { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    
+
+
+      body { font-family: 'Inter', sans-serif; }
+    

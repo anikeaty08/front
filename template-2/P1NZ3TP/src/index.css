@@ -1,0 +1,16 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Nunito', Arial, sans-serif; background: linear-gradient(135deg, #d1fae5 0%, #bae6fd 80%); min-height: 100vh;}
+    .modal-bg { background: rgba(0,0,0,0.35);}
+    textarea { font-family: inherit;}
+  

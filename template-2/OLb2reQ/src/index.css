@@ -1,0 +1,32 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { font-family: 'Nunito Sans', sans-serif; }
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            overflow: auto;
+            border-radius: 40px;
+        }
+        .progress-bar {
+            background: linear-gradient(to right, #5A67D8, #9F7AEA);
+            height: 4px;
+            width: 65%;
+            border-radius: 2px;
+        }
+        .artist-card, .album-card, .playlist-card {
+            transition: all 0.3s ease;
+        }
+        .artist-card:hover, .album-card:hover, .playlist-card:hover {
+            transform: translateY(-3px);
+        }
+    

@@ -1,0 +1,30 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Inter', serif;
+    }
+    .faq-heading {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.03em;
+    }
+    .faq-subheading {
+      font-family: 'Inter', serif;
+    }
+    .faq-q {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.02em;
+    }
+    .faq-a {
+      font-family: 'Inter', serif;
+    }
+  

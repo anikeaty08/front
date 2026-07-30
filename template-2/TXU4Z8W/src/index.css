@@ -1,0 +1,16 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body { font-family: 'Inter', sans-serif; }
+.spin-sun { animation: spin 2s linear infinite; }
+@keyframes spin { 100% { transform: rotate(1turn); } }
+

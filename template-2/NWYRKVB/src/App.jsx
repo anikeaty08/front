@@ -1,0 +1,283 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    lucide.createIcons();
+
+    // Line chart
+    const ctxLine = document.getElementById('lineChart');
+    new Chart(ctxLine, {
+      type: 'line',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+          label: 'Visitors',
+          data: [1250, 1950, 1650, 2250],
+          borderColor: '#e5e7eb',
+          backgroundColor: 'rgba(245,245,245,0.1)',
+          tension: .4,
+          fill: true,
+          pointRadius: 3
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: 'rgba(120,120,120,0.1)' } },
+          y: { grid: { color: 'rgba(120,120,120,0.1)' }, ticks: { callback: val => val } }
+        }
+      }
+    });
+
+    // Doughnut chart
+    const ctxDoughnut = document.getElementById('doughnutChart');
+    new Chart(ctxDoughnut, {
+      type: 'doughnut',
+      data: {
+        labels: ['Desktop', 'Tablet', 'Mobile'],
+        datasets: [{
+          data: [54, 18, 28],
+          backgroundColor: ['#60a5fa', '#34d399', '#fbbf24'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        plugins: { legend: { position: 'bottom', labels: { color: '#a1a1aa', boxWidth: 12 } } },
+        cutout: '60%'
+      }
+    });
+  
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<div className="min-h-screen flex">
+
+<aside className="hidden lg:flex w-72 flex-col bg-stone-900/70 backdrop-blur border-r border-stone-800 rounded-tr-2xl rounded-br-2xl shadow-2xl shadow-black/20">
+
+<div className="flex items-center justify-between p-6 border-b border-stone-800">
+<div className="flex items-center gap-3">
+<button className="h-10 w-10 flex items-center justify-center rounded-lg bg-stone-800 border border-stone-700 shadow">
+<svg className="lucide lucide-menu w-5 h-5 stroke-stone-400" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M4 6h16"></path></svg>
+</button>
+<span className="text-lg font-semibold tracking-tight">AcmeMail</span>
+</div>
+<div className="relative">
+<img alt="" className="h-10 w-10 object-cover border-stone-700 border-2 rounded-xl shadow" src="https://images.unsplash.com/photo-1500649297466-74794c70acfc?w=1080&q=80" />
+<span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-stone-900"></span>
+</div>
+</div>
+
+<div className="p-4">
+<button className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-stone-300/90 to-stone-50/90 text-stone-900 font-medium py-3 shadow-inner shadow-white/10 hover:scale-[1.01] transition">
+<svg className="lucide lucide-plus-circle w-5 h-5" data-lucide="plus-circle" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
+<span>Compose</span>
+</button>
+</div>
+
+<nav className="flex-1 px-4 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-800">
+
+<a className="group flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-stone-800 to-stone-900 text-stone-50 shadow-inner shadow-black/30" href="#">
+<svg className="lucide lucide-inbox w-5 h-5" data-lucide="inbox" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+<span className="flex-1 text-sm">Inbox</span>
+<span className="text-[11px] font-medium px-2 py-1 bg-stone-600 rounded-full">24</span>
+</a>
+<a className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800/60 transition" href="#">
+<svg className="lucide lucide-star w-5 h-5 text-stone-400" data-lucide="star" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+<span className="flex-1 text-sm text-stone-400">Starred</span>
+<span className="text-[11px] font-medium px-2 py-1 text-stone-400">8</span>
+</a>
+<a className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800/60 transition" href="#">
+<svg className="lucide lucide-send w-5 h-5 text-stone-400" data-lucide="send" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+<span className="flex-1 text-sm text-stone-400">Sent</span>
+</a>
+<a className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-stone-800/60 transition" href="#">
+<svg className="lucide lucide-file-text w-5 h-5 text-stone-400" data-lucide="file-text" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+<span className="flex-1 text-sm text-stone-400">Drafts</span>
+<span className="text-[11px] font-medium px-2 py-1 text-stone-400">3</span>
+</a>
+
+<h3 className="mt-8 mb-1 px-4 text-[11px] font-medium text-stone-500 tracking-wider">LABELS</h3>
+<a className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-stone-800/60 transition" href="#">
+<span className="h-2 w-2 rounded-full bg-rose-500"></span>
+<span className="flex-1 text-sm text-stone-400">Work</span>
+<span className="text-[11px] font-medium text-stone-400">12</span>
+</a>
+<a className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-stone-800/60 transition" href="#">
+<span className="h-2 w-2 rounded-full bg-sky-500"></span>
+<span className="flex-1 text-sm text-stone-400">Personal</span>
+<span className="text-[11px] font-medium text-stone-400">7</span>
+</a>
+<a className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-stone-800/60 transition" href="#">
+<span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+<span className="flex-1 text-sm text-stone-400">Important</span>
+<span className="text-[11px] font-medium text-stone-400">5</span>
+</a>
+<a className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-stone-800/60 transition" href="#">
+<span className="h-2 w-2 rounded-full bg-amber-500"></span>
+<span className="flex-1 text-sm text-stone-400">Follow Up</span>
+<span className="text-[11px] font-medium text-stone-400">2</span>
+</a>
+
+<div className="mt-8 space-y-3 p-4 bg-stone-900 border border-stone-800 rounded-lg">
+<p className="text-[11px] font-medium tracking-wider text-stone-500">STORAGE</p>
+<div className="flex items-center justify-between text-sm">
+<span>Used</span>
+<span>8.2 GB of 15 GB</span>
+</div>
+<div className="h-2 rounded-full bg-stone-800 relative">
+<span className="absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-stone-400 to-stone-300 rounded-full"></span>
+</div>
+<button className="w-full text-center text-xs text-stone-400 hover:text-stone-200 transition">Manage Storage</button>
+</div>
+</nav>
+</aside>
+
+<main className="flex-1 flex flex-col">
+
+<header className="flex items-center justify-between gap-4 border-b border-stone-800 px-6 py-4">
+<h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Dashboard</h1>
+<div className="flex items-center gap-3">
+<div className="relative">
+<input className="pl-10 pr-4 py-2 rounded-lg bg-stone-900/80 border border-stone-800 placeholder-stone-500 text-sm focus:outline-none focus:ring-1 focus:ring-stone-600" placeholder="Search" type="text" />
+<svg className="lucide lucide-search absolute left-3 top-2.5 h-4 w-4 text-stone-500" data-lucide="search" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+</div>
+<button className="h-10 w-10 flex items-center justify-center rounded-lg bg-stone-900 border border-stone-800 hover:bg-stone-800">
+<svg className="lucide lucide-bell w-5 h-5 stroke-stone-400" data-lucide="bell" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+</button>
+</div>
+</header>
+
+<section className="flex-1 overflow-y-auto pt-6 pr-6 pb-6 pl-6 space-y-6">
+
+<div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
+<div className="bg-stone-900/70 border border-stone-800 rounded-xl p-5 shadow-md shadow-black/20">
+<p className="text-sm text-stone-400 mb-2">New Emails</p>
+<h2 className="text-3xl font-semibold tracking-tight">1,248</h2>
+</div>
+<div className="bg-stone-900/70 border border-stone-800 rounded-xl p-5 shadow-md shadow-black/20">
+<p className="text-sm text-stone-400 mb-2">Open Rate</p>
+<h2 className="text-3xl font-semibold tracking-tight">54.6%</h2>
+</div>
+<div className="bg-stone-900/70 border border-stone-800 rounded-xl p-5 shadow-md shadow-black/20">
+<p className="text-sm text-stone-400 mb-2">Clicks</p>
+<h2 className="text-3xl font-semibold tracking-tight">3,846</h2>
+</div>
+<div className="bg-stone-900/70 border border-stone-800 rounded-xl p-5 shadow-md shadow-black/20">
+<p className="text-sm text-stone-400 mb-2">Bounce Rate</p>
+<h2 className="text-3xl font-semibold tracking-tight">1.2%</h2>
+</div>
+</div>
+
+<div className="grid lg:grid-cols-2 gap-6">
+
+<div className="bg-stone-900/70 border border-stone-800 rounded-xl p-6 shadow-md shadow-black/20">
+<h2 className="text-lg font-semibold tracking-tight mb-1">Traffic Overview</h2>
+<p className="text-sm text-stone-400 mb-4">Last 30 days</p>
+<div className="relative h-64">
+<canvas className="absolute inset-0" height="451" id="lineChart" style={{display: `block`, boxSizing: `border-box`, height: `225px`, width: `451px`}} width="902"></canvas>
+</div>
+</div>
+
+<div className="bg-stone-900/70 border border-stone-800 rounded-xl p-6 shadow-md shadow-black/20">
+<h2 className="text-lg font-semibold tracking-tight mb-1">Device Split</h2>
+<p className="text-sm text-stone-400 mb-4">Current month</p>
+<div className="relative h-64">
+<canvas className="absolute inset-0" height="512" id="doughnutChart" style={{display: `block`, boxSizing: `border-box`, height: `256px`, width: `256px`}} width="512"></canvas>
+</div>
+</div>
+</div>
+
+<div className="bg-stone-900/70 border border-stone-800 rounded-xl shadow-md shadow-black/20">
+<div className="flex items-center justify-between px-6 py-4 border-b border-stone-800">
+<h2 className="text-lg font-semibold tracking-tight">Recent Emails</h2>
+<button className="text-sm text-stone-400 hover:text-stone-200">View all</button>
+</div>
+<ul className="divide-y divide-stone-800">
+<li className="flex items-center gap-4 px-6 py-4 hover:bg-stone-800/60 transition">
+<img alt="" className="h-10 w-10 object-cover rounded-lg" src="https://images.unsplash.com/photo-1494806812796-244fe51b774d?w=1080&q=80" />
+<div className="flex-1">
+<p className="font-medium">Welcome to Acme Cloud</p>
+<p className="text-sm text-stone-400">Marketing · 2 hours ago</p>
+</div>
+<span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+</li>
+<li className="flex items-center gap-4 px-6 py-4 hover:bg-stone-800/60 transition">
+<img alt="" className="h-10 w-10 object-cover rounded-lg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1080&q=80" />
+<div className="flex-1">
+<p className="font-medium">Your weekly report</p>
+<p className="text-sm text-stone-400">Analytics · 1 day ago</p>
+</div>
+<span className="h-2 w-2 rounded-full bg-stone-600"></span>
+</li>
+<li className="flex items-center gap-4 px-6 py-4 hover:bg-stone-800/60 transition">
+<img alt="" className="h-10 w-10 object-cover rounded-lg" src="https://images.unsplash.com/photo-1566679056462-2075774c8c07?w=1080&q=80" />
+<div className="flex-1">
+<p className="font-medium">Team offsite details</p>
+<p className="text-sm text-stone-400">HR · 3 days ago</p>
+</div>
+<span className="h-2 w-2 rounded-full bg-stone-600"></span>
+</li>
+</ul>
+</div>
+</section>
+</main>
+</div>
+
+
+    </>
+  );
+}

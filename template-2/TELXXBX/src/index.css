@@ -1,0 +1,210 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+filter: blur(10px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+filter: blur(0);
+}
+}
+@keyframes fadeInLeft {
+from {
+opacity: 0;
+transform: translateX(-30px);
+filter: blur(8px);
+}
+to {
+opacity: 1;
+transform: translateX(0);
+filter: blur(0);
+}
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+filter: blur(4px);
+}
+to {
+opacity: 1;
+filter: blur(0);
+}
+}
+/* Scroll Reveal Animations */
+@keyframes scrollReveal {
+from {
+opacity: 0;
+transform: translateY(24px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+.scroll-reveal {
+opacity: 0;
+transform: translateY(24px);
+transition: opacity 700ms ease-out, transform 700ms ease-out;
+}
+.scroll-reveal.revealed {
+opacity: 1;
+transform: translateY(0);
+}
+/* Stagger delays for child elements */
+.scroll-reveal-stagger > *:nth-child(1) { transition-delay: 0ms; }
+.scroll-reveal-stagger > *:nth-child(2) { transition-delay: 80ms; }
+.scroll-reveal-stagger > *:nth-child(3) { transition-delay: 160ms; }
+.scroll-reveal-stagger > *:nth-child(4) { transition-delay: 240ms; }
+.scroll-reveal-stagger > *:nth-child(5) { transition-delay: 320ms; }
+.scroll-reveal-stagger > *:nth-child(6) { transition-delay: 400ms; }
+.scroll-reveal-stagger > *:nth-child(7) { transition-delay: 480ms; }
+.scroll-reveal-stagger > *:nth-child(8) { transition-delay: 560ms; }
+.scroll-reveal-stagger > *:nth-child(9) { transition-delay: 640ms; }
+.scroll-reveal-stagger > *:nth-child(10) { transition-delay: 720ms; }
+.animate-fade-in-up {
+animation: fadeInUp 0.8s ease-out forwards;
+}
+.animate-fade-in-left {
+animation: fadeInLeft 0.8s ease-out forwards;
+}
+.animate-fade-in {
+animation: fadeIn 0.6s ease-out forwards;
+}
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-800 { animation-delay: 0.8s; }
+.animation-delay-1000 { animation-delay: 1.0s; }
+.animation-delay-1200 { animation-delay: 1.2s; }
+.animation-delay-1400 { animation-delay: 1.4s; }
+.initial-hidden {
+opacity: 0;
+}
+html {
+scroll-behavior: smooth;
+}
+/* Notification styles */
+.notification {
+position: fixed;
+top: 20px;
+right: 20px;
+background: rgba(0, 0, 0, 0.9);
+border: 1px solid rgba(255, 255, 255, 0.2);
+color: white;
+padding: 16px 20px;
+border-radius: 12px;
+z-index: 1000;
+transform: translateX(400px);
+transition: transform 0.3s ease-out;
+backdrop-filter: blur(10px);
+}
+.notification.show {
+transform: translateX(0);
+}
+.notification.success {
+border-color: rgba(34, 197, 94, 0.5);
+background: rgba(22, 163, 74, 0.2);
+}
+.notification.error {
+border-color: rgba(239, 68, 68, 0.5);
+background: rgba(220, 38, 38, 0.2);
+}
+/* Mobile menu styles */
+.mobile-menu {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: rgba(0, 0, 0, 0.95);
+backdrop-filter: blur(20px);
+z-index: 100;
+transform: translateY(-100%);
+transition: transform 0.3s ease-out;
+}
+.mobile-menu.open {
+transform: translateY(0);
+}
+/* Modal styles */
+.modal {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: rgba(0, 0, 0, 0.8);
+backdrop-filter: blur(10px);
+z-index: 200;
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+.modal.open {
+opacity: 1;
+visibility: visible;
+}
+.modal-content {
+background: rgba(255, 255, 255, 0.1);
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 20px;
+padding: 32px;
+max-width: 500px;
+width: 90%;
+transform: scale(0.9);
+transition: transform 0.3s ease-out;
+}
+.modal.open .modal-content {
+transform: scale(1);
+}
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

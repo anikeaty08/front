@@ -1,0 +1,19 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root{--desert-sand:#f4e5d6;--terra:#d46a4c;--cocoa:#4a2f23;--night:#13100e;--shade:#1e1a17;}
+body{font-family:'Inter',sans-serif;}h1,h2,h3,h4{letter-spacing:-.02em;}
+@keyframes fade-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slide-left{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes bean-spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.fade-in{animation:fade-in .7s both;}.slide-left{animation:slide-left .8s both;}.bean-spin{animation:bean-spin .9s linear infinite;}
+

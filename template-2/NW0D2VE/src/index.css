@@ -1,0 +1,42 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .btn-primary{ @apply inline-flex items-center gap-2 px-7 py-3 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 transition-colors text-sm font-medium rounded-md shadow text-white; }
+    .btn-outline{ @apply inline-flex items-center gap-2 px-7 py-3 border border-neutral-300 dark:border-neutral-700 rounded-md hover:border-indigo-600 hover:text-indigo-600 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-all text-sm font-medium; }
+    .feature-icon{ @apply w-8 h-8 text-indigo-600 dark:text-indigo-500 mb-4; }
+    .feature-title{ @apply text-lg font-medium mb-2; }
+    .feature-desc{ @apply text-sm text-neutral-600 dark:text-neutral-400; }
+    .tilt-card{ @apply group border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 hover:border-indigo-600 dark:hover:border-indigo-500 transition-colors bg-white/60 dark:bg-neutral-900/40 backdrop-blur; }
+    .pricing-card{ @apply flex flex-col border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8 bg-white/60 dark:bg-neutral-900/40 backdrop-blur; }
+    .pricing-title{ @apply text-lg font-medium mb-4; }
+    .pricing-price{ @apply text-4xl font-semibold tracking-tight mb-6; }
+    .pricing-period{ @apply text-base font-normal text-neutral-600 dark:text-neutral-400; }
+    .pricing-list{ @apply space-y-3 mb-8 text-sm; }
+    .pricing-item{ @apply flex items-center gap-2; }
+    .pricing-item::before{ content:'✔'; @apply text-indigo-600 dark:text-indigo-500; }
+    .footer-head{ @apply text-sm font-medium mb-3; }
+    .footer-list{ @apply space-y-2 text-neutral-600 dark:text-neutral-400 text-sm; }
+    .footer-link{ @apply hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors; }
+    .list-item{ @apply flex items-start gap-3; }
+    .list-icon{ @apply w-5 h-5 text-indigo-600 dark:text-indigo-500 mt-1; }
+    /* Gradient text animation */
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .animate-gradient{background-size:200% 200%;animation:gradientShift 6s ease infinite;}
+    /* Slow bounce for main CTA */
+    @keyframes bounce-slow{0%,100%{transform:translateY(-3%)}50%{transform:translateY(3%)}}
+    .animate-bounce-slow{animation:bounce-slow 3s infinite;}
+    /* Fade variants */
+    .fade-up   {transform:translateY(2rem);}
+    .fade-left {transform:translateX(2rem);}
+    .fade-right{transform:translateX(-2rem);}
+    .fade-zoom {transform:scale(.85);}
+  

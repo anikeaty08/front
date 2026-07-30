@@ -1,0 +1,47 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { font-family: 'Nunito Sans', sans-serif; }
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            overflow: auto;
+            border-radius: 40px;
+        }
+        .music-gradient {
+            background: linear-gradient(to right, #5A67D8 0%, #9F7AEA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .album-art {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .album-art:hover {
+            transform: scale(1.02);
+        }
+        .progress-bar {
+            background: linear-gradient(to right, #5A67D8, #9F7AEA);
+            height: 4px;
+            width: 65%;
+            border-radius: 2px;
+        }
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 4px;
+            width: 50px;
+            background-color: #5A67D8;
+            border-radius: 2px;
+            left: 45px;
+        }
+    

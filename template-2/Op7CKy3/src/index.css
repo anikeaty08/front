@@ -1,0 +1,197 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f5f5f7;
+    }
+    .space-grotesk {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .iphone-mockup {
+      position: relative;
+      width: 375px;
+      height: 812px;
+      background-color: white;
+      border-radius: 40px;
+      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.25), 0 30px 60px -30px rgba(0,0,0,0.3), inset 0 -2px 6px 0 rgba(10,37,64,0.35);
+      border: 6px solid #1a1a1c;
+      overflow: hidden;
+    }
+    .notch {
+      position: absolute;
+      width: 150px;
+      height: 30px;
+      background-color: #1a1a1c;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      z-index: 10;
+    }
+    .orbit {
+      position: relative;
+      width: 300px;
+      height: 300px;
+    }
+    .orbit-circle {
+      position: absolute;
+      border-radius: 50%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      opacity: 0;
+    }
+    .orbit-1 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(23,50,164,0.05) 0%, rgba(23,50,164,0) 100%);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .orbit-2 {
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(23,50,164,0.05) 0%, rgba(23,50,164,0) 100%);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .orbit-3 {
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(23,50,164,0.05) 0%, rgba(23,50,164,0) 100%);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .orbit-4 {
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(23,50,164,0.2) 0%, rgba(23,50,164,0) 100%);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+    .main-btn {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(23,50,164,1);
+      color: white;
+      font-size: 2rem;
+      box-shadow: 0 10px 10px rgba(0,0,0,0.15), 0 4px 4px rgba(0,0,0,0.1), 0 1px 0px rgba(0,0,0,0.05);
+      backdrop-filter: blur(50px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      opacity: 0;
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #000;
+      margin-top: 15px;
+      z-index: 5;
+      position: relative;
+    }
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: #000;
+      border-radius: 100px;
+      margin: 0 auto;
+    }
+    
+    .orbital-element {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0 0;
+      opacity: 0;
+    }
+    
+    .orbital-item {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 10px rgba(0,0,0,0.1), 0 4px 4px rgba(0,0,0,0.05), 0 1px 0 rgba(0,0,0,0.05);
+      transform: translate(-50%, -50%);
+    }
+    
+    .social-btn {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
+      border: 1px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(50px);
+    }
+    
+    .avatar {
+      background-size: cover;
+      backdrop-filter: blur(50px);
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+      animation-delay: 2s;
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(23,50,164,0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(23,50,164,0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(23,50,164,0);
+      }
+    }
+    
+    @keyframes orbit {
+      from {
+        transform: rotate(0deg) translateX(120px) rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg) translateX(120px) rotate(-360deg);
+      }
+    }
+    
+    /* Animation classes */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .fade-in {
+      opacity: 0;
+    }
+    
+    .scale-up {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    
+    /* Page content is initially hidden */
+    .page-content h1, 
+    .page-content p, 
+    .page-content button {
+      opacity: 0;
+    }
+  

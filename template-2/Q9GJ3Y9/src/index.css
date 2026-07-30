@@ -1,0 +1,53 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Montserrat', sans-serif; }
+    /* Glassmorphism effect */
+    .glass {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 24px 0 rgba(45,137,255,0.06), 0 1.5px 8px 0 rgba(0,0,0,0.05);
+    }
+    /* Mascot floating animation */
+    @keyframes float {
+      0% { transform: translateY(0);}
+      50% { transform: translateY(-12px);}
+      100% { transform: translateY(0);}
+    }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    /* Neumorphic card hover */
+    .neumo:hover {
+      box-shadow: 0 6px 36px 0 rgba(45,137,255,0.14), 0 1.5px 8px 0 rgba(0,0,0,0.08);
+      transform: translateY(-4px) scale(1.03);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    /* CTA hover */
+    .cta-gold:hover { background-color: #e49d00; }
+    .cta-blue:hover { background-color: #1e6ed8; }
+    .cta-green:hover { background-color: #18b653; }
+    /* Subtle link underline animation */
+    .footer-link {
+      position: relative;
+      transition: color 0.2s;
+    }
+    .footer-link::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 100%; height: 2px;
+      background: #2D89FF;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .footer-link:hover::after { opacity: 1; }
+    .footer-link:hover { color: #2D89FF; }
+  

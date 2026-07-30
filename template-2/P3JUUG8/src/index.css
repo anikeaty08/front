@@ -1,0 +1,29 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{margin:0;overflow:hidden;background:#000}
+.glass{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.connector{stroke-dasharray:8;animation:dataStream 2s linear infinite}
+.table-float{animation:float 6s ease-in-out infinite}
+.table-float:nth-child(2){animation-delay:-1s}
+.table-float:nth-child(3){animation-delay:-2s}
+.table-float:nth-child(4){animation-delay:-3s}
+.gradient-border{position:relative;background:linear-gradient(135deg,rgba(79,70,229,.1),rgba(59,130,246,.1),rgba(139,92,246,.1))}
+.gradient-border::before{content:'';position:absolute;inset:0;padding:2px;background:linear-gradient(135deg,#4f46e5,#3b82f6,#8b5cf6,#f59e0b);border-radius:inherit;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:xor;-webkit-mask-composite:xor}
+.inner-glow{box-shadow:inset 0 0 20px rgba(79,70,229,.3),inset 0 0 40px rgba(59,130,246,.2),0 0 30px rgba(139,92,246,.4)}
+.hero-glow{box-shadow:0 0 100px rgba(79,70,229,.3),0 0 200px rgba(59,130,246,.2)}
+.eyebrow-stroke{-webkit-text-stroke:1px rgba(255,255,255,.2);text-stroke:1px rgba(255,255,255,.2)}
+.schema-gradient{background:linear-gradient(135deg,#22c55e,#4ade80,#84cc16,#facc15);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#aurora-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes dataStream{0%{stroke-dashoffset:20}100%{stroke-dashoffset:0}}
+

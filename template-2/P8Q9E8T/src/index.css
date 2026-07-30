@@ -1,0 +1,25 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .animate-delay-100{animation-delay:.1s}.animate-delay-200{animation-delay:.2s}.animate-delay-300{animation-delay:.3s}.animate-delay-400{animation-delay:.4s}.animate-delay-500{animation-delay:.5s}.animate-delay-600{animation-delay:.6s}
+    [class*="animate-"]{opacity:0}@keyframes fadeUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
+    .animate-fade-up{animation:fadeUp .8s ease-out forwards}
+    .hover-lift{transition:.3s cubic-bezier(.4,0,.2,1)}.hover-lift:hover{transform:translateY(-6px) scale(1.02)}
+    @media (prefers-reduced-motion:reduce){
+      .hover-lift:hover{transform:none}
+      .animate-fade-up{animation:none;opacity:1}
+    }
+  
+
+
+      body { font-family: 'Inter', sans-serif; }
+    

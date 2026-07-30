@@ -1,0 +1,104 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Inter', sans-serif; }
+    .album-bg {
+      background: linear-gradient(135deg, #ff6bcb 0%, #a18aff 45%, #43e97b 100%);
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .album-bg .shape1,
+    .album-bg .shape2,
+    .album-bg .shape3 {
+      position: absolute;
+      opacity: 0.22;
+      pointer-events: none;
+      filter: blur(1.5px);
+    }
+    .album-bg .shape1 {
+      width: 160px; height: 160px; background: #fff;
+      border-radius: 40% 60% 70% 30%/30% 30% 70% 70%;
+      top: -30px; left: -30px; transform: rotate(18deg);
+    }
+    .album-bg .shape2 {
+      width: 180px; height: 120px; background: #2dd4bf;
+      border-radius: 60% 40% 50% 50%/60% 60% 40% 40%;
+      bottom: -40px; right: -50px; transform: rotate(-21deg);
+    }
+    .album-bg .shape3 {
+      width: 90px; height: 80px; background: #f59e42;
+      border-radius: 70% 30% 60% 40%/50% 60% 40% 60%;
+      top: 60px; right: 30px; transform: rotate(30deg);
+    }
+    /* Curved label text */
+    .curve-text {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      width: 68%;
+      text-align: center;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.12em;
+      color: #e3d8fc;
+      font-weight: 600;
+      opacity: 0.75;
+      text-shadow: 0 1px 5px #0008, 0 0 1px #fff9;
+      pointer-events: none;
+      z-index: 40;
+      /* SVG curve effect using CSS mask */
+      /* Not a true curve, but visually mimics one */
+    }
+    /* Artist name: big, angled, neon glow */
+    .artist-name {
+      position: absolute;
+      top: 36px;
+      left: 20px;
+      font-family: 'Montserrat', 'Inter', sans-serif;
+      font-size: 2.65rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      text-shadow: 0 3px 24px #a18affbb, 0 1px 4px #000a, 0 0 1px #fff;
+      transform: rotate(-10deg) skewY(-6deg);
+      filter: brightness(1.25);
+      line-height: 1;
+      z-index: 30;
+      padding: 0.1em 0.25em;
+      background: linear-gradient(90deg, #fff 55%, #f472b6 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Album title: serif, bottom, with shadow */
+    .album-title {
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%) rotate(2deg);
+      font-family: 'IBM Plex Serif', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fffbe9;
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 18px #a18affcc, 0 1px 5px #000a, 0 0 2px #fff9;
+      background: rgba(230,30,110,0.15);
+      border-radius: 0.5em;
+      padding: 0.1em 1em 0.11em 1em;
+      z-index: 30;
+      white-space: nowrap;
+    }
+  

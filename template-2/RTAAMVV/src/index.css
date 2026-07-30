@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+
+body { font-family: 'Inter', sans-serif; }
+.animate-fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; }
+.animate-slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+.custom-input { transition: all 0.2s ease; }
+.custom-input:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+ #aura-emdxjk7ys::before { content: ""; position: absolute; border-radius: inherit; will-change: transform; left: 50%; transform: translateX(-50%); background-color: var(--fancy-button-shine-top); width: 96px; height: 6px; top: -3px; opacity: 0.6; filter: blur(6px); transition: opacity 0.25s; } #aura-emdxjk7ys::after { content: ""; position: absolute; border-radius: inherit; inset: 0; background-size: cover; z-index: 2; opacity: 0.3; mix-blend-mode: overlay; pointer-events: none; } #aura-emdxjk7ys span::before, #aura-emdxjk7ys span::after { content: ""; position: absolute; left: 50%; transform: translateX(-50%); border-radius: 50%; background-color: var(--fancy-button-shine-bottom); transition: opacity 0.25s, transform 0.25s; will-change: transform; } #aura-emdxjk7ys span::before { width: 92px; height: 8px; bottom: -4px; opacity: 0.75; filter: blur(6px); } #aura-emdxjk7ys span::after { width: 112px; height: 1px; bottom: 0; opacity: 0.9; filter: blur(1px); } #aura-emdxjk7ys:hover span::before { opacity: 0.8; transform: translateX(-50%) scale(1.25); } #aura-emdxjk7ys:hover span::after { opacity: 1; } 
+
+
+      #aura-emdxjiri6::before {
+        content: "";
+        position: absolute;
+        border-radius: 25px;
+        will-change: transform;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #e9d1ff;
+        width: 96px;
+        height: 6px;
+        top: -3px;
+        opacity: 0.6;
+        filter: blur(6px);
+        transition: opacity 0.25s;
+        pointer-events: none;
+        z-index: 0;
+      }
+      #aura-emdxjiri6::after {
+        content: "";
+        position: absolute;
+        border-radius: 25px;
+        inset: 0;
+        background-size: cover;
+        z-index: 2;
+        opacity: 0.3;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+      #aura-emdxjiri6 span::before,
+      #aura-emdxjiri6 span::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background-color: #adfff9;
+        transition: opacity 0.25s, transform 0.25s;
+        will-change: transform;
+      }
+      #aura-emdxjiri6 span::before {
+        width: 92px;
+        height: 8px;
+        bottom: -4px;
+        opacity: 0.75;
+        filter: blur(6px);
+      }
+      #aura-emdxjiri6 span::after {
+        width: 112px;
+        height: 1px;
+        bottom: 0;
+        opacity: 0.9;
+        filter: blur(1px);
+      }
+      #aura-emdxjiri6:hover span::before {
+        opacity: 0.8;
+        transform: translateX(-50%) scale(1.25);
+      }
+      #aura-emdxjiri6:hover span::after {
+        opacity: 1;
+      }
+    

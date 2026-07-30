@@ -1,0 +1,303 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<div className="max-w-5xl w-full overflow-hidden rounded-lg shadow-xl">
+<div className="bg-gray-800 px-4 py-2 flex items-center">
+<div className="flex mr-4">
+<div className="browser-dot bg-red-500"></div>
+<div className="browser-dot bg-yellow-500"></div>
+<div className="browser-dot bg-green-500"></div>
+</div>
+<div className="flex-1 bg-gray-700 rounded-md flex items-center px-3 py-1 text-sm text-gray-300">
+<svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<span>https://photon.app/discover</span>
+</div>
+<div className="ml-4 flex space-x-2 text-gray-400">
+<button>
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+<button>
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<div className="h-[600px] flex bg-gray-900 text-gray-100">
+<div className="w-56 bg-gray-800 border-r border-gray-700 flex flex-col">
+<div className="p-4 border-b border-gray-700">
+<h1 className="text-xl font-medium">Photon</h1>
+<p className="text-xs text-gray-400">Your visual collections</p>
+</div>
+<nav className="flex-1 py-4">
+<div className="px-4 mb-2 text-xs font-medium text-gray-400 uppercase">Browse</div>
+<a className="flex items-center px-4 py-2 text-sm text-indigo-400 bg-gray-700 border-l-2 border-indigo-500" href="#">
+<svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+            Discover
+          </a>
+<a className="flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-700" href="#">
+<svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+            Collections
+          </a>
+<a className="flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-700" href="#">
+<svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+            Following
+          </a>
+<a className="flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-700" href="#">
+<svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+            Favorites
+          </a>
+<div className="px-4 mt-6 mb-2 text-xs font-medium text-gray-400 uppercase">Library</div>
+<a className="flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-700" href="#">
+<svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+            All Photos
+          </a>
+<a className="flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-700" href="#">
+<svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+            Recents
+          </a>
+<a className="flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-700" href="#">
+<svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+            Trash
+          </a>
+</nav>
+<div className="p-4 border-t border-gray-700 flex items-center">
+<div className="h-8 w-8 bg-indigo-500 rounded-full flex items-center justify-center">
+<span className="text-sm font-medium">YN</span>
+</div>
+<div className="ml-3">
+<p className="text-sm font-medium">Your Name</p>
+<p className="text-xs text-gray-400">Free Plan</p>
+</div>
+</div>
+</div>
+<div className="flex-1 overflow-y-auto">
+<div className="max-w-3xl mx-auto px-6">
+<header className="sticky top-0 z-10 bg-gray-900/80 backdrop-blur-sm py-4 border-b border-gray-800">
+<div className="flex justify-between items-center">
+<h2 className="text-xl font-medium">Discover</h2>
+<div className="flex items-center space-x-3">
+<button className="bg-gray-800 hover:bg-gray-700 p-2 rounded-full">
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+</button>
+<button className="bg-gray-800 hover:bg-gray-700 p-2 rounded-full">
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+</button>
+<button className="bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-md text-sm">
+<svg className="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 4v16m8-8H4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+                  New
+                </button>
+</div>
+</div>
+</header>
+<div className="py-6">
+<div className="mb-8">
+<div className="flex justify-between items-center mb-4">
+<h2 className="text-lg font-medium">Featured Collection</h2>
+<button className="text-sm text-indigo-400">View all</button>
+</div>
+<div className="bg-gray-800 rounded-lg p-4">
+<div className="flex space-x-4 overflow-x-auto featured-scroll pb-2">
+<div className="flex-shrink-0 w-40">
+<div className="aspect-square bg-gray-700 rounded-md mb-2 overflow-hidden">
+<div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600"></div>
+</div>
+<p className="text-sm font-medium">Architecture</p>
+<p className="text-xs text-gray-400">42 photos</p>
+</div>
+<div className="flex-shrink-0 w-40">
+<div className="aspect-square bg-gray-700 rounded-md mb-2 overflow-hidden">
+<div className="w-full h-full bg-gradient-to-br from-pink-500 to-red-600"></div>
+</div>
+<p className="text-sm font-medium">Nature</p>
+<p className="text-xs text-gray-400">67 photos</p>
+</div>
+<div className="flex-shrink-0 w-40">
+<div className="aspect-square bg-gray-700 rounded-md mb-2 overflow-hidden">
+<div className="w-full h-full bg-gradient-to-br from-blue-500 to-teal-500"></div>
+</div>
+<p className="text-sm font-medium">Travel</p>
+<p className="text-xs text-gray-400">28 photos</p>
+</div>
+<div className="flex-shrink-0 w-40">
+<div className="aspect-square bg-gray-700 rounded-md mb-2 overflow-hidden">
+<div className="w-full h-full bg-gradient-to-br from-yellow-400 to-orange-500"></div>
+</div>
+<p className="text-sm font-medium">Food</p>
+<p className="text-xs text-gray-400">54 photos</p>
+</div>
+</div>
+</div>
+</div>
+<div className="mb-6">
+<div className="flex justify-between items-center mb-4">
+<h2 className="text-lg font-medium">For You</h2>
+<div className="flex items-center space-x-2">
+<button className="text-xs bg-gray-800 px-3 py-1 rounded-full">Recent</button>
+<button className="text-xs text-gray-400 px-3 py-1 rounded-full hover:bg-gray-800">Popular</button>
+</div>
+</div>
+<div className="masonry">
+<div className="masonry-item">
+<div className="bg-gray-800 rounded-lg overflow-hidden">
+<div className="aspect-[3/4] bg-gray-700"></div>
+<div className="p-3">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-sm font-medium">Mountain View</p>
+<p className="text-xs text-gray-400">Travel • Alps</p>
+</div>
+<button className="text-gray-400 hover:text-gray-300">
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div className="masonry-item">
+<div className="bg-gray-800 rounded-lg overflow-hidden">
+<div className="aspect-square bg-gray-700"></div>
+<div className="p-3">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-sm font-medium">Minimal Office</p>
+<p className="text-xs text-gray-400">Interior • Design</p>
+</div>
+<button className="text-gray-400 hover:text-gray-300">
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div className="masonry-item">
+<div className="bg-gray-800 rounded-lg overflow-hidden">
+<div className="aspect-[2/3] bg-gray-700"></div>
+<div className="p-3">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-sm font-medium">Ocean View</p>
+<p className="text-xs text-gray-400">Nature • Sea</p>
+</div>
+<button className="text-gray-400 hover:text-gray-300">
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div className="masonry-item">
+<div className="bg-gray-800 rounded-lg overflow-hidden">
+<div className="aspect-[4/3] bg-gray-700"></div>
+<div className="p-3">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-sm font-medium">Coffee Art</p>
+<p className="text-xs text-gray-400">Food • Drinks</p>
+</div>
+<button className="text-gray-400 hover:text-gray-300">
+<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    </>
+  );
+}

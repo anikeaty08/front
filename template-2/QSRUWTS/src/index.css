@@ -1,0 +1,24 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root{
+--main-red:#e14e25;
+--main-yellow:#fca502;
+--roxo-vibrante:#8412e2;
+--roxo-claro:#a350d3;
+--accent-text: #cd76ff;
+}
+@keyframes moveGradient {
+0% { background-position: 0% 50%; }
+100% { background-position: 200% 50%; }
+}
+

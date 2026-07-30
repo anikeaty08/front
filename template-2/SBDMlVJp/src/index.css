@@ -1,0 +1,35 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .dot {
+      will-change: transform, background-color;
+      transform-origin: center;
+      background-color: #333333;
+      border-radius: 50%;
+      width: 0.75em;
+      height: 0.75em;
+      position: relative;
+      transform: translate(0);
+    }
+    
+    .dots-container {
+      grid-column-gap: 2em;
+      grid-row-gap: 2em;
+      pointer-events: none;
+      flex-flow: wrap;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      position: absolute;
+      inset: 0;
+    }
+  

@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body, html {
+            height: 100%;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .spline-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+        .gradient-gold {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+        }
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .confetti-rect {
+            width: 8px;
+            height: 16px;
+        }
+        .confetti-circle {
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+        }
+        .confetti-triangle {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+        }
+        @keyframes confetti-fall-1 {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        @keyframes confetti-fall-2 {
+            0% {
+                transform: translateY(-100vh) rotate(0deg) translateX(0);
+                opacity: 1;
+            }
+            25% {
+                transform: translateY(-75vh) rotate(180deg) translateX(20px);
+            }
+            50% {
+                transform: translateY(-50vh) rotate(360deg) translateX(-15px);
+            }
+            75% {
+                transform: translateY(-25vh) rotate(540deg) translateX(25px);
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg) translateX(0);
+                opacity: 0;
+            }
+        }
+        @keyframes confetti-fall-3 {
+            0% {
+                transform: translateY(-100vh) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50vh) rotate(360deg) scale(1.2);
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        .font-roboto { font-family: 'Roboto', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-roboto { font-family: 'Roboto', sans-serif !important; }
+    
+
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+
+
+      /* Custom font utilities */
+      .font-roboto { font-family: 'Roboto', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-roboto { font-family: 'Roboto', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-roboto { font-family: 'Roboto', sans-serif !important; }
+    

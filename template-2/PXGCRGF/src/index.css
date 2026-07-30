@@ -1,0 +1,39 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    /* Animated gradient background */
+    body {
+      background: linear-gradient(-45deg, #fbbf24, #fde68a, #34d399, #60a5fa, #f472b6);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    /* Subtle animated circles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: float 12s infinite alternate;
+      filter: blur(2px);
+    }
+    .bubble1 { width: 170px; height: 170px; background: #fbbf24; top: 10%; left: -60px; animation-delay: 0s;}
+    .bubble2 { width: 220px; height: 220px; background: #60a5fa; top: 60%; left: 70%; animation-delay: 2s;}
+    .bubble3 { width: 120px; height: 120px; background: #f472b6; top: 80%; left: 20%; animation-delay: 4s;}
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-40px);}
+    }
+  

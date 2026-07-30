@@ -1,0 +1,16 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{font-family:'Inter',sans-serif}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:18px;width:18px;border-radius:9999px;background:#38bdf8;cursor:pointer;border:4px solid #0f172a}
+input[type=range]::-moz-range-thumb{height:18px;width:18px;border-radius:9999px;background:#38bdf8;cursor:pointer;border:4px solid #0f172a}
+

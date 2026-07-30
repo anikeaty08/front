@@ -1,0 +1,92 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { 
+            margin: 0; 
+            background: #ffffff; 
+            font-family: 'Courier New', monospace;
+        }
+        .dimension-line {
+            position: relative;
+        }
+        .dimension-line::before {
+            content: '';
+            position: absolute;
+            background: #000;
+            z-index: 1;
+        }
+        .dimension-h::before {
+            height: 1px;
+            width: 20px;
+            top: 50%;
+            left: -30px;
+        }
+        .dimension-v::before {
+            width: 1px;
+            height: 20px;
+            left: 50%;
+            top: -30px;
+        }
+        .dimension-bracket {
+            position: relative;
+        }
+        .dimension-bracket::after {
+            content: '';
+            position: absolute;
+            border: 1px solid #000;
+            z-index: 1;
+        }
+        .bracket-top::after {
+            top: -15px;
+            left: 0;
+            right: 0;
+            height: 10px;
+            border-bottom: none;
+        }
+        .bracket-left::after {
+            left: -15px;
+            top: 0;
+            bottom: 0;
+            width: 10px;
+            border-right: none;
+        }
+        .tech-card {
+            border: 2px solid #000;
+            background: #fff;
+            position: relative;
+        }
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border: 1px solid #000;
+            background: #fff;
+        }
+        .popular-card {
+            border: 3px solid #000;
+            background: #000;
+            color: #fff;
+        }
+        .popular-card::before {
+            background: #000;
+            border-color: #fff;
+        }
+        .grid-bg {
+            background-image: 
+                linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+                linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    

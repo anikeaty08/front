@@ -1,0 +1,33 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+  body{font-family:"Inter",sans-serif}
+  /* enter/exit animations used across the page */
+  @keyframes fade-in{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:translateY(0)}}
+  @keyframes slide-left{0%{opacity:0;transform:translateX(40px)}100%{opacity:1;transform:translateX(0)}}
+  .animate-fade{animation:fade-in .8s forwards}
+  .animate-left:nth-child(1){animation:slide-left .7s .05s forwards}
+  .animate-left:nth-child(2){animation:slide-left .7s .15s forwards}
+  .animate-left:nth-child(3){animation:slide-left .7s .25s forwards}
+  .animate-left:nth-child(4){animation:slide-left .7s .35s forwards}
+  .animate-left:nth-child(5){animation:slide-left .7s .45s forwards}
+  .animate-card:nth-child(1){animation:fade-in .8s .1s forwards}
+  .animate-card:nth-child(2){animation:fade-in .8s .2s forwards}
+  .animate-card:nth-child(3){animation:fade-in .8s .3s forwards}
+
+  /* ∆ New animated border button */
+  .codepen-button{display:block;cursor:pointer;color:#fff;position:relative;text-decoration:none;font-weight:600;border-radius:100px;overflow:hidden;padding:2px;isolation:isolate}
+  .codepen-button::before{content:"";position:absolute;inset:0;width:400%;height:100%;background:linear-gradient(115deg,#d1d1d1,#02367b,#a7bfde);background-size:25% 100%;animation:border-shift .75s linear infinite;animation-play-state:running;translate:-5% 0;transition:translate .25s ease-out}
+  .codepen-button:hover::before{animation-play-state:running;transition-duration:.75s;translate:0 0}
+  @keyframes border-shift{to{transform:translateX(-25%)}}
+  .codepen-button span{position:relative;display:block;padding:1rem 1.5rem;font-size:1.1rem;background:#02367b;border-radius:100px;height:100%}
+

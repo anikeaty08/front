@@ -1,0 +1,25 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        :root {
+            --gradient-background-start: rgb(108, 0, 162);
+            --gradient-background-end: rgb(0, 17, 82);
+            --first-color: rgb(18, 113, 255);
+            --second-color: rgba(221, 74, 255, 0.8);
+            --third-color: rgba(100, 220, 255, 0.8);
+            --fourth-color: rgba(200, 50, 50, 0.8);
+            --fifth-color: rgba(180, 180, 50, 0.8);
+            --pointer-color: rgba(140, 100, 255, 0.8);
+            --size: 80%;
+            --blending-value: hard-light;
+        }
+    

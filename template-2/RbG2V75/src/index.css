@@ -1,0 +1,43 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .progress-section {
+      transition: all 0.4s ease-in-out;
+    }
+    .progress-section.expanded {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .progress-details {
+      max-height: 0;
+      opacity: 0;
+      transition: all 0.4s ease;
+      overflow: hidden;
+    }
+    .expanded .progress-details {
+      max-height: 1000px;
+      opacity: 1;
+      margin-top: 16px;
+    }
+    .progress-title {
+      display: none;
+    }
+    .expanded .progress-title {
+      display: block;
+    }
+  

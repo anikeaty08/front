@@ -1,0 +1,174 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        :root {
+            --font-main: 'VT323', monospace;
+            --bg-page: #FFFF00;
+            --bg-component: #FFFFFF;
+            --text-primary: #000000;
+            --text-secondary: #000000;
+            --text-muted: #333333;
+            --text-heading: #000000;
+            --text-accent: #FF0000;
+            --border-color: #000000;
+            --border-width: 3px;
+            --shadow-md: 6px 6px 0px rgba(0, 0, 0, 1);
+            --transition-speed: 0.05s;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+            letter-spacing: 1px;
+            line-height: 1.6;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-heading);
+            font-family: var(--font-main);
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1em;
+        }
+        
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        a {
+            color: var(--text-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .accordion-group-wrapper {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--bg-component);
+            padding: 20px 30px;
+            border: var(--border-width) solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .accordion-item {
+            border-bottom: var(--border-width) solid var(--border-color);
+            background-color: transparent;
+            margin-bottom: 0;
+        }
+
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-item summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-weight: 500;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            background-color: transparent;
+            cursor: pointer;
+            list-style: none;
+            transition: color var(--transition-speed);
+        }
+
+        .accordion-item summary::-webkit-details-marker,
+        .accordion-item summary::marker {
+            display: none;
+        }
+
+        .accordion-item summary:hover {
+            background-color: transparent;
+            color: var(--text-accent);
+        }
+
+        .accordion-item summary:focus-visible {
+            outline: var(--border-width) dashed var(--text-accent);
+            outline-offset: 2px;
+        }
+
+        details[open] > summary {
+            color: var(--text-accent);
+            background-color: transparent;
+        }
+
+        .accordion-title-text {
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+
+        .accordion-indicator-icon {
+            width: 20px;
+            height: 20px;
+            transition: transform var(--transition-speed) linear;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        details[open] > summary .accordion-indicator-icon {
+            transform: rotate(90deg);
+            color: var(--text-accent);
+        }
+
+        .accordion-item summary:hover .accordion-indicator-icon {
+            color: var(--text-accent);
+        }
+
+        .accordion-content {
+            padding: 0 10px;
+            background-color: transparent;
+            color: var(--text-secondary);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height var(--transition-speed) linear, 
+                        opacity var(--transition-speed) linear, 
+                        padding var(--transition-speed) linear;
+        }
+
+        details[open] > .accordion-content {
+            max-height: 60rem;
+            opacity: 1;
+            padding: 15px 10px;
+        }
+
+        @media (max-width: 480px) {
+            .accordion-item summary {
+                font-size: 0.95rem;
+                padding: 8px 0;
+            }
+            .accordion-group-wrapper {
+                padding: 15px 20px;
+            }
+        }
+    

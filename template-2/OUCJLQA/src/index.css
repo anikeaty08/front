@@ -1,0 +1,18 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; }
+        #container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .slider { -webkit-appearance: none; appearance: none; background: #374151; outline: none; border-radius: 4px; }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #f59e0b; cursor: pointer; border-radius: 50%; }
+        .slider::-moz-range-thumb { width: 16px; height: 16px; background: #f59e0b; cursor: pointer; border-radius: 50%; border: none; }
+    

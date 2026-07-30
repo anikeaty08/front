@@ -1,0 +1,19 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html, body { font-family: 'Manrope', sans-serif; background: #181926; }
+    .font-condensed { font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif !important; }
+    #canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+    .card-section { box-shadow: 0 2px 8px #0002; }
+    .icon-circle { background: linear-gradient(135deg, #f1f5f91A 60%, #a78bfa1A 100%); }
+    .tight-heading { letter-spacing: -0.03em; }
+  

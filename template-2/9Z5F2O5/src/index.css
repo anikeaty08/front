@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@200;300;400&display=swap');
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    
+    
+    /* Custom font for Geist-like appearance */
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist-font@latest/fonts/geist-sans/Geist-Light.woff2') format('woff2');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    
+    .font-geist {
+      font-family: 'Geist', 'Inter', sans-serif;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .bg-gradient-text {
+      background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .card-glow::before {
+      position: fixed;
+      content: "";
+      box-shadow: 0 0 100px 40px rgba(59, 130, 246, 0.05);
+      top: -10%;
+      left: -100%;
+      transform: rotate(-45deg);
+      height: 60rem;
+      transition: 0.7s all;
+    }
+    
+    .card-glow:hover::before {
+      filter: brightness(0.5);
+      top: -100%;
+      left: 200%;
+    }
+  

@@ -1,0 +1,32 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .heading-tight {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: bold;
+    }
+    .mono {
+      font-family: 'Roboto Mono', monospace;
+      font-weight: 500;
+    }
+    /* Hide scrollbar for ticker */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  

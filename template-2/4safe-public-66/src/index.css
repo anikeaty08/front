@@ -1,0 +1,21 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+.font-inter { font-family: 'Inter', sans-serif; }
+/* Minimalist scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #fafaf9; }
+::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+/* Smooth selection */
+::selection { background: #f6931e; color: #fff; }
+

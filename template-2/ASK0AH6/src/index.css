@@ -1,0 +1,24 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        html, body { margin: 0; padding: 0; overflow-x: hidden; background: #000; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .schema-gradient { background: linear-gradient(135deg, #4f46e5, #3b82f6, #8b5cf6, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        #aurora-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; }
+        .faq-item { transition: all 0.3s ease; }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.02); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, opacity 0.3s ease-out; opacity: 0; }
+        .faq-answer.open { max-height: 500px; opacity: 1; }
+        .rotate-180 { transform: rotate(180deg); }
+        .category-active { background: rgba(79, 70, 229, 0.2); border-color: rgba(79, 70, 229, 0.5); }
+        .search-glow { box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.3), 0 0 20px rgba(79, 70, 229, 0.1); }
+    

@@ -1,0 +1,72 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html { font-family: 'Inter', sans-serif; }
+@keyframes fadeIn { from {opacity:0} to {opacity:1} }
+@keyframes slideUp { from {opacity:0; transform:translateY(32px)} to {opacity:1; transform:translateY(0)} }
+@keyframes slideLeft { from {opacity:0; transform:translateX(24px)} to {opacity:1; transform:translateX(0)} }
+@keyframes scaleIn { from {opacity:0; transform:scale(0.96)} to {opacity:1; transform:scale(1)} }
+.fade-in {animation:fadeIn 0.9s cubic-bezier(.5,.1,.5,1.2) both;}
+.slide-up {animation:slideUp 1s cubic-bezier(.5,.1,.5,1.2) both;}
+.slide-left {animation:slideLeft 1s cubic-bezier(.5,.1,.5,1.2) both;}
+.scale-in {animation:scaleIn 1.1s cubic-bezier(.5,.1,.5,1.2) both;}
+.glass {
+background: rgba(25,28,40,0.82);
+backdrop-filter: blur(24px) saturate(120%);
+-webkit-backdrop-filter: blur(24px) saturate(120%);
+border: 1px solid rgba(110,120,160,0.09);
+}
+.card-shadow { box-shadow:0 6px 32px 0 rgba(22,30,50,0.10);}
+.divider { border-bottom: 1px solid rgba(90,100,130,0.15);}
+.avatar-ring { box-shadow:0 0 0 2px #fff, 0 2px 6px 0 rgba(30,40,60,0.12);}
+.card-outline { box-shadow:0 0 0 1.5px rgba(120,130,160,0.08);}
+@media (max-width: 640px) {
+.min-h-hero { min-height:340px;}
+}
+@media (min-width: 641px) {
+.min-h-hero { min-height:410px;}
+}
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

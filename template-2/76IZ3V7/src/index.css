@@ -1,0 +1,101 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .custom-btn {
+      font: inherit;
+      background-color: #000000;
+      border: 0;
+      color: #ffffff;
+      border-radius: 0.5em;
+      font-size: 0.875rem;
+      padding: 0.65em 1.25em;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: 0.15s ease;
+      cursor: pointer;
+    }
+    .custom-btn:hover {
+      background-color: #333333;
+    }
+    .custom-btn:active {
+      translate: 0 1px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .font-geist { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; }
+    
+    #silk-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    
+    .step-indicator {
+      transition: all 0.3s ease;
+    }
+    
+    .step-indicator.active {
+      background-color: #000;
+      color: white;
+    }
+    
+    .step-indicator.completed {
+      background-color: #10b981;
+      color: white;
+    }
+    
+    .form-section {
+      display: none;
+    }
+    
+    .form-section.active {
+      display: block;
+    }
+
+    .card-preview {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      color: white;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+  
+
+
+      /* Custom font utilities */
+      .font-geist { font-family: 'Geist', sans-serif !important; }
+    
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+
+
+      /* Custom font utilities */
+      .font-geist { font-family: 'Geist', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-geist { font-family: 'Geist', sans-serif !important; }
+    
+
+
+.font-mono { font-family: 'Mono', sans-serif !important; }
+
+
+
+      /* Custom font utilities */
+      .font-geist { font-family: 'Geist', sans-serif !important; }
+    

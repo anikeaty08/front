@@ -1,0 +1,150 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+
+        .button::before,
+        .button::after {
+          content: "";
+          position: absolute;
+          inset: var(--space);
+          transition: all 0.5s ease-in-out;
+          border-radius: calc(var(--round) - var(--space));
+          z-index: 0;
+        }
+        .button::before {
+          --space: 1px;
+          background: linear-gradient(177.95deg, rgba(255, 255, 255, 0.19) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .button::after {
+          --space: 2px;
+          background: radial-gradient(65.28% 65.28% at 50% 100%, rgba(30, 64, 175, 0.8) 0%, rgba(30, 64, 175, 0) 100%), linear-gradient(0deg, #1e3a8a, #1e3a8a);
+        }
+        .button:active {
+          transform: scale(0.95);
+        }
+        .fold::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 150%;
+          height: 150%;
+          transform: rotate(45deg) translateX(0%) translateY(-18px);
+          background-color: #e8e8e8;
+          pointer-events: none;
+        }
+        .button:hover .fold {
+          margin-top: -1rem;
+          margin-right: -1rem;
+        }
+        @keyframes floating-points {
+          0% {
+            transform: translateY(0);
+          }
+          85% {
+            opacity: 0;
+          }
+          100% {
+            transform: translateY(-55px);
+            opacity: 0;
+          }
+        }
+        .button:focus svg.icon {
+          fill: white;
+        }
+        .button:hover svg.icon {
+          fill: transparent;
+          animation: dasharray 1s linear forwards, filled 0.1s linear forwards 0.95s;
+        }
+        @keyframes dasharray {
+          from {
+            stroke-dasharray: 0 0 0 0;
+          }
+          to {
+            stroke-dasharray: 68 68 0 0;
+          }
+        }
+        @keyframes filled {
+          to {
+            fill: white;
+          }
+        }
+        
+        /* Letter Animation Styles */
+        .animated-heading .letter {
+          display: inline-block;
+          opacity: 0;
+          transform: translateY(50px) rotateX(90deg);
+          animation: letterReveal 0.8s ease-out forwards;
+        }
+        
+        @keyframes letterReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(50px) rotateX(90deg) scale(0.8);
+          }
+          50% {
+            opacity: 0.7;
+            transform: translateY(0) rotateX(45deg) scale(1.1);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg) scale(1);
+          }
+        }
+        
+        .animated-heading:hover .letter {
+          animation: letterBounce 0.3s ease-out forwards;
+        }
+        
+        @keyframes letterBounce {
+          0%, 100% {
+            transform: translateY(0) rotateX(0deg) scale(1);
+          }
+          50% {
+            transform: translateY(-10px) rotateX(15deg) scale(1.05);
+          }
+        }
+      

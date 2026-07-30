@@ -1,0 +1,53 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #111827;
+      color: #f3f4f6;
+    }
+    .gradient-bg {
+      background: linear-gradient(to right, #3B82F6, #8B5CF6);
+    }
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.75rem;
+    }
+    .carousel-slide {
+      opacity: 0;
+      position: absolute;
+      transition: opacity 1s ease-in-out;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .carousel-slide.active {
+      opacity: 1;
+      position: relative;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0.75rem;
+    }
+  

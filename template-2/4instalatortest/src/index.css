@@ -1,0 +1,39 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+/* Hide scrollbar for marquee but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.no-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+/* Animation for logos */
+@keyframes scroll {
+0% { transform: translateX(0); }
+100% { transform: translateX(-50%); }
+}
+.animate-scroll {
+animation: scroll 30s linear infinite;
+}
+.glass-panel {
+background: rgba(255, 255, 255, 0.7);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border: 1px solid rgba(226, 232, 240, 0.6);
+}
+

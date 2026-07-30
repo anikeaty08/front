@@ -1,0 +1,194 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+
+            @keyframes ticker {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-100%);
+                }
+            }
+            
+            .ticker-track {
+                animation: ticker 40s linear infinite;
+                width: calc(200% + 16px);
+            }
+            
+            .ticker-track:hover {
+                animation-play-state: paused;
+            }
+        
+
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200px 0;
+      }
+      100% {
+        background-position: 200px 0;
+      }
+    }
+
+    .portfolio-card {
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform-style: preserve-3d;
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-8px) rotateX(5deg) rotateY(2deg);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .portfolio-card img {
+      transition: all 0.6s ease;
+      filter: grayscale(100%) brightness(0.7);
+    }
+
+    .portfolio-card:hover img {
+      filter: grayscale(20%) brightness(1);
+      transform: scale(1.05);
+    }
+
+    .portfolio-card .view-button {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    .portfolio-card:hover .view-button {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .masonry-item:nth-child(1) { animation-delay: 0.1s; }
+    .masonry-item:nth-child(2) { animation-delay: 0.2s; }
+    .masonry-item:nth-child(3) { animation-delay: 0.3s; }
+    .masonry-item:nth-child(4) { animation-delay: 0.4s; }
+    .masonry-item:nth-child(5) { animation-delay: 0.5s; }
+    .masonry-item:nth-child(6) { animation-delay: 0.6s; }
+    .masonry-item:nth-child(7) { animation-delay: 0.7s; }
+    .masonry-item:nth-child(8) { animation-delay: 0.8s; }
+    .masonry-item:nth-child(9) { animation-delay: 0.9s; }
+
+    .section-header {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .section-header h2 {
+      background: linear-gradient(135deg, #ffffff 0%, #e5e5e5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .loading-shimmer {
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+      background-size: 200px 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    .portfolio-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .portfolio-card:hover::before {
+      opacity: 1;
+    }
+
+    .view-button svg {
+      transition: transform 0.2s ease;
+    }
+
+    .portfolio-card:hover .view-button svg {
+      transform: rotate(45deg) scale(1.1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .portfolio-card,
+      .portfolio-card img,
+      .view-button,
+      .section-header {
+        animation: none !important;
+        transition: none !important;
+      }
+      
+      .portfolio-card:hover {
+        transform: none !important;
+      }
+    }
+  

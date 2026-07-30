@@ -1,0 +1,80 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html{font-family:'Inter',sans-serif}
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes slideInLeft {
+from {
+opacity: 0;
+transform: translateX(-50px) rotate(-6deg);
+}
+to {
+opacity: 1;
+transform: translateX(0) rotate(-6deg);
+}
+}
+@keyframes slideInRight {
+from {
+opacity: 0;
+transform: translateX(50px) rotate(6deg);
+}
+to {
+opacity: 1;
+transform: translateX(0) rotate(6deg);
+}
+}
+.animate-fade-up {
+animation: fadeInUp 0.8s ease-out forwards;
+}
+.animate-slide-left {
+animation: slideInLeft 1s ease-out forwards;
+}
+.animate-slide-right {
+animation: slideInRight 1s ease-out 0.2s forwards;
+}
+.card-hover {
+transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+transform-style: preserve-3d;
+perspective: 1000px;
+}
+.card-hover:hover {
+transform: scale(1.05) rotate(-8deg) rotateX(5deg) rotateY(-8deg) translateZ(50px);
+box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+.card-hover-right:hover {
+transform: scale(1.05) rotate(8deg) rotateX(5deg) rotateY(8deg) translateZ(50px);
+}
+.card-content {
+transform: translateZ(20px);
+transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.card-hover:hover .card-content {
+transform: translateZ(40px);
+}
+.card-icon {
+transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.card-hover:hover .card-icon {
+transform: scale(1.1) rotateY(15deg);
+}
+
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }

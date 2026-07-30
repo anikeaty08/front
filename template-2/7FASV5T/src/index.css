@@ -1,0 +1,86 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root {
+--bg: #0E1116;
+--bg-muted: #12161d;
+--surface: rgba(255,255,255,0.03);
+--text: rgba(255,255,255,0.96);
+--text-dim: rgba(255,255,255,0.72);
+--border: rgba(255,255,255,0.08);
+--accent: #14B8A6;
+--accent2: #22D3EE;
+--violet: #7C3AED;
+--shadow-neon: 0 0 24px rgba(34, 211, 238, 0.18), 0 0 48px rgba(20, 184, 166, 0.12);
+--shadow-violet: 0 0 24px rgba(124, 58, 237, 0.2);
+}
+html[data-theme="light"] {
+--bg: #FFFFFF;
+--bg-muted: #f6f7f9;
+--surface: rgba(0,0,0,0.03);
+--text: rgba(0,0,0,0.92);
+--text-dim: rgba(0,0,0,0.7);
+--border: rgba(0,0,0,0.08);
+--accent: #14B8A6;
+--accent2: #22D3EE;
+--violet: #7C3AED;
+--shadow-neon: 0 8px 24px rgba(20, 184, 166, 0.15);
+--shadow-violet: 0 8px 24px rgba(124, 58, 237, 0.18);
+}
+/* Motion + marquee + float */
+@keyframes marquee {
+0% { transform: translateX(0); }
+100% { transform: translateX(-50%); }
+}
+@keyframes floatSlow {
+0% { transform: translateY(0px); }
+50% { transform: translateY(-8px); }
+100% { transform: translateY(0px); }
+}
+@keyframes pulseGlow {
+0%, 100% { box-shadow: var(--shadow-neon); }
+50% { box-shadow: 0 0 32px rgba(34,211,238,0.35); }
+}
+@media (prefers-reduced-motion: reduce) {
+.motion-safe\\:animate-marquee,
+.floating,
+.parallax-tilt,
+.arc-animate { animation: none !important; transition: none !important; }
+}
+.glass {
+background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+border: 1px solid var(--border);
+backdrop-filter: blur(10px);
+}
+.neon-border {
+box-shadow: var(--shadow-neon);
+}
+.neon-border-violet {
+box-shadow: var(--shadow-violet);
+}
+.radial-glow {
+position: absolute;
+inset: auto;
+width: 1200px;
+height: 1200px;
+border-radius: 9999px;
+background: radial-gradient(closest-side, rgba(34,211,238,0.12), rgba(20,184,166,0.06) 40%, transparent 70%);
+filter: blur(20px);
+pointer-events: none;
+transform: translate(-20%, -10%);
+}
+.divider-glow {
+background: radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,0.25), rgba(124,58,237,0.2) 45%, transparent 70%);
+height: 1px;
+filter: blur(1px);
+}
+

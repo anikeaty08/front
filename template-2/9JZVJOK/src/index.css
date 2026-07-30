@@ -1,0 +1,92 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+
+@keyframes neonPulse {
+0%, 100% {
+box-shadow:
+inset 0 0 0 1px rgba(255,255,255,0.1),
+inset 0 2px 4px rgba(0,0,0,0.3),
+inset 0 0 15px rgba(6,182,212,0.3),
+inset 0 0 25px rgba(59,130,246,0.2);
+}
+50% {
+box-shadow:
+inset 0 0 0 1px rgba(255,255,255,0.15),
+inset 0 2px 4px rgba(0,0,0,0.3),
+inset 0 0 25px rgba(6,182,212,0.5),
+inset 0 0 40px rgba(59,130,246,0.3),
+inset 0 0 60px rgba(6,182,212,0.2);
+}
+}
+.neon-border {
+animation: neonPulse 3s ease-in-out infinite;
+}
+@keyframes entranceSlideUp {
+0% {
+opacity: 0;
+transform: translateY(80px) scale(0.95);
+}
+100% {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+.entrance-animation-1 {
+animation: entranceSlideUp 0.8s ease-out forwards;
+animation-delay: 0.2s;
+opacity: 0;
+}
+.entrance-animation-2 {
+animation: entranceSlideUp 0.8s ease-out forwards;
+animation-delay: 0.4s;
+opacity: 0;
+}
+.entrance-animation-3 {
+animation: entranceSlideUp 0.8s ease-out forwards;
+animation-delay: 0.6s;
+opacity: 0;
+}
+

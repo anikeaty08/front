@@ -1,0 +1,57 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html { font-family: 'Inter', sans-serif; }
+.glass { background: rgba(32,41,58,0.86); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.08);}
+.card-hover:hover, .card-hover:focus { box-shadow: 0 8px 36px 0 rgba(77,116,255,0.08), 0 1.5px 4px 0 rgba(0,0,0,.05);}
+.gradient-text { background: linear-gradient(90deg,#7dd3fc 0%,#22d3ee 60%,#818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+.divider { border-bottom: 1px solid rgba(255,255,255,0.07);}
+.feature-card { transition: box-shadow .25s,transform .18s;}
+.feature-card:hover { box-shadow: 0 10px 32px 0 rgba(77,116,255,.09);}
+@media (max-width: 640px) { .feature-stack { flex-direction: column; } }
+.cta-glow {box-shadow:0 0 0 2px #22d3ee33;}
+.step-line:before { content: ''; display: block; width: 2px; height: 44px; background: rgba(226,232,240,.11); margin: 0 auto;}
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

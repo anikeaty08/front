@@ -1,0 +1,51 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html, body, * { font-family: 'Satoshi', sans-serif !important; }
+    @keyframes slide-fade-in-right {
+      0% { opacity: 0; transform: translateX(40px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slide-fade-in-left {
+      0% { opacity: 0; transform: translateX(-40px);}
+      100% { opacity: 1; transform: translateX(0);}
+    }
+    @keyframes slide-fade-in-up {
+      0% { opacity: 0; transform: translateY(40px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    .animate-slide-fade-right {
+      animation: slide-fade-in-right 1s cubic-bezier(.35,1.15,.49,1) forwards;
+      opacity: 0;
+    }
+    .animate-slide-fade-left {
+      animation: slide-fade-in-left 1s cubic-bezier(.35,1.15,.49,1) forwards;
+      opacity: 0;
+    }
+    .animate-slide-fade-up {
+      animation: slide-fade-in-up 1s cubic-bezier(.35,1.15,.49,1) forwards;
+      opacity: 0;
+    }
+    .animation-delay-0 { animation-delay: 0s; }
+    .animation-delay-1 { animation-delay: 0.25s; }
+    .animation-delay-2 { animation-delay: 0.5s; }
+    .animation-delay-3 { animation-delay: 0.75s; }
+    .animation-delay-4 { animation-delay: 1s; }
+    .animation-delay-5 { animation-delay: 1.25s; }
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.08;
+    }
+  

@@ -1,0 +1,26 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Geist Mono', monospace;}
+    .custom-shadow {
+      box-shadow:
+        rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    }
+    .perspective {
+      perspective: 1200px;
+    }
+    .tilt-card {
+      transition: transform 0.25s cubic-bezier(.23,1.01,.32,1);
+      will-change: transform;
+    }
+  

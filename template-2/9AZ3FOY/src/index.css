@@ -1,0 +1,17 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body { font-family: 'Inter', system-ui, sans-serif; }
+h1,h2 { font-family: 'Sora', 'Inter', system-ui, sans-serif; }
+.animate-stagger { opacity: 0; transform: translateY(24px) scale(0.98) blur(4px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.animate-stagger.visible { opacity: 1; transform: none; filter: blur(0); }
+

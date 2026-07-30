@@ -1,0 +1,40 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { font-family: 'Nunito Sans', sans-serif; }
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            overflow: auto;
+            border-radius: 40px;
+        }
+        .temp-gradient {
+            background: linear-gradient(to right, #5A67D8 0%, #48BB78 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .energy-bar {
+            background: linear-gradient(to right, #5A67D8, #48BB78);
+            height: 8px;
+            width: 70%;
+            border-radius: 4px;
+        }
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 4px;
+            width: 50px;
+            background-color: #5A67D8;
+            border-radius: 2px;
+            left: 45px;
+        }
+    

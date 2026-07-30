@@ -1,0 +1,653 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+
+  /* Core scroll animations */
+  .scroll-fade {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .scroll-fade.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .scroll-slide-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .scroll-slide-left.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  .scroll-slide-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .scroll-slide-right.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  .scroll-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .scroll-scale.animate {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  /* Staggered delays for sequential animations */
+  .scroll-delay-100 {
+    transition-delay: 0.1s;
+  }
+  
+  .scroll-delay-200 {
+    transition-delay: 0.2s;
+  }
+  
+  .scroll-delay-300 {
+    transition-delay: 0.3s;
+  }
+  
+  .scroll-delay-400 {
+    transition-delay: 0.4s;
+  }
+  
+  .scroll-delay-500 {
+    transition-delay: 0.5s;
+  }
+  
+  .scroll-delay-600 {
+    transition-delay: 0.6s;
+  }
+  
+  /* Parallax background effect */
+  .parallax-bg {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Smooth reveal for text blocks */
+  .text-reveal {
+    overflow: hidden;
+  }
+  
+  .text-reveal-inner {
+    transform: translateY(100%);
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .text-reveal.animate .text-reveal-inner {
+    transform: translateY(0);
+  }
+  
+  /* Counter animation */
+  .counter {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  
+  .counter.animate {
+    opacity: 1;
+  }
+  
+  /* Floating elements */
+  .float-element {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Progress bar animation */
+  .progress-animate {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s ease-out;
+  }
+  
+  .progress-animate.animate {
+    transform: scaleX(1);
+  }
+
+
+
+      @keyframes fadeStroke {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+      }
+      
+      .animated-text span {
+        display: inline-block;
+        opacity: 1;
+        animation: slideDown 0.8s ease forwards calc(var(--i) * 0.03s);
+      }
+      
+      #aura-emfh21kx3:hover .animated-text span {
+        animation: wave 0.5s ease forwards calc(var(--i) * 0.02s);
+      }
+      
+      @keyframes wave {
+        30% {
+          opacity: 1;
+          transform: translateY(4px) translateX(0) rotate(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-3px) translateX(0) rotate(0);
+          color: rgb(167 243 208);
+          text-shadow: 0 0 8px rgba(167, 243, 208, 0.4);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) translateX(0) rotate(0);
+          color: rgb(255 255 255 / 0.9);
+          text-shadow: none;
+        }
+      }
+      
+      @keyframes slideDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px) translateX(5px) rotate(-90deg);
+          color: rgb(167 243 208);
+          filter: blur(5px);
+        }
+        30% {
+          opacity: 1;
+          transform: translateY(4px) translateX(0) rotate(0);
+          filter: blur(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-3px) translateX(0) rotate(0);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) translateX(0) rotate(0);
+          color: rgb(255 255 255 / 0.9);
+        }
+      }
+    
+
+
+      .animated-text span {
+        display: inline-block;
+        opacity: 1;
+        animation: slideDown 0.8s ease forwards calc(var(--i) * 0.03s);
+      }
+      
+      #aura-emfh2440r:hover .animated-text span {
+        animation: wave 0.5s ease forwards calc(var(--i) * 0.02s);
+      }
+      
+      @keyframes wave {
+        30% {
+          opacity: 1;
+          transform: translateY(4px) translateX(0) rotate(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-3px) translateX(0) rotate(0);
+          color: rgb(167 243 208);
+          text-shadow: 0 0 8px rgba(167, 243, 208, 0.4);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) translateX(0) rotate(0);
+          color: rgb(255 255 255 / 0.9);
+          text-shadow: none;
+        }
+      }
+      
+      @keyframes slideDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px) translateX(5px) rotate(-90deg);
+          color: rgb(167 243 208);
+          filter: blur(5px);
+        }
+        30% {
+          opacity: 1;
+          transform: translateY(4px) translateX(0) rotate(0);
+          filter: blur(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-3px) translateX(0) rotate(0);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) translateX(0) rotate(0);
+          color: rgb(255 255 255 / 0.9);
+        }
+      }
+    
+
+
+      @keyframes barLoop {
+        0% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        25% { background: rgb(52 211 153 / 0.9); transform: scaleY(1.2); }
+        50% { background: rgb(52 211 153 / 1); transform: scaleY(1.1); }
+        75% { background: rgb(52 211 153 / 0.8); transform: scaleY(1); }
+        100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+      }
+      
+      @keyframes barLoopYellow {
+        0% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        25% { background: rgb(163 230 53 / 0.9); transform: scaleY(1.3); }
+        50% { background: rgb(163 230 53 / 1); transform: scaleY(1.2); }
+        75% { background: rgb(163 230 53 / 0.8); transform: scaleY(1); }
+        100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+      }
+      
+      @keyframes barLoopAmber {
+        0% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        25% { background: rgb(250 204 21 / 0.8); transform: scaleY(1.4); }
+        50% { background: rgb(250 204 21 / 1); transform: scaleY(1.3); }
+        75% { background: rgb(250 204 21 / 0.7); transform: scaleY(1.1); }
+        100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+      }
+      
+      @keyframes barLoopAmberDark {
+        0% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        25% { background: rgb(251 191 36 / 0.8); transform: scaleY(1.5); }
+        50% { background: rgb(251 191 36 / 1); transform: scaleY(1.4); }
+        75% { background: rgb(251 191 36 / 0.7); transform: scaleY(1.2); }
+        100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+      }
+      
+      @keyframes barLoopBlue {
+        0% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        25% { background: rgb(96 165 250 / 0.9); transform: scaleY(1.3); }
+        50% { background: rgb(96 165 250 / 1); transform: scaleY(1.2); box-shadow: 0 0 12px rgba(96, 165, 250, 0.6); }
+        75% { background: rgb(96 165 250 / 0.8); transform: scaleY(1.1); }
+        100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+      }
+      
+      @keyframes barLoopBlueLight {
+        0% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        25% { background: rgb(96 165 250 / 0.8); transform: scaleY(1.2); }
+        50% { background: rgb(96 165 250 / 0.9); transform: scaleY(1.1); box-shadow: 0 0 8px rgba(96, 165, 250, 0.5); }
+        75% { background: rgb(96 165 250 / 0.7); transform: scaleY(1); }
+        100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+      }
+      
+      @keyframes barLoopBlueFaded {
+        0% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        25% { background: rgb(96 165 250 / 0.5); transform: scaleY(1.1); }
+        50% { background: rgb(96 165 250 / 0.6); transform: scaleY(1.05); }
+        75% { background: rgb(96 165 250 / 0.4); transform: scaleY(1); }
+        100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+      }
+      
+      @keyframes staticBarPulse {
+        0%, 100% { background: rgb(63 63 70 / 0.6); transform: scaleY(1); }
+        50% { background: rgb(63 63 70 / 0.8); transform: scaleY(0.95); }
+      }
+      
+      @keyframes numberPulse {
+        0%, 100% { color: rgb(52 211 153); transform: scale(1); }
+        50% { color: rgb(167 243 208); transform: scale(1.05); text-shadow: 0 0 8px rgba(52, 211, 153, 0.4); }
+      }
+      
+      @keyframes statusGlow {
+        0%, 100% { 
+          background: rgb(52 211 153 / 0.2); 
+          border-color: rgb(52 211 153 / 0.3); 
+          transform: scale(1); 
+        }
+        50% { 
+          background: rgb(52 211 153 / 0.3); 
+          border-color: rgb(52 211 153 / 0.5); 
+          transform: scale(1.02); 
+          box-shadow: 0 0 12px rgba(52, 211, 153, 0.3); 
+        }
+      }
+      
+      @keyframes textFlicker {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; color: rgb(212 212 216); }
+      }
+      
+      @keyframes counterTick {
+        0%, 90%, 100% { transform: scale(1); }
+        5% { transform: scale(1.1); color: rgb(52 211 153); }
+      }
+      
+      @keyframes cacheFlicker {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; color: rgb(96 165 250); }
+      }
+      
+      @keyframes statusDotLoop {
+        0%, 100% { 
+          transform: scale(1); 
+          box-shadow: 0 0 8px rgba(16,185,129,0.6); 
+          background: rgb(52 211 153);
+        }
+        50% { 
+          transform: scale(1.3); 
+          box-shadow: 0 0 16px rgba(16,185,129,0.8), 0 0 24px rgba(16,185,129,0.4); 
+          background: rgb(167 243 208);
+        }
+      }
+      
+      @keyframes latencyLoop {
+        0%, 100% { opacity: 0.9; transform: scale(1); }
+        25% { opacity: 1; transform: scale(1.05); color: rgb(52 211 153); }
+        50% { opacity: 1; transform: scale(1.02); }
+        75% { opacity: 0.95; transform: scale(1); }
+      }
+    
+
+
+      @keyframes progressFill {
+        0% {
+          transform: scaleX(0);
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: scaleX(1);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes animate-pulse-glow {
+        0%, 100% { 
+          transform: scale(1); 
+          opacity: 0.8;
+          box-shadow: 0 0 12px rgba(167,243,208,0.8), 0 0 28px rgba(167,243,208,0.35);
+        }
+        50% { 
+          transform: scale(1.2); 
+          opacity: 1;
+          box-shadow: 0 0 16px rgba(167,243,208,1), 0 0 36px rgba(167,243,208,0.5);
+        }
+      }
+      
+      .animate-pulse-glow {
+        animation: animate-pulse-glow 3s ease-in-out infinite;
+      }
+    
+
+
+        @keyframes codeScroll {
+            0% {
+                transform: translateY(0px);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+        
+        .scrolling-code-container {
+            mask-image: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(0,0,0,1) 10%, 
+                rgba(0,0,0,1) 80%, 
+                transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(0,0,0,1) 10%, 
+                rgba(0,0,0,1) 80%, 
+                transparent 100%);
+        }
+        
+        @keyframes codeWindowGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+                border-color: rgb(39, 39, 42, 0.6);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(52, 211, 153, 0.2);
+                border-color: rgb(39, 39, 42, 0.8);
+            }
+        }
+        
+        @keyframes windowDot {
+            0%, 100% { background-color: rgb(82, 82, 91); }
+            50% { background-color: rgb(113, 113, 122); }
+        }
+        
+        @keyframes fileNameFlicker {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.9; color: rgb(167, 243, 208); }
+        }
+        
+        @keyframes codeHighlight {
+            0%, 90%, 100% { opacity: 1; }
+            45% { opacity: 0.8; color: rgb(167, 243, 208); text-shadow: 0 0 4px rgba(52, 211, 153, 0.3); }
+        }
+    
+
+
+        /* AI Processing Animations */
+        @keyframes aiPulse {
+          0%, 100% { transform: scale(1); opacity: 0.8; }
+          50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        @keyframes sparkle {
+          0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.6; }
+          25% { transform: rotate(90deg) scale(1.2); opacity: 1; }
+          50% { transform: rotate(180deg) scale(0.8); opacity: 0.8; }
+          75% { transform: rotate(270deg) scale(1.1); opacity: 0.9; }
+        }
+        
+        @keyframes numberCount {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.05); color: rgb(52, 211, 153); }
+          100% { transform: scale(1); }
+        }
+        
+        @keyframes statusPulse {
+          0%, 100% { background-color: rgb(52, 211, 153, 0.2); border-color: rgb(52, 211, 153, 0.3); }
+          50% { background-color: rgb(52, 211, 153, 0.3); border-color: rgb(52, 211, 153, 0.5); }
+        }
+        
+        @keyframes barPulse {
+          0%, 100% { transform: scaleY(1); opacity: 0.9; }
+          50% { transform: scaleY(1.1); opacity: 1; }
+        }
+        
+        @keyframes activeBar {
+          0%, 100% { transform: scaleY(1); background-color: rgb(96, 165, 250, 0.8); box-shadow: 0 0 8px rgba(96, 165, 250, 0.4); }
+          50% { transform: scaleY(1.2); background-color: rgb(96, 165, 250, 1); box-shadow: 0 0 16px rgba(96, 165, 250, 0.6); }
+        }
+        
+        @keyframes idleBar {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 0.8; }
+        }
+        
+        @keyframes textFade {
+          0%, 100% { opacity: 0.8; }
+          50% { opacity: 1; }
+        }
+        
+        @keyframes statusDot {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(16,185,129,0.6); }
+          50% { transform: scale(1.2); box-shadow: 0 0 16px rgba(16,185,129,0.8); }
+        }
+        
+        @keyframes latencyCount {
+          0% { opacity: 0.8; }
+          50% { opacity: 1; color: rgb(52, 211, 153); }
+          100% { opacity: 0.8; }
+        }
+        
+        /* Expense Tracking Animations */
+        @keyframes progressGrow {
+          0%, 100% { transform: scaleX(1); }
+          50% { transform: scaleX(1.02); }
+        }
+        
+        @keyframes progressGlow {
+          0%, 100% { 
+            box-shadow: 0 0 20px rgba(52,211,153,0.25) inset, 0 0 24px rgba(52,211,153,0.35);
+          }
+          50% { 
+            box-shadow: 0 0 24px rgba(52,211,153,0.4) inset, 0 0 32px rgba(52,211,153,0.5);
+          }
+        }
+        
+        @keyframes progressDot {
+          0%, 100% { 
+            transform: scale(1); 
+            box-shadow: 0 0 12px rgba(167,243,208,0.8), 0 0 28px rgba(167,243,208,0.35);
+          }
+          50% { 
+            transform: scale(1.2); 
+            box-shadow: 0 0 16px rgba(167,243,208,1), 0 0 36px rgba(167,243,208,0.5);
+          }
+        }
+        
+        /* Real-time Monitoring Animations */
+        @keyframes ringPulse {
+          0%, 100% { transform: scale(1); opacity: 0.6; }
+          50% { transform: scale(1.02); opacity: 0.8; }
+        }
+        
+        @keyframes radarSweep {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes coreGlow {
+          0%, 100% { 
+            background: linear-gradient(to bottom right, rgba(52, 211, 153, 0.2), rgba(5, 150, 105, 0.1));
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.2);
+          }
+          50% { 
+            background: linear-gradient(to bottom right, rgba(52, 211, 153, 0.3), rgba(5, 150, 105, 0.15));
+            box-shadow: 0 0 30px rgba(52, 211, 153, 0.4);
+          }
+        }
+        
+        @keyframes dataPointPulse {
+          0%, 100% { 
+            transform: scale(1); 
+            box-shadow: 0 0 12px rgba(16,185,129,0.6);
+          }
+          50% { 
+            transform: scale(1.3); 
+            box-shadow: 0 0 20px rgba(16,185,129,0.8);
+          }
+        }
+        
+        @keyframes numberFlicker {
+          0%, 100% { opacity: 0.8; }
+          25% { opacity: 1; transform: translateY(-1px); }
+          75% { opacity: 0.9; transform: translateY(0px); }
+        }
+        
+        /* Code Window Animations */
+        @keyframes codeWindowGlow {
+          0%, 100% { 
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.1);
+            border-color: rgb(39, 39, 42, 0.6);
+          }
+          50% { 
+            box-shadow: 0 0 30px rgba(52, 211, 153, 0.2);
+            border-color: rgb(39, 39, 42, 0.8);
+          }
+        }
+        
+        @keyframes windowDot {
+          0%, 100% { background-color: rgb(82, 82, 91); }
+          50% { background-color: rgb(113, 113, 122); }
+        }
+        
+        @keyframes fileNameFlicker {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 0.9; color: rgb(167, 243, 208); }
+        }
+        
+        @keyframes codeHighlight {
+          0%, 90%, 100% { opacity: 1; }
+          45% { opacity: 0.8; color: rgb(167, 243, 208); text-shadow: 0 0 4px rgba(52, 211, 153, 0.3); }
+        }
+        
+
+
+            @keyframes ticker {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-100%);
+                }
+            }
+            
+            .ticker-track {
+                animation: ticker 40s linear infinite;
+                width: calc(200% + 16px);
+            }
+            
+            .ticker-track:hover {
+                animation-play-state: paused;
+            }
+        

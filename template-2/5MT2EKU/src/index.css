@@ -1,0 +1,60 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        @keyframes orbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse-star {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+        @keyframes feature-reveal {
+            0% { opacity: 0; transform: translateY(40px) rotateX(15deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+        }
+        @keyframes constellation-draw {
+            0% { stroke-dashoffset: 1000; opacity: 0; }
+            100% { stroke-dashoffset: 0; opacity: 0.4; }
+        }
+        .star-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: pulse-star 3s ease-in-out infinite;
+        }
+        .feature-card {
+            opacity: 0;
+            animation: feature-reveal 1s ease-out forwards;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 158, 255, 0.2);
+        }
+        .constellation-line {
+            stroke: #4A9EFF;
+            stroke-width: 1;
+            opacity: 0;
+            stroke-dasharray: 5 5;
+            stroke-dashoffset: 1000;
+            animation: constellation-draw 2s ease-out forwards;
+        }
+        .orbital-ring {
+            border: 1px solid rgba(74, 158, 255, 0.2);
+            border-radius: 50%;
+            animation: orbit 20s linear infinite;
+        }
+    

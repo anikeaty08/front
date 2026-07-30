@@ -1,0 +1,31 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html, body { height: 100%; }
+/* Custom checkbox */
+.chk {
+appearance: none; width: 18px; height: 18px; border-radius: 6px;
+border: 1px solid rgb(203 213 225); background: white; display: grid; place-items: center;
+}
+.chk:checked { background: #6366f1; border-color: #6366f1; }
+.chk:checked::after {
+content: ''; width: 10px; height: 10px; border-radius: 3px; background: white;
+}
+.dark .chk { background: rgb(30 41 59); border-color: rgb(71 85 105); }
+/* Custom toggle */
+.toggle { width: 42px; height: 24px; border-radius: 999px; position: relative; transition: all .2s; }
+.knob { width: 18px; height: 18px; background: white; border-radius: 999px; position: absolute; top: 3px; left: 3px; transition: all .2s; }
+.on  .knob { left: 21px; }
+/* Smooth hide/show */
+.page { display: none; }
+.page.active { display: block; }
+

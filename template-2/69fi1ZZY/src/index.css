@@ -1,0 +1,157 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        :root {
+            --font-main: 'Roboto', sans-serif;
+            --bg-page: #f8f9fa;
+            --bg-component: #ffffff;
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-heading: #004085;
+            --text-accent: #007bff;
+            --border-color: #dee2e6;
+            --shadow-color: 0, 0, 0;
+            --shadow-md: 0 .5rem 1rem rgba(var(--shadow-color), 0.15);
+            --shadow-lg: 0 1rem 3rem rgba(var(--shadow-color), 0.2);
+            --shadow-xs: 0 .125rem .25rem rgba(var(--shadow-color), 0.05);
+            --border-radius: 0.25rem;
+            --color-success: #28a745;
+            --color-danger: #dc3545;
+            --transition-normal: 0.2s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            display: grid;
+            place-items: center;
+            align-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .dashboard-kpi-overview {
+            background-color: var(--bg-component);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 600px;
+            transition: transform var(--transition-normal) ease-in-out, box-shadow var(--transition-normal) ease-in-out;
+        }
+
+        .dashboard-kpi-overview:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .kpi-card-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .kpi-card-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-card);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            flex: 1;
+            min-width: 130px;
+            border: 1px solid rgba(222, 226, 230, 0.5);
+            box-shadow: var(--shadow-xs);
+            transition: all 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: var(--shadow-md);
+            border-color: var(--text-accent);
+        }
+
+        .kpi-icon {
+            font-size: 1.8rem;
+            color: var(--text-accent);
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 3px;
+        }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-trend {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .kpi-trend.up {
+            color: var(--color-success);
+        }
+
+        .kpi-trend.down {
+            color: var(--color-danger);
+        }
+
+        .kpi-trend i {
+            margin-right: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .kpi-card-row {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-kpi-overview {
+                padding: 15px;
+            }
+            .kpi-card {
+                min-width: 100%;
+                padding: 12px;
+            }
+            .kpi-value {
+                font-size: 1.4rem;
+            }
+            .kpi-icon {
+                font-size: 1.6rem;
+            }
+        }
+    

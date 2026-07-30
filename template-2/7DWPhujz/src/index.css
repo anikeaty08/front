@@ -1,0 +1,24 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    @font-face {
+      font-family: 'Chicago';
+      src: url('https://cdn.jsdelivr.net/gh/rphl/chicago-font@master/Chicago.woff2') format('woff2');
+    }
+    .chicago { font-family: 'Chicago', sans-serif; }
+    .menu-dropdown { display: none; }
+    .menu-item.active .menu-dropdown { display: block; }
+    .menu-item.active { background-color: black; color: white; }
+    .window { box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+    .dock-icon { transition: all 0.2s; }
+    .dock-icon:hover { transform: scale(1.2); }
+  

@@ -1,0 +1,215 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #5e6ad2, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Interactive Card Stack Styles */
+        .testimonials-stack {
+            --_offset-steps: 4rem;
+            --_scale-steps: 25;
+            --_opacity-steps: 15;
+            --_ani-duration: 300ms;
+            
+            --_offset-steps-two: calc(var(--_offset-steps) * -1);
+            --_offset-steps-three: calc(var(--_offset-steps) * -2);
+            --scale-steps-two: calc(1 - var(--_scale-steps) * 0.01);
+            --scale-steps-three: calc(1 - var(--_scale-steps) * 0.02);
+            --opacity-steps-two: calc(1 - var(--_opacity-steps) * 0.02);
+            --opacity-steps-three: calc(1 - var(--_opacity-steps) * 0.04);
+            
+            display: grid;
+            grid-template-areas: "stack";
+            width: min(calc(100% - 2rem), 37.5rem);
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            position: relative;
+            isolation: isolate;
+            background: linear-gradient(135deg, 
+                rgba(19, 20, 26, 0.7) 0%,
+                rgba(31, 32, 35, 0.4) 100%);
+            border: 1px solid rgba(31, 32, 35, 0.8);
+            grid-area: stack;
+            border-radius: 16px;
+            transition: 500ms ease-in-out;
+            translate: 0 var(--_offset);
+            order: var(--_order);
+            z-index: var(--_order);
+            scale: var(--_scale);
+            opacity: var(--_opacity);
+            box-shadow: 0px 0px 0px 1px rgba(94, 106, 210, 0.05),
+                        0px 1px 1px -0.5px rgba(94, 106, 210, 0.03),
+                        0px 3px 3px -1.5px rgba(0,0,0,0.2),
+                        0px 6px 6px -3px rgba(0,0,0,0.2),
+                        0px 12px 12px -6px rgba(0,0,0,0.2),
+                        0px 24px 24px -12px rgba(0,0,0,0.2);
+            user-select: none;
+            touch-action: pan-y;
+            cursor: grab;
+        }
+
+        .testimonial-card:active {
+            cursor: grabbing;
+        }
+
+        .testimonial-card:nth-of-type(1) {
+            --_order: var(--_1-order);
+            --_scale: var(--_1-scale);
+            --_opacity: var(--_1-opacity);
+            --_offset: var(--_1-offset);
+        }
+
+        .testimonial-card:nth-of-type(2) {
+            --_order: var(--_2-order);
+            --_scale: var(--_2-scale);
+            --_opacity: var(--_2-opacity);
+            --_offset: var(--_2-offset);
+        }
+
+        .testimonial-card:nth-of-type(3) {
+            --_order: var(--_3-order);
+            --_scale: var(--_3-scale);
+            --_opacity: var(--_3-opacity);
+            --_offset: var(--_3-offset);
+        }
+
+        .testimonials-stack.card-1-active {
+            --_1-order: 3;
+            --_1-scale: 1;
+            --_1-opacity: 1;
+            --_1-offset: 0;
+            
+            --_2-order: 2;
+            --_2-scale: var(--scale-steps-two);
+            --_2-opacity: var(--opacity-steps-two);
+            --_2-offset: var(--_offset-steps-two);
+            
+            --_3-order: 1;
+            --_3-scale: var(--scale-steps-three);
+            --_3-opacity: var(--opacity-steps-three);
+            --_3-offset: var(--_offset-steps-three);
+        }
+
+        .testimonials-stack.card-2-active {
+            --_2-order: 3;
+            --_2-scale: 1;
+            --_2-opacity: 1;
+            --_2-offset: 0;
+            
+            --_3-order: 2;
+            --_3-scale: var(--scale-steps-two);
+            --_3-opacity: var(--opacity-steps-two);
+            --_3-offset: var(--_offset-steps-two);
+            
+            --_1-order: 1;
+            --_1-scale: var(--scale-steps-three);
+            --_1-opacity: var(--opacity-steps-three);
+            --_1-offset: var(--_offset-steps-three);
+        }
+
+        .testimonials-stack.card-3-active {
+            --_3-order: 3;
+            --_3-scale: 1;
+            --_3-opacity: 1;
+            --_3-offset: 0;
+            
+            --_1-order: 2;
+            --_1-scale: var(--scale-steps-two);
+            --_1-opacity: var(--opacity-steps-two);
+            --_1-offset: var(--_offset-steps-two);
+            
+            --_2-order: 1;
+            --_2-scale: var(--scale-steps-three);
+            --_2-opacity: var(--opacity-steps-three);
+            --_2-offset: var(--_offset-steps-three);
+        }
+
+        .dragging-left {
+            transform: translateX(-100px);
+        }
+
+        .dragging-right {
+            transform: translateX(100px);
+        }
+
+        .pagination {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .pagination button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4b5563;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .pagination button.active {
+            background-color: #5e6ad2;
+            transform: scale(1.2);
+        }
+
+        .swipe-hint {
+            position: absolute;
+            bottom: -3rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #7c8794;
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .drag-indicator {
+            color: #7c8794;
+            display: flex;
+            gap: 3px;
+        }
+
+        .drag-indicator span {
+            width: 4px;
+            height: 4px;
+            background-color: currentColor;
+            border-radius: 50%;
+        }
+
+        .container-center {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    

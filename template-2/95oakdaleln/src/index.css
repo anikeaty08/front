@@ -1,0 +1,141 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f3f4f6;
+color: #171717;
+overflow-x: hidden;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+width: 0px;
+background: transparent;
+}
+.glass-nav {
+background: rgba(255, 255, 255, 0.6);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border: 1px solid rgba(255, 255, 255, 0.4);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+.card {
+background: rgba(255, 255, 255, 0.85);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 255, 255, 0.6);
+box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
+transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.card:hover {
+transform: translateY(-2px);
+box-shadow: 0 20px 50px -10px rgba(0,0,0,0.08);
+border-color: rgba(255, 255, 255, 0.9);
+}
+.hero-gradient {
+background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
+}
+/* 3D Background Elements */
+.perspective-container {
+perspective: 1000px;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: -1;
+overflow: hidden;
+background: #eef2f6;
+}
+.ambient-light {
+position: absolute;
+border-radius: 50%;
+filter: blur(100px);
+opacity: 0.6;
+animation: float 10s ease-in-out infinite;
+}
+.light-1 {
+top: -10%;
+left: -10%;
+width: 50vw;
+height: 50vw;
+background: radial-gradient(circle, #e0e7ff 0%, rgba(255,255,255,0) 70%);
+animation-delay: 0s;
+}
+.light-2 {
+bottom: -10%;
+right: -10%;
+width: 60vw;
+height: 60vw;
+background: radial-gradient(circle, #f3e8ff 0%, rgba(255,255,255,0) 70%);
+animation-delay: -5s;
+}
+/* CSS 3D Cube Animation */
+.cube-scene {
+position: absolute;
+top: 20%;
+right: 10%;
+width: 200px;
+height: 200px;
+perspective: 600px;
+opacity: 0.4;
+pointer-events: none;
+}
+.cube {
+width: 100%;
+height: 100%;
+position: relative;
+transform-style: preserve-3d;
+animation: rotateCube 20s infinite linear;
+}
+.cube-face {
+position: absolute;
+width: 200px;
+height: 200px;
+border: 1px solid rgba(0,0,0,0.05);
+background: rgba(255,255,255,0.05);
+backdrop-filter: blur(2px);
+}
+.front  { transform: rotateY(0deg) translateZ(100px); }
+.right  { transform: rotateY(90deg) translateZ(100px); }
+.back   { transform: rotateY(180deg) translateZ(100px); }
+.left   { transform: rotateY(-90deg) translateZ(100px); }
+.top    { transform: rotateX(90deg) translateZ(100px); }
+.bottom { transform: rotateX(-90deg) translateZ(100px); }
+@keyframes rotateCube {
+from { transform: rotateX(-15deg) rotateY(0deg); }
+to { transform: rotateX(-15deg) rotateY(360deg); }
+}
+@keyframes float {
+0%, 100% { transform: translate(0, 0); }
+50% { transform: translate(20px, -20px); }
+}
+/* Grid Floor */
+.grid-floor {
+position: absolute;
+bottom: -20%;
+left: -50%;
+width: 200%;
+height: 100%;
+background-image:
+linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+background-size: 60px 60px;
+transform: perspective(500px) rotateX(60deg);
+mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 60%);
+pointer-events: none;
+}
+
+
+
+/* 3D Transform utilities */
+

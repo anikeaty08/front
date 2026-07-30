@@ -1,0 +1,105 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        @keyframes neon-pulse {
+            0%, 100% { 
+                text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+                filter: brightness(1);
+            }
+            50% { 
+                text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+                filter: brightness(1.2);
+            }
+        }
+        
+        @keyframes grid-scan {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        @keyframes vhs-glitch {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+            100% { transform: translateX(0); }
+        }
+        
+        @keyframes pixel-float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(5px, -5px) scale(1.1); }
+            50% { transform: translate(-3px, -10px) scale(0.9); }
+            75% { transform: translate(3px, -5px) scale(1.05); }
+        }
+        
+        @keyframes data-flow {
+            0% { transform: translateX(-100%); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(100vw); opacity: 0; }
+        }
+        
+        .neon-text {
+            animation: neon-pulse 2s ease-in-out infinite;
+        }
+        
+        .grid-overlay {
+            background-image: 
+                linear-gradient(rgba(255, 0, 128, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 128, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .vhs-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vhs-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                transparent 0%,
+                rgba(255, 0, 128, 0.03) 50%,
+                transparent 100%
+            );
+            animation: grid-scan 3s linear infinite;
+            pointer-events: none;
+        }
+        
+        .pixel-border {
+            border-image: linear-gradient(45deg, #ff0080, #00ffff, #8000ff, #ff4000) 1;
+            border-style: solid;
+            border-width: 2px;
+        }
+        
+        .retro-card {
+            background: linear-gradient(135deg, rgba(128, 0, 255, 0.1), rgba(255, 0, 128, 0.1));
+            border: 1px solid rgba(255, 0, 128, 0.3);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 128, 0.2),
+                inset 0 0 20px rgba(128, 0, 255, 0.1);
+        }
+        
+        .data-stream {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: data-flow 4s linear infinite;
+        }
+    

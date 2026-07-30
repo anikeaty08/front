@@ -1,0 +1,57 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .orbit {
+      animation: orbit 8s linear infinite;
+      transform-origin: 50% 50%;
+    }
+    @keyframes orbit {
+      0% { transform: rotate(0deg) translateX(0); }
+      100% { transform: rotate(360deg) translateX(0); }
+    }
+    .fade-in {
+      animation: fadeInUp 1.2s cubic-bezier(.39,.575,.565,1.000) both;
+    }
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+      }
+      100% {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .glow {
+      text-shadow: 0 0 10px #00eaff88, 0 0 30px #00eaff44;
+    }
+    .bg-quantum {
+      background: radial-gradient(ellipse at 30% 30%, #101929 70%, #090d16 100%);
+    }
+    .quantum-gradient {
+      background: linear-gradient(90deg, #00eaff 0%, #7f5cff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .neon-border {
+      box-shadow: 0 0 0 2px #00eaff44, 0 0 10px #00eaff88;
+    }
+    .dot-pulse {
+      animation: dotPulse 1.2s infinite linear;
+    }
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+  

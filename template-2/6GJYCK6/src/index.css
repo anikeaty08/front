@@ -1,0 +1,115 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        @keyframes aurora {
+            0% {
+                transform: translateX(-100%) skewX(-15deg);
+                opacity: 0.6;
+            }
+            25% {
+                transform: translateX(-50%) skewX(10deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateX(0%) skewX(-5deg);
+                opacity: 1;
+            }
+            75% {
+                transform: translateX(50%) skewX(8deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(100%) skewX(-10deg);
+                opacity: 0.5;
+            }
+        }
+        
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0px) scaleY(1);
+            }
+            50% {
+                transform: translateY(-20px) scaleY(1.2);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.9;
+            }
+        }
+        
+        .aurora-wave {
+            animation: aurora 12s ease-in-out infinite;
+        }
+        
+        .aurora-wave:nth-child(2) {
+            animation: aurora 15s ease-in-out infinite reverse;
+            animation-delay: -2s;
+        }
+        
+        .aurora-wave:nth-child(3) {
+            animation: aurora 18s ease-in-out infinite;
+            animation-delay: -4s;
+        }
+        
+        .aurora-layer {
+            animation: wave 8s ease-in-out infinite, pulse 6s ease-in-out infinite;
+        }
+        
+        .aurora-layer:nth-child(2) {
+            animation-delay: -1s, -1.5s;
+        }
+        
+        .aurora-layer:nth-child(3) {
+            animation-delay: -2s, -3s;
+        }
+
+        .gallery-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        .gallery-cylinder {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            cursor: grab;
+        }
+        .gallery-cylinder:active {
+            cursor: grabbing;
+        }
+        .gallery-face {
+            backface-visibility: hidden;
+        }
+        .gallery-spinning {
+            animation: spin 20s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotateX(0deg); }
+            to { transform: rotateX(-360deg); }
+        }
+        .gradient-top {
+            background: linear-gradient(to top, rgba(0,0,0,0) 0%, #111827 100%);
+        }
+        .gradient-bottom {
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #111827 100%);
+        }
+        .glass-frame {
+            border: 3px solid rgba(255,255,255,0.35) !important;
+            background: rgba(255,255,255,0.10);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow: 0 2px 30px 0 rgba(255,255,255,0.10) inset, 0 1.5px 10px 0 rgba(255,255,255,0.12);
+        }
+    

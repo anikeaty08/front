@@ -1,0 +1,1162 @@
+import React, { useEffect } from 'react';
+
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      {
+
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+}
+
+{
+
+tailwind.config = {
+theme: {
+extend: {
+animation: {
+'fade-in': 'fadeIn 0.8s ease-out forwards',
+'slide-up': 'slideUp 0.8s ease-out forwards',
+'blur-in': 'blurIn 0.8s ease-out forwards',
+'scale-in': 'scaleIn 0.8s ease-out forwards',
+'float': 'float 6s ease-in-out infinite',
+'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+'slide-in-left': 'slideInLeft 0.8s ease-out forwards',
+'slide-out-left': 'slideOutLeft 0.8s ease-out forwards',
+'marquee': 'marquee 25s linear infinite',
+'marquee-reverse': 'marquee-reverse 25s linear infinite',
+'typing': 'typing 4s steps(40, end) infinite',
+'blink': 'blink 1s infinite'
+},
+keyframes: {
+fadeIn: {
+'0%': { opacity: '0' },
+'100%': { opacity: '1' }
+},
+slideUp: {
+'0%': { opacity: '0', transform: 'translateY(24px)' },
+'100%': { opacity: '1', transform: 'translateY(0)' }
+},
+blurIn: {
+'0%': { opacity: '0', filter: 'blur(8px)' },
+'100%': { opacity: '1', filter: 'blur(0px)' }
+},
+scaleIn: {
+'0%': { opacity: '0', transform: 'scale(0.95)' },
+'100%': { opacity: '1', transform: 'scale(1)' }
+},
+float: {
+'0%, 100%': { transform: 'translateY(0px)' },
+'50%': { transform: 'translateY(-8px)' }
+},
+pulseGlow: {
+'0%, 100%': { boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' },
+'50%': { boxShadow: '0 0 40px rgba(34, 197, 94, 0.6), 0 0 80px rgba(34, 197, 94, 0.2)' }
+},
+slideInLeft: {
+'0%': { opacity: '0', transform: 'translateX(-100%)' },
+'100%': { opacity: '1', transform: 'translateX(0)' }
+},
+slideOutLeft: {
+'0%': { opacity: '1', transform: 'translateX(0)' },
+'100%': { opacity: '0', transform: 'translateX(-100%)' }
+},
+letterReveal: {
+'0%': { opacity: '0', transform: 'translateY(24px)' },
+'100%': { opacity: '1', transform: 'translateY(0)' }
+},
+marquee: {
+'0%': { transform: 'translateX(0%)' },
+'100%': { transform: 'translateX(-100%)' }
+},
+'marquee-reverse': {
+'0%': { transform: 'translateX(-100%)' },
+'100%': { transform: 'translateX(0%)' }
+},
+typing: {
+'0%': { width: '0' },
+'100%': { width: '100%' }
+},
+blink: {
+'0%, 50%': { opacity: '1' },
+'51%, 100%': { opacity: '0' }
+}
+}
+}
+}
+}
+
+}
+
+{
+
+      // Initialize Lucide icons
+      lucide.createIcons();
+      
+      // Mobile menu toggle
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      
+      if (menuBtn && mobileNav) {
+        menuBtn.addEventListener('click', () => {
+          mobileNav.classList.toggle('hidden');
+        });
+      }
+
+      // Go to Top button functionality
+      const goToTopBtn = document.getElementById('goToTop');
+      const heroSection = document.getElementById('heroSection');
+      
+      if (goToTopBtn && heroSection) {
+        goToTopBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          heroSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        });
+      }
+
+      // Letter-by-letter animation for headline
+      function animateHeadlineLetters() {
+        const headline = document.getElementById('heroHeadline');
+        if (!headline) return;
+
+        const text = headline.textContent;
+        headline.innerHTML = '';
+
+        // Split text into letters and spaces
+        const letters = text.split('').map((char, index) => {
+          const span = document.createElement('span');
+          span.textContent = char;
+          span.classList.add('letter-animated');
+          
+          if (char === ' ') {
+            span.style.marginRight = '0.5rem';
+          }
+
+          // Add staggered delay
+          setTimeout(() => {
+            span.classList.add('animate');
+          }, 1000 + (index * 50)); // Start after 1s with 50ms stagger
+
+          return span;
+        });
+
+        letters.forEach(letter => headline.appendChild(letter));
+      }
+
+      // Typing animation for the code container
+      function startCodeTypingAnimation() {
+        const codeContainer = document.getElementById('codeContainer');
+        if (!codeContainer) return;
+
+        const codeLines = [
+          { text: '// Figma Design System', className: 'text-sm text-gray-400 font-geist-mono mb-2' },
+          { 
+            text: '', 
+            className: 'text-sm leading-relaxed font-geist-mono', 
+            html: '<span class="text-blue-400">const</span> <span class="text-yellow-300">components</span> <span class="text-white">= {</span>'
+          },
+          { text: '  button: "primary-cta",', className: 'text-sm leading-relaxed font-geist-mono ml-4 text-green-400' },
+          { text: '  card: "glass-container",', className: 'text-sm leading-relaxed font-geist-mono ml-4 text-green-400' },
+          { text: '  typography: "system-fonts"', className: 'text-sm leading-relaxed font-geist-mono ml-4 text-green-400' },
+          { text: '};', className: 'text-sm leading-relaxed font-geist-mono text-white' },
+          { text: '// Interactive prototypes', className: 'text-sm leading-relaxed font-geist-mono mt-2 text-gray-500' },
+          { 
+            text: '', 
+            className: 'text-sm leading-relaxed font-geist-mono', 
+            html: '<span class="text-blue-400">function</span> <span class="text-yellow-300">createPrototype()</span> <span class="text-white">{</span>'
+          },
+          { text: '  return userTesting;', className: 'text-sm leading-relaxed font-geist-mono ml-4' },
+          { text: '}', className: 'text-sm leading-relaxed font-geist-mono text-white' }
+        ];
+
+        let currentLine = 0;
+        const typingSpeed = 80; // milliseconds per character
+        const lineDelay = 400; // delay between lines
+
+        function typeLine() {
+          if (currentLine >= codeLines.length) return;
+
+          const line = codeLines[currentLine];
+          const lineElement = document.createElement('div');
+          lineElement.className = line.className;
+          
+          if (line.html) {
+            lineElement.innerHTML = line.html;
+            codeContainer.appendChild(lineElement);
+            currentLine++;
+            setTimeout(typeLine, lineDelay);
+          } else {
+            lineElement.classList.add('typing-line');
+            codeContainer.appendChild(lineElement);
+
+            let charIndex = 0;
+            function typeChar() {
+              if (charIndex < line.text.length) {
+                lineElement.textContent = line.text.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeChar, typingSpeed);
+              } else {
+                lineElement.classList.remove('typing-line');
+                lineElement.classList.add('typed');
+                currentLine++;
+                setTimeout(typeLine, lineDelay);
+              }
+            }
+
+            // Start typing immediately
+            lineElement.style.opacity = '1';
+            lineElement.style.borderRight = '2px solid #10B981';
+            typeChar();
+          }
+        }
+
+        // Start the typing animation after a delay
+        setTimeout(typeLine, 1000);
+      }
+
+      // Intersection Observer for code animation
+      function setupCodeAnimationObserver() {
+        const codeContainer = document.getElementById('codeContainer');
+        if (!codeContainer) return;
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.children.length === 0) {
+              startCodeTypingAnimation();
+            }
+          });
+        }, {
+          threshold: 0.3,
+          rootMargin: '0px'
+        });
+
+        observer.observe(codeContainer);
+      }
+
+      // Enhanced scroll effects for status indicator (horizontal positioning)
+      const statusIndicator = document.getElementById('statusIndicator');
+      let lastScrollY = window.scrollY;
+      let ticking = false;
+      
+      function updateStatusIndicator() {
+        const scrollY = window.scrollY;
+        const scrollDirection = scrollY > lastScrollY ? 'down' : 'up';
+        const scrollProgress = Math.min(scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1);
+        
+        // Show the indicator after initial animation
+        setTimeout(() => {
+          statusIndicator.style.opacity = '1';
+        }, 1800);
+        
+        // Dynamic positioning and effects based on scroll (horizontal layout)
+        if (scrollY > 100) {
+          const translateY = -scrollY * 0.1; // Parallax effect
+          const scale = Math.max(0.9, 1 - scrollProgress * 0.1); // Subtle scale
+          
+          statusIndicator.style.transform = `translateY(calc(-50% + ${translateY}px)) scale(${scale})`;
+          
+          // Add scroll-based glow intensity
+          const glowIntensity = Math.sin(scrollProgress * Math.PI) * 0.3;
+          statusIndicator.style.filter = `drop-shadow(0 0 ${20 + glowIntensity * 20}px rgba(34, 197, 94, ${0.3 + glowIntensity}))`;
+        } else {
+          statusIndicator.style.transform = 'translateY(-50%) scale(1)';
+          statusIndicator.style.filter = 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.3))';
+        }
+        
+        lastScrollY = scrollY;
+        ticking = false;
+      }
+      
+      function requestTick() {
+        if (!ticking) {
+          requestAnimationFrame(updateStatusIndicator);
+          ticking = true;
+        }
+      }
+      
+      window.addEventListener('scroll', requestTick, { passive: true });
+
+      // Cursor invert effect for hero section
+      const heroSectionEl = document.getElementById('heroSection');
+      const body = document.body;
+      const maskElement = heroSectionEl.querySelector('.cursor-invert-mask::before');
+      let isInHero = false;
+
+      if (heroSectionEl) {
+        heroSectionEl.addEventListener('mouseenter', (e) => {
+          isInHero = true;
+          body.classList.add('cursor-invert-active');
+          body.style.cursor = 'none';
+        });
+
+        heroSectionEl.addEventListener('mouseleave', (e) => {
+          isInHero = false;
+          body.classList.remove('cursor-invert-active');
+          body.style.cursor = 'auto';
+        });
+
+        heroSectionEl.addEventListener('mousemove', (e) => {
+          if (!isInHero) return;
+          
+          const x = e.clientX;
+          const y = e.clientY;
+          
+          // Update the CSS custom property for cursor position
+          document.documentElement.style.setProperty('--cursor-x', x + 'px');
+          document.documentElement.style.setProperty('--cursor-y', y + 'px');
+          
+          // Update the pseudo-element position via CSS variable
+          const maskElements = document.querySelectorAll('.cursor-invert-mask');
+          maskElements.forEach(mask => {
+            mask.style.setProperty('--cursor-x', x + 'px');
+            mask.style.setProperty('--cursor-y', y + 'px');
+          });
+        });
+      }
+
+      // Update CSS to use the variables
+      const style = document.createElement('style');
+      style.textContent = `
+        .cursor-invert-mask::before {
+          left: var(--cursor-x, 0px);
+          top: var(--cursor-y, 0px);
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Add click interaction to status indicator
+      if (statusIndicator) {
+        statusIndicator.addEventListener('click', () => {
+          const contactSection = document.getElementById('contact');
+          if (contactSection) {
+            contactSection.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      }
+
+      // Trigger animations when page loads
+      document.addEventListener('DOMContentLoaded', () => {
+        animateHeadlineLetters();
+        setupCodeAnimationObserver();
+      });
+    
+}
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+
+<div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
+<div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl opacity-0 animate-fade-in" style={{animationDelay: `0.5s`}}></div>
+<div className="absolute top-1/2 -right-32 h-96 w-96 rounded-full bg-purple-600/15 blur-3xl opacity-0 animate-fade-in" style={{animationDelay: `0.8s`}}></div>
+<div className="absolute bottom-0 left-1/2 h-72 w-72 rounded-full bg-indigo-600/10 blur-3xl opacity-0 animate-fade-in" style={{animationDelay: `1.2s`}}></div>
+</div>
+
+<div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 space-y-3 hidden lg:flex opacity-0 animate-slide-up" style={{animationDelay: `2s`}}>
+<div className="group">
+</div>
+</div>
+
+<div className="fixed left-8 top-1/2 -translate-y-1/2 z-50 hidden xl:block transition-all duration-700 ease-out opacity-0 rounded-full shadow-2xl backdrop-blur-3xl" style={{animationDelay: `1.8s`, filter: `drop-shadow(rgba(34, 197, 94, 0.3) 0px 0px 20px)`, opacity: `1`}}>
+<div className="inline-flex gap-3 hover:shadow-green-500/20 transition-all duration-500 group cursor-pointer relative overflow-hidden bg-black/20 border-white/30 border rounded-full pt-3 pr-6 pb-3 pl-6 shadow-2xl backdrop-blur-3xl items-center" style={{background: `linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))`, backdropFilter: `blur(32px)`}}>
+
+<div className="absolute inset-0 opacity-50 bg-gradient-to-br from-white/20 via-transparent to-black/20 rounded-full"></div>
+<div className="absolute inset-[1px] opacity-30 bg-gradient-to-br from-white/10 to-transparent rounded-full shadow backdrop-blur-none"></div>
+
+<div className="relative flex items-center gap-3">
+
+<div className="relative flex h-3 w-3">
+<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+<span className="relative inline-flex rounded-full h-3 w-3 bg-green-400 shadow-lg animate-pulse-glow"></span>
+</div>
+
+<span className="text-sm font-semibold bg-gradient-to-r from-green-400 via-white to-gray-300 bg-clip-text text-transparent whitespace-nowrap tracking-wide font-geist" style={{}}>
+        Available for projects
+      </span>
+
+<div className="transform transition-transform duration-300 group-hover:translate-x-1">
+<svg className="text-green-400" fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+<path className=""></path>
+</svg>
+</div>
+</div>
+</div>
+
+<div className="absolute top-1/2 -left-8 w-6 h-px bg-gradient-to-l from-white/30 to-transparent transform -translate-y-1/2"></div>
+</div>
+
+<header className="fixed top-0 left-0 right-0 z-40 opacity-0 animate-fade-in my-4 backdrop-blur-3xl" style={{animationDelay: `0.2s`}}>
+<div className="relative max-w-7xl lg:px-8 ring-1 ring-white/10 bg-white/10 border-white/20 border rounded-2xl mr-auto ml-auto pr-6 pl-6 shadow-lg backdrop-blur-lg">
+<div className="flex h-20 items-center justify-between">
+<a className="group" href="#">
+<div className="flex items-center gap-2">
+<div className="group-hover:bg-white/20 transition-colors bg-white/15 border-white/30 border rounded-xl pt-2 pr-3 pb-2 pl-3 backdrop-blur-md">
+<span className="block text-lg font-semibold tracking-tight font-geist" style={{}}>JC</span>
+</div>
+</div>
+</a>
+<nav className="hidden md:flex items-center gap-8">
+<a className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200 font-geist" href="#work" style={{}}>Work</a>
+<a className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200 font-geist" href="#about" style={{}}>About</a>
+<a className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200 font-geist" href="#process" style={{}}>Process</a>
+<a className="hover:text-white transition-colors duration-200 text-sm font-medium text-gray-300 font-geist" href="#journal" style={{}}>Resume</a>
+</nav>
+<a className="hidden md:inline-flex items-center gap-2 rounded-full bg-white/90 text-black px-5 py-2.5 text-sm font-semibold hover:bg-white transition-all duration-200 hover:scale-105 backdrop-blur-md shadow-lg font-geist" href="#contact" style={{}}>
+<svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+      Let's connect
+    </a>
+<button className="md:hidden rounded-xl bg-white/15 border border-white/30 p-2.5 text-white hover:bg-white/20 backdrop-blur-md" id="menuBtn">
+<svg className="lucide lucide-menu w-5 h-5" data-lucide="menu" fill="none" height="24" stroke="currentColor" stroke-line="round" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg>
+</button>
+</div>
+
+<div className="hidden md:hidden absolute top-full left-0 right-0 bg-black/80 backdrop-blur-xl border-b border-white/20 rounded-b-2xl shadow-lg ring-1 ring-white/10" id="mobileNav">
+<div className="px-6 py-6 space-y-4">
+<a className="block rounded-xl px-4 py-3 text-base font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-geist" href="#work" style={{}}>Work</a>
+<a className="block rounded-xl px-4 py-3 text-base font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-geist" href="#about" style={{}}>About</a>
+<a className="block rounded-xl px-4 py-3 text-base font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-geist" href="#process" style={{}}>Process</a>
+<a className="block rounded-xl px-4 py-3 text-base font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-geist" href="#journal" style={{}}>Journal</a>
+<div className="pt-4 border-t border-white/20">
+<a className="flex items-center justify-center gap-2 rounded-xl bg-white/90 text-black px-6 py-3 text-base font-semibold backdrop-blur-md shadow-lg font-geist" href="#contact" style={{}}>
+<svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+          Let's connect
+        </a>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+<section className="relative lg:pt-40 lg:pb-28 overflow-hidden cursor-invert-mask pt-32 pb-20" id="heroSection" style={{'--cursor-x': `1027px`, '--cursor-y': `5px`}}>
+<div className="mx-auto max-w-7xl px-6 lg:px-8">
+<div className="text-center">
+
+<div className="mb-8 flex justify-center opacity-0 animate-scale-in" style={{animationDelay: `0.8s`}}>
+<div className="relative parallax-scale" data-parallax="scale" data-scale-end="1.2" data-scale-start="1" style={{transform: `scale(1)`, transition: `transform 0.1s ease-out`}}>
+<img alt="Jordan Chen" className="h-32 w-32 lg:h-40 lg:w-40 rounded-full object-cover ring-4 ring-white/20 shadow-2xl transition-all duration-300" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/f804111a-fe24-4660-b754-0f3654213f91_320w.jpg" style={{transform: `inherit`}} />
+</div>
+</div>
+
+<div className="opacity-0 animate-slide-up" style={{animationDelay: `1s`}}>
+<h1 className="lg:text-7xl xl:text-8xl text-5xl font-bold text-white tracking-tight" id="heroHeadline"><span className="letter-animated animate">
+</span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate">P</span><span className="letter-animated animate">r</span><span className="letter-animated animate">o</span><span className="letter-animated animate">d</span><span className="letter-animated animate">u</span><span className="letter-animated animate">c</span><span className="letter-animated animate">t</span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate">D</span><span className="letter-animated animate">e</span><span className="letter-animated animate">s</span><span className="letter-animated animate">i</span><span className="letter-animated animate">g</span><span className="letter-animated animate">n</span><span className="letter-animated animate">e</span><span className="letter-animated animate">r</span><span className="letter-animated animate">
+</span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span><span className="letter-animated animate" style={{marginRight: `0.5rem`}}> </span></h1>
+</div>
+<div className="opacity-0 animate-slide-up" style={{animationDelay: `1.2s`}}>
+<p className="mt-6 max-w-3xl mx-auto text-xl lg:text-2xl text-gray-400 leading-relaxed font-geist tracking-tight font-light" style={{}}>
+              Crafting digital experiences that feel intuitive, look beautiful, and solve real problems for companies like Apple, Tesla, and Stripe.
+            </p>
+</div>
+<div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 animate-slide-up" style={{animationDelay: `1.4s`}}>
+<a className="group inline-flex items-center gap-3 rounded-full bg-white text-black px-8 py-4 text-base font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 font-geist" href="#work" style={{}}>
+<svg className="lucide lucide-play w-5 h-5" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+              View my work
+              <svg className="lucide lucide-arrow-right w-4 h-4 group-hover:translate-x-1 transition-transform" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+<a className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 backdrop-blur text-white px-8 py-4 text-base font-medium hover:bg-white/15 transition-all duration-300 hover:scale-105 font-geist" href="#about" style={{}}>
+<svg className="lucide lucide-user w-5 h-5" data-lucide="user" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="7"></circle></svg>
+              About me
+            </a>
+</div>
+
+<div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto opacity-0 animate-fade-in" style={{animationDelay: `1.6s`}}>
+<div className="text-center">
+<div className="text-2xl lg:text-3xl text-white font-geist tracking-tight font-light" style={{}}>8+</div>
+<div className="text-sm text-gray-400 mt-1 font-geist" style={{}}>Years</div>
+</div>
+<div className="text-center">
+<div className="text-2xl lg:text-3xl text-white font-geist tracking-tight font-light" style={{}}>50+</div>
+<div className="text-sm text-gray-400 mt-1 font-geist" style={{}}>Projects</div>
+</div>
+<div className="text-center">
+<div className="text-2xl lg:text-3xl text-white font-geist tracking-tight font-light" style={{}}>12</div>
+<div className="text-sm text-gray-400 mt-1 font-geist" style={{}}>Awards</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="border-y opacity-0 animate-fade-in border-white/10 pt-16 pb-16 overflow-hidden" style={{animationDelay: `1.8s`}}>
+<div className="mx-auto max-w-7xl px-6 lg:px-8">
+<p className="text-center text-sm font-medium text-gray-500 mb-8 font-geist" style={{}}>Trusted by industry leaders</p>
+
+<div className="relative overflow-hidden">
+<div className="flex animate-marquee whitespace-nowrap">
+<div className="flex items-center justify-center gap-16 lg:gap-20 mx-8">
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Apple</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Tesla</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Stripe</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Notion</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Figma</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Linear</div>
+</div>
+<div className="flex items-center justify-center gap-16 lg:gap-20 mx-8">
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Apple</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Tesla</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Stripe</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Notion</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Figma</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Linear</div>
+</div>
+<div className="flex items-center justify-center gap-16 lg:gap-20 mx-8">
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Apple</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Tesla</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Stripe</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Notion</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Figma</div>
+<div className="text-gray-400 text-lg font-medium tracking-tight hover:text-gray-300 transition-colors font-geist" style={{}}>Linear</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="pt-24 pb-24" id="work">
+<div className="mx-auto max-w-7xl px-6 lg:px-8">
+<div className="text-center mb-16">
+<h2 className="text-4xl lg:text-5xl text-white opacity-0 animate-slide-up font-geist tracking-tight font-light" style={{animationDelay: `2s`}}>
+            What I do
+          </h2>
+<p className="mt-4 text-xl text-gray-400 opacity-0 animate-slide-up font-geist" style={{animationDelay: `2.2s`}}>
+            Full-spectrum design services for ambitious companies
+          </p>
+</div>
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+<div className="group rounded-3xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 p-8 hover:from-white/15 hover:to-white/10 transition-all duration-500 hover:scale-105 opacity-0 animate-scale-in" style={{animationDelay: `2.4s`}}>
+<h3 className="text-2xl text-white mb-4 font-geist tracking-tight font-light" style={{}}>Product Design</h3>
+<p className="text-gray-400 leading-relaxed mb-6 font-geist" style={{}}>
+              End-to-end product design from research and strategy to pixel-perfect interfaces that users love.
+            </p>
+<ul className="space-y-3 text-sm text-gray-300">
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                User research & personas
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Wireframing & prototyping
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Visual design & branding
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Usability testing
+              </li>
+</ul>
+</div>
+
+<div className="group rounded-3xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 p-8 hover:from-white/15 hover:to-white/10 transition-all duration-500 hover:scale-105 opacity-0 animate-scale-in" style={{animationDelay: `2.6s`}}>
+<h3 className="text-2xl text-white mb-4 font-geist tracking-tight font-light" style={{}}>Mobile Apps</h3>
+<p className="text-gray-400 leading-relaxed mb-6 font-geist" style={{}}>
+              Native iOS and Android app design that feels at home on every platform while maintaining brand consistency.
+            </p>
+<ul className="space-y-3 text-sm text-gray-300">
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                iOS & Android design
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Human interface guidelines
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Micro-interactions
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                App store optimization
+              </li>
+</ul>
+</div>
+
+<div className="group rounded-3xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 p-8 hover:from-white/15 hover:to-white/10 transition-all duration-500 hover:scale-105 opacity-0 animate-scale-in" style={{animationDelay: `2.8s`}}>
+<h3 className="text-2xl text-white mb-4 font-geist tracking-tight font-light" style={{}}>Design Systems</h3>
+<p className="text-gray-400 leading-relaxed mb-6 font-geist" style={{}}>
+              Scalable design systems and component libraries that ensure consistency across all touchpoints.
+            </p>
+<ul className="space-y-3 text-sm text-gray-300">
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Component libraries
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Design tokens
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Documentation
+              </li>
+<li className="flex items-center gap-3 font-geist" style={{}}>
+<svg className="lucide lucide-check w-4 h-4 text-green-400" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+                Team training
+              </li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section className="pt-24 pb-24">
+<div className="max-w-7xl lg:px-8 mr-auto ml-auto pr-6 pl-6">
+<div className="flex items-center justify-between mb-10">
+<div>
+<h2 className="text-3xl lg:text-4xl text-white opacity-0 animate-slide-up font-geist tracking-tight font-light" style={{animationDelay: `3s`}}>Selected Work</h2>
+</div>
+<a className="hidden lg:inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur text-white px-4 py-2 text-xs font-medium hover:bg-white/15 transition-all duration-300 opacity-0 animate-fade-in font-geist" href="#" style={{animationDelay: `3.2s`}}>
+        See all
+        <svg className="lucide lucide-arrow-up-right w-3.5 h-3.5" data-lucide="arrow-up-right" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+<article className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] opacity-0 animate-scale-in" style={{animationDelay: `3.4s`}}>
+<div className="relative aspect-[16/10] overflow-hidden">
+<img alt="Aurora Financial App" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/a6ea5042-fd78-4888-b5e1-47f268a0569b_800w.jpg" style={{}} />
+<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+<div className="absolute left-2 right-2 bottom-2">
+<div className="flex bg-white/10 border-white/10 border rounded-xl mx-2 my-2 pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl items-center justify-between">
+<span className="text-sm font-medium text-white font-geist" style={{}}>Aurora Financial</span>
+<span className="text-[10px] tracking-wider text-gray-300 uppercase font-geist" style={{}}>Mobile App</span>
+</div>
+</div>
+</div>
+</article>
+
+<article className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] opacity-0 animate-scale-in" style={{animationDelay: `3.6s`}}>
+<div className="relative aspect-[16/10] overflow-hidden">
+<img alt="Nexus Dashboard" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/78877756-9e45-410e-b630-78c3dfb8e94c_1600w.jpg" style={{}} />
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div className="absolute left-2 right-2 bottom-2">
+<div className="flex bg-white/10 border-white/10 border rounded-xl mx-2 my-2 pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl items-center justify-between">
+<span className="text-sm font-medium text-white font-geist" style={{}}>Nexus Dashboard</span>
+<span className="text-[10px] tracking-wider text-gray-300 uppercase font-geist" style={{}}>Web Platform</span>
+</div>
+</div>
+</div>
+</article>
+
+<article className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] opacity-0 animate-scale-in" style={{animationDelay: `3.8s`}}>
+<div className="relative aspect-[16/10] overflow-hidden">
+<img alt="Zenith E-commerce" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/7ee361ca-4978-4130-bab8-b605105c04b4_1600w.jpg" style={{}} />
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div className="absolute left-2 right-2 bottom-2">
+<div className="flex bg-white/10 border-white/10 border rounded-xl mx-2 my-2 pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl items-center justify-between">
+<span className="text-sm font-medium text-white font-geist" style={{}}>Zenith Store</span>
+<span className="text-[10px] tracking-wider text-gray-300 uppercase font-geist" style={{}}>E‑commerce</span>
+</div>
+</div>
+</div>
+</article>
+
+<article className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] opacity-0 animate-scale-in" style={{animationDelay: `4s`}}>
+<div className="relative aspect-[16/10] overflow-hidden">
+<img alt="Orbit Workspace" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/5162c07d-8a65-4a42-9a8c-c48dbea36297_1600w.jpg" style={{}} />
+<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div className="absolute left-2 right-2 bottom-2">
+<div className="flex bg-white/10 border-white/10 border rounded-xl mx-2 my-2 pt-4 pr-4 pb-4 pl-4 backdrop-blur-xl items-center justify-between">
+<span className="text-sm font-medium text-white font-geist" style={{}}>Orbit Workspace</span>
+<span className="text-[10px] tracking-wider text-gray-300 uppercase font-geist" style={{}}>Collaboration</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<section className="pt-24 pb-24" id="about">
+<div className="mx-auto max-w-7xl px-6 lg:px-8">
+
+<div className="relative mb-16 text-center">
+<div aria-hidden="true" className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-2 h-12 w-[560px] rounded-full bg-gradient-to-r from-white/5 via-white/25 to-white/5 blur-2xl"></div>
+<h2 className="relative text-4xl lg:text-5xl text-white font-geist tracking-tight font-light" style={{}}>About <span className="text-white/80 font-geist tracking-tight font-light" style={{}}>Me</span></h2>
+</div>
+
+<div className="relative lg:p-12 bg-black/40 border-white/10 border rounded-[32px] p-8 backdrop-blur-xl shadow-2xl">
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[32px] bg-gradient-to-b from-white/10 to-transparent"></div>
+<div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+<div className="relative space-y-6">
+<div className="rounded-3xl group p-3 cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:bg-zinc-800/60 hover:shadow-xl bg-zinc-900/80 border-zinc-800 border shadow-2xl">
+<div className="overflow-hidden rounded-2xl ring-1 ring-white/10">
+<img alt="Working outdoors on a laptop" className="object-cover w-full h-[400px] lg:h-[480px] transition-transform duration-700 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/b6453140-0e66-40b1-89b8-06321fdcdc09_1600w.jpg" style={{}} />
+</div>
+</div>
+
+<div className="grid grid-cols-2 gap-6">
+<div className="rounded-2xl bg-white/5 border border-white/10 p-3 shadow-lg hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+<div className="overflow-hidden rounded-xl ring-1 ring-white/10">
+<img alt="Design workspace setup" className="object-cover w-full h-28 lg:h-36 transition-transform duration-500 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/dfbdff07-910b-401f-9b3c-472e23555ca7_800w.jpg" style={{}} />
+</div>
+</div>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-3 shadow-lg hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+<div className="overflow-hidden rounded-xl ring-1 ring-white/10">
+<img alt="Creative tools and materials" className="object-cover w-full h-28 lg:h-36 transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1751234810818-2134a19346f5?w=800&q=80" style={{}} />
+</div>
+</div>
+</div><div className="grid grid-cols-2 gap-6">
+<div className="rounded-2xl bg-white/5 border border-white/10 p-3 shadow-lg hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+<div className="overflow-hidden rounded-xl ring-1 ring-white/10">
+<img alt="Design workspace setup" className="object-cover w-full h-28 lg:h-36 transition-transform duration-500 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/72c8b3bf-292e-4424-b26d-4fcb776f58d6_800w.jpg" style={{}} />
+</div>
+</div>
+<div className="rounded-2xl bg-white/5 border border-white/10 p-3 shadow-lg hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+<div className="overflow-hidden rounded-xl ring-1 ring-white/10">
+<img alt="Creative tools and materials" className="object-cover w-full h-28 lg:h-36 transition-transform duration-500 group-hover:scale-105" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/2b8b03a2-19b6-4f4d-a27f-4bd29d76f583_800w.jpg" style={{}} />
+</div>
+</div>
+</div>
+</div>
+
+<div className="relative space-y-8">
+<div className="space-y-4">
+<h3 className="text-2xl lg:text-3xl text-white font-geist tracking-tight font-light" style={{}}>Curious about me?</h3>
+<div className="w-16 h-0.5 bg-gradient-to-r from-white/60 to-transparent"></div>
+</div>
+<div className="space-y-8">
+<div className="rounded-2xl bg-white/10 border border-white/10 p-6 lg:p-8 text-gray-300 text-base lg:text-lg leading-relaxed hover:bg-white/[0.12] transition-colors duration-300">
+<p className="font-geist mb-6" style={{}}>I'm a Product Designer passionate about building digital experiences that are not only visually striking but also deeply functional. With over 8 years of experience, I've helped turn complex challenges into simple, intuitive solutions for mobile, web, and cross-platform products.</p>
+<p className="font-geist mb-6" style={{}}>My approach combines design strategy, user empathy, and a sharp eye for detail. From wireframes to polished prototypes, I ensure every interaction feels natural and purposeful. I thrive at collaborating with engineers, product managers, and stakeholders to align business goals with user needs.</p>
+<p className="font-geist" style={{}}>Beyond creating interfaces, I focus on systems designing scalable libraries, establishing clear guidelines, and refining workflows that make teams more efficient. For me, great design means solving real problems and creating experiences people love to use.</p>
+</div>
+<ul className="space-y-4 text-gray-300">
+<li className="flex items-start gap-4 group">
+<span className="inline-flex items-center justify-center w-10 h-10 bg-[#ffffff]/20 border-[#ffffff]/30 border rounded-xl flex-shrink-0 group-hover:bg-[#ffffff]/25 transition-colors duration-300">
+<svg className="lucide lucide-zap w-5 h-5" data-icon-replaced="true" data-lucide="zap" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: `rgb(255, 255, 255)`}} viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+</span>
+<div className="flex-1 pt-1">
+<span className="text-sm lg:text-base font-medium font-geist" style={{}}>Full‑time freelancer</span>
+</div>
+</li>
+<li className="flex items-start gap-4 group">
+<span className="inline-flex items-center justify-center w-10 h-10 bg-[#ffffff]/20 border-[#ffffff]/30 border rounded-xl flex-shrink-0 group-hover:bg-[#ffffff]/25 transition-colors duration-300">
+<svg className="lucide lucide-message-circle w-5 h-5" data-icon-replaced="true" data-lucide="message-circle" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: `rgb(255, 255, 255)`}} viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+</span>
+<div className="flex-1 pt-1">
+<span className="text-sm lg:text-base font-medium font-geist" style={{}}>Open to exciting projects and creative collaborations</span>
+</div>
+</li>
+<li className="flex items-start gap-4 group">
+<span className="inline-flex items-center justify-center w-10 h-10 bg-[#ffffff]/20 border-[#ffffff]/30 border rounded-xl flex-shrink-0 group-hover:bg-[#ffffff]/25 transition-colors duration-300">
+<svg className="lucide lucide-smile w-5 h-5" data-icon-replaced="true" data-lucide="smile" fill="none" height="20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" style={{color: `rgb(255, 255, 255)`}} viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><path></path><line></line><line></line></svg>
+</span>
+<div className="flex-1 pt-1">
+<span className="text-sm lg:text-base font-medium font-geist" style={{}}>Friendly, approachable, and always eager to connect</span>
+</div>
+</li>
+</ul>
+<div className="flex justify-start pt-4">
+<a className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm lg:text-base font-medium text-white hover:bg-white/15 hover:scale-105 transition-all duration-300 font-geist shadow-lg" href="#contact" style={{}}>
+          Learn more
+          <svg className="lucide lucide-arrow-up-right w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" data-lucide="arrow-up-right" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[32px] ring-1 ring-white/10"></div>
+</div>
+</div>
+</section><section className="bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/0d850914-e949-410a-ac08-c604b47ea90f_3840w.jpg)] bg-cover pt-24 pb-24" id="about">
+<div className="max-w-7xl lg:px-8 mr-auto ml-auto pr-6 pl-6">
+
+<div className="relative mb-12 text-center">
+<div aria-hidden="true" className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-2 h-12 w-[560px] rounded-full bg-gradient-to-r from-white/5 via-white/25 to-white/5 blur-2xl"></div>
+<h2 className="relative text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 font-geist tracking-tight font-light" style={{}}>My <span className="text-white/80 bg-none font-geist tracking-tight font-light" style={{}}>Process</span></h2>
+</div>
+
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+<div className="relative rounded-[28px] border border-white/10 bg-black/40 backdrop-blur-xl p-6 lg:p-8">
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/10 to-transparent"></div>
+<div className="relative mb-6">
+<div className="overflow-hidden rounded-2xl ring-1 ring-white/10 bg-white/5">
+<a className="group relative block overflow-hidden ring-1 ring-white/10 transition hover:ring-white/20 bg-gradient-to-b from-[#0C0F17] to-[#0A0D14] rounded-2xl" href="#">
+
+<div className="relative">
+<div className="relative mx-3 mt-3 rounded-xl bg-[#0A0E15] ring-1 ring-white/10 overflow-hidden">
+
+<div className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),inset_0_0_60px_rgba(88,101,242,0.06)]">
+</div>
+
+<div className="m-3 rounded-lg ring-1 ring-white/10 relative overflow-hidden">
+<div className="absolute inset-0" style={{backgroundImage: `radial-gradient(rgba(148,163,184,0.14) 1px, transparent 1px)`, backgroundSize: `12px 12px`, backgroundPosition: `0 0`}}></div>
+
+<div className="absolute left-3 bottom-4 h-24 w-36 backdrop-blur-[1px] z-10 shadow-[0_2px_12px_rgba(0,0,0,0.25)] transition-transform duration-300 ease-out group-hover:-translate-y-0.5 border-white/15 border rounded-md backdrop-blur-md">
+
+<div className="h-5 border-b border-white/10 bg-white/[0.03]">
+<div className="h-full px-2 flex items-center gap-1.5">
+<div className="h-2 w-8 rounded-sm bg-white/25"></div>
+</div>
+</div>
+
+<div className="pt-2 pr-2 pb-2 pl-2">
+<div className="h-16 w-full rounded border border-white/10 relative flex items-center justify-center">
+<div className="text-white/40 text-xs">User Journey</div>
+</div>
+</div>
+</div>
+
+<div className="absolute right-4 top-5 h-28 w-44 backdrop-blur-[1px] z-10 shadow-[0_2px_12px_rgba(0,0,0,0.25)] transition-transform duration-300 ease-out group-hover:-translate-y-0.5 border-white/15 border rounded-md backdrop-blur-md">
+
+<div className="h-5 border-b border-white/10 bg-white/[0.03]">
+<div className="h-full px-2 flex items-center gap-1.5">
+<div className="h-2 w-10 rounded-sm bg-white/25"></div>
+</div>
+</div>
+<div className="pt-3 pr-3 pb-3 pl-3">
+
+<div className="relative mx-auto h-14 w-14 rounded-full border border-white/25 flex items-center justify-center">
+<div className="text-white/40 text-xs">Personas</div>
+</div>
+</div>
+</div>
+
+<div className="absolute left-1/2 top-7 w-[65%] max-w-[340px] -translate-x-1/2 shadow-[0_0_0_1px_rgba(99,102,241,0.30),0_0_40px_rgba(67,56,202,0.25)] transition-all duration-300 z-20 group-hover:-translate-y-0.5 group-hover:shadow-[0_0_0_1px_rgba(129,140,248,0.45),0_0_60px_rgba(99,102,241,0.35)] bg-[#0B1020]/50 border-indigo-400/50 border rounded-md backdrop-blur-md translate-y-2">
+
+<div className="h-6 border-b border-indigo-300/30 bg-indigo-300/5">
+<div className="h-full px-3 flex items-center gap-1.5">
+<div className="h-1.5 w-16 rounded-sm bg-indigo-300/70"></div>
+<div className="h-1.5 w-8 rounded-sm bg-indigo-300/40"></div>
+</div>
+</div>
+
+<div className="pt-4 pr-4 pb-4 pl-4 space-y-2">
+<div className="h-2 w-1/2 rounded bg-white/60"></div>
+<div className="h-2 w-2/3 rounded bg-white/30"></div>
+<div className="h-2 w-1/3 rounded bg-white/20"></div>
+</div>
+</div>
+
+<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20">
+</div>
+
+<div className="invisible block pt-[45%]"></div>
+</div>
+</div>
+</div>
+
+<div className="sm:p-5 text-gray-400 pt-4 pr-4 pb-4 pl-4">
+<div className="mb-2 flex items-center gap-2 text-sm text-slate-400">
+<div className="flex items-center gap-1.5">
+<span className="sr-only font-geist" style={{}}>Phase:</span>
+<span className="text-slate-300/90 font-geist" style={{}}>Research & Strategy</span>
+</div>
+<span className="text-slate-500 font-geist" style={{}}>·</span>
+<div className="flex items-center gap-1.5">
+</div>
+<div className="hidden sm:flex items-center gap-1.5">
+<svg className="lucide lucide-clock h-3.5 w-3.5 text-slate-400" data-lucide="clock" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="12"></circle></svg>
+<span className="text-slate-300/90 font-geist" style={{}}>Week 1-2</span>
+</div>
+</div>
+<h3 className="font-semibold text-slate-100 tracking-tight text-lg font-geist" style={{}}>
+      Understanding users and business goals
+    </h3>
+<div className="mt-3 flex items-center gap-3">
+<div className="grid h-8 w-8 place-items-center ring-1 ring-white/10 text-sm font-medium text-slate-200 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/f804111a-fe24-4660-b754-0f3654213f91_320w.jpg)] bg-cover rounded-full px-4 py-4">
+</div>
+<div className="text-sm">
+<p className="font-medium text-slate-200/90 font-geist" style={{}}>Jordan Chen</p>
+<p className="text-slate-400 font-geist" style={{}}>Research, strategy, and user insights</p>
+</div>
+<div className="ml-auto hidden sm:flex items-center gap-2">
+<svg className="lucide lucide-arrow-up-right h-4 w-4 text-slate-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</div>
+</div>
+</div>
+
+<div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-transparent transition group-hover:ring-indigo-400/30">
+</div>
+</a>
+</div>
+</div>
+<div className="relative">
+<h3 className="text-2xl text-white mb-3 font-geist tracking-tight font-light" style={{}}>Research & Strategy</h3>
+<p className="text-gray-300 leading-relaxed text-base font-geist" style={{}}>
+          I begin every project with thorough <span className="font-semibold text-white font-geist" style={{}}>user research</span> and stakeholder interviews to understand the problem space and align on project goals.
+        </p>
+</div>
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-white/10"></div>
+</div>
+
+<div className="relative rounded-[28px] border border-white/10 bg-black/40 backdrop-blur-xl p-6 lg:p-8">
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/10 to-transparent"></div>
+<div className="relative mb-6">
+
+<div className="ring-1 ring-white/10 overflow-hidden bg-white/5 rounded-2xl">
+<div className="h-8 w-full bg-white/10 flex items-center px-3">
+<div className="flex gap-2">
+<div className="w-3 h-3 rounded-full bg-red-400"></div>
+<div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+<div className="w-3 h-3 rounded-full bg-green-400"></div>
+</div>
+</div>
+<div className="pt-4 pr-4 pb-4 pl-4 typing-container" id="codeContainer">
+
+</div>
+</div>
+</div>
+<div className="relative">
+<h3 className="text-2xl text-white mb-3 font-geist tracking-tight font-light" style={{}}>Design & Prototype</h3>
+<p className="text-gray-300 leading-relaxed text-base font-geist" style={{}}>
+          From wireframes to high-fidelity designs, I create <span className="font-semibold text-white font-geist" style={{}}>interactive prototypes</span> that bring ideas to life and enable early user testing.
+        </p>
+</div>
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-white/10"></div>
+</div>
+
+<div className="relative rounded-[28px] border border-white/10 bg-black/40 backdrop-blur-xl p-6 lg:p-8">
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/10 to-transparent"></div>
+<div className="relative mb-6">
+<article className="group relative overflow-hidden transition-shadow hover:shadow-md max-w-[500px] bg-neutral-900 border-neutral-800 border rounded-3xl pt-0 pb-0 shadow-sm">
+<div className="sm:p-8 pr-6 pl-6">
+
+<div className="relative h-56 sm:h-64 ring-1 ring-inset ring-white/5 bg-gradient-to-b from-neutral-900 to-neutral-800 rounded-2xl">
+
+<div className="absolute right-3 sm:right-6 top-4 sm:top-6 w-[78%] h-[68%] rounded-2xl bg-neutral-900/90 backdrop-blur border border-neutral-800 shadow-sm">
+<div className="flex items-center justify-between px-3 py-2 border-b border-neutral-800/70">
+<span className="text-[10px] sm:text-xs tracking-widest text-neutral-400 font-geist" style={{}}>USABILITY</span>
+<div className="flex items-center gap-2">
+<span className="text-xs text-green-400 font-geist" style={{}}>+94%</span>
+<span className="h-2 w-12 rounded bg-green-500/20"></span>
+</div>
+</div>
+<div className="p-2">
+<svg className="w-full h-20 sm:h-24 text-neutral-700" viewBox="0 0 300 90">
+<defs>
+<pattern height="4" id="dots2" patternunits="userSpaceOnUse" width="4">
+<circle cx="1" cy="1" fill="currentColor" opacity="0.3"></circle>
+</pattern>
+</defs>
+<rect className="" fill="url(#dots2)" height="100%" width="100%"></rect>
+
+<rect fill="#10B981" height="40" width="3"></rect>
+<rect fill="#10B981" height="45" width="3"></rect>
+<rect fill="#10B981" height="50" width="3"></rect>
+<rect fill="#10B981" height="55" width="3"></rect>
+<rect fill="#10B981" height="53" width="3"></rect>
+<rect fill="#10B981" height="57" width="3"></rect>
+<rect fill="#10B981" height="60" width="3"></rect>
+<rect fill="#10B981" height="62" width="3"></rect>
+<rect fill="#10B981" height="63" width="3"></rect>
+<rect fill="#10B981" height="64" width="3"></rect>
+<polyline fill="none" points="22,45 42,40 62,35 82,32 102,35 122,30 142,25 162,22 182,20 202,18" stroke="#10B981" strokeLinecap="round" strokeWidth="1.5"></polyline>
+</svg>
+</div>
+</div>
+
+<div className="absolute left-6 sm:left-12 bottom-10 sm:bottom-12 w-[62%] h-[52%] rounded-2xl bg-neutral-900/90 backdrop-blur border border-neutral-800 shadow-sm">
+<div className="flex items-center justify-between px-3 py-2 border-b border-neutral-800/70">
+<span className="text-[10px] sm:text-xs tracking-widest text-neutral-400 font-geist" style={{}}>METRICS</span>
+</div>
+<div className="p-2 space-y-1">
+<div className="flex items-center justify-between text-xs">
+<span className="text-neutral-300 font-geist" style={{}}>Task Success</span>
+<span className="text-green-400 font-geist" style={{}}>94%</span>
+</div>
+<div className="flex items-center justify-between text-xs">
+<span className="text-neutral-300 font-geist" style={{}}>Time to Complete</span>
+<span className="text-green-400 font-geist" style={{}}>-40%</span>
+</div>
+<div className="flex items-center justify-between text-xs">
+<span className="text-neutral-300 font-geist" style={{}}>User Satisfaction</span>
+<span className="text-green-400 font-geist" style={{}}>4.8/5</span>
+</div>
+</div>
+</div>
+
+<div className="absolute left-3 sm:left-6 bottom-3 sm:bottom-4 w-[38%] h-[44%] rounded-2xl bg-neutral-900/90 backdrop-blur border border-neutral-800 shadow-sm">
+<div className="flex items-center justify-between px-3 py-2 border-b border-neutral-800/70">
+<span className="text-[10px] sm:text-xs tracking-widest text-neutral-400 font-geist" style={{}}>A/B TEST</span>
+</div>
+<div className="p-2">
+<svg className="w-full h-14 sm:h-16 text-neutral-700" viewBox="0 0 180 70">
+<rect fill="#10B981" height="35" width="2"></rect>
+<rect fill="#10B981" height="40" width="2"></rect>
+<rect fill="#10B981" height="37" width="2"></rect>
+<rect fill="#10B981" height="43" width="2"></rect>
+<rect fill="#10B981" height="45" width="2"></rect>
+<rect fill="#10B981" height="47" width="2"></rect>
+<rect fill="#10B981" height="50" width="2"></rect>
+<rect fill="#10B981" height="52" width="2"></rect>
+<rect className="" fill="#10B981" height="53" width="2"></rect>
+<polyline fill="none" points="11,37 26,35 41,36 56,34 71,32 86,30 101,27 116,25 131,24" stroke="#10B981" strokeLinecap="round" strokeWidth="1"></polyline>
+</svg>
+</div>
+</div>
+</div>
+
+<div className="mt-6 sm:mt-8">
+</div>
+</div>
+</article>
+</div>
+<div className="relative">
+<h3 className="text-2xl text-white mb-3 font-geist tracking-tight font-light" style={{}}>Test & Refine</h3>
+<p className="text-gray-300 leading-relaxed text-base font-geist" style={{}}>
+          Through continuous <span className="font-semibold text-white font-geist" style={{}}>user testing</span> and data analysis, I iterate and refine designs until they deliver exceptional user experiences and measurable results.
+        </p>
+</div>
+<div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-white/10"></div>
+</div>
+</div>
+</div>
+</section>
+
+<footer className="relative border-white/10 border-t pt-24 pb-24" id="contact">
+<div className="max-w-7xl lg:px-8 mr-auto ml-auto pr-6 pl-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+<div className="">
+<h2 className="text-4xl lg:text-5xl text-white mb-6 opacity-0 animate-slide-up font-geist tracking-tight font-light" style={{animationDelay: `5.2s`}}>
+              Let's create something amazing together
+            </h2>
+<p className="text-xl text-gray-400 mb-8 opacity-0 animate-slide-up font-geist" style={{animationDelay: `5.4s`}}>
+              Ready to bring your vision to life? I'd love to hear about your project and explore how we can work together.
+            </p>
+<div className="flex flex-col sm:flex-row gap-4 mb-8 opacity-0 animate-slide-up" style={{animationDelay: `5.6s`}}>
+<a className="inline-flex items-center gap-3 rounded-full bg-white text-black px-8 py-4 text-base font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 font-geist" href="mailto:hello@jordanchen.design" style={{}}>
+<svg className="lucide lucide-mail w-5 h-5" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="16" rx="2" width="20"></rect></svg>
+                hello@jordanchen.design
+              </a>
+<a className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 backdrop-blur text-white px-8 py-4 text-base font-medium hover:bg-white/15 transition-all duration-300 hover:scale-105 font-geist" href="#" style={{}}>
+<svg className="lucide lucide-calendar w-5 h-5" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><rect height="18" rx="2" width="18"></rect><path></path></svg>
+                Schedule a call
+              </a>
+</div>
+<div className="flex items-center gap-4 opacity-0 animate-fade-in" style={{animationDelay: `5.8s`}}>
+<a className="rounded-2xl bg-white/10 border border-white/20 p-3 hover:bg-white/15 transition-colors" href="#">
+<svg className="lucide lucide-dribbble w-5 h-5 text-gray-300" data-lucide="dribbble" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><path></path><path></path><path></path></svg>
+</a>
+<a className="rounded-2xl bg-white/10 border border-white/20 p-3 hover:bg-white/15 transition-colors" href="#">
+<svg className="lucide lucide-twitter w-5 h-5 text-gray-300" data-lucide="twitter" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+</a>
+<a className="rounded-2xl bg-white/10 border border-white/20 p-3 hover:bg-white/15 transition-colors" href="#">
+<svg className="lucide lucide-linkedin w-5 h-5 text-gray-300" data-lucide="linkedin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="12" width="4"></rect><circle cx="4" cy="4"></circle></svg>
+</a>
+<a className="rounded-2xl bg-white/10 border border-white/20 p-3 hover:bg-white/15 transition-colors" href="#">
+<svg className="lucide lucide-github w-5 h-5 text-gray-300" data-lucide="github" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+</div>
+<div className="opacity-0 animate-fade-in" style={{animationDelay: `6s`}}>
+<div className="rounded-3xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 p-8">
+<h3 className="text-2xl text-white mb-6 font-geist tracking-tight font-light" style={{}}>Quick Links</h3>
+<div className="grid grid-cols-2 gap-4">
+<div className="space-y-3">
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#work" style={{}}>Work</a>
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#about" style={{}}>About</a>
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#process" style={{}}>Process</a>
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#journal" style={{}}>Journal</a>
+</div>
+<div className="space-y-3">
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#" style={{}}>Resume</a>
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#" style={{}}>Case Studies</a>
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#" style={{}}>Speaking</a>
+<a className="block text-gray-300 hover:text-white transition-colors font-geist" href="#" style={{}}>Mentoring</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in border-white/10 border-t mt-16 pt-8 items-center justify-between" style={{animationDelay: `6.2s`}}>
+<div className="flex items-center gap-2">
+<div className="bg-white/10 border-white/20 border rounded-xl pt-2 pr-3 pb-2 pl-3">
+<span className="block text-lg font-semibold tracking-tight font-geist" style={{}}>JC</span>
+</div>
+<span className="text-sm text-gray-500 font-geist" style={{}}>© 2024 Jordan Cole. All rights reserved.</span>
+</div>
+<div className="text-sm text-gray-500 font-geist" style={{}}>Designed in Aura, built with love</div>
+</div>
+</div>
+
+<div className="fixed bottom-8 right-8 z-50 opacity-0 animate-fade-in" style={{animationDelay: `6.4s`}}>
+<button aria-label="Go to top" className="group relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white/20 hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-white/10" id="goToTop">
+<svg className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform duration-300" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path></path>
+</svg>
+</button>
+</div>
+</footer>
+
+
+
+
+    </>
+  );
+}

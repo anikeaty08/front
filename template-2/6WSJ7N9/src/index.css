@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+
+body { font-family: 'Inter', sans-serif; }
+.canvas-area {
+background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+background-size: 20px 20px;
+}
+.marching-ants {
+border: 2px dashed #007AFF;
+animation: march 1s linear infinite;
+}
+@keyframes march {
+0% { stroke-dashoffset: 0; }
+100% { stroke-dashoffset: 8; }
+}
+.sidebar-transition {
+transition: width 0.3s ease-in-out, opacity 0.2s ease-in-out;
+}
+.arrow-transition {
+transition: transform 0.2s ease-in-out;
+}
+.collapsed-arrow {
+transform: rotate(-90deg);
+}
+.chat-bubble {
+max-width: 85%;
+word-wrap: break-word;
+}
+.user-bubble {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.ai-bubble {
+background: #f8fafc;
+border: 1px solid #e2e8f0;
+}
+.tool-active {
+background-color: #3b82f6;
+color: white;
+}
+.tool-active:hover {
+background-color: #2563eb;
+}
+.sidebar-hidden {
+width: 0 !important;
+opacity: 0;
+}
+.sidebar-show-btn {
+position: fixed;
+left: 16px;
+top: 50%;
+transform: translateY(-50%);
+z-index: 50;
+}
+

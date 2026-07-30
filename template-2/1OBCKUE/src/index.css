@@ -1,0 +1,28 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        @keyframes neural-pulse { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.05); } }
+        @keyframes data-flow { 0% { transform: translateX(-100%); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px #00FFFF; } 50% { box-shadow: 0 0 20px #00FFFF, 0 0 30px #00FFFF; } }
+        @keyframes slide-up { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        .neural-node { animation: neural-pulse 3s ease-in-out infinite; }
+        .data-stream { animation: data-flow 4s linear infinite; }
+        .cyber-glow { animation: glow 2s ease-in-out infinite; }
+        .setting-panel { animation: slide-up 0.6s ease-out forwards; opacity: 0; }
+        .setting-panel:nth-child(1) { animation-delay: 0.1s; }
+        .setting-panel:nth-child(2) { animation-delay: 0.2s; }
+        .setting-panel:nth-child(3) { animation-delay: 0.3s; }
+        .setting-panel:nth-child(4) { animation-delay: 0.4s; }
+        .toggle-switch { transition: all 0.3s ease; }
+        .toggle-switch:checked { background: #00FFFF; }
+        .slider-track::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: #00FFFF; border-radius: 50%; cursor: pointer; }
+    

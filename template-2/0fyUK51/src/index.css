@@ -1,0 +1,46 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body {
+      color: #adbdcc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      background-color: #071527;
+    }
+    
+    .pricing-card {
+      background-color: #0c2e4e;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    
+    .pricing-card:hover {
+      transform: translateY(-4px);
+    }
+    
+    .pricing-highlight {
+      background-color: #0f395e;
+    }
+    
+    .accent-text {
+      color: #00d4ff;
+    }
+    
+    .accent-bg {
+      background-color: #00d4ff;
+    }
+    
+    .feature-check {
+      color: #00d4ff;
+    }
+  

@@ -1,0 +1,148 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+
+      .codepen-button{display:block;cursor:pointer;color:#fff;position:relative;text-decoration:none;font-weight:600;border-radius:100px;overflow:hidden;padding:2px;isolation:isolate}.codepen-button::before{content:"";position:absolute;inset:0;width:400%;height:100%;background:linear-gradient(115deg,#d1d1d1,#02367b,#a7bfde);background-size:25% 100%;animation:border-shift .75s linear infinite}@keyframes border-shift{to{transform:translateX(-25%)}}.codepen-button span{position:relative;display:block;padding:1rem 1.5rem;font-size:1.1rem;background:#02367b;border-radius:100px;height:100%}
+    
+
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(2rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInScale {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Custom date input styling for dark theme */
+      input[type="date"] {
+        color-scheme: dark;
+      }
+      
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(0.8) brightness(1.2);
+        opacity: 0.7;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+      }
+      
+      input[type="date"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+      }
+
+      input[type="date"]::-webkit-datetime-edit {
+        color: rgb(226 232 240);
+      }
+      
+      input[type="date"]::-webkit-datetime-edit-text {
+        color: rgb(148 163 184);
+      }
+      
+      input[type="date"]::-webkit-datetime-edit-month-field {
+        color: rgb(226 232 240);
+      }
+      
+      input[type="date"]::-webkit-datetime-edit-day-field {
+        color: rgb(226 232 240);
+      }
+      
+      input[type="date"]::-webkit-datetime-edit-year-field {
+        color: rgb(226 232 240);
+      }
+
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='rgba(226, 232, 240, 0.8)'%3e%3cpath fill-rule='evenodd' d='M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z' clip-rule='evenodd'/%3e%3c/svg%3e");
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+    

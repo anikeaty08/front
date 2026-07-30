@@ -1,0 +1,25 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body { font-family: 'Inter', sans-serif; }
+@keyframes fade-up { 0%{ opacity:0; transform:translateY(32px);} 100%{ opacity:1; transform:translateY(0);} }
+.fade-up { animation: fade-up .8s cubic-bezier(.4,0,.2,1) both; }
+.fade-delay-1 { animation-delay: .3s; }
+.fade-delay-2 { animation-delay: .6s; }
+.fade-delay-3 { animation-delay: .9s; }
+.fade-delay-4 { animation-delay: 1.2s; }
+/* subtle glowing green */
+.highlight { color: #CCFF00; }
+.highlight-bg { background-color: #CCFF00; }
+.glow-green { filter: drop-shadow(0 0 10px #CCFF00cc); }
+.glow-green-outline { box-shadow: 0 0 0 2px #CCFF0040; }
+

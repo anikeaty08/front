@@ -1,0 +1,70 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .clip-hexagon {
+      clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+    }
+    .clip-circle {
+      clip-path: circle(48% at 50% 50%);
+    }
+    .clip-diamond {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+    .shine {
+      position: absolute;
+      top: 0; left: -75%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 20%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 80%);
+      transform: skewX(-20deg);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .group:hover .shine {
+      animation: shine-move 0.8s linear forwards;
+      opacity: 1;
+    }
+    @keyframes shine-move {
+      0% { left: -75%; opacity: 0.2;}
+      30% { opacity: 1;}
+      100% { left: 110%; opacity: 0;}
+    }
+    .group:hover .glow {
+      box-shadow: 0 0 20px 6px rgba(168,85,247,0.6), 0 0 10px 2px rgba(59,130,246,0.3);
+      transition: box-shadow .3s;
+    }
+    .group.nature:hover .glow {
+      box-shadow: 0 0 24px 8px rgba(34,197,94,0.5), 0 0 10px 2px rgba(16,185,129,0.25);
+    }
+    .group.city:hover .glow {
+      box-shadow: 0 0 24px 8px rgba(59,130,246,0.5), 0 0 10px 2px rgba(30,64,175,0.25);
+    }
+    .group.people:hover .glow {
+      box-shadow: 0 0 24px 8px rgba(236,72,153,0.45), 0 0 10px 2px rgba(219,39,119,0.2);
+    }
+    .group.abstract:hover .glow {
+      box-shadow: 0 0 24px 8px rgba(234,179,8,0.5), 0 0 10px 2px rgba(202,138,4,0.18);
+    }
+    .hover-zoom:hover img { transform: scale(1.15); }
+    .hover-zoomout:hover img { transform: scale(0.92); }
+    .hover-move-up:hover img { transform: translateY(-18px); }
+    .hover-move-right:hover img { transform: translateX(18px); }
+    .hover-rotate:hover img { transform: rotate(6deg) scale(1.08);}
+    .hover-tilt:hover img { transform: rotate(-7deg) scale(1.1);}
+    .hover-blur:hover img { filter: blur(2.5px) brightness(1.1);}
+    .hover-shadow-xl:hover img { box-shadow: 0 8px 32px 0 rgba(31,41,55,0.25); }
+    .hover-grayscale:hover img { filter: grayscale(0.7) brightness(1.15);}
+    .img-transition img {
+      transition: transform 0.5s cubic-bezier(.16,1,.3,1), filter 0.5s cubic-bezier(.16,1,.3,1), box-shadow 0.5s, border-color 0.5s;
+    }
+  

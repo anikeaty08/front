@@ -1,0 +1,111 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f5f5f5;
+color: #171717;
+}
+/* Smooth scrolling & custom scrollbar */
+::-webkit-scrollbar {
+width: 6px;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+::-webkit-scrollbar-thumb {
+background: #d4d4d4;
+border-radius: 10px;
+}
+/* Glassmorphism utilities */
+.glass-panel {
+background: rgba(255, 255, 255, 0.9);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.nav-glass {
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(20px);
+border: 1px solid rgba(229, 229, 229, 0.8);
+}
+/* Card Hover Effects */
+.bento-card {
+transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+border: 1px solid #e5e5e5;
+background: #ffffff;
+box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.bento-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+border-color: #d4d4d4;
+}
+/* Subtle grid background */
+.bg-grid {
+background-size: 40px 40px;
+background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+/* Animations */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+animation: fadeIn 0.8s ease-out forwards;
+}
+/* Custom Table Styles */
+.market-table th {
+font-weight: 500;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+font-size: 0.65rem;
+color: #737373;
+padding-bottom: 0.75rem;
+}
+.market-table td {
+padding-top: 0.75rem;
+padding-bottom: 0.75rem;
+font-size: 0.875rem;
+border-bottom: 1px solid #f5f5f5;
+}
+.market-table tr:last-child td {
+border-bottom: none;
+}
+/* Custom Progress Bar for Comparison */
+.price-bar-bg {
+background: #f5f5f5;
+border-radius: 99px;
+height: 6px;
+width: 100%;
+overflow: hidden;
+position: relative;
+}
+.price-bar-fill {
+background: #171717;
+height: 100%;
+border-radius: 99px;
+}
+.price-marker {
+position: absolute;
+top: 50%;
+transform: translate(-50%, -50%);
+width: 12px;
+height: 12px;
+background: #fff;
+border: 3px solid #171717;
+border-radius: 50%;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+

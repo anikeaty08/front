@@ -1,0 +1,61 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .orb-preview {
+      width: 360px;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #18181b;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 48px 0 #00000033;
+      overflow: hidden;
+      position: relative;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      box-shadow: 0 0 80px 0 #fff3;
+      filter: blur(var(--blur, 24px));
+      transition: all .3s, background 0.5s;
+      animation: orb-move var(--speed,6s) ease-in-out infinite alternate;
+      background: var(--gradient);
+      width: var(--size,200px);
+      height: var(--size,200px);
+      z-index: 10;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.93;
+    }
+    .orb.morphing {
+      animation: orb-move var(--speed,6s) ease-in-out infinite alternate,
+                 morph-radius var(--speed,8s) ease-in-out infinite alternate;
+    }
+
+    @keyframes orb-move {
+      0% { transform: translate(-50%,-50%) scale(1);}
+      15% { transform: translate(-60%,-42%) scale(1.08);}
+      30% { transform: translate(-40%,-58%) scale(1.06);}
+      50% { transform: translate(-65%,-45%) scale(1.12);}
+      70% { transform: translate(-37%,-62%) scale(1.07);}
+      100% { transform: translate(-50%,-50%) scale(1);}
+    }
+    @keyframes morph-radius {
+      0%   { border-radius: var(--radius,50%) 50% 60% 40% / 50% 60% 50% 40%; }
+      22%  { border-radius: 48% 55% 70% 36% / 60% 47% 64% 48%; }
+      44%  { border-radius: 60% 40% 52% 68% / 41% 63% 38% 57%; }
+      66%  { border-radius: 67% 60% 43% 62% / 55% 50% 57% 51%; }
+      88%  { border-radius: 45% 61% 58% 49% / 60% 48% 56% 47%; }
+      100% { border-radius: var(--radius,50%) 50% 60% 40% / 50% 60% 50% 40%; }
+    }
+  

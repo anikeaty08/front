@@ -1,0 +1,43 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+background-color: #ffffff;
+overflow-x: hidden;
+}
+/* Hide scrollbar */
+::-webkit-scrollbar {
+width: 0px;
+background: transparent;
+}
+/* 3D Scene Setup */
+.carousel-container {
+perspective: 1200px;
+/* Ensure perspective origin is slightly above center for that "looking down" feel */
+perspective-origin: 50% 45%;
+}
+.card-3d {
+transform-style: preserve-3d;
+backface-visibility: hidden;
+/* Hardware acceleration hints */
+will-change: transform, opacity, box-shadow;
+}
+/* Custom Easing for that "Premium" feel */
+.ease-premium {
+transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+
+/* 3D Transform utilities */
+

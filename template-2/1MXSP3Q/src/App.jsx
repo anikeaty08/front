@@ -1,0 +1,406 @@
+import React, { useEffect } from 'react';
+
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      {
+
+    const slides = [{ key: 'docs', bullet: 'Real‑time briefs', accent: 'emerald', icon: 'users', pillText: 'Co‑create', tailText: 'product briefs', body: 'Draft clear briefs together with multiplayer editing. Structure work with headings, checklists, and callouts.', badges: [{ text: 'noa', color: 'emerald' , target: 'briefs' }, { text: 'leo', color: 'violet' , target: 'checklists' }] }, { key: 'comments', bullet: 'Threaded reviews', accent: 'amber', icon: 'message-square', pillText: 'Review in', tailText: 'context', body: 'Keep decisions attached to the work with inline threads. Mention teammates, resolve quickly, and move forward.', badges: [{ text: 'ivan', color: 'amber', target: 'threads' }, { text: 'sara', color: 'sky', target: 'Mention' }] }, { key: 'commands', bullet: 'Commands to tickets', accent: 'violet', icon: 'workflow', pillText: 'Turn notes into', tailText: 'tickets', body: 'Use quick commands to convert writing into scoped tickets with owners, labels, and estimates.', badges: [{ text: 'jin',  color: 'violet', target: 'tickets' }, { text: 'nora', color: 'emerald', target: 'owners' }] }]; const accents = { emerald: { pill: 'ring-emerald-500/60 bg-emerald-500/10 text-emerald-200', iconBox: 'bg-emerald-500/10 text-emerald-400', bar: 'bg-emerald-400', }, amber: { pill: 'ring-amber-500/60 bg-amber-500/10 text-amber-200', iconBox: 'bg-amber-500/10 text-amber-400', bar: 'bg-amber-400', }, violet: { pill: 'ring-violet-500/60 bg-violet-500/10 text-violet-200', iconBox: 'bg-violet-500/10 text-violet-400', bar: 'bg-violet-400', }, sky: { pill: 'ring-sky-500/60 bg-sky-500/10 text-sky-200', iconBox: 'bg-sky-500/10 text-sky-400', bar: 'bg-sky-400', } }; const highlightMap = { docs: ['briefs', 'checklists'], comments: ['threads', 'Mention'], commands: ['tickets', 'owners'] }; const root = document.querySelector('[data-component="feature-rotator"]') || document.querySelector('div'); const bulletList = document.getElementById('bulletList'); const iconBox = document.getElementById('iconBox'); const highlightPill = document.getElementById('highlightPill'); const highlightTail = document.getElementById('highlightTail'); const bodyCopy = document.getElementById('bodyCopy'); const badgesLayer = document.getElementById('badgesLayer'); function renderBullets(active) { bulletList.innerHTML = ''; slides.forEach((s, i) => { const isActive = i === active; const row = document.createElement('button'); row.type = 'button'; row.setAttribute('data-index', i); row.className = 'group w-full flex items-center gap-3 sm:gap-4'; row.innerHTML = `<span class="h-6 w-1 rounded-full ${isActive ? accents[slides[active].accent].bar : 'bg-neutral-700'} transition-colors"></span><span class="text-sm sm:text-base ${isActive ? 'text-white' : 'text-neutral-500 group-hover:text-neutral-300'} font-medium">${s.bullet}</span>`; row.addEventListener('click', () => setActive(i, true)); bulletList.appendChild(row); }); } function setIcon(icon, accent) { iconBox.className = `w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${accents[accent].iconBox}`; iconBox.innerHTML = `<i data-lucide="${icon}" class="w-6 h-6"></i>`; lucide.createIcons({ attrs: { 'stroke-width': 1.5 } }); } function setBadges() { badgesLayer.innerHTML = ''; } function colorMap(name, alpha = 1) { const colors = { emerald: `rgba(16,185,129,${alpha})`, violet: `rgba(139,92,246,${alpha})`, amber: `rgba(245,158,11,${alpha})`, sky: `rgba(14,165,233,${alpha})` }; return colors[name] || `rgba(16,185,129,${alpha})`; } function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); } function applyHighlights(text, slideKey, badges) { const tokens = (highlightMap[slideKey] || []).slice(); let result = text; tokens.forEach((token, idx) => { const b = badges[idx]; if (!b) return; const re = new RegExp(`\\b(${escapeRegExp(token)})\\b`, 'i'); const bg = colorMap(b.color, 0.18); const border = colorMap(b.color, 0.35); result = result.replace(re, (m) => { return `<span class="rounded-md px-1.5 -mx-0.5 ring-1" style="background:${bg}; box-shadow: inset 0 0 0 1px ${border};">${m}</span>`; }); }); return result; } let index = 0; let timer; function setActive(i, manual = false) { index = i % slides.length; if (index < 0) index = slides.length - 1; const s = slides[index]; renderBullets(index); setIcon(s.icon, s.accent); highlightPill.className = `inline-flex items-center rounded-md px-2.5 py-1.5 ring-1 text-base sm:text-lg ${accents[s.accent].pill}`; highlightPill.textContent = s.pillText; highlightTail.textContent = s.tailText; bodyCopy.innerHTML = applyHighlights(s.body, s.key, s.badges); setBadges(); if (manual) { clearInterval(timer); timer = startRotation(); } } function startRotation() { return setInterval(() => setActive((index + 1) % slides.length), 4500); } renderBullets(index); setActive(0); timer = startRotation(); root.addEventListener('mouseenter', () => clearInterval(timer)); root.addEventListener('mouseleave', () => { clearInterval(timer); timer = startRotation(); }); setTimeout(() => lucide.createIcons({ attrs: { 'stroke-width': 1.5 } }), 100);
+  
+}
+
+{
+
+    const slides = [{ key: 'docs', bullet: 'Real‑time briefs', accent: 'emerald', icon: 'users', pillText: 'Co‑create', tailText: 'product briefs', body: 'Draft clear briefs together with multiplayer editing. Structure work with headings, checklists, and callouts.', badges: [{ text: 'noa', color: 'emerald' , target: 'briefs' }, { text: 'leo', color: 'violet' , target: 'checklists' }] }, { key: 'comments', bullet: 'Threaded reviews', accent: 'amber', icon: 'message-square', pillText: 'Review in', tailText: 'context', body: 'Keep decisions attached to the work with inline threads. Mention teammates, resolve quickly, and move forward.', badges: [{ text: 'ivan', color: 'amber', target: 'threads' }, { text: 'sara', color: 'sky', target: 'Mention' }] }, { key: 'commands', bullet: 'Commands to tickets', accent: 'violet', icon: 'workflow', pillText: 'Turn notes into', tailText: 'tickets', body: 'Use quick commands to convert writing into scoped tickets with owners, labels, and estimates.', badges: [{ text: 'jin',  color: 'violet', target: 'tickets' }, { text: 'nora', color: 'emerald', target: 'owners' }] }]; const accents = { emerald: { pill: 'ring-emerald-500/60 bg-emerald-500/10 text-emerald-200', iconBox: 'bg-emerald-500/10 text-emerald-400', bar: 'bg-emerald-400', }, amber: { pill: 'ring-amber-500/60 bg-amber-500/10 text-amber-200', iconBox: 'bg-amber-500/10 text-amber-400', bar: 'bg-amber-400', }, violet: { pill: 'ring-violet-500/60 bg-violet-500/10 text-violet-200', iconBox: 'bg-violet-500/10 text-violet-400', bar: 'bg-violet-400', }, sky: { pill: 'ring-sky-500/60 bg-sky-500/10 text-sky-200', iconBox: 'bg-sky-500/10 text-sky-400', bar: 'bg-sky-400', } }; const highlightMap = { docs: ['briefs', 'checklists'], comments: ['threads', 'Mention'], commands: ['tickets', 'owners'] }; const root = document.querySelector('[data-component="feature-rotator"]') || document.querySelector('div'); const bulletList = document.getElementById('bulletList'); const iconBox = document.getElementById('iconBox'); const highlightPill = document.getElementById('highlightPill'); const highlightTail = document.getElementById('highlightTail'); const bodyCopy = document.getElementById('bodyCopy'); const badgesLayer = document.getElementById('badgesLayer'); function renderBullets(active) { bulletList.innerHTML = ''; slides.forEach((s, i) => { const isActive = i === active; const row = document.createElement('button'); row.type = 'button'; row.setAttribute('data-index', i); row.className = 'group w-full flex items-center gap-3 sm:gap-4'; row.innerHTML = `<span class="h-6 w-1 rounded-full ${isActive ? accents[slides[active].accent].bar : 'bg-neutral-700'} transition-colors"></span><span class="text-sm sm:text-base ${isActive ? 'text-white' : 'text-neutral-500 group-hover:text-neutral-300'} font-medium">${s.bullet}</span>`; row.addEventListener('click', () => setActive(i, true)); bulletList.appendChild(row); }); } function setIcon(icon, accent) { iconBox.className = `w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${accents[accent].iconBox}`; iconBox.innerHTML = `<i data-lucide="${icon}" class="w-6 h-6"></i>`; lucide.createIcons({ attrs: { 'stroke-width': 1.5 } }); } function setBadges() { badgesLayer.innerHTML = ''; } function colorMap(name, alpha = 1) { const colors = { emerald: `rgba(16,185,129,${alpha})`, violet: `rgba(139,92,246,${alpha})`, amber: `rgba(245,158,11,${alpha})`, sky: `rgba(14,165,233,${alpha})` }; return colors[name] || `rgba(16,185,129,${alpha})`; } function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); } function applyHighlights(text, slideKey, badges) { const tokens = (highlightMap[slideKey] || []).slice(); let result = text; tokens.forEach((token, idx) => { const b = badges[idx]; if (!b) return; const re = new RegExp(`\\b(${escapeRegExp(token)})\\b`, 'i'); const bg = colorMap(b.color, 0.18); const border = colorMap(b.color, 0.35); result = result.replace(re, (m) => { return `<span class="rounded-md px-1.5 -mx-0.5 ring-1" style="background:${bg}; box-shadow: inset 0 0 0 1px ${border};">${m}</span>`; }); }); return result; } let index = 0; let timer; function setActive(i, manual = false) { index = i % slides.length; if (index < 0) index = slides.length - 1; const s = slides[index]; renderBullets(index); setIcon(s.icon, s.accent); highlightPill.className = `inline-flex items-center rounded-md px-2.5 py-1.5 ring-1 text-base sm:text-lg ${accents[s.accent].pill}`; highlightPill.textContent = s.pillText; highlightTail.textContent = s.tailText; bodyCopy.innerHTML = applyHighlights(s.body, s.key, s.badges); setBadges(); if (manual) { clearInterval(timer); timer = startRotation(); } } function startRotation() { return setInterval(() => setActive((index + 1) % slides.length), 4500); } renderBullets(index); setActive(0); timer = startRotation(); root.addEventListener('mouseenter', () => clearInterval(timer)); root.addEventListener('mouseleave', () => { clearInterval(timer); timer = startRotation(); }); setTimeout(() => lucide.createIcons({ attrs: { 'stroke-width': 1.5 } }), 100);
+  
+}
+
+{
+
+        // Initialize Lucide icons
+        lucide.createIcons({
+            attrs: {
+                'stroke-width': '1.5'
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    
+}
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+
+<nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200/60 opacity-0 animate-[fadeIn_1s_ease-out_0.2s_forwards]" style={{animationFillMode: `forwards`}}>
+<div className="max-w-7xl mx-auto px-6 lg:px-8">
+<div className="flex items-center justify-between h-16">
+<div className="font-playfair font-semibold text-xl tracking-tight text-zinc-900">
+                    ALEXANDRA CHEN
+                </div>
+<div className="hidden md:flex items-center space-x-8">
+<a className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors duration-300" href="#work">WORK</a>
+<a className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors duration-300" href="#about">ABOUT</a>
+<a className="text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors duration-300" href="#contact">CONTACT</a>
+</div>
+<button className="md:hidden p-2">
+<svg className="lucide lucide-menu w-5 h-5 text-zinc-600" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg>
+</button>
+</div>
+</div>
+</nav>
+
+<div className="min-h-screen relative overflow-hidden text-neutral-200 antialiased font-sans" style={{fontFamily: `Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`}}>
+
+
+
+<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_40%_at_70%_30%,rgba(120,119,198,0.15),transparent_60%)]"></div>
+<section className="max-w-7xl md:px-8 md:py-24 bg-[url(https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/86071fe2-c5b4-4d6d-8cc8-87a7cc2edda1_1600w.jpg)] bg-cover mr-auto ml-auto pt-16 pr-6 pb-16 pl-6">
+<div className="min-h-screen relative overflow-hidden antialiased font-sans text-neutral-200" style={{fontFamily: `Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`}}>
+
+
+
+<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_40%_at_70%_30%,rgba(120,119,198,0.15),transparent_60%)]"></div>
+<section className="max-w-7xl mx-auto px-6 md:px-8 py-16 md:py-24">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+<div className="">
+<h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white">
+          Plan, write, and shipwork that matters
+          <br className="hidden sm:block" />
+</h1>
+<div className="mt-10 space-y-5" id="bulletList"><button className="group w-full flex items-center gap-3 sm:gap-4" data-index="0" type="button"><span className="h-6 w-1 rounded-full bg-emerald-400 transition-colors"></span><span className="text-sm sm:text-base text-white font-medium">Real‑time briefs</span></button><button className="group w-full flex items-center gap-3 sm:gap-4" data-index="1" type="button"><span className="h-6 w-1 rounded-full bg-neutral-700 transition-colors"></span><span className="text-sm sm:text-base text-neutral-500 group-hover:text-neutral-300 font-medium">Threaded reviews</span></button><button className="group w-full flex items-center gap-3 sm:gap-4" data-index="2" type="button"><span className="h-6 w-1 rounded-full bg-neutral-700 transition-colors"></span><span className="text-sm sm:text-base text-neutral-500 group-hover:text-neutral-300 font-medium">Commands to tickets</span></button></div>
+</div>
+<div className="relative">
+<div className="relative rounded-2xl border shadow-[0_10px_60px_-15px_rgba(0,0,0,0.6)] ring-1 backdrop-blur-md overflow-hidden border-neutral-800/80 bg-neutral-900/50 ring-white/5">
+<div className="h-12 flex items-center gap-2 px-4 border-b text-sm border-neutral-800/70 text-neutral-400">
+<svg className="lucide lucide-file-text w-4 h-4" data-lucide="file-text" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path><path></path></svg>
+<span className="truncate">Nebula relay</span>
+<span className="opacity-50">›</span>
+<span className="truncate text-neutral-300">Product brief</span>
+<span className="ml-auto flex items-center gap-1 opacity-60">
+<svg className="lucide lucide-more-horizontal w-4 h-4" data-lucide="more-horizontal" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><circle cx="19" cy="12"></circle><circle cx="5" cy="12"></circle></svg>
+</span>
+</div>
+<div className="relative px-6 md:px-8 py-8 md:py-10">
+<div className="absolute left-3 top-1/2 -translate-y-1/2 flex flex-col gap-1 text-neutral-700">
+<span className="w-1 h-1 rounded-full bg-current"></span>
+<span className="w-1 h-1 rounded-full bg-current"></span>
+<span className="w-1 h-1 rounded-full bg-current"></span>
+</div>
+<div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 bg-emerald-500/10 text-emerald-400" id="iconBox"><svg className="lucide lucide-users w-6 h-6" data-lucide="users" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><circle cx="9" cy="7"></circle></svg></div>
+<div className="relative">
+<h2 className="text-2xl sm:text-3xl font-semibold tracking-tight flex flex-wrap items-center gap-3 text-neutral-100">
+<span className="inline-flex items-center rounded-md px-2.5 py-1.5 ring-1 text-base sm:text-lg ring-emerald-500/60 bg-emerald-500/10 text-emerald-200" id="highlightPill">Co‑create</span>
+<span className="" id="highlightTail">product briefs</span>
+</h2>
+<div className="relative" id="badgesLayer"></div>
+</div>
+<p className="mt-5 leading-relaxed max-w-prose text-[17px] sm:text-lg text-neutral-400" id="bodyCopy">Draft clear <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: `rgba(16,185,129,0.18)`, boxShadow: `inset 0 0 0 1px rgba(16,185,129,0.35)`}}>briefs</span> together with multiplayer editing. Structure work with headings, <span className="rounded-md px-1.5 -mx-0.5 ring-1" style={{background: `rgba(139,92,246,0.18)`, boxShadow: `inset 0 0 0 1px rgba(139,92,246,0.35)`}}>checklists</span>, and callouts.</p>
+<div className="mt-8 space-y-2">
+<div className="h-3 rounded w-2/3 bg-neutral-800/70"></div>
+<div className="h-3 rounded w-5/6 bg-neutral-800/70"></div>
+<div className="h-3 rounded w-1/2 bg-neutral-800/70"></div>
+</div>
+<div className="mt-8 space-y-2 opacity-80">
+<div className="h-3 rounded w-11/12 bg-neutral-800/70"></div>
+<div className="h-3 rounded w-2/3 bg-neutral-800/70"></div>
+<div className="h-3 rounded w-3/4 bg-neutral-800/70"></div>
+</div>
+<div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t to-transparent from-neutral-950/80"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</div>
+</section>
+
+</div>
+
+<section className="bg-white pt-24 pb-24" id="work">
+<div className="max-w-7xl mx-auto px-6 lg:px-8">
+<div className="text-center mb-20 opacity-0 animate-[fadeIn_1s_ease-out_0.2s_forwards]">
+<h2 className="md:text-5xl text-4xl font-medium text-zinc-900 tracking-tight font-playfair text-left mb-4">
+                    Featured Work
+                </h2>
+<p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+                    A curated selection of recent projects spanning portraiture, fashion, and fine art photography.
+                </p>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+<div className="md:col-span-2 lg:row-span-2 group cursor-pointer opacity-0 animate-[slideUp_1s_ease-out_0.4s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="relative overflow-hidden bg-zinc-100 aspect-[4/5] md:aspect-[3/4]">
+<img alt="Portrait Photography" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&q=80" />
+<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+<div className="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+<h3 className="font-playfair text-xl font-medium mb-1">Ethereal Portraits</h3>
+<p className="text-sm text-white/80">Portrait Series, 2024</p>
+</div>
+</div>
+</div>
+
+<div className="group cursor-pointer opacity-0 animate-[slideUp_1s_ease-out_0.6s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="relative overflow-hidden bg-zinc-100 aspect-square">
+<img alt="Fashion Photography" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=600&fit=crop" />
+<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+<div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+<h3 className="font-medium text-sm">Urban Fashion</h3>
+</div>
+</div>
+</div>
+<div className="group cursor-pointer opacity-0 animate-[slideUp_1s_ease-out_0.8s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="relative overflow-hidden bg-zinc-100 aspect-square">
+<img alt="Portrait Photography" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=600&fit=crop&crop=face" />
+<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+<div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+<h3 className="font-medium text-sm">Golden Hour</h3>
+</div>
+</div>
+</div>
+<div className="md:col-span-2 group cursor-pointer opacity-0 animate-[slideUp_1s_ease-out_1s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="relative overflow-hidden bg-zinc-100 aspect-[21/9]">
+<img alt="Landscape Photography" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&h=500&fit=crop" />
+<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+<div className="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+<h3 className="font-playfair text-xl font-medium mb-1">Natural Landscapes</h3>
+<p className="text-sm text-white/80">Fine Art Series, 2024</p>
+</div>
+</div>
+</div>
+<div className="group cursor-pointer opacity-0 animate-[slideUp_1s_ease-out_1.2s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="relative overflow-hidden bg-zinc-100 aspect-square">
+<img alt="Portrait Photography" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=600&fit=crop&crop=face" />
+<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+<div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+<h3 className="font-medium text-sm">Contemporary</h3>
+</div>
+</div>
+</div>
+</div>
+<div className="text-center mt-16 opacity-0 animate-[fadeIn_1s_ease-out_1.4s_forwards]">
+<a className="inline-flex items-center text-sm font-medium text-zinc-900 hover:text-zinc-600 transition-colors duration-300 group" href="#">
+                    VIEW ALL WORK
+                    <svg className="lucide lucide-arrow-right w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-zinc-50" id="about">
+<div className="max-w-4xl mx-auto px-6 lg:px-8">
+<div className="grid md:grid-cols-2 gap-16 items-center">
+<div className="opacity-0 animate-[slideUp_1s_ease-out_0.3s_forwards]" style={{transform: `translateY(30px)`}}>
+<img alt="Alexandra Chen" className="w-full aspect-[4/5] object-cover" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=700&fit=crop&crop=face" />
+</div>
+<div className="opacity-0 animate-[slideUp_1s_ease-out_0.6s_forwards]" style={{transform: `translateY(30px)`}}>
+<h2 className="font-playfair text-4xl font-medium text-zinc-900 tracking-tight mb-6">
+                        About Alexandra
+                    </h2>
+<p className="text-lg text-zinc-600 leading-relaxed mb-6">
+                        With over a decade of experience in visual storytelling, I specialize in capturing the raw authenticity of human emotion through portraiture and fine art photography.
+                    </p>
+<p className="text-zinc-600 leading-relaxed mb-8">
+                        My work has been featured in Vogue, Harper's Bazaar, and National Geographic. I believe every photograph should tell a story that resonates beyond the frame, creating connections that transcend time and space.
+                    </p>
+<div className="flex flex-col space-y-4">
+<div className="flex items-center space-x-3">
+<svg className="lucide lucide-award w-5 h-5 text-zinc-400" data-lucide="award" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="8"></circle></svg>
+<span className="text-sm text-zinc-600">World Press Photo Award Winner 2023</span>
+</div>
+<div className="flex items-center space-x-3">
+<svg className="lucide lucide-camera w-5 h-5 text-zinc-400" data-lucide="camera" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="13"></circle></svg>
+<span className="text-sm text-zinc-600">Published in 50+ International Publications</span>
+</div>
+<div className="flex items-center space-x-3">
+<svg className="lucide lucide-globe w-5 h-5 text-zinc-400" data-lucide="globe" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><path></path><path></path></svg>
+<span className="text-sm text-zinc-600">Based in New York, Available Worldwide</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-white">
+<div className="max-w-6xl mx-auto px-6 lg:px-8">
+<div className="text-center mb-20 opacity-0 animate-[fadeIn_1s_ease-out_0.2s_forwards]">
+<h2 className="font-playfair text-4xl font-medium text-zinc-900 tracking-tight mb-4">
+                    Services
+                </h2>
+<p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+                    Comprehensive photography services tailored to capture your unique story with artistic precision.
+                </p>
+</div>
+<div className="grid md:grid-cols-3 gap-8">
+<div className="text-center p-8 opacity-0 animate-[slideUp_1s_ease-out_0.4s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+<svg className="lucide lucide-user w-8 h-8 text-zinc-600" data-lucide="user" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="7"></circle></svg>
+</div>
+<h3 className="font-playfair text-xl font-medium text-zinc-900 mb-4">Portrait Sessions</h3>
+<p className="text-zinc-600 leading-relaxed">
+                        Intimate portrait sessions that reveal the authentic essence of your personality through carefully crafted lighting and composition.
+                    </p>
+</div>
+<div className="text-center p-8 opacity-0 animate-[slideUp_1s_ease-out_0.6s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+<svg className="lucide lucide-heart w-8 h-8 text-zinc-600" data-lucide="heart" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+</div>
+<h3 className="font-playfair text-xl font-medium text-zinc-900 mb-4">Wedding Photography</h3>
+<p className="text-zinc-600 leading-relaxed">
+                        Documentary-style wedding photography that captures genuine moments and emotions throughout your special day.
+                    </p>
+</div>
+<div className="text-center p-8 opacity-0 animate-[slideUp_1s_ease-out_0.8s_forwards]" style={{transform: `translateY(20px)`}}>
+<div className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6">
+<svg className="lucide lucide-briefcase w-8 h-8 text-zinc-600" data-lucide="briefcase" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="14" rx="2" width="20"></rect></svg>
+</div>
+<h3 className="font-playfair text-xl font-medium text-zinc-900 mb-4">Commercial Work</h3>
+<p className="text-zinc-600 leading-relaxed">
+                        High-end commercial photography for fashion brands, editorial publications, and creative campaigns.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-24 bg-zinc-50" id="contact">
+<div className="max-w-4xl mx-auto px-6 lg:px-8">
+<div className="text-center mb-16 opacity-0 animate-[fadeIn_1s_ease-out_0.2s_forwards]">
+<h2 className="font-playfair text-4xl font-medium text-zinc-900 tracking-tight mb-4">
+                    Let's Create Together
+                </h2>
+<p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+                    Ready to bring your vision to life? I'd love to hear about your project and discuss how we can create something beautiful together.
+                </p>
+</div>
+<div className="grid md:grid-cols-2 gap-16">
+<div className="opacity-0 animate-[slideUp_1s_ease-out_0.4s_forwards]" style={{transform: `translateY(20px)`}}>
+<h3 className="font-playfair text-2xl font-medium text-zinc-900 mb-6">Get in Touch</h3>
+<div className="space-y-4 mb-8">
+<div className="flex items-center space-x-3">
+<svg className="lucide lucide-mail w-5 h-5 text-zinc-400" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="16" rx="2" width="20"></rect></svg>
+<a className="text-zinc-600 hover:text-zinc-900 transition-colors duration-300" href="mailto:hello@alexandrachen.com">hello@alexandrachen.com</a>
+</div>
+<div className="flex items-center space-x-3">
+<svg className="lucide lucide-phone w-5 h-5 text-zinc-400" data-lucide="phone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+<span className="text-zinc-600">+1 (555) 123-4567</span>
+</div>
+<div className="flex items-center space-x-3">
+<svg className="lucide lucide-map-pin w-5 h-5 text-zinc-400" data-lucide="map-pin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="10"></circle></svg>
+<span className="text-zinc-600">New York City, NY</span>
+</div>
+</div>
+<div className="flex space-x-4">
+<a className="w-10 h-10 bg-zinc-200 hover:bg-zinc-300 rounded-full flex items-center justify-center transition-colors duration-300" href="#">
+<svg className="lucide lucide-instagram w-5 h-5 text-zinc-600" data-lucide="instagram" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="20" rx="5" ry="5" width="20"></rect><path></path><line></line></svg>
+</a>
+<a className="w-10 h-10 bg-zinc-200 hover:bg-zinc-300 rounded-full flex items-center justify-center transition-colors duration-300" href="#">
+<svg className="lucide lucide-twitter w-5 h-5 text-zinc-600" data-lucide="twitter" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+</a>
+<a className="w-10 h-10 bg-zinc-200 hover:bg-zinc-300 rounded-full flex items-center justify-center transition-colors duration-300" href="#">
+<svg className="lucide lucide-linkedin w-5 h-5 text-zinc-600" data-lucide="linkedin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="12" width="4"></rect><circle cx="4" cy="4"></circle></svg>
+</a>
+</div>
+</div>
+<form className="space-y-6 opacity-0 animate-[slideUp_1s_ease-out_0.6s_forwards]" style={{transform: `translateY(20px)`}}>
+<div>
+<input className="w-full px-4 py-3 border border-zinc-200 focus:border-zinc-400 focus:outline-none transition-colors duration-300 bg-white" placeholder="Your Name" type="text" />
+</div>
+<div>
+<input className="w-full px-4 py-3 border border-zinc-200 focus:border-zinc-400 focus:outline-none transition-colors duration-300 bg-white" placeholder="Email Address" type="email" />
+</div>
+<div>
+<input className="w-full px-4 py-3 border border-zinc-200 focus:border-zinc-400 focus:outline-none transition-colors duration-300 bg-white" placeholder="Project Type" type="text" />
+</div>
+<div>
+<textarea className="w-full px-4 py-3 border border-zinc-200 focus:border-zinc-400 focus:outline-none transition-colors duration-300 resize-none bg-white" placeholder="Tell me about your project..." rows="5"></textarea>
+</div>
+<button className="w-full bg-zinc-900 text-white py-3 font-medium tracking-wide hover:bg-zinc-800 transition-colors duration-300" type="submit">
+                        SEND MESSAGE
+                    </button>
+</form>
+</div>
+</div>
+</section>
+
+<footer className="py-12 bg-white border-t border-zinc-200">
+<div className="max-w-6xl mx-auto px-6 lg:px-8">
+<div className="flex flex-col md:flex-row items-center justify-between">
+<div className="font-playfair font-semibold text-xl tracking-tight text-zinc-900 mb-4 md:mb-0">
+                    ALEXANDRA CHEN
+                </div>
+<div className="text-sm text-zinc-600">
+                    © 2024 Alexandra Chen Photography. All rights reserved.
+                </div>
+</div>
+</div>
+</footer>
+
+
+
+    </>
+  );
+}

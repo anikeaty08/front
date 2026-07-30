@@ -1,0 +1,114 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body { 
+            font-family: "Space Mono", monospace; 
+            background-color: #0a1929;
+            background-image: 
+                linear-gradient(rgba(30, 144, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 144, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(rgba(30, 144, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 144, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+        }
+        .blueprint-card {
+            background: linear-gradient(135deg, rgba(15, 35, 70, 0.8) 0%, rgba(10, 25, 50, 0.9) 100%);
+            border: 2px solid #1e90ff;
+            box-shadow: 
+                0 0 30px rgba(30, 144, 255, 0.3),
+                inset 0 0 20px rgba(30, 144, 255, 0.1);
+            position: relative;
+        }
+        .blueprint-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(30, 144, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 144, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        .tech-section {
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            background: rgba(30, 144, 255, 0.02);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .tech-section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 8px;
+            height: 8px;
+            border: 2px solid #1e90ff;
+            background: #0a1929;
+        }
+        .tech-section::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            border: 2px solid #1e90ff;
+            background: #0a1929;
+        }
+        .tech-section:hover {
+            background: rgba(30, 144, 255, 0.08);
+            border-color: rgba(30, 144, 255, 0.6);
+            transform: translateY(-1px);
+        }
+        .tech-section:hover h3 {
+            color: #87ceeb;
+            text-shadow: 0 0 8px rgba(135, 206, 235, 0.6);
+        }
+        .blueprint-title {
+            color: #1e90ff;
+            text-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+            letter-spacing: 3px;
+        }
+        .dimension-line {
+            border-left: 2px solid #1e90ff;
+            border-bottom: 2px solid #1e90ff;
+            position: relative;
+        }
+        .dimension-line::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: -4px;
+            width: 6px;
+            height: 6px;
+            background: #1e90ff;
+            transform: rotate(45deg);
+        }
+        .spec-code {
+            background: rgba(30, 144, 255, 0.1);
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            color: #87ceeb;
+            font-family: 'Space Mono', monospace;
+        }
+        .spec-code:hover {
+            background: rgba(30, 144, 255, 0.2);
+            color: #1e90ff;
+            box-shadow: 0 0 5px rgba(30, 144, 255, 0.4);
+        }
+        .revision-stamp {
+            background: linear-gradient(45deg, transparent 30%, rgba(30, 144, 255, 0.1) 50%, transparent 70%);
+            border: 1px dashed rgba(30, 144, 255, 0.4);
+        }
+    

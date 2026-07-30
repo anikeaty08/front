@@ -1,0 +1,75 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html, body { font-family: "SF Pro Display", "Inter", Arial, sans-serif; }
+    @keyframes slideFadeIn {
+      0% { opacity: 0; transform: translateY(40px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    .animate-slide-fade { animation: slideFadeIn 0.7s cubic-bezier(0.4,0,0.2,1) forwards; opacity: 0;}
+    .delay-0 { animation-delay: 0s; }
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .noise {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.10;
+      z-index: 30;
+      mix-blend-mode: overlay;
+    }
+    .shadow-inner-faint {
+      box-shadow: 0 4px 4px 0 rgba(174,174,174,0.25) inset;
+    }
+    .shadow-outer-faint {
+      box-shadow: 0 2px 5px 0 rgba(23,23,23,0.4);
+    }
+    @keyframes mesh1 {
+      0%   { transform: translate(0px, 0px) scale(1) rotate(0deg);}
+      50%  { transform: translate(-30px, 30px) scale(1.08) rotate(12deg);}
+      100% { transform: translate(0px 0px) scale(1) rotate(0deg);}
+    }
+    @keyframes mesh2 {
+      0%   { transform: translate(0px, 0px) scale(1);}
+      50%  { transform: translate(35px, -18px) scale(1.04);}
+      100% { transform: translate(0px, 0px) scale(1);}
+    }
+    @keyframes mesh3 {
+      0%   { transform: translate(0,0) scale(1);}
+      50%  { transform: translate(-25px, 20px) scale(1.07);}
+      100% { transform: translate(0,0) scale(1);}
+    }
+    @keyframes mesh4 {
+      0%   { transform: translate(0px,0px) scale(1);}
+      50%  { transform: translate(20px, 12px) scale(0.97);}
+      100% { transform: translate(0px,0px) scale(1);}
+    }
+    @keyframes mesh5 {
+      0%   { transform: translate(0,0) scale(1);}
+      50%  { transform: translate(16px,-8px) scale(1.04);}
+      100% { transform: translate(0,0) scale(1);}
+    }
+    @keyframes mesh6 {
+      0%   { transform: translate(0,0) scale(1);}
+      50%  { transform: translate(-15px, 8px) scale(0.97);}
+      100% { transform: translate(0,0) scale(1);}
+    }
+    .mesh1 { animation: mesh1 9s ease-in-out infinite; }
+    .mesh2 { animation: mesh2 13s ease-in-out infinite; }
+    .mesh3 { animation: mesh3 10s ease-in-out infinite; }
+    .mesh4 { animation: mesh4 14s ease-in-out infinite; }
+    .mesh5 { animation: mesh5 11s ease-in-out infinite; }
+    .mesh6 { animation: mesh6 15s ease-in-out infinite; }
+    .inter { font-family: 'Inter', sans-serif; }
+  

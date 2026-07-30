@@ -1,0 +1,49 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* Custom font settings and resets */
+body {
+font-family: 'Inter', system-ui, -apple-system, sans-serif;
+background-color: #030304; /* Pure near black */
+overflow: hidden;
+margin: 0;
+padding: 0;
+width: 100vw;
+height: 100vh;
+}
+/* Soft top vignette overlay */
+.vignette {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+background: radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08), transparent 70%);
+z-index: 10;
+}
+/* Hide scrollbars */
+::-webkit-scrollbar { display: none; }
+/* Canvas positioning */
+#canvas-container {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1;
+}
+/* Smooth UI transitions */
+.ui-panel {
+transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+

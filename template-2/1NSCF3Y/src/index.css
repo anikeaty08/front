@@ -1,0 +1,85 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body, html {
+            font-family: 'JetBrains Mono', monospace;
+            background: #000;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-size: 14px;
+        }
+        .font-heading {
+            font-family: 'Geist Mono', monospace;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+        #shader-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            z-index: 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        .viewfinder-grid {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background-size: 33.33% 33.33%;
+            opacity: 0.3;
+        }
+        .focus-ring {
+            animation: focus-pulse 2s ease-in-out infinite;
+            border: 2px solid #3b82f6;
+        }
+        @keyframes focus-pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .shutter-button {
+            background: radial-gradient(circle, #fff 30%, #3b82f6 31%, #3b82f6 70%, #fff 71%);
+            transition: all 0.1s ease;
+        }
+        .shutter-button:active {
+            transform: scale(0.95);
+        }
+        .hero-text {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .float-icon {
+            animation: float-gentle 3s ease-in-out infinite;
+        }
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-2px); }
+        }
+        .recording-dot {
+            animation: recording-blink 1s ease-in-out infinite;
+        }
+        @keyframes recording-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        .camera-float {
+            animation: camera-hover 4s ease-in-out infinite;
+        }
+        @keyframes camera-hover {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+    

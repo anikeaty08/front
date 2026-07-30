@@ -1,0 +1,169 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('meteor-container');
+      const meteorCount = 15;
+      
+      for (let i = 0; i < meteorCount; i++) {
+        const meteor = document.createElement('div');
+        meteor.classList.add('meteor');
+        
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 6 + 3;
+        const topPosition = Math.random() * 100;
+        const leftPosition = Math.floor(Math.random() * 300) - 300;
+        
+        meteor.style.top = `${topPosition}%`;
+        meteor.style.left = `${leftPosition}px`;
+        meteor.style.animationDelay = `${delay}s`;
+        meteor.style.animationDuration = `${duration}s`;
+        
+        if (i % 3 === 0) {
+          meteor.style.background = 'rgba(99, 102, 241, 0.8)';
+          meteor.style.boxShadow = '0 0 1px rgba(99, 102, 241, 0.3)';
+        } else if (i % 4 === 0) {
+          meteor.style.background = 'rgba(129, 140, 248, 0.8)';
+          meteor.style.boxShadow = '0 0 1px rgba(129, 140, 248, 0.3)';
+        }
+        
+        container.appendChild(meteor);
+      }
+    });
+  
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<div className="max-w-6xl mx-auto">
+
+<div className="relative overflow-hidden rounded-xl bg-gray-900/60 backdrop-blur-sm border border-gray-800/30 p-6 md:p-8 mb-6 shadow-lg">
+<div className="absolute inset-0 overflow-hidden" id="meteor-container">
+<div className="meteor" style={{top: `10%`, left: `-50px`, animationDelay: `0s`}}></div>
+<div className="meteor" style={{top: `30%`, left: `-150px`, animationDelay: `1s`}}></div>
+<div className="meteor" style={{top: `50%`, left: `-250px`, animationDelay: `2s`}}></div>
+</div>
+<div className="relative z-10">
+<div className="mb-2">
+<span className="px-3 py-1 bg-indigo-600/20 text-indigo-300 rounded-full text-xs font-medium">INTRODUCING</span>
+</div>
+<h1 className="text-3xl md:text-4xl font-bold text-white mb-4">The Ultimate Platform</h1>
+<div className="h-px w-24 bg-indigo-500/70 mb-6"></div>
+<p className="text-gray-300 max-w-3xl mb-6">Experience the future of digital solutions with our comprehensive suite of tools designed to enhance your workflow, boost productivity, and streamline your operations.</p>
+<div className="flex flex-wrap gap-4">
+<button className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg text-sm border border-indigo-700/30 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+            Get Started
+          </button>
+<button className="px-5 py-2.5 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 font-medium rounded-lg text-sm border border-gray-700/30 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+            Learn More
+          </button>
+</div>
+</div>
+</div>
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+<div className="bg-gray-900/60 backdrop-blur-sm border border-gray-800/30 rounded-xl p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1">
+<div className="w-12 h-12 bg-indigo-600/20 rounded-lg flex items-center justify-center mb-4">
+<svg className="h-6 w-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-2">Lightning Fast</h3>
+<div className="h-px w-12 bg-indigo-500/50 mb-3"></div>
+<p className="text-gray-400">Experience unparalleled speed with our optimized infrastructure and cutting-edge technology.</p>
+</div>
+
+<div className="bg-gray-900/60 backdrop-blur-sm border border-gray-800/30 rounded-xl p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1">
+<div className="w-12 h-12 bg-indigo-600/20 rounded-lg flex items-center justify-center mb-4">
+<svg className="h-6 w-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-2">Secure & Private</h3>
+<div className="h-px w-12 bg-indigo-500/50 mb-3"></div>
+<p className="text-gray-400">Your data is protected with enterprise-grade security and end-to-end encryption.</p>
+</div>
+
+<div className="bg-gray-900/60 backdrop-blur-sm border border-gray-800/30 rounded-xl p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1">
+<div className="w-12 h-12 bg-indigo-600/20 rounded-lg flex items-center justify-center mb-4">
+<svg className="h-6 w-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-2">Customizable</h3>
+<div className="h-px w-12 bg-indigo-500/50 mb-3"></div>
+<p className="text-gray-400">Tailor the platform to your specific needs with flexible configuration options.</p>
+</div>
+
+<div className="bg-gray-900/60 backdrop-blur-sm border border-gray-800/30 rounded-xl p-6 shadow-md hover:shadow-lg transition-all hover:-translate-y-1">
+<div className="w-12 h-12 bg-indigo-600/20 rounded-lg flex items-center justify-center mb-4">
+<svg className="h-6 w-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+<h3 className="text-xl font-semibold text-white mb-2">Collaborative</h3>
+<div className="h-px w-12 bg-indigo-500/50 mb-3"></div>
+<p className="text-gray-400">Work seamlessly with your team in real-time, no matter where they are located.</p>
+</div>
+</div>
+</div>
+
+
+    </>
+  );
+}

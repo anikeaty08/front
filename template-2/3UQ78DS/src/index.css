@@ -1,0 +1,86 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html,body{font-family:'Inter',sans-serif;}
+/* Enhanced Glass Effect */
+.glass-card {
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+background: rgba(15, 23, 42, 0.4);
+border: 1px solid rgba(148, 163, 184, 0.1);
+box-shadow:
+0 8px 32px rgba(0, 0, 0, 0.3),
+inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.glass-card:hover {
+background: rgba(15, 23, 42, 0.5);
+border: 1px solid rgba(148, 163, 184, 0.15);
+transform: translateY(-2px);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-header {
+backdrop-filter: blur(24px);
+-webkit-backdrop-filter: blur(24px);
+background: rgba(15, 23, 42, 0.8);
+border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+.animate-fade-in {
+opacity: 0;
+transform: translateY(20px);
+transition: all 0.6s ease-out;
+}
+.animate-visible {
+opacity: 1;
+transform: translateY(0);
+}
+.metric-card:hover {
+transform: translateY(-4px);
+transition: all 0.3s ease;
+}
+.status-indicator {
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.7; }
+}
+.chart-container {
+position: relative;
+height: 300px;
+}
+.drill-down:hover {
+background: rgba(34, 197, 94, 0.1);
+cursor: pointer;
+}
+.globe-card {
+min-height: 500px;
+}
+.globe-container {
+position: relative;
+height: 400px;
+}
+/* Dithered wave shader styles */
+#dithered-canvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+z-index: -1;
+pointer-events: none;
+}
+/* Content overlay to ensure readability */
+.content-overlay {
+position: relative;
+z-index: 1;
+}
+

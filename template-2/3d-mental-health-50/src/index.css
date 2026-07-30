@@ -1,0 +1,71 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+background-color: #f8fafc;
+background-image:
+radial-gradient(at 0% 0%, hsla(168,76%,85%,1) 0, transparent 50%),
+radial-gradient(at 100% 0%, hsla(227,70%,90%,1) 0, transparent 50%),
+radial-gradient(at 100% 100%, hsla(34,100%,92%,1) 0, transparent 50%);
+background-attachment: fixed;
+}
+/* 3D Perspective Utilities */
+.stage-3d {
+perspective: 1200px;
+transform-style: preserve-3d;
+}
+.card-3d {
+transform-style: preserve-3d;
+transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+background: rgba(255, 255, 255, 0.65);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border: 1px solid rgba(255, 255, 255, 0.5);
+box-shadow:
+0 4px 6px -1px rgba(0, 0, 0, 0.05),
+0 10px 15px -3px rgba(0, 0, 0, 0.05),
+inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+.card-3d:hover {
+transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+box-shadow:
+20px 20px 60px rgba(0, 0, 0, 0.05),
+0 0 0 1px rgba(255, 255, 255, 0.8),
+inset 0 0 0 rgba(255, 255, 255, 0);
+border-color: rgba(255, 255, 255, 0.9);
+z-index: 10;
+}
+.content-lift {
+transform: translateZ(30px);
+}
+/* Floating Dashboard Mockup */
+.dashboard-float {
+transform: rotateY(-12deg) rotateX(5deg) translateZ(0);
+transition: transform 0.6s ease;
+box-shadow:
+-20px 20px 60px -10px rgba(0,0,0,0.1),
+0 0 0 1px rgba(255,255,255,0.2);
+}
+.dashboard-float:hover {
+transform: rotateY(0) rotateX(0) translateZ(20px);
+}
+/* Smooth Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+/* Typography Polish */
+h1, h2, h3, h4, h5, h6 { letter-spacing: -0.025em; }
+
+
+
+/* 3D Transform utilities */
+

@@ -1,0 +1,74 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+background-color: #ffffff;
+}
+/* Subtle Grid Background */
+.bg-grid {
+background-size: 40px 40px;
+background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+-webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+/* Scroll Reveal Animation Classes */
+.reveal {
+opacity: 0;
+transform: translateY(30px);
+transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.active {
+opacity: 1;
+transform: translateY(0);
+}
+/* Staggered delays for grids */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+/* Infinite Scroll Animation */
+@keyframes scroll {
+0% { transform: translateX(0); }
+100% { transform: translateX(-50%); }
+}
+.animate-scroll {
+animation: scroll 20s linear infinite;
+}
+.pause-hover:hover {
+animation-play-state: paused;
+}
+/* Text Gradients */
+.text-gradient {
+background: linear-gradient(to bottom right, #18181b 0%, #52525b 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+/* Button Hover Glow */
+.btn-glow {
+position: relative;
+overflow: hidden;
+}
+.btn-glow::after {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+transition: 0.5s;
+}
+.btn-glow:hover::after {
+left: 100%;
+}
+

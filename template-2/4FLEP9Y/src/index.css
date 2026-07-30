@@ -1,0 +1,42 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* Custom thumb/track for range slider */
+input[type="range"].ae9ab0-thumb::-webkit-slider-thumb {
+background: #ae9ab0;
+border: 2px solid #ede9f3;
+}
+input[type="range"].ae9ab0-thumb::-moz-range-thumb {
+background: #ae9ab0;
+border: 2px solid #ede9f3;
+}
+input[type="range"].ae9ab0-thumb::-ms-thumb {
+background: #ae9ab0;
+border: 2px solid #ede9f3;
+}
+input[type="range"].ae9ab0-thumb::-webkit-slider-runnable-track {
+background: #ede9f3;
+}
+input[type="range"].ae9ab0-thumb::-moz-range-track {
+background: #ede9f3;
+}
+input[type="range"].ae9ab0-thumb::-ms-fill-lower {
+background: #ae9ab0;
+}
+input[type="range"].ae9ab0-thumb::-ms-fill-upper {
+background: #ede9f3;
+}
+input[type="range"].ae9ab0-thumb:focus {
+outline: none;
+box-shadow: 0 0 0 2px #ae9ab0;
+}
+

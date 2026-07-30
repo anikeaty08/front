@@ -1,0 +1,70 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+/* Base Styles */
+body {
+-webkit-font-smoothing: antialiased;
+color: #651414;
+}
+/* Buttons */
+.btn-primary {
+background: linear-gradient(to bottom, #7BBCAD, #6CA899);
+box-shadow: 0 4px 12px rgba(123, 188, 173, 0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 20px rgba(123, 188, 173, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.btn-coral {
+background: linear-gradient(to bottom, #E96C6C, #D65A5A);
+box-shadow: 0 4px 12px rgba(233, 108, 108, 0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.btn-coral:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 20px rgba(233, 108, 108, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.btn-outline {
+border: 2px solid #7BBCAD;
+color: #7BBCAD;
+transition: all 0.2s ease;
+}
+.btn-outline:hover {
+background-color: #7BBCAD;
+color: white;
+}
+/* Card Styles */
+.idea-card {
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.idea-card:hover {
+transform: scale(1.02);
+box-shadow: 0 20px 40px -8px rgba(101, 20, 20, 0.12);
+}
+/* Visual Element Styling */
+.slap-badge {
+background: #7BBCAD;
+transform: rotate(-12deg);
+box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.phone-frame {
+box-shadow:
+0 0 0 2px #334155,
+0 0 0 6px #1e293b,
+0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* 3D Transform utilities */
+

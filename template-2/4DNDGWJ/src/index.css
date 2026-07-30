@@ -1,0 +1,124 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+cursor: none;
+}
+.gradient-text {
+background: linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+/* Custom cursor with much larger glow */
+.cursor-glow {
+position: fixed;
+width: 900px;
+height: 900px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 20%, rgba(16, 185, 129, 0.04) 40%, rgba(16, 185, 129, 0.02) 90%, transparent 100%);
+pointer-events: none;
+z-index: 9999;
+transform: translate(-50%, -50%);
+transition: all 0.1s ease-out;
+mix-blend-mode: screen;
+}
+.cursor-dot {
+position: fixed;
+width: 8px;
+height: 8px;
+background: #10b981;
+border-radius: 50%;
+pointer-events: none;
+z-index: 10000;
+transform: translate(-50%, -50%);
+transition: all 0.05s ease-out;
+box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+}
+/* Hidden grid lines pattern */
+.grid-pattern {
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 1;
+}
+.grid-line {
+position: absolute;
+background: rgba(16, 185, 129, 0.3);
+opacity: 0;
+transition: opacity 0.3s ease-out;
+}
+.grid-line.horizontal {
+width: 100%;
+height: 1px;
+}
+.grid-line.vertical {
+width: 1px;
+height: 100%;
+}
+/* Hidden dots pattern - more dense */
+.dots-pattern {
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 1;
+}
+.dot {
+position: absolute;
+width: 1.5px;
+height: 1.5px;
+background: rgba(16, 185, 129, 0.4);
+border-radius: 50%;
+opacity: 0;
+transition: opacity 0.3s ease-out;
+}
+/* Reveal area for mask effect */
+.reveal-area {
+position: fixed;
+width: 800px;
+height: 800px;
+border-radius: 50%;
+pointer-events: none;
+z-index: 2;
+transform: translate(-50%, -50%);
+}
+/* Button hover effects */
+button:hover, a:hover {
+cursor: none;
+}
+/* Content masking effect */
+.content-mask {
+position: relative;
+}
+.content-mask::before {
+content: '';
+position: fixed;
+inset: 0;
+background: rgba(0, 0, 0, 0.7);
+pointer-events: none;
+z-index: 5;
+transition: all 0.1s ease-out;
+}
+
+
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    

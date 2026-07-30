@@ -1,0 +1,29 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    @keyframes letterSlideIn {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0;
+        clip-path: inset(0 0 100% 0);
+      }
+      50% {
+        opacity: 0.5;
+        clip-path: inset(0 0 50% 0);
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+        clip-path: inset(0 0 0% 0);
+      }
+    }
+  

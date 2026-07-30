@@ -1,0 +1,37 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.glass-panel {
+background: rgba(15, 15, 15, 0.6);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border: 1px solid rgba(255, 255, 255, 0.06);
+box-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+}
+.glass-panel-highlight {
+background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+}
+.scanlines {
+background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+background-size: 100% 3px;
+}
+/* Subtle grid background */
+.bg-grid {
+background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+background-size: 40px 40px;
+mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+-webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+

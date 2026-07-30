@@ -1,0 +1,265 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+    const {
+      Engine, Render, Runner, Body, Composite, Composites, MouseConstraint, Mouse, World, Bodies, Constraint
+    } = Matter;
+
+    const width = 400, height = 320;
+
+    // Create engine and world
+    const engine = Engine.create();
+    const world = engine.world;
+
+    // Renderer
+    const render = Render.create({
+      element: document.getElementById('canvas-holder'),
+      engine: engine,
+      options: {
+        width: width,
+        height: height,
+        wireframes: false,
+        background: "#ffffff",
+        pixelRatio: window.devicePixelRatio
+      }
+    });
+
+    // Cloth parameters
+    const clothCols = 16;
+    const clothRows = 10;
+    const spacing = 20;
+    const offsetX = 40;
+    const offsetY = 40;
+    const nodeRadius = 4;
+    const nodeColor = "#818cf8";
+    const constraintColor = "#4f46e5";
+    const fixedColor = "#fbbf24";
+
+    // Group to hold cloth
+    const clothParticles = [];
+
+    // Create nodes
+    for (let row = 0; row < clothRows; row++) {
+      clothParticles[row] = [];
+      for (let col = 0; col < clothCols; col++) {
+        const x = offsetX + col * spacing;
+        const y = offsetY + row * spacing;
+
+        const isFixed = row === 0 && (col % 2 === 0); // Fix every other node on the top row
+
+        const node = Bodies.circle(x, y, nodeRadius, {
+          isStatic: isFixed,
+          collisionFilter: { group: -1 },
+          render: {
+            fillStyle: isFixed ? fixedColor : nodeColor,
+            strokeStyle: "#c7d2fe",
+            lineWidth: 1
+          }
+        });
+        clothParticles[row][col] = node;
+        World.add(world, node);
+      }
+    }
+
+    // Connect nodes with constraints (springs)
+    for (let row = 0; row < clothRows; row++) {
+      for (let col = 0; col < clothCols; col++) {
+        if (col < clothCols - 1) {
+          // Horizontal constraint
+          const constraint = Constraint.create({
+            bodyA: clothParticles[row][col],
+            bodyB: clothParticles[row][col + 1],
+            length: spacing,
+            stiffness: 0.9,
+            render: { strokeStyle: constraintColor, lineWidth: 2 }
+          });
+          World.add(world, constraint);
+        }
+        if (row < clothRows - 1) {
+          // Vertical constraint
+          const constraint = Constraint.create({
+            bodyA: clothParticles[row][col],
+            bodyB: clothParticles[row + 1][col],
+            length: spacing,
+            stiffness: 0.9,
+            render: { strokeStyle: constraintColor, lineWidth: 2 }
+          });
+          World.add(world, constraint);
+        }
+      }
+    }
+
+    // Add floor with outlines
+    const floor = Bodies.rectangle(width/2, height-20, width-40, 16, {
+      isStatic: true,
+      render: { 
+        fillStyle: "#f8fafc", 
+        strokeStyle: "#e2e8f0", 
+        lineWidth: 2 
+      }
+    });
+    World.add(world, floor);
+
+    // Add shapes that interact with the cloth
+    const ball = Bodies.circle(width/2 + 40, 100, 18, {
+      restitution: 0.5,
+      density: 0.008,
+      render: {
+        fillStyle: "#f87171",
+        strokeStyle: "#ef4444",
+        lineWidth: 2
+      }
+    });
+
+    const box = Bodies.rectangle(width/2 - 60, 80, 38, 38, {
+      chamfer: { radius: 6 },
+      restitution: 0.4,
+      density: 0.01,
+      render: {
+        fillStyle: "#34d399",
+        strokeStyle: "#10b981",
+        lineWidth: 2
+      }
+    });
+
+    const triangle = Bodies.polygon(width/2 + 80, 70, 3, 22, {
+      restitution: 0.5,
+      density: 0.009,
+      render: {
+        fillStyle: "#fbbf24",
+        strokeStyle: "#f59e0b",
+        lineWidth: 2
+      }
+    });
+
+    World.add(world, [ball, box, triangle]);
+
+    // Mouse control
+    const mouse = Mouse.create(render.canvas);
+    const mouseConstraint = MouseConstraint.create(engine, {
+      mouse: mouse,
+      constraint: {
+        stiffness: 0.94,
+        render: { visible: false }
+      }
+    });
+    World.add(world, mouseConstraint);
+    render.mouse = mouse;
+
+    // Run
+    Engine.run(engine);
+    Render.run(render);
+    Runner.run(Runner.create(), engine);
+  
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<div className="flex flex-col items-center justify-center w-full max-w-lg">
+<div className="rounded-xl shadow-lg bg-white w-full border border-gray-200 overflow-hidden">
+
+<div className="flex items-center justify-between h-14 px-5 border-b border-gray-100">
+<div className="flex items-center">
+<div className="w-1 h-5 rounded-full bg-indigo-500 mr-3"></div>
+<h1 className="text-gray-800 font-medium text-lg">Physics Cloth Designer</h1>
+</div>
+<div className="flex space-x-3">
+<div className="w-2 h-2 rounded-full bg-gray-300"></div>
+<div className="w-2 h-2 rounded-full bg-gray-300"></div>
+<div className="w-2 h-2 rounded-full bg-gray-300"></div>
+</div>
+</div>
+
+<div className="p-5">
+<div className="mb-3 flex justify-between items-center">
+<div className="text-xs text-gray-500">Drag the cloth or shapes to interact</div>
+<div className="text-xs font-medium text-indigo-600 py-1 px-2 rounded border border-indigo-100 bg-indigo-50">Design Mode</div>
+</div>
+
+<div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-1.5 mb-4">
+<div className="rounded-md overflow-hidden bg-white shadow-sm w-full h-80" id="canvas-holder">
+
+</div>
+</div>
+
+<div className="grid grid-cols-4 gap-2 mb-4">
+<div className="col-span-1 flex flex-col items-center justify-center p-2 rounded border border-gray-200 bg-gray-50 text-xs text-gray-600">
+<div className="w-4 h-4 bg-indigo-500 rounded-full mb-1"></div>
+<span>Cloth</span>
+</div>
+<div className="col-span-1 flex flex-col items-center justify-center p-2 rounded border border-gray-200 bg-gray-50 text-xs text-gray-600">
+<div className="w-4 h-4 bg-red-500 rounded-full mb-1"></div>
+<span>Circle</span>
+</div>
+<div className="col-span-1 flex flex-col items-center justify-center p-2 rounded border border-gray-200 bg-gray-50 text-xs text-gray-600">
+<div className="w-4 h-4 bg-green-500 rounded-sm mb-1"></div>
+<span>Square</span>
+</div>
+<div className="col-span-1 flex flex-col items-center justify-center p-2 rounded border border-gray-200 bg-gray-50 text-xs text-gray-600">
+<div className="w-4 h-4 bg-yellow-500 transform rotate-45 mb-1"></div>
+<span>Triangle</span>
+</div>
+</div>
+</div>
+</div>
+<div className="mt-4 text-xs text-gray-400">Powered by Matter.js Physics Engine</div>
+</div>
+
+
+    </>
+  );
+}

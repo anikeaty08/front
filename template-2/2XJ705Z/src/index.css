@@ -1,0 +1,27 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body { font-family: 'Inter', sans-serif; }
+.filter-chip { transition: all 0.15s ease; }
+.filter-chip:hover { transform: translateY(-1px); }
+.sparkline { height: 20px; width: 60px; }
+.dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.dropdown-content.active { max-height: 400px; }
+.filter-dropdown { position: relative; }
+.advanced-filters-panel { transform: translateX(100%); transition: transform 0.3s ease; }
+.advanced-filters-panel.active { transform: translateX(0); }
+.table-sort:hover { background-color: #f8fafc; }
+.table-sort.asc::after { content: ' ↑'; }
+.table-sort.desc::after { content: ' ↓'; }
+.follow-btn { transition: all 0.15s ease; }
+.follow-btn.following { background-color: #10b981; }
+

@@ -1,0 +1,50 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+background-color: #FAFAFA;
+color: #171717;
+}
+.font-serif {
+font-family: 'Newsreader', serif;
+}
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.no-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+.smooth-transition {
+transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.image-zoom:hover img {
+transform: scale(1.03);
+}
+.faq-content {
+transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+max-height: 0;
+opacity: 0;
+overflow: hidden;
+}
+.faq-content.open {
+max-height: 500px;
+opacity: 1;
+}
+.faq-icon {
+transition: transform 0.3s ease;
+}
+.faq-button[aria-expanded="true"] .faq-icon {
+transform: rotate(180deg);
+}
+

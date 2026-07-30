@@ -1,0 +1,801 @@
+import React, { useEffect } from 'react';
+
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      {
+
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+}
+
+{
+
+    // Icons
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
+
+    // Smooth anchor scroll
+    function smoothScrollTo(target) {
+      const el = document.querySelector(target);
+      if (!el) return;
+      const headerOffset = document.getElementById('site-header').offsetHeight;
+      const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerOffset + 1;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+
+    // Scroll progress
+    const progressEl = document.getElementById('scroll-progress');
+    const onScrollProgress = () => {
+      const h = document.documentElement;
+      const scrollTop = h.scrollTop || document.body.scrollTop;
+      const scrollHeight = h.scrollHeight - h.clientHeight;
+      const pct = Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100));
+      progressEl.style.width = pct + '%';
+    };
+    document.addEventListener('scroll', onScrollProgress, { passive: true });
+
+    // Header show/hide on scroll
+    const header = document.getElementById('site-header');
+    let lastY = window.pageYOffset;
+    let ticking = false;
+    function handleHeader() {
+      const y = window.pageYOffset;
+      const down = y > lastY && y > 80;
+      header.style.transform = down ? 'translateY(-100%)' : 'translateY(0)';
+      lastY = y;
+      ticking = false;
+    }
+    document.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(handleHeader);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Mobile panel
+    const toggleBtn = document.getElementById('nav-toggle');
+    const mobilePanel = document.getElementById('mobile-panel');
+    const panelInner = mobilePanel.querySelector('div.absolute.inset-x-0.top-0');
+    const overlay = mobilePanel.querySelector('[data-close-overlay]');
+
+    function openMobile() {
+      mobilePanel.classList.remove('pointer-events-none');
+      mobilePanel.classList.add('pointer-events-auto');
+      mobilePanel.style.opacity = '1';
+      panelInner.style.transform = 'translateY(0)';
+      panelInner.style.opacity = '1';
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      toggleBtn.querySelector('[data-lucide="menu"]').classList.add('hidden');
+      toggleBtn.querySelector('[data-lucide="x"]').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobile() {
+      mobilePanel.style.opacity = '0';
+      panelInner.style.transform = 'translateY(-8px)';
+      panelInner.style.opacity = '0';
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.querySelector('[data-lucide="menu"]').classList.remove('hidden');
+      toggleBtn.querySelector('[data-lucide="x"]').classList.add('hidden');
+      setTimeout(() => {
+        mobilePanel.classList.remove('pointer-events-auto');
+        mobilePanel.classList.add('pointer-events-none');
+        document.body.style.overflow = '';
+      }, 250);
+    }
+    toggleBtn.addEventListener('click', () => {
+      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      expanded ? closeMobile() : openMobile();
+    });
+    overlay.addEventListener('click', closeMobile);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMobile();
+    });
+    // Close on resize to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) closeMobile();
+    });
+
+    // Mobile link click closes panel + smooth scroll
+    document.querySelectorAll('[data-mobile-link]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = a.getAttribute('href');
+        closeMobile();
+        setTimeout(() => smoothScrollTo(href), 220);
+      });
+    });
+
+    // Desktop nav smooth scroll
+    document.querySelectorAll('[data-nav-link]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        smoothScrollTo(a.getAttribute('href'));
+      });
+    });
+
+    // Active link highlighting
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    const navLinks = Array.from(document.querySelectorAll('[data-nav-link]'));
+
+    function setActive(id) {
+      navLinks.forEach(link => {
+        const match = link.getAttribute('href') === '#' + id;
+        link.setAttribute('aria-current', match ? 'page' : 'false');
+        link.style.backgroundSize = match ? '100% 2px' : '0% 2px';
+        link.classList.toggle('text-white', match);
+      });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { threshold: 0.5, rootMargin: '-20% 0px -20% 0px' });
+    sections.forEach(sec => observer.observe(sec));
+
+    // Element entrance animations
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const animated = document.querySelectorAll('[data-animate]');
+    animated.forEach((el) => {
+      const type = el.getAttribute('data-animate');
+      const delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+      el.style.opacity = '0';
+      el.style.transform = type === 'left' ? 'translateX(-16px)' :
+                           type === 'right' ? 'translateX(16px)' :
+                           'translateY(16px)';
+      el.style.transition = prefersReduced ? 'opacity 300ms ease-out' : 'opacity 600ms cubic-bezier(.2,.8,.2,1), transform 600ms cubic-bezier(.2,.8,.2,1)';
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              el.style.opacity = '1';
+              el.style.transform = 'translateX(0) translateY(0)';
+            }, prefersReduced ? 0 : delay);
+            obs.unobserve(el);
+          }
+        });
+      }, { threshold: 0.2 });
+      io.observe(el);
+    });
+
+    // Mini chart
+    function initMiniChart() {
+      const ctx = document.getElementById('miniChart');
+      if (!ctx) return;
+      const c = ctx.getContext('2d');
+      const gradient = c.createLinearGradient(0, 0, 0, 64);
+      gradient.addColorStop(0, 'rgba(45,212,191,0.35)');
+      gradient.addColorStop(1, 'rgba(45,212,191,0.0)');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: Array.from({ length: 12 }, (_, i) => i + 1),
+          datasets: [{
+            data: [3,4,3,5,6,8,7,9,10,12,11,13],
+            borderColor: '#5eead4',
+            backgroundColor: gradient,
+            tension: 0.35,
+            pointRadius: 0,
+            fill: true,
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: { x: { display: false }, y: { display: false } },
+          elements: { line: { borderJoinStyle: 'round' } }
+        }
+      });
+    }
+    window.addEventListener('load', initMiniChart);
+
+    // Form handler + toast
+    const form = document.getElementById('contact-form');
+    const toast = document.getElementById('toast');
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.remove('opacity-0', 'translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2200);
+    }
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = data.get('name');
+      showToast('Thanks, ' + (name || 'there') + '! We\'ll be in touch shortly.');
+      form.reset();
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Patch truncated markup (safety)
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1) Remove any accidental <img> without src in About gallery
+      document.querySelectorAll('#about .grid img:not([src])').forEach(img => img.remove());
+
+      // 2) Remove stray "div>" text node from the Work section, if present
+      const workSection = document.getElementById('work');
+      if (workSection) {
+        const walker = document.createTreeWalker(workSection, NodeFilter.SHOW_TEXT, null);
+        const toRemove = [];
+        let node;
+        while ((node = walker.nextNode())) {
+          if (node.nodeValue && node.nodeValue.trim() === 'div>') toRemove.push(node);
+        }
+        toRemove.forEach(n => n.parentNode && n.parentNode.removeChild(n));
+      }
+
+      // 3) Fix the gray color class typo for the "-36%" stat
+      const ttvSpan = Array.from(document.querySelectorAll('#work span')).find(el => el.textContent.trim() === '-36%');
+      if (ttvSpan) ttvSpan.classList.add('text-gray-200', 'font-medium');
+    });
+  
+}
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      <div className="spline-container fixed top-0 w-full h-screen -z-10"><iframe frameborder="0" height="100%" src="https://my.spline.design/radialglass-20RYcJn9wbsEb5QEYkazHjpb" width="100%"></iframe></div>
+
+<div className="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-teal-400 to-cyan-400 w-0 z-[60]" id="scroll-progress" style={{width: `0%`}}></div>
+
+<header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b bg-black/70 border-gray-900 transition-transform duration-300 will-change-transform" id="site-header" style={{transform: `translateY(0px)`}}>
+<nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16">
+<div className="h-full flex items-center justify-between">
+
+<a className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-md" href="#home">
+<div className="h-6 w-6 rounded-md bg-gradient-to-br from-teal-500 to-cyan-400"></div>
+<span className="text-lg font-medium tracking-tight" style={{fontFamily: `'Plus Jakarta Sans', Inter, sans-serif`}}>Prism Studio</span>
+</a>
+
+<div className="hidden md:flex items-center gap-8">
+<a aria-current="page" className="group text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors bg-gradient-to-r from-teal-400 to-teal-400 bg-left-bottom bg-no-repeat bg-[length:0%_2px] group-hover:bg-[length:100%_2px] transition-[background-size] duration-300 text-white" data-nav-link="" href="#home" style={{backgroundSize: `100% 2px`}}>
+            Home
+          </a>
+<a aria-current="false" className="group text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors bg-gradient-to-r from-teal-400 to-teal-400 bg-left-bottom bg-no-repeat bg-[length:0%_2px] group-hover:bg-[length:100%_2px] transition-[background-size] duration-300" data-nav-link="" href="#about" style={{backgroundSize: `0% 2px`}}>
+            About
+          </a>
+<a aria-current="false" className="group text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors bg-gradient-to-r from-teal-400 to-teal-400 bg-left-bottom bg-no-repeat bg-[length:0%_2px] group-hover:bg-[length:100%_2px] transition-[background-size] duration-300" data-nav-link="" href="#services" style={{backgroundSize: `0% 2px`}}>
+            Services
+          </a>
+<a aria-current="false" className="group text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors bg-gradient-to-r from-teal-400 to-teal-400 bg-left-bottom bg-no-repeat bg-[length:0%_2px] group-hover:bg-[length:100%_2px] transition-[background-size] duration-300" data-nav-link="" href="#work" style={{backgroundSize: `0% 2px`}}>
+            Work
+          </a>
+<a aria-current="false" className="group text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors bg-gradient-to-r from-teal-400 to-teal-400 bg-left-bottom bg-no-repeat bg-[length:0%_2px] group-hover:bg-[length:100%_2px] transition-[background-size] duration-300" data-nav-link="" href="#contact" style={{backgroundSize: `0% 2px`}}>
+            Contact
+          </a>
+</div>
+
+<div className="flex items-center gap-3">
+<a className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-black hover:bg-gray-200 transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-teal-500" href="#contact">
+            Let’s Talk
+            <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+<button aria-controls="mobile-panel" aria-expanded="false" className="md:hidden p-2 rounded-md transition-colors hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500" id="nav-toggle">
+<svg aria-hidden="true" className="lucide lucide-menu w-5 h-5" data-lucide="menu" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg>
+<svg aria-hidden="true" className="lucide lucide-x w-5 h-5 hidden" data-lucide="x" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</button>
+</div>
+</div>
+</nav>
+
+<div className="fixed inset-0 z-40 pointer-events-none opacity-0 transition-opacity duration-300" id="mobile-panel">
+<div className="absolute inset-0 bg-black/50 backdrop-blur-sm" data-close-overlay=""></div>
+<div className="absolute inset-x-0 top-0 bg-gray-950/95 border-b border-gray-900 px-4 sm:px-6 pt-20 pb-8 translate-y-[-8px] opacity-0 transition-all duration-300">
+<div className="max-w-7xl mx-auto">
+<div className="grid gap-4">
+<a className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-900 border border-transparent hover:border-gray-800 transition-colors" data-mobile-link="" href="#home">
+<span className="text-base font-medium text-gray-100">Home</span>
+<svg className="lucide lucide-arrow-up-right w-4 h-4 text-gray-400" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+<a className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-900 border border-transparent hover:border-gray-800 transition-colors" data-mobile-link="" href="#about">
+<span className="text-base font-medium text-gray-100">About</span>
+<svg className="lucide lucide-arrow-up-right w-4 h-4 text-gray-400" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+<a className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-900 border border-transparent hover:border-gray-800 transition-colors" data-mobile-link="" href="#services">
+<span className="text-base font-medium text-gray-100">Services</span>
+<svg className="lucide lucide-arrow-up-right w-4 h-4 text-gray-400" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+<a className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-900 border border-transparent hover:border-gray-800 transition-colors" data-mobile-link="" href="#work">
+<span className="text-base font-medium text-gray-100">Work</span>
+<svg className="lucide lucide-arrow-up-right w-4 h-4 text-gray-400" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+<a className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-900 border border-transparent hover:border-gray-800 transition-colors" data-mobile-link="" href="#contact">
+<span className="text-base font-medium text-gray-100">Contact</span>
+<svg className="lucide lucide-arrow-up-right w-4 h-4 text-gray-400" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+<div className="mt-6 flex items-center gap-3">
+<a className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-teal-400 text-black hover:bg-teal-300 transition-all hover:scale-[1.02]" href="#contact">
+              Start a Project
+              <svg className="lucide lucide-sparkles w-4 h-4" data-lucide="sparkles" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><circle cx="4" cy="20"></circle></svg>
+</a>
+<a className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-200" href="mailto:hello@prism.studio">
+<svg className="lucide lucide-mail w-4 h-4" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="16" rx="2" width="20"></rect></svg>
+              hello@prism.studio
+            </a>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+<section className="relative overflow-hidden pt-24 sm:pt-28 pb-16 bg-[url('https://images.unsplash.com/photo-1529429612778-c8e40ef2f36d?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center" id="home">
+<div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black"></div>
+<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+<div>
+<p className="text-sm font-medium uppercase tracking-wider text-teal-300/90" data-animate="up" data-delay="0" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>Design That Converts</p>
+<h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl leading-tight font-medium tracking-tight" data-animate="left" data-delay="100" style={{fontFamily: `"Plus Jakarta Sans", Inter, sans-serif`, opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+            Sophisticated digital experiences that drive growth
+          </h1>
+<p className="mt-6 text-lg text-gray-300 max-w-xl" data-animate="up" data-delay="200" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+            We partner with ambitious teams to design and launch products that users love—measurably improving activation, retention, and revenue.
+          </p>
+<div className="mt-8 flex flex-col sm:flex-row gap-3" data-animate="up" data-delay="300" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<a className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-medium bg-teal-400 text-black hover:bg-teal-300 transition-all hover:scale-[1.02]" href="#work">
+              View Work
+              <svg className="lucide lucide-arrow-right w-5 h-5" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+<a className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-medium bg-white/10 text-gray-100 hover:bg-white/15 border border-white/10 transition-all hover:scale-[1.02]" href="#about">
+              Learn More
+              <svg className="lucide lucide-play w-5 h-5" data-lucide="play" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+</a>
+</div>
+<div className="mt-8 flex items-center gap-6" data-animate="up" data-delay="400" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="flex -space-x-2">
+<img alt="Avatar" className="w-9 h-9 rounded-full border-2 border-black object-cover" src="https://images.unsplash.com/photo-1500649297466-74794c70acfc?w=320&q=80" />
+<img alt="Avatar" className="w-9 h-9 rounded-full border-2 border-black object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/bcaefeee-31cd-4c69-9a33-39ee0ad78c30_320w.jpg" />
+<img alt="Avatar" className="w-9 h-9 rounded-full border-2 border-black object-cover" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/468105fe-8942-4e2b-a1a3-7023da9fd488_320w.jpg" />
+<div className="w-9 h-9 rounded-full border-2 border-black bg-teal-400 flex items-center justify-center text-black text-xs font-medium">50+</div>
+</div>
+<div>
+<p className="text-sm font-medium text-gray-100">Trusted by 50+ companies</p>
+<p className="text-sm text-gray-400">From startups to enterprises</p>
+</div>
+</div>
+</div>
+<div className="relative">
+<div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-gray-900/40" data-animate="right" data-delay="150" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<img alt="Design workspace" className="w-full h-[460px] object-cover" src="/assets/ff6e51d4-782c-4d82-bd46-0c123b22c9e4_1600w.jpg" />
+
+<div className="absolute top-4 right-4 backdrop-blur-sm rounded-xl p-4 shadow-lg bg-black/80 border border-white/10">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 flex bg-gray-800 rounded-full items-center justify-center">
+<svg className="lucide lucide-trending-up w-5 h-5 text-gray-200" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</div>
+<div className="">
+<p className="text-sm text-gray-300">Conversion Rate</p>
+<p className="text-lg font-semibold text-white">+147%</p>
+</div>
+</div>
+</div>
+<div className="absolute bottom-4 left-4 backdrop-blur-sm rounded-xl p-4 shadow-lg bg-black/80 border border-white/10">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 flex bg-gray-800 rounded-full items-center justify-center">
+<svg className="lucide lucide-users w-5 h-5 text-gray-300" data-lucide="users" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><circle cx="9" cy="7"></circle></svg>
+</div>
+<div className="">
+<p className="text-sm text-gray-300">Engagement</p>
+<p className="text-lg font-semibold text-white">+89%</p>
+</div>
+</div>
+
+<div className="mt-3 w-44 h-16">
+<div className="w-full h-full">
+<canvas height="128" id="miniChart" style={{display: `block`, boxSizing: `border-box`, height: `64px`, width: `176px`}} width="352"></canvas>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div className="mt-12 border-t border-white/10 pt-8">
+<p className="text-center text-sm text-gray-400 mb-6" data-animate="up" data-delay="0" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>Trusted by leading brands</p>
+<div className="grid grid-cols-2 md:grid-cols-5 gap-6 items-center">
+<div className="flex items-center justify-center gap-2 text-gray-400 hover:text-teal-300 transition-colors" data-animate="up" data-delay="50" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<svg className="lucide lucide-zap w-5 h-5" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg><span className="text-sm">Nexus Labs</span>
+</div>
+<div className="flex items-center justify-center gap-2 text-gray-400 hover:text-teal-300 transition-colors" data-animate="up" data-delay="100" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<svg className="lucide lucide-rocket w-5 h-5" data-lucide="rocket" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path></svg><span className="text-sm">Velocity</span>
+</div>
+<div className="flex items-center justify-center gap-2 text-gray-400 hover:text-teal-300 transition-colors" data-animate="up" data-delay="150" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<svg className="lucide lucide-shield w-5 h-5" data-lucide="shield" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg><span className="text-sm">Fortress</span>
+</div>
+<div className="flex items-center justify-center gap-2 text-gray-400 hover:text-teal-300 transition-colors" data-animate="up" data-delay="200" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<svg className="lucide lucide-globe w-5 h-5" data-lucide="globe" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12"></circle><path></path><path></path></svg><span className="text-sm">Orbit</span>
+</div>
+<div className="flex items-center justify-center gap-2 text-gray-400 hover:text-teal-300 transition-colors" data-animate="up" data-delay="250" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<svg className="lucide lucide-diamond w-5 h-5" data-lucide="diamond" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg><span className="text-sm">Prism</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-20 bg-gray-950" id="about">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid lg:grid-cols-2 gap-12 items-center">
+<div>
+<p className="text-sm font-medium uppercase tracking-wider text-teal-300/90" data-animate="up" data-delay="0" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>About Us</p>
+<h2 className="mt-3 text-3xl lg:text-4xl tracking-tight font-medium text-white" data-animate="left" data-delay="100" style={{fontFamily: `"Plus Jakarta Sans", Inter, sans-serif`, opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+            We don’t just design—<br />we engineer outcomes
+          </h2>
+<p className="mt-6 text-gray-400 text-lg" data-animate="up" data-delay="200" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+            Founded in 2019, Prism Studio partners with product-led teams to launch category-defining experiences. Research-driven, conversion-minded, and craft-obsessed.
+          </p>
+<div className="mt-6 grid sm:grid-cols-2 gap-4" data-animate="up" data-delay="300" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="p-5 rounded-xl border border-white/10 bg-black/40">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-award w-5 h-5 text-gray-300" data-lucide="award" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="8"></circle></svg>
+</div>
+<div>
+<p className="text-xl font-medium text-white">150+</p>
+<p className="text-sm text-gray-400">Projects Delivered</p>
+</div>
+</div>
+</div>
+<div className="p-5 rounded-xl border border-white/10 bg-black/40">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-heart w-5 h-5 text-gray-300" data-lucide="heart" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg>
+</div>
+<div>
+<p className="text-xl font-medium text-white">98%</p>
+<p className="text-sm text-gray-400">Client Satisfaction</p>
+</div>
+</div>
+</div>
+</div>
+<div className="mt-6" data-animate="up" data-delay="350" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<a className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium bg-gray-100 text-black hover:bg-gray-200 transition-all hover:scale-[1.02]" href="#services">
+              Explore Our Process
+              <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+</div>
+<div className="grid grid-cols-2 gap-4">
+<img alt="Team" className="w-full h-56 sm:h-64 lg:h-72 object-cover border-white/10 border rounded-xl" data-animate="up" data-delay="50" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/49682d03-ac44-4fa0-a27e-f1ff15352b3e_800w.jpg" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}} />
+<img alt="Workspace" className="w-full h-56 sm:h-64 lg:h-72 object-cover border-white/10 border rounded-xl" data-animate="up" data-delay="150" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/1fc9213b-2848-4f6a-b350-abf31607d5f8_800w.jpg" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}} />
+<img alt="Sketching concepts" className="w-full h-56 sm:h-64 lg:h-72 object-cover border-white/10 border rounded-xl" data="" data-animate="up" data-delay="250" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/93cb07c8-3f56-4c7c-b383-f9ebea4a55a2_800w.jpg" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}} />
+<img alt="Collaboration session" className="w-full h-56 sm:h-64 lg:h-72 object-cover border-white/10 border rounded-xl" data-animate="up" data-delay="350" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/7b1a7307-c2aa-49c2-ad29-2bde4b72d91f_800w.jpg" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}} />
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-20 bg-[radial-gradient(60%_80%_at_50%_0%,rgba(45,212,191,0.08),transparent_70%)]" id="services">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="flex items-end justify-between gap-6">
+<div>
+<p className="text-sm font-medium uppercase tracking-wider text-teal-300/90" data-animate="up" data-delay="0" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>What we do</p>
+<h2 className="mt-3 text-3xl lg:text-4xl tracking-tight font-medium text-white" data-animate="left" data-delay="100" style={{fontFamily: `"Plus Jakarta Sans", Inter, sans-serif`, opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+            Strategy, design, and engineering—end to end
+          </h2>
+</div>
+<a className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-white/10 text-gray-100 hover:bg-white/15 border border-white/10 transition-all hover:scale-[1.02]" href="#contact">
+          Start a project
+          <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+<div className="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+<div className="group relative hover:bg-black/50 transition-colors overflow-hidden bg-black/40 border-white/10 border rounded-xl pt-5 pr-5 pb-5 pl-5 backdrop-blur" data-animate="up" data-delay="100" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-teal-400/10 blur-2xl transition-opacity opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-compass w-5 h-5 text-gray-300" data-lucide="compass" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="12"></circle></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold">Product Strategy</h3>
+<p className="mt-2 text-sm text-gray-400">Opportunity mapping, JTBD, and roadmap definition to de-risk execution.</p>
+<ul className="mt-4 space-y-1.5 text-sm text-gray-400">
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> Research sprints</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> KPI modeling</li>
+</ul>
+</div>
+<div className="group relative hover:bg-black/50 transition-colors overflow-hidden bg-black/40 border-white/10 border rounded-xl pt-5 pr-5 pb-5 pl-5 backdrop-blur" data-animate="up" data-delay="150" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-cyan-400/10 blur-2xl transition-opacity opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-pen-tool w-5 h-5 text-gray-300" data-lucide="pen-tool" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><circle cx="11" cy="11"></circle></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold">Product Design</h3>
+<p className="mt-2 text-sm text-gray-400">UX/UI systems that ship fast and scale with your product.</p>
+<ul className="mt-4 space-y-1.5 text-sm text-gray-400">
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> Design systems</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> Prototyping & testing</li>
+</ul>
+</div>
+<div className="group relative hover:bg-black/50 transition-colors overflow-hidden bg-black/40 border-white/10 border rounded-xl pt-5 pr-5 pb-5 pl-5 backdrop-blur" data-animate="up" data-delay="200" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-emerald-400/10 blur-2xl transition-opacity opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-code-2 w-5 h-5 text-gray-300" data-lucide="code-2" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold">Frontend Engineering</h3>
+<p className="mt-2 text-sm text-gray-400">Accessible, maintainable interfaces built with modern stacks.</p>
+<ul className="mt-4 space-y-1.5 text-sm text-gray-400">
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> React / Vue</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> Performance tuning</li>
+</ul>
+</div>
+<div className="group relative hover:bg-black/50 transition-colors overflow-hidden bg-black/40 border-white/10 border rounded-xl pt-5 pr-5 pb-5 pl-5 backdrop-blur" data-animate="up" data-delay="250" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-fuchsia-400/10 blur-2xl transition-opacity opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-bar-chart-3 w-5 h-5 text-gray-300" data-lucide="bar-chart-3" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path></svg>
+</div>
+<h3 className="mt-4 text-lg font-semibold">Growth & Analytics</h3>
+<p className="mt-2 text-sm text-gray-400">Experiments and insights that compound—without guesswork.</p>
+<ul className="mt-4 space-y-1.5 text-sm text-gray-400">
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> Funnel analysis</li>
+<li className="flex items-center gap-2"><svg className="lucide lucide-check w-4 h-4 text-teal-300" data-lucide="check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path></svg> CRO roadmaps</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section className="py-20 bg-gray-950" id="work">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="flex items-end justify-between gap-6">
+<div>
+<p className="text-sm font-medium uppercase tracking-wider text-teal-300/90" data-animate="up" data-delay="0" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>Selected Work</p>
+<h2 className="mt-3 text-3xl lg:text-4xl tracking-tight font-medium text-white" data-animate="left" data-delay="100" style={{fontFamily: `"Plus Jakarta Sans", Inter, sans-serif`, opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+            Case studies that moved the needle
+          </h2>
+</div>
+<a className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-black hover:bg-gray-200 transition-all hover:scale-[1.02]" href="#contact">
+          Work with us
+          <svg className="lucide lucide-handshake w-4 h-4" data-lucide="handshake" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path><path></path><path></path><path></path></svg>
+</a>
+</div>
+<div className="mt-10 grid lg:grid-cols-3 gap-6">
+
+<article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-gray-900/60 to-black" data-animate="up" data-delay="100" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="relative h-56">
+<img alt="Analytics dashboard redesign" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/d881c5aa-a10a-48d9-ac16-06055527d54d_800w.jpg" style={{}} />
+<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div className="absolute bottom-4 left-4 flex items-center gap-2">
+<span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/10">SaaS</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/10">B2B</span>
+</div>
+</div>
+<div className="p-5">
+<h3 className="text-lg font-semibold">Voyant Analytics</h3>
+<p className="mt-1 text-sm text-gray-400">Rebuilt the dashboard UX to accelerate insights and adoption.</p>
+<div className="mt-4 flex items-center justify-between">
+<div className="text-sm text-gray-400"><span className="text-gray-200 font-medium">+47%</span> activation</div>
+<a className="inline-flex items-center gap-1 text-sm text-teal-300 hover:text-teal-200" href="#contact">
+                Discuss approach <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+</div>
+</article>
+
+<article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-gray-900/60 to-black" data-animate="up" data-delay="150" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="relative h-56">
+<img alt="DevOps website" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/35e1d968-74f7-4c60-aa59-4be460bf1b97_800w.jpg" style={{}} />
+<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div className="absolute bottom-4 left-4 flex items-center gap-2">
+<span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/10">Web</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/10">DevTools</span>
+</div>
+</div>
+<div className="p-5">
+<h3 className="text-lg font-semibold">Stackflow</h3>
+<p className="mt-1 text-sm text-gray-400">Positioned a new developer platform with a scalable design system.</p>
+<div className="mt-4 flex items-center justify-between">
+<div className="text-sm text-gray-400"><span className="text-gray-200 font-medium">+32%</span> trial-to-paid</div>
+<a className="inline-flex items-center gap-1 text-sm text-teal-300 hover:text-teal-200" href="#contact">
+                Explore details <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+</div>
+</article>
+
+<article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-gray-900/60 to-black" data-animate="up" data-delay="200" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+<div className="relative h-56">
+<img alt="Mobile app" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]" src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/1f2e7ddd-36d6-4476-b1bb-3dd274d9f579_1600w.jpg" style={{}} />
+<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div className="absolute bottom-4 left-4 flex items-center gap-2">
+<span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/10">Mobile</span>
+<span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 border border-white/10">Fintech</span>
+</div>
+</div>
+<div className="p-5">
+<h3 className="text-lg font-semibold">Mintory</h3>
+<p className="mt-1 text-sm text-gray-400">Shipped a streamlined onboarding that increased funded accounts.</p>
+<div className="mt-4 flex items-center justify-between">
+<div className="text-sm text-gray-400"><span className="text-gray-2 00 font-medium text-gray-200">-36%</span> time-to-value</div>
+<a className="inline-flex items-center gap-1 text-sm text-teal-300 hover:text-teal-200" href="#contact">
+                See playbook <svg className="lucide lucide-arrow-right w-4 h-4" data-lucide="arrow-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</a>
+</div>
+</div>
+</article></div>
+</div></section>
+
+<section className="py-20 bg-black" id="contact">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid lg:grid-cols-2 gap-10">
+<div>
+<p className="text-sm font-medium uppercase tracking-wider text-teal-300/90" data-animate="up" data-delay="0" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>Contact</p>
+<h2 className="mt-3 text-3xl lg:text-4xl tracking-tight font-medium text-white" data-animate="left" data-delay="100" style={{fontFamily: `"Plus Jakarta Sans", Inter, sans-serif`, opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>
+            Let’s build something users can’t ignore
+          </h2>
+<p className="mt-4 text-gray-400" data-animate="up" data-delay="200" style={{opacity: `1`, transform: `translateX(0px) translateY(0px)`, transition: `opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1)`}}>Tell us about your goals. We’ll follow up within 24 hours.</p>
+<div className="mt-8 grid sm:grid-cols-2 gap-4">
+<div className="p-5 rounded-xl border border-white/10 bg-black/40">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-clock w-5 h-5 text-gray-300" data-lucide="clock" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="12"></circle></svg>
+</div>
+<div>
+<p className="text-base font-medium">Avg. kickoff</p>
+<p className="text-sm text-gray-400">~2 weeks</p>
+</div>
+</div>
+</div>
+<div className="p-5 rounded-xl border border-white/10 bg-black/40">
+<div className="flex items-center gap-3">
+<div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+<svg className="lucide lucide-shield-check w-5 h-5 text-gray-300" data-lucide="shield-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</div>
+<div>
+<p className="text-base font-medium">NDA friendly</p>
+<p className="text-sm text-gray-400">Your secrets are safe</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<form className="p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-gray-950 to-black" id="contact-form">
+<div className="grid sm:grid-cols-2 gap-4">
+<div>
+<label className="block text-sm text-gray-300 mb-1" htmlFor="name">Name</label>
+<input className="w-full px-3 py-2.5 rounded-lg bg-black/60 border border-white/10 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500" id="name" name="name" placeholder="Alex Doe" required type="text" />
+</div>
+<div>
+<label className="block text-sm text-gray-300 mb-1" htmlFor="email">Email</label>
+<input className="w-full px-3 py-2.5 rounded-lg bg-black/60 border border-white/10 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500" id="email" name="email" placeholder="alex@company.com" required type="email" />
+</div>
+</div>
+<div className="mt-4">
+<label className="block text-sm text-gray-300 mb-1" htmlFor="budget">Estimated budget</label>
+<select className="w-full px-3 py-2.5 rounded-lg bg-black/60 border border-white/10 focus:outline-none focus:ring-2 focus:ring-teal-500" id="budget" name="budget">
+<option value="">Select a range</option>
+<option>$10k – $25k</option>
+<option>$25k – $50k</option>
+<option>$50k – $100k</option>
+<option>$100k+</option>
+</select>
+</div>
+<div className="mt-4">
+<label className="block text-sm text-gray-300 mb-1" htmlFor="message">Project details</label>
+<textarea className="w-full px-3 py-2.5 rounded-lg bg-black/60 border border-white/10 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500" id="message" name="message" placeholder="What are you aiming to achieve?" rows="4"></textarea>
+</div>
+<div className="mt-6 flex items-center justify-between gap-4">
+<div className="flex items-center gap-2">
+<input className="w-4 h-4 rounded border-white/20 bg-black/60 text-teal-500 focus:ring-teal-500" id="nda" name="nda" type="checkbox" />
+<label className="text-sm text-gray-400" htmlFor="nda">Send NDA first</label>
+</div>
+<button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium bg-teal-400 text-black hover:bg-teal-300 transition-all hover:scale-[1.02]" type="submit">
+              Send message
+              <svg className="lucide lucide-send w-4 h-4" data-lucide="send" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><path></path></svg>
+</button>
+</div>
+<p className="mt-3 text-xs text-gray-500" id="form-hint">By submitting, you agree to our privacy policy.</p>
+</form>
+</div>
+</div>
+</section>
+
+<footer className="border-t border-white/10 bg-gray-950">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div className="grid md:grid-cols-4 gap-8">
+<div className="md:col-span-2">
+<a className="inline-flex items-center gap-2" href="#home">
+<div className="h-6 w-6 rounded-md bg-gradient-to-br from-teal-500 to-cyan-400"></div>
+<span className="text-lg font-medium" style={{fontFamily: `'Plus Jakarta Sans', Inter, sans-serif`}}>Prism Studio</span>
+</a>
+<p className="mt-3 text-sm text-gray-400 max-w-md">We craft interfaces and systems that help ambitious teams move faster with confidence.</p>
+<div className="mt-4 flex items-center gap-3">
+<a className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-200" href="mailto:hello@prism.studio">
+<svg className="lucide lucide-mail w-4 h-4" data-lucide="mail" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><rect height="16" rx="2" width="20"></rect></svg> hello@prism.studio
+            </a>
+<span className="text-gray-700">•</span>
+<a className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-200" href="#contact">
+<svg className="lucide lucide-map-pin w-4 h-4" data-lucide="map-pin" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path></path><circle cx="12" cy="10"></circle></svg> Remote-first
+            </a>
+</div>
+</div>
+<div>
+<p className="text-sm font-medium text-gray-300">Navigate</p>
+<ul className="mt-3 space-y-2 text-sm text-gray-400">
+<li><a className="hover:text-teal-300" href="#about">About</a></li>
+<li><a className="hover:text-teal-300" href="#services">Services</a></li>
+<li><a className="hover:text-teal-300" href="#work">Work</a></li>
+<li><a className="hover:text-teal-300" href="#contact">Contact</a></li>
+</ul>
+</div>
+<div>
+<p className="text-sm font-medium text-gray-300">Legal</p>
+<ul className="mt-3 space-y-2 text-sm text-gray-400">
+<li><a className="hover:text-teal-300" href="#">Privacy</a></li>
+<li><a className="hover:text-teal-300" href="#">Terms</a></li>
+</ul>
+</div>
+</div>
+<div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+<p>© <span id="year">2025</span> Prism Studio. All rights reserved.</p>
+<div className="flex items-center gap-3">
+<a className="hover:text-teal-300" href="#">Twitter</a>
+<a className="hover:text-teal-300" href="#">Dribbble</a>
+<a className="hover:text-teal-300" href="#">GitHub</a>
+</div>
+</div>
+</div>
+</footer>
+
+<div aria-live="polite" className="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-black shadow-lg opacity-0 translate-y-2 transition-all" id="toast" role="status"></div>
+
+
+
+    </>
+  );
+}

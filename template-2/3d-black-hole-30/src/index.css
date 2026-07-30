@@ -1,0 +1,18 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; }
+#container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.slider { -webkit-appearance: none; appearance: none; background: #1f2937; outline: none; border-radius: 4px; }
+.slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #22d3ee; cursor: pointer; border-radius: 50%; box-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
+.slider::-moz-range-thumb { width: 16px; height: 16px; background: #22d3ee; cursor: pointer; border-radius: 50%; border: none; box-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
+

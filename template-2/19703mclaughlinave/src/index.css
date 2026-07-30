@@ -1,0 +1,101 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body {
+font-family: 'Inter', sans-serif;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+.hide-scrollbar::-webkit-scrollbar {
+display: none;
+}
+.hide-scrollbar {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+
+
+
+.invisible { visibility: hidden !important; }
+
+
+
+@keyframes cms-shimmer {
+0% { background-position: -200% 0; }
+100% { background-position: 200% 0; }
+}
+.cms-loading {
+position: relative;
+color: transparent !important;
+background: linear-gradient(90deg,
+rgba(128, 128, 128, 0.1) 25%,
+rgba(128, 128, 128, 0.2) 50%,
+rgba(128, 128, 128, 0.1) 75%
+);
+background-size: 200% 100%;
+animation: cms-shimmer 1.5s infinite;
+border-radius: 12px;
+min-height: 1em;
+min-width: 3em;
+overflow: hidden;
+}
+.cms-loading * {
+visibility: hidden !important;
+}
+.cms-loading img {
+opacity: 0 !important;
+}
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+
+.font-newsreader { font-family: 'Newsreader', serif !important; }
+
+.font-google-sans-flex { font-family: 'Google Sans Flex', sans-serif !important; }
+
+.font-oswald { font-family: 'Oswald', sans-serif !important; }
+
+.font-dm-sans { font-family: 'DM Sans', sans-serif !important; }
+
+.font-cormorant { font-family: 'Cormorant Garamond', serif !important; }

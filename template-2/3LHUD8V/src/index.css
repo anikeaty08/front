@@ -1,0 +1,108 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        
+        .card-top {
+            width: 31.65em;
+            height: 18em;
+            border-radius: 1em;
+        }
+        
+        .card-bottom {
+            width: calc(31.65em * 0.8); /* 80% of the top card width */
+            height: 18em;
+            border-radius: 1em;
+        }
+        
+        .card-content-gradient {
+            background-image: 
+                linear-gradient(to bottom, 
+                    rgba(255,255,255,0) 3.125em,
+                    hsl(35, 95%, 60%) 3.375em,
+                    hsl(45, 90%, 80%) 4.5em
+                ),
+                linear-gradient(to right,
+                    hsl(45, 90%, 80%) 19.5em,
+                    hsl(35, 95%, 60%) calc(100% - 6em),
+                    rgba(255,255,255,0) 28.65em
+                ),
+                linear-gradient(to right,
+                    rgba(255,255,255,0.5) 6em,
+                    rgba(255,255,255,0.2)
+                );
+            background-size: calc(100% - 6em) 35%, 100% 35%, 100% 100%;
+            background-position: 0 0, 0 100%, 0 0;
+            background-repeat: no-repeat;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        
+        .card-divider {
+            height: 1px;
+            background-image: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.3) 20%, 
+                rgba(255,255,255,0.5) 50%,
+                rgba(255,255,255,0.3) 80%,
+                transparent
+            );
+        }
+        
+        .card-vertical-divider {
+            width: 1px;
+            background-image: linear-gradient(180deg, 
+                transparent, 
+                rgba(255,255,255,0.3) 20%, 
+                rgba(255,255,255,0.5) 50%,
+                rgba(255,255,255,0.3) 80%,
+                transparent
+            );
+        }
+        
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .glow {
+            box-shadow: 0 0 15px rgba(255, 149, 0, 0.6);
+        }
+        
+        .icon-circle {
+            height: 2rem;
+            width: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+    

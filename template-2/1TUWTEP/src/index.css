@@ -1,0 +1,14 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-geist { font-family: 'Geist', sans-serif !important; }

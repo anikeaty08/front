@@ -1,0 +1,164 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+
+<div className="relative w-[375px] h-[812px] bg-white rounded-[60px] overflow-hidden shadow-xl border-8 border-gray-800">
+
+<div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[40%] h-[30px] bg-gray-800 rounded-b-xl z-10"></div>
+
+<div className="relative pt-12 px-6 z-0">
+<div className="flex justify-between items-center text-xs">
+<span>9:41</span>
+<div className="flex items-center gap-1">
+<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 7h12m0 0l-4-4m4 4l-4 4m-8 6H4m0 0l4 4m-4-4l4-4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+</svg>
+</div>
+</div>
+</div>
+
+<div className="px-6 pt-6">
+<h1 className="text-2xl font-bold mb-4">Welcome Back</h1>
+
+<div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg mb-6">
+<div className="flex justify-between items-start mb-10">
+<div>
+<p className="text-xs opacity-80">Balance</p>
+<p className="text-2xl font-bold">$8,256.42</p>
+</div>
+<div className="flex items-center justify-center h-8 w-8 rounded-full bg-white/20">
+<svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+<path clip-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" fillRule="evenodd"></path>
+</svg>
+</div>
+</div>
+<div className="flex justify-between text-sm">
+<div>
+<p className="opacity-80">Card Number</p>
+<p>•••• •••• •••• 4582</p>
+</div>
+<div>
+<p className="opacity-80">Exp Date</p>
+<p>09/25</p>
+</div>
+</div>
+</div>
+
+<h2 className="text-lg font-semibold mb-3">Recent Activity</h2>
+<div className="space-y-4">
+<div className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm">
+<div className="flex items-center gap-3">
+<div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+<svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fillRule="evenodd"></path>
+</svg>
+</div>
+<div>
+<p className="font-medium">Apple Store</p>
+<p className="text-xs text-gray-500">Today, 2:34 PM</p>
+</div>
+</div>
+<p className="font-semibold">-$129.00</p>
+</div>
+<div className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm">
+<div className="flex items-center gap-3">
+<div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+<svg className="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" fillRule="evenodd"></path>
+</svg>
+</div>
+<div>
+<p className="font-medium">Salary Deposit</p>
+<p className="text-xs text-gray-500">Yesterday, 9:15 AM</p>
+</div>
+</div>
+<p className="font-semibold text-green-600">+$4,250.00</p>
+</div>
+<div className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm">
+<div className="flex items-center gap-3">
+<div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+<svg className="h-5 w-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" fillRule="evenodd"></path>
+<path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z"></path>
+</svg>
+</div>
+<div>
+<p className="font-medium">Amazon</p>
+<p className="text-xs text-gray-500">Jul 28, 11:23 AM</p>
+</div>
+</div>
+<p className="font-semibold">-$35.50</p>
+</div>
+</div>
+</div>
+
+<div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-[40%] h-1 bg-gray-800 rounded-full"></div>
+</div>
+
+    </>
+  );
+}

@@ -1,0 +1,17 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root { color-scheme: light; }
+@media (prefers-reduced-motion: reduce) {
+* { transition: none !important; animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
+

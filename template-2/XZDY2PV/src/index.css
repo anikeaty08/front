@@ -1,0 +1,15 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+      /* Custom font utilities */
+      .font-roboto { font-family: 'Roboto', sans-serif !important; }
+    

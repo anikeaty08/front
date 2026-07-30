@@ -1,0 +1,19 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{background:#0a0a0b;color:#e5e7eb}
+.section-card{background:#121214;border:1px solid #252529;border-radius:1rem}
+.badge{font-size:.7rem;background:#3b82f6;padding:.4rem 1rem;border-radius:9999px;letter-spacing:.05em;color:#ffffff;font-weight:500}
+.right-board{background:#121214;border:1px solid #252529;position:relative;overflow:hidden}
+.tech-icon{background:#1a1a1d;border:1px solid #3a3a3f}
+.divider{background:#3a3a3f;height:1px}
+

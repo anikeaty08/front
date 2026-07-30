@@ -1,0 +1,21 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root {
+--brand-yellow: #f6c915;
+--brand-deep: #0f172a; /* slate-900 */
+--brand-mid: #1f2937;  /* gray-800 */
+--brand-soft: #64748b; /* slate-500 */
+}
+html, body { scroll-behavior: smooth; }
+body { font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; }
+

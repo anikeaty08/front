@@ -1,0 +1,69 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+@font-face{
+  font-family:InterVariable;
+  src:url("https://rsms.me/inter/font-files/Inter-roman.var.woff2") format("woff2");
+  font-weight:100 900;
+  font-display:swap;
+}
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 46px; 
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+*::-webkit-scrollbar{display:none}
+.content-area {
+  flex-grow: 1;
+}
+.safe-area-top {
+  height: 44px;
+  background: transparent;
+}
+.safe-area-bottom {
+  height: 34px;
+  background: transparent;
+}
+
+.progress-circle {
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  position: relative;
+  background: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.progress-circle-100 {
+  background: #C9FFC3;
+}
+
+.progress-circle-90 {
+  background: conic-gradient(#C9FFC3 0deg 324deg, #ffffff 324deg 360deg);
+  border: 2px solid #C9FFC3;
+}
+
+.progress-circle-64 {
+  background: conic-gradient(#FED8AA 0deg 230deg, #ffffff 230deg 360deg);
+  border: 2px solid #FED8AA;
+}
+
+.progress-circle-12 {
+  background: conic-gradient(#FECACA 0deg 43deg, #ffffff 43deg 360deg);
+  border: 2px solid #FECACA;
+}
+

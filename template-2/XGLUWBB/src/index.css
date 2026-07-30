@@ -1,0 +1,17 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        .bg-grid {
+            background-image: radial-gradient(rgba(255,255,255,.08) 1px,transparent 1px);
+            background-size: 32px 32px;
+        }
+    

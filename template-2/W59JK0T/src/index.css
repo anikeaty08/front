@@ -1,0 +1,125 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html { font-family: 'Inter', sans-serif; }
+    @media (prefers-reduced-motion: reduce) {
+      .entrance-animate,
+      .entrance-animate-delay-1,
+      .entrance-animate-delay-2,
+      .entrance-animate-delay-3,
+      .entrance-animate-delay-4,
+      .entrance-animate-delay-5 {
+        animation: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+      }
+    }
+    @keyframes fadeSlideBlurIn {
+      0% {
+        opacity: 0;
+        filter: blur(22px);
+        transform: translateY(32px) scale(.98);
+      }
+      80% {
+        filter: blur(2px);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+      }
+    }
+    .entrance-animate {
+      opacity: 0;
+      animation: fadeSlideBlurIn 0.85s cubic-bezier(.23,1.21,.47,1) forwards;
+    }
+    .entrance-animate-delay-1 { animation-delay: 0.12s; }
+    .entrance-animate-delay-2 { animation-delay: 0.22s; }
+    .entrance-animate-delay-3 { animation-delay: 0.32s; }
+    .entrance-animate-delay-4 { animation-delay: 0.42s; }
+    .entrance-animate-delay-5 { animation-delay: 0.52s; }
+    .glass {
+      background: linear-gradient(120deg,rgba(50,10,60,.28) 0%,rgba(30,15,40,.38) 100%);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      position: relative;
+      z-index: 1;
+    }
+    .inner-shadow:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      z-index: 2;
+      box-shadow:
+        inset 0 4px 24px 0 rgba(120, 40, 200, 0.15),
+        inset 0 -4px 24px 0 rgba(60, 220, 255, 0.10),
+        inset 0 1.5px 22px 0 rgba(255, 80, 255, 0.09);
+      background:
+        linear-gradient(120deg,rgba(236,56,188,0.08) 0%,rgba(58,180,255,0.04) 100%);
+      mix-blend-mode: lighten;
+    }
+    .outline-gradient {
+      border: 1.5px solid transparent;
+      background-image: linear-gradient(120deg,#232131 60%,#1e1b24 100%),linear-gradient(100deg,#ec38bc 0%,#7303c0 50%,#03001e 100%);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .analytics-glow {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 1.25rem;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .analytics-glow:before { display:none; }
+    .avatar-group [tabindex="0"]:focus-visible {
+      outline: 2px solid #f472b6;
+      z-index: 10;
+      position: relative;
+    }
+    .avatar-tooltip {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      left: 50%;
+      top: 110%;
+      transform: translateX(-50%);
+      background: #232131;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      box-shadow: 0 2px 10px 0 rgba(0,0,0,0.17);
+      transition: opacity .16s;
+      z-index: 20;
+    }
+    .avatar-group > div:hover .avatar-tooltip,
+    .avatar-group > div:focus-visible .avatar-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+  
+
+
+      /* Custom font utilities */
+      .font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+    

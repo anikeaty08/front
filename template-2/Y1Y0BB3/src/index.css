@@ -1,0 +1,34 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+:root { color-scheme: dark; }
+body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
+/* Simple slide-fade utility */
+.slide-in { transform: translateX(8px); opacity: 0; }
+.slide-in.show { transform: translateX(0); opacity: 1; transition: transform 150ms ease, opacity 150ms ease; }
+/* Check animation */
+.stamp-in { transform: scale(0.8); opacity: 0; }
+.stamp-in.show { transform: scale(1); opacity: 1; transition: transform 160ms cubic-bezier(.2,.8,.2,1), opacity 160ms; }
+/* Success pulse ring */
+.pulse-ring::after {
+content: '';
+position: absolute;
+inset: -8px;
+border-radius: 9999px;
+border: 2px solid rgba(16,185,129,0.25);
+animation: ring 1.4s ease-out 1 forwards;
+}
+@keyframes ring {
+from { transform: scale(.9); opacity: .7; }
+to { transform: scale(1.15); opacity: 0; }
+}
+

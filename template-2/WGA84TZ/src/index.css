@@ -1,0 +1,25 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    /* Soft custom themes */
+    .theme-blue { --primary: #3b82f6; --bg: #f1f5f9; --accent: #93c5fd; }
+    .theme-green { --primary: #10b981; --bg: #f0fdf4; --accent: #6ee7b7; }
+    .theme-purple { --primary: #a78bfa; --bg: #f5f3ff; --accent: #c4b5fd; }
+    .theme-gray { --primary: #64748b; --bg: #f8fafc; --accent: #cbd5e1; }
+    html { background-color: var(--bg); }
+    .bg-primary { background-color: var(--primary); }
+    .text-primary { color: var(--primary); }
+    .border-primary { border-color: var(--primary); }
+    .bg-accent { background-color: var(--accent); }
+    .focus-ring:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+    ::selection { background: var(--accent); }
+  

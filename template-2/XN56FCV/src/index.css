@@ -1,0 +1,38 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    html, body { font-family: 'Inter', sans-serif; }
+    .fade-in { opacity: 0; transform: translateY(24px) scale(.98); animation: fadeInUp .8s cubic-bezier(.6,.06,.29,.99) forwards; }
+    .fade-in-blur { opacity: 0; filter: blur(8px); animation: fadeInBlur .8s cubic-bezier(.6,.06,.29,.99) forwards; }
+    .fade-in-delay-1 { animation-delay: .14s; }
+    .fade-in-delay-2 { animation-delay: .28s; }
+    .fade-in-delay-3 { animation-delay: .42s; }
+    .fade-in-delay-4 { animation-delay: .56s; }
+    .fade-in-delay-5 { animation-delay: .7s; }
+    @keyframes fadeInUp { to { opacity: 1; transform: none; } }
+    @keyframes fadeInBlur { to { opacity: 1; filter: blur(0); } }
+    .glass {
+      background: linear-gradient(135deg, rgba(245,245,255,.60) 80%, rgba(156,180,253,0.18));
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+      border: 1.5px solid rgba(125,150,220,0.13);
+      box-shadow: 0 6px 32px -4px rgba(125,140,170,0.10);
+    }
+    .glass-light {
+      background: linear-gradient(135deg, rgba(250,250,255,0.69) 90%, rgba(199,210,254,0.11));
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      border: 1.5px solid rgba(137,179,255,0.08);
+      box-shadow: 0 4px 16px -4px rgba(160,180,210,0.06);
+    }
+    ::selection { background:#a5b4fc33; }
+  

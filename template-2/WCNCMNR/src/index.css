@@ -1,0 +1,155 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        :root {
+            --transition: 0.25s;
+            --purple-base: 260;
+            --active: 0;
+        }
+
+        body {
+            background: hsl(260 6% 6%);
+            color: hsl(0 0% 90%);
+        }
+
+        .feature-card {
+            --active: 0;
+            --bg: radial-gradient(40% 50% at center 100%, hsl(270 calc(var(--active) * 50%) 20% / 0.4), transparent),
+                  radial-gradient(80% 100% at center 120%, hsl(260 calc(var(--active) * 40%) 25% / 0.3), transparent),
+                  hsl(260 15% calc((var(--active) * 8%) + 8%));
+            background: var(--bg);
+            border: 1px solid hsl(260 20% calc((var(--active) * 15%) + 15%));
+            border-radius: 1.5rem;
+            padding: 2rem;
+            position: relative;
+            transition: all var(--transition);
+            transform: translateY(0);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+                        0 0 calc(var(--active) * 3em) calc(var(--active) * 1em) hsl(260 70% 50% / 0.2);
+        }
+
+        .feature-card:hover {
+            --active: 1;
+            transform: translateY(-8px);
+        }
+
+        .feature-card:before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            border: 1px solid hsl(260 70% 50% / 0.3);
+            border-radius: 1.5rem;
+            opacity: var(--active, 0);
+            transition: opacity var(--transition);
+            background: linear-gradient(135deg, 
+                hsl(260 70% 50% / 0.1) 0%, 
+                transparent 50%, 
+                hsl(280 70% 60% / 0.1) 100%);
+        }
+
+        .feature-icon {
+            --scale: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, 
+                hsl(260 70% 50% / 0.2), 
+                hsl(280 70% 60% / 0.2));
+            border: 1px solid hsl(260 50% 40% / 0.3);
+            margin-bottom: 1.5rem;
+            transition: transform var(--transition);
+            transform: scale(var(--scale));
+        }
+
+        .feature-card:hover .feature-icon {
+            --scale: 1.1;
+        }
+
+        .feature-icon svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: hsl(260 70% 70%);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(90deg, 
+                hsl(0 0% 95%), 
+                hsl(260 30% 80%));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .feature-description {
+            color: hsl(0 0% 70%);
+            line-height: 1.6;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, 
+                hsl(0 0% 95%) 0%, 
+                hsl(260 50% 80%) 50%, 
+                hsl(280 50% 85%) 100%);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: hsl(0 0% 70%);
+            text-align: center;
+            font-size: 1.125rem;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sparkle-bg {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: hsl(260 70% 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle 3s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .floating-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: hsl(260 60% 60%);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+        }
+    

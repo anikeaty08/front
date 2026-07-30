@@ -1,0 +1,73 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    .checkbox-gradient {
+      @apply appearance-none w-5 h-5 rounded-md bg-card inline-flex items-center justify-center cursor-pointer transition;
+    }
+    .checkbox-gradient:checked {
+      background-image: linear-gradient(to bottom right,#10b981,#059669);
+    }
+    .toggle {
+      @apply relative w-10 h-6 inline-block cursor-pointer;
+    }
+    .toggle input {
+      @apply opacity-0 w-0 h-0;
+    }
+    .slider {
+      @apply absolute top-0 left-0 right-0 bottom-0 bg-track rounded-full transition;
+    }
+    .slider::before {
+      content:'';
+      @apply absolute h-5 w-5 bg-white rounded-full left-0.5 top-0.5 transition;
+    }
+    input:checked + .slider {
+      background-image: linear-gradient(to bottom right,#10b981,#059669);
+    }
+    input:checked + .slider::before {
+      @apply translate-x-4;
+    }
+    input[type='range'] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+    input[type='range']::-webkit-slider-runnable-track {
+      height: 4px;
+      background: var(--tw-gradient-stops);
+      @apply rounded-full bg-track;
+    }
+    input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      border-radius: 9999px;
+      background: #10b981;
+      margin-top: -6px;
+      cursor: pointer;
+    }
+    input[type='range']::-moz-range-track {
+      height: 4px;
+      background: var(--tw-gradient-stops);
+      @apply rounded-full bg-track;
+    }
+    input[type='range']::-moz-range-thumb {
+      height: 16px;
+      width: 16px;
+      border-radius: 9999px;
+      background: #10b981;
+      cursor: pointer;
+      border: none;
+    }
+    select {
+      @apply bg-card border border-card text-white text-sm rounded-lg focus:ring-0 focus:border-emerald-500 block w-full p-2.5;
+    }
+  

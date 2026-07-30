@@ -1,0 +1,78 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+html, body { font-family: 'SF Pro Display', 'Inter', Arial, sans-serif; }
+.ios-glass {
+background: rgba(255,255,255,0.7);
+box-shadow: 0 12px 32px 0 rgba(44,62,80,0.08), 0 1.5px 4px 0 rgba(44,62,80,0.10);
+backdrop-filter: blur(18px) saturate(180%);
+border: 1px solid rgba(222,226,230,0.25);
+}
+.ios-nav {
+background: rgba(255,255,255,0.6);
+box-shadow: 0 -2px 8px 0 rgba(44,62,80,0.05);
+backdrop-filter: blur(12px) saturate(180%);
+border-top: 1px solid rgba(222,226,230,0.28);
+}
+.ios-divider {
+border-bottom: 1px solid rgba(220,220,220,0.28);
+}
+.phone-shadow {
+box-shadow: 0 16px 40px 0 rgba(44,62,80,0.10), 0 1.5px 6px 0 rgba(44,62,80,0.04);
+}
+.fadein {
+opacity:0;transform:translateY(24px) scale(0.97);
+animation: fadein 1s cubic-bezier(.36, .66, .04, 1) forwards;
+}
+.fadein-1 { animation-delay: .1s; }
+.fadein-2 { animation-delay: .22s; }
+.fadein-3 { animation-delay: .34s; }
+.fadein-4 { animation-delay: .46s; }
+.fadein-5 { animation-delay: .58s; }
+@keyframes fadein {
+to {opacity:1;transform:translateY(0) scale(1);}
+}
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+
+.font-nunito { font-family: 'Nunito', sans-serif !important; }

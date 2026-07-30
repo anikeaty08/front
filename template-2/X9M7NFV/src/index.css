@@ -1,0 +1,31 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+  .timeline-col::before{
+    content:'';
+    @apply absolute left-1/2 transform -translate-x-px top-12 bottom-6 border-l-2 border-dotted border-gray-600/40;
+  }
+  .bar{
+    @apply relative rounded-lg text-center text-xs font-medium text-white/90 whitespace-nowrap flex items-center justify-center transition-all duration-200 hover:scale-105 cursor-pointer shadow-lg;
+    background:linear-gradient(135deg,#1f1f23 0%,#151518 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .bar-accent{
+    background:linear-gradient(135deg,#00d4aa 0%,#00b894 100%);
+    @apply text-white shadow-accent-500/20;
+    box-shadow: 0 8px 25px rgba(0,212,170,0.15);
+  }
+  .bar-highlight{
+    background:linear-gradient(135deg,#2d1b69 0%,#1e1348 100%);
+    @apply text-purple-300 border-purple-400/30;
+  }
+

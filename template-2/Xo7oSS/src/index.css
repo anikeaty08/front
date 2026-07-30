@@ -1,0 +1,24 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    body { font-family: 'Poppins', sans-serif; background: #0e1016; }
+    .iphone-notch {
+      position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+      width: 110px; height: 28px; border-radius: 0 0 18px 18px;
+      background: #13141a;
+      z-index: 10;
+      border: 1.5px solid #23253e;
+    }
+    .bg-linear-card {
+      background: linear-gradient(112.09deg,#313142 24%,#191c24 100%);
+    }
+  

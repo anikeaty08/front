@@ -1,0 +1,26 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    /* Waves animation keyframes */
+    @keyframes wave-move {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    /* Gradient stroke for lines */
+    .wave-gradient {
+      stroke: url(#grad);
+    }
+    /* Animation speed varies per line */
+    .wave1 { animation: wave-move 8s linear infinite; }
+    .wave2 { animation: wave-move 12s linear infinite; opacity: .7; }
+    .wave3 { animation: wave-move 16s linear infinite; opacity: .5;}
+  

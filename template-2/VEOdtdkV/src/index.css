@@ -1,0 +1,342 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        /* Global styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Filter card styles */
+        .filter-card {
+            width: 480px;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 10px 10px rgba(0, 0, 0, 0.03),
+                0 0 2px rgba(0, 0, 0, 0.1),
+                0 1px 1px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Header styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 12px;
+        }
+
+        .header h2 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .reset-btn {
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .reset-btn:hover {
+            opacity: 1;
+        }
+
+        /* Separator */
+        .separator {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 0;
+        }
+
+        /* Section styles */
+        .section {
+            padding: 24px 12px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .clear-btn {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .clear-btn:hover {
+            opacity: 1;
+        }
+
+        /* Price slider section */
+        .price-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Slider container */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 12px;
+            margin: 12px 0;
+        }
+
+        /* Slider track */
+        .slider-track {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Slider active track */
+        .slider-track-active {
+            position: absolute;
+            height: 6px;
+            background: #3395ff;
+            border-radius: 3px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Slider thumb */
+        .slider-thumb {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #3395ff;
+            border-radius: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        /* Price bubble */
+        .price-bubble {
+            position: absolute;
+            background: #3395ff;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            transform: translateX(-50%);
+            top: -40px;
+            z-index: 3;
+        }
+
+        /* Sort by section */
+        .sort-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sort-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .radio-container {
+            position: relative;
+            width: 20px;
+            height: 20px;
+        }
+
+        .radio-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .radio-checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .radio-input:checked ~ .radio-checkmark {
+            background-color: #3395ff;
+        }
+
+        .radio-checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .radio-input:checked ~ .radio-checkmark:after {
+            display: block;
+            top: 6px;
+            left: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .option-label {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* Stops section */
+        .stops-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stops-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-container {
+            position: relative;
+            width: 20px;
+            height: 20px;
+        }
+
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkbox-checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .checkbox-input:checked ~ .checkbox-checkmark {
+            background-color: #3395ff;
+        }
+
+        .checkbox-checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-input:checked ~ .checkbox-checkmark:after {
+            display: block;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Travel time section */
+        .time-slider-container {
+            position: relative;
+            width: 100%;
+            height: 12px;
+            margin: 12px 0 20px 0;
+        }
+
+        .time-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Baggage section */
+        .baggage-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Search button */
+        .search-button {
+            background-color: #3395ff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 
+                0 5px 5px rgba(0, 0, 0, 0.03),
+                0 0 2px rgba(0, 0, 0, 0.1),
+                0 1px 1px rgba(0, 0, 0, 0.03);
+            transition: background-color 0.2s;
+        }
+
+        .search-button:hover {
+            background-color: #2a85ea;
+        }
+    

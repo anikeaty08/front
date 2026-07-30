@@ -1,0 +1,17 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+body{
+  background:#0a0e1a;
+  background-image:radial-gradient(ellipse at center, rgba(6,182,212,0.25) 0%,rgba(10,14,26,0) 70%);
+}
+

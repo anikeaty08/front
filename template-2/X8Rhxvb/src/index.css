@@ -1,0 +1,20 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+    :root { --radius: 1rem; }
+    html.dark .dark\:bg-zinc-950\/50 { background-color: rgba(9, 9, 11, 0.5); }
+    html.dark .dark\:bg-transparent { background-color: transparent; }
+    html.dark .dark\:invert { filter: invert(1); }
+    html.dark .dark\:block { display: block !important;}
+    html.dark .dark\:hidden { display: none !important;}
+    html.dark .dark\:shadow-none { box-shadow: none !important;}
+  

@@ -1,0 +1,259 @@
+import React, { useEffect } from 'react';
+
+export default function App() {
+  useEffect(() => {
+    const originalAddEventListener = document.addEventListener;
+    const originalWindowAddEventListener = window.addEventListener;
+    
+    document.addEventListener = function(event, callback, options) {
+      if (event === 'DOMContentLoaded') {
+        setTimeout(() => {
+          try { callback(new Event('DOMContentLoaded')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalAddEventListener.call(document, event, callback, options);
+      }
+    };
+    
+    window.addEventListener = function(event, callback, options) {
+      if (event === 'load') {
+        setTimeout(() => {
+          try { callback(new Event('load')); } catch (e) { console.error(e); }
+        }, 0);
+      } else {
+        originalWindowAddEventListener.call(window, event, callback, options);
+      }
+    };
+    
+    let onloadHandler = null;
+    try {
+      Object.defineProperty(window, 'onload', {
+        set: function(fn) {
+          onloadHandler = fn;
+          setTimeout(() => {
+            try { if (typeof fn === 'function') fn(); } catch (e) { console.error(e); }
+          }, 0);
+        },
+        get: function() { return onloadHandler; },
+        configurable: true
+      });
+    } catch (e) {}
+
+    try {
+      
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+
+
+
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+      colors: {
+        surface: { 900:'#0a0a0b', 800:'#111113', 700:'#1a1a1d' },
+        accent:  { 500:'#00d4aa', 400:'#1ee2b8' }
+      },
+      borderRadius: { xl2:'1.75rem' }
+    }
+  }
+}
+
+
+
+  lucide.createIcons();
+
+    } catch (error) {
+      console.error("Error executing template scripts:", error);
+    }
+    
+    return () => {
+      document.addEventListener = originalAddEventListener;
+      window.addEventListener = originalWindowAddEventListener;
+      try { delete window.onload; } catch (e) {}
+    };
+  }, []);
+
+  return (
+    <>
+      
+<main className="flex items-start justify-center min-h-screen p-4 md:p-8">
+<section className="relative w-full max-w-7xl bg-surface-800 md:px-12 md:py-10 overflow-hidden rounded-xl2 pt-8 pr-6 pb-8 pl-6 shadow-2xl border border-white/5">
+
+<div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-8">
+<div className="flex-1">
+<div className="inline-flex items-center gap-2 mb-4 bg-surface-700/60 rounded-lg px-3 py-1.5 text-xs font-medium border border-white/5">
+<svg className="lucide lucide-zap w-3 h-3 text-accent-500" data-lucide="zap" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+          Phase 2.1 — Development Roadmap
+        </div>
+<h1 className="md:text-6xl bg-clip-text text-4xl font-normal text-transparent tracking-tight bg-gradient-to-r from-white to-gray-300 mb-3">
+          NexaFlow Timeline
+        </h1>
+<div className="flex items-center gap-5 text-sm text-gray-400 mb-4">
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-calendar w-4 h-4" data-lucide="calendar" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg>
+            18 months total
+          </div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-users w-4 h-4" data-lucide="users" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            12 team members
+          </div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-target w-4 h-4" data-lucide="target" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+            B2B SaaS Platform
+          </div>
+</div>
+</div>
+<div className="lg:max-w-sm mt-4 lg:mt-0 lg:ml-8">
+<p className="text-sm leading-relaxed text-gray-300 bg-surface-700/30 rounded-lg p-4">
+          Complete development roadmap for NexaFlow's enterprise workflow automation platform, covering market research through production deployment with Stripe integration, Auth0 authentication, and AWS infrastructure.
+        </p>
+</div>
+</div>
+
+<div className="relative overflow-x-auto mt-12">
+
+<div className="grid grid-cols-5 gap-4 text-sm font-semibold text-gray-200 mb-2 min-w-[800px]">
+<div className="relative timeline-col text-left">
+<div className="flex items-center justify-center gap-2 text-left mb-2">Discover<svg className="lucide lucide-search w-4 h-4 text-blue-400" data-lucide="search" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg></div>
+</div>
+<div className="relative timeline-col text-left">
+<div className="flex items-center justify-center gap-2 mb-2">Prototyping<svg className="lucide lucide-palette w-4 h-4 text-purple-400" data-lucide="palette" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" fill="currentColor" r=".5"></circle><circle cx="17.5" cy="10.5" fill="currentColor" r=".5"></circle><circle cx="6.5" cy="12.5" fill="currentColor" r=".5"></circle><circle cx="8.5" cy="7.5" fill="currentColor" r=".5"></circle></svg></div>
+</div>
+<div className="relative timeline-col text-left">
+<div className="flex items-center justify-center gap-2 mb-2">Development Phase <svg className="lucide lucide-code w-4 h-4 text-green-400" data-lucide="code" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg></div>
+</div>
+<div className="relative timeline-col text-left">
+<div className="flex items-center justify-center gap-2 text-left mb-2">QA & Testing <svg className="lucide lucide-bug w-4 h-4 text-yellow-400" data-lucide="bug" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m8 2 1.88 1.88"></path><path d="M14.12 3.88 16 2"></path><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"></path><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"></path><path d="M12 20v-9"></path><path d="M6.53 9C4.6 8.8 3 7.1 3 5"></path><path d="M6 13H2"></path><path d="M3 21c0-2.1 1.7-3.9 3.8-4"></path><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"></path><path d="M22 13h-4"></path><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"></path></svg></div>
+</div>
+<div className="relative timeline-col text-left">
+<div className="flex items-center justify-center gap-2 mb-2">Launch & Scale <svg className="lucide lucide-rocket w-4 h-4 text-accent-500" data-lucide="rocket" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg></div>
+</div>
+</div>
+
+<div className="space-y-3 min-w-[800px] text-xs mt-8">
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-span-3 bar h-8 text-left rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Salesforce & HubSpot competitor analysis</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-2 col-span-4 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Enterprise customer interviews & surveys</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-1 col-span-5 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">React.js + Node.js tech stack validation</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-4 col-span-4 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">User flow mapping & site architecture</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-5 col-span-5 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Figma wireframes & interactive prototypes</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-6 col-span-3 bar bar-highlight h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Visual identity & component library</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-6 col-span-3 bar bar-highlight h-8 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">
+            High-fidelity UI design system
+          </div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-11 col-span-5 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">React dashboard & authentication flows</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-10 col-span-6 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Express.js API & PostgreSQL database</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-12 col-span-5 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Stripe payments & Auth0 integration</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-15 col-span-4 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Jest unit tests & Cypress E2E testing</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-16 col-span-3 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">Enterprise beta program rollout</div>
+</div>
+
+<div className="grid grid-cols-20 gap-1">
+<div className="col-start-18 col-span-3 bar h-8 rounded-full pt-1.5 pr-3 pb-1.5 pl-3">AWS production deployment</div>
+</div>
+</div>
+
+<div className="flex justify-between items-center min-w-[800px] text-xs text-gray-400 border-gray-700/50 border-t mt-12 pt-6">
+<div className="text-left">
+<div className="font-medium text-white mb-1">Month 1-3</div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-clock w-3 h-3" data-lucide="clock" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Research Phase
+          </div>
+</div>
+<div className="text-left">
+<div className="font-medium text-white mb-1">Month 4-7</div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-paintbrush w-3 h-3" data-lucide="paintbrush" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m14.622 17.897-10.68-2.913"></path><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"></path><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"></path></svg>
+            Design Phase
+          </div>
+</div>
+<div className="text-left">
+<div className="font-medium text-white mb-1">Month 8-14</div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-hammer w-3 h-3" data-lucide="hammer" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9"></path><path d="m18 15 4-4"></path><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"></path></svg>
+            Build Phase
+          </div>
+</div>
+<div className="text-left">
+<div className="font-medium text-white mb-1">Month 15-17</div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-shield-check w-3 h-3" data-lucide="shield-check" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            Testing Phase
+          </div>
+</div>
+<div className="text-left">
+<div className="font-medium text-white mb-1">Month 18</div>
+<div className="flex items-center gap-1">
+<svg className="lucide lucide-arrow-up-right w-3 h-3" data-lucide="arrow-up-right" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+            Launch
+          </div>
+</div>
+</div>
+
+<div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+<div className="bg-surface-700/30 rounded-lg p-4 border border-gray-700/50">
+<div className="flex items-center gap-2 mb-2">
+<svg className="lucide lucide-milestone w-4 h-4 text-accent-500" data-lucide="milestone" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 13v8"></path><path d="M12 3v3"></path><path d="M4 6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h13a2 2 0 0 0 1.152-.365l3.424-2.317a1 1 0 0 0 0-1.635l-3.424-2.318A2 2 0 0 0 17 6z"></path></svg>
+<span className="font-medium text-sm">MVP Release</span>
+</div>
+<p className="text-xs text-gray-400">Core workflow automation features with Stripe billing integration</p>
+</div>
+<div className="bg-surface-700/30 rounded-lg p-4 border border-gray-700/50">
+<div className="flex items-center gap-2 mb-2">
+<svg className="lucide lucide-users-round w-4 h-4 text-purple-400" data-lucide="users-round" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg>
+<span className="font-medium text-sm">Beta Program</span>
+</div>
+<p className="text-xs text-gray-400">50 enterprise customers testing core functionality and providing feedback</p>
+</div>
+<div className="bg-surface-700/30 rounded-lg p-4 border border-gray-700/50">
+<div className="flex items-center gap-2 mb-2">
+<svg className="lucide lucide-trending-up w-4 h-4 text-green-400" data-lucide="trending-up" fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+<span className="font-medium text-sm">Production Launch</span>
+</div>
+<p className="text-xs text-gray-400">Full platform launch with AWS auto-scaling and enterprise security</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+
+    </>
+  );
+}

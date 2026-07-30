@@ -1,0 +1,427 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulseHighlight {
+            0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(234, 179, 8, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+        }
+
+        .pulse-highlight {
+            animation: pulseHighlight 1.5s ease-in-out;
+        }
+        
+        .animate-in {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .art-shadow {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .color-swatch {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 3px;
+            border: 1px solid rgba(0,0,0,0.1);
+            vertical-align: middle;
+        }
+        
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .dropdown-container:focus-within .dropdown-menu {
+            display: block;
+        }
+        
+        .dropdown-option {
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-option:hover {
+            background-color: rgba(234, 179, 8, 0.1);
+        }
+        
+        .frame-option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .frame-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .frame-option.selected {
+            border-color: rgb(234, 179, 8);
+            background-color: rgba(234, 179, 8, 0.05);
+        }
+        
+        .mount-option:hover {
+            border-color: rgb(234, 179, 8);
+        }
+
+        .mount-option.active-mat {
+            border-color: rgb(234, 179, 8);
+            box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.2);
+        }
+        
+        .mount-style-preview {
+            transition: all 0.3s ease;
+        }
+        
+        .mount-style-preview:hover {
+            transform: scale(1.05);
+        }
+
+        .glazing-option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .glazing-option:hover {
+            border-color: rgb(234, 179, 8);
+        }
+        
+        .glazing-option.selected {
+            border-color: rgb(234, 179, 8);
+            background-color: rgba(234, 179, 8, 0.05);
+        }
+
+        /* Glass effects for glazing preview */
+        .glazing-preview-standard::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+        
+        .glazing-preview-nonglare::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            backdrop-filter: blur(0.5px);
+            pointer-events: none;
+        }
+        
+        .glazing-preview-uv::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(120,200,255,0.05), rgba(255,255,255,0.05));
+            pointer-events: none;
+        }
+        
+        .glazing-preview-museum::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 100%);
+            backdrop-filter: blur(0.2px);
+            pointer-events: none;
+        }
+
+        .glazing-preview-acrylic::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            transition: transform 0.3s ease;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background-color: white;
+            backdrop-filter: blur(8px);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .unframed-preview {
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+        }
+
+        /* Modal specific styles */
+        .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            border-radius: 0.5rem;
+            max-width: 98vw;
+            max-height: 98vh;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Step indicator */
+        .step-container {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        
+        .step-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+        
+        .step-active {
+            background-color: #EAB308;
+            color: white;
+        }
+        
+        .step-inactive {
+            background-color: #E5E7EB;
+            color: #6B7280;
+        }
+        
+        .step-completed {
+            background-color: #10B981;
+            color: white;
+        }
+        
+        /* Page transitions */
+        .page {
+            transition: all 0.3s ease;
+            height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        
+        .page.active {
+            height: auto;
+            overflow: visible;
+            opacity: 1;
+        }
+        
+        /* Artist preferred setting badge */
+        .preferred-badge {
+            background-color: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            color: #854D0E;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            margin-left: 8px;
+        }
+
+        /* AR view button styles */
+        .ar-view-btn {
+            background-color: rgba(79, 70, 229, 0.1);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            color: #4F46E5;
+            transition: all 0.2s ease;
+        }
+        
+        .ar-view-btn:hover {
+            background-color: rgba(79, 70, 229, 0.15);
+        }
+
+        /* Toggle switch styling */
+        .toggle-checkbox:checked {
+            right: 0;
+            transform: translateX(100%);
+            border-color: #EAB308;
+        }
+        
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #FEF3C7;
+        }
+        
+        .toggle-label {
+            transition: background-color 0.2s ease;
+        }
+
+        /* Frame texture styles */
+        .frame-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.7;
+            background-size: cover;
+            background-position: center;
+            pointer-events: none;
+        }
+
+        /* AR modal styles */
+        #arModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .ar-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            background-color: #111827;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ar-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=1080');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .ar-frame {
+            position: absolute;
+            width: 40%;
+            height: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 20px solid #8B4513;
+            background-color: transparent;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .ar-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ar-instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .ar-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ar-close:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Animation for AR content */
+        @keyframes arFrameFloat {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-51%, -49%) rotate(0.5deg); }
+            50% { transform: translate(-49%, -51%) rotate(-0.5deg); }
+            75% { transform: translate(-50%, -50%) rotate(0.25deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+
+        .ar-frame {
+            animation: arFrameFloat 8s ease-in-out infinite;
+        }
+    
+
+
+      body { font-family: 'Inter', sans-serif; }
+    

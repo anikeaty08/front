@@ -1,0 +1,101 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1c20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background-color: rgba(26, 27, 34, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+        .phone-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .phone-body {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .screen-shape {
+            background: linear-gradient(180deg, #2A2D3A, #1a1c20);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        .screen-content {
+            background: linear-gradient(135deg, #3B4058, #1E2130);
+            position: relative;
+        }
+        .play-button {
+            background: rgba(26, 28, 32, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+        }
+        .blue-button {
+            background: linear-gradient(135deg, #4D7CFE, #3361D8);
+            box-shadow: 0 4px 12px rgba(51, 97, 216, 0.3);
+            transition: all 0.3s ease;
+        }
+        .blue-button:hover {
+            background: linear-gradient(135deg, #5A89FF, #3D6BE0);
+            box-shadow: 0 6px 16px rgba(51, 97, 216, 0.4);
+        }
+        .content-container {
+            background-color: rgba(26, 27, 34, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        
+        /* Subtle stroke path animation */
+        .phone-outline {
+            position: absolute;
+            top: -70px;
+            left: 0;
+            width: 180px;
+            height: 320px;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            z-index: 30;
+            animation: draw 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes draw {
+            0% {
+                stroke-dashoffset: 1000;
+                stroke: rgba(77, 124, 254, 0.2);
+                filter: drop-shadow(0 0 1px rgba(77, 124, 254, 0.1));
+            }
+            50% {
+                stroke: rgba(77, 124, 254, 0.8);
+                filter: drop-shadow(0 0 6px rgba(77, 124, 254, 0.5));
+            }
+            100% {
+                stroke-dashoffset: 0;
+                stroke: rgba(77, 124, 254, 0.2);
+                filter: drop-shadow(0 0 1px rgba(77, 124, 254, 0.1));
+            }
+        }
+    

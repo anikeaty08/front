@@ -1,0 +1,124 @@
+
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+        .font-geist { font-family: 'Geist', sans-serif !important; }
+    
+
+
+      /* Custom font utilities */
+      .font-geist { font-family: 'Geist', sans-serif !important; }
+    
+
+
+.font-geist { font-family: 'Geist', sans-serif !important; }
+
+
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform:translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        .logo-set {
+            animation-duration: 0.8s;
+            animation-fill-mode: forwards;
+            animation-timing-function: ease-in-out;
+        }
+
+        .logo-set.fade-in {
+            animation-name: fadeIn;
+        }
+
+        .logo-set.fade-out {
+            animation-name: fadeOut;
+        }
+
+        /* Initially hide second set */
+        #logoSet2 {
+            opacity: 0;
+        }
+
+        /* Animate logo containers individually */
+        .logo-container {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .logo-container:nth-child(1) { animation-delay: 0.4s; }
+        .logo-container:nth-child(2) { animation-delay: 0.5s; }
+        .logo-container:nth-child(3) { animation-delay: 0.6s; }
+        .logo-container:nth-child(4) { animation-delay: 0.7s; }
+        .logo-container:nth-child(5) { animation-delay: 0.8s; }
+        .logo-container:nth-child(6) { animation-delay: 0.9s; }
+
+        /* Gradient background animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Smooth hover transitions */
+        .logo-container:hover svg {
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .logo-container {
+                animation-delay: 0.2s;
+            }
+            
+            .logo-container:nth-child(1) { animation-delay: 0.3s; }
+            .logo-container:nth-child(2) { animation-delay: 0.4s; }
+            .logo-container:nth-child(3) { animation-delay: 0.5s; }
+            .logo-container:nth-child(4) { animation-delay: 0.6s; }
+            .logo-container:nth-child(5) { animation-delay: 0.7s; }
+            .logo-container:nth-child(6) { animation-delay: 0.8s; }
+        }
+    
